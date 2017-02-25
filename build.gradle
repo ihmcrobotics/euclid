@@ -1,0 +1,132 @@
+plugins {
+  id "us.ihmc.gradle.ihmc-build" version "0.0.19"
+}
+
+repositories {
+    maven {
+       url "http://dl.bintray.com/ihmcrobotics/maven-release"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+sourceCompatibility = 1.8
+version = '0.4.1'
+
+project.ext.fullVersion = version
+project.ext.vcsUrl = "https://github.com/ihmcrobotics/euclid"
+project.ext.licenseURL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+project.ext.licenseName = "The Apache Software License, Version 2.0"
+project.ext.bintrayLicenseName = "Apache-2.0"
+project.ext.publicationName = "euclid"
+
+jar {
+    manifest {
+        attributes(
+                "Created-By": "IHMC Gradle Build Script",
+                "Implementation-Title": project.name,
+                "Implementation-Version": project.version,
+                "Implementation-Vendor": "IHMC",
+
+                "Bundle-Name": project.name,
+                "Bundle-Version": project.version,
+                "Bundle-License": "IHMC Proprietary",
+                "Bundle-Vendor": "IHMC")
+    }
+}
+
+task sourceJar(type: Jar, dependsOn: classes) {
+   classifier = 'sources'
+   from sourceSets.main.allJava
+}
+
+publishing {
+   publications {
+      mavenJava(MavenPublication) {
+         groupId "us.ihmc"
+         artifactId project.ext.publicationName
+         version "$version"
+         from components.java
+		 
+		 pom.withXml {
+             asNode().children().last() + {
+                 resolveStrategy = Closure.DELEGATE_FIRST
+                 name project.name
+                 description 'Euclid is library providing a variety of geometries and useful math.'
+                 url project.ext.vcsUrl
+                 licenses {
+                     license {
+                         name project.ext.licenseName
+                         url project.ext.licenseURL
+                         distribution 'repo'
+                     }
+                 }
+                 developers {
+                     developer {
+                         id 'sbertrand'
+                         name 'Sylvain Bertrand'
+                         email 'sbertrand@ihmc.us'
+                     }
+                 }
+             }
+         }
+
+		artifact sourceJar {
+			classifier "sources"
+		}
+      }
+   }
+}
+
+def bintrayUsernameString = project.hasProperty("bintray_user") ? bintray_user : "unknown"
+def bintrayPasswordString = project.hasProperty("bintray_key") ? bintray_key : "unknown"
+
+bintray {
+   user = bintrayUsernameString
+   key = bintrayPasswordString
+
+   dryRun = false
+   publish = false
+
+   publications = ["mavenJava"]
+
+   pkg {
+      repo = "maven-release"
+      name = project.ext.publicationName
+      userOrg = 'ihmcrobotics'
+      desc = "IHMC Open Robotics Software Project ${project.name}"
+
+      websiteUrl = project.ext.vcsUrl
+      issueTrackerUrl = "${project.ext.vcsUrl}/issues"
+      vcsUrl = "${project.ext.vcsUrl}.git"
+
+      licenses = [project.ext.bintrayLicenseName]
+      labels = ['ihmc', 'java', 'geometry', 'vector', 'math']
+      publicDownloadNumbers = true
+
+      version {
+         name = project.ext.fullVersion
+         desc = "IHMC Open Robotics Software Project ${project.name} v${project.ext.fullVersion}"
+         released = new Date()
+         vcsTag = "v${project.version}"
+      }
+   }
+}
+
+repositories {
+   mavenLocal()
+   jcenter()
+   mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.pitest', name: 'pitest', version: '1.1.9'
+    testCompile group: 'org.pitest', name: 'pitest-command-line', version: '1.1.9'
+    testCompile group: 'us.ihmc', name: 'ihmc-continuous-integration-framework', version: '0.9.4'
+
+    compile group: 'org.ejml', name: 'dense64', version: '0.30'
+    compile group: 'us.ihmc', name: 'euclid-core', version: '0.4.1'
+}
