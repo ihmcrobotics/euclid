@@ -538,8 +538,8 @@ public class EuclidGeometryTools
     * is set to: (1, 0, 0).
     * <li>the vectors are collinear pointing opposite directions: the rotation angle is equal to
     * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
-    * <li>if the length of either normal is below {@link #ONE_TEN_MILLIONTH}: the rotation angle is equal to
-    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@link #ONE_TEN_MILLIONTH}: the rotation angle is
+    * equal to {@code 0.0} and the rotation axis is set to: (1, 0, 0).
     * </ul>
     * </p>
     * <p>
@@ -1989,7 +1989,7 @@ public class EuclidGeometryTools
                                                               double lineSegmentEnd1y, double lineSegmentStart2x, double lineSegmentStart2y,
                                                               double lineSegmentEnd2x, double lineSegmentEnd2y, Point2DBasics intersectionToPack)
    {
-      if (doLineSegment2DsIntersect(lineSegmentStart1x, lineSegmentStart1y, lineSegmentEnd1x, lineSegmentEnd1y, lineSegmentStart2x, lineSegmentStart2y,
+      if (!doLineSegment2DsIntersect(lineSegmentStart1x, lineSegmentStart1y, lineSegmentEnd1x, lineSegmentEnd1y, lineSegmentStart2x, lineSegmentStart2y,
                                     lineSegmentEnd2x, lineSegmentEnd2y))
       {
          return false;
