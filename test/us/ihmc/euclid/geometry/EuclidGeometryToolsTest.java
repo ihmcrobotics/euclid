@@ -168,7 +168,7 @@ public class EuclidGeometryToolsTest
 
          double angleEpsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
          double rotationAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection1, true);
+         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection1, true);
          AxisAngle axisAngle = new AxisAngle(orthogonal, rotationAngle);
 
          Vector3D lineDirection2 = new Vector3D();
@@ -203,7 +203,7 @@ public class EuclidGeometryToolsTest
       {
          Vector3D lineDirection = EuclidCoreRandomTools.generateRandomVector3D(random);
          lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection, true);
+         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection, true);
 
          double angleEpsilon = EuclidGeometryTools.ONE_MILLIONTH;
 
@@ -270,7 +270,7 @@ public class EuclidGeometryToolsTest
 
          pointOnPlane2.scaleAdd(distanceBetweenPlanes, planeNormal1, pointOnPlane1);
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal1, true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal1, true);
          double angleEpsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
          double rotationAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
 
@@ -336,7 +336,7 @@ public class EuclidGeometryToolsTest
          Vector3D firstVector = EuclidCoreRandomTools.generateRandomVector3D(random);
          firstVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, firstVector, true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstVector, true);
          double angleEpsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
          double rotationAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
 
@@ -358,7 +358,7 @@ public class EuclidGeometryToolsTest
          Vector3D firstVector = EuclidCoreRandomTools.generateRandomVector3D(random);
          firstVector.normalize();
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, firstVector, true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstVector, true);
          double angleEpsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, EuclidGeometryTools.ONE_MILLIONTH * Math.PI / 2.0);
          double rotationAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, EuclidGeometryTools.ONE_MILLIONTH * Math.PI / 2.0);
          if (Math.abs(rotationAngle - angleEpsilon) < 1.0e-7)
@@ -518,7 +518,7 @@ public class EuclidGeometryToolsTest
          Vector3D firstVector = EuclidCoreRandomTools.generateRandomVector3D(random);
          firstVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          double expectedAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI);
-         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, firstVector, true);
+         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstVector, true);
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
          RotationMatrix rotationMatrix = new RotationMatrix();
          rotationMatrix.set(expectedAxisAngle);
@@ -557,7 +557,7 @@ public class EuclidGeometryToolsTest
          double expectedAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 0.001);
          if (random.nextBoolean())
             expectedAngle = -expectedAngle;
-         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, firstVector, true);
+         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstVector, true);
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
          RotationMatrix rotationMatrix = new RotationMatrix();
          rotationMatrix.set(expectedAxisAngle);
@@ -599,7 +599,7 @@ public class EuclidGeometryToolsTest
          if (random.nextBoolean())
             expectedAngle = -expectedAngle;
          expectedAngle += Math.PI;
-         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, firstVector, true);
+         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstVector, true);
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
 
          Vector3D secondVector = new Vector3D();
@@ -692,7 +692,7 @@ public class EuclidGeometryToolsTest
       {
          Vector3D referenceNormal = new Vector3D(0.0, 0.0, 1.0);
          double expectedAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI);
-         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, referenceNormal, true);
+         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, referenceNormal, true);
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
 
          Vector3D rotatedNormal = new Vector3D();
@@ -745,7 +745,7 @@ public class EuclidGeometryToolsTest
          Vector3D lineDirection2 = new Vector3D(lineDirection1);
 
          // Shift orthogonally line2 away from line1.
-         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection1, true);
+         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection1, true);
          double expectedMinimumDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          lineStart2.scaleAdd(expectedMinimumDistance, orthogonalToLine1, lineStart1);
 
@@ -791,7 +791,7 @@ public class EuclidGeometryToolsTest
          Vector3D lineDirection2 = new Vector3D(lineDirection1);
 
          // Shift orthogonally line2 away from line1.
-         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection1, true);
+         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection1, true);
          double expectedMinimumDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          lineStart2.scaleAdd(expectedMinimumDistance, orthogonalToLine1, lineStart1);
 
@@ -868,7 +868,7 @@ public class EuclidGeometryToolsTest
          expectedPointOnLineSegment1.interpolate(lineSegmentStart1, lineSegmentEnd1, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
 
          // Create the closest point of line segment 2
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          expectedPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), orthogonalToLineSegment1,
                                               expectedPointOnLineSegment1);
 
@@ -909,7 +909,7 @@ public class EuclidGeometryToolsTest
          expectedPointOnLineSegment1.set(lineSegmentStart1);
 
          // Create the closest point of line segment 2
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          expectedPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), orthogonalToLineSegment1,
                                               expectedPointOnLineSegment1);
 
@@ -970,13 +970,13 @@ public class EuclidGeometryToolsTest
          // out of line segment 1
          Vector3D oppositeOflineSegmentDirection1 = new Vector3D();
          oppositeOflineSegmentDirection1.setAndNegate(lineSegmentDirection1);
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          Vector3D shiftVector = new Vector3D();
          shiftVector.interpolate(orthogonalToLineSegment1, oppositeOflineSegmentDirection1, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
          expectedPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), shiftVector, expectedPointOnLineSegment1);
 
          // Set the line direction 2 to orthogonal to the shift vector
-         lineSegmentDirection2 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, shiftVector, true);
+         lineSegmentDirection2 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, shiftVector, true);
 
          // Set the end points of the line segment 2 around the expected
          // closest point.
@@ -1025,7 +1025,7 @@ public class EuclidGeometryToolsTest
          // out of line segment 1
          Vector3D oppositeOflineSegmentDirection1 = new Vector3D();
          oppositeOflineSegmentDirection1.setAndNegate(lineSegmentDirection1);
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          Vector3D shiftVector = new Vector3D();
          shiftVector.interpolate(orthogonalToLineSegment1, oppositeOflineSegmentDirection1, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
          expectedPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), shiftVector, expectedPointOnLineSegment1);
@@ -1036,7 +1036,7 @@ public class EuclidGeometryToolsTest
 
          // Set the line direction 2 to point somewhat in the same direction
          // as the shift vector
-         Vector3D orthogonalToShiftVector = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, shiftVector, true);
+         Vector3D orthogonalToShiftVector = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, shiftVector, true);
          lineSegmentDirection2.interpolate(shiftVector, orthogonalToShiftVector, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
 
          // Set the end points of the line segment 2 around the expected
@@ -1145,7 +1145,7 @@ public class EuclidGeometryToolsTest
          Vector3D lineDirection2 = new Vector3D(lineDirection1);
 
          // Shift orthogonally line2 away from line1.
-         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection1, true);
+         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection1, true);
          double expectedMinimumDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          lineStart2.scaleAdd(expectedMinimumDistance, orthogonalToLine1, lineStart1);
 
@@ -1186,7 +1186,7 @@ public class EuclidGeometryToolsTest
          Vector3D lineDirection2 = new Vector3D(lineDirection1);
 
          // Shift orthogonally line2 away from line1.
-         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection1, true);
+         Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection1, true);
          double expectedMinimumDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          lineStart2.scaleAdd(expectedMinimumDistance, orthogonalToLine1, lineStart1);
 
@@ -1229,7 +1229,7 @@ public class EuclidGeometryToolsTest
          closestPointOnLineSegment1.interpolate(lineSegmentStart1, lineSegmentEnd1, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
 
          // Create the closest point of line segment 2
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          double expectedMinimumDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          closestPointOnLineSegment2.scaleAdd(expectedMinimumDistance, orthogonalToLineSegment1, closestPointOnLineSegment1);
 
@@ -1267,7 +1267,7 @@ public class EuclidGeometryToolsTest
          closestPointOnLineSegment1.set(lineSegmentStart1);
 
          // Create the closest point of line segment 2
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          double expectedMinimumDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          closestPointOnLineSegment2.scaleAdd(expectedMinimumDistance, orthogonalToLineSegment1, closestPointOnLineSegment1);
 
@@ -1320,13 +1320,13 @@ public class EuclidGeometryToolsTest
          // out of line segment 1
          Vector3D oppositeOflineSegmentDirection1 = new Vector3D();
          oppositeOflineSegmentDirection1.setAndNegate(lineSegmentDirection1);
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          Vector3D shiftVector = new Vector3D();
          shiftVector.interpolate(orthogonalToLineSegment1, oppositeOflineSegmentDirection1, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
          closestPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), shiftVector, closestPointOnLineSegment1);
 
          // Set the line direction 2 to orthogonal to the shift vector
-         lineSegmentDirection2 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, shiftVector, true);
+         lineSegmentDirection2 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, shiftVector, true);
 
          // Set the end points of the line segment 2 around the expected
          // closest point.
@@ -1366,7 +1366,7 @@ public class EuclidGeometryToolsTest
          // out of line segment 1
          Vector3D oppositeOflineSegmentDirection1 = new Vector3D();
          oppositeOflineSegmentDirection1.setAndNegate(lineSegmentDirection1);
-         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection1, true);
+         Vector3D orthogonalToLineSegment1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection1, true);
          Vector3D shiftVector = new Vector3D();
          double alpha = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          shiftVector.interpolate(orthogonalToLineSegment1, oppositeOflineSegmentDirection1, alpha);
@@ -1378,7 +1378,7 @@ public class EuclidGeometryToolsTest
 
          // Set the line direction 2 to point somewhat in the same direction
          // as the shift vector
-         Vector3D orthogonalToShiftVector = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, shiftVector, true);
+         Vector3D orthogonalToShiftVector = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, shiftVector, true);
          lineSegmentDirection2.interpolate(shiftVector, orthogonalToShiftVector, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
 
          // Set the end points of the line segment 2 around the expected
@@ -1522,7 +1522,7 @@ public class EuclidGeometryToolsTest
          Vector3D lineDirection = new Vector3D();
          lineDirection.sub(end, start);
          // Generate a random vector orthogonal to the line
-         Vector3D orthogonalVector = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection, true);
+         Vector3D orthogonalVector = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection, true);
          double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          // Generate a random point located at an expected distance from the line
          Point3D randomPoint = new Point3D();
@@ -1554,7 +1554,7 @@ public class EuclidGeometryToolsTest
          Vector3D lineSegmentDirection = new Vector3D();
          lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
          lineSegmentDirection.normalize();
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection, true);
+         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection, true);
          Point3D projection = new Point3D();
          Point3D testPoint = new Point3D();
          double expectedDistance, actualDistance;
@@ -1595,7 +1595,7 @@ public class EuclidGeometryToolsTest
          Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
                                                                                             EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
-         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal, true);
+         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
          Point3D secondPointOnPlane = new Point3D();
          secondPointOnPlane.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane, pointOnPlane);
 
@@ -1674,7 +1674,7 @@ public class EuclidGeometryToolsTest
          Vector3D lineSegmentDirection = new Vector3D();
          lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
          lineSegmentDirection.normalize();
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection, true);
+         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection, true);
          Point3D projection = new Point3D();
          Point3D testPoint = new Point3D();
          double expectedSquaredDistance, actualSquaredDistance;
@@ -1718,7 +1718,7 @@ public class EuclidGeometryToolsTest
          Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
                                                                                             EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
-         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal, true);
+         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
          Point3D randomLinePlaneIntersection = new Point3D();
          randomLinePlaneIntersection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane, pointOnPlane);
 
@@ -2087,7 +2087,7 @@ public class EuclidGeometryToolsTest
          Point3D pointOnPlane = EuclidCoreRandomTools.generateRandomPoint3D(random);
          pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal, true);
+         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
 
          Point3D expectedIntersection = new Point3D();
          expectedIntersection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane, pointOnPlane);
@@ -2112,7 +2112,7 @@ public class EuclidGeometryToolsTest
          pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
 
-         Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal, false);
+         Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, false);
          Point3D pointOnLine = new Point3D();
          pointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnPlane);
 
@@ -2137,7 +2137,7 @@ public class EuclidGeometryToolsTest
          Point3D pointOnPlane = EuclidCoreRandomTools.generateRandomPoint3D(random);
          pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal, true);
+         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
 
          Point3D expectedIntersection = new Point3D();
          expectedIntersection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane, pointOnPlane);
@@ -2168,7 +2168,7 @@ public class EuclidGeometryToolsTest
          pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
 
-         Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal, false);
+         Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, false);
          endPoint0.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnPlane);
          endPoint1.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnPlane);
 
@@ -2443,8 +2443,8 @@ public class EuclidGeometryToolsTest
          Vector3D planeNormal1 = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
                                                                                              EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
-         Vector3D firstParallelToPlane1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal1, true);
-         Vector3D secondParallelToPlane1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal1, true);
+         Vector3D firstParallelToPlane1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal1, true);
+         Vector3D secondParallelToPlane1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal1, true);
 
          Point3D firstPointOnIntersection = new Point3D();
          Point3D secondPointOnIntersection = new Point3D();
@@ -2465,7 +2465,7 @@ public class EuclidGeometryToolsTest
          planeNormal2.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
          Point3D pointOnPlane2 = new Point3D();
 
-         Vector3D parallelToPlane2 = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal2, true);
+         Vector3D parallelToPlane2 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal2, true);
          pointOnPlane2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane2, firstPointOnIntersection);
 
          Point3D actualPointOnIntersection = new Point3D();
@@ -2670,8 +2670,8 @@ public class EuclidGeometryToolsTest
          Point3D secondPointOnPlane = new Point3D();
          Point3D thirdPointOnPlane = new Point3D();
 
-         Vector3D secondOrthogonalToNormal = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, expectedPlaneNormal, true);
-         Vector3D thirdOrthogonalToNormal = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, expectedPlaneNormal, true);
+         Vector3D secondOrthogonalToNormal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, expectedPlaneNormal, true);
+         Vector3D thirdOrthogonalToNormal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, expectedPlaneNormal, true);
 
          secondPointOnPlane.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0), secondOrthogonalToNormal, firstPointOnPlane);
          thirdPointOnPlane.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0), thirdOrthogonalToNormal, firstPointOnPlane);
@@ -2725,7 +2725,7 @@ public class EuclidGeometryToolsTest
                                                                                               EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
          Point3D expectedProjection = new Point3D();
          expectedProjection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
-         Vector3D perpendicularToLineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineDirection, true);
+         Vector3D perpendicularToLineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection, true);
 
          Point3D testPoint = new Point3D();
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), perpendicularToLineDirection, expectedProjection);
@@ -2788,7 +2788,7 @@ public class EuclidGeometryToolsTest
          lineSegmentEnd.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D lineSegmentDirection = new Vector3D();
          lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, lineSegmentDirection, true);
+         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection, true);
          Point3D expectedProjection = new Point3D();
          Point3D testPoint = new Point3D();
 
@@ -2825,7 +2825,7 @@ public class EuclidGeometryToolsTest
          pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
-         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3d(random, planeNormal, true);
+         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
          Point3D expectedProjection = new Point3D();
          expectedProjection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane, pointOnPlane);
 
