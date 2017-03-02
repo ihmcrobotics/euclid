@@ -1,8 +1,14 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
@@ -11,6 +17,7 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -77,7 +84,7 @@ public class EuclidGeometryToolsTest
          double rotationAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
 
          Vector2D lineDirection2 = new Vector2D();
-         EuclidGeometryTools.rotateTuple2D(rotationAngle, lineDirection1, lineDirection2);
+         RotationMatrixTools.applyYawRotation(rotationAngle, lineDirection1, lineDirection2);
          lineDirection2.normalize();
          lineDirection2.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
@@ -99,6 +106,10 @@ public class EuclidGeometryToolsTest
          boolean expectedCollinear = rotationAngle < angleEpsilon && distance < distanceEspilon;
          boolean actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2,
                                                                            angleEpsilon, distanceEspilon);
+         assertEquals(expectedCollinear, actualCollinear);
+
+         actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2, angleEpsilon,
+                                                                   distanceEspilon);
          assertEquals(expectedCollinear, actualCollinear);
       }
 
@@ -288,7 +299,7 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
-   public void testAreVector2DsCollinear() throws Exception
+   public void testAreVector2DsParallel() throws Exception
    {
       Random random = new Random(232L);
 
@@ -301,11 +312,11 @@ public class EuclidGeometryToolsTest
          double rotationAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
 
          Vector2D secondVector = new Vector2D();
-         EuclidGeometryTools.rotateTuple2D(rotationAngle, firstVector, secondVector);
+         RotationMatrixTools.applyYawRotation(rotationAngle, firstVector, secondVector);
          secondVector.normalize();
          secondVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
-         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector2DsCollinear(firstVector, secondVector, angleEpsilon));
+         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, angleEpsilon));
       }
 
       // Try again with small values
@@ -320,14 +331,45 @@ public class EuclidGeometryToolsTest
             continue; // This is the limit of accuracy.
 
          Vector2D secondVector = new Vector2D();
-         EuclidGeometryTools.rotateTuple2D(rotationAngle, firstVector, secondVector);
+         RotationMatrixTools.applyYawRotation(rotationAngle, firstVector, secondVector);
 
-         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector2DsCollinear(firstVector, secondVector, angleEpsilon));
+         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, angleEpsilon));
+      }
+
+      Vector2D unitVector = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.0);
+      Vector2D firstVector = new Vector2D(unitVector);
+      Vector2D secondVector = new Vector2D(unitVector);
+      firstVector.scale(0.9 * EuclidGeometryTools.ONE_TEN_MILLIONTH);
+
+      assertFalse(EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, Math.PI / 2.0));
+      assertFalse(EuclidGeometryTools.areVector2DsParallel(secondVector, firstVector, Math.PI / 2.0));
+
+      // Check that with an epsilon exactly equal to zero it does not crash.
+      EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, 0.0);
+
+      try
+      {
+         EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, -Double.MIN_VALUE);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, Math.PI / 2.0 + 1.110224e-16);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
       }
    }
 
    @Test
-   public void testAreVector3DsCollinear() throws Exception
+   public void testAreVector3DsParallel() throws Exception
    {
       Random random = new Random(232L);
 
@@ -349,7 +391,7 @@ public class EuclidGeometryToolsTest
          secondVector.normalize();
          secondVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
-         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector3DsCollinear(firstVector, secondVector, angleEpsilon));
+         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
       }
 
       // Try again with small values
@@ -371,7 +413,38 @@ public class EuclidGeometryToolsTest
          Vector3D secondVector = new Vector3D();
          rotationMatrix.transform(firstVector, secondVector);
 
-         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector3DsCollinear(firstVector, secondVector, angleEpsilon));
+         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
+      }
+
+      Vector3D unitVector = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0);
+      Vector3D firstVector = new Vector3D(unitVector);
+      Vector3D secondVector = new Vector3D(unitVector);
+      firstVector.scale(0.9 * EuclidGeometryTools.ONE_TEN_MILLIONTH);
+
+      assertFalse(EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, Math.PI / 2.0));
+      assertFalse(EuclidGeometryTools.areVector3DsParallel(secondVector, firstVector, Math.PI / 2.0));
+
+      // Check that with an epsilon exactly equal to zero it does not crash.
+      EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, 0.0);
+
+      try
+      {
+         EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, -Double.MIN_VALUE);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, Math.PI / 2.0 + 1.110224e-16);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
       }
    }
 
@@ -520,11 +593,9 @@ public class EuclidGeometryToolsTest
          double expectedAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI);
          Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstVector, true);
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
-         RotationMatrix rotationMatrix = new RotationMatrix();
-         rotationMatrix.set(expectedAxisAngle);
 
          Vector3D secondVector = new Vector3D();
-         rotationMatrix.transform(firstVector, secondVector);
+         expectedAxisAngle.transform(firstVector, secondVector);
          secondVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
          AxisAngle actualAxisAngle = new AxisAngle();
@@ -559,11 +630,9 @@ public class EuclidGeometryToolsTest
             expectedAngle = -expectedAngle;
          Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstVector, true);
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
-         RotationMatrix rotationMatrix = new RotationMatrix();
-         rotationMatrix.set(expectedAxisAngle);
 
          Vector3D secondVector = new Vector3D();
-         rotationMatrix.transform(firstVector, secondVector);
+         expectedAxisAngle.transform(firstVector, secondVector);
          secondVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
          AxisAngle actualAxisAngle = new AxisAngle();
@@ -633,8 +702,8 @@ public class EuclidGeometryToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D firstVector = EuclidCoreRandomTools.generateRandomVector3D(random);
-         firstVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
          Vector3D secondVector = new Vector3D(firstVector);
+         firstVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
          secondVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
          double expectedAngle = 0.0;
          Vector3D expectedAxis = new Vector3D(1.0, 0.0, 0.0);
@@ -661,8 +730,8 @@ public class EuclidGeometryToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D referenceNormal = EuclidCoreRandomTools.generateRandomVector3D(random);
-         referenceNormal.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D rotatedNormal = new Vector3D();
+         referenceNormal.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          rotatedNormal.setAndNegate(referenceNormal);
          rotatedNormal.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
          double expectedAngle = Math.PI;
@@ -686,38 +755,17 @@ public class EuclidGeometryToolsTest
          EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
       }
 
-      // Test getRotationBasedOnNormal(AxisAngle4d rotationToPack, Vector3d
-      // normalVector3d)
+      // Test axisAngleFromZUpToVector3D(Vector3DReadOnly vector, AxisAngleBasics rotationToPack) & axisAngleFromZUpToVector3D(Vector3DReadOnly vector)
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector3D referenceNormal = new Vector3D(0.0, 0.0, 1.0);
-         double expectedAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI);
-         Vector3D expectedAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, referenceNormal, true);
-         AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
-
-         Vector3D rotatedNormal = new Vector3D();
-         expectedAxisAngle.transform(referenceNormal, rotatedNormal);
-         rotatedNormal.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
-
+         Vector3D zUp = new Vector3D(0.0, 0.0, 1.0);
+         Vector3D vector = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
+         AxisAngle expectedAxisAngle = new AxisAngle();
          AxisAngle actualAxisAngle = new AxisAngle();
-         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(referenceNormal, rotatedNormal, actualAxisAngle);
-
-         Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
-
-         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEquals(0.0, actualAxis.dot(referenceNormal), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEquals(0.0, actualAxis.dot(rotatedNormal), EuclidGeometryTools.ONE_TRILLIONTH);
-
-         assertEquals(0.0, expectedAxis.dot(referenceNormal), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEquals(0.0, expectedAxis.dot(rotatedNormal), EuclidGeometryTools.ONE_TRILLIONTH);
-
-         if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
-         {
-            expectedAxis.negate();
-            expectedAngle = -expectedAngle;
-            expectedAxisAngle.set(expectedAxis, expectedAngle);
-         }
-
+         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(zUp, vector, expectedAxisAngle);
+         EuclidGeometryTools.axisAngleFromZUpToVector3D(vector, actualAxisAngle);
+         EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualAxisAngle = EuclidGeometryTools.axisAngleFromZUpToVector3D(vector);
          EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
@@ -737,12 +785,13 @@ public class EuclidGeometryToolsTest
       {
          Point3D lineStart1 = EuclidCoreRandomTools.generateRandomPoint3D(random);
          lineStart1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector3D lineDirection1 = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
-                                                                                               EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+         Vector3D lineDirection1 = EuclidCoreRandomTools.generateRandomVector3D(random);
+         lineDirection1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.1, 10.0));
 
          // Make line2 == line1
          Point3D lineStart2 = new Point3D(lineStart1);
          Vector3D lineDirection2 = new Vector3D(lineDirection1);
+         lineDirection2.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.1, 10.0));
 
          // Shift orthogonally line2 away from line1.
          Vector3D orthogonalToLine1 = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection1, true);
@@ -1425,6 +1474,13 @@ public class EuclidGeometryToolsTest
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint2DToLine2D(query, pointOnLine, lineDirection);
          assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         // Test with a line direction that a magnitude that is too small
+         lineDirection.normalize();
+         lineDirection.scale(0.999999 * EuclidGeometryTools.ONE_TRILLIONTH);
+         expectedDistance = pointOnLine.distance(query);
+         actualDistance = EuclidGeometryTools.distanceFromPoint2DToLine2D(query, pointOnLine, lineDirection);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1515,27 +1571,34 @@ public class EuclidGeometryToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          // Generate a random line
-         Point3D start = EuclidCoreRandomTools.generateRandomPoint3D(random);
-         start.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Point3D end = EuclidCoreRandomTools.generateRandomPoint3D(random);
-         end.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Point3D firstPointOnLine = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         firstPointOnLine.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Point3D secondPointOnLine = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         secondPointOnLine.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Vector3D lineDirection = new Vector3D();
-         lineDirection.sub(end, start);
+         lineDirection.sub(secondPointOnLine, firstPointOnLine);
          // Generate a random vector orthogonal to the line
          Vector3D orthogonalVector = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineDirection, true);
          double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          // Generate a random point located at an expected distance from the line
-         Point3D randomPoint = new Point3D();
+         Point3D query = new Point3D();
          // Randomize on the line
-         randomPoint.interpolate(start, end, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         query.interpolate(firstPointOnLine, secondPointOnLine, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          // Move the point away from the line by the expected distance
-         randomPoint.scaleAdd(expectedDistance, orthogonalVector, randomPoint);
+         query.scaleAdd(expectedDistance, orthogonalVector, query);
 
-         double actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(randomPoint, start, end);
+         double actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, firstPointOnLine, secondPointOnLine);
          assertEquals(expectedDistance, actualDistance, 1.0e-12);
 
-         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(randomPoint, start, lineDirection);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, firstPointOnLine, lineDirection);
          assertEquals(expectedDistance, actualDistance, 1.0e-12);
+
+         // Test with a line direction that a magnitude that is too small
+         lineDirection.normalize();
+         lineDirection.scale(0.999999 * EuclidGeometryTools.ONE_TRILLIONTH);
+         expectedDistance = firstPointOnLine.distance(query);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, firstPointOnLine, lineDirection);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1884,6 +1947,100 @@ public class EuclidGeometryToolsTest
          assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2));
          assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2));
       }
+
+      // Test with vertical parallel/collinear line segments
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double x = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         Point2D lineSegmentStart1 = new Point2D(x, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Point2D lineSegmentEnd1 = new Point2D(x, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point2D lineSegmentStart2 = new Point2D();
+         Point2D lineSegmentEnd2 = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.generateRandomDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.generateRandomDouble(random, 2.0);
+
+         // Make the second line segment collinear to the first one
+         lineSegmentStart2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha1);
+         lineSegmentEnd2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha2);
+
+         if ((0.0 < alpha1 && alpha1 < 1.0) || (0.0 < alpha2 && alpha2 < 1.0) || alpha1 * alpha2 < 0.0)
+         {
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2));
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2));
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2));
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2));
+         }
+         else
+         {
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2));
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2));
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2));
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2));
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the first.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(lineSegmentEnd1, lineSegmentStart1);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.generateRandomDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart2.scaleAdd(distance, orthogonal, lineSegmentStart2);
+         lineSegmentEnd2.scaleAdd(distance, orthogonal, lineSegmentEnd2);
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2));
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2));
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2));
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2));
+      }
+
+      // Test with horizontal parallel/collinear line segments
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double y = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         Point2D lineSegmentStart1 = new Point2D(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), y);
+         Point2D lineSegmentEnd1 = new Point2D(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), y);
+
+         Point2D lineSegmentStart2 = new Point2D();
+         Point2D lineSegmentEnd2 = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.generateRandomDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.generateRandomDouble(random, 2.0);
+
+         // Make the second line segment collinear to the first one
+         lineSegmentStart2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha1);
+         lineSegmentEnd2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha2);
+
+         if ((0.0 < alpha1 && alpha1 < 1.0) || (0.0 < alpha2 && alpha2 < 1.0) || alpha1 * alpha2 < 0.0)
+         {
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2));
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2));
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2));
+            assertTrue(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2));
+         }
+         else
+         {
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2));
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2));
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2));
+            assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2));
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the first.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(lineSegmentEnd1, lineSegmentStart1);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.generateRandomDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart2.scaleAdd(distance, orthogonal, lineSegmentStart2);
+         lineSegmentEnd2.scaleAdd(distance, orthogonal, lineSegmentEnd2);
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2));
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2));
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2));
+         assertFalse(EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2));
+      }
    }
 
    @Test
@@ -1939,10 +2096,14 @@ public class EuclidGeometryToolsTest
                                                                                  actualIntersection);
          assertTrue(success);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
          pointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), lineDirection, expectedIntersection);
@@ -1950,10 +2111,14 @@ public class EuclidGeometryToolsTest
                                                                                  actualIntersection);
          assertTrue(success);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       }
 
@@ -1974,20 +2139,24 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertFalse(success);
+         assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
 
          lineLineIntersection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.generateRandomDouble(random, -1.0, 0.0));
          pointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), lineDirection, lineLineIntersection);
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertFalse(success);
+         assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
       }
 
       // Make the intersection happen on each end point of the line segment
@@ -2008,10 +2177,14 @@ public class EuclidGeometryToolsTest
                                                                                  actualIntersection);
          assertTrue(success);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
          expectedIntersection.set(lineSegmentEnd);
@@ -2020,10 +2193,14 @@ public class EuclidGeometryToolsTest
                                                                                  actualIntersection);
          assertTrue(success);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       }
 
@@ -2049,6 +2226,7 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
       }
 
       // Make the line segment and the line collinear.
@@ -2071,9 +2249,14 @@ public class EuclidGeometryToolsTest
                                                                                  actualIntersection);
          assertTrue(success);
          EuclidCoreTestTools.assertTuple2DEquals(lineSegmentStart, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd);
+         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentStart, actualIntersection, epsilon);
+
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentEnd, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart);
          EuclidCoreTestTools.assertTuple2DEquals(lineSegmentEnd, actualIntersection, epsilon);
       }
    }
@@ -2191,66 +2374,94 @@ public class EuclidGeometryToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D pointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
-         pointOnLine1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 10.0);
+         Point2D firstPointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
+         firstPointOnLine1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random,
+                                                                                               EuclidCoreRandomTools.generateRandomDouble(random, 0.1, 10.0));
+         Point2D secondPointOnLine1 = new Point2D();
+         secondPointOnLine1.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection1, firstPointOnLine1);
 
          Point2D expectedIntersection = new Point2D();
-         expectedIntersection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection1, pointOnLine1);
+         expectedIntersection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection1, firstPointOnLine1);
 
-         Vector2D lineDirection2 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 10.0);
-         Point2D pointOnLine2 = new Point2D(expectedIntersection);
+         Vector2D lineDirection2 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random,
+                                                                                               EuclidCoreRandomTools.generateRandomDouble(random, 0.1, 10.0));
+         Point2D firstPointOnLine2 = new Point2D(expectedIntersection);
+         Point2D secondPointOnLine2 = new Point2D();
+         secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
 
          if (Math.abs(lineDirection1.dot(lineDirection2) / lineDirection1.length() / lineDirection2.length()) > 1.0 - 0.0005)
             epsilon = 1.0e-11; // Loss of precision for small angles between the two lines.
          else
             epsilon = 1.0e-12;
-         Point2D actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2);
+         Point2D actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, pointOnLine2);
-         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2);
+         firstPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
+         secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       }
 
       // Test when parallel but not collinear
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D pointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
-         pointOnLine1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 10.0);
+         Point2D firstPointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
+         firstPointOnLine1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random,
+                                                                                               EuclidCoreRandomTools.generateRandomDouble(random, 0.1, 10.0));
+         Point2D secondPointOnLine1 = new Point2D();
+         secondPointOnLine1.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection1, firstPointOnLine1);
 
          Vector2D lineDirection2 = new Vector2D(lineDirection1);
          if (random.nextBoolean())
             lineDirection2.negate();
-         Point2D pointOnLine2 = new Point2D(pointOnLine1);
+         Point2D firstPointOnLine2 = new Point2D(firstPointOnLine1);
+         Point2D secondPointOnLine2 = new Point2D();
 
          Vector2D orthogonal = new Vector2D(-lineDirection1.getY(), lineDirection1.getX());
 
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOnLine2);
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, pointOnLine2);
-         Point2D actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2);
+         firstPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, firstPointOnLine2);
+         firstPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
+         secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
+         Point2D actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2);
+         assertNull(actualIntersection);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
          assertNull(actualIntersection);
       }
 
       // Test when collinear
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D pointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
-         pointOnLine1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 10.0);
+         Point2D firstPointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
+         firstPointOnLine1.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random,
+                                                                                               EuclidCoreRandomTools.generateRandomDouble(random, 0.1, 10.0));
+         Point2D secondPointOnLine1 = new Point2D();
+         secondPointOnLine1.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection1, firstPointOnLine1);
 
          Point2D expectedIntersection = new Point2D();
-         expectedIntersection.set(pointOnLine1);
+         expectedIntersection.set(firstPointOnLine1);
 
          Vector2D lineDirection2 = new Vector2D(lineDirection1);
-         Point2D pointOnLine2 = new Point2D(expectedIntersection);
+         Point2D firstPointOnLine2 = new Point2D(expectedIntersection);
+         Point2D secondPointOnLine2 = new Point2D();
+         secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
 
-         Point2D actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2);
+         Point2D actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, pointOnLine2);
-         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2);
+         firstPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
+         secondPointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, firstPointOnLine2);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+         actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       }
    }
@@ -2473,7 +2684,7 @@ public class EuclidGeometryToolsTest
 
          boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2,
                                                                               actualPointOnIntersection, actualIntersectionDirection);
-         boolean areParallel = EuclidGeometryTools.areVector3DsCollinear(planeNormal1, planeNormal2, 1.0e-6);
+         boolean areParallel = EuclidGeometryTools.areVector3DsParallel(planeNormal1, planeNormal2, 1.0e-6);
          assertNotEquals(areParallel, success);
          if (areParallel)
             continue;
@@ -2482,7 +2693,7 @@ public class EuclidGeometryToolsTest
             expectedIntersectionDirection.negate();
 
          String message = "Angle between vectors " + expectedIntersectionDirection.angle(actualIntersectionDirection);
-         assertTrue(message, EuclidGeometryTools.areVector3DsCollinear(expectedIntersectionDirection, actualIntersectionDirection, 1.0e-7));
+         assertTrue(message, EuclidGeometryTools.areVector3DsParallel(expectedIntersectionDirection, actualIntersectionDirection, 1.0e-7));
          assertEquals(1.0, actualIntersectionDirection.length(), EPSILON);
 
          if (planeNormal1.dot(planeNormal2) < 0.0)
@@ -2823,7 +3034,8 @@ public class EuclidGeometryToolsTest
       {
          Point3D pointOnPlane = EuclidCoreRandomTools.generateRandomPoint3D(random);
          pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
+         Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
+                                                                                            EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
 
          Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
          Point3D expectedProjection = new Point3D();
@@ -2841,6 +3053,502 @@ public class EuclidGeometryToolsTest
    @Test
    public void testPercentageAlongLineSegment2D() throws Exception
    {
-      
+      Random random = new Random(23424L);
+
+      // Test on line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         Point2D pointOnLineSegment = new Point2D();
+
+         // Test between end points
+         double expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test before end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0);
+         pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test after end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0);
+         pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+      }
+
+      // Test off line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         Point2D pointOffLineSegment = new Point2D();
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineSegmentDirection);
+         orthogonal.normalize();
+
+         // Test between end points
+         double expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOffLineSegment);
+         double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test before end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0);
+         pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOffLineSegment);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test after end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0);
+         pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOffLineSegment);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPercentageAlongLineSegment3D() throws Exception
+   {
+      Random random = new Random(23424L);
+
+      // Test on line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D lineSegmentEnd = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+
+         Point3D pointOnLineSegment = new Point3D();
+
+         // Test between end points
+         double expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test before end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0);
+         pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test after end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0);
+         pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+      }
+
+      // Test off line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint3D(random, -10.0, 10.0);
+         Point3D lineSegmentEnd = EuclidCoreRandomTools.generateRandomPoint3D(random, -10.0, 10.0);
+
+         Point3D pointOffLineSegment = new Point3D();
+         Vector3D lineSegmentDirection = new Vector3D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentDirection.normalize();
+         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection, true);
+
+         // Test between end points
+         double expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOffLineSegment);
+         double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test before end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0);
+         pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOffLineSegment);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Test after end points
+         expectedPercentage = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0);
+         pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
+         pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOffLineSegment);
+         actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPerpendicularBisector2D() throws Exception
+   {
+      Random random = new Random(1176L);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         Point2D expectedBisectorStart = new Point2D();
+         expectedBisectorStart.interpolate(lineSegmentStart, lineSegmentEnd, 0.5);
+         Vector2D expectedBisectorDirection = new Vector2D();
+         expectedBisectorDirection.sub(lineSegmentEnd, lineSegmentStart);
+         EuclidGeometryTools.perpendicularVector2D(expectedBisectorDirection, expectedBisectorDirection);
+         expectedBisectorDirection.normalize();
+
+         Point2D actualBisectorStart = new Point2D();
+         Vector2D actualBisectorDirection = new Vector2D();
+         EuclidGeometryTools.perpendicularBisector2D(lineSegmentStart, lineSegmentEnd, actualBisectorStart, actualBisectorDirection);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedBisectorStart, actualBisectorStart, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedBisectorDirection, actualBisectorDirection, EPSILON);
+
+         Point2D pointOnBisector = new Point2D();
+         pointOnBisector.scaleAdd(1.0, actualBisectorDirection, actualBisectorStart);
+         assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(pointOnBisector, lineSegmentStart, lineSegmentEnd));
+      }
+   }
+
+   @Test
+   public void testPerpendicularBisectorSegment2D() throws Exception
+   {
+      Random random = new Random(1176L);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D firstPointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D secondPointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(secondPointOnLine, firstPointOnLine);
+         double lengthOffset = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+         List<Point2D> normalPointsFromLine = EuclidGeometryTools.perpendicularBisectorSegment2D(firstPointOnLine, secondPointOnLine, lengthOffset);
+
+         Point2D normalPoint0 = normalPointsFromLine.get(0);
+         Point2D normalPoint1 = normalPointsFromLine.get(1);
+         Vector2D normalDirection = new Vector2D();
+         normalDirection.sub(normalPoint1, normalPoint0);
+
+         assertEquals(2.0 * lengthOffset, normalDirection.length(), EPSILON);
+         assertEquals(0.0, lineDirection.dot(normalDirection), EPSILON);
+         assertEquals(lengthOffset, EuclidGeometryTools.distanceFromPoint2DToLine2D(normalPoint0, firstPointOnLine, secondPointOnLine), EPSILON);
+         assertEquals(lengthOffset, EuclidGeometryTools.distanceFromPoint2DToLine2D(normalPoint1, firstPointOnLine, secondPointOnLine), EPSILON);
+         assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(normalPoint0, firstPointOnLine, secondPointOnLine));
+         assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(normalPoint1, firstPointOnLine, secondPointOnLine));
+      }
+   }
+
+   @Test
+   public void testPerpedicularVector2D() throws Exception
+   {
+      Vector2D vector = new Vector2D(15.0, 10.0);
+      Vector2D expectedReturn = new Vector2D(-10.0, 15.0);
+      Vector2D actualReturn = EuclidGeometryTools.perpendicularVector2D(vector);
+      assertEquals("return value", expectedReturn, actualReturn);
+      Random random = new Random(1176L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         vector = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
+         Vector2D perpendicularVector = EuclidGeometryTools.perpendicularVector2D(vector);
+         assertEquals(vector.length(), perpendicularVector.length(), EPSILON);
+         assertEquals(vector.length() * vector.length(), vector.cross(perpendicularVector), EPSILON);
+         assertEquals(0.0, vector.dot(perpendicularVector), EPSILON);
+         assertEquals(Math.PI / 2.0, vector.angle(perpendicularVector), EPSILON);
+      }
+   }
+
+   @Test
+   public void testPerpendicularVector3DFromLine3DToPoint3D() throws Exception
+   {
+      Random random = new Random(1176L);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D expectedPerpendicularVector = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
+                                                                                                            EuclidCoreRandomTools.generateRandomDouble(random,
+                                                                                                                                                       0.0, 10.0));
+         Point3D expectedIntersection = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+
+         Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, expectedPerpendicularVector, true);
+         Point3D firstPointOnLine = new Point3D();
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, expectedIntersection);
+         Point3D secondPointOnLine = new Point3D();
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, expectedIntersection);
+
+         Point3D point = new Point3D();
+         point.add(expectedIntersection, expectedPerpendicularVector);
+
+         Point3D actualIntersection = new Point3D();
+         double epsilon = EPSILON;
+
+         if (firstPointOnLine.distance(secondPointOnLine) < 5.0e-4)
+            epsilon = 1.0e-10; // Loss of precision when the given points defining the line are getting close.
+
+         Vector3D actualPerpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine,
+                                                                                                           actualIntersection);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection, actualIntersection, epsilon);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedPerpendicularVector, actualPerpendicularVector, epsilon);
+
+         actualPerpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine, null);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedPerpendicularVector, actualPerpendicularVector, epsilon);
+      }
+   }
+
+   @Test
+   public void testPythagorasGetCathetus() throws Exception
+   {
+      try
+      {
+         EuclidGeometryTools.pythagorasGetCathetus(-1.0, 1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         EuclidGeometryTools.pythagorasGetCathetus(1.0, -1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      Random random = new Random(23434L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D a = new Point2D();
+         Point2D b = new Point2D(EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0), 0.0);
+         Point2D c = new Point2D(0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0));
+
+         double hypotenuseC = b.distance(c);
+         double cathetusA = a.distance(b);
+         double expectedCathetusB = a.distance(c);
+         double actualCathetusB = EuclidGeometryTools.pythagorasGetCathetus(hypotenuseC, cathetusA);
+         assertEquals(expectedCathetusB, actualCathetusB, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPythagorasGetHypotenuse() throws Exception
+   {
+      try
+      {
+         EuclidGeometryTools.pythagorasGetHypotenuse(-1.0, 1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         EuclidGeometryTools.pythagorasGetHypotenuse(1.0, -1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      Random random = new Random(23434L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D a = new Point2D();
+         Point2D b = new Point2D(EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0), 0.0);
+         Point2D c = new Point2D(0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0));
+
+         double cathetusA = a.distance(b);
+         double cathetusB = a.distance(c);
+         double expectedHypotenuseC = b.distance(c);
+         double actualHypotenuseC = EuclidGeometryTools.pythagorasGetHypotenuse(cathetusA, cathetusB);
+         assertEquals(expectedHypotenuseC, actualHypotenuseC, EPSILON);
+      }
+   }
+
+   @Test
+   public void testRadiusOfArc() throws Exception
+   {
+      Random random = new Random(1176L);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double expectedArcRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.1, 100.0);
+         double chordAngle = EuclidCoreRandomTools.generateRandomDouble(random, -3.0 * Math.PI, 3.0 * Math.PI);
+         double chordLength = 2.0 * expectedArcRadius * Math.sin(0.5 * chordAngle);
+         double actualArcRadius = EuclidGeometryTools.radiusOfArc(chordLength, chordAngle);
+         assertEquals(expectedArcRadius, actualArcRadius, EPSILON);
+      }
+
+      assertTrue(Double.isNaN(EuclidGeometryTools.radiusOfArc(1.0, 0.0)));
+      assertTrue(Double.isNaN(EuclidGeometryTools.radiusOfArc(1.0, Math.PI)));
+      assertTrue(Double.isNaN(EuclidGeometryTools.radiusOfArc(1.0, -Math.PI)));
+   }
+
+   @Test
+   public void testTopVertex3DOfIsoscelesTriangle3D() throws Exception
+   {
+      Random random = new Random(1176L);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D expectedB = EuclidCoreRandomTools.generateRandomPoint3D(random, -10.0, 10.0);
+         Point3D a = EuclidCoreRandomTools.generateRandomPoint3D(random, -10.0, 10.0);
+         Vector3D ba = new Vector3D();
+         ba.sub(a, expectedB);
+
+         double abcAngle = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, Math.PI / 2.0);
+
+         Vector3D triangleNormal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, ba, true);
+         triangleNormal.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
+         AxisAngle abcAxisAngle = new AxisAngle(triangleNormal, abcAngle);
+         RotationMatrix abcRotationMatrix = new RotationMatrix();
+         abcRotationMatrix.set(abcAxisAngle);
+         Vector3D bc = new Vector3D();
+         abcRotationMatrix.transform(ba, bc);
+
+         Point3D c = new Point3D();
+         c.add(bc, expectedB);
+
+         double epsilon = 1.0e-11;
+
+         Point3D actualB = new Point3D();
+         EuclidGeometryTools.topVertex3DOfIsoscelesTriangle3D(a, c, triangleNormal, abcAngle, actualB);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedB, actualB, epsilon);
+         assertEquals(abcAngle, ba.angle(bc), epsilon);
+      }
+   }
+
+   @Test
+   public void testTriangleBisector2D() throws Exception
+   {
+      Random random = new Random(1176L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D a = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D b = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D c = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         Vector2D ba = new Vector2D();
+         ba.sub(a, b);
+         Vector2D bc = new Vector2D();
+         bc.sub(c, b);
+
+         double abcAngle = ba.angle(bc);
+
+         Point2D x = new Point2D();
+         EuclidGeometryTools.triangleBisector2D(a, b, c, x);
+
+         Vector2D bx = new Vector2D();
+         bx.sub(x, b);
+
+         double abxAngle = ba.angle(bx);
+
+         assertEquals(0.5 * abcAngle, abxAngle, EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(x, a, c), EPSILON);
+      }
+   }
+
+   @Test
+   public void testUnknownTriangleAngleByLawOfCosine() throws Exception
+   {
+      Random random = new Random(34534L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D a = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D b = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D c = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         Vector2D ab = new Vector2D();
+         ab.sub(b, a);
+         Vector2D ba = new Vector2D();
+         ba.sub(a, b);
+         Vector2D ac = new Vector2D();
+         ac.sub(c, a);
+         Vector2D ca = new Vector2D();
+         ca.sub(a, c);
+         Vector2D bc = new Vector2D();
+         bc.sub(c, b);
+         Vector2D cb = new Vector2D();
+         cb.sub(b, c);
+
+         // The three edge lengths
+         double abLength = ab.length();
+         double acLength = ac.length();
+         double bcLength = bc.length();
+
+         // The three angles
+         double abc = Math.abs(ba.angle(bc));
+         double bca = Math.abs(cb.angle(ca));
+         double cab = Math.abs(ac.angle(ab));
+
+         assertEquals(cab, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(abLength, acLength, bcLength), EPSILON);
+         assertEquals(bca, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(acLength, bcLength, abLength), EPSILON);
+         assertEquals(abc, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(abLength, bcLength, acLength), EPSILON);
+      }
+   }
+
+   @Test
+   public void testUnknownTriangleSideLengthByLawOfCosine() throws Exception
+   {
+      Random random = new Random(34534L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D a = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D b = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D c = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         Vector2D ab = new Vector2D();
+         ab.sub(b, a);
+         Vector2D ba = new Vector2D();
+         ba.sub(a, b);
+         Vector2D ac = new Vector2D();
+         ac.sub(c, a);
+         Vector2D ca = new Vector2D();
+         ca.sub(a, c);
+         Vector2D bc = new Vector2D();
+         bc.sub(c, b);
+         Vector2D cb = new Vector2D();
+         cb.sub(b, c);
+
+         // The three edge lengths
+         double abLength = ab.length();
+         double acLength = ac.length();
+         double bcLength = bc.length();
+
+         // The three angles
+         double abc = Math.abs(ba.angle(bc));
+         double bca = Math.abs(cb.angle(ca));
+         double cab = Math.abs(ac.angle(ab));
+
+         assertEquals(bcLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, acLength, cab), EPSILON);
+         assertEquals(abLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(acLength, bcLength, bca), EPSILON);
+         assertEquals(acLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, bcLength, abc), EPSILON);
+      }
+   }
+
+   @Test
+   public void testXYDistanceBetweenPoint3Ds() throws Exception
+   {
+      Random random = new Random(232L);
+
+      for (int i = 0; i < 1000; i++)
+      {
+         Point3D firstPoint3d = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D secondPoint3d = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point2D firstPoint2d = new Point2D(firstPoint3d.getX(), firstPoint3d.getY());
+         Point2D secondPoint2d = new Point2D(secondPoint3d.getX(), secondPoint3d.getY());
+         double expectedDistance = firstPoint2d.distance(secondPoint2d);
+         double actualDistance = EuclidGeometryTools.xyDistanceBetweenPoint3Ds(firstPoint3d, secondPoint3d);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
    }
 }

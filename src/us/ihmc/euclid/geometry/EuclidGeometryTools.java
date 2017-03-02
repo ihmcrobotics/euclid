@@ -6,12 +6,11 @@ import java.util.List;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -27,6 +26,8 @@ public class EuclidGeometryTools
    public static final double ONE_TEN_MILLIONTH = 1.0e-7;
    public static final double ONE_TRILLIONTH = 1.0e-12;
 
+   public static final double HALF_PI = 0.5 * Math.PI;
+
    /**
     * Computes the angle in radians from the first 2D vector to the second 2D vector. The computed
     * angle is in the range [-<i>pi</i>; <i>pi</i>].
@@ -37,14 +38,6 @@ public class EuclidGeometryTools
     */
    public static double angleFromFirstToSecondVector2D(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY)
    {
-      double firstVectorLength = Math.sqrt(firstVectorX * firstVectorX + firstVectorY * firstVectorY);
-      firstVectorX /= firstVectorLength;
-      firstVectorY /= firstVectorLength;
-
-      double secondVectorLength = Math.sqrt(secondVectorX * secondVectorX + secondVectorY * secondVectorY);
-      secondVectorX /= secondVectorLength;
-      secondVectorY /= secondVectorLength;
-
       // The sign of the angle comes from the cross product
       double crossProduct = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
       // the magnitude of the angle comes from the dot product
@@ -124,7 +117,7 @@ public class EuclidGeometryTools
    public static boolean areLine2DsCollinear(double pointOnLine1x, double pointOnLine1y, double lineDirection1x, double lineDirection1y, double pointOnLine2x,
                                              double pointOnLine2y, double lineDirection2x, double lineDirection2y, double angleEpsilon, double distanceEspilon)
    {
-      if (!areVector2DsCollinear(lineDirection1x, lineDirection1y, lineDirection2x, lineDirection2y, angleEpsilon))
+      if (!areVector2DsParallel(lineDirection1x, lineDirection1y, lineDirection2x, lineDirection2y, angleEpsilon))
          return false;
 
       double distance = distanceFromPoint2DToLine2D(pointOnLine2x, pointOnLine2y, pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y);
@@ -231,7 +224,7 @@ public class EuclidGeometryTools
                                              double lineDirection1z, double pointOnLine2x, double pointOnLine2y, double pointOnLine2z, double lineDirection2x,
                                              double lineDirection2y, double lineDirection2z, double angleEpsilon, double distanceEspilon)
    {
-      if (!areVector3DsCollinear(lineDirection1x, lineDirection1y, lineDirection1z, lineDirection2x, lineDirection2y, lineDirection2z, angleEpsilon))
+      if (!areVector3DsParallel(lineDirection1x, lineDirection1y, lineDirection1z, lineDirection2x, lineDirection2y, lineDirection2z, angleEpsilon))
          return false;
 
       double distance = distanceFromPoint3DToLine3D(pointOnLine2x, pointOnLine2y, pointOnLine2z, pointOnLine1x, pointOnLine1y, pointOnLine1z, lineDirection1x,
@@ -313,7 +306,7 @@ public class EuclidGeometryTools
    /**
     * Tests if the two given planes are coincident:
     * <ul>
-    * <li>{@code planeNormal1} and {@code planeNormal2} are collinear given the tolerance
+    * <li>{@code planeNormal1} and {@code planeNormal2} are parallel given the tolerance
     * {@code angleEpsilon}.
     * <li>the distance of {@code pointOnPlane2} from the first plane is less than
     * {@code distanceEpsilon}.
@@ -331,7 +324,7 @@ public class EuclidGeometryTools
     * @param pointOnPlane2 a point on the second plane. Not modified.
     * @param planeNormal2 the normal of the second plane. Not modified.
     * @param angleEpsilon tolerance on the angle in radians to determine if the plane normals are
-    *           collinear.
+    *           parallel.
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnPlane2} belongs
     *           to the first plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
@@ -339,16 +332,16 @@ public class EuclidGeometryTools
    public static boolean arePlane3DsCoincident(Point3DReadOnly pointOnPlane1, Vector3DReadOnly planeNormal1, Point3DReadOnly pointOnPlane2,
                                                Vector3DReadOnly planeNormal2, double angleEpsilon, double distanceEpsilon)
    {
-      if (!areVector3DsCollinear(planeNormal1, planeNormal2, angleEpsilon))
+      if (!areVector3DsParallel(planeNormal1, planeNormal2, angleEpsilon))
          return false;
       else
          return distanceFromPoint3DToPlane3D(pointOnPlane2, pointOnPlane1, planeNormal1) < distanceEpsilon;
    }
 
    /**
-    * Tests if the two given vectors are collinear given a tolerance on the angle between the two
+    * Tests if the two given vectors are parallel given a tolerance on the angle between the two
     * vector axes in the range ]0; <i>pi</i>/2[. This method returns {@code true} if the two vectors
-    * are collinear, whether they are pointing in the same direction or in opposite directions.
+    * are parallel, whether they are pointing in the same direction or in opposite directions.
     *
     * <p>
     * Edge cases:
@@ -363,10 +356,13 @@ public class EuclidGeometryTools
     * @param secondVectorX x-component of the second vector. Not modified.
     * @param secondVectorY y-component of the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
-    * @return {@code true} if the two vectors are collinear, {@code false} otherwise.
+    * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
     */
-   public static boolean areVector2DsCollinear(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY, double angleEpsilon)
+   public static boolean areVector2DsParallel(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY, double angleEpsilon)
    {
+      if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
+         throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
+
       double firstVectorLength = Math.sqrt(firstVectorX * firstVectorX + firstVectorY * firstVectorY);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
@@ -378,9 +374,9 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Tests if the two given vectors are collinear given a tolerance on the angle between the two
+    * Tests if the two given vectors are parallel given a tolerance on the angle between the two
     * vector axes in the range ]0; <i>pi</i>/2[. This method returns {@code true} if the two vectors
-    * are collinear, whether they are pointing in the same direction or in opposite directions.
+    * are parallel, whether they are pointing in the same direction or in opposite directions.
     *
     * <p>
     * Edge cases:
@@ -393,17 +389,17 @@ public class EuclidGeometryTools
     * @param firstVector the first vector. Not modified.
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
-    * @return {@code true} if the two vectors are collinear, {@code false} otherwise.
+    * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
     */
-   public static boolean areVector2DsCollinear(Vector2DReadOnly firstVector, Vector2DReadOnly secondVector, double angleEpsilon)
+   public static boolean areVector2DsParallel(Vector2DReadOnly firstVector, Vector2DReadOnly secondVector, double angleEpsilon)
    {
-      return areVector2DsCollinear(firstVector.getX(), firstVector.getY(), secondVector.getX(), secondVector.getY(), angleEpsilon);
+      return areVector2DsParallel(firstVector.getX(), firstVector.getY(), secondVector.getX(), secondVector.getY(), angleEpsilon);
    }
 
    /**
-    * Tests if the two given vectors are collinear given a tolerance on the angle between the two
+    * Tests if the two given vectors are parallel given a tolerance on the angle between the two
     * vector axes in the range ]0; <i>pi</i>/2[. This method returns {@code true} if the two vectors
-    * are collinear, whether they are pointing in the same direction or in opposite directions.
+    * are parallel, whether they are pointing in the same direction or in opposite directions.
     *
     * <p>
     * Edge cases:
@@ -420,11 +416,14 @@ public class EuclidGeometryTools
     * @param secondVectorY y-component of the second vector. Not modified.
     * @param secondVectorZ z-component of the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
-    * @return {@code true} if the two vectors are collinear, {@code false} otherwise.
+    * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
     */
-   public static boolean areVector3DsCollinear(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX, double secondVectorY,
+   public static boolean areVector3DsParallel(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX, double secondVectorY,
                                                double secondVectorZ, double angleEpsilon)
    {
+      if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
+         throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
+
       double firstVectorLength = Math.sqrt(firstVectorX * firstVectorX + firstVectorY * firstVectorY + firstVectorZ * firstVectorZ);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
@@ -436,9 +435,9 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Tests if the two given vectors are collinear given a tolerance on the angle between the two
+    * Tests if the two given vectors are parallel given a tolerance on the angle between the two
     * vector axes in the range ]0; <i>pi</i>/2[. This method returns {@code true} if the two vectors
-    * are collinear, whether they are pointing in the same direction or in opposite directions.
+    * are parallel, whether they are pointing in the same direction or in opposite directions.
     *
     * <p>
     * Edge cases:
@@ -451,11 +450,11 @@ public class EuclidGeometryTools
     * @param firstVector the first vector. Not modified.
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
-    * @return {@code true} if the two vectors are collinear, {@code false} otherwise.
+    * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
     */
-   public static boolean areVector3DsCollinear(Vector3DReadOnly firstVector, Vector3DReadOnly secondVector, double angleEpsilon)
+   public static boolean areVector3DsParallel(Vector3DReadOnly firstVector, Vector3DReadOnly secondVector, double angleEpsilon)
    {
-      return areVector3DsCollinear(firstVector.getX(), firstVector.getY(), firstVector.getZ(), secondVector.getX(), secondVector.getY(), secondVector.getZ(),
+      return areVector3DsParallel(firstVector.getX(), firstVector.getY(), firstVector.getZ(), secondVector.getX(), secondVector.getY(), secondVector.getZ(),
                                    angleEpsilon);
    }
 
@@ -536,14 +535,14 @@ public class EuclidGeometryTools
     * <ul>
     * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis
     * is set to: (1, 0, 0).
-    * <li>the vectors are collinear pointing opposite directions: the rotation angle is equal to
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
     * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
     * <li>if the length of either normal is below {@link #ONE_TEN_MILLIONTH}: the rotation angle is
     * equal to {@code 0.0} and the rotation axis is set to: (1, 0, 0).
     * </ul>
     * </p>
     * <p>
-    * Note: The calculation becomes less accurate as the two vectors are more collinear.
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
     * </p>
     *
     * @param firstVectorX x-component of the first vector.
@@ -564,17 +563,16 @@ public class EuclidGeometryTools
       double rotationAxisX = firstVectorY * secondVectorZ - firstVectorZ * secondVectorY;
       double rotationAxisY = firstVectorZ * secondVectorX - firstVectorX * secondVectorZ;
       double rotationAxisZ = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
-      double rotationAxisLength = Math.sqrt(rotationAxisX * rotationAxisX + rotationAxisY * rotationAxisY + rotationAxisZ * rotationAxisZ);
+      double rotationAxisLength = Math.sqrt(EuclidCoreTools.normSquared(rotationAxisX, rotationAxisY, rotationAxisZ));
 
       boolean normalsAreParallel = rotationAxisLength < ONE_TEN_MILLIONTH;
 
-      double dot;
-      dot = secondVectorX * firstVectorX;
-      dot += secondVectorY * firstVectorY;
-      dot += secondVectorZ * firstVectorZ;
-
       if (normalsAreParallel)
       {
+         double dot;
+         dot = secondVectorX * firstVectorX;
+         dot += secondVectorY * firstVectorY;
+         dot += secondVectorZ * firstVectorZ;
          double rotationAngle = dot > 0.0 ? 0.0 : Math.PI;
          rotationToPack.set(1.0, 0.0, 0.0, rotationAngle);
          return;
@@ -600,14 +598,14 @@ public class EuclidGeometryTools
     * <ul>
     * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis
     * is set to: (1, 0, 0).
-    * <li>the vectors are collinear pointing opposite directions: the rotation angle is equal to
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
     * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
     * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
     * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
     * </ul>
     * </p>
     * <p>
-    * Note: The calculation becomes less accurate as the two vectors are more collinear.
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
     * </p>
     *
     * @param firstVector the first vector. Not modified.
@@ -634,14 +632,14 @@ public class EuclidGeometryTools
     * <ul>
     * <li>the vector is aligned with {@code zUp}: the rotation angle is equal to {@code 0.0} and the
     * rotation axis is set to: (1, 0, 0).
-    * <li>the vector is collinear pointing opposite direction of {@code zUp}: the rotation angle is
+    * <li>the vector is parallel pointing opposite direction of {@code zUp}: the rotation angle is
     * equal to {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
     * <li>if the length of the given normal is below {@code 1.0E-7}: the rotation angle is equal to
     * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
     * </ul>
     * </p>
     * <p>
-    * Note: The calculation becomes less accurate as the two vectors are more collinear.
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
     * </p>
     * <p>
     * WARNING: This method generates garbage.
@@ -669,14 +667,14 @@ public class EuclidGeometryTools
     * <ul>
     * <li>the vector is aligned with {@code zUp}: the rotation angle is equal to {@code 0.0} and the
     * rotation axis is set to: (1, 0, 0).
-    * <li>the vector is collinear pointing opposite direction of {@code zUp}: the rotation angle is
+    * <li>the vector is parallel pointing opposite direction of {@code zUp}: the rotation angle is
     * equal to {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
     * <li>if the length of the given normal is below {@code 1.0E-7}: the rotation angle is equal to
     * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
     * </ul>
     * </p>
     * <p>
-    * Note: The calculation becomes less accurate as the two vectors are more collinear.
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
     * </p>
     *
     * @param vector the vector that is rotated with respect to {@code zUp}. Not modified.
@@ -980,8 +978,8 @@ public class EuclidGeometryTools
    public static double distanceFromPoint2DToLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
                                                     double lineDirectionY)
    {
-      double dx = pointOnLineY - pointY;
-      double dy = pointOnLineX - pointX;
+      double dx = pointOnLineX - pointX;
+      double dy = pointOnLineY - pointY;
       double directionMagnitude = lineDirectionX * lineDirectionX + lineDirectionY * lineDirectionY;
       directionMagnitude = Math.sqrt(directionMagnitude);
 
@@ -991,7 +989,7 @@ public class EuclidGeometryTools
       }
       else
       {
-         return Math.abs(lineDirectionX * dx - dy * lineDirectionY) / directionMagnitude;
+         return Math.abs(lineDirectionX * dy - dx * lineDirectionY) / directionMagnitude;
       }
    }
 
@@ -3639,43 +3637,6 @@ public class EuclidGeometryTools
          return Double.NaN;
       else
          return chordLength / (2.0 * Math.sin(0.5 * chordAngle));
-   }
-
-   /**
-    * Rotates the given {@code tupleOriginal} tuple by an angle {@code yaw} and stores the result in
-    * the tuple.
-    *
-    * @param yaw the angle in radians by which {@code tupleOriginal} should be rotated.
-    * @param tupleToRotate the original tuple. Not modified.
-    */
-   public static void rotateTuple2D(double yaw, Tuple2DBasics tupleToRotate)
-   {
-      double cos = Math.cos(yaw);
-      double sin = Math.sin(yaw);
-
-      double x = tupleToRotate.getX();
-      double y = tupleToRotate.getY();
-
-      tupleToRotate.setX(cos * x - sin * y);
-      tupleToRotate.setY(sin * x + cos * y);
-   }
-
-   /**
-    * Rotates the given {@code tupleOriginal} tuple by an angle {@code yaw} and stores the result in
-    * the tuple {@code tupleTransformed}.
-    *
-    * @param yaw the angle in radians by which {@code tupleOriginal} should be rotated.
-    * @param tupleOriginal the original tuple. Not modified.
-    * @param tupleTransformed the tuple in which the transformed {@code original} is stored.
-    *           Modified.
-    */
-   public static void rotateTuple2D(double yaw, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
-   {
-      double cos = Math.cos(yaw);
-      double sin = Math.sin(yaw);
-
-      tupleTransformed.setX(cos * tupleOriginal.getX() - sin * tupleOriginal.getY());
-      tupleTransformed.setY(sin * tupleOriginal.getX() + cos * tupleOriginal.getY());
    }
 
    /**
