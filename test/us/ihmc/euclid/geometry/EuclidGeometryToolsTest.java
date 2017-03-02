@@ -2556,6 +2556,96 @@ public class EuclidGeometryToolsTest
          lineSegmentEnd2.scaleAdd(distance, orthogonal, lineSegmentEnd2);
          assertOnlyExistenceOfTwoLineSegmentsIntersectionAllCombinations(false, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
       }
+
+      // Test with various overlapping with collinear line segments
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D pointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Vector2D lineDirection = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.0);
+
+         // Making four points ordered on the line
+         Point2D a = new Point2D();
+         Point2D b = new Point2D();
+         Point2D c = new Point2D();
+         Point2D d = new Point2D();
+
+         double alphaA = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double alphaB = alphaA + EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+         double alphaC = alphaB + EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+         double alphaD = alphaC + EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+
+         a.scaleAdd(alphaA, lineDirection, pointOnLine);
+         b.scaleAdd(alphaB, lineDirection, pointOnLine);
+         c.scaleAdd(alphaC, lineDirection, pointOnLine);
+         d.scaleAdd(alphaD, lineDirection, pointOnLine);
+
+         boolean success;
+         Point2D expectedIntersection = new Point2D();
+         Point2D actualIntersection = new Point2D();
+
+         // Line segment 1 contains line segment 2
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(a, d, b, c, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(c);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(a, d, c, b, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(d, a, b, c, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(c);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(d, a, c, b, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         // Line segment 2 contains line segment 1
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(b, c, a, d, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(c);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(c, b, a, d, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(b, c, d, a, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(c);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(c, b, d, a, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         // The line segments partially overlap
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(a, c, b, d, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(a, c, d, b, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(c, a, b, d, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(b);
+         success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(c, a, d, b, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+      }
    }
 
    private void assertOnlyExistenceOfTwoLineSegmentsIntersectionAllCombinations(boolean intersectionExist, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
@@ -2564,31 +2654,44 @@ public class EuclidGeometryToolsTest
       boolean success;
       Point2D actualIntersection = new Point2D();
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
-                                                                         actualIntersection);
+      Point2D lss1 = lineSegmentStart1;
+      Point2D lse1 = lineSegmentEnd1;
+      Point2D lss2 = lineSegmentStart2;
+      Point2D lse = lineSegmentEnd2;
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse, new Point2D());
       assertTrue(success == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2,
-                                                                         actualIntersection);
-      assertTrue(success == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2,
-                                                                         actualIntersection);
-      assertTrue(success == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2,
-                                                                         actualIntersection);
-      assertTrue(success == intersectionExist);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse);
+      assertTrue((actualIntersection != null) == intersectionExist);
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart2, lineSegmentEnd2, lineSegmentStart1, lineSegmentEnd1,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2, new Point2D());
       assertTrue(success == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart2, lineSegmentEnd2, lineSegmentEnd1, lineSegmentStart1,
-                                                                         actualIntersection);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2);
+      assertTrue((actualIntersection != null) == intersectionExist);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse, new Point2D());
       assertTrue(success == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd2, lineSegmentStart2, lineSegmentStart1, lineSegmentEnd1,
-                                                                         actualIntersection);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse);
+      assertTrue((actualIntersection != null) == intersectionExist);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2, new Point2D());
       assertTrue(success == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd2, lineSegmentStart2, lineSegmentEnd1, lineSegmentStart1,
-                                                                         actualIntersection);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2);
+      assertTrue((actualIntersection != null) == intersectionExist);
+
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1, new Point2D());
       assertTrue(success == intersectionExist);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1);
+      assertTrue((actualIntersection != null) == intersectionExist);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1, new Point2D());
+      assertTrue(success == intersectionExist);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1);
+      assertTrue((actualIntersection != null) == intersectionExist);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1, new Point2D());
+      assertTrue(success == intersectionExist);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1);
+      assertTrue((actualIntersection != null) == intersectionExist);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1, new Point2D());
+      assertTrue(success == intersectionExist);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1);
+      assertTrue((actualIntersection != null) == intersectionExist);
    }
 
    private void assertAllCombinationsOfTwoLineSegmentsIntersection(Point2D expectedIntersection, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
@@ -2597,9 +2700,13 @@ public class EuclidGeometryToolsTest
       double epsilon = EuclidGeometryTools.ONE_TRILLIONTH;
 
       Vector2D direction1 = new Vector2D();
-      direction1.sub(lineSegmentEnd1, lineSegmentStart1);
+      Point2D lss1 = lineSegmentStart1;
+      Point2D lse1 = lineSegmentEnd1;
+      direction1.sub(lse1, lss1);
       Vector2D direction2 = new Vector2D();
-      direction2.sub(lineSegmentEnd2, lineSegmentStart2);
+      Point2D lss2 = lineSegmentStart2;
+      Point2D lse2 = lineSegmentEnd2;
+      direction2.sub(lse2, lss2);
 
       if (Math.abs(direction1.dot(direction2)) > 1.0 - 0.0001)
          epsilon = 1.0e-10;
@@ -2607,38 +2714,48 @@ public class EuclidGeometryToolsTest
       boolean success;
       Point2D actualIntersection = new Point2D();
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse2, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse2, lss2, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse2, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse2, lss2, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart2, lineSegmentEnd2, lineSegmentStart1, lineSegmentEnd1,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse2, lss1, lse1, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart2, lineSegmentEnd2, lineSegmentEnd1, lineSegmentStart1,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse2, lse1, lss1, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd2, lineSegmentStart2, lineSegmentStart1, lineSegmentEnd1,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse2, lss2, lss1, lse1, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentEnd2, lineSegmentStart2, lineSegmentEnd1, lineSegmentStart1,
-                                                                         actualIntersection);
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse2, lss2, lse1, lss1, actualIntersection);
       assertTrue(success);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse2);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse2, lss2);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse2);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse2, lss2);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse2, lss1, lse1);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse2, lse1, lss1);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse2, lss2, lss1, lse1);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse2, lss2, lse1, lss1);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
    }
 
@@ -2668,11 +2785,9 @@ public class EuclidGeometryToolsTest
 
          double rotationAngle = EuclidCoreRandomTools.generateRandomDouble(random, Math.PI);
          AxisAngle rotationAxisAngle = new AxisAngle(expectedIntersectionDirection, rotationAngle);
-         RotationMatrix rotationMatrix = new RotationMatrix();
-         rotationMatrix.set(rotationAxisAngle);
 
          Vector3D planeNormal2 = new Vector3D();
-         rotationMatrix.transform(planeNormal1, planeNormal2);
+         rotationAxisAngle.transform(planeNormal1, planeNormal2);
          planeNormal2.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
          Point3D pointOnPlane2 = new Point3D();
 
@@ -2717,6 +2832,38 @@ public class EuclidGeometryToolsTest
          //         System.out.println("angle: " + planeNormal1.angle(planeNormal2) + ", distance: " + pointOnPlane1.distance(pointOnPlane2));
          assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(actualPointOnIntersection, firstPointOnIntersection, expectedIntersectionDirection),
                       epsilon);
+      }
+
+      Point3D pointOnPlane1 = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      Point3D pointOnPlane2 = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+
+      Vector3D unitVector = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0);
+      Vector3D planeNormal1 = new Vector3D(unitVector);
+      Vector3D planeNormal2 = new Vector3D(unitVector);
+
+      planeNormal1.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+      
+      assertFalse(EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, 0.5 * Math.PI, new Point3D(), new Vector3D()));
+      assertFalse(EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane2, planeNormal2, pointOnPlane1, planeNormal1, 0.5 * Math.PI, new Point3D(), new Vector3D()));
+      
+      try
+      {
+         EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, -Double.MIN_VALUE, new Point3D(), new Vector3D());
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, Math.PI / 2.0 + 1.110224e-16, new Point3D(), new Vector3D());
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
       }
    }
 

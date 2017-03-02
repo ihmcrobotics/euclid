@@ -1,5 +1,7 @@
 package us.ihmc.euclid.geometry;
 
+import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,8 +76,8 @@ public class EuclidGeometryTools
    public static double angleFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX,
                                                        double secondVectorY, double secondVectorZ)
    {
-      double firstVectorLength = Math.sqrt(firstVectorX * firstVectorX + firstVectorY * firstVectorY + firstVectorZ * firstVectorZ);
-      double secondVectorLength = Math.sqrt(secondVectorX * secondVectorX + secondVectorY * secondVectorY + secondVectorZ * secondVectorZ);
+      double firstVectorLength = Math.sqrt(normSquared(firstVectorX, firstVectorY, firstVectorZ));
+      double secondVectorLength = Math.sqrt(normSquared(secondVectorX, secondVectorY, secondVectorZ));
 
       double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
       dotProduct /= firstVectorLength * secondVectorLength;
@@ -363,10 +365,10 @@ public class EuclidGeometryTools
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
          throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
-      double firstVectorLength = Math.sqrt(firstVectorX * firstVectorX + firstVectorY * firstVectorY);
+      double firstVectorLength = Math.sqrt(normSquared(firstVectorX, firstVectorY));
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
-      double secondVectorLength = Math.sqrt(secondVectorX * secondVectorX + secondVectorY * secondVectorY);
+      double secondVectorLength = Math.sqrt(normSquared(secondVectorX, secondVectorY));
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
@@ -419,15 +421,15 @@ public class EuclidGeometryTools
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
     */
    public static boolean areVector3DsParallel(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX, double secondVectorY,
-                                               double secondVectorZ, double angleEpsilon)
+                                              double secondVectorZ, double angleEpsilon)
    {
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
          throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
-      double firstVectorLength = Math.sqrt(firstVectorX * firstVectorX + firstVectorY * firstVectorY + firstVectorZ * firstVectorZ);
+      double firstVectorLength = Math.sqrt(normSquared(firstVectorX, firstVectorY, firstVectorZ));
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
-      double secondVectorLength = Math.sqrt(secondVectorX * secondVectorX + secondVectorY * secondVectorY + secondVectorZ * secondVectorZ);
+      double secondVectorLength = Math.sqrt(normSquared(secondVectorX, secondVectorY, secondVectorZ));
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
@@ -455,7 +457,7 @@ public class EuclidGeometryTools
    public static boolean areVector3DsParallel(Vector3DReadOnly firstVector, Vector3DReadOnly secondVector, double angleEpsilon)
    {
       return areVector3DsParallel(firstVector.getX(), firstVector.getY(), firstVector.getZ(), secondVector.getX(), secondVector.getY(), secondVector.getZ(),
-                                   angleEpsilon);
+                                  angleEpsilon);
    }
 
    /**
@@ -563,7 +565,7 @@ public class EuclidGeometryTools
       double rotationAxisX = firstVectorY * secondVectorZ - firstVectorZ * secondVectorY;
       double rotationAxisY = firstVectorZ * secondVectorX - firstVectorX * secondVectorZ;
       double rotationAxisZ = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
-      double rotationAxisLength = Math.sqrt(EuclidCoreTools.normSquared(rotationAxisX, rotationAxisY, rotationAxisZ));
+      double rotationAxisLength = Math.sqrt(normSquared(rotationAxisX, rotationAxisY, rotationAxisZ));
 
       boolean normalsAreParallel = rotationAxisLength < ONE_TEN_MILLIONTH;
 
@@ -890,8 +892,7 @@ public class EuclidGeometryTools
       double dx = PscX - QtcX;
       double dy = PscY - QtcY;
       double dz = PscZ - QtcZ;
-      double distanceSquared = dx * dx + dy * dy + dz * dz;
-      return Math.sqrt(distanceSquared);
+      return Math.sqrt(normSquared(dx, dy, dz));
    }
 
    /**
@@ -921,7 +922,7 @@ public class EuclidGeometryTools
    {
       double deltaX = secondPointX - firstPointX;
       double deltaY = secondPointY - firstPointY;
-      return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      return Math.sqrt(EuclidCoreTools.normSquared(deltaX, deltaY));
    }
 
    /**
@@ -980,8 +981,7 @@ public class EuclidGeometryTools
    {
       double dx = pointOnLineX - pointX;
       double dy = pointOnLineY - pointY;
-      double directionMagnitude = lineDirectionX * lineDirectionX + lineDirectionY * lineDirectionY;
-      directionMagnitude = Math.sqrt(directionMagnitude);
+      double directionMagnitude = Math.sqrt(EuclidCoreTools.normSquared(lineDirectionX, lineDirectionY));
 
       if (directionMagnitude < ONE_TRILLIONTH)
       {
@@ -1133,8 +1133,7 @@ public class EuclidGeometryTools
    public static double distanceFromPoint3DToLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
                                                     double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
-      double directionMagnitude = lineDirectionX * lineDirectionX + lineDirectionY * lineDirectionY + lineDirectionZ * lineDirectionZ;
-      directionMagnitude = Math.sqrt(directionMagnitude);
+      double directionMagnitude = Math.sqrt(normSquared(lineDirectionX, lineDirectionY, lineDirectionZ));
 
       double dx = pointOnLineX - pointX;
       double dy = pointOnLineY - pointY;
@@ -1142,14 +1141,14 @@ public class EuclidGeometryTools
 
       if (directionMagnitude < ONE_TRILLIONTH)
       {
-         return Math.sqrt(dx * dx + dy * dy + dz * dz);
+         return Math.sqrt(normSquared(dx, dy, dz));
       }
       else
       {
          double crossX = lineDirectionY * dz - lineDirectionZ * dy;
          double crossY = lineDirectionZ * dx - lineDirectionX * dz;
          double crossZ = lineDirectionX * dy - lineDirectionY * dx;
-         double distance = Math.sqrt(crossX * crossX + crossY * crossY + crossZ * crossZ);
+         double distance = Math.sqrt(normSquared(crossX, crossY, crossZ));
          distance /= directionMagnitude;
 
          return distance;
@@ -1988,7 +1987,7 @@ public class EuclidGeometryTools
                                                               double lineSegmentEnd2x, double lineSegmentEnd2y, Point2DBasics intersectionToPack)
    {
       if (!doLineSegment2DsIntersect(lineSegmentStart1x, lineSegmentStart1y, lineSegmentEnd1x, lineSegmentEnd1y, lineSegmentStart2x, lineSegmentStart2y,
-                                    lineSegmentEnd2x, lineSegmentEnd2y))
+                                     lineSegmentEnd2x, lineSegmentEnd2y))
       {
          return false;
       }
@@ -2013,7 +2012,7 @@ public class EuclidGeometryTools
          double epsilon = ONE_TRILLIONTH;
 
          // Let's find the first endpoint that is inside the other line segment and return it.
-         double lineSegment1LengthSquare = lineDirection1x * lineDirection1x + lineDirection1y * lineDirection1y;
+         double lineSegment1LengthSquare = EuclidCoreTools.normSquared(lineDirection1x, lineDirection1y);
          double dx, dy, dot;
 
          // Check if lineSegmentStart2 is inside lineSegment1
@@ -2038,7 +2037,7 @@ public class EuclidGeometryTools
             return true;
          }
 
-         double lineSegment2LengthSquare = lineDirection2x * lineDirection2x + lineDirection2y * lineDirection2y;
+         double lineSegment2LengthSquare = EuclidCoreTools.normSquared(lineDirection2x, lineDirection2y);
 
          // Check if lineSegmentStart1 is inside lineSegment2
          dx = lineSegmentStart1x - lineSegmentStart2x;
@@ -2050,6 +2049,12 @@ public class EuclidGeometryTools
             intersectionToPack.set(lineSegmentStart1x, lineSegmentStart1y);
             return true;
          }
+
+         /*
+          * The following is unreachable, left the last condition in case numerical errors could
+          * cause the previous checks to fail. Worst case scenario, if the method has an unexpected
+          * behavior, it will throw a RuntimeException.
+          */
 
          // Check if lineSegmentEnd1 is inside lineSegment2
          dx = lineSegmentEnd1x - lineSegmentStart2x;
@@ -2163,6 +2168,9 @@ public class EuclidGeometryTools
                                                         Vector3DReadOnly planeNormal2, double angleThreshold, Point3DBasics pointOnIntersectionToPack,
                                                         Vector3DBasics intersectionDirectionToPack)
    {
+      if (angleThreshold < 0.0 || angleThreshold > HALF_PI)
+         throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
+
       double normalMagnitude1 = planeNormal1.length();
 
       if (normalMagnitude1 < ONE_TRILLIONTH)
