@@ -10,13 +10,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 
+import us.ihmc.euclid.geometry.Line3DTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+      // Geometry class tests
+      Line3DTest.class,
       // Tools tests
       EuclidGeometryToolsTest.class
-      // Conversion tests
       })
 
 public class EuclidTestSuite
