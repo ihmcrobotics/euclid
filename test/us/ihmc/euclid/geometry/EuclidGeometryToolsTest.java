@@ -2739,7 +2739,7 @@ public class EuclidGeometryToolsTest
       success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse2, lss2, lse1, lss1, actualIntersection);
       assertTrue(success);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      
+
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse2);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse2, lss2);
@@ -2748,7 +2748,7 @@ public class EuclidGeometryToolsTest
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse2, lss2);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
-      
+
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse2, lss1, lse1);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse2, lse1, lss1);
@@ -2842,13 +2842,16 @@ public class EuclidGeometryToolsTest
       Vector3D planeNormal2 = new Vector3D(unitVector);
 
       planeNormal1.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
-      
-      assertFalse(EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, 0.5 * Math.PI, new Point3D(), new Vector3D()));
-      assertFalse(EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane2, planeNormal2, pointOnPlane1, planeNormal1, 0.5 * Math.PI, new Point3D(), new Vector3D()));
-      
+
+      assertFalse(EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, 0.5 * Math.PI, new Point3D(),
+                                                                     new Vector3D()));
+      assertFalse(EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane2, planeNormal2, pointOnPlane1, planeNormal1, 0.5 * Math.PI, new Point3D(),
+                                                                     new Vector3D()));
+
       try
       {
-         EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, -Double.MIN_VALUE, new Point3D(), new Vector3D());
+         EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, -Double.MIN_VALUE, new Point3D(),
+                                                            new Vector3D());
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -2858,7 +2861,8 @@ public class EuclidGeometryToolsTest
 
       try
       {
-         EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, Math.PI / 2.0 + 1.110224e-16, new Point3D(), new Vector3D());
+         EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, Math.PI / 2.0 + 1.110224e-16,
+                                                            new Point3D(), new Vector3D());
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -2912,6 +2916,36 @@ public class EuclidGeometryToolsTest
          b = d12;
          c = d01 + d12 + random.nextDouble();
          assertFalse(EuclidGeometryTools.isFormingTriangle(a, b, c));
+      }
+
+      assertFalse(EuclidGeometryTools.isFormingTriangle(0.0, 0.0, 0.0));
+
+      try
+      {
+         EuclidGeometryTools.isFormingTriangle(-Double.MIN_VALUE, 1.0, 1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+      try
+      {
+         EuclidGeometryTools.isFormingTriangle(1.0, -Double.MIN_VALUE, 1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+      try
+      {
+         EuclidGeometryTools.isFormingTriangle(1.0, 1.0, -Double.MIN_VALUE);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
       }
    }
 
@@ -3040,6 +3074,8 @@ public class EuclidGeometryToolsTest
             actualPlaneNormal.negate();
 
          EuclidCoreTestTools.assertTuple3DEquals(expectedPlaneNormal, actualPlaneNormal, EPSILON);
+
+         assertNull(EuclidGeometryTools.normal3DFromThreePoint3Ds(firstPointOnPlane, secondPointOnPlane, firstPointOnPlane));
       }
    }
 
@@ -3055,18 +3091,43 @@ public class EuclidGeometryToolsTest
          Point2D secondPointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random);
          secondPointOnLine.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
 
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(secondPointOnLine, firstPointOnLine);
+         lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
          Point2D expectionProjection = new Point2D();
          expectionProjection.interpolate(firstPointOnLine, secondPointOnLine, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
-         Vector2D perpendicularToLineDirection = new Vector2D();
-         perpendicularToLineDirection.sub(secondPointOnLine, firstPointOnLine);
+         Vector2D perpendicularToLineDirection = EuclidGeometryTools.perpendicularVector2D(lineDirection);
          perpendicularToLineDirection.normalize();
-         EuclidGeometryTools.perpendicularVector2D(perpendicularToLineDirection, perpendicularToLineDirection);
 
          Point2D testPoint = new Point2D();
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), perpendicularToLineDirection, expectionProjection);
 
-         Point2D actualProjection = EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, secondPointOnLine);
+         Point2D actualProjection = new Point2D();
+         boolean success;
+
+         success = EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, secondPointOnLine, actualProjection);
+         assertTrue(success);
          EuclidCoreTestTools.assertTuple2DEquals(expectionProjection, actualProjection, EPSILON);
+
+         success = EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, lineDirection, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectionProjection, actualProjection, EPSILON);
+
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, secondPointOnLine);
+         EuclidCoreTestTools.assertTuple2DEquals(expectionProjection, actualProjection, EPSILON);
+
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, lineDirection);
+         EuclidCoreTestTools.assertTuple2DEquals(expectionProjection, actualProjection, EPSILON);
+
+         lineDirection.normalize();
+         lineDirection.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         assertNull(EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, lineDirection));
+         assertFalse(EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, lineDirection, new Point2D()));
+
+         secondPointOnLine.add(firstPointOnLine, lineDirection);
+         assertNull(EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, secondPointOnLine));
+         assertFalse(EuclidGeometryTools.orthogonalProjectionOnLine2D(testPoint, firstPointOnLine, secondPointOnLine, new Point2D()));
       }
    }
 
@@ -3088,8 +3149,20 @@ public class EuclidGeometryToolsTest
          Point3D testPoint = new Point3D();
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), perpendicularToLineDirection, expectedProjection);
 
-         Point3D actualProjection = EuclidGeometryTools.orthogonalProjectionOnLine3D(testPoint, pointOnLine, lineDirection);
+         Point3D actualProjection = new Point3D();
+         boolean success;
+
+         success = EuclidGeometryTools.orthogonalProjectionOnLine3D(testPoint, pointOnLine, lineDirection, actualProjection);
+         assertTrue(success);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnLine3D(testPoint, pointOnLine, lineDirection);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+
+         lineDirection.normalize();
+         lineDirection.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         assertFalse(EuclidGeometryTools.orthogonalProjectionOnLine3D(testPoint, pointOnLine, lineDirection, actualProjection));
+         assertNull(EuclidGeometryTools.orthogonalProjectionOnLine3D(testPoint, pointOnLine, lineDirection));
       }
    }
 
@@ -3110,17 +3183,25 @@ public class EuclidGeometryToolsTest
          orthogonal.normalize();
          Point2D expectedProjection = new Point2D();
          Point2D testPoint = new Point2D();
+         Point2D actualProjection = new Point2D();
+         boolean success;
 
          // Between end points
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, expectedProjection);
-         Point2D actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
          EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
 
          // Before end points
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, expectedProjection);
          expectedProjection.set(lineSegmentStart);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
          actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
          EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
 
@@ -3128,6 +3209,23 @@ public class EuclidGeometryToolsTest
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, expectedProjection);
          expectedProjection.set(lineSegmentEnd);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
+
+         // The line segment is very small
+         testPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         expectedProjection.set(lineSegmentStart);
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentDirection.normalize();
+         lineSegmentDirection.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         lineSegmentEnd.add(lineSegmentStart, lineSegmentDirection);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
          actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
          EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
       }
@@ -3149,17 +3247,25 @@ public class EuclidGeometryToolsTest
          Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegmentDirection, true);
          Point3D expectedProjection = new Point3D();
          Point3D testPoint = new Point3D();
+         Point3D actualProjection = new Point3D();
+         boolean success;
 
          // Between end points
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, expectedProjection);
-         Point3D actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
 
          // Before end points
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, expectedProjection);
          expectedProjection.set(lineSegmentStart);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
          actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
 
@@ -3167,6 +3273,22 @@ public class EuclidGeometryToolsTest
          expectedProjection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, expectedProjection);
          expectedProjection.set(lineSegmentEnd);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+
+         // The line segment is very small
+         testPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         expectedProjection.set(lineSegmentStart);
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentDirection.normalize();
+         lineSegmentDirection.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         lineSegmentEnd.add(lineSegmentStart, lineSegmentDirection);
+         success = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
          actualProjection = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
@@ -3192,8 +3314,21 @@ public class EuclidGeometryToolsTest
          double distanceOffPlane = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
          pointToProject.scaleAdd(distanceOffPlane, planeNormal, expectedProjection);
 
-         Point3D actualProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, pointOnPlane, planeNormal);
+         Point3D actualProjection = new Point3D();
+         boolean success;
+
+         success = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, pointOnPlane, planeNormal, actualProjection);
+         assertTrue(success);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+         actualProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, pointOnPlane, planeNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+
+         // Test failure case.
+         planeNormal.normalize();
+         planeNormal.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+
+         assertFalse(EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, pointOnPlane, planeNormal, actualProjection));
+         assertNull(EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, pointOnPlane, planeNormal));
       }
    }
 
@@ -3262,6 +3397,21 @@ public class EuclidGeometryToolsTest
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
          assertEquals(expectedPercentage, actualPercentage, EPSILON);
       }
+
+      // The line segment is very small
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Vector2D lineSegmentDirection = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, EuclidGeometryTools.ONE_TRILLIONTH);
+         Point2D lineSegmentEnd = new Point2D();
+         lineSegmentEnd.add(lineSegmentStart, lineSegmentDirection);
+
+         double expectedPercentage = 0.0;
+         Point2D testPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
+         assertTrue(expectedPercentage == actualPercentage);
+      }
    }
 
    @Test
@@ -3329,6 +3479,21 @@ public class EuclidGeometryToolsTest
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
          assertEquals(expectedPercentage, actualPercentage, EPSILON);
       }
+
+      // The line segment is very small
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Vector3D lineSegmentDirection = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, EuclidGeometryTools.ONE_TRILLIONTH);
+         Point3D lineSegmentEnd = new Point3D();
+         lineSegmentEnd.add(lineSegmentStart, lineSegmentDirection);
+
+         double expectedPercentage = 0.0;
+         Point3D testPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+
+         double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
+         assertTrue(expectedPercentage == actualPercentage);
+      }
    }
 
    @Test
@@ -3349,13 +3514,23 @@ public class EuclidGeometryToolsTest
 
          Point2D actualBisectorStart = new Point2D();
          Vector2D actualBisectorDirection = new Vector2D();
-         EuclidGeometryTools.perpendicularBisector2D(lineSegmentStart, lineSegmentEnd, actualBisectorStart, actualBisectorDirection);
+         boolean success;
+         success = EuclidGeometryTools.perpendicularBisector2D(lineSegmentStart, lineSegmentEnd, actualBisectorStart, actualBisectorDirection);
+         assertTrue(success);
          EuclidCoreTestTools.assertTuple2DEquals(expectedBisectorStart, actualBisectorStart, EPSILON);
          EuclidCoreTestTools.assertTuple2DEquals(expectedBisectorDirection, actualBisectorDirection, EPSILON);
 
          Point2D pointOnBisector = new Point2D();
          pointOnBisector.scaleAdd(1.0, actualBisectorDirection, actualBisectorStart);
          assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(pointOnBisector, lineSegmentStart, lineSegmentEnd));
+
+         // Test with small segment
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentDirection.normalize();
+         lineSegmentDirection.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         lineSegmentEnd.add(lineSegmentStart, lineSegmentDirection);
+         assertFalse(EuclidGeometryTools.perpendicularBisector2D(lineSegmentStart, lineSegmentEnd, actualBisectorStart, actualBisectorDirection));
       }
    }
 
@@ -3365,24 +3540,67 @@ public class EuclidGeometryToolsTest
       Random random = new Random(1176L);
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D firstPointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
-         Point2D secondPointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
-         Vector2D lineDirection = new Vector2D();
-         lineDirection.sub(secondPointOnLine, firstPointOnLine);
-         double lengthOffset = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
-         List<Point2D> normalPointsFromLine = EuclidGeometryTools.perpendicularBisectorSegment2D(firstPointOnLine, secondPointOnLine, lengthOffset);
+         Point2D lineSegmentStart = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D lineSegmentMidpoint = new Point2D();
+         lineSegmentMidpoint.interpolate(lineSegmentStart, lineSegmentEnd, 0.5);
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
 
-         Point2D normalPoint0 = normalPointsFromLine.get(0);
-         Point2D normalPoint1 = normalPointsFromLine.get(1);
-         Vector2D normalDirection = new Vector2D();
-         normalDirection.sub(normalPoint1, normalPoint0);
+         double bisectorSegmentHalfLength = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+         Point2D bisectorSegmentStart = new Point2D();
+         Point2D bisectorSegmentEnd = new Point2D();
+         Vector2D bisectorDirection = new Vector2D();
 
-         assertEquals(2.0 * lengthOffset, normalDirection.length(), EPSILON);
-         assertEquals(0.0, lineDirection.dot(normalDirection), EPSILON);
-         assertEquals(lengthOffset, EuclidGeometryTools.distanceFromPoint2DToLine2D(normalPoint0, firstPointOnLine, secondPointOnLine), EPSILON);
-         assertEquals(lengthOffset, EuclidGeometryTools.distanceFromPoint2DToLine2D(normalPoint1, firstPointOnLine, secondPointOnLine), EPSILON);
-         assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(normalPoint0, firstPointOnLine, secondPointOnLine));
-         assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(normalPoint1, firstPointOnLine, secondPointOnLine));
+         boolean success = EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength, bisectorSegmentStart,
+                                                                              bisectorSegmentEnd);
+         assertTrue(success);
+
+         bisectorDirection.sub(bisectorSegmentEnd, bisectorSegmentStart);
+         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
+         assertEquals(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
+                      EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
+                      EPSILON);
+         assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd));
+         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart,
+                                                                                                                              lineSegmentStart, lineSegmentEnd),
+                                                 EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentMidpoint,
+                                                 EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
+                                                 EPSILON);
+
+         List<Point2D> bisectorSegmentEndpoints = EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd,
+                                                                                                     bisectorSegmentHalfLength);
+         bisectorSegmentStart = bisectorSegmentEndpoints.get(0);
+         bisectorSegmentEnd = bisectorSegmentEndpoints.get(1);
+
+         bisectorDirection.sub(bisectorSegmentEnd, bisectorSegmentStart);
+         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
+         assertEquals(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
+                      EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
+                      EPSILON);
+         assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd));
+         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart,
+                                                                                                                              lineSegmentStart, lineSegmentEnd),
+                                                 EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(lineSegmentMidpoint,
+                                                 EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
+                                                 EPSILON);
+
+         // Test with small segment
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentDirection.normalize();
+         lineSegmentDirection.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         lineSegmentEnd.add(lineSegmentStart, lineSegmentDirection);
+         assertNull(EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength));
+         assertFalse(EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength, bisectorSegmentStart,
+                                                                        bisectorSegmentEnd));
       }
    }
 
@@ -3412,9 +3630,8 @@ public class EuclidGeometryToolsTest
       Random random = new Random(1176L);
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector3D expectedPerpendicularVector = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
-                                                                                                            EuclidCoreRandomTools.generateRandomDouble(random,
-                                                                                                                                                       0.0, 10.0));
+         Vector3D expectedPerpendicularVector = EuclidCoreRandomTools.generateRandomVector3D(random);
+         expectedPerpendicularVector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
          Point3D expectedIntersection = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
 
          Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, expectedPerpendicularVector, true);
@@ -3439,6 +3656,12 @@ public class EuclidGeometryToolsTest
 
          actualPerpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine, null);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPerpendicularVector, actualPerpendicularVector, epsilon);
+
+         // Test failure case
+         lineDirection.normalize();
+         lineDirection.scale(0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         secondPointOnLine.add(firstPointOnLine, lineDirection);
+         assertNull(EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine, actualIntersection));
       }
    }
 
@@ -3447,7 +3670,7 @@ public class EuclidGeometryToolsTest
    {
       try
       {
-         EuclidGeometryTools.pythagorasGetCathetus(-1.0, 1.0);
+         EuclidGeometryTools.pythagorasGetCathetus(-Double.MIN_VALUE, 1.0);
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -3457,13 +3680,25 @@ public class EuclidGeometryToolsTest
 
       try
       {
-         EuclidGeometryTools.pythagorasGetCathetus(1.0, -1.0);
+         EuclidGeometryTools.pythagorasGetCathetus(1.0, -Double.MIN_VALUE);
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
       {
          // good
       }
+
+      try
+      {
+         EuclidGeometryTools.pythagorasGetCathetus(1.0, 2.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      EuclidGeometryTools.pythagorasGetCathetus(1.0, 1.0);
 
       Random random = new Random(23434L);
 
@@ -3486,7 +3721,7 @@ public class EuclidGeometryToolsTest
    {
       try
       {
-         EuclidGeometryTools.pythagorasGetHypotenuse(-1.0, 1.0);
+         EuclidGeometryTools.pythagorasGetHypotenuse(-Double.MIN_VALUE, 1.0);
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -3496,7 +3731,7 @@ public class EuclidGeometryToolsTest
 
       try
       {
-         EuclidGeometryTools.pythagorasGetHypotenuse(1.0, -1.0);
+         EuclidGeometryTools.pythagorasGetHypotenuse(1.0, -Double.MIN_VALUE);
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -3588,17 +3823,60 @@ public class EuclidGeometryToolsTest
          bc.sub(c, b);
 
          double abcAngle = ba.angle(bc);
-
          Point2D x = new Point2D();
-         EuclidGeometryTools.triangleBisector2D(a, b, c, x);
-
          Vector2D bx = new Vector2D();
+
+         boolean success = EuclidGeometryTools.triangleBisector2D(a, b, c, x);
+         assertTrue(success);
          bx.sub(x, b);
-
          double abxAngle = ba.angle(bx);
-
          assertEquals(0.5 * abcAngle, abxAngle, EPSILON);
          assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(x, a, c), EPSILON);
+
+         x = EuclidGeometryTools.triangleBisector2D(a, b, c);
+         bx.sub(x, b);
+         abxAngle = ba.angle(bx);
+         assertEquals(0.5 * abcAngle, abxAngle, EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(x, a, c), EPSILON);
+      }
+
+      // Test failure case 1
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector2D small = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         Point2D a = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D b = new Point2D();
+         b.add(a, small);
+         Point2D c = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         assertFalse(EuclidGeometryTools.triangleBisector2D(a, b, c, new Point2D()));
+         assertNull(EuclidGeometryTools.triangleBisector2D(a, b, c));
+      }
+
+      // Test failure case 2
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector2D small = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         Point2D a = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D b = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D c = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         c.add(b, small);
+
+         assertFalse(EuclidGeometryTools.triangleBisector2D(a, b, c, new Point2D()));
+         assertNull(EuclidGeometryTools.triangleBisector2D(a, b, c));
+      }
+
+      // Test failure case 3
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector2D small = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
+         Point2D a = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D b = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Point2D c = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         c.add(a, small);
+
+         assertFalse(EuclidGeometryTools.triangleBisector2D(a, b, c, new Point2D()));
+         assertNull(EuclidGeometryTools.triangleBisector2D(a, b, c));
       }
    }
 
@@ -3679,6 +3957,36 @@ public class EuclidGeometryToolsTest
          assertEquals(bcLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, acLength, cab), EPSILON);
          assertEquals(abLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(acLength, bcLength, bca), EPSILON);
          assertEquals(acLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, bcLength, abc), EPSILON);
+      }
+
+      try
+      {
+         EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(-Double.MIN_VALUE, 1.0, 1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      try
+      {
+         EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(1.0, -Double.MIN_VALUE, 1.0);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+      
+      try
+      {
+         EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(1.0, 1.0, Math.PI + 2.22045e-16);
+         fail("Should have thrown a " + RuntimeException.class.getSimpleName());
+      }
+      catch (RuntimeException e)
+      {
+         // good
       }
    }
 

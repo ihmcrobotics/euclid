@@ -736,10 +736,10 @@ public class EuclidGeometryTools
       if (delta <= ONE_TRILLIONTH)
       {
          /*
-          * The lines are parallel, there's an infinite number of pairs, but for one chosen point on
-          * one of the lines, there's only one closest point to it on the other line. So let's
-          * choose arbitrarily a point on the line1 and calculate the point that is closest to it on
-          * the line2.
+          * The lines are parallel, there's an infinite number of pairs, but for
+          * one chosen point on one of the lines, there's only one closest point
+          * to it on the other line. So let's choose arbitrarily a point on the
+          * line1 and calculate the point that is closest to it on the line2.
           */
          sc = 0.0;
          tc = d / b;
@@ -823,10 +823,11 @@ public class EuclidGeometryTools
       if (delta <= ONE_MILLIONTH)
       {
          /*
-          * The lines are parallel, there's an infinite number of pairs, but for one chosen point on
-          * one of the lines, there's only one closest point to it on the other line. So let's
-          * choose arbitrarily a point on the lineSegment1 and calculate the point that is closest
-          * to it on the lineSegment2.
+          * The lines are parallel, there's an infinite number of pairs, but for
+          * one chosen point on one of the lines, there's only one closest point
+          * to it on the other line. So let's choose arbitrarily a point on the
+          * lineSegment1 and calculate the point that is closest to it on the
+          * lineSegment2.
           */
          sNumerator = 0.0;
          sDenominator = 1.0;
@@ -1595,9 +1596,10 @@ public class EuclidGeometryTools
          if (Math.abs(cross) < epsilon)
          {
             /*
-             * The line and the line segment are collinear. There's an infinite number of
-             * intersection. Let's just set the result to lineSegmentStart such that it at least
-             * belongs to the line segment.
+             * The line and the line segment are collinear. There's an infinite
+             * number of intersection. Let's just set the result to
+             * lineSegmentStart such that it at least belongs to the line
+             * segment.
              */
             intersectionToPack.set(lineSegmentStartX, lineSegmentStartY);
             return true;
@@ -1830,8 +1832,8 @@ public class EuclidGeometryTools
          if (Math.abs(cross) < ONE_TRILLIONTH)
          {
             /*
-             * The two lines are collinear. There's an infinite number of intersection. Let's just
-             * set the result to pointOnLine1.
+             * The two lines are collinear. There's an infinite number of
+             * intersection. Let's just set the result to pointOnLine1.
              */
             intersectionToPack.set(pointOnLine1x, pointOnLine1y);
             return true;
@@ -2051,9 +2053,10 @@ public class EuclidGeometryTools
          }
 
          /*
-          * The following is unreachable, left the last condition in case numerical errors could
-          * cause the previous checks to fail. Worst case scenario, if the method has an unexpected
-          * behavior, it will throw a RuntimeException.
+          * The following is unreachable code. The last condition is staying in
+          * case numerical errors could cause the previous checks to fail. Worst
+          * case scenario, if the method has an unexpected behavior, it will
+          * throw a RuntimeException.
           */
 
          // Check if lineSegmentEnd1 is inside lineSegment2
@@ -2582,7 +2585,7 @@ public class EuclidGeometryTools
       normalToPack.setZ(v1_x * v2_y - v1_y * v2_x);
 
       double normalLength = normalToPack.length();
-      if (normalLength < 1.0e-7)
+      if (normalLength < ONE_TEN_MILLIONTH)
          return false;
 
       normalToPack.scale(1.0 / normalLength);
@@ -2613,7 +2616,7 @@ public class EuclidGeometryTools
    public static boolean orthogonalProjectionOnLine2D(Point2DReadOnly pointToProject, double pointOnLineX, double pointOnLineY, double lineDirectionX,
                                                       double lineDirectionY, Point2DBasics projectionToPack)
    {
-      double directionLengthSquared = lineDirectionX * lineDirectionX + lineDirectionY * lineDirectionY;
+      double directionLengthSquared = normSquared(lineDirectionX, lineDirectionY);
 
       if (directionLengthSquared < ONE_TRILLIONTH)
          return false;
@@ -2771,7 +2774,7 @@ public class EuclidGeometryTools
    public static boolean orthogonalProjectionOnLine3D(Point3DReadOnly pointToProject, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
                                                       double lineDirectionX, double lineDirectionY, double lineDirectionZ, Point3DBasics projectionToPack)
    {
-      double directionLengthSquared = lineDirectionX * lineDirectionX + lineDirectionY * lineDirectionY + lineDirectionZ * lineDirectionZ;
+      double directionLengthSquared = normSquared(lineDirectionX, lineDirectionY, lineDirectionZ);
 
       if (directionLengthSquared < ONE_TRILLIONTH)
          return false;
@@ -2876,9 +2879,6 @@ public class EuclidGeometryTools
    {
       double percentage = percentageAlongLineSegment2D(pointToProject.getX(), pointToProject.getY(), lineSegmentStartX, lineSegmentStartY, lineSegmentEndX,
                                                        lineSegmentEndY);
-      if (!Double.isFinite(percentage))
-         return false;
-
       if (percentage > 1.0)
          percentage = 1.0;
       else if (percentage < 0.0)
@@ -2886,6 +2886,11 @@ public class EuclidGeometryTools
 
       projectionToPack.setX((1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX);
       projectionToPack.setY((1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY);
+
+      /*
+       * This method never fails with the current implementation but the method
+       * still returns a boolean in case a failure case is implemented.
+       */
       return true;
    }
 
@@ -2985,9 +2990,6 @@ public class EuclidGeometryTools
    {
       double percentage = percentageAlongLineSegment3D(pointToProject.getX(), pointToProject.getY(), pointToProject.getZ(), lineSegmentStartX,
                                                        lineSegmentStartY, lineSegmentStartZ, lineSegmentEndX, lineSegmentEndY, lineSegmentEndZ);
-      if (!Double.isFinite(percentage))
-         return false;
-
       if (percentage > 1.0)
          percentage = 1.0;
       else if (percentage < 0.0)
@@ -2996,6 +2998,11 @@ public class EuclidGeometryTools
       projectionToPack.setX((1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX);
       projectionToPack.setY((1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY);
       projectionToPack.setZ((1.0 - percentage) * lineSegmentStartZ + percentage * lineSegmentEndZ);
+
+      /*
+       * This method never fails with the current implementation but the method
+       * still returns a boolean in case a failure case is implemented.
+       */
       return true;
    }
 
@@ -3162,7 +3169,7 @@ public class EuclidGeometryTools
    {
       double lineSegmentDx = lineSegmentEndX - lineSegmentStartX;
       double lineSegmentDy = lineSegmentEndY - lineSegmentStartY;
-      double lengthSquared = lineSegmentDx * lineSegmentDx + lineSegmentDy * lineSegmentDy;
+      double lengthSquared = normSquared(lineSegmentDx, lineSegmentDy);
 
       if (lengthSquared < ONE_TRILLIONTH)
          return 0.0;
@@ -3251,7 +3258,7 @@ public class EuclidGeometryTools
       double lineSegmentDx = lineSegmentEndX - lineSegmentStartX;
       double lineSegmentDy = lineSegmentEndY - lineSegmentStartY;
       double lineSegmentDz = lineSegmentEndZ - lineSegmentStartZ;
-      double lengthSquared = lineSegmentDx * lineSegmentDx + lineSegmentDy * lineSegmentDy + lineSegmentDz * lineSegmentDz;
+      double lengthSquared = normSquared(lineSegmentDx, lineSegmentDy, lineSegmentDz);
 
       if (lengthSquared < ONE_TRILLIONTH)
          return 0.0;
@@ -3423,7 +3430,7 @@ public class EuclidGeometryTools
       // direction will be on left side of line
       double bisectorDirectionX = -(lineSegmentEnd.getY() - lineSegmentStart.getY());
       double bisectorDirectionY = lineSegmentEnd.getX() - lineSegmentStart.getX();
-      double directionInverseMagnitude = 1.0 / Math.sqrt(bisectorDirectionX * bisectorDirectionX + bisectorDirectionY * bisectorDirectionY);
+      double directionInverseMagnitude = 1.0 / Math.sqrt(normSquared(bisectorDirectionX, bisectorDirectionY));
       bisectorDirectionX *= directionInverseMagnitude;
       bisectorDirectionY *= directionInverseMagnitude;
 
@@ -3453,9 +3460,6 @@ public class EuclidGeometryTools
     */
    public static Vector2D perpendicularVector2D(Vector2DReadOnly vector)
    {
-      Vector2D perpendicularVector = new Vector2D();
-      perpendicularVector2D(vector, perpendicularVector);
-
       return new Vector2D(-vector.getY(), vector.getX());
    }
 
@@ -3544,7 +3548,7 @@ public class EuclidGeometryTools
       double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
       double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
       double lineDirectionZ = secondPointOnLine.getZ() - firstPointOnLine.getZ();
-      double lineLength = Math.sqrt(lineDirectionX * lineDirectionX + lineDirectionY * lineDirectionY + lineDirectionZ * lineDirectionZ);
+      double lineLength = Math.sqrt(normSquared(lineDirectionX, lineDirectionY, lineDirectionZ));
 
       if (lineLength < ONE_TRILLIONTH)
          return false;
@@ -3665,7 +3669,7 @@ public class EuclidGeometryTools
       double baseEdgeACx = baseVertexC.getX() - baseVertexA.getX();
       double baseEdgeACy = baseVertexC.getY() - baseVertexA.getY();
       double baseEdgeACz = baseVertexC.getZ() - baseVertexA.getZ();
-      double baseEdgeACLength = Math.sqrt(baseEdgeACx * baseEdgeACx + baseEdgeACy * baseEdgeACy + baseEdgeACz * baseEdgeACz);
+      double baseEdgeACLength = Math.sqrt(normSquared(baseEdgeACx, baseEdgeACy, baseEdgeACz));
 
       double legLengthABorCB = radiusOfArc(baseEdgeACLength, ccwAngleAboutNormalAtTopVertex);
       double lengthOfBisectorOfBase = pythagorasGetCathetus(legLengthABorCB, 0.5 * baseEdgeACLength);
@@ -3674,8 +3678,7 @@ public class EuclidGeometryTools
       double perpendicularBisectorY = trianglePlaneNormal.getZ() * baseEdgeACx - trianglePlaneNormal.getX() * baseEdgeACz;
       double perpendicularBisectorZ = trianglePlaneNormal.getX() * baseEdgeACy - trianglePlaneNormal.getY() * baseEdgeACx;
       double scale = lengthOfBisectorOfBase;
-      scale /= Math.sqrt(perpendicularBisectorX * perpendicularBisectorX + perpendicularBisectorY * perpendicularBisectorY
-            + perpendicularBisectorZ * perpendicularBisectorZ);
+      scale /= Math.sqrt(normSquared(perpendicularBisectorX, perpendicularBisectorY, perpendicularBisectorZ));
       perpendicularBisectorX *= scale;
       perpendicularBisectorY *= scale;
       perpendicularBisectorZ *= scale;
@@ -3710,8 +3713,11 @@ public class EuclidGeometryTools
    public static Point2D triangleBisector2D(Point2DReadOnly A, Point2DReadOnly B, Point2DReadOnly C)
    {
       Point2D X = new Point2D();
-      triangleBisector2D(A, B, C, X);
-      return X;
+      boolean success = triangleBisector2D(A, B, C, X);
+      if (success)
+         return X;
+      else
+         return null;
    }
 
    /**
@@ -3754,13 +3760,13 @@ public class EuclidGeometryTools
       // use AX distance to find X along AC
       double vectorAXx = C.getX() - A.getX();
       double vectorAXy = C.getY() - A.getY();
-      double inverseMagnitude = 1.0 / Math.sqrt(vectorAXx * vectorAXx + vectorAXy * vectorAXy);
+      double inverseMagnitude = 1.0 / Math.sqrt(normSquared(vectorAXx, vectorAXy));
       vectorAXx *= AX * inverseMagnitude;
       vectorAXy *= AX * inverseMagnitude;
 
       XToPack.set(vectorAXx, vectorAXy);
       XToPack.add(A);
-      return false;
+      return true;
    }
 
    /**
