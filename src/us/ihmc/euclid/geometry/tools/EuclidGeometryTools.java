@@ -1,4 +1,4 @@
-package us.ihmc.euclid.geometry;
+package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
@@ -736,10 +736,10 @@ public class EuclidGeometryTools
       if (delta <= ONE_TRILLIONTH)
       {
          /*
-          * The lines are parallel, there's an infinite number of pairs, but for
-          * one chosen point on one of the lines, there's only one closest point
-          * to it on the other line. So let's choose arbitrarily a point on the
-          * line1 and calculate the point that is closest to it on the line2.
+          * The lines are parallel, there's an infinite number of pairs, but for one chosen point on
+          * one of the lines, there's only one closest point to it on the other line. So let's
+          * choose arbitrarily a point on the line1 and calculate the point that is closest to it on
+          * the line2.
           */
          sc = 0.0;
          tc = d / b;
@@ -823,11 +823,10 @@ public class EuclidGeometryTools
       if (delta <= ONE_MILLIONTH)
       {
          /*
-          * The lines are parallel, there's an infinite number of pairs, but for
-          * one chosen point on one of the lines, there's only one closest point
-          * to it on the other line. So let's choose arbitrarily a point on the
-          * lineSegment1 and calculate the point that is closest to it on the
-          * lineSegment2.
+          * The lines are parallel, there's an infinite number of pairs, but for one chosen point on
+          * one of the lines, there's only one closest point to it on the other line. So let's
+          * choose arbitrarily a point on the lineSegment1 and calculate the point that is closest
+          * to it on the lineSegment2.
           */
          sNumerator = 0.0;
          sDenominator = 1.0;
@@ -1596,10 +1595,9 @@ public class EuclidGeometryTools
          if (Math.abs(cross) < epsilon)
          {
             /*
-             * The line and the line segment are collinear. There's an infinite
-             * number of intersection. Let's just set the result to
-             * lineSegmentStart such that it at least belongs to the line
-             * segment.
+             * The line and the line segment are collinear. There's an infinite number of
+             * intersection. Let's just set the result to lineSegmentStart such that it at least
+             * belongs to the line segment.
              */
             intersectionToPack.set(lineSegmentStartX, lineSegmentStartY);
             return true;
@@ -1832,8 +1830,8 @@ public class EuclidGeometryTools
          if (Math.abs(cross) < ONE_TRILLIONTH)
          {
             /*
-             * The two lines are collinear. There's an infinite number of
-             * intersection. Let's just set the result to pointOnLine1.
+             * The two lines are collinear. There's an infinite number of intersection. Let's just
+             * set the result to pointOnLine1.
              */
             intersectionToPack.set(pointOnLine1x, pointOnLine1y);
             return true;
@@ -2053,10 +2051,9 @@ public class EuclidGeometryTools
          }
 
          /*
-          * The following is unreachable code. The last condition is staying in
-          * case numerical errors could cause the previous checks to fail. Worst
-          * case scenario, if the method has an unexpected behavior, it will
-          * throw a RuntimeException.
+          * The following is unreachable code. The last condition is staying in case numerical
+          * errors could cause the previous checks to fail. Worst case scenario, if the method has
+          * an unexpected behavior, it will throw a RuntimeException.
           */
 
          // Check if lineSegmentEnd1 is inside lineSegment2
@@ -2888,8 +2885,8 @@ public class EuclidGeometryTools
       projectionToPack.setY((1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY);
 
       /*
-       * This method never fails with the current implementation but the method
-       * still returns a boolean in case a failure case is implemented.
+       * This method never fails with the current implementation but the method still returns a
+       * boolean in case a failure case is implemented.
        */
       return true;
    }
@@ -3000,8 +2997,8 @@ public class EuclidGeometryTools
       projectionToPack.setZ((1.0 - percentage) * lineSegmentStartZ + percentage * lineSegmentEndZ);
 
       /*
-       * This method never fails with the current implementation but the method
-       * still returns a boolean in case a failure case is implemented.
+       * This method never fails with the current implementation but the method still returns a
+       * boolean in case a failure case is implemented.
        */
       return true;
    }
