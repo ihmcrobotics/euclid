@@ -10,13 +10,17 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 
-import us.ihmc.euclid.geometry.EuclidGeometryToolsTest;
+import us.ihmc.euclid.geometry.Line3DTest;
+import us.ihmc.euclid.geometry.LineSegment3DTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+      // Geometry class tests
+      Line3DTest.class,
+      LineSegment3DTest.class,
       // Tools tests
       EuclidGeometryToolsTest.class
-      // Conversion tests
       })
 
 public class EuclidTestSuite
@@ -24,7 +28,7 @@ public class EuclidTestSuite
    public static void main(String[] args) throws URISyntaxException, IOException
    {
       String targetTests = EuclidTestSuite.class.getName();
-      String targetClasses = "us.ihmc.euclid.geometry.*";
+      String targetClasses = "us.ihmc.euclid.*";
       doPITMutationTestAndOpenResult(targetTests, targetClasses);
    }
 
