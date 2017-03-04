@@ -55,15 +55,33 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the angle in radians from {@code xForward = (1.0, 0.0)} to the given 2D vector. The computed
+    * angle is in the range [-<i>pi</i>; <i>pi</i>].
+    *
+    * @param vector the vector to compute the angle of. Not modified.
+    * @return the angle in radians from xForward to the vector.
+    */
+   public static double angleFromXForwardToVector2D(Vector2DReadOnly vector)
+   {
+      return angleFromXForwardToVector2D(vector.getX(), vector.getY());
+   }
+
+   /**
+    * Computes the angle in radians from {@code xForward = (1.0, 0.0)} to the given 2D vector. The computed
+    * angle is in the range [-<i>pi</i>; <i>pi</i>].
+    *
+    * @param vectorX x-component of the vector to compute the angle of.
+    * @param vectorY y-component of the vector to compute the angle of.
+    * @return the angle in radians from xForward to the vector.
+    */
+   public static double angleFromXForwardToVector2D(double vectorX, double vectorY)
+   {
+      return angleFromFirstToSecondVector2D(1.0, 0.0, vectorX, vectorY);
+   }
+
+   /**
     * Computes the angle in radians from the first 3D vector to the second 3D vector. The computed
     * angle is in the range [0; <i>pi</i>].
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the length of either vector is below {@code 1.0E-7}, this method fails and returns an
-    * angle of {@code 0.0} radian.
-    * </ul>
-    * </p>
     *
     * @param firstVectorX x-component of first the vector.
     * @param firstVectorY y-component of first the vector.

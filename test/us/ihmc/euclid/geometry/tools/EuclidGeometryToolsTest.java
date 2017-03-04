@@ -51,6 +51,26 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testAngleFromXForwardToVector2D() throws Exception
+   {
+      Random random = new Random(4353L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector2D xForward = new Vector2D(1.0, 0.0);
+         Vector2D vector = EuclidCoreRandomTools.generateRandomVector2D(random);
+         vector.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         double expectedAngle = xForward.angle(vector);
+         double actualAngle = EuclidGeometryTools.angleFromXForwardToVector2D(vector);
+         EuclidCoreTestTools.assertAngleEquals(expectedAngle, actualAngle, EPSILON);
+
+         actualAngle = EuclidGeometryTools.angleFromXForwardToVector2D(vector.getX(), vector.getY());
+         EuclidCoreTestTools.assertAngleEquals(expectedAngle, actualAngle, EPSILON);
+      }
+   }
+
+   @Test
    public void testAngleFromFirstToSecondVector3D() throws Exception
    {
       Random random = new Random(4353L);
