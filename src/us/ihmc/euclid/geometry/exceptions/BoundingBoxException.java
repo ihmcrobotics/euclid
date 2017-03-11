@@ -1,6 +1,5 @@
 package us.ihmc.euclid.geometry.exceptions;
 
-import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -29,18 +28,6 @@ public class BoundingBoxException extends RuntimeException
    public BoundingBoxException(String message)
    {
       super(message);
-   }
-
-   /**
-    * Creates a new bounding box exception with a default detail message containing the value of the
-    * given {@code boundingBox2D}.
-    * 
-    * @param badBoundingBox2D the bounding box 2D to be displayed in the detail message. Not
-    *           modified.
-    */
-   public BoundingBoxException(BoundingBox2D badBoundingBox2D)
-   {
-      super("Improper bounding box 2D: " + badBoundingBox2D == null ? "bounding box is null" : badBoundingBox2D.toString());
    }
 
    /**
