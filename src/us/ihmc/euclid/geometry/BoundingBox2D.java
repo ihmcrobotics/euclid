@@ -64,11 +64,11 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public static BoundingBox2D union(BoundingBox2D boundingBoxOne, BoundingBox2D boundingBoxTwo)
    {
-      double minX = Math.min(boundingBoxOne.minPoint.getX(), boundingBoxTwo.minPoint.getX());
-      double minY = Math.min(boundingBoxOne.minPoint.getY(), boundingBoxTwo.minPoint.getY());
+      double minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
+      double minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
 
-      double maxX = Math.max(boundingBoxOne.maxPoint.getX(), boundingBoxTwo.maxPoint.getX());
-      double maxY = Math.max(boundingBoxOne.maxPoint.getY(), boundingBoxTwo.maxPoint.getY());
+      double maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
+      double maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
 
       Point2D unionMin = new Point2D(minX, minY);
       Point2D unionMax = new Point2D(maxX, maxY);
@@ -294,8 +294,8 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public void getPointGivenParameters(double xParameter, double yParameter, Point2DBasics pointToPack)
    {
-      pointToPack.setX(minPoint.getX() + xParameter * (maxPoint.getX() - minPoint.getX()));
-      pointToPack.setY(minPoint.getY() + yParameter * (maxPoint.getY() - minPoint.getY()));
+      pointToPack.setX(getMinX() + xParameter * (getMaxX() - getMinX()));
+      pointToPack.setY(getMinY() + yParameter * (getMaxY() - getMinY()));
    }
 
    /**
@@ -321,10 +321,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideExclusive(Point2DReadOnly query)
    {
-      if (query.getY() < minPoint.getY() || query.getY() > maxPoint.getY())
+      if (query.getX() < getMinX() || query.getX() > getMaxX())
          return false;
-
-      if (query.getX() < minPoint.getX() || query.getX() > maxPoint.getX())
+      
+      if (query.getY() < getMinY() || query.getY() > getMaxY())
          return false;
 
       return true;
@@ -342,10 +342,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideInclusive(Point2DReadOnly query)
    {
-      if (query.getY() <= minPoint.getY() || query.getY() >= maxPoint.getY())
+      if (query.getX() <= getMinX() || query.getX() >= getMaxX())
          return false;
-
-      if (query.getX() <= minPoint.getX() || query.getX() >= maxPoint.getX())
+      
+      if (query.getY() <= getMinY() || query.getY() >= getMaxY())
          return false;
 
       return true;
@@ -372,10 +372,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideEpsilon(Point2DReadOnly query, double epsilon)
    {
-      if (query.getY() < minPoint.getY() - epsilon || query.getY() > maxPoint.getY() + epsilon)
+      if (query.getX() < getMinX() - epsilon || query.getX() > getMaxX() + epsilon)
          return false;
-
-      if (query.getX() < minPoint.getX() - epsilon || query.getX() > maxPoint.getX() + epsilon)
+      
+      if (query.getY() < getMinY() - epsilon || query.getY() > getMaxY() + epsilon)
          return false;
 
       return true;
@@ -393,16 +393,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean intersectsInclusive(BoundingBox2D other)
    {
-      if (other.minPoint.getX() > maxPoint.getX())
+      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
          return false;
 
-      if (other.maxPoint.getX() < minPoint.getX())
-         return false;
-
-      if (other.minPoint.getY() > maxPoint.getY())
-         return false;
-
-      if (other.maxPoint.getY() < minPoint.getY())
+      if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
          return false;
 
       return true;
@@ -421,16 +415,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean intersectsExclusive(BoundingBox2D other)
    {
-      if (other.minPoint.getX() >= maxPoint.getX())
+      if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX())
          return false;
 
-      if (other.maxPoint.getX() <= minPoint.getX())
-         return false;
-
-      if (other.minPoint.getY() >= maxPoint.getY())
-         return false;
-
-      if (other.maxPoint.getY() <= minPoint.getY())
+      if (other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
          return false;
 
       return true;
@@ -456,16 +444,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean intersectsEpsilon(BoundingBox2D other, double epsilon)
    {
-      if (other.minPoint.getX() > maxPoint.getX() + epsilon)
+      if (other.getMinX() > getMaxX() + epsilon || other.getMaxX() < getMinX() - epsilon)
          return false;
 
-      if (other.maxPoint.getX() < minPoint.getX() - epsilon)
-         return false;
-
-      if (other.minPoint.getY() > maxPoint.getY() + epsilon)
-         return false;
-
-      if (other.maxPoint.getY() < minPoint.getY() - epsilon)
+      if (other.getMinY() > getMaxY() + epsilon || other.getMaxY() < getMinY() - epsilon)
          return false;
 
       return true;
