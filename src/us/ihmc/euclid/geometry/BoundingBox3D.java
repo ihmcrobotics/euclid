@@ -1,33 +1,33 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.Settable;
-import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * A {@link BoundingBox2D} can be used to defines from a set of minimum and maximum coordinates an
+ * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box in the XY-plane.
  */
-public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable<BoundingBox2D>, Clearable
+public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable<BoundingBox3D>, Clearable
 {
    /** The minimum coordinates of this bounding box. */
-   private final Point2D minPoint = new Point2D();
+   private final Point3D minPoint = new Point3D();
    /** The maximum coordinates of this bounding box. */
-   private final Point2D maxPoint = new Point2D();
+   private final Point3D maxPoint = new Point3D();
 
    /**
-    * Creates a new bounding box 2D from its center coordinate {@code center} and a tuple 2D holding
+    * Creates a new bounding box 3D from its center coordinate {@code center} and a tuple 3D holding
     * onto half its size {@code plusMinusTuple}.
     * <p>
     * The minimum and maximum coordinates of the resulting bounding box are calculated as follows:
@@ -44,11 +44,11 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public static BoundingBox2D createUsingCenterAndPlusMinusVector(Point2DReadOnly center, Tuple2DReadOnly plusMinusTuple)
+   public static BoundingBox3D createUsingCenterAndPlusMinusVector(Point3DReadOnly center, Tuple3DReadOnly plusMinusTuple)
    {
-      BoundingBox2D boundingBox2D = new BoundingBox2D();
-      boundingBox2D.set(center, new Vector2D(plusMinusTuple));
-      return boundingBox2D;
+      BoundingBox3D boundingBox3D = new BoundingBox3D();
+      boundingBox3D.set(center, new Vector3D(plusMinusTuple));
+      return boundingBox3D;
    }
 
    /**
@@ -59,9 +59,9 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @param boundingBoxTwo the second bounding box. Not modified.
     * @return the new bounding box.
     */
-   public static BoundingBox2D union(BoundingBox2D boundingBoxOne, BoundingBox2D boundingBoxTwo)
+   public static BoundingBox3D union(BoundingBox3D boundingBoxOne, BoundingBox3D boundingBoxTwo)
    {
-      BoundingBox2D union = new BoundingBox2D();
+      BoundingBox3D union = new BoundingBox3D();
       union.combine(boundingBoxOne, boundingBoxTwo);
       return union;
    }
@@ -70,7 +70,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * Creates a new bounding box initialized with both its minimum and maximum coordinates to (0,
     * 0).
     */
-   public BoundingBox2D()
+   public BoundingBox3D()
    {
    }
 
@@ -82,7 +82,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public BoundingBox2D(Point2DReadOnly min, Point2DReadOnly max)
+   public BoundingBox3D(Point3DReadOnly min, Point3DReadOnly max)
    {
       set(min, max);
    }
@@ -92,7 +92,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *
     * @param other the other bounding box used to initialize this. Not modified.
     */
-   public BoundingBox2D(BoundingBox2D other)
+   public BoundingBox3D(BoundingBox3D other)
    {
       set(other);
    }
@@ -105,7 +105,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public BoundingBox2D(double[] min, double[] max)
+   public BoundingBox3D(double[] min, double[] max)
    {
       set(min, max);
    }
@@ -115,14 +115,16 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *
     * @param minX the minimum x-coordinate for this.
     * @param minY the minimum y-coordinate for this.
+    * @param minZ the minimum z-coordinate for this.
     * @param maxX the maximum x-coordinates for this.
     * @param maxY the maximum y-coordinates for this.
+    * @param maxZ the maximum z-coordinates for this.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public BoundingBox2D(double minX, double minY, double maxX, double maxY)
+   public BoundingBox3D(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
    {
-      set(minX, minY, maxX, maxY);
+      set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
    /**
@@ -137,6 +139,8 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
          throw new BoundingBoxException("minPoint.getX() > maxPoint.getX(): " + minPoint.getX() + ">" + maxPoint.getX());
       if (minPoint.getY() > maxPoint.getY())
          throw new BoundingBoxException("minPoint.getY() > maxPoint.getY(): " + minPoint.getY() + ">" + maxPoint.getY());
+      if (minPoint.getZ() > maxPoint.getZ())
+         throw new BoundingBoxException("minPoint.getZ() > maxPoint.getZ(): " + minPoint.getZ() + ">" + maxPoint.getZ());
    }
 
    /**
@@ -146,7 +150,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public void setMin(Point2DReadOnly min)
+   public void setMin(Point3DReadOnly min)
    {
       minPoint.set(min);
       checkBounds();
@@ -159,7 +163,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public void setMax(Point2DReadOnly max)
+   public void setMax(Point3DReadOnly max)
    {
       maxPoint.set(max);
       checkBounds();
@@ -170,15 +174,17 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *
     * @param minX the new minimum x-coordinate for this bounding box.
     * @param minY the new minimum y-coordinate for this bounding box.
+    * @param minZ the new minimum z-coordinate for this bounding box.
     * @param maxX the new maximum x-coordinates for this bounding box.
     * @param maxY the new maximum y-coordinates for this bounding box.
+    * @param maxZ the new maximum z-coordinates for this bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public void set(double minX, double minY, double maxX, double maxY)
+   public void set(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
    {
-      minPoint.set(minX, minY);
-      maxPoint.set(maxX, maxY);
+      minPoint.set(minX, minY, minZ);
+      maxPoint.set(maxX, maxY, maxZ);
       checkBounds();
    }
 
@@ -205,7 +211,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
     */
-   public void set(Point2DReadOnly min, Point2DReadOnly max)
+   public void set(Point3DReadOnly min, Point3DReadOnly max)
    {
       minPoint.set(min);
       maxPoint.set(max);
@@ -213,12 +219,13 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
-    * Redefines this bounding box given its {@code center} location and half its size along each axis {@code halfSize}.
+    * Redefines this bounding box given its {@code center} location and half its size along each
+    * axis {@code halfSize}.
     * 
     * @param center the new center location of this bounding box. Not modified.
     * @param halfSize half the size of this bounding box. Not modified.
     */
-   public void set(Point2DReadOnly center, Vector2DReadOnly halfSize)
+   public void set(Point3DReadOnly center, Vector3DReadOnly halfSize)
    {
       minPoint.sub(center, halfSize);
       maxPoint.add(center, halfSize);
@@ -233,7 +240,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *            maximum coordinate on the same axis.
     */
    @Override
-   public void set(BoundingBox2D other)
+   public void set(BoundingBox3D other)
    {
       minPoint.set(other.minPoint);
       maxPoint.set(other.maxPoint);
@@ -241,11 +248,12 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
-    * Combines this bounding box with {@code other} such that it becomes the smallest bounding box containing this and {@code other}.
+    * Combines this bounding box with {@code other} such that it becomes the smallest bounding box
+    * containing this and {@code other}.
     * 
     * @param other the other bounding box to combine with this. Not modified.
     */
-   public void combine(BoundingBox2D other)
+   public void combine(BoundingBox3D other)
    {
       combine(this, other);
    }
@@ -253,21 +261,24 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    /**
     * Sets this bounding box to the union of {@code boundingBoxOne} and {@code boundingBoxTwo}.
     * <p>
-    * This bounding box is set such that it is the smallest bounding box containing the two given bounding boxes.
+    * This bounding box is set such that it is the smallest bounding box containing the two given
+    * bounding boxes.
     * </p>
     * 
     * @param boundingBoxOne the first bounding box. Can be the same instance as this. Not modified.
     * @param boundingBoxTwo the second bounding box. Can be the same instance as this. Not modified.
     */
-   public void combine(BoundingBox2D boundingBoxOne, BoundingBox2D boundingBoxTwo)
+   public void combine(BoundingBox3D boundingBoxOne, BoundingBox3D boundingBoxTwo)
    {
       double minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
       double minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
+      double minZ = Math.min(boundingBoxOne.getMinZ(), boundingBoxTwo.getMinZ());
 
       double maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
       double maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
+      double maxZ = Math.max(boundingBoxOne.getMaxZ(), boundingBoxTwo.getMaxZ());
 
-      set(minX, minY, maxX, maxY);
+      set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
    /**
@@ -301,34 +312,37 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * Calculates the coordinate of the center of this bounding box and stores it in the given
     * {@code centerToPack}.
     *
-    * @param centerToPack point 2D in which the center of this bounding box is stored. Modified.
+    * @param centerToPack point 3D in which the center of this bounding box is stored. Modified.
     */
-   public void getCenterPoint(Point2DBasics centerToPack)
+   public void getCenterPoint(Point3DBasics centerToPack)
    {
       centerToPack.interpolate(minPoint, maxPoint, 0.5);
    }
 
    /**
     * Performs a linear interpolation between this bounding box minimum and maximum coordinates
-    * using independent parameters {@code xParameter} and {@code yParameter} for the x-axis and
-    * y-axis respectively. The result is stored in {@code pointToPack}.
+    * using independent parameters {@code xParameter}, {@code yParameter}, and {@code zParameter}
+    * for the x-axis, y-axis, and z-axis respectively. The result is stored in {@code pointToPack}.
     * <p>
     * <ul>
     * <li>{@code (xParameter == 0)} results in: {@code (pointToPack.getX() == this.getMinX())}.
     * <li>{@code (xParameter == 1)} results in: {@code (pointToPack.getX() == this.getMaxX())}.
     * <li>{@code (yParameter == 0)} results in: {@code (pointToPack.getY() == this.getMinY())}.
     * <li>{@code (yParameter == 1)} results in: {@code (pointToPack.getY() == this.getMaxY())}.
+    * <li>{@code (zParameter == 0)} results in: {@code (pointToPack.getZ() == this.getMinZ())}.
+    * <li>{@code (zParameter == 1)} results in: {@code (pointToPack.getZ() == this.getMaxZ())}.
     * </ul>
     * </p>
     *
     * @param xParameter the parameter to use for the interpolation along the x-axis.
     * @param yParameter the parameter to use for the interpolation along the y-axis.
-    * @param pointToPack the point 2D in which the result is stored. Modified.
+    * @param pointToPack the point 3D in which the result is stored. Modified.
     */
-   public void getPointGivenParameters(double xParameter, double yParameter, Point2DBasics pointToPack)
+   public void getPointGivenParameters(double xParameter, double yParameter, double zParameter, Point3DBasics pointToPack)
    {
       pointToPack.setX(getMinX() + xParameter * (getMaxX() - getMinX()));
       pointToPack.setY(getMinY() + yParameter * (getMaxY() - getMinY()));
+      pointToPack.setZ(getMinZ() + zParameter * (getMaxZ() - getMinZ()));
    }
 
    /**
@@ -352,12 +366,15 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
     *         this bounding box.
     */
-   public boolean isInsideExclusive(Point2DReadOnly query)
+   public boolean isInsideExclusive(Point3DReadOnly query)
    {
       if (query.getX() < getMinX() || query.getX() > getMaxX())
          return false;
-      
+
       if (query.getY() < getMinY() || query.getY() > getMaxY())
+         return false;
+
+      if (query.getZ() < getMinZ() || query.getZ() > getMaxZ())
          return false;
 
       return true;
@@ -373,12 +390,15 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return {@code true} if the query is inside or located on an edge of this bounding box,
     *         {@code false} if outside.
     */
-   public boolean isInsideInclusive(Point2DReadOnly query)
+   public boolean isInsideInclusive(Point3DReadOnly query)
    {
       if (query.getX() <= getMinX() || query.getX() >= getMaxX())
          return false;
-      
+
       if (query.getY() <= getMinY() || query.getY() >= getMaxY())
+         return false;
+
+      if (query.getZ() <= getMinZ() || query.getZ() >= getMaxZ())
          return false;
 
       return true;
@@ -390,7 +410,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
-    * {@link #isInsideExclusive(Point2DReadOnly)}.
+    * {@link #isInsideExclusive(Point3DReadOnly)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
     * of {@code epsilon} toward the outside.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
@@ -403,12 +423,15 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
     */
-   public boolean isInsideEpsilon(Point2DReadOnly query, double epsilon)
+   public boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
       if (query.getX() < getMinX() - epsilon || query.getX() > getMaxX() + epsilon)
          return false;
-      
+
       if (query.getY() < getMinY() - epsilon || query.getY() > getMaxY() + epsilon)
+         return false;
+
+      if (query.getZ() < getMinZ() - epsilon || query.getZ() > getMaxZ() + epsilon)
          return false;
 
       return true;
@@ -424,12 +447,15 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   public boolean intersectsInclusive(BoundingBox2D other)
+   public boolean intersectsInclusive(BoundingBox3D other)
    {
       if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
          return false;
 
       if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+         return false;
+
+      if (other.getMinZ() > getMaxZ() || other.getMaxZ() < getMinZ())
          return false;
 
       return true;
@@ -446,12 +472,15 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   public boolean intersectsExclusive(BoundingBox2D other)
+   public boolean intersectsExclusive(BoundingBox3D other)
    {
       if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX())
          return false;
 
       if (other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
+         return false;
+
+      if (other.getMinZ() >= getMaxZ() || other.getMaxZ() <= getMinZ())
          return false;
 
       return true;
@@ -462,7 +491,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
-    * {@link #intersectsEpsilon(BoundingBox2D)}.
+    * {@link #intersectsEpsilon(BoundingBox3D)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
     * of {@code epsilon} toward the outside.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
@@ -475,7 +504,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @param epsilon the tolerance to use in this test.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   public boolean intersectsEpsilon(BoundingBox2D other, double epsilon)
+   public boolean intersectsEpsilon(BoundingBox3D other, double epsilon)
    {
       if (other.getMinX() > getMaxX() + epsilon || other.getMaxX() < getMinX() - epsilon)
          return false;
@@ -483,44 +512,47 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
       if (other.getMinY() > getMaxY() + epsilon || other.getMaxY() < getMinY() - epsilon)
          return false;
 
+      if (other.getMinZ() > getMaxZ() + epsilon || other.getMaxZ() < getMinZ() - epsilon)
+         return false;
+
       return true;
    }
 
    /**
-    * Tests if this the given line 2D intersects this bounding box.
+    * Tests if this the given line 3D intersects this bounding box.
     *
     * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the line direction. Not modified.
     * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
     */
-   public boolean doesIntersectWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   public boolean doesIntersectWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
-      return intersectionWithLine2D(pointOnLine, lineDirection, null, null) != 0;
+      return intersectionWithLine3D(pointOnLine, lineDirection, null, null) != 0;
    }
 
    /**
-    * Tests if this the given line segment 2D intersects this bounding box.
+    * Tests if this the given line segment 3D intersects this bounding box.
     *
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd second endpoint of the line segment. Not modified.
     * @return {@code true} if the line segment and this bounding box intersect, {@code false}
     *         otherwise.
     */
-   public boolean doesIntersectWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
+   public boolean doesIntersectWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
    {
-      return intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, null, null) != 0;
+      return intersectionWithLineSegment3D(lineSegmentStart, lineSegmentEnd, null, null) != 0;
    }
 
    /**
-    * Tests if this the given ray 2D intersects this bounding box.
+    * Tests if this the given ray 3D intersects this bounding box.
     *
     * @param rayOrigin the origin of the ray. Not modified.
     * @param lineDirection the ray direction. Not modified.
     * @return {@code true} if the ray and this bounding box intersect, {@code false} otherwise.
     */
-   public boolean doesIntersectWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
+   public boolean doesIntersectWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection)
    {
-      return intersectionWithRay2D(rayOrigin, rayDirection, null, null) != 0;
+      return intersectionWithRay3D(rayOrigin, rayDirection, null, null) != 0;
    }
 
    /**
@@ -539,10 +571,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return the number of intersections between the line and this bounding box. It is either equal
     *         to 0 or 2.
     */
-   public int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, Point2DBasics firstIntersectionToPack,
-                                     Point2DBasics secondIntersectionToPack)
+   public int intersectionWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+                                     Point3DBasics secondIntersectionToPack)
    {
-      return intersectionBetweenLine2DAndBoundingBox2D(minPoint, maxPoint, pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      return intersectionBetweenLine3DAndBoundingBox3D(minPoint, maxPoint, pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -572,10 +604,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return the number of intersections between the line segment and this bounding box. It is
     *         either equal to 0, 1, or 2.
     */
-   public int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, Point2DBasics firstIntersectionToPack,
-                                            Point2DBasics secondIntersectionToPack)
+   public int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
+                                            Point3DBasics secondIntersectionToPack)
    {
-      return intersectionBetweenLineSegment2DAndBoundingBox2D(minPoint, maxPoint, lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
+      return intersectionBetweenLineSegment3DAndBoundingBox3D(minPoint, maxPoint, lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
                                                               secondIntersectionToPack);
    }
 
@@ -604,10 +636,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return the number of intersections between the ray and this bounding box. It is either equal
     *         to 0, 1, or 2.
     */
-   public int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DBasics firstIntersectionToPack,
-                                    Point2DBasics secondIntersectionToPack)
+   public int intersectionWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
+                                    Point3DBasics secondIntersectionToPack)
    {
-      return intersectionBetweenRay2DAndBoundingBox2D(minPoint, maxPoint, rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+      return intersectionBetweenRay3DAndBoundingBox3D(minPoint, maxPoint, rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -616,9 +648,9 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * 
     * @param point the point to be included in this bounding box. Not modified.
     */
-   public void updateToIncludePoint(Point2DReadOnly point)
+   public void updateToIncludePoint(Point3DReadOnly point)
    {
-      this.updateToIncludePoint(point.getX(), point.getY());
+      this.updateToIncludePoint(point.getX(), point.getY(), point.getZ());
    }
 
    /**
@@ -627,8 +659,9 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * 
     * @param x x-coordinate of the point to be included in this bounding box. Not modified.
     * @param y y-coordinate of the point to be included in this bounding box. Not modified.
+    * @param z z-coordinate of the point to be included in this bounding box. Not modified.
     */
-   public void updateToIncludePoint(double x, double y)
+   public void updateToIncludePoint(double x, double y, double z)
    {
       if (Double.isNaN(minPoint.getX()) || x < minPoint.getX())
       {
@@ -640,6 +673,11 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
          minPoint.setY(y);
       }
 
+      if (Double.isNaN(minPoint.getZ()) || z < minPoint.getZ())
+      {
+         minPoint.setZ(z);
+      }
+
       if (Double.isNaN(maxPoint.getX()) || x > maxPoint.getX())
       {
          maxPoint.setX(x);
@@ -649,15 +687,20 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
       {
          maxPoint.setY(y);
       }
+
+      if (Double.isNaN(maxPoint.getZ()) || z > maxPoint.getZ())
+      {
+         maxPoint.setZ(z);
+      }
    }
 
    /**
     * Gets the minimum coordinate of this bounding box and stores it in the given {@code minToPack}.
     *
-    * @param minToPack point 2D in which the minimum coordinate of this bounding box is stored.
+    * @param minToPack point 3D in which the minimum coordinate of this bounding box is stored.
     *           Modified.
     */
-   public void getMinPoint(Point2DBasics minToPack)
+   public void getMinPoint(Point3DBasics minToPack)
    {
       minToPack.set(minPoint);
    }
@@ -665,10 +708,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    /**
     * Gets the maximum coordinate of this bounding box and stores it in the given {@code maxToPack}.
     *
-    * @param maxToPack point 2D in which the maximum coordinate of this bounding box is stored.
+    * @param maxToPack point 3D in which the maximum coordinate of this bounding box is stored.
     *           Modified.
     */
-   public void getMaxPoint(Point2DBasics maxToPack)
+   public void getMaxPoint(Point3DBasics maxToPack)
    {
       maxToPack.set(maxPoint);
    }
@@ -702,7 +745,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *
     * @return the read-only reference to the minimum coordinate.
     */
-   public Point2DReadOnly getMinPoint()
+   public Point3DReadOnly getMinPoint()
    {
       return minPoint;
    }
@@ -712,7 +755,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     *
     * @return the read-only reference to the maximum coordinate.
     */
-   public Point2DReadOnly getMaxPoint()
+   public Point3DReadOnly getMaxPoint()
    {
       return maxPoint;
    }
@@ -738,6 +781,16 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
+    * Gets the minimum z-coordinate of this bounding box.
+    *
+    * @return the minimum z-coordinate.
+    */
+   public double getMinZ()
+   {
+      return minPoint.getZ();
+   }
+
+   /**
     * Gets the maximum x-coordinate of this bounding box.
     *
     * @return the maximum x-coordinate.
@@ -758,6 +811,16 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
+    * Gets the maximum z-coordinate of this bounding box.
+    *
+    * @return the maximum z-coordinate.
+    */
+   public double getMaxZ()
+   {
+      return maxPoint.getZ();
+   }
+
+   /**
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
@@ -766,14 +829,14 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
    @Override
-   public boolean epsilonEquals(BoundingBox2D other, double epsilon)
+   public boolean epsilonEquals(BoundingBox3D other, double epsilon)
    {
       return minPoint.epsilonEquals(other.minPoint, epsilon) && maxPoint.epsilonEquals(other.maxPoint, epsilon);
    }
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(BoundingBox2D)}, it returns {@code false} otherwise.
+    * returns {@link #equals(BoundingBox3D)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -783,7 +846,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    {
       try
       {
-         return equals((BoundingBox2D) obj);
+         return equals((BoundingBox3D) obj);
       }
       catch (ClassCastException e)
       {
@@ -792,13 +855,13 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
-    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
+    * Tests on a per component basis, if this bounding box 3D is exactly equal to {@code other}.
     *
-    * @param other the other bounding box 2D to compare against this. Not modified.
+    * @param other the other bounding box 3D to compare against this. Not modified.
     * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
     *         otherwise.
     */
-   public boolean equals(BoundingBox2D other)
+   public boolean equals(BoundingBox3D other)
    {
       if (other == null)
          return false;
@@ -807,14 +870,14 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
-    * Provides a {@code String} representation of this bounding box 2D as follows:<br>
-    * Bounding Box 2D: min = (x, y), max = (x, y)
+    * Provides a {@code String} representation of this bounding box 3D as follows:<br>
+    * Bounding Box 3D: min = (x, y), max = (x, y)
     *
-    * @return the {@code String} representing this bounding box 2D.
+    * @return the {@code String} representing this bounding box 3D.
     */
    @Override
    public String toString()
    {
-      return "Bounding Box 2D: " + "min = " + minPoint + ", max = " + maxPoint;
+      return "Bounding Box 3D: " + "min = " + minPoint + ", max = " + maxPoint;
    }
 }
