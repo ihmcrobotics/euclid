@@ -9,6 +9,7 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -45,13 +46,9 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public static BoundingBox2D createUsingCenterAndPlusMinusVector(Point2DReadOnly center, Tuple2DReadOnly plusMinusTuple)
    {
-      Point2D minPoint = new Point2D();
-      Point2D maxPoint = new Point2D();
-
-      minPoint.sub(center, plusMinusTuple);
-      maxPoint.add(center, plusMinusTuple);
-
-      return new BoundingBox2D(minPoint, maxPoint);
+      BoundingBox2D boundingBox2D = new BoundingBox2D();
+      boundingBox2D.set(center, new Vector2D(plusMinusTuple));
+      return boundingBox2D;
    }
 
    /**
@@ -64,16 +61,9 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public static BoundingBox2D union(BoundingBox2D boundingBoxOne, BoundingBox2D boundingBoxTwo)
    {
-      double minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
-      double minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
-
-      double maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
-      double maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
-
-      Point2D unionMin = new Point2D(minX, minY);
-      Point2D unionMax = new Point2D(maxX, maxY);
-
-      return new BoundingBox2D(unionMin, unionMax);
+      BoundingBox2D union = new BoundingBox2D();
+      union.combine(boundingBoxOne, boundingBoxTwo);
+      return union;
    }
 
    /**
@@ -223,6 +213,19 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
+    * Redefines this bounding box given its {@code center} location and half its size along each axis {@code halfSize}.
+    * 
+    * @param center the new center location of this bounding box. Not modified.
+    * @param halfSize half the size of this bounding box. Not modified.
+    */
+   public void set(Point2DReadOnly center, Vector2DReadOnly halfSize)
+   {
+      minPoint.sub(center, halfSize);
+      maxPoint.add(center, halfSize);
+      checkBounds();
+   }
+
+   /**
     * Redefines this bounding box to be the same as the given {@code other}.
     *
     * @param other the bounding box used to redefine this bounding box. Not modified.
@@ -235,6 +238,36 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
       minPoint.set(other.minPoint);
       maxPoint.set(other.maxPoint);
       checkBounds();
+   }
+
+   /**
+    * Combines this bounding box with {@code other} such that it becomes the smallest bounding box containing this and {@code other}.
+    * 
+    * @param other the other bounding box to combine with this. Not modified.
+    */
+   public void combine(BoundingBox2D other)
+   {
+      combine(this, other);
+   }
+
+   /**
+    * Sets this bounding box to the union of {@code boundingBoxOne} and {@code boundingBoxTwo}.
+    * <p>
+    * This bounding box is set such that it is the smallest bounding box containing the two given bounding boxes.
+    * </p>
+    * 
+    * @param boundingBoxOne the first bounding box. Can be the same instance as this. Not modified.
+    * @param boundingBoxTwo the second bounding box. Can be the same instance as this. Not modified.
+    */
+   public void combine(BoundingBox2D boundingBoxOne, BoundingBox2D boundingBoxTwo)
+   {
+      double minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
+      double minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
+
+      double maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
+      double maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
+
+      set(minX, minY, maxX, maxY);
    }
 
    /**
