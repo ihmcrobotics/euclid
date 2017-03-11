@@ -8,6 +8,7 @@ import java.util.List;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -55,8 +56,8 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Computes the angle in radians from {@code xForward = (1.0, 0.0)} to the given 2D vector. The computed
-    * angle is in the range [-<i>pi</i>; <i>pi</i>].
+    * Computes the angle in radians from {@code xForward = (1.0, 0.0)} to the given 2D vector. The
+    * computed angle is in the range [-<i>pi</i>; <i>pi</i>].
     *
     * @param vector the vector to compute the angle of. Not modified.
     * @return the angle in radians from xForward to the vector.
@@ -67,8 +68,8 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Computes the angle in radians from {@code xForward = (1.0, 0.0)} to the given 2D vector. The computed
-    * angle is in the range [-<i>pi</i>; <i>pi</i>].
+    * Computes the angle in radians from {@code xForward = (1.0, 0.0)} to the given 2D vector. The
+    * computed angle is in the range [-<i>pi</i>; <i>pi</i>].
     *
     * @param vectorX x-component of the vector to compute the angle of.
     * @param vectorY y-component of the vector to compute the angle of.
@@ -1561,6 +1562,224 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the two intersections between a line and an axis-aligned bounding
+    * box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * Intersections between the line and the bounding box are not restricted to exist between the
+    * two given points defining the line.
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenLine2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax, Point2DReadOnly firstPointOnLine,
+                                                               Point2DReadOnly secondPointOnLine, Point2DBasics firstIntersectionToPack,
+                                                               Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine2DAndBoundingBox2DImpl(boundingBoxMin, boundingBoxMax, firstPointOnLine.getX(), firstPointOnLine.getY(), true,
+                                                           secondPointOnLine.getX(), secondPointOnLine.getY(), true, firstIntersectionToPack,
+                                                           secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line and an axis-aligned bounding
+    * box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine a point located on the infinitely long line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenLine2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax, Point2DReadOnly pointOnLine,
+                                                               Vector2DReadOnly lineDirection, Point2DBasics firstIntersectionToPack,
+                                                               Point2DBasics secondIntersectionToPack)
+   {
+      double firstPointOnLineX = pointOnLine.getX();
+      double firstPointOnLineY = pointOnLine.getY();
+      double secondPointOnLineX = pointOnLine.getX() + lineDirection.getX();
+      double secondPointOnLineY = pointOnLine.getY() + lineDirection.getY();
+      return intersectionBetweenLine2DAndBoundingBox2DImpl(boundingBoxMin, boundingBoxMax, firstPointOnLineX, firstPointOnLineY, true, secondPointOnLineX,
+                                                           secondPointOnLineY, true, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Flexible implementation for computing the intersection between a bounding box and either a
+    * line, a line segment, or a ray.
+    * <p>
+    * Switching between line/line-segment/ray can be done using the two arguments
+    * {@code canIntersectionOccurBeforeStart} and {@code canIntersectionOccurAfterEnd}:
+    * <ul>
+    * <li>{@code canIntersectionOccurBeforeStart == true} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate
+    * line/bounding-box intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == false} changes the algorithm to calculate
+    * line-segment/bounding-box intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate
+    * ray/bounding-box intersection.
+    * </ul>
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param startX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param startY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurBeforeStart specifies whether an intersection can exist before
+    *           {@code start}.
+    * @param endX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param endY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurAfterEnd specifies whether an intersection can exist after
+    *           {@code end}.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the bounding box. It
+    *         is either equal to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   private static int intersectionBetweenLine2DAndBoundingBox2DImpl(Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax, double startX,
+                                                                    double startY, boolean canIntersectionOccurBeforeStart, double endX, double endY,
+                                                                    boolean canIntersectionOccurAfterEnd, Point2DBasics firstIntersectionToPack,
+                                                                    Point2DBasics secondIntersectionToPack)
+   {
+      if (boundingBoxMin.getX() > boundingBoxMax.getX() || boundingBoxMin.getY() > boundingBoxMax.getY())
+         throw new BoundingBoxException(boundingBoxMin, boundingBoxMax);
+
+      double dx = endX - startX;
+      double dy = endY - startY;
+
+      double invXDir = 1.0 / dx;
+      double invYDir = 1.0 / dy;
+
+      double tmin, tmax, tymin, tymax;
+
+      if (invXDir > 0.0)
+      {
+         tmin = (boundingBoxMin.getX() - startX) * invXDir;
+         tmax = (boundingBoxMax.getX() - startX) * invXDir;
+      }
+      else
+      {
+         tmin = (boundingBoxMax.getX() - startX) * invXDir;
+         tmax = (boundingBoxMin.getX() - startX) * invXDir;
+      }
+
+      if (invYDir > 0.0)
+      {
+         tymin = (boundingBoxMin.getY() - startY) * invYDir;
+         tymax = (boundingBoxMax.getY() - startY) * invYDir;
+      }
+      else
+      {
+         tymin = (boundingBoxMax.getY() - startY) * invYDir;
+         tymax = (boundingBoxMin.getY() - startY) * invYDir;
+      }
+
+      // if regions do not overlap, return false
+      if (tmin > tymax || tmax < tymin)
+      {
+         return 0;
+      }
+
+      // update tmin
+      if (tymin > tmin)
+         tmin = tymin;
+
+      if (tymax < tmax)
+         tmax = tymax;
+
+      if (!canIntersectionOccurAfterEnd && tmin > 1.0)
+         return 0;
+      if (!canIntersectionOccurBeforeStart && tmax < 0.0)
+         return 0;
+
+      int numberOfIntersections = 0;
+
+      boolean isIntersectingAtTmin = canIntersectionOccurBeforeStart || tmin >= 0.0;
+      boolean isIntersectingAtTmax = canIntersectionOccurAfterEnd || tmax <= 1.0;
+
+      if (isIntersectingAtTmin)
+         numberOfIntersections++;
+      if (isIntersectingAtTmax)
+         numberOfIntersections++;
+
+      switch (numberOfIntersections)
+      {
+      case 0:
+         return 0;
+      case 1:
+         if (firstIntersectionToPack != null)
+         {
+            if (isIntersectingAtTmin)
+            {
+               firstIntersectionToPack.setX(tmin * dx + startX);
+               firstIntersectionToPack.setY(tmin * dy + startY);
+            }
+            else
+            {
+               firstIntersectionToPack.setX(tmax * dx + startX);
+               firstIntersectionToPack.setY(tmax * dy + startY);
+            }
+         }
+         if (secondIntersectionToPack != null)
+            secondIntersectionToPack.setToNaN();
+         return 1;
+      case 2:
+         if (firstIntersectionToPack != null)
+         {
+            firstIntersectionToPack.setX(tmin * dx + startX);
+            firstIntersectionToPack.setY(tmin * dy + startY);
+         }
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.setX(tmax * dx + startX);
+            secondIntersectionToPack.setY(tmax * dy + startY);
+         }
+         return 2;
+      default:
+         throw new RuntimeException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
+      }
+   }
+
+   /**
     * Computes the intersection between an infinitely long 2D line (defined by a 2D point and a 2D
     * direction) and a 2D line segment (defined by its two 2D endpoints).
     * <p>
@@ -1717,6 +1936,260 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the two intersections between a line and an axis-aligned bounding
+    * box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * Intersections between the line and the bounding box are not restricted to exist between the
+    * two given points defining the line.
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenLine3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax, Point3DReadOnly firstPointOnLine,
+                                                               Point3DReadOnly secondPointOnLine, Point3DBasics firstIntersectionToPack,
+                                                               Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMin, boundingBoxMax, firstPointOnLine.getX(), firstPointOnLine.getY(),
+                                                           firstPointOnLine.getZ(), true, secondPointOnLine.getX(), secondPointOnLine.getY(),
+                                                           secondPointOnLine.getZ(), true, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line and an axis-aligned bounding
+    * box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine a point located on the infinitely long line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenLine3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax, Point3DReadOnly pointOnLine,
+                                                               Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+                                                               Point3DBasics secondIntersectionToPack)
+   {
+      double firstPointOnLineX = pointOnLine.getX();
+      double firstPointOnLineY = pointOnLine.getY();
+      double firstPointOnLineZ = pointOnLine.getZ();
+      double secondPointOnLineX = pointOnLine.getX() + lineDirection.getX();
+      double secondPointOnLineY = pointOnLine.getY() + lineDirection.getY();
+      double secondPointOnLineZ = pointOnLine.getZ() + lineDirection.getZ();
+      return intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMin, boundingBoxMax, firstPointOnLineX, firstPointOnLineY, firstPointOnLineZ, true,
+                                                           secondPointOnLineX, secondPointOnLineY, secondPointOnLineZ, true, firstIntersectionToPack,
+                                                           secondIntersectionToPack);
+   }
+
+   /**
+    * Flexible implementation for computing the intersection between a bounding box and either a
+    * line, a line segment, or a ray.
+    * <p>
+    * Switching between line/line-segment/ray can be done using the two arguments
+    * {@code canIntersectionOccurBeforeStart} and {@code canIntersectionOccurAfterEnd}:
+    * <ul>
+    * <li>{@code canIntersectionOccurBeforeStart == true} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate
+    * line/bounding-box intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == false} changes the algorithm to calculate
+    * line-segment/bounding-box intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate
+    * ray/bounding-box intersection.
+    * </ul>
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param startX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param startY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param startZ the z-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurBeforeStart specifies whether an intersection can exist before
+    *           {@code start}.
+    * @param endX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param endY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param endZ the z-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurAfterEnd specifies whether an intersection can exist after
+    *           {@code end}.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the bounding box. It
+    *         is either equal to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   private static int intersectionBetweenLine3DAndBoundingBox3DImpl(Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax, double startX,
+                                                                    double startY, double startZ, boolean canIntersectionOccurBeforeStart, double endX,
+                                                                    double endY, double endZ, boolean canIntersectionOccurAfterEnd,
+                                                                    Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      if (boundingBoxMin.getX() > boundingBoxMax.getX() || boundingBoxMin.getY() > boundingBoxMax.getY() || boundingBoxMin.getZ() > boundingBoxMax.getZ())
+         throw new BoundingBoxException(boundingBoxMin, boundingBoxMax);
+
+      double dx = endX - startX;
+      double dy = endY - startY;
+      double dz = endZ - startZ;
+
+      double invXDir = 1.0 / dx;
+      double invYDir = 1.0 / dy;
+      double invZDir = 1.0 / dz;
+
+      double tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+      if (invXDir > 0.0)
+      {
+         tmin = (boundingBoxMin.getX() - startX) * invXDir;
+         tmax = (boundingBoxMax.getX() - startX) * invXDir;
+      }
+      else
+      {
+         tmin = (boundingBoxMax.getX() - startX) * invXDir;
+         tmax = (boundingBoxMin.getX() - startX) * invXDir;
+      }
+
+      if (invYDir > 0.0)
+      {
+         tymin = (boundingBoxMin.getY() - startY) * invYDir;
+         tymax = (boundingBoxMax.getY() - startY) * invYDir;
+      }
+      else
+      {
+         tymin = (boundingBoxMax.getY() - startY) * invYDir;
+         tymax = (boundingBoxMin.getY() - startY) * invYDir;
+      }
+
+      // if regions do not overlap, return false
+      if (tmin > tymax || tmax < tymin)
+      {
+         return 0;
+      }
+
+      // update tmin
+      if (tymin > tmin)
+         tmin = tymin;
+
+      if (tymax < tmax)
+         tmax = tymax;
+
+      if (invZDir > 0.0)
+      {
+         tzmin = (boundingBoxMin.getZ() - startZ) * invZDir;
+         tzmax = (boundingBoxMax.getZ() - startZ) * invZDir;
+      }
+      else
+      {
+         tzmin = (boundingBoxMax.getZ() - startZ) * invZDir;
+         tzmax = (boundingBoxMin.getZ() - startZ) * invZDir;
+      }
+
+      // if regions do not overlap, return false
+      if (tmin > tzmax || tmax < tzmin)
+      {
+         return 0;
+      }
+
+      // update tmin
+      if (tzmin > tmin)
+         tmin = tzmin;
+
+      if (tzmax < tmax)
+         tmax = tzmax;
+
+      if (!canIntersectionOccurAfterEnd && tmin > 1.0)
+         return 0;
+      if (!canIntersectionOccurBeforeStart && tmax < 0.0)
+         return 0;
+
+      int numberOfIntersections = 0;
+
+      boolean isIntersectingAtTmin = canIntersectionOccurBeforeStart || tmin >= 0.0;
+      boolean isIntersectingAtTmax = canIntersectionOccurAfterEnd || tmax <= 1.0;
+
+      if (isIntersectingAtTmin)
+         numberOfIntersections++;
+      if (isIntersectingAtTmax)
+         numberOfIntersections++;
+
+      switch (numberOfIntersections)
+      {
+      case 0:
+         return 0;
+      case 1:
+         if (firstIntersectionToPack != null)
+         {
+            if (isIntersectingAtTmin)
+            {
+               firstIntersectionToPack.setX(tmin * dx + startX);
+               firstIntersectionToPack.setY(tmin * dy + startY);
+               firstIntersectionToPack.setZ(tmin * dz + startZ);
+            }
+            else
+            {
+               firstIntersectionToPack.setX(tmax * dx + startX);
+               firstIntersectionToPack.setY(tmax * dy + startY);
+               firstIntersectionToPack.setZ(tmax * dz + startZ);
+            }
+         }
+         if (secondIntersectionToPack != null)
+            secondIntersectionToPack.setToNaN();
+         return 1;
+      case 2:
+         if (firstIntersectionToPack != null)
+         {
+            firstIntersectionToPack.setX(tmin * dx + startX);
+            firstIntersectionToPack.setY(tmin * dy + startY);
+            firstIntersectionToPack.setZ(tmin * dz + startZ);
+         }
+
+         if (secondIntersectionToPack != null)
+         {
+            secondIntersectionToPack.setX(tmax * dx + startX);
+            secondIntersectionToPack.setY(tmax * dy + startY);
+            secondIntersectionToPack.setZ(tmax * dz + startZ);
+         }
+
+         return 2;
+      default:
+         throw new RuntimeException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
+      }
+   }
+
+   /**
     * Computes the coordinates of the intersection between a plane and an infinitely long line. In
     * the case the line is parallel to the plane, this method will return {@code null}.
     * <a href="https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection"> Useful link </a>.
@@ -1764,6 +2237,96 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the two intersections between a line segment and an axis-aligned
+    * bounding box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * Intersection(s) between the line segment and the bounding box can only exist between the
+    * endpoints of the line segment.
+    * </p>
+    * <p>
+    * In the case the line segment and the bounding box do not intersect, this method returns
+    * {@code false} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
+    * unmodified.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the line segment and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line segment and the bounding box. It is
+    *         either equal to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenLineSegment2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax,
+                                                                      Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd,
+                                                                      Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine2DAndBoundingBox2DImpl(boundingBoxMin, boundingBoxMax, lineSegmentStart.getX(), lineSegmentStart.getY(), false,
+                                                           lineSegmentEnd.getX(), lineSegmentEnd.getY(), false, firstIntersectionToPack,
+                                                           secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line segment and an axis-aligned
+    * bounding box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * Intersection(s) between the line segment and the bounding box can only exist between the
+    * endpoints of the line segment.
+    * </p>
+    * <p>
+    * In the case the line segment and the bounding box do not intersect, this method returns
+    * {@code false} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
+    * unmodified.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the line segment and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line segment and the bounding box. It is
+    *         either equal to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenLineSegment3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax,
+                                                                      Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd,
+                                                                      Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMin, boundingBoxMax, lineSegmentStart.getX(), lineSegmentStart.getY(),
+                                                           lineSegmentStart.getZ(), false, lineSegmentEnd.getX(), lineSegmentEnd.getY(), lineSegmentEnd.getZ(),
+                                                           false, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
     * Computes the coordinates of the intersection between a plane and a finite length line segment.
     * <p>
     * This method returns null for the following cases:
@@ -1800,6 +2363,101 @@ public class EuclidGeometryTools
       {
          return null;
       }
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a ray and an axis-aligned bounding
+    * box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * <p>
+    * Intersection(s) between the ray and the bounding box cannot exist before the origin of the
+    * ray.
+    * </p>
+    * </p>
+    * In the case the ray and the bounding box do not intersect, this method returns {@code false}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the ray and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param rayOrigin the coordinate of the ray origin. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the ray and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenRay2DAndBoundingBox2D(Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax, Point2DReadOnly rayOrigin,
+                                                              Vector2DReadOnly rayDirection, Point2DBasics firstIntersectionToPack,
+                                                              Point2DBasics secondIntersectionToPack)
+   {
+      double firstPointOnLineX = rayOrigin.getX();
+      double firstPointOnLineY = rayOrigin.getY();
+      double secondPointOnLineX = rayOrigin.getX() + rayDirection.getX();
+      double secondPointOnLineY = rayOrigin.getY() + rayDirection.getY();
+      return intersectionBetweenLine2DAndBoundingBox2DImpl(boundingBoxMin, boundingBoxMax, firstPointOnLineX, firstPointOnLineY, false, secondPointOnLineX,
+                                                           secondPointOnLineY, true, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a ray and an axis-aligned bounding
+    * box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * <p>
+    * Intersection(s) between the ray and the bounding box cannot exist before the origin of the
+    * ray.
+    * </p>
+    * </p>
+    * In the case the ray and the bounding box do not intersect, this method returns {@code false}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the ray and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    * 
+    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param rayOrigin the coordinate of the ray origin. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the ray and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenRay3DAndBoundingBox3D(Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax, Point3DReadOnly rayOrigin,
+                                                              Vector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
+                                                              Point3DBasics secondIntersectionToPack)
+   {
+      double firstPointOnLineX = rayOrigin.getX();
+      double firstPointOnLineY = rayOrigin.getY();
+      double firstPointOnLineZ = rayOrigin.getZ();
+      double secondPointOnLineX = rayOrigin.getX() + rayDirection.getX();
+      double secondPointOnLineY = rayOrigin.getY() + rayDirection.getY();
+      double secondPointOnLineZ = rayOrigin.getZ() + rayDirection.getZ();
+      return intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMin, boundingBoxMax, firstPointOnLineX, firstPointOnLineY, firstPointOnLineZ, false,
+                                                           secondPointOnLineX, secondPointOnLineY, secondPointOnLineZ, true, firstIntersectionToPack,
+                                                           secondIntersectionToPack);
    }
 
    /**
