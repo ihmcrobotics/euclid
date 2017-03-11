@@ -1,19 +1,24 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
+
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.EpsilonComparable;
+import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
- * A {@link BoundingBox2D} can be used to defines from its minimum and maximum coordinates an
+ * A {@link BoundingBox2D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box in the XY-plane.
  */
-public class BoundingBox2D implements GeometryObject<BoundingBox2D>
+public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable<BoundingBox2D>, Clearable
 {
    /** The minimum coordinates of this bounding box. */
    private final Point2D minPoint = new Point2D();
@@ -21,17 +26,19 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    private final Point2D maxPoint = new Point2D();
 
    /**
-    * Creates a new bounding box 2D from its center coordinate {@code center} and a tuple 2D holding onto half its size {@code plusMinusTuple}.
+    * Creates a new bounding box 2D from its center coordinate {@code center} and a tuple 2D holding
+    * onto half its size {@code plusMinusTuple}.
     * <p>
     * The minimum and maximum coordinates of the resulting bounding box are calculated as follows:
     * <ul>
-    * <li> {@code minPoint = center - plusMinusTuple}
-    * <li> {@code maxPoint = center + plusMinusTuple}
+    * <li>{@code minPoint = center - plusMinusTuple}
+    * <li>{@code maxPoint = center + plusMinusTuple}
     * </ul>
     * </p>
-    * 
+    *
     * @param center the center coordinate of the new bounding box. Not modified.
-    * @param plusMinusTuple tuple representing half of the size of the new bounding box. Not modified.
+    * @param plusMinusTuple tuple representing half of the size of the new bounding box. Not
+    *           modified.
     * @return the new bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
@@ -48,8 +55,9 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    }
 
    /**
-    * Creates a new bounding box such that it is the smallest bounding box containing the two given bounding boxes {@code boundingBoxOne} and {@code boundingBoxTwo}.
-    * 
+    * Creates a new bounding box such that it is the smallest bounding box containing the two given
+    * bounding boxes {@code boundingBoxOne} and {@code boundingBoxTwo}.
+    *
     * @param boundingBoxOne the first bounding box. Not modified.
     * @param boundingBoxTwo the second bounding box. Not modified.
     * @return the new bounding box.
@@ -143,7 +151,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Sets the minimum coordinate of this bounding box.
-    * 
+    *
     * @param min the minimum coordinate for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
@@ -156,7 +164,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Sets the maximum coordinate of this bounding box.
-    * 
+    *
     * @param max the maximum coordinate for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
@@ -216,7 +224,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Redefines this bounding box to be the same as the given {@code other}.
-    * 
+    *
     * @param other the bounding box used to redefine this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
     *            maximum coordinate on the same axis.
@@ -259,7 +267,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    /**
     * Calculates the coordinate of the center of this bounding box and stores it in the given
     * {@code centerToPack}.
-    * 
+    *
     * @param centerToPack point 2D in which the center of this bounding box is stored. Modified.
     */
    public void getCenterPoint(Point2DBasics centerToPack)
@@ -279,7 +287,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     * <li>{@code (yParameter == 1)} results in: {@code (pointToPack.getY() == this.getMaxY())}.
     * </ul>
     * </p>
-    * 
+    *
     * @param xParameter the parameter to use for the interpolation along the x-axis.
     * @param yParameter the parameter to use for the interpolation along the y-axis.
     * @param pointToPack the point 2D in which the result is stored. Modified.
@@ -293,7 +301,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    /**
     * Calculates the squared value of the distance between the minimum and maximum coordinates of
     * this bounding box.
-    * 
+    *
     * @return the squared value of this bounding box diagonal.
     */
    public double getDiagonalLengthSquared()
@@ -306,7 +314,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     * <p>
     * The query is considered to be outside if located exactly on an edge of this bounding box.
     * </p>
-    * 
+    *
     * @param query the query to test if it is located inside this bounding box. Not modified.
     * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
     *         this bounding box.
@@ -327,7 +335,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     * <p>
     * The query is considered to be inside if located exactly on an edge of this bounding box.
     * </p>
-    * 
+    *
     * @param query the query to test if it is located inside this bounding box. Not modified.
     * @return {@code true} if the query is inside or located on an edge of this bounding box,
     *         {@code false} if outside.
@@ -356,7 +364,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     * of {@code epsilon} toward the inside.
     * </ul>
     * </p>
-    * 
+    *
     * @param query the query to test if it is located inside this bounding box. Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
@@ -364,10 +372,10 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     */
    public boolean isInsideEpsilon(Point2DReadOnly query, double epsilon)
    {
-      if (query.getY() < (minPoint.getY() - epsilon) || query.getY() > (maxPoint.getY() + epsilon))
+      if (query.getY() < minPoint.getY() - epsilon || query.getY() > maxPoint.getY() + epsilon)
          return false;
 
-      if (query.getX() < (minPoint.getX() - epsilon) || query.getX() > (maxPoint.getX() + epsilon))
+      if (query.getX() < minPoint.getX() - epsilon || query.getX() > maxPoint.getX() + epsilon)
          return false;
 
       return true;
@@ -378,7 +386,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     * <p>
     * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
     * </p>
-    * 
+    *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
@@ -406,7 +414,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     * The two bounding boxes are considered to not be intersecting if they share a corner or an
     * edge.
     * </p>
-    * 
+    *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
@@ -440,7 +448,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
     * of {@code epsilon} toward the inside.
     * </ul>
     * </p>
-    * 
+    *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
     *           Modified.
     * @param epsilon the tolerance to use in this test.
@@ -464,8 +472,173 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    }
 
    /**
-    * Gets the minimum coordinate of this bounding box and stores it in the given {@code minToPack}.
+    * Tests if this the given line 2D intersects this bounding box.
+    *
+    * @param pointOnLine a point located on the infinitely long line. Not modified.
+    * @param lineDirection the line direction. Not modified.
+    * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
+    */
+   public boolean doesIntersectWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return intersectionWithLine2D(pointOnLine, lineDirection, null, null) != 0;
+   }
+
+   /**
+    * Tests if this the given line segment 2D intersects this bounding box.
+    *
+    * @param lineSegmentStart first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @return {@code true} if the line segment and this bounding box intersect, {@code false}
+    *         otherwise.
+    */
+   public boolean doesIntersectWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
+   {
+      return intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, null, null) != 0;
+   }
+
+   /**
+    * Tests if this the given ray 2D intersects this bounding box.
+    *
+    * @param rayOrigin the origin of the ray. Not modified.
+    * @param lineDirection the ray direction. Not modified.
+    * @return {@code true} if the ray and this bounding box intersect, {@code false} otherwise.
+    */
+   public boolean doesIntersectWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
+   {
+      return intersectionWithRay2D(rayOrigin, rayDirection, null, null) != 0;
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line and this bounding box.
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    *
+    * @param pointOnLine a point located on the infinitely long line. Not modified.
+    * @param lineDirection the line direction. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and this bounding box. It is either equal
+    *         to 0 or 2.
+    */
+   public int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, Point2DBasics firstIntersectionToPack,
+                                     Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLine2DAndBoundingBox2D(minPoint, maxPoint, pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line segment and this bounding
+    * box.
+    * <p>
+    * Intersection(s) between the line segment and this bounding box can only exist between the
+    * endpoints of the line segment.
+    * </p>
+    * <p>
+    * In the case the line segment and this bounding box do not intersect, this method returns
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
+    * unmodified.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the line segment and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    *
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line segment and this bounding box. It is
+    *         either equal to 0, 1, or 2.
+    */
+   public int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, Point2DBasics firstIntersectionToPack,
+                                            Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenLineSegment2DAndBoundingBox2D(minPoint, maxPoint, lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
+                                                              secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a ray and this bounding box.
+    * <p>
+    * Intersection(s) between the ray and the bounding box cannot exist before the origin of the
+    * ray.
+    * </p>
+    * </p>
+    * In the case the ray and this bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the ray and this bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    *
+    * @param rayOrigin the coordinate of the ray origin. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the ray and this bounding box. It is either equal
+    *         to 0, 1, or 2.
+    */
+   public int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DBasics firstIntersectionToPack,
+                                    Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionBetweenRay2DAndBoundingBox2D(minPoint, maxPoint, rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Updates this bounding box to be the smallest bounding box that includes this and the given
+    * point.
     * 
+    * @param point the point to be included in this bounding box. Not modified.
+    */
+   public void updateToIncludePoint(Point2DReadOnly point)
+   {
+      this.updateToIncludePoint(point.getX(), point.getY());
+   }
+
+   /**
+    * Updates this bounding box to be the smallest bounding box that includes this and the given
+    * point.
+    * 
+    * @param x x-coordinate of the point to be included in this bounding box. Not modified.
+    * @param y y-coordinate of the point to be included in this bounding box. Not modified.
+    */
+   public void updateToIncludePoint(double x, double y)
+   {
+      if (Double.isNaN(minPoint.getX()) || x < minPoint.getX())
+      {
+         minPoint.setX(x);
+      }
+
+      if (Double.isNaN(minPoint.getY()) || y < minPoint.getY())
+      {
+         minPoint.setY(y);
+      }
+
+      if (Double.isNaN(maxPoint.getX()) || x > maxPoint.getX())
+      {
+         maxPoint.setX(x);
+      }
+
+      if (Double.isNaN(maxPoint.getY()) || y > maxPoint.getY())
+      {
+         maxPoint.setY(y);
+      }
+   }
+
+   /**
+    * Gets the minimum coordinate of this bounding box and stores it in the given {@code minToPack}.
+    *
     * @param minToPack point 2D in which the minimum coordinate of this bounding box is stored.
     *           Modified.
     */
@@ -476,7 +649,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Gets the maximum coordinate of this bounding box and stores it in the given {@code maxToPack}.
-    * 
+    *
     * @param maxToPack point 2D in which the maximum coordinate of this bounding box is stored.
     *           Modified.
     */
@@ -486,8 +659,9 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    }
 
    /**
-    * Gets the minimum coordinate of this bounding box and stores it in the given array {@code maxToPack}.
-    * 
+    * Gets the minimum coordinate of this bounding box and stores it in the given array
+    * {@code maxToPack}.
+    *
     * @param maxToPack array in which the minimum coordinate of this bounding box is stored.
     *           Modified.
     */
@@ -497,8 +671,9 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    }
 
    /**
-    * Gets the maximum coordinate of this bounding box and stores it in the given array {@code maxToPack}.
-    * 
+    * Gets the maximum coordinate of this bounding box and stores it in the given array
+    * {@code maxToPack}.
+    *
     * @param maxToPack array in which the maximum coordinate of this bounding box is stored.
     *           Modified.
     */
@@ -507,10 +682,9 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
       maxPoint.get(maxToPack);
    }
 
-
    /**
     * Gets the read-only reference to the minimum coordinate of this bounding box.
-    * 
+    *
     * @return the read-only reference to the minimum coordinate.
     */
    public Point2DReadOnly getMinPoint()
@@ -520,7 +694,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Gets the read-only reference to the maximum coordinate of this bounding box.
-    * 
+    *
     * @return the read-only reference to the maximum coordinate.
     */
    public Point2DReadOnly getMaxPoint()
@@ -530,7 +704,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Gets the minimum x-coordinate of this bounding box.
-    * 
+    *
     * @return the minimum x-coordinate.
     */
    public double getMinX()
@@ -540,7 +714,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Gets the minimum y-coordinate of this bounding box.
-    * 
+    *
     * @return the minimum y-coordinate.
     */
    public double getMinY()
@@ -550,7 +724,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Gets the maximum x-coordinate of this bounding box.
-    * 
+    *
     * @return the maximum x-coordinate.
     */
    public double getMaxX()
@@ -560,7 +734,7 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
 
    /**
     * Gets the maximum y-coordinate of this bounding box.
-    * 
+    *
     * @return the maximum y-coordinate.
     */
    public double getMaxY()
@@ -569,24 +743,9 @@ public class BoundingBox2D implements GeometryObject<BoundingBox2D>
    }
 
    /**
-    * Transforms this bounding box 2D using the given homogeneous transformation matrix.
-    * 
-    * @param transform the transform to apply on the minimum and maximum coordinates of this
-    *           bounding box. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
-    */
-   @Override
-   public void applyTransform(Transform transform)
-   {
-      transform.transform(minPoint);
-      transform.transform(maxPoint);
-   }
-
-   /**
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
-    * 
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
