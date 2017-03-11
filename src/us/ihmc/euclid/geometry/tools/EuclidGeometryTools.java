@@ -1573,7 +1573,7 @@ public class EuclidGeometryTools
     * Intersections between the line and the bounding box are not restricted to exist between the
     * two given points defining the line.
     * <p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
     * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
@@ -1586,7 +1586,7 @@ public class EuclidGeometryTools
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be
     *           {@code null}. Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal
-    *         to 0, 1, or 2.
+    *         to 0 or 2.
     * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
     *            greater than the maximum coordinate of the bounding box on the same axis.
     */
@@ -1607,7 +1607,8 @@ public class EuclidGeometryTools
     * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
     * link</a>.
     * </p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
     * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
@@ -1947,7 +1948,7 @@ public class EuclidGeometryTools
     * Intersections between the line and the bounding box are not restricted to exist between the
     * two given points defining the line.
     * <p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
     * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
@@ -1981,7 +1982,8 @@ public class EuclidGeometryTools
     * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
     * link</a>.
     * </p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code false}
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
     * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
@@ -2250,7 +2252,7 @@ public class EuclidGeometryTools
     * </p>
     * <p>
     * In the case the line segment and the bounding box do not intersect, this method returns
-    * {@code false} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
     * unmodified.
     * </p>
     * <p>
@@ -2295,7 +2297,7 @@ public class EuclidGeometryTools
     * </p>
     * <p>
     * In the case the line segment and the bounding box do not intersect, this method returns
-    * {@code false} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
     * unmodified.
     * </p>
     * <p>
@@ -2372,12 +2374,13 @@ public class EuclidGeometryTools
     * <a href=
     * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
     * link</a>.
+    * </p>
     * <p>
     * Intersection(s) between the ray and the bounding box cannot exist before the origin of the
     * ray.
     * </p>
     * </p>
-    * In the case the ray and the bounding box do not intersect, this method returns {@code false}
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0}
     * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * <p>
@@ -2418,12 +2421,13 @@ public class EuclidGeometryTools
     * <a href=
     * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
     * link</a>.
+    * </p>
     * <p>
     * Intersection(s) between the ray and the bounding box cannot exist before the origin of the
     * ray.
     * </p>
     * </p>
-    * In the case the ray and the bounding box do not intersect, this method returns {@code false}
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0}
     * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * <p>
