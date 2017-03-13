@@ -157,6 +157,34 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
+    * Sets the minimum coordinate of this bounding box.
+    *
+    * @param min the minimum coordinates for this bounding box. Not modified.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMin(double[] min)
+   {
+      minPoint.set(min);
+      checkBounds();
+   }
+
+   /**
+    * Sets the minimum coordinate of this bounding box.
+    *
+    * @param minX the new minimum x-coordinate for this bounding box.
+    * @param minY the new minimum y-coordinate for this bounding box.
+    * @param minZ the new minimum z-coordinate for this bounding box.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMin(double minX, double minY, double minZ)
+   {
+      minPoint.set(minX, minY, minZ);
+      checkBounds();
+   }
+
+   /**
     * Sets the maximum coordinate of this bounding box.
     *
     * @param max the maximum coordinate for this bounding box. Not modified.
@@ -166,6 +194,34 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    public void setMax(Point3DReadOnly max)
    {
       maxPoint.set(max);
+      checkBounds();
+   }
+
+   /**
+    * Sets the maximum coordinate of this bounding box.
+    *
+    * @param max the maximum coordinates for this bounding box. Not modified.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMax(double[] max)
+   {
+      maxPoint.set(max);
+      checkBounds();
+   }
+
+   /**
+    * Sets the maximum coordinate of this bounding box.
+    *
+    * @param maxX the new maximum x-coordinate for this bounding box.
+    * @param maxY the new maximum y-coordinate for this bounding box.
+    * @param maxZ the new maximum z-coordinate for this bounding box.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMax(double maxX, double maxY, double maxZ)
+   {
+      maxPoint.set(maxX, maxY, maxZ);
       checkBounds();
    }
 
@@ -368,13 +424,33 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     */
    public boolean isInsideExclusive(Point3DReadOnly query)
    {
-      if (query.getX() < getMinX() || query.getX() > getMaxX())
+      return isInsideExclusive(query.getX(), query.getY(), query.getZ());
+   }
+
+   /**
+    * Tests if the {@code query} is located inside this bounding box.
+    * <p>
+    * The query is considered to be outside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param z the z-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
+    *         this bounding box.
+    */
+   public boolean isInsideExclusive(double x, double y, double z)
+   {
+      if (x <= getMinX() || x >= getMaxX())
          return false;
 
-      if (query.getY() < getMinY() || query.getY() > getMaxY())
+      if (y <= getMinY() || y >= getMaxY())
          return false;
 
-      if (query.getZ() < getMinZ() || query.getZ() > getMaxZ())
+      if (z <= getMinZ() || z >= getMaxZ())
          return false;
 
       return true;
@@ -392,13 +468,33 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     */
    public boolean isInsideInclusive(Point3DReadOnly query)
    {
-      if (query.getX() <= getMinX() || query.getX() >= getMaxX())
+      return isInsideInclusive(query.getX(), query.getY(), query.getZ());
+   }
+
+   /**
+    * Tests if the {@code query} is located inside this bounding box.
+    * <p>
+    * The query is considered to be inside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param z the z-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @return {@code true} if the query is inside or located on an edge of this bounding box,
+    *         {@code false} if outside.
+    */
+   public boolean isInsideInclusive(double x, double y, double z)
+   {
+      if (x < getMinX() || x > getMaxX())
          return false;
 
-      if (query.getY() <= getMinY() || query.getY() >= getMaxY())
+      if (y < getMinY() || y > getMaxY())
          return false;
 
-      if (query.getZ() <= getMinZ() || query.getZ() >= getMaxZ())
+      if (z < getMinZ() || z > getMaxZ())
          return false;
 
       return true;
@@ -425,37 +521,42 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     */
    public boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      if (query.getX() < getMinX() - epsilon || query.getX() > getMaxX() + epsilon)
-         return false;
-
-      if (query.getY() < getMinY() - epsilon || query.getY() > getMaxY() + epsilon)
-         return false;
-
-      if (query.getZ() < getMinZ() - epsilon || query.getZ() > getMaxZ() + epsilon)
-         return false;
-
-      return true;
+      return isInsideEpsilon(query.getX(), query.getY(), query.getZ(), epsilon);
    }
 
    /**
-    * Tests if this bounding box and {@code other} intersects.
+    * Tests if the {@code query} is located inside this bounding box given the tolerance
+    * {@code epsilon}.
     * <p>
-    * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
+    * <ul>
+    * <li>if {@code epsilon == 0}, this method is equivalent to
+    * {@link #isInsideExclusive(Point3DReadOnly)}.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
+    * of {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
+    * of {@code epsilon} toward the inside.
+    * </ul>
     * </p>
     *
-    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
-    * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    * @param x the x-coordinate the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param z the z-coordinate the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param epsilon the tolerance to use for this test.
+    * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
+    *         otherwise.
     */
-   public boolean intersectsInclusive(BoundingBox3D other)
+   public boolean isInsideEpsilon(double x, double y, double z, double epsilon)
    {
-      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
+      if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon)
          return false;
 
-      if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+      if (y <= getMinY() - epsilon || y >= getMaxY() + epsilon)
          return false;
 
-      if (other.getMinZ() > getMaxZ() || other.getMaxZ() < getMinZ())
+      if (z <= getMinZ() - epsilon || z >= getMaxZ() + epsilon)
          return false;
 
       return true;
@@ -481,6 +582,30 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
          return false;
 
       if (other.getMinZ() >= getMaxZ() || other.getMaxZ() <= getMinZ())
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Tests if this bounding box and {@code other} intersects.
+    * <p>
+    * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
+    * </p>
+    *
+    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
+    *           Modified.
+    * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    */
+   public boolean intersectsInclusive(BoundingBox3D other)
+   {
+      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
+         return false;
+
+      if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+         return false;
+
+      if (other.getMinZ() > getMaxZ() || other.getMaxZ() < getMinZ())
          return false;
 
       return true;

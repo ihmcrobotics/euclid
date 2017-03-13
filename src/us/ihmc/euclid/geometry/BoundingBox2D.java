@@ -153,6 +153,33 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
+    * Sets the minimum coordinate of this bounding box.
+    *
+    * @param min the minimum coordinates for this bounding box. Not modified.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMin(double[] min)
+   {
+      minPoint.set(min);
+      checkBounds();
+   }
+
+   /**
+    * Sets the minimum coordinate of this bounding box.
+    *
+    * @param minX the new minimum x-coordinate for this bounding box.
+    * @param minY the new minimum y-coordinate for this bounding box.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMin(double minX, double minY)
+   {
+      minPoint.set(minX, minY);
+      checkBounds();
+   }
+
+   /**
     * Sets the maximum coordinate of this bounding box.
     *
     * @param max the maximum coordinate for this bounding box. Not modified.
@@ -162,6 +189,33 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    public void setMax(Point2DReadOnly max)
    {
       maxPoint.set(max);
+      checkBounds();
+   }
+
+   /**
+    * Sets the maximum coordinate of this bounding box.
+    *
+    * @param max the maximum coordinates for this bounding box. Not modified.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMax(double[] max)
+   {
+      maxPoint.set(max);
+      checkBounds();
+   }
+
+   /**
+    * Sets the maximum coordinate of this bounding box.
+    *
+    * @param maxX the new maximum x-coordinate for this bounding box.
+    * @param maxY the new maximum y-coordinate for this bounding box.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
+    *            maximum coordinate on the same axis.
+    */
+   public void setMax(double maxX, double maxY)
+   {
+      maxPoint.set(maxX, maxY);
       checkBounds();
    }
 
@@ -213,7 +267,8 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
-    * Redefines this bounding box given its {@code center} location and half its size along each axis {@code halfSize}.
+    * Redefines this bounding box given its {@code center} location and half its size along each
+    * axis {@code halfSize}.
     * 
     * @param center the new center location of this bounding box. Not modified.
     * @param halfSize half the size of this bounding box. Not modified.
@@ -241,7 +296,8 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    }
 
    /**
-    * Combines this bounding box with {@code other} such that it becomes the smallest bounding box containing this and {@code other}.
+    * Combines this bounding box with {@code other} such that it becomes the smallest bounding box
+    * containing this and {@code other}.
     * 
     * @param other the other bounding box to combine with this. Not modified.
     */
@@ -253,7 +309,8 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    /**
     * Sets this bounding box to the union of {@code boundingBoxOne} and {@code boundingBoxTwo}.
     * <p>
-    * This bounding box is set such that it is the smallest bounding box containing the two given bounding boxes.
+    * This bounding box is set such that it is the smallest bounding box containing the two given
+    * bounding boxes.
     * </p>
     * 
     * @param boundingBoxOne the first bounding box. Can be the same instance as this. Not modified.
@@ -354,13 +411,25 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideExclusive(Point2DReadOnly query)
    {
-      if (query.getX() < getMinX() || query.getX() > getMaxX())
-         return false;
-      
-      if (query.getY() < getMinY() || query.getY() > getMaxY())
-         return false;
+      return isInsideExclusive(query.getX(), query.getY());
+   }
 
-      return true;
+   /**
+    * Tests if the {@code query} is located inside this bounding box.
+    * <p>
+    * The query is considered to be outside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
+    *         this bounding box.
+    */
+   public boolean isInsideExclusive(double x, double y)
+   {
+      return isInsideInclusive(x, y);
    }
 
    /**
@@ -375,10 +444,30 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideInclusive(Point2DReadOnly query)
    {
-      if (query.getX() <= getMinX() || query.getX() >= getMaxX())
+      double x = query.getX();
+      double y = query.getY();
+      return isInsideInclusive(x, y);
+   }
+
+   /**
+    * Tests if the {@code query} is located inside this bounding box.
+    * <p>
+    * The query is considered to be inside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @return {@code true} if the query is inside or located on an edge of this bounding box,
+    *         {@code false} if outside.
+    */
+   public boolean isInsideInclusive(double x, double y)
+   {
+      if (x < getMinX() || x > getMaxX())
          return false;
-      
-      if (query.getY() <= getMinY() || query.getY() >= getMaxY())
+
+      if (y < getMinY() || y > getMaxY())
          return false;
 
       return true;
@@ -405,31 +494,39 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideEpsilon(Point2DReadOnly query, double epsilon)
    {
-      if (query.getX() < getMinX() - epsilon || query.getX() > getMaxX() + epsilon)
-         return false;
-      
-      if (query.getY() < getMinY() - epsilon || query.getY() > getMaxY() + epsilon)
-         return false;
-
-      return true;
+      double x = query.getX();
+      double y = query.getY();
+      return isInsideEpsilon(x, y, epsilon);
    }
 
    /**
-    * Tests if this bounding box and {@code other} intersects.
+    * Tests if the {@code query} is located inside this bounding box given the tolerance
+    * {@code epsilon}.
     * <p>
-    * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
+    * <ul>
+    * <li>if {@code epsilon == 0}, this method is equivalent to
+    * {@link #isInsideExclusive(Point2DReadOnly)}.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
+    * of {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
+    * of {@code epsilon} toward the inside.
+    * </ul>
     * </p>
     *
-    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
-    * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param epsilon the tolerance to use for this test.
+    * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
+    *         otherwise.
     */
-   public boolean intersectsInclusive(BoundingBox2D other)
+   public boolean isInsideEpsilon(double x, double y, double epsilon)
    {
-      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
+      if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon)
          return false;
 
-      if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+      if (y <= getMinY() - epsilon || y >= getMaxY() + epsilon)
          return false;
 
       return true;
@@ -452,6 +549,27 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
          return false;
 
       if (other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Tests if this bounding box and {@code other} intersects.
+    * <p>
+    * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
+    * </p>
+    *
+    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
+    *           Modified.
+    * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    */
+   public boolean intersectsInclusive(BoundingBox2D other)
+   {
+      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
+         return false;
+
+      if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
          return false;
 
       return true;
