@@ -2554,6 +2554,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(new Point2D(1.0, 0.0), new Point2D(0.0, 0.0), new Point2D(),
                                                                               new Point2D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -2563,6 +2564,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(new Point2D(0.0, 1.0), new Point2D(0.0, 0.0), new Point2D(),
                                                                               new Point2D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -2572,6 +2574,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(new Point2D(0.0, 0.0), new Point2D(-1.0, 0.0), new Point2D(),
                                                                               new Point2D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -2581,11 +2584,15 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(new Point2D(0.0, 0.0), new Point2D(0.0, -1.0), new Point2D(),
                                                                               new Point2D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
          // good
       }
+      // Asserts no exception is thrown when the bounding box coordinates are equal
+      EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(new Point2D(0.0, 0.0), new Point2D(0.0, 0.0), new Point2D(),
+                                                                           new Point2D(), null, null);
    }
 
    private void assertPointIsOnBoundingBoxFace(Point2D query, Point2D boundingBoxMin, Point2D boundingBoxMax, double epsilon)
@@ -3321,6 +3328,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(new Point3D(1.0, 0.0, 0.0), new Point3D(0.0, 0.0, 0.0), new Point3D(),
                                                                               new Point3D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -3330,6 +3338,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(new Point3D(0.0, 1.0, 0.0), new Point3D(0.0, 0.0, 0.0), new Point3D(),
                                                                               new Point3D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -3339,6 +3348,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(new Point3D(0.0, 0.0, 1.0), new Point3D(0.0, 0.0, 0.0), new Point3D(),
                                                                               new Point3D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -3349,6 +3359,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(new Point3D(0.0, 0.0, 0.0), new Point3D(-1.0, 0.0, 0.0), new Point3D(),
                                                                               new Point3D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -3358,6 +3369,7 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(new Point3D(0.0, 0.0, 0.0), new Point3D(0.0, -1.0, 0.0), new Point3D(),
                                                                               new Point3D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
@@ -3367,11 +3379,15 @@ public class EuclidGeometryToolsTest
       {
          EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(new Point3D(0.0, 0.0, 0.0), new Point3D(0.0, 0.0, -1.0), new Point3D(),
                                                                               new Point3D(), null, null);
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
       catch (BoundingBoxException e)
       {
          // good
       }
+      // Asserts the no exception is thrown when the bounding box coordinates are equal
+      EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(new Point3D(0.0, 0.0, 0.0), new Point3D(0.0, 0.0, 0.0), new Point3D(),
+                                                                           new Point3D(), null, null);
    }
 
    private void assertPointIsOnBoundingBoxFace(Point3D query, Point3D boundingBoxMin, Point3D boundingBoxMax, double epsilon)
