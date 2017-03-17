@@ -1,6 +1,9 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Random;
 
@@ -942,6 +945,171 @@ public class BoundingBox3DTest
    }
 
    @Test
+   public void testIsXYInsideExclusive() throws Exception
+   {
+      Random random = new Random(3243L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         Point3DReadOnly minPoint = boundingBox3D.getMinPoint();
+         Point3DReadOnly maxPoint = boundingBox3D.getMaxPoint();
+         assertFalse(boundingBox3D.isXYInsideExclusive(new Point2D(minPoint.getX(), minPoint.getY())));
+         assertFalse(boundingBox3D.isXYInsideExclusive(new Point2D(maxPoint.getX(), maxPoint.getY())));
+         assertFalse(boundingBox3D.isXYInsideExclusive(minPoint.getX(), minPoint.getY()));
+         assertFalse(boundingBox3D.isXYInsideExclusive(maxPoint.getX(), maxPoint.getY()));
+
+         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+         Point2D query2D = new Point2D();
+         Point3D query3D = new Point3D();
+         boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), 0.0, query3D);
+         query2D.set(query3D.getX(), query3D.getY());
+         assertTrue(boundingBox3D.isXYInsideExclusive(query2D));
+         assertTrue(boundingBox3D.isXYInsideExclusive(query2D.getX(), query2D.getY()));
+
+         for (int axisIndex = 0; axisIndex < 2; axisIndex++)
+         {
+            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query3D);
+            query2D.set(query3D.getX(), query3D.getY());
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D));
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D.getX(), query2D.getY()));
+
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query3D);
+            query2D.set(query3D.getX(), query3D.getY());
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D));
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D.getX(), query2D.getY()));
+
+            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+            boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query3D);
+            query2D.set(query3D.getX(), query3D.getY());
+            query2D.setElement(axisIndex, minPoint.getElement(axisIndex));
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D));
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D.getX(), query2D.getY()));
+
+            query2D.setElement(axisIndex, maxPoint.getElement(axisIndex));
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D));
+            assertFalse(boundingBox3D.isXYInsideExclusive(query2D.getX(), query2D.getY()));
+         }
+      }
+   }
+
+   @Test
+   public void testIsXYInsideInclusive() throws Exception
+   {
+      Random random = new Random(3243L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         Point3DReadOnly minPoint = boundingBox3D.getMinPoint();
+         Point3DReadOnly maxPoint = boundingBox3D.getMaxPoint();
+         assertTrue(boundingBox3D.isXYInsideInclusive(new Point2D(minPoint.getX(), minPoint.getY())));
+         assertTrue(boundingBox3D.isXYInsideInclusive(new Point2D(maxPoint.getX(), maxPoint.getY())));
+         assertTrue(boundingBox3D.isXYInsideInclusive(minPoint.getX(), minPoint.getY()));
+         assertTrue(boundingBox3D.isXYInsideInclusive(maxPoint.getX(), maxPoint.getY()));
+
+         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+         Point3D query = new Point3D();
+         boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+         assertTrue(boundingBox3D.isInsideInclusive(query));
+         assertTrue(boundingBox3D.isInsideInclusive(query.getX(), query.getY(), query.getZ()));
+
+         for (int axisIndex = 0; axisIndex < 2; axisIndex++)
+         {
+            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+            assertFalse(boundingBox3D.isXYInsideInclusive(new Point2D(query.getX(), query.getY())));
+            assertFalse(boundingBox3D.isXYInsideInclusive(query.getX(), query.getY()));
+
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+            assertFalse(boundingBox3D.isXYInsideInclusive(new Point2D(query.getX(), query.getY())));
+            assertFalse(boundingBox3D.isXYInsideInclusive(query.getX(), query.getY()));
+
+            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+            query.setElement(axisIndex, minPoint.getElement(axisIndex));
+            assertTrue(boundingBox3D.isXYInsideInclusive(new Point2D(query.getX(), query.getY())));
+            assertTrue(boundingBox3D.isXYInsideInclusive(query.getX(), query.getY()));
+            query.setElement(axisIndex, maxPoint.getElement(axisIndex));
+            assertTrue(boundingBox3D.isXYInsideInclusive(new Point2D(query.getX(), query.getY())));
+            assertTrue(boundingBox3D.isXYInsideInclusive(query.getX(), query.getY()));
+         }
+      }
+   }
+
+   @Test
+   public void testIsXYInsideEpsilon() throws Exception
+   {
+      Random random = new Random(3243L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         BoundingBox3D boundingBoxEpsilon = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
+         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, -Math.min(halfSize.getX(), Math.min(halfSize.getY(), halfSize.getZ())), 1.0);
+         halfSize.add(epsilon, epsilon, epsilon);
+         BoundingBox3D boundingBoxExclusive = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
+
+         Point3DReadOnly minPoint = boundingBoxEpsilon.getMinPoint();
+         Point3DReadOnly maxPoint = boundingBoxEpsilon.getMaxPoint();
+         assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(minPoint.getX(), minPoint.getY())),
+                      boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(minPoint.getX(), minPoint.getY()), epsilon));
+         assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(maxPoint.getX(), maxPoint.getY())),
+                      boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(maxPoint.getX(), maxPoint.getY()), epsilon));
+         assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(minPoint.getX(), minPoint.getY())),
+                      boundingBoxEpsilon.isXYInsideEpsilon(minPoint.getX(), minPoint.getY(), epsilon));
+         assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(maxPoint.getX(), maxPoint.getY())),
+                      boundingBoxEpsilon.isXYInsideEpsilon(maxPoint.getX(), maxPoint.getY(), epsilon));
+
+         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+         Point3D query = new Point3D();
+         boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+         assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                      boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(query.getX(), query.getY()), epsilon));
+         assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                      boundingBoxEpsilon.isXYInsideEpsilon(query.getX(), query.getY(), epsilon));
+
+         for (int axisIndex = 0; axisIndex < 2; axisIndex++)
+         {
+            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(query.getX(), query.getY()), epsilon));
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(query.getX(), query.getY(), epsilon));
+
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(query.getX(), query.getY()), epsilon));
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(query.getX(), query.getY(), epsilon));
+
+            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
+            query.setElement(axisIndex, minPoint.getElement(axisIndex));
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(query.getX(), query.getY()), epsilon));
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(query.getX(), query.getY(), epsilon));
+
+            query.setElement(axisIndex, maxPoint.getElement(axisIndex));
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(query.getX(), query.getY()), epsilon));
+            assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
+                         boundingBoxEpsilon.isXYInsideEpsilon(query.getX(), query.getY(), epsilon));
+         }
+      }
+   }
+
+   @Test
    public void testIntersectsExclusive() throws Exception
    {
       Random random = new Random(34545L);
@@ -1712,7 +1880,6 @@ public class BoundingBox3DTest
       assertTrue(boundingBox3D.equals((Object) new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ)));
       assertFalse(boundingBox3D.equals(null));
       assertFalse(boundingBox3D.equals(new double[5]));
-      
 
       assertFalse(boundingBox3D.equals(new BoundingBox3D(minX + smallestEpsilon, minY, minZ, maxX, maxY, maxZ)));
       assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY + smallestEpsilon, minZ, maxX, maxY, maxZ)));
