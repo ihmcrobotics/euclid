@@ -1,12 +1,20 @@
 package us.ihmc.euclid.geometry.tools;
 
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint2D;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2D;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector3D;
 
 import java.util.Random;
 
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 
 public abstract class EuclidGeometryRandomTools
 {
@@ -80,5 +88,37 @@ public abstract class EuclidGeometryRandomTools
    public static LineSegment3D generateRandomLineSegment3D(Random random, double minMax)
    {
       return new LineSegment3D(generateRandomPoint3D(random, minMax), generateRandomPoint3D(random, minMax));
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    */
+   public static BoundingBox2D generateRandomBoundingBox2D(Random random, double centerMinMax, double sizeMax)
+   {
+      Point2D center = generateRandomPoint2D(random, centerMinMax);
+      Vector2D halfSize = generateRandomVector2D(random, 0.0, sizeMax / 2.0);
+      return BoundingBox2D.createUsingCenterAndPlusMinusVector(center, halfSize);
+   }
+   
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    */
+   public static BoundingBox3D generateRandomBoundingBox3D(Random random, double centerMinMax, double sizeMax)
+   {
+      Point3D center = generateRandomPoint3D(random, centerMinMax);
+      Vector3D halfSize = generateRandomVector3D(random, 0.0, sizeMax / 2.0);
+      return BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
    }
 }
