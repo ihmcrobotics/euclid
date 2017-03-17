@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -155,6 +156,36 @@ public class BoundingBox3DTest
       new BoundingBox3D(new double[] {1.0, 1.0, 1.0}, new double[] {1.0, 1.0, 1.0});
       new BoundingBox3D(new Point3D(1.0, 1.0, 1.0), new Point3D(1.0, 1.0, 1.0));
       new BoundingBox3D(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+   }
+
+   @Test
+   public void testStaticConstructors() throws Exception
+   {
+      Random random = new Random(32443L);
+
+      Point3D min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      Point3D max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      max.add(min);
+      Point3D center = new Point3D();
+      center.add(min, max);
+      center.scale(0.5);
+      Vector3D halfSize = new Vector3D();
+      halfSize.sub(max, min);
+      halfSize.scale(0.5);
+      BoundingBox3D boundingBox = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
+      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
+      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         BoundingBox3D boundingBoxOne = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBoxTwo = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D expected = new BoundingBox3D();
+         expected.combine(boundingBoxOne, boundingBoxTwo);
+         BoundingBox3D actual = BoundingBox3D.union(boundingBoxOne, boundingBoxTwo);
+
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+      }
    }
 
    @Test
@@ -427,6 +458,7 @@ public class BoundingBox3DTest
       boundingBox.set(new BoundingBox3D(min, max));
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+
       // Asserts exception is thrown when attempting to create a bad bounding box
       try
       {
@@ -486,6 +518,34 @@ public class BoundingBox3DTest
 
       try
       {
+         boundingBox.set(new Point3D(1.0, 0.0, 0.0), new Vector3D(-1.0, 0.0, 0.0));
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
+      }
+      catch (BoundingBoxException e)
+      {
+         // good
+      }
+      try
+      {
+         boundingBox.set(new Point3D(1.0, 0.0, 0.0), new Vector3D(0.0, -1.0, 0.0));
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
+      }
+      catch (BoundingBoxException e)
+      {
+         // good
+      }
+      try
+      {
+         boundingBox.set(new Point3D(1.0, 0.0, 0.0), new Vector3D(0.0, 0.0, -1.0));
+         fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
+      }
+      catch (BoundingBoxException e)
+      {
+         // good
+      }
+
+      try
+      {
          boundingBox.set(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
          fail("Should have thrown a " + BoundingBoxException.class.getSimpleName());
       }
@@ -530,10 +590,10 @@ public class BoundingBox3DTest
          combined.combine(boundingBoxOne, boundingBoxTwo);
 
          // First assert that the resulting bounding box contains all the point of the two bounding bounding boxes
-         combined.isInsideInclusive(boundingBoxOne.getMinPoint());
-         combined.isInsideInclusive(boundingBoxOne.getMaxPoint());
-         combined.isInsideInclusive(boundingBoxTwo.getMinPoint());
-         combined.isInsideInclusive(boundingBoxTwo.getMaxPoint());
+         assertTrue(combined.isInsideInclusive(boundingBoxOne.getMinPoint()));
+         assertTrue(combined.isInsideInclusive(boundingBoxOne.getMaxPoint()));
+         assertTrue(combined.isInsideInclusive(boundingBoxTwo.getMinPoint()));
+         assertTrue(combined.isInsideInclusive(boundingBoxTwo.getMaxPoint()));
 
          // Check that each coordinate of the resulting bounding box comes from one of the two original bounding boxes
          Point3DReadOnly[] originalMinCoordinates = {boundingBoxOne.getMinPoint(), boundingBoxTwo.getMinPoint()};
@@ -576,10 +636,10 @@ public class BoundingBox3DTest
          combined.combine(boundingBoxTwo);
 
          // First assert that the resulting bounding box contains all the point of the two bounding bounding boxes
-         combined.isInsideInclusive(boundingBoxOne.getMinPoint());
-         combined.isInsideInclusive(boundingBoxOne.getMaxPoint());
-         combined.isInsideInclusive(boundingBoxTwo.getMinPoint());
-         combined.isInsideInclusive(boundingBoxTwo.getMaxPoint());
+         assertTrue(combined.isInsideInclusive(boundingBoxOne.getMinPoint()));
+         assertTrue(combined.isInsideInclusive(boundingBoxOne.getMaxPoint()));
+         assertTrue(combined.isInsideInclusive(boundingBoxTwo.getMinPoint()));
+         assertTrue(combined.isInsideInclusive(boundingBoxTwo.getMaxPoint()));
 
          // Check that each coordinate of the resulting bounding box comes from one of the two original bounding boxes
          Point3DReadOnly[] originalMinCoordinates = {boundingBoxOne.getMinPoint(), boundingBoxTwo.getMinPoint()};
@@ -872,6 +932,10 @@ public class BoundingBox3DTest
             assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
             assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), query.getZ(), epsilon));
          }
+
+         // Simple tests to verify the exclusive feature
+         assertFalse(boundingBoxEpsilon.isInsideEpsilon(boundingBoxEpsilon.getMaxPoint(), 0.0));
+         assertFalse(boundingBoxEpsilon.isInsideEpsilon(boundingBoxEpsilon.getMinPoint(), 0.0));
       }
    }
 
@@ -897,24 +961,573 @@ public class BoundingBox3DTest
          query.set(queryCenter, queryHalfSize);
          assertTrue(boundingBox3D.intersectsExclusive(query));
 
-         for (double xSign = -1.0; xSign <= 1.0; xSign += 2.0)
+         for (double xSign = -1.0; xSign <= 1.0; xSign += 1.0)
          {
-            for (double ySign = -1.0; ySign <= 1.0; ySign += 2.0)
+            for (double ySign = -1.0; ySign <= 1.0; ySign += 1.0)
             {
-               for (double zSign = -1.0; zSign <= 1.0; zSign += 2.0)
+               for (double zSign = -1.0; zSign <= 1.0; zSign += 1.0)
                {
-                  halfSize.absolute();
-                  halfSize.scale(xSign, ySign, zSign);
-                  
-                  Vector3D shift = new Vector3D(queryHalfSize);
+                  Vector3D shift = new Vector3D();
+                  shift.add(queryHalfSize, halfSize);
                   shift.scale(xSign, ySign, zSign);
-                  
-                  queryCenter.add(center, halfSize);
-                  // TODO: Stopped implementing tests right here.
-                  
+
+                  queryCenter.scaleAdd(0.999, shift, center);
+                  query.set(queryCenter, queryHalfSize);
+                  assertTrue(boundingBox3D.intersectsExclusive(query));
+
+                  if (Math.abs(xSign) + Math.abs(ySign) + Math.abs(zSign) != 0.0)
+                  {
+                     queryCenter.scaleAdd(1.0001, shift, center);
+                     query.set(queryCenter, queryHalfSize);
+                     assertFalse(boundingBox3D.intersectsExclusive(query));
+                  }
                }
             }
          }
+
+         // Simple tests to verify the exclusive feature
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(-1.0, 0.0, 0.0, 0.0, 1.0, 1.0);
+         assertFalse(boundingBox3D.intersectsExclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, -1.0, 0.0, 1.0, 0.0, 1.0);
+         assertFalse(boundingBox3D.intersectsExclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 0.0, -1.0, 1.0, 1.0, 0.0);
+         assertFalse(boundingBox3D.intersectsExclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(1.0, 0.0, 0.0, 2.0, 1.0, 1.0);
+         assertFalse(boundingBox3D.intersectsExclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 1.0, 0.0, 1.0, 2.0, 1.0);
+         assertFalse(boundingBox3D.intersectsExclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 0.0, 1.0, 1.0, 1.0, 2.0);
+         assertFalse(boundingBox3D.intersectsExclusive(query));
       }
+   }
+
+   @Test
+   public void testIntersectsInclusive() throws Exception
+   {
+      Random random = new Random(34545L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
+
+         Point3D queryCenter = new Point3D();
+         Vector3D queryHalfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         BoundingBox3D query = new BoundingBox3D();
+
+         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double zParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         boundingBox3D.getPointGivenParameters(xParameter, yParameter, zParameter, queryCenter);
+         query.set(queryCenter, queryHalfSize);
+         assertTrue(boundingBox3D.intersectsInclusive(query));
+
+         for (double xSign = -1.0; xSign <= 1.0; xSign += 1.0)
+         {
+            for (double ySign = -1.0; ySign <= 1.0; ySign += 1.0)
+            {
+               for (double zSign = -1.0; zSign <= 1.0; zSign += 1.0)
+               {
+                  Vector3D shift = new Vector3D();
+                  shift.add(queryHalfSize, halfSize);
+                  shift.scale(xSign, ySign, zSign);
+
+                  queryCenter.scaleAdd(0.999, shift, center);
+                  query.set(queryCenter, queryHalfSize);
+                  assertTrue(boundingBox3D.intersectsInclusive(query));
+
+                  if (Math.abs(xSign) + Math.abs(ySign) + Math.abs(zSign) != 0.0)
+                  {
+                     queryCenter.scaleAdd(1.0001, shift, center);
+                     query.set(queryCenter, queryHalfSize);
+                     assertFalse(boundingBox3D.intersectsInclusive(query));
+                  }
+               }
+            }
+         }
+
+         // Simple tests to verify the inclusive feature
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(-1.0, 0.0, 0.0, 0.0, 1.0, 1.0);
+         assertTrue(boundingBox3D.intersectsInclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, -1.0, 0.0, 1.0, 0.0, 1.0);
+         assertTrue(boundingBox3D.intersectsInclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 0.0, -1.0, 1.0, 1.0, 0.0);
+         assertTrue(boundingBox3D.intersectsInclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(1.0, 0.0, 0.0, 2.0, 1.0, 1.0);
+         assertTrue(boundingBox3D.intersectsInclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 1.0, 0.0, 1.0, 2.0, 1.0);
+         assertTrue(boundingBox3D.intersectsInclusive(query));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 0.0, 1.0, 1.0, 1.0, 2.0);
+         assertTrue(boundingBox3D.intersectsInclusive(query));
+      }
+   }
+
+   @Test
+   public void testIntersectsEpsilon() throws Exception
+   {
+      Random random = new Random(34545L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 1.0);
+
+         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
+         BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
+
+         Point3D queryCenter = new Point3D();
+         Vector3D queryHalfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
+         BoundingBox3D query = new BoundingBox3D();
+
+         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double zParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         boundingBox3D.getPointGivenParameters(xParameter, yParameter, zParameter, queryCenter);
+         query.set(queryCenter, queryHalfSize);
+         assertTrue(boundingBox3D.intersectsEpsilon(query, epsilon));
+
+         for (double xSign = -1.0; xSign <= 1.0; xSign += 1.0)
+         {
+            for (double ySign = -1.0; ySign <= 1.0; ySign += 1.0)
+            {
+               for (double zSign = -1.0; zSign <= 1.0; zSign += 1.0)
+               {
+                  Vector3D shift = new Vector3D();
+                  shift.add(queryHalfSize, halfSize);
+                  shift.add(epsilon, epsilon, epsilon);
+                  shift.scale(xSign, ySign, zSign);
+
+                  queryCenter.scaleAdd(0.999, shift, center);
+                  query.set(queryCenter, queryHalfSize);
+                  assertTrue(boundingBox3D.intersectsEpsilon(query, epsilon));
+
+                  if (Math.abs(xSign) + Math.abs(ySign) + Math.abs(zSign) != 0.0)
+                  {
+                     queryCenter.scaleAdd(1.0001, shift, center);
+                     query.set(queryCenter, queryHalfSize);
+                     assertFalse(boundingBox3D.intersectsEpsilon(query, epsilon));
+                  }
+               }
+            }
+         }
+
+         // Simple tests to verify the exclusive feature
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(-1.0, 0.0, 0.0, 0.0, 1.0, 1.0);
+         assertFalse(boundingBox3D.intersectsEpsilon(query, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, -1.0, 0.0, 1.0, 0.0, 1.0);
+         assertFalse(boundingBox3D.intersectsEpsilon(query, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 0.0, -1.0, 1.0, 1.0, 0.0);
+         assertFalse(boundingBox3D.intersectsEpsilon(query, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(1.0, 0.0, 0.0, 2.0, 1.0, 1.0);
+         assertFalse(boundingBox3D.intersectsEpsilon(query, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 1.0, 0.0, 1.0, 2.0, 1.0);
+         assertFalse(boundingBox3D.intersectsEpsilon(query, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query.set(0.0, 0.0, 1.0, 1.0, 1.0, 2.0);
+         assertFalse(boundingBox3D.intersectsEpsilon(query, 0.0));
+      }
+   }
+
+   @Test
+   public void testDoesIntersectWithLine3D() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Line3D line3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         boolean expected = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
+                                                                                          line3D.getPoint(), line3D.getDirection(), null, null) != 0;
+         boolean actual = boundingBox3D.doesIntersectWithLine3D(line3D);
+         assertEquals(expected, actual);
+
+         actual = boundingBox3D.doesIntersectWithLine3D(line3D.getPoint(), line3D.getDirection());
+         assertEquals(expected, actual);
+      }
+   }
+
+   @Test
+   public void testDoesIntersectWithLineSegment3D() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
+                                                                                                 lineSegment3D.getFirstEndpoint(),
+                                                                                                 lineSegment3D.getSecondEndpoint(), null, null) != 0;
+         boolean actual = boundingBox3D.doesIntersectWithLineSegment3D(lineSegment3D);
+         assertEquals(expected, actual);
+
+         actual = boundingBox3D.doesIntersectWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
+         assertEquals(expected, actual);
+      }
+   }
+
+   @Test
+   public void testDoesIntersectWithRay3D() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Line3D ray3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         boolean expected = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
+                                                                                         ray3D.getPoint(), ray3D.getDirection(), null, null) != 0;
+         boolean actual = boundingBox3D.doesIntersectWithRay3D(ray3D.getPoint(), ray3D.getDirection());
+         assertEquals(expected, actual);
+      }
+   }
+
+   @Test
+   public void testintersectionWithLine3D() throws Exception
+   {
+      Random random = new Random(435345L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Line3D line3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+
+         int expectedN, actualN;
+         Point3D expectedFirstIntersection = new Point3D();
+         Point3D expectedSecondIntersection = new Point3D();
+         Point3D actualFirstIntersection = new Point3D();
+         Point3D actualSecondIntersection = new Point3D();
+         expectedN = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(), line3D.getPoint(),
+                                                                                   line3D.getDirection(), expectedFirstIntersection,
+                                                                                   expectedSecondIntersection);
+         actualN = boundingBox3D.intersectionWithLine3D(line3D.getPoint(), line3D.getDirection(), actualFirstIntersection, actualSecondIntersection);
+
+         assertEquals(expectedN, actualN);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+
+         actualFirstIntersection.setToZero();
+         actualSecondIntersection.setToZero();
+
+         actualN = boundingBox3D.intersectionWithLine3D(line3D, actualFirstIntersection, actualSecondIntersection);
+
+         assertEquals(expectedN, actualN);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+      }
+   }
+
+   @Test
+   public void testintersectionWithLineSegment3D() throws Exception
+   {
+      Random random = new Random(435345L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+
+         int expectedN, actualN;
+         Point3D expectedFirstIntersection = new Point3D();
+         Point3D expectedSecondIntersection = new Point3D();
+         Point3D actualFirstIntersection = new Point3D();
+         Point3D actualSecondIntersection = new Point3D();
+         expectedN = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
+                                                                                          lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(),
+                                                                                          expectedFirstIntersection, expectedSecondIntersection);
+         actualN = boundingBox3D.intersectionWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), actualFirstIntersection,
+                                                               actualSecondIntersection);
+
+         assertEquals(expectedN, actualN);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         if (expectedN == 1)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         }
+
+         actualFirstIntersection.setToZero();
+         actualSecondIntersection.setToZero();
+
+         actualN = boundingBox3D.intersectionWithLineSegment3D(lineSegment3D, actualFirstIntersection, actualSecondIntersection);
+
+         assertEquals(expectedN, actualN);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         if (expectedN == 1)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         }
+      }
+   }
+
+   @Test
+   public void testintersectionWithRay3D() throws Exception
+   {
+      Random random = new Random(435345L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Line3D ray3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+
+         int expectedN, actualN;
+         Point3D expectedFirstIntersection = new Point3D();
+         Point3D expectedSecondIntersection = new Point3D();
+         Point3D actualFirstIntersection = new Point3D();
+         Point3D actualSecondIntersection = new Point3D();
+         expectedN = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(), ray3D.getPoint(),
+                                                                                  ray3D.getDirection(), expectedFirstIntersection, expectedSecondIntersection);
+         actualN = boundingBox3D.intersectionWithRay3D(ray3D.getPoint(), ray3D.getDirection(), actualFirstIntersection, actualSecondIntersection);
+
+         assertEquals(expectedN, actualN);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         if (expectedN == 1)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         }
+      }
+   }
+
+   @Test
+   public void testUpdateToIncludePoint() throws Exception
+   {
+      Random random = new Random(234234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test updateToIncludePoint(Point3DReadOnly point)
+         BoundingBox3D original = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D extended = new BoundingBox3D(original);
+
+         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         extended.updateToIncludePoint(point);
+
+         if (original.isInsideInclusive(point))
+         { // Make sure calling it did not change the bounding box
+            assertEquals(original, extended);
+         }
+         else
+         { // If a bound has changed, it must be set to the point coordinate.
+            assertTrue(extended.isInsideInclusive(point));
+
+            Point3DReadOnly originalMin = original.getMinPoint();
+            Point3DReadOnly extendedMin = extended.getMinPoint();
+
+            for (int axis = 0; axis < 3; axis++)
+            {
+               boolean hasNotChanged = originalMin.getElement(axis) == extendedMin.getElement(axis);
+               boolean hasGrownToPoint = point.getElement(axis) == extendedMin.getElement(axis);
+               assertTrue(hasNotChanged || hasGrownToPoint);
+            }
+
+            Point3DReadOnly originalMax = original.getMaxPoint();
+            Point3DReadOnly extendedMax = extended.getMaxPoint();
+
+            for (int axis = 0; axis < 3; axis++)
+            {
+               boolean hasNotChanged = originalMax.getElement(axis) == extendedMax.getElement(axis);
+               boolean hasGrownToPoint = point.getElement(axis) == extendedMax.getElement(axis);
+               assertTrue(hasNotChanged || hasGrownToPoint);
+            }
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test updateToIncludePoint(Point3DReadOnly point)
+         BoundingBox3D original = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D extended = new BoundingBox3D(original);
+
+         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         extended.updateToIncludePoint(point.getX(), point.getY(), point.getZ());
+
+         if (original.isInsideInclusive(point))
+         { // Make sure calling it did not change the bounding box
+            assertEquals(original, extended);
+         }
+         else
+         { // If a bound has changed, it must be set to the point coordinate.
+            assertTrue(extended.isInsideInclusive(point));
+
+            Point3DReadOnly originalMin = original.getMinPoint();
+            Point3DReadOnly extendedMin = extended.getMinPoint();
+
+            for (int axis = 0; axis < 3; axis++)
+            {
+               boolean hasNotChanged = originalMin.getElement(axis) == extendedMin.getElement(axis);
+               boolean hasGrownToPoint = point.getElement(axis) == extendedMin.getElement(axis);
+               assertTrue(hasNotChanged || hasGrownToPoint);
+            }
+
+            Point3DReadOnly originalMax = original.getMaxPoint();
+            Point3DReadOnly extendedMax = extended.getMaxPoint();
+
+            for (int axis = 0; axis < 3; axis++)
+            {
+               boolean hasNotChanged = originalMax.getElement(axis) == extendedMax.getElement(axis);
+               boolean hasGrownToPoint = point.getElement(axis) == extendedMax.getElement(axis);
+               assertTrue(hasNotChanged || hasGrownToPoint);
+            }
+         }
+      }
+   }
+
+   @Test
+   public void testGetters() throws Exception
+   {
+      Random random = new Random(3242L);
+
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      Point3DReadOnly min = boundingBox3D.getMinPoint();
+      Point3DReadOnly max = boundingBox3D.getMaxPoint();
+
+      {
+         Point3D actualMin = new Point3D();
+         Point3D actualMax = new Point3D();
+         boundingBox3D.getMinPoint(actualMin);
+         boundingBox3D.getMaxPoint(actualMax);
+         assertEquals(min, actualMin);
+         assertEquals(max, actualMax);
+      }
+
+      {
+         double[] actualMin = new double[3];
+         double[] actualMax = new double[3];
+         boundingBox3D.getMinPoint(actualMin);
+         boundingBox3D.getMaxPoint(actualMax);
+         assertEquals(min, new Point3D(actualMin));
+         assertEquals(max, new Point3D(actualMax));
+      }
+
+      {
+         assertTrue(min.getX() == boundingBox3D.getMinX());
+         assertTrue(min.getY() == boundingBox3D.getMinY());
+         assertTrue(min.getZ() == boundingBox3D.getMinZ());
+         assertTrue(max.getX() == boundingBox3D.getMaxX());
+         assertTrue(max.getY() == boundingBox3D.getMaxY());
+         assertTrue(max.getZ() == boundingBox3D.getMaxZ());
+      }
+   }
+
+   @Test
+   public void testEpsilonEquals() throws Exception
+   {
+      Random random = new Random(234234L);
+      double epsilon = random.nextDouble();
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      double minX = boundingBox3D.getMinX();
+      double minY = boundingBox3D.getMinY();
+      double minZ = boundingBox3D.getMinZ();
+      double maxX = boundingBox3D.getMaxX();
+      double maxY = boundingBox3D.getMaxY();
+      double maxZ = boundingBox3D.getMaxZ();
+
+      double small = 0.999 * epsilon;
+      double big = 1.001 * epsilon;
+
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX + small, minY, minZ, maxX, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY + small, minZ, maxX, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ + small, maxX, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX + small, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY + small, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ + small), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX - small, minY, minZ, maxX, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY - small, minZ, maxX, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ - small, maxX, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX - small, maxY, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY - small, maxZ), epsilon));
+      assertTrue(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ - small), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX + big, minY, minZ, maxX, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY + big, minZ, maxX, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ + big, maxX, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX + big, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY + big, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ + big), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX - big, minY, minZ, maxX, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY - big, minZ, maxX, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ - big, maxX, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX - big, maxY, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY - big, maxZ), epsilon));
+      assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ - big), epsilon));
+   }
+
+   @Test
+   public void testEquals() throws Exception
+   {
+      Random random = new Random(234234L);
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      double minX = boundingBox3D.getMinX();
+      double minY = boundingBox3D.getMinY();
+      double minZ = boundingBox3D.getMinZ();
+      double maxX = boundingBox3D.getMaxX();
+      double maxY = boundingBox3D.getMaxY();
+      double maxZ = boundingBox3D.getMaxZ();
+
+      double smallestEpsilon = 8.8888e-16;
+
+      assertTrue(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ)));
+      assertTrue(boundingBox3D.equals((Object) new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(null));
+      assertFalse(boundingBox3D.equals(new double[5]));
+      
+
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX + smallestEpsilon, minY, minZ, maxX, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY + smallestEpsilon, minZ, maxX, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ + smallestEpsilon, maxX, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX + smallestEpsilon, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY + smallestEpsilon, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ + smallestEpsilon)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX - smallestEpsilon, minY, minZ, maxX, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY - smallestEpsilon, minZ, maxX, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ - smallestEpsilon, maxX, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX - smallestEpsilon, maxY, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY - smallestEpsilon, maxZ)));
+      assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ - smallestEpsilon)));
    }
 }

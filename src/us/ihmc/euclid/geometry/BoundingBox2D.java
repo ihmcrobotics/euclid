@@ -284,15 +284,12 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * Redefines this bounding box to be the same as the given {@code other}.
     *
     * @param other the bounding box used to redefine this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
     */
    @Override
    public void set(BoundingBox2D other)
    {
       minPoint.set(other.minPoint);
       maxPoint.set(other.maxPoint);
-      checkBounds();
    }
 
    /**
@@ -429,7 +426,13 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideExclusive(double x, double y)
    {
-      return isInsideInclusive(x, y);
+      if (x <= getMinX() || x >= getMaxX())
+         return false;
+
+      if (y <= getMinY() || y >= getMaxY())
+         return false;
+
+      return true;
    }
 
    /**
@@ -444,9 +447,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean isInsideInclusive(Point2DReadOnly query)
    {
-      double x = query.getX();
-      double y = query.getY();
-      return isInsideInclusive(x, y);
+      return isInsideInclusive(query.getX(), query.getY());
    }
 
    /**
@@ -580,7 +581,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
-    * {@link #intersectsEpsilon(BoundingBox2D)}.
+    * {@link #intersectsExclusive(BoundingBox3D)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
     * of {@code epsilon} toward the outside.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
@@ -595,10 +596,10 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean intersectsEpsilon(BoundingBox2D other, double epsilon)
    {
-      if (other.getMinX() > getMaxX() + epsilon || other.getMaxX() < getMinX() - epsilon)
+      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon)
          return false;
 
-      if (other.getMinY() > getMaxY() + epsilon || other.getMaxY() < getMinY() - epsilon)
+      if (other.getMinY() >= getMaxY() + epsilon || other.getMaxY() <= getMinY() - epsilon)
          return false;
 
       return true;
@@ -613,7 +614,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean doesIntersectWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
-      return intersectionWithLine2D(pointOnLine, lineDirection, null, null) != 0;
+      return intersectionWithLine2D(pointOnLine, lineDirection, null, null) > 0;
    }
 
    /**
@@ -626,7 +627,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean doesIntersectWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
    {
-      return intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, null, null) != 0;
+      return intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, null, null) > 0;
    }
 
    /**
@@ -638,7 +639,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     */
    public boolean doesIntersectWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
    {
-      return intersectionWithRay2D(rayOrigin, rayDirection, null, null) != 0;
+      return intersectionWithRay2D(rayOrigin, rayDirection, null, null) > 0;
    }
 
    /**
@@ -933,6 +934,6 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    @Override
    public String toString()
    {
-      return "Bounding Box 2D: " + "min = " + minPoint + ", max = " + maxPoint;
+      return "Bounding Box 2D: min = " + minPoint + ", max = " + maxPoint;
    }
 }

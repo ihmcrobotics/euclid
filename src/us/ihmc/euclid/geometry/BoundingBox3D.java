@@ -17,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
- * axis-aligned bounding box in the XY-plane.
+ * axis-aligned bounding box.
  */
 public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable<BoundingBox3D>, Clearable
 {
@@ -292,15 +292,12 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Redefines this bounding box to be the same as the given {@code other}.
     *
     * @param other the bounding box used to redefine this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
     */
    @Override
    public void set(BoundingBox3D other)
    {
       minPoint.set(other.minPoint);
       maxPoint.set(other.maxPoint);
-      checkBounds();
    }
 
    /**
@@ -616,7 +613,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
-    * {@link #intersectsEpsilon(BoundingBox3D)}.
+    * {@link #intersectsExclusive(BoundingBox3D)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
     * of {@code epsilon} toward the outside.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
@@ -631,16 +628,27 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     */
    public boolean intersectsEpsilon(BoundingBox3D other, double epsilon)
    {
-      if (other.getMinX() > getMaxX() + epsilon || other.getMaxX() < getMinX() - epsilon)
+      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon)
          return false;
 
-      if (other.getMinY() > getMaxY() + epsilon || other.getMaxY() < getMinY() - epsilon)
+      if (other.getMinY() >= getMaxY() + epsilon || other.getMaxY() <= getMinY() - epsilon)
          return false;
 
-      if (other.getMinZ() > getMaxZ() + epsilon || other.getMaxZ() < getMinZ() - epsilon)
+      if (other.getMinZ() >= getMaxZ() + epsilon || other.getMaxZ() <= getMinZ() - epsilon)
          return false;
 
       return true;
+   }
+
+   /**
+    * Tests if this the given line 3D intersects this bounding box.
+    *
+    * @param line3D the query. Not modified.
+    * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
+    */
+   public boolean doesIntersectWithLine3D(Line3D line3D)
+   {
+      return doesIntersectWithLine3D(line3D.getPoint(), line3D.getDirection());
    }
 
    /**
@@ -652,7 +660,19 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     */
    public boolean doesIntersectWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
-      return intersectionWithLine3D(pointOnLine, lineDirection, null, null) != 0;
+      return intersectionWithLine3D(pointOnLine, lineDirection, null, null) > 0;
+   }
+
+   /**
+    * Tests if this the given line segment 3D intersects this bounding box.
+    *
+    * @param lineSegment3D the query. Not modified.
+    * @return {@code true} if the line segment and this bounding box intersect, {@code false}
+    *         otherwise.
+    */
+   public boolean doesIntersectWithLineSegment3D(LineSegment3D lineSegment3D)
+   {
+      return doesIntersectWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
    }
 
    /**
@@ -665,7 +685,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     */
    public boolean doesIntersectWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
    {
-      return intersectionWithLineSegment3D(lineSegmentStart, lineSegmentEnd, null, null) != 0;
+      return intersectionWithLineSegment3D(lineSegmentStart, lineSegmentEnd, null, null) > 0;
    }
 
    /**
@@ -677,7 +697,27 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     */
    public boolean doesIntersectWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection)
    {
-      return intersectionWithRay3D(rayOrigin, rayDirection, null, null) != 0;
+      return intersectionWithRay3D(rayOrigin, rayDirection, null, null) > 0;
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line and this bounding box.
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * </p>
+    *
+    * @param line3D the query. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and this bounding box. It is either equal
+    *         to 0 or 2.
+    */
+   public int intersectionWithLine3D(Line3D line3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWithLine3D(line3D.getPoint(), line3D.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -700,6 +740,38 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
                                      Point3DBasics secondIntersectionToPack)
    {
       return intersectionBetweenLine3DAndBoundingBox3D(minPoint, maxPoint, pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line segment and this bounding
+    * box.
+    * <p>
+    * Intersection(s) between the line segment and this bounding box can only exist between the
+    * endpoints of the line segment.
+    * </p>
+    * <p>
+    * In the case the line segment and this bounding box do not intersect, this method returns
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
+    * unmodified.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the line segment and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    *
+    * @param lineSegment3D the query. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line segment and this bounding box. It is
+    *         either equal to 0, 1, or 2.
+    */
+   public int intersectionWithLineSegment3D(LineSegment3D lineSegment3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), firstIntersectionToPack,
+                                           secondIntersectionToPack);
    }
 
    /**
@@ -996,13 +1068,13 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
 
    /**
     * Provides a {@code String} representation of this bounding box 3D as follows:<br>
-    * Bounding Box 3D: min = (x, y), max = (x, y)
+    * Bounding Box 3D: min = (x, y, z), max = (x, y, z)
     *
     * @return the {@code String} representing this bounding box 3D.
     */
    @Override
    public String toString()
    {
-      return "Bounding Box 3D: " + "min = " + minPoint + ", max = " + maxPoint;
+      return "Bounding Box 3D: min = " + minPoint + ", max = " + maxPoint;
    }
 }
