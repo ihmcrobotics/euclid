@@ -641,6 +641,87 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
+    * Tests if this bounding box and {@code other} intersects.
+    * <p>
+    * The two bounding boxes are considered to not be intersecting if they share a corner or an
+    * edge.
+    * </p>
+    * <p>
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the test.
+    * </p>
+    *
+    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
+    *           Modified.
+    * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    */
+   public boolean intersectsExclusiveInXYPlane(BoundingBox2D other)
+   {
+      if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX())
+         return false;
+
+      if (other.getMinY() >= getMaxY() || other.getMaxY() <= getMinY())
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Tests if this bounding box and {@code other} intersects.
+    * <p>
+    * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
+    * </p>
+    * <p>
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the test.
+    * </p>
+    *
+    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
+    *           Modified.
+    * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    */
+   public boolean intersectsInclusiveInXYPlane(BoundingBox2D other)
+   {
+      if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
+         return false;
+
+      if (other.getMinY() > getMaxY() || other.getMaxY() < getMinY())
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Tests if this bounding box and {@code other} intersects.
+    * <p>
+    * <ul>
+    * <li>if {@code epsilon == 0}, this method is equivalent to
+    * {@link #intersectsEpsilonInXYPlane(BoundingBox2D)}.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
+    * of {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
+    * of {@code epsilon} toward the inside.
+    * </ul>
+    * </p>
+    * <p>
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the test.
+    * </p>
+    *
+    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
+    *           Modified.
+    * @param epsilon the tolerance to use in this test.
+    * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    */
+   public boolean intersectsEpsilonInXYPlane(BoundingBox2D other, double epsilon)
+   {
+      if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon)
+         return false;
+
+      if (other.getMinY() >= getMaxY() + epsilon || other.getMaxY() <= getMinY() - epsilon)
+         return false;
+
+      return true;
+   }
+
+   /**
     * Tests if this the given line 3D intersects this bounding box.
     *
     * @param line3D the query. Not modified.
