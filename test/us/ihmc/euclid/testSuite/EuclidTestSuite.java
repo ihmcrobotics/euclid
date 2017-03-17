@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 
+import us.ihmc.euclid.geometry.BoundingBox2DTest;
+import us.ihmc.euclid.geometry.BoundingBox3DTest;
 import us.ihmc.euclid.geometry.Line3DTest;
 import us.ihmc.euclid.geometry.LineSegment3DTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
@@ -17,11 +19,12 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
       // Geometry class tests
-      Line3DTest.class,
-      LineSegment3DTest.class,
+      // 2D
+      BoundingBox2DTest.class,
+      // 3D
+      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class,
       // Tools tests
-      EuclidGeometryToolsTest.class
-      })
+      EuclidGeometryToolsTest.class})
 
 public class EuclidTestSuite
 {
