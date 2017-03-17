@@ -1,5 +1,7 @@
 package us.ihmc.euclid.geometry.exceptions;
 
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -32,6 +34,18 @@ public class BoundingBoxException extends RuntimeException
 
    /**
     * Creates a new bounding box exception with a default detail message containing the value of the
+    * given {@code boundingBox2D}.
+    * 
+    * @param badBoundingBox2D the bounding box 2D to be displayed in the detail message. Not
+    *           modified.
+    */
+   public BoundingBoxException(BoundingBox2D badBoundingBox2D)
+   {
+      super("Improper bounding box 2D: " + badBoundingBox2D == null ? "bounding box is null" : badBoundingBox2D.toString());
+   }
+
+   /**
+    * Creates a new bounding box exception with a default detail message containing the value of the
     * given minimum and maximum coordinates of the bounding box.
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box to be displayed in the detail
@@ -42,6 +56,18 @@ public class BoundingBoxException extends RuntimeException
    public BoundingBoxException(Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax)
    {
       super("Improper bounding box 2D: min = " + boundingBoxMin + ", max = " + boundingBoxMax);
+   }
+
+   /**
+    * Creates a new bounding box exception with a default detail message containing the value of the
+    * given {@code boundingBox3D}.
+    * 
+    * @param badBoundingBox3D the bounding box 3D to be displayed in the detail message. Not
+    *           modified.
+    */
+   public BoundingBoxException(BoundingBox3D badBoundingBox3D)
+   {
+      super("Improper bounding box 3D: " + badBoundingBox3D == null ? "bounding box is null" : badBoundingBox3D.toString());
    }
 
    /**
