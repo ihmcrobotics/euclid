@@ -12,6 +12,8 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -1158,6 +1160,201 @@ public class BoundingBox3DTest
          boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
          query.set(0.0, 0.0, 1.0, 1.0, 1.0, 2.0);
          assertFalse(boundingBox3D.intersectsEpsilon(query, 0.0));
+      }
+   }
+
+   @Test
+   public void testIntersectsExclusiveInXYPlane() throws Exception
+   {
+      Random random = new Random(34545L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D center3D = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point2D center2D = new Point2D(center3D.getX(), center3D.getY());
+         Vector3D halfSize3D = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center3D, halfSize3D);
+
+         Point2D queryCenter2D = new Point2D();
+         Point3D queryCenter3D = new Point3D();
+         Vector2D queryHalfSize2D = EuclidCoreRandomTools.generateRandomVector2D(random, 0.0, 10.0);
+         BoundingBox2D query2D = new BoundingBox2D();
+
+         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         boundingBox3D.getPointGivenParameters(xParameter, yParameter, 0.0, queryCenter3D);
+         queryCenter2D.set(queryCenter3D.getX(), queryCenter3D.getY());
+         query2D.set(queryCenter2D, queryHalfSize2D);
+         assertTrue(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+
+         for (double xSign = -1.0; xSign <= 1.0; xSign += 1.0)
+         {
+            for (double ySign = -1.0; ySign <= 1.0; ySign += 1.0)
+            {
+               Vector2D shift2D = new Vector2D(queryHalfSize2D);
+               shift2D.add(halfSize3D.getX(), halfSize3D.getY());
+               shift2D.scale(xSign, ySign);
+
+               queryCenter2D.scaleAdd(0.999, shift2D, center2D);
+               query2D.set(queryCenter2D, queryHalfSize2D);
+               assertTrue(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+
+               if (Math.abs(xSign) + Math.abs(ySign) != 0.0)
+               {
+                  queryCenter2D.scaleAdd(1.0001, shift2D, center2D);
+                  query2D.set(queryCenter2D, queryHalfSize2D);
+                  assertFalse(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+               }
+            }
+         }
+
+         // Simple tests to verify the exclusive feature
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(-1.0, 0.0, 0.0, 1.0);
+         assertFalse(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(0.0, -1.0, 1.0, 0.0);
+         assertFalse(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(1.0, 0.0, 2.0, 1.0);
+         assertFalse(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(0.0, 1.0, 1.0, 2.0);
+         assertFalse(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+      }
+   }
+
+   @Test
+   public void testIntersectsInclusiveInXYPlane() throws Exception
+   {
+      Random random = new Random(34545L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D center3D = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point2D center2D = new Point2D(center3D.getX(), center3D.getY());
+         Vector3D halfSize3D = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center3D, halfSize3D);
+
+         Point2D queryCenter2D = new Point2D();
+         Point3D queryCenter3D = new Point3D();
+         Vector2D queryHalfSize2D = EuclidCoreRandomTools.generateRandomVector2D(random, 0.0, 10.0);
+         BoundingBox2D query2D = new BoundingBox2D();
+
+         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         boundingBox3D.getPointGivenParameters(xParameter, yParameter, 0.0, queryCenter3D);
+         queryCenter2D.set(queryCenter3D.getX(), queryCenter3D.getY());
+         query2D.set(queryCenter2D, queryHalfSize2D);
+         assertTrue(boundingBox3D.intersectsExclusiveInXYPlane(query2D));
+
+         for (double xSign = -1.0; xSign <= 1.0; xSign += 1.0)
+         {
+            for (double ySign = -1.0; ySign <= 1.0; ySign += 1.0)
+            {
+               Vector2D shift = new Vector2D(queryHalfSize2D);
+               shift.add(halfSize3D.getX(), halfSize3D.getY());
+               shift.scale(xSign, ySign);
+
+               queryCenter2D.scaleAdd(0.999, shift, center2D);
+               query2D.set(queryCenter2D, queryHalfSize2D);
+               assertTrue(boundingBox3D.intersectsInclusiveInXYPlane(query2D));
+
+               if (Math.abs(xSign) + Math.abs(ySign) != 0.0)
+               {
+                  queryCenter2D.scaleAdd(1.0001, shift, center2D);
+                  query2D.set(queryCenter2D, queryHalfSize2D);
+                  assertFalse(boundingBox3D.intersectsInclusiveInXYPlane(query2D));
+               }
+            }
+         }
+
+         // Simple tests to verify the inclusive feature
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(-1.0, 0.0, 0.0, 1.0);
+         assertTrue(boundingBox3D.intersectsInclusiveInXYPlane(query2D));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(0.0, -1.0, 1.0, 0.0);
+         assertTrue(boundingBox3D.intersectsInclusiveInXYPlane(query2D));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(1.0, 0.0, 2.0, 1.0);
+         assertTrue(boundingBox3D.intersectsInclusiveInXYPlane(query2D));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(0.0, 1.0, 1.0, 2.0);
+         assertTrue(boundingBox3D.intersectsInclusiveInXYPlane(query2D));
+      }
+   }
+
+   @Test
+   public void testIntersectsEpsilonInXYPlane() throws Exception
+   {
+      Random random = new Random(34545L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 1.0);
+
+         Point3D center3D = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point2D center2D = new Point2D(center3D.getX(), center3D.getY());
+         Vector3D halfSize3D = EuclidCoreRandomTools.generateRandomVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
+         BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center3D, halfSize3D);
+
+         Point2D queryCenter2D = new Point2D();
+         Point3D queryCenter3D = new Point3D();
+         Vector2D queryHalfSize2D = EuclidCoreRandomTools.generateRandomVector2D(random, 2.0 * Math.abs(epsilon), 10.0);
+         BoundingBox2D query2D = new BoundingBox2D();
+
+         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         boundingBox3D.getPointGivenParameters(xParameter, yParameter, 0.0, queryCenter3D);
+         queryCenter2D.set(queryCenter3D.getX(), queryCenter3D.getY());
+         query2D.set(queryCenter2D, queryHalfSize2D);
+         assertTrue(boundingBox3D.intersectsEpsilonInXYPlane(query2D, epsilon));
+
+         for (double xSign = -1.0; xSign <= 1.0; xSign += 1.0)
+         {
+            for (double ySign = -1.0; ySign <= 1.0; ySign += 1.0)
+            {
+               Vector2D shift = new Vector2D(queryHalfSize2D);
+               shift.add(halfSize3D.getX(), halfSize3D.getY());
+               shift.add(epsilon, epsilon);
+               shift.scale(xSign, ySign);
+
+               queryCenter2D.scaleAdd(0.999, shift, center2D);
+               query2D.set(queryCenter2D, queryHalfSize2D);
+               assertTrue(boundingBox3D.intersectsEpsilonInXYPlane(query2D, epsilon));
+
+               if (Math.abs(xSign) + Math.abs(ySign) != 0.0)
+               {
+                  queryCenter2D.scaleAdd(1.0001, shift, center2D);
+                  query2D.set(queryCenter2D, queryHalfSize2D);
+                  assertFalse(boundingBox3D.intersectsEpsilonInXYPlane(query2D, epsilon));
+               }
+            }
+         }
+
+         // Simple tests to verify the exclusive feature
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(-1.0, 0.0, 0.0, 1.0);
+         assertFalse(boundingBox3D.intersectsEpsilonInXYPlane(query2D, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(0.0, -1.0, 1.0, 0.0);
+         assertFalse(boundingBox3D.intersectsEpsilonInXYPlane(query2D, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(1.0, 0.0, 2.0, 1.0);
+         assertFalse(boundingBox3D.intersectsEpsilonInXYPlane(query2D, 0.0));
+
+         boundingBox3D.set(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+         query2D.set(0.0, 1.0, 1.0, 2.0);
+         assertFalse(boundingBox3D.intersectsEpsilonInXYPlane(query2D, 0.0));
       }
    }
 
