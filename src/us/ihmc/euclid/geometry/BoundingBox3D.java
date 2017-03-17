@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -560,6 +561,145 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
+    * Tests if the {@code query} is located inside the projection onto the XY-plane of this bounding
+    * box.
+    * <p>
+    * The query is considered to be outside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param query the query to test if it is located inside this bounding box. Not modified.
+    * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
+    *         this bounding box.
+    */
+   public boolean isXYInsideExclusive(Point2DReadOnly query)
+   {
+      return isXYInsideExclusive(query.getX(), query.getY());
+   }
+
+   /**
+    * Tests if the {@code query} is located inside the projection onto the XY-plane of this bounding
+    * box.
+    * <p>
+    * The query is considered to be outside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
+    *         this bounding box.
+    */
+   public boolean isXYInsideExclusive(double x, double y)
+   {
+      if (x <= getMinX() || x >= getMaxX())
+         return false;
+
+      if (y <= getMinY() || y >= getMaxY())
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Tests if the {@code query} is located inside the projection onto the XY-plane of this bounding
+    * box.
+    * <p>
+    * The query is considered to be inside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param query the query to test if it is located inside this bounding box. Not modified.
+    * @return {@code true} if the query is inside or located on an edge of this bounding box,
+    *         {@code false} if outside.
+    */
+   public boolean isXYInsideInclusive(Point2DReadOnly query)
+   {
+      return isXYInsideInclusive(query.getX(), query.getY());
+   }
+
+   /**
+    * Tests if the {@code query} is located inside the projection onto the XY-plane of this bounding
+    * box.
+    * <p>
+    * The query is considered to be inside if located exactly on an edge of this bounding box.
+    * </p>
+    *
+    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @return {@code true} if the query is inside or located on an edge of this bounding box,
+    *         {@code false} if outside.
+    */
+   public boolean isXYInsideInclusive(double x, double y)
+   {
+      if (x < getMinX() || x > getMaxX())
+         return false;
+
+      if (y < getMinY() || y > getMaxY())
+         return false;
+
+      return true;
+   }
+
+   /**
+    * * Tests if the {@code query} is located inside the projection onto the XY-plane of this
+    * bounding box given the tolerance {@code epsilon}.
+    * <p>
+    * <ul>
+    * <li>if {@code epsilon == 0}, this method is equivalent to
+    * {@link #isInsideExclusive(Point3DReadOnly)}.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
+    * of {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
+    * of {@code epsilon} toward the inside.
+    * </ul>
+    * </p>
+    *
+    * @param query the query to test if it is located inside this bounding box. Not modified.
+    * @param epsilon the tolerance to use for this test.
+    * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
+    *         otherwise.
+    */
+   public boolean isXYInsideEpsilon(Point2DReadOnly query, double epsilon)
+   {
+      return isXYInsideEpsilon(query.getX(), query.getY(), epsilon);
+   }
+
+   /**
+    * * Tests if the {@code query} is located inside the projection onto the XY-plane of this
+    * bounding box given the tolerance {@code epsilon}.
+    * <p>
+    * <ul>
+    * <li>if {@code epsilon == 0}, this method is equivalent to
+    * {@link #isInsideExclusive(Point3DReadOnly)}.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
+    * of {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
+    * of {@code epsilon} toward the inside.
+    * </ul>
+    * </p>
+    *
+    * @param x the x-coordinate the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param y the y-coordinate the query to test if it is located inside this bounding box. Not
+    *           modified.
+    * @param epsilon the tolerance to use for this test.
+    * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
+    *         otherwise.
+    */
+   public boolean isXYInsideEpsilon(double x, double y, double epsilon)
+   {
+      if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon)
+         return false;
+
+      if (y <= getMinY() - epsilon || y >= getMaxY() + epsilon)
+         return false;
+
+      return true;
+   }
+
+   /**
     * Tests if this bounding box and {@code other} intersects.
     * <p>
     * The two bounding boxes are considered to not be intersecting if they share a corner or an
@@ -647,7 +787,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * edge.
     * </p>
     * <p>
-    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the test.
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing
+    * the test.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -671,7 +812,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
     * </p>
     * <p>
-    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the test.
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing
+    * the test.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -702,7 +844,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * </ul>
     * </p>
     * <p>
-    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the test.
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing
+    * the test.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
