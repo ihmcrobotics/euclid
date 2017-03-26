@@ -1,17 +1,69 @@
 package us.ihmc.euclid.geometry.tools;
 
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredBetweenPoint2Ds;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnSideOfLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.signedDistanceFromPoint2DToLine2D;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 public class EuclidGeometryPolygonTools
 {
    private static final Random random = new Random();
    static final double EPSILON = 1.0e-7;
+
+   /**
+    * Tests if the polygon defined by the given {@code vertices} is convex at the vertex defined by
+    * the given {@code vertexIndex}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
+    * line.
+    * </ul>
+    * </p>
+    * 
+    * @param vertexIndex the index of the vertex to be tested for convexity.
+    * @param vertices the list of vertices defining the polygon to test. Not modified.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
+    */
+   public static boolean isConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, boolean clockwiseOrdered)
+   {
+      return isConvexAtVertex(vertexIndex, vertices, vertices.size(), clockwiseOrdered);
+   }
+
+   /**
+    * Tests if the polygon defined by the given {@code vertices} is convex at the vertex defined by
+    * the given {@code vertexIndex}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
+    * line.
+    * </ul>
+    * </p>
+    * 
+    * @param vertexIndex the index of the vertex to be tested for convexity.
+    * @param vertices the list of vertices defining the polygon to test. Not modified.
+    * @param numberOfVertices the number of vertices relevant to the polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
+    */
+   public static boolean isConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
+   {
+      Point2DReadOnly vertex = vertices.get(vertexIndex);
+      Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
+      Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
+
+      return EuclidGeometryTools.isPoint2DOnSideOfLine2D(vertex, previousVertex, nextVertex, clockwiseOrdered);
+   }
 
    /**
     * In-place and garbage free implementation of the
@@ -170,6 +222,236 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
+    * Computes the area and centroid (optional) of a convex polygon defined by its size
+    * {@code numberOfVertices} and vertices {@code convexPolygon2D}.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code numberOfVertices == 0}, this method returns {@link Double#NaN} and
+    * {@code centroidToPack} is set to {@link Double#NaN}.
+    * <li>if {@code numberOfVertices < 3}, this method returns {@link 0.0} and
+    * {@code centroidToPack} is set to average of the polygon vertices.
+    * </ul>
+    * </p>
+    * 
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param centroidToPack point 2D in which the centroid of the convex polygon is stored. Can be
+    *           {@code null}. Modified.
+    * @return the area of the convex polygon.
+    */
+   public static double computeConvexPolyong2DArea(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
+                                                   Point2DBasics centroidToPack)
+   {
+      if (numberOfVertices == 0)
+      {
+         if (centroidToPack != null)
+            centroidToPack.setToNaN();
+         return Double.NaN;
+      }
+      else if (numberOfVertices < 3)
+      {
+         if (centroidToPack != null)
+         {
+            for (int i = 0; i < numberOfVertices; i++)
+               centroidToPack.add(convexPolygon2D.get(i));
+            centroidToPack.scale(1.0 / numberOfVertices);
+         }
+         return 0.0;
+      }
+      else
+      {
+         double area = 0.0;
+         double Cx = 0.0;
+         double Cy = 0.0;
+
+         if (clockwiseOrdered)
+         {
+            for (int i = numberOfVertices - 1; i >= 0; i--)
+            {
+               Point2DReadOnly ci = convexPolygon2D.get(i);
+               Point2DReadOnly ciMinus1 = convexPolygon2D.get(previous(i, numberOfVertices));
+
+               double weight = (ci.getX() * ciMinus1.getY() - ciMinus1.getX() * ci.getY());
+
+               Cx += (ci.getX() + ciMinus1.getX()) * weight;
+               Cy += (ci.getY() + ciMinus1.getY()) * weight;
+
+               area += weight;
+            }
+         }
+         else
+         {
+            for (int i = 0; i < numberOfVertices; i++)
+            {
+               Point2DReadOnly ci = convexPolygon2D.get(i);
+               Point2DReadOnly ciPlus1 = convexPolygon2D.get(next(i, numberOfVertices));
+
+               double weight = (ci.getX() * ciPlus1.getY() - ciPlus1.getX() * ci.getY());
+
+               Cx += (ci.getX() + ciPlus1.getX()) * weight;
+               Cy += (ci.getY() + ciPlus1.getY()) * weight;
+
+               area += weight;
+            }
+         }
+
+         area *= 0.5;
+
+         if (centroidToPack != null)
+         {
+            if (area < 1.0e-5)
+            {
+               centroidToPack.set(convexPolygon2D.get(0));
+            }
+            else
+            {
+               Cx *= 1.0 / (6.0 * area);
+               Cy *= 1.0 / (6.0 * area);
+
+               centroidToPack.set(Cx, Cy);
+            }
+         }
+
+         return area;
+      }
+   }
+
+   /**
+    * Determines if the point is inside the convex polygon given the tolerance {@code epsilon}.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The sign of {@code epsilon} is perform the test against the polygon shrunk by
+    * {@code Math.abs(epsilon)} if {@code epsilon < 0.0}, or against the polygon enlarged by
+    * {@code epsilon} if {@code epsilon > 0.0}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
+    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only vertex that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
+    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only edge that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
+    * </ul>
+    * 
+    * 
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param epsilon the tolerance to use during the test.
+    * @return {@code true} if the query is considered to be inside the polygon, {@code false}
+    *         otherwise.
+    */
+   public static boolean isPointInside(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                       boolean clockwiseOrdered, double epsilon)
+   {
+      if (numberOfVertices == 0)
+         return false;
+
+      if (numberOfVertices == 1)
+      {
+         if (epsilon < 0.0)
+            return false;
+
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, vertex.getX(), vertex.getY());
+         return distanceSquared <= epsilon * epsilon;
+      }
+
+      if (numberOfVertices == 2)
+      {
+         if (epsilon < 0.0)
+            return false;
+
+         Point2DReadOnly edgeStart = convexPolygon2D.get(0);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(1);
+         double distanceSquared = distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, edgeStart, edgeEnd);
+         return distanceSquared <= epsilon * epsilon;
+      }
+
+      // Determine whether the point is on the right side of each edge:
+      for (int i = 0; i < numberOfVertices; i++)
+      {
+         Point2DReadOnly edgeStart = convexPolygon2D.get(i);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(next(i, numberOfVertices));
+         double distanceToEdgeLine = signedDistanceFromPoint2DToLine2D(pointX, pointY, edgeStart, edgeEnd);
+
+         if (distanceToEdgeLine > epsilon)
+            return false;
+      }
+
+      return true;
+   }
+
+   /**
+    * Determines whether an observer can see the outside of the given edge of the given convex
+    * polygon.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its its start
+    * {@code convexPolygon2D.get(edgeIndex + 1)}.
+    * </p>
+    * 
+    * @param edgeStartIndex the vertex index of the start of the edge.
+    * @param observer the coordinates of the observer.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
+    *         observer cannot see the outside or is lying on the edge.
+    */
+   public static boolean canObserverSeeEdge(int edgeStartIndex, Point2DReadOnly observer, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                            boolean clockwiseOrdered)
+   {
+      return canObserverSeeEdge(edgeStartIndex, observer.getX(), observer.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
+   }
+
+   /**
+    * Determines whether an observer can see the outside of the given edge of the given convex
+    * polygon.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its its start
+    * {@code convexPolygon2D.get(edgeIndex + 1)}.
+    * </p>
+    * 
+    * @param edgeStartIndex the vertex index of the start of the edge.
+    * @param observerX the x-coordinate of the observer.
+    * @param observerY the y-coordinate of the observer.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
+    *         observer cannot see the outside or is lying on the edge.
+    */
+   public static boolean canObserverSeeEdge(int edgeStartIndex, double observerX, double observerY, List<? extends Point2DReadOnly> convexPolygon2D,
+                                            int numberOfVertices, boolean clockwiseOrdered)
+   {
+      Point2DReadOnly edgeStart = convexPolygon2D.get(edgeStartIndex);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeStartIndex, numberOfVertices));
+      return isPoint2DOnSideOfLine2D(observerX, observerY, edgeStart, edgeEnd, clockwiseOrdered);
+   }
+
+   /**
     * Sorts the vertices to complete the first step of the Graham scan algorithm.
     * <p>
     * First the vertex located at the lowest x-coordinate is found and used as the reference P.
@@ -322,63 +604,16 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
-    * Tests if the polygon defined by the given {@code vertices} is convex at the vertex defined by
-    * the given {@code vertexIndex}.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
-    * line.
-    * </ul>
-    * </p>
-    * 
-    * @param vertexIndex the index of the vertex to be tested for convexity.
-    * @param vertices the list of vertices defining the polygon to test. Not modified.
-    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
-    * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
-    */
-   public static boolean isConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, boolean clockwiseOrdered)
-   {
-      return isConvexAtVertex(vertexIndex, vertices, vertices.size(), clockwiseOrdered);
-   }
-
-   /**
-    * Tests if the polygon defined by the given {@code vertices} is convex at the vertex defined by
-    * the given {@code vertexIndex}.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
-    * line.
-    * </ul>
-    * </p>
-    * 
-    * @param vertexIndex the index of the vertex to be tested for convexity.
-    * @param vertices the list of vertices defining the polygon to test. Not modified.
-    * @param numberOfVertices the number of vertices relevant to the polygon.
-    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
-    * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
-    */
-   public static boolean isConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
-   {
-      Point2DReadOnly vertex = vertices.get(vertexIndex);
-      Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
-      Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
-
-      return EuclidGeometryTools.isPoint2DOnSideOfLine2D(vertex, previousVertex, nextVertex, clockwiseOrdered);
-   }
-
-   /**
     * Recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
     * <p>
     * The {@code index} remains unchanged if already &in; [0, {@code listSize}[.
     * <p>
     * Examples:
     * <ul>
-    * <li> {@code wrap(-1, 10)} returns 9.
-    * <li> {@code wrap(10, 10)} returns 0.
-    * <li> {@code wrap( 5, 10)} returns 5.
-    * <li> {@code wrap(15, 10)} returns 5.
+    * <li>{@code wrap(-1, 10)} returns 9.
+    * <li>{@code wrap(10, 10)} returns 0.
+    * <li>{@code wrap( 5, 10)} returns 5.
+    * <li>{@code wrap(15, 10)} returns 5.
     * </ul>
     * </p>
     * 
@@ -398,10 +633,10 @@ public class EuclidGeometryPolygonTools
     * Increments then recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
     * Examples:
     * <ul>
-    * <li> {@code next(-1, 10)} returns 0.
-    * <li> {@code next(10, 10)} returns 1.
-    * <li> {@code next( 5, 10)} returns 6.
-    * <li> {@code next(15, 10)} returns 6.
+    * <li>{@code next(-1, 10)} returns 0.
+    * <li>{@code next(10, 10)} returns 1.
+    * <li>{@code next( 5, 10)} returns 6.
+    * <li>{@code next(15, 10)} returns 6.
     * </ul>
     * </p>
     * 
@@ -418,10 +653,10 @@ public class EuclidGeometryPolygonTools
     * Decrements then recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
     * Examples:
     * <ul>
-    * <li> {@code next(-1, 10)} returns 10.
-    * <li> {@code next(10, 10)} returns 9.
-    * <li> {@code next( 5, 10)} returns 4.
-    * <li> {@code next(15, 10)} returns 4.
+    * <li>{@code next(-1, 10)} returns 10.
+    * <li>{@code next(10, 10)} returns 9.
+    * <li>{@code next( 5, 10)} returns 4.
+    * <li>{@code next(15, 10)} returns 4.
     * </ul>
     * </p>
     * 

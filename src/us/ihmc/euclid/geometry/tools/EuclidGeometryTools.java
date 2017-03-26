@@ -939,9 +939,23 @@ public class EuclidGeometryTools
     */
    public static double distanceBetweenPoint2Ds(double firstPointX, double firstPointY, double secondPointX, double secondPointY)
    {
+      return Math.sqrt(distanceSquaredBetweenPoint2Ds(firstPointX, firstPointY, secondPointX, secondPointY));
+   }
+
+   /**
+    * Calculates the square value of the distance between two points.
+    *
+    * @param firstPointX the x-coordinate of the first point.
+    * @param firstPointY the y-coordinate of the first point.
+    * @param secondPointX the x-coordinate of the second point.
+    * @param secondPointY the y-coordinate of the second point.
+    * @return the distance squared between the two points.
+    */
+   public static double distanceSquaredBetweenPoint2Ds(double firstPointX, double firstPointY, double secondPointX, double secondPointY)
+   {
       double deltaX = secondPointX - firstPointX;
       double deltaY = secondPointY - firstPointY;
-      return Math.sqrt(EuclidCoreTools.normSquared(deltaX, deltaY));
+      return EuclidCoreTools.normSquared(deltaX, deltaY);
    }
 
    /**
@@ -998,18 +1012,33 @@ public class EuclidGeometryTools
    public static double distanceFromPoint2DToLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
                                                     double lineDirectionY)
    {
-      double dx = pointOnLineX - pointX;
-      double dy = pointOnLineY - pointY;
-      double directionMagnitude = Math.sqrt(EuclidCoreTools.normSquared(lineDirectionX, lineDirectionY));
+      return Math.abs(signedDistanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY));
+   }
 
-      if (directionMagnitude < ONE_TRILLIONTH)
-      {
-         return Math.sqrt(dx * dx + dy * dy);
-      }
-      else
-      {
-         return Math.abs(lineDirectionX * dy - dx * lineDirectionY) / directionMagnitude;
-      }
+   /**
+    * Returns the minimum distance between a 2D point and an infinitely long 2D line defined by two
+    * points.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of the query.
+    * @param pointY y-coordinate of the query.
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line.
+    */
+   public static double distanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      double pointOnLineX = firstPointOnLine.getX();
+      double pointOnLineY = firstPointOnLine.getY();
+      double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
+      double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
+      return distanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
    }
 
    /**
@@ -1030,11 +1059,7 @@ public class EuclidGeometryTools
     */
    public static double distanceFromPoint2DToLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
-      double pointOnLineX = firstPointOnLine.getX();
-      double pointOnLineY = firstPointOnLine.getY();
-      double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
-      double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
-      return distanceFromPoint2DToLine2D(point.getX(), point.getY(), pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+      return distanceFromPoint2DToLine2D(point.getX(), point.getY(), firstPointOnLine, secondPointOnLine);
    }
 
    /**
@@ -1333,6 +1358,29 @@ public class EuclidGeometryTools
     * </ul>
     * </p>
     *
+    * @param pointX x coordinate of point to be tested.
+    * @param pointY y coordinate of point to be tested.
+    * @param lineSegmentStart first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @return the square of the minimum distance between the 2D point and the 2D line segment.
+    */
+   public static double distanceSquaredFromPoint2DToLineSegment2D(double pointX, double pointY, Point2DReadOnly lineSegmentStart,
+                                                                  Point2DReadOnly lineSegmentEnd)
+   {
+      return distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentEnd.getX(),
+                                                       lineSegmentEnd.getY());
+   }
+
+   /**
+    * Returns the square of the minimum distance between a point and a given line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
     * @param pointX x-coordinate of point to be tested.
     * @param pointY y-coordinate of point to be tested.
     * @param pointZ z-coordinate of point to be tested.
@@ -1573,8 +1621,8 @@ public class EuclidGeometryTools
     * Intersections between the line and the bounding box are not restricted to exist between the
     * two given points defining the line.
     * <p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
@@ -1608,8 +1656,8 @@ public class EuclidGeometryTools
     * link</a>.
     * </p>
     * <p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
@@ -1948,8 +1996,8 @@ public class EuclidGeometryTools
     * Intersections between the line and the bounding box are not restricted to exist between the
     * two given points defining the line.
     * <p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
@@ -1983,8 +2031,8 @@ public class EuclidGeometryTools
     * link</a>.
     * </p>
     * <p>
-    * In the case the line and the bounding box do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
@@ -2380,8 +2428,8 @@ public class EuclidGeometryTools
     * ray.
     * </p>
     * </p>
-    * In the case the ray and the bounding box do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * <p>
     * In the case only one intersection exists between the ray and the bounding box,
@@ -2427,8 +2475,8 @@ public class EuclidGeometryTools
     * ray.
     * </p>
     * </p>
-    * In the case the ray and the bounding box do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     * <p>
     * In the case only one intersection exists between the ray and the bounding box,
@@ -3074,9 +3122,9 @@ public class EuclidGeometryTools
    public static boolean isPoint2DOnSideOfLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
                                                  double lineDirectionY, boolean testLeftSide)
    {
-      double pointToPointX = pointX - pointOnLineX;
-      double pointToPointY = pointY - pointOnLineY;
-      double crossProduct = lineDirectionX * pointToPointY - pointToPointX * lineDirectionY;
+      double dx = pointX - pointOnLineX;
+      double dy = pointY - pointOnLineY;
+      double crossProduct = lineDirectionX * dy - dx * lineDirectionY;
       if (testLeftSide)
          return crossProduct > 0.0;
       else
@@ -4326,6 +4374,102 @@ public class EuclidGeometryTools
          return Double.NaN;
       else
          return chordLength / (2.0 * Math.sin(0.5 * chordAngle));
+   }
+
+   /**
+    * Returns the minimum signed distance between a 2D point and an infinitely long 2D line defined
+    * by a point and a direction.
+    * <p>
+    * The calculated distance is negative if the query is located on the right side of the line.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of the query.
+    * @param pointY y-coordinate of the query.
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
+    *         the query is located on the right side of the line.
+    */
+   public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      double pointOnLineX = firstPointOnLine.getX();
+      double pointOnLineY = firstPointOnLine.getY();
+      double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
+      double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
+      return signedDistanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+   }
+
+   /**
+    * Returns the minimum signed distance between a 2D point and an infinitely long 2D line defined
+    * by a point and a direction.
+    * <p>
+    * The calculated distance is negative if the query is located on the right side of the line.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of the query.
+    * @param pointY y-coordinate of the query.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
+    *         the query is located on the right side of the line.
+    */
+   public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return signedDistanceFromPoint2DToLine2D(pointX, pointY, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+   }
+
+   /**
+    * Returns the minimum signed distance between a 2D point and an infinitely long 2D line defined
+    * by a point and a direction.
+    * <p>
+    * The calculated distance is negative if the query is located on the right side of the line.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of the query.
+    * @param pointY y-coordinate of the query.
+    * @param pointOnLineX x-coordinate of a point located on the line.
+    * @param pointOnLineY y-coordinate of a point located on the line.
+    * @param lineDirectionX x-component of the line direction.
+    * @param lineDirectionY y-component of the line direction.
+    * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
+    *         the query is located on the right side of the line.
+    */
+   public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
+                                                          double lineDirectionY)
+   {
+      double dx = pointX - pointOnLineX;
+      double dy = pointY - pointOnLineY;
+      double directionMagnitude = Math.sqrt(EuclidCoreTools.normSquared(lineDirectionX, lineDirectionY));
+
+      if (directionMagnitude < ONE_TRILLIONTH)
+      {
+         return Math.sqrt(dx * dx + dy * dy);
+      }
+      else
+      {
+         return (lineDirectionX * dy - dx * lineDirectionY) / directionMagnitude;
+      }
    }
 
    /**
