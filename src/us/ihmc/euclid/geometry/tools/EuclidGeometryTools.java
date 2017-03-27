@@ -28,6 +28,7 @@ public class EuclidGeometryTools
    public static final double ONE_MILLIONTH = 1.0e-6;
    public static final double ONE_TEN_MILLIONTH = 1.0e-7;
    public static final double ONE_TRILLIONTH = 1.0e-12;
+   public static final double IS_POINT_ON_LINE_EPS = 1.0e-8;
 
    public static final double HALF_PI = 0.5 * Math.PI;
 
@@ -180,6 +181,39 @@ public class EuclidGeometryTools
       double lineDirection2y = secondPointOnLine2.getY() - firstPointOnLine2.getY();
       return areLine2DsCollinear(pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y, pointOnLine2x, pointOnLine2y, lineDirection2x, lineDirection2y,
                                  angleEpsilon, distanceEspilon);
+   }
+
+   /**
+    * Tests if the two given lines are collinear given a tolerance on the angle between in the range
+    * ]0; <i>pi</i>/2[. This method returns {@code true} if the two lines are collinear, whether
+    * they are pointing in the same direction or in opposite directions.
+    *
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the direction magnitude of either line is below {@link #ONE_TEN_MILLIONTH}, this method
+    * fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointOnLine1 point located on the first line. Not modified.
+    * @param lineDirection1 the first line direction. Not modified.
+    * @param firstPointOnLine2 a first point located on the second line. Not modified.
+    * @param secondPointOnLine2 a second point located on the second line. Not modified.
+    * @param angleEpsilon tolerance on the angle in radians.
+    * @param distanceEpsilon tolerance on the distance to determine if {@code firstPointOnLine2}
+    *           belongs to the first line segment.
+    * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    */
+   public static boolean areLine2DsCollinear(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly firstPointOnLine2,
+                                             Point2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
+   {
+      double pointOnLine2x = firstPointOnLine2.getX();
+      double pointOnLine2y = firstPointOnLine2.getY();
+      double lineDirection2x = secondPointOnLine2.getX() - firstPointOnLine2.getX();
+      double lineDirection2y = secondPointOnLine2.getY() - firstPointOnLine2.getY();
+      return areLine2DsCollinear(pointOnLine1.getX(), pointOnLine1.getY(), lineDirection1.getX(), lineDirection1.getY(), pointOnLine2x, pointOnLine2y,
+                                 lineDirection2x, lineDirection2y, angleEpsilon, distanceEspilon);
    }
 
    /**
@@ -943,6 +977,19 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Calculates the distance between two points.
+    *
+    * @param firstPointX the x-coordinate of the first point.
+    * @param firstPointY the y-coordinate of the first point.
+    * @param secondPoint the coordinates of the second point. Not modified.
+    * @return the distance between the two points.
+    */
+   public static double distanceBetweenPoint2Ds(double firstPointX, double firstPointY, Point2DReadOnly secondPoint)
+   {
+      return Math.sqrt(distanceSquaredBetweenPoint2Ds(firstPointX, firstPointY, secondPoint));
+   }
+
+   /**
     * Calculates the square value of the distance between two points.
     *
     * @param firstPointX the x-coordinate of the first point.
@@ -955,6 +1002,21 @@ public class EuclidGeometryTools
    {
       double deltaX = secondPointX - firstPointX;
       double deltaY = secondPointY - firstPointY;
+      return EuclidCoreTools.normSquared(deltaX, deltaY);
+   }
+
+   /**
+    * Calculates the square value of the distance between two points.
+    *
+    * @param firstPointX the x-coordinate of the first point.
+    * @param firstPointY the y-coordinate of the first point.
+    * @param secondPoint the coordinates of the second point. Not modified.
+    * @return the distance squared between the two points.
+    */
+   public static double distanceSquaredBetweenPoint2Ds(double firstPointX, double firstPointY, Point2DReadOnly secondPoint)
+   {
+      double deltaX = secondPoint.getX() - firstPointX;
+      double deltaY = secondPoint.getY() - firstPointY;
       return EuclidCoreTools.normSquared(deltaX, deltaY);
    }
 
@@ -1042,6 +1104,28 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Returns the minimum distance between a 2D point and an infinitely long 2D line defined by a
+    * point and a direction.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of the query.
+    * @param pointY y-coordinate of the query.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line.
+    */
+   public static double distanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return distanceFromPoint2DToLine2D(pointX, pointY, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+   }
+
+   /**
     * Returns the minimum distance between a 2D point and an infinitely long 2D line defined by two
     * points.
     * <p>
@@ -1080,7 +1164,7 @@ public class EuclidGeometryTools
     */
    public static double distanceFromPoint2DToLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
-      return distanceFromPoint2DToLine2D(point.getX(), point.getY(), pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+      return distanceFromPoint2DToLine2D(point.getX(), point.getY(), pointOnLine, lineDirection);
    }
 
    /**
@@ -1469,6 +1553,59 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Tests if an intersection exists between an infinitely long 2D line (defined by a 2D point and
+    * a 2D direction) and a 2D line segment (defined by its two 2D endpoints).
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the line and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the line and the line segment are collinear, they are assumed to intersect.
+    * <li>When the line intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param pointOnLineX the x-coordinate of a point located on the line.
+    * @param pointOnLineY the y-coordinate of a point located on the line.
+    * @param lineDirectionX the x-component of the line direction.
+    * @param lineDirectionY the y-component of the line direction.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   public static boolean doLine2DAndLineSegment2DIntersect(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
+                                                           Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
+   {
+      return intersectionBetweenLine2DAndLineSegment2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, lineSegmentStart.getX(),
+                                                       lineSegmentStart.getY(), lineSegmentEnd.getX(), lineSegmentEnd.getY(), null);
+   }
+
+   /**
+    * Tests if an intersection exists between an infinitely long 2D line (defined by a 2D point and
+    * a 2D direction) and a 2D line segment (defined by its two 2D endpoints).
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the line and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the line and the line segment are collinear, they are assumed to intersect.
+    * <li>When the line intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the line direction. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   public static boolean doLine2DAndLineSegment2DIntersect(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, Point2DReadOnly lineSegmentStart,
+                                                           Point2DReadOnly lineSegmentEnd)
+   {
+      return intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd, null);
+   }
+
+   /**
     * Test if two line segments intersect each other.
     * <p>
     * Edge cases:
@@ -1843,14 +1980,15 @@ public class EuclidGeometryTools
     * </p>
     *
     * @param pointOnLineX x-coordinate of a point located on the line.
-    * @param pointOnLineX y-coordinate of a point located on the line.
+    * @param pointOnLineY y-coordinate of a point located on the line.
     * @param lineDirectionX x-component of the line direction.
     * @param lineDirectionY y-component of the line direction.
     * @param lineSegmentStartX x-coordinate of the first endpoint of the line segment.
     * @param lineSegmentStartY y-coordinate of the first endpoint of the line segment.
     * @param lineSegmentEndX x-coordinate of the second endpoint of the line segment.
     * @param lineSegmentEndY y-coordinate of the second endpoint of the line segment.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     */
    public static boolean intersectionBetweenLine2DAndLineSegment2D(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
@@ -1885,7 +2023,8 @@ public class EuclidGeometryTools
              * intersection. Let's just set the result to lineSegmentStart such that it at least
              * belongs to the line segment.
              */
-            intersectionToPack.set(lineSegmentStartX, lineSegmentStartY);
+            if (intersectionToPack != null)
+               intersectionToPack.set(lineSegmentStartX, lineSegmentStartY);
             return true;
          }
          else
@@ -1903,12 +2042,15 @@ public class EuclidGeometryTools
 
          if (0.0 - epsilon < beta && beta < 1.0 + epsilon)
          {
-            if (beta < 0.0)
-               beta = 0.0;
-            else if (beta > 1.0)
-               beta = 1.0;
-            intersectionToPack.setX(lineSegmentStartX + beta * lineSegmentDirectionX);
-            intersectionToPack.setY(lineSegmentStartY + beta * lineSegmentDirectionY);
+            if (intersectionToPack != null)
+            {
+               if (beta < 0.0)
+                  beta = 0.0;
+               else if (beta > 1.0)
+                  beta = 1.0;
+               intersectionToPack.setX(lineSegmentStartX + beta * lineSegmentDirectionX);
+               intersectionToPack.setY(lineSegmentStartY + beta * lineSegmentDirectionY);
+            }
             return true;
          }
          else
@@ -1972,7 +2114,8 @@ public class EuclidGeometryTools
     * @param lineDirection the line direction. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     */
    public static boolean intersectionBetweenLine2DAndLineSegment2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
@@ -2539,48 +2682,14 @@ public class EuclidGeometryTools
                                                        double pointOnLine2x, double pointOnLine2y, double lineDirection2x, double lineDirection2y,
                                                        Point2DBasics intersectionToPack)
    {
-      //      We solve for x the problem of the form: A * x = b
-      //            A      *     x     =      b
-      //      / lineDirection2x -lineDirection1x \   / alpha \   / pointOnLine2x - pointOnLine1x \
-      //      |                                  | * |       | = |                               |
-      //      \ lineDirection2y -lineDirection1y /   \ beta  /   \ pointOnLine2y - pointOnLine1y /
-      // Here, only alpha or beta is needed.
+      double alpha = percentageOfIntersectionBetweenTwoLine2Ds(pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y, pointOnLine2x, pointOnLine2y,
+                                                               lineDirection2x, lineDirection2y);
+      if (Double.isNaN(alpha))
+         return false;
 
-      double determinant = -lineDirection1x * lineDirection2y + lineDirection1y * lineDirection2x;
-
-      double dx = pointOnLine2x - pointOnLine1x;
-      double dy = pointOnLine2y - pointOnLine1y;
-
-      if (Math.abs(determinant) < ONE_TRILLIONTH)
-      { // The lines are parallel
-           // Check if they are collinear
-         double cross = dx * lineDirection1y - dy * lineDirection1x;
-         if (Math.abs(cross) < ONE_TRILLIONTH)
-         {
-            /*
-             * The two lines are collinear. There's an infinite number of intersection. Let's just
-             * set the result to pointOnLine1.
-             */
-            intersectionToPack.set(pointOnLine1x, pointOnLine1y);
-            return true;
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         double oneOverDeterminant = 1.0 / determinant;
-         double AInverse00 = oneOverDeterminant * -lineDirection2y;
-         double AInverse01 = oneOverDeterminant * lineDirection2x;
-
-         double alpha = AInverse00 * dx + AInverse01 * dy;
-
-         intersectionToPack.setX(pointOnLine1x + alpha * lineDirection1x);
-         intersectionToPack.setY(pointOnLine1y + alpha * lineDirection1y);
-         return true;
-      }
+      intersectionToPack.setX(pointOnLine1x + alpha * lineDirection1x);
+      intersectionToPack.setY(pointOnLine1y + alpha * lineDirection1y);
+      return true;
    }
 
    /**
@@ -3026,6 +3135,42 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Determines if the query is exactly on or on the right side of the infinitely long line that
+    * goes through the ray origin and which direction is perpendicular to the ray and directed
+    * towards the left side.
+    * 
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param rayOriginX the x-coordinate of the ray's origin.
+    * @param rayOriginY the y-coordinate of the ray's origin.
+    * @param rayDirectionX the x-component of the ray's direction.
+    * @param rayDirectionY the y-component of the ray's direction.
+    * @return {@code true} if the query is located in front of the ray.
+    */
+   public static boolean isPoint2DInFrontOfRay2D(double pointX, double pointY, double rayOriginX, double rayOriginY, double rayDirectionX, double rayDirectionY)
+   {
+      double rayStartToVertexX = pointX - rayOriginX;
+      double rayStartToVertexY = pointY - rayOriginY;
+      double dotProduct = rayStartToVertexX * rayDirectionX + rayStartToVertexY * rayDirectionY;
+      return dotProduct >= 0.0;
+   }
+
+   /**
+    * Determines if the query is exactly on or on the right side of the infinitely long line that
+    * goes through the ray origin and which direction is perpendicular to the ray and directed
+    * towards the left side.
+    * 
+    * @param point the query. Not modified.
+    * @param rayOrigin the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @return {@code true} if the query is located in front of the ray.
+    */
+   public static boolean isPoint2DInFrontOfRay2D(Point2DReadOnly point, Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
+   {
+      return isPoint2DInFrontOfRay2D(point.getX(), point.getY(), rayOrigin.getX(), rayOrigin.getY(), rayDirection.getX(), rayDirection.getY());
+   }
+
+   /**
     * Returns true only if the point is inside the triangle defined by the vertices a, b, and c. The
     * triangle can be clockwise or counter-clockwise ordered.
     *
@@ -3049,6 +3194,82 @@ public class EuclidGeometryTools
          return false;
 
       return true;
+   }
+
+   /**
+    * Tests if the point 2D is located on the infinitely long line 2D.
+    * <p>
+    * The test is performed by computing the distance between the point and the line, if that
+    * distance is below {@link #IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param pointOnLineX the x-coordinate of a point located on the line.
+    * @param pointOnLineY the y-coordinate of a point located on the line.
+    * @param lineDirectionX the x-component of the direction of the line.
+    * @param lineDirectionY the y-component of the direction of the line.
+    * @return {@code true} if the query is considered to be lying on the line, {@code false}
+    *         otherwise.
+    */
+   public static boolean isPoint2DOnLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY)
+   {
+      return distanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY) < IS_POINT_ON_LINE_EPS;
+   }
+
+   /**
+    * Tests if the point 2D is located on the infinitely long line 2D.
+    * <p>
+    * The test is performed by computing the distance between the point and the line, if that
+    * distance is below {@link #IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return {@code true} if the query is considered to be lying on the line, {@code false}
+    *         otherwise.
+    */
+   public static boolean isPoint2DOnLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return distanceFromPoint2DToLine2D(pointX, pointY, pointOnLine, lineDirection) < IS_POINT_ON_LINE_EPS;
+   }
+
+   /**
+    * Tests if the point 2D is located on the infinitely long line 2D.
+    * <p>
+    * The test is performed by computing the distance between the point and the line, if that
+    * distance is below {@link #IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * </p>
+    * 
+    * @param point the coordinates of the query. Not modified.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return {@code true} if the query is considered to be lying on the line, {@code false}
+    *         otherwise.
+    */
+   public static boolean isPoint2DOnLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return isPoint2DOnLine2D(point.getX(), point.getY(), pointOnLine, lineDirection);
+   }
+
+   /**
+    * Tests if the point 2D is located on the infinitely long line 2D.
+    * <p>
+    * The test is performed by computing the distance between the point and the line, if that
+    * distance is below {@link #IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * </p>
+    * 
+    * @param point the coordinates of the query. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @return {@code true} if the query is considered to be lying on the line, {@code false}
+    *         otherwise.
+    */
+   public static boolean isPoint2DOnLineSegment2D(Point2DReadOnly point, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
+   {
+      return distanceFromPoint2DToLineSegment2D(point, lineSegmentStart, lineSegmentEnd) < IS_POINT_ON_LINE_EPS;
    }
 
    /**
@@ -3590,7 +3811,8 @@ public class EuclidGeometryTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProjectX the x-coordinate of the point to compute the projection of.
+    * @param pointToProjectY the y-coordinate of the point to compute the projection of.
     * @param lineSegmentStartX the x-coordinate of the line segment first endpoint.
     * @param lineSegmentStartY the y-coordinate of the line segment first endpoint.
     * @param lineSegmentEndX the x-coordinate of the line segment second endpoint.
@@ -3599,10 +3821,10 @@ public class EuclidGeometryTools
     *           stored. Modified.
     * @return whether the method succeeded or not.
     */
-   public static boolean orthogonalProjectionOnLineSegment2D(Point2DReadOnly pointToProject, double lineSegmentStartX, double lineSegmentStartY,
+   public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX, double pointToProjectY, double lineSegmentStartX, double lineSegmentStartY,
                                                              double lineSegmentEndX, double lineSegmentEndY, Point2DBasics projectionToPack)
    {
-      double percentage = percentageAlongLineSegment2D(pointToProject.getX(), pointToProject.getY(), lineSegmentStartX, lineSegmentStartY, lineSegmentEndX,
+      double percentage = percentageAlongLineSegment2D(pointToProjectX, pointToProjectY, lineSegmentStartX, lineSegmentStartY, lineSegmentEndX,
                                                        lineSegmentEndY);
       if (percentage > 1.0)
          percentage = 1.0;
@@ -3617,6 +3839,37 @@ public class EuclidGeometryTools
        * boolean in case a failure case is implemented.
        */
       return true;
+   }
+
+   /**
+    * Computes the orthogonal projection of a 2D point on a given 2D line segment defined by its two
+    * 2D endpoints.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the given line segment is too small, i.e.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
+    * method returns {@code lineSegmentStart}.
+    * <li>the projection can not be outside the line segment. When the projection on the
+    * corresponding line is outside the line segment, the result is the closest of the two
+    * endpoints.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param lineSegmentStartX the x-coordinate of the line segment first endpoint.
+    * @param lineSegmentStartY the y-coordinate of the line segment first endpoint.
+    * @param lineSegmentEndX the x-coordinate of the line segment second endpoint.
+    * @param lineSegmentEndY the y-coordinate of the line segment second endpoint.
+    * @param projectionToPack point in which the projection of the point onto the line segment is
+    *           stored. Modified.
+    * @return whether the method succeeded or not.
+    */
+   public static boolean orthogonalProjectionOnLineSegment2D(Point2DReadOnly pointToProject, double lineSegmentStartX, double lineSegmentStartY,
+                                                             double lineSegmentEndX, double lineSegmentEndY, Point2DBasics projectionToPack)
+   {
+      return orthogonalProjectionOnLineSegment2D(pointToProject.getX(), pointToProject.getY(), lineSegmentStartX, lineSegmentStartY, lineSegmentEndX,
+                                                 lineSegmentEndY, projectionToPack);
    }
 
    /**
@@ -3652,6 +3905,36 @@ public class EuclidGeometryTools
          return null;
       else
          return projection;
+   }
+
+   /**
+    * Computes the orthogonal projection of a 2D point on a given 2D line segment defined by its two
+    * 2D endpoints.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the given line segment is too small, i.e.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
+    * method returns {@code lineSegmentStart}.
+    * <li>the projection can not be outside the line segment. When the projection on the
+    * corresponding line is outside the line segment, the result is the closest of the two
+    * endpoints.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProjectX the x-coordinate of the point to compute the projection of.
+    * @param pointToProjectY the y-coordinate of the point to compute the projection of.
+    * @param lineSegmentStart the line segment first endpoint. Not modified.
+    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param projectionToPack point in which the projection of the point onto the line segment is
+    *           stored. Modified.
+    * @return whether the method succeeded or not.
+    */
+   public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX, double pointToProjectY, Point2DReadOnly lineSegmentStart,
+                                                             Point2DReadOnly lineSegmentEnd, Point2DBasics projectionToPack)
+   {
+      return orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentEnd.getX(),
+                                                 lineSegmentEnd.getY(), projectionToPack);
    }
 
    /**
@@ -3859,6 +4142,76 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the intersection between two infinitely long 2D lines each defined by a 2D point and
+    * a 2D direction and returns a percentage {@code alpha} along the first line such that the
+    * intersection coordinates can be computed as follows: <br>
+    * {@code intersection = pointOnLine1 + alpha * lineDirection1}
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and the
+    * returned value is {@link Double#NaN}.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code pointOnLine1}, the returned value {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointOnLine1x x-coordinate of a point located on the first line.
+    * @param pointOnLine1y y-coordinate of a point located on the first line.
+    * @param lineDirection1x x-component of the first line direction.
+    * @param lineDirection1y y-component of the first line direction.
+    * @param pointOnLine2x x-coordinate of a point located on the second line.
+    * @param pointOnLine2y y-coordinate of a point located on the second line.
+    * @param lineDirection2x x-component of the second line direction.
+    * @param lineDirection2y y-component of the second line direction.
+    * @return {@code alpha} the percentage along the first line of the intersection location. This
+    *         method returns {@link Double#NaN} if the lines do not intersect.
+    */
+   public static double percentageOfIntersectionBetweenTwoLine2Ds(double pointOnLine1x, double pointOnLine1y, double lineDirection1x, double lineDirection1y,
+                                                                  double pointOnLine2x, double pointOnLine2y, double lineDirection2x, double lineDirection2y)
+   {
+      //      We solve for x the problem of the form: A * x = b
+      //            A      *     x     =      b
+      //      / lineDirection2x -lineDirection1x \   / alpha \   / pointOnLine2x - pointOnLine1x \
+      //      |                                  | * |       | = |                               |
+      //      \ lineDirection2y -lineDirection1y /   \ beta  /   \ pointOnLine2y - pointOnLine1y /
+      // Here, only alpha or beta is needed.
+
+      double determinant = -lineDirection1x * lineDirection2y + lineDirection1y * lineDirection2x;
+
+      double dx = pointOnLine2x - pointOnLine1x;
+      double dy = pointOnLine2y - pointOnLine1y;
+
+      if (Math.abs(determinant) < ONE_TRILLIONTH)
+      { // The lines are parallel
+           // Check if they are collinear
+         double cross = dx * lineDirection1y - dy * lineDirection1x;
+         if (Math.abs(cross) < ONE_TRILLIONTH)
+         {
+            /*
+             * The two lines are collinear. There's an infinite number of intersection. Let's just
+             * set the result to pointOnLine1, i.e. alpha = 0.0.
+             */
+            return 0.0;
+         }
+         else
+         {
+            return Double.NaN;
+         }
+      }
+      else
+      {
+         double oneOverDeterminant = 1.0 / determinant;
+         double AInverse00 = oneOverDeterminant * -lineDirection2y;
+         double AInverse01 = oneOverDeterminant * lineDirection2x;
+
+         double alpha = AInverse00 * dx + AInverse01 * dy;
+
+         return alpha;
+      }
+   }
+
+   /**
     * Computes a percentage along the line segment representing the location of the given point once
     * projected onto the line segment. The returned percentage is in ] -&infin;; &infin; [,
     * {@code 0.0} representing {@code lineSegmentStart}, and {@code 1.0} representing
@@ -3931,6 +4284,40 @@ public class EuclidGeometryTools
     * </ul>
     * </p>
     *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param lineSegmentStart the line segment first endpoint. Not modified.
+    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @return the computed percentage along the line segment representing where the point projection
+    *         is located.
+    */
+   public static double percentageAlongLineSegment2D(double pointX, double pointY, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
+   {
+      return percentageAlongLineSegment2D(pointX, pointY, lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentEnd.getX(), lineSegmentEnd.getY());
+   }
+
+   /**
+    * Computes a percentage along the line segment representing the location of the projection onto
+    * the line segment of the given point. The returned percentage is in ] -&infin;; &infin; [,
+    * {@code 0.0} representing {@code lineSegmentStart}, and {@code 1.0} representing
+    * {@code lineSegmentEnd}.
+    * <p>
+    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
+    * given point is located at the middle of the line segment. The coordinates of the projection of
+    * the point can be computed from the {@code percentage} as follows: <code>
+    * Point2d projection = new Point2d(); </br>
+    * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
+    * </code>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the given line segment is too small, i.e.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
+    * method fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
     * @param point the query. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
     * @param lineSegmentEnd the line segment second endpoint. Not modified.
@@ -3939,8 +4326,7 @@ public class EuclidGeometryTools
     */
    public static double percentageAlongLineSegment2D(Point2DReadOnly point, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
    {
-      return percentageAlongLineSegment2D(point.getX(), point.getY(), lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentEnd.getX(),
-                                          lineSegmentEnd.getY());
+      return percentageAlongLineSegment2D(point.getX(), point.getY(), lineSegmentStart, lineSegmentEnd);
    }
 
    /**

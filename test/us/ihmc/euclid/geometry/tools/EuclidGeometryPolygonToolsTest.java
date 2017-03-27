@@ -147,7 +147,7 @@ public class EuclidGeometryPolygonToolsTest
          List<? extends Point2DReadOnly> points = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          int hullSize = algorithmToTest.process(points, numberOfPoints);
          for (int index = 0; index < hullSize; index++)
-            assertTrue("Is not convex at vertex index: " + index, EuclidGeometryPolygonTools.isConvexAtVertex(index, points, hullSize, true));
+            assertTrue("Is not convex at vertex index: " + index, EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex(index, points, hullSize, true));
       }
 
       for (int i = 0; i < ITERATIONS; i++)

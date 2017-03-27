@@ -1,10 +1,19 @@
 package us.ihmc.euclid.geometry.tools;
 
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.areVector2DsParallel;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceBetweenPoint2Ds;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredBetweenPoint2Ds;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.doLine2DAndLineSegment2DIntersect;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DInFrontOfRay2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLineSegment2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.signedDistanceFromPoint2DToLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.orthogonalProjectionOnLineSegment2D;
+import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +21,8 @@ import java.util.Random;
 
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public class EuclidGeometryPolygonTools
 {
@@ -33,10 +44,12 @@ public class EuclidGeometryPolygonTools
     * @param vertices the list of vertices defining the polygon to test. Not modified.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
-   public static boolean isConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, boolean clockwiseOrdered)
+   public static boolean isPolygon2DConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, boolean clockwiseOrdered)
    {
-      return isConvexAtVertex(vertexIndex, vertices, vertices.size(), clockwiseOrdered);
+      return isPolygon2DConvexAtVertex(vertexIndex, vertices, vertices.size(), clockwiseOrdered);
    }
 
    /**
@@ -55,9 +68,15 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices relevant to the polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or
+    *            equal than {@code numberOfVertices}.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
-   public static boolean isConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
+   public static boolean isPolygon2DConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
    {
+      checkNumberOfVertices(vertices, numberOfVertices);
+      checkVertexIndex(vertexIndex, numberOfVertices);
       Point2DReadOnly vertex = vertices.get(vertexIndex);
       Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
       Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
@@ -79,6 +98,8 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
     *           will only process the points &in; [0; {@code numberOfVertices}[.
     * @return the size of the convex hull.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    public static int inPlaceGiftWrapConvexHull2D(List<? extends Point2DReadOnly> vertices)
    {
@@ -99,13 +120,12 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
     *           will only process the points &in; [0; {@code numberOfVertices}[.
     * @return the size of the convex hull.
-    * @throws ArrayIndexOutOfBoundsException if {@code numberOfVertices} is negative or greater than
-    *            the size of the given list of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    public static int inPlaceGiftWrapConvexHull2D(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
-      if (numberOfVertices <= 0 || numberOfVertices > vertices.size())
-         throw new ArrayIndexOutOfBoundsException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
+      checkNumberOfVertices(vertices, numberOfVertices);
 
       /*
        * Set the first vertex to be the one with the lowest x-coordinate. If the lowest x-coordinate
@@ -185,13 +205,12 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
     *           will only process the points &in; [0; {@code numberOfVertices}[.
     * @return the size of the convex hull.
-    * @throws ArrayIndexOutOfBoundsException if {@code numberOfVertices} is negative or greater than
-    *            the size of the given list of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    public static int inPlaceGrahamScanConvexHull2D(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
-      if (numberOfVertices <= 0 || numberOfVertices > vertices.size())
-         throw new ArrayIndexOutOfBoundsException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
+      checkNumberOfVertices(vertices, numberOfVertices);
 
       grahamScanAngleSort(vertices, numberOfVertices);
 
@@ -202,7 +221,7 @@ public class EuclidGeometryPolygonTools
 
       while (currentIndex < numberOfVertices)
       {
-         if (isConvexAtVertex(currentIndex, vertices, numberOfVertices, true))
+         if (isPolygon2DConvexAtVertex(currentIndex, vertices, numberOfVertices, true))
          { // Convex at the current vertex: move on to next. 
             currentIndex++;
          }
@@ -244,10 +263,14 @@ public class EuclidGeometryPolygonTools
     * @param centroidToPack point 2D in which the centroid of the convex polygon is stored. Can be
     *           {@code null}. Modified.
     * @return the area of the convex polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    public static double computeConvexPolyong2DArea(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
                                                    Point2DBasics centroidToPack)
    {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
       if (numberOfVertices == 0)
       {
          if (centroidToPack != null)
@@ -323,6 +346,48 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
+    * Computes the vector that points to the outside and orthogonal to the
+    * {@code edgeIndex}<sup>th</sup> edge of the given convex polygon.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * 
+    * @param edgeIndex index of the vertex the edge starts from.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param normalToPack the vector that is orthogonal to the edge and points toward the outside of
+    *           the polygon. Modified.
+    * @return whether the method succeeds or not.
+    * @throws IndexOutOfBoundsException if {@code edgeIndex} is either negative or greater or equal
+    *            than {@code numberOfVertices}.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static boolean edgeNormal(int edgeIndex, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
+                                    Vector2DBasics normalToPack)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices <= 1)
+         return false;
+      checkEdgeIndex(edgeIndex, numberOfVertices);
+
+      Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
+
+      double edgeVectorX = edgeEnd.getX() - edgeStart.getX();
+      double edgeVectorY = edgeEnd.getY() - edgeStart.getY();
+
+      normalToPack.set(-edgeVectorY, edgeVectorX);
+      if (!clockwiseOrdered)
+         normalToPack.negate();
+      normalToPack.normalize();
+      return true;
+   }
+
+   /**
     * Determines if the point is inside the convex polygon given the tolerance {@code epsilon}.
     * <p>
     * WARNING: This method assumes that the given vertices already form a convex polygon.
@@ -354,46 +419,926 @@ public class EuclidGeometryPolygonTools
     * @param epsilon the tolerance to use during the test.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
     *         otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
-   public static boolean isPointInside(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
-                                       boolean clockwiseOrdered, double epsilon)
+   public static boolean isPoint2DInsideConvexPolygon2D(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                        boolean clockwiseOrdered, double epsilon)
    {
+      return signedDistanceFromPoint2DToConvexPolygon2D(pointX, pointY, convexPolygon2D, numberOfVertices, clockwiseOrdered) <= epsilon;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and a given
+    * convex polygon 2D.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    * 
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @return the number of intersections between the line and the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int intersectionBetweenLine2DAndConvexPolygon2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
+                                                                 List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                 boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
+                                                                 Point2DBasics secondIntersectionToPack)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
       if (numberOfVertices == 0)
-         return false;
+         return 0;
 
       if (numberOfVertices == 1)
       {
-         if (epsilon < 0.0)
-            return false;
-
-         Point2DReadOnly vertex = convexPolygon2D.get(0);
-         double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, vertex.getX(), vertex.getY());
-         return distanceSquared <= epsilon * epsilon;
+         if (EuclidGeometryTools.isPoint2DOnLine2D(convexPolygon2D.get(0), pointOnLine, lineDirection))
+         {
+            firstIntersectionToPack.set(convexPolygon2D.get(0));
+            return 1;
+         }
       }
+
+      int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, numberOfVertices);
+      if (firstEdgeIndex < 0)
+         return 0;
+
+      Point2DReadOnly edgeStart = convexPolygon2D.get(firstEdgeIndex);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(firstEdgeIndex, numberOfVertices));
+      boolean success = intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, edgeStart, edgeEnd, firstIntersectionToPack);
+      if (!success)
+         throw new RuntimeException("Inconsistency in algorithms.");
+
+      int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, numberOfVertices);
+
+      if (secondEdgeIndex >= 0)
+      {
+         edgeStart = convexPolygon2D.get(secondEdgeIndex);
+         edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, numberOfVertices));
+         success = intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, edgeStart, edgeEnd, secondIntersectionToPack);
+         if (!success)
+            throw new RuntimeException("Inconsistency in algorithms.");
+         return 2;
+      }
+      else
+      {
+         return 1;
+      }
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and a
+    * given convex polygon 2D.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    * 
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @return the number of intersections between the line and the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int intersectionBetweenLineSegment2DAndConvexPolygon2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd,
+                                                                        List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                        boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
+                                                                        Point2DBasics secondIntersectionToPack)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return 0;
+
+      if (numberOfVertices == 1)
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         if (isPoint2DOnLineSegment2D(vertex, lineSegmentStart, lineSegmentEnd))
+         {
+            firstIntersectionToPack.set(convexPolygon2D.get(0));
+            return 1;
+         }
+      }
+
+      double lineSegmentStartX = lineSegmentStart.getX();
+      double lineSegmentStartY = lineSegmentStart.getY();
+      double lineSegmentDirectionX = lineSegmentEnd.getX() - lineSegmentStart.getX();
+      double lineSegmentDirectionY = lineSegmentEnd.getY() - lineSegmentStart.getY();
+
+      int firstEdgeIndex = nextIntersectingEdgeIndex(-1, lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY, convexPolygon2D,
+                                                     numberOfVertices);
+      if (firstEdgeIndex < 0)
+         return 0;
+
+      Point2DReadOnly edgeStart = convexPolygon2D.get(firstEdgeIndex);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(firstEdgeIndex, numberOfVertices));
+      boolean success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY,
+                                                             edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), firstIntersectionToPack);
+      if (!success)
+      { // Change reference of secondIntersectionToPack such that if there is any second intersection it'll override the first one.
+         secondIntersectionToPack = firstIntersectionToPack;
+      }
+
+      int numberOfIntersections = success ? 1 : 0;
+
+      int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY,
+                                                      convexPolygon2D, numberOfVertices);
+
+      if (secondEdgeIndex >= 0)
+      {
+         edgeStart = convexPolygon2D.get(secondEdgeIndex);
+         edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, numberOfVertices));
+         success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY, edgeStart.getX(),
+                                                        edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), secondIntersectionToPack);
+         numberOfIntersections += success ? 1 : 0;
+         return numberOfIntersections;
+      }
+      else
+      {
+         return 1;
+      }
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and a given
+    * convex polygon 2D.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments might be modified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} might be modified.
+    * </ul>
+    * </p>
+    * 
+    * @param rayOrigin the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @return the number of intersections between the line and the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int intersectionBetweenRay2DAndConvexPolygon2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection,
+                                                                List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
+                                                                Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      int numberOfInterections = intersectionBetweenLine2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices, clockwiseOrdered,
+                                                                             firstIntersectionToPack, secondIntersectionToPack);
+
+      if (numberOfInterections == 2 && !isPoint2DInFrontOfRay2D(secondIntersectionToPack, rayOrigin, rayDirection))
+      {
+         numberOfInterections--;
+      }
+
+      if (numberOfInterections >= 1 && !isPoint2DInFrontOfRay2D(firstIntersectionToPack, rayOrigin, rayDirection))
+      {
+         numberOfInterections--;
+         firstIntersectionToPack.set(secondIntersectionToPack);
+      }
+
+      return numberOfInterections;
+   }
+
+   /**
+    * Returns minimum distance between the point and the polygon.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The return value is negative if the point is inside the polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@link Double#NaN}.
+    * <li>If the polygon has exactly one vertex, the returned value is positive and is equal to the
+    * distance between the query and the polygon's vertex.
+    * <li>If the polygon has exactly two vertices, the returned value is positive and is equal to
+    * the distance and the line segment defined by the polygon's two vertices.
+    * </ul>
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the distance between the query and the polygon, it is negative if the point is inside
+    *         the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static double signedDistanceFromPoint2DToConvexPolygon2D(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D,
+                                                                   int numberOfVertices, boolean clockwiseOrdered)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return Double.NaN;
+
+      if (numberOfVertices == 1)
+         return distanceBetweenPoint2Ds(pointX, pointY, convexPolygon2D.get(0));
 
       if (numberOfVertices == 2)
-      {
-         if (epsilon < 0.0)
-            return false;
+         return distanceFromPoint2DToLineSegment2D(pointX, pointY, convexPolygon2D.get(0), convexPolygon2D.get(1));
 
-         Point2DReadOnly edgeStart = convexPolygon2D.get(0);
-         Point2DReadOnly edgeEnd = convexPolygon2D.get(1);
-         double distanceSquared = distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, edgeStart, edgeEnd);
-         return distanceSquared <= epsilon * epsilon;
+      boolean isQueryOutsidePolygon = false;
+      double minPositiveDistanceSquared = Double.POSITIVE_INFINITY;
+      double maxNegativeDistanceSquared = Double.NEGATIVE_INFINITY;
+
+      for (int index = 0; index < numberOfVertices; index++)
+      {
+         Point2DReadOnly edgeStart = convexPolygon2D.get(index);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(next(index, numberOfVertices));
+
+         double percentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointX, pointY, edgeStart, edgeEnd);
+
+         if (percentage < 0.0)
+         {
+            double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, edgeStart);
+            minPositiveDistanceSquared = Math.min(distanceSquared, minPositiveDistanceSquared);
+         }
+         else if (percentage > 1.0)
+         {
+            double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, edgeEnd);
+            minPositiveDistanceSquared = Math.min(distanceSquared, minPositiveDistanceSquared);
+         }
+         else
+         {
+            double projectionX = (1.0 - percentage) * edgeStart.getX() + percentage * edgeEnd.getX();
+            double projectionY = (1.0 - percentage) * edgeStart.getY() + percentage * edgeEnd.getY();
+            double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, projectionX, projectionY);
+
+            if (isQueryOutsidePolygon || EuclidGeometryTools.isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, clockwiseOrdered))
+            { // The query is outside the polygon
+               isQueryOutsidePolygon = true;
+               minPositiveDistanceSquared = Math.min(distanceSquared, minPositiveDistanceSquared);
+            }
+            else
+            { // The query might be inside the polygon
+               maxNegativeDistanceSquared = Math.max(-distanceSquared, maxNegativeDistanceSquared);
+            }
+         }
       }
 
-      // Determine whether the point is on the right side of each edge:
+      if (isQueryOutsidePolygon)
+         return Math.sqrt(minPositiveDistanceSquared);
+      else
+         return -Math.sqrt(-maxNegativeDistanceSquared);
+   }
+
+   /**
+    * Computes the coordinates of the closest point to the ray that belongs to the given convex
+    * polygon.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param rayOrigin the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param closestPointToPack the point in which the coordinates of the closest point are stored.
+    *           Modified.
+    * @return {@code true} if the method succeeds, {@code false} otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static boolean closestPointToRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, List<? extends Point2DReadOnly> convexPolygon2D,
+                                             int numberOfVertices, Point2DBasics closestPointToPack)
+   {
+      int closestVertexIndexToLine = closestVertexIndexToLine2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices);
+      if (closestVertexIndexToLine == -1)
+         return false;
+
+      Point2DReadOnly closestVertexToLine = convexPolygon2D.get(closestVertexIndexToLine);
+      if (isPoint2DInFrontOfRay2D(closestVertexToLine, rayOrigin, rayDirection))
+      {
+         closestPointToPack.set(closestVertexToLine);
+         return true;
+      }
+      else
+      {
+         return orthogonalProjectionOnConvexPolygon2D(rayOrigin.getX(), rayOrigin.getY(), convexPolygon2D, numberOfVertices, closestPointToPack);
+      }
+   }
+
+   /**
+    * Finds the index of the closest vertex to the given line.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the closest vertex to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestVertexIndexToLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, List<? extends Point2DReadOnly> convexPolygon2D,
+                                                int numberOfVertices)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      int index = -1;
+      double minDistance = Double.POSITIVE_INFINITY;
+
+      for (int i = 0; i < numberOfVertices; i++)
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(i);
+
+         double distance = EuclidGeometryTools.distanceFromPoint2DToLine2D(vertex, pointOnLine, lineDirection);
+
+         if (distance < minDistance)
+         {
+            index = i;
+            minDistance = distance;
+         }
+      }
+
+      return index;
+   }
+
+   /**
+    * Finds the index of the closest vertex to the given ray.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param rayOrigin the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the closest vertex to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestVertexIndexToRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, List<? extends Point2DReadOnly> convexPolygon2D,
+                                               int numberOfVertices)
+   {
+      int closestVertexIndexToLine = closestVertexIndexToLine2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices);
+      if (closestVertexIndexToLine == -1)
+         return -1;
+
+      Point2DReadOnly closestVertexToLine = convexPolygon2D.get(closestVertexIndexToLine);
+      if (isPoint2DInFrontOfRay2D(closestVertexToLine, rayOrigin, rayDirection))
+      {
+         return closestVertexIndexToLine;
+      }
+      else
+      {
+         return closestEdgeIndexToPoint2D(rayOrigin.getX(), rayOrigin.getY(), convexPolygon2D, numberOfVertices);
+      }
+   }
+
+   /**
+    * Finds the index of the closest vertex to the query.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param point the coordinates of the query. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the closest vertex to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestVertexIndexToPoint2D(Point2DReadOnly point, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      return closestVertexIndexToPoint2D(point.getX(), point.getY(), convexPolygon2D, numberOfVertices);
+   }
+
+   /**
+    * Finds the index of the closest vertex to the query.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the closest vertex to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestVertexIndexToPoint2D(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      int index = -1;
+      double minDistanceSquared = Double.POSITIVE_INFINITY;
+
+      for (int i = 0; i < numberOfVertices; i++)
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(i);
+
+         double distanceSquared = normSquared(pointX - vertex.getX(), pointY - vertex.getY());
+
+         if (distanceSquared < minDistanceSquared)
+         {
+            index = i;
+            minDistanceSquared = distanceSquared;
+         }
+      }
+
+      return index;
+   }
+
+   /**
+    * Finds the index of the closest edge to the query.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has one or no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the closest edge to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestEdgeIndexToPoint2D(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices <= 1)
+         return -1;
+
+      int index = -1;
+      double minDistanceSquared = Double.POSITIVE_INFINITY;
+
       for (int i = 0; i < numberOfVertices; i++)
       {
          Point2DReadOnly edgeStart = convexPolygon2D.get(i);
          Point2DReadOnly edgeEnd = convexPolygon2D.get(next(i, numberOfVertices));
-         double distanceToEdgeLine = signedDistanceFromPoint2DToLine2D(pointX, pointY, edgeStart, edgeEnd);
 
-         if (distanceToEdgeLine > epsilon)
-            return false;
+         double distanceSquared = distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, edgeStart, edgeEnd);
+
+         if (distanceSquared < minDistanceSquared)
+         {
+            index = i;
+            minDistanceSquared = distanceSquared;
+         }
       }
 
-      return true;
+      return index;
+   }
+
+   /**
+    * From the point of view of an observer located outside the polygon, only a continuous subset of
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the
+    * first vertex that is in the line-of-sight.
+    * <p>
+    * WARNING:
+    * <ul>
+    * <li>This method assumes that the given vertices already form a convex polygon.
+    * <li>This method assumes that the given observer is located outside the polygon.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>The polygon has no vertices, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param observerX the x-coordinate of the observer.
+    * @param observerY the y-coordinate of the observer.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the index of the first vertex that is in the line-of-sight, {@code -1} if this method
+    *         fails.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int lineOfSightStartIndex(double observerX, double observerY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                           boolean clockwiseOrdered)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return -1;
+      if (numberOfVertices == 1)
+         return 0;
+      if (numberOfVertices == 2)
+      {
+         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), true);
+         return answer == 1 ? 0 : 1;
+      }
+
+      boolean previousEdgeVisible = canObserverSeeEdge(numberOfVertices - 1, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
+
+      for (int edgeIndex = 0; edgeIndex < numberOfVertices - 1; edgeIndex++)
+      {
+         boolean edgeVisible = canObserverSeeEdge(edgeIndex, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
+         if (!previousEdgeVisible && edgeVisible)
+            return edgeIndex;
+      }
+      return -1;
+   }
+
+   /**
+    * From the point of view of an observer located outside the polygon, only a continuous subset of
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the
+    * last vertex that is in the line-of-sight.
+    * <p>
+    * WARNING:
+    * <ul>
+    * <li>This method assumes that the given vertices already form a convex polygon.
+    * <li>This method assumes that the given observer is located outside the polygon.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>The polygon has no vertices, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param observerX the x-coordinate of the observer.
+    * @param observerY the y-coordinate of the observer.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the index of the last vertex that is in the line-of-sight, {@code -1} if this method
+    *         fails.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int lineOfSightEndIndex(double observerX, double observerY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                         boolean clockwiseOrdered)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return -1;
+      if (numberOfVertices == 1)
+         return 0;
+      if (numberOfVertices == 2)
+      {
+         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), false);
+         return answer == 1 ? 0 : 1;
+      }
+
+      boolean previousEdgeVisible = canObserverSeeEdge(numberOfVertices - 1, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
+
+      for (int edgeIndex = 0; edgeIndex < numberOfVertices - 1; edgeIndex++)
+      {
+         boolean edgeVisible = canObserverSeeEdge(edgeIndex, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
+         if (previousEdgeVisible && !edgeVisible)
+            return edgeIndex;
+      }
+      return -1;
+   }
+
+   /**
+    * Finds the index of the next polygon's edge that the given line intersects.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The exploration starts with the edge at the index {@code previousEdgeIndex + 1}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If {@code previousEdgeIndex == -2}, this method automatically fails and returns
+    * {@code -2}.
+    * <li>If the polygon has less than 2 vertices, this method fails and returns {@code -2}.
+    * <li>If the line and an edge of the polygon are collinear and the polygon has exactly 2
+    * vertices, this method fails and returns {@code -2}.
+    * <li>If the polygon has exactly 2 vertices and the line intersects it, this method returns
+    * {@code previousEdgeIndex + 1}.
+    * <li>If the line and an edge of the polygon are collinear and the polygon has more than 2
+    * vertices, this method returns the index of the previous edge or the next edge if the given
+    * {@code previousEdgeIndex} refers to the previous edge.
+    * </ul>
+    * </p>
+    * 
+    * @param previousEdgeIndex refers to the index of the previously found edge intersecting with
+    *           the line. To find the first intersecting edge, it should be set to {@code -1}.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the next polygon's edge the line intersects with, if none found
+    *         {@code -2}.
+    * @throws IndexOutOfBoundsException if {@code previousEdgeIndex} is not in [-2,
+    *            {@code numberOfVertices}[.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int nextIntersectingEdgeIndex(int previousEdgeIndex, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
+                                               List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      return nextIntersectingEdgeIndex(previousEdgeIndex, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), convexPolygon2D,
+                                       numberOfVertices);
+   }
+
+   /**
+    * Finds the index of the next polygon's edge that the given line intersects.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The exploration starts with the edge at the index {@code previousEdgeIndex + 1}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If {@code previousEdgeIndex == -2}, this method automatically fails and returns
+    * {@code -2}.
+    * <li>If the polygon has less than 2 vertices, this method fails and returns {@code -2}.
+    * <li>If the line and an edge of the polygon are collinear and the polygon has exactly 2
+    * vertices, this method fails and returns {@code -2}.
+    * <li>If the polygon has exactly 2 vertices and the line intersects it, this method returns
+    * {@code previousEdgeIndex + 1}.
+    * <li>If the line and an edge of the polygon are collinear and the polygon has more than 2
+    * vertices, this method returns the index of the previous edge or the next edge if the given
+    * {@code previousEdgeIndex} refers to the previous edge.
+    * </ul>
+    * </p>
+    * 
+    * @param previousEdgeIndex refers to the index of the previously found edge intersecting with
+    *           the line. To find the first intersecting edge, it should be set to {@code -1}.
+    * @param pointOnLineX the x-coordinate of a point located on the line.
+    * @param pointOnLineY the y-coordinate of a point located on the line.
+    * @param lineDirectionX the x-component of the direction of the line.
+    * @param lineDirectionY the y-component of the direction of the line.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the next polygon's edge the line intersects with, if none found
+    *         {@code -2}.
+    * @throws IndexOutOfBoundsException if {@code previousEdgeIndex} is not in [-2,
+    *            {@code numberOfVertices}[.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int nextIntersectingEdgeIndex(int previousEdgeIndex, double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
+                                               List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+      if (previousEdgeIndex < -2 || previousEdgeIndex >= numberOfVertices)
+         throw new IndexOutOfBoundsException("Expected previousEdgeIndex to be in [-2; numberOfVertices[, but was: " + previousEdgeIndex);
+
+      if (numberOfVertices <= 1 || previousEdgeIndex == -2)
+         return -2;
+
+      if (numberOfVertices == 2)
+      {
+         if (previousEdgeIndex == 0) // Meaning the line intersects the polygon and that the next index is 1.
+            return 1;
+
+         Point2DReadOnly edgeStart = convexPolygon2D.get(0);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(1);
+         if (doLine2DAndLineSegment2DIntersect(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart, edgeEnd))
+            return previousEdgeIndex == -1 ? 0 : 1;
+      }
+
+      for (int edgeIndex = previousEdgeIndex + 1; edgeIndex < numberOfVertices; edgeIndex++)
+      {
+         Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
+
+         boolean doLineAndEdgeIntersect = doLine2DAndLineSegment2DIntersect(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart, edgeEnd);
+
+         if (doLineAndEdgeIntersect)
+         {
+            double edgeDx = edgeEnd.getX() - edgeStart.getX();
+            double edgeDy = edgeEnd.getY() - edgeStart.getY();
+            boolean areLineAndEdgeParallel = areVector2DsParallel(lineDirectionX, lineDirectionY, edgeDx, edgeDy, 1.0e-5);
+
+            if (areLineAndEdgeParallel) // The line and the edge are collinear.
+            {
+               int newPreviousEdgeIndex = previous(edgeIndex, numberOfVertices);
+               if (newPreviousEdgeIndex != previousEdgeIndex)
+                  return newPreviousEdgeIndex;
+               else
+                  return next(edgeIndex, numberOfVertices);
+            }
+            else
+               return edgeIndex;
+         }
+      }
+
+      return -2;
+   }
+
+   /**
+    * Computes the orthogonal projection of a 2D point on a given 2D convex polygon.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code false}.
+    * <li>If the polygon has exactly one vertex, the result is the polygon only vertex, this method
+    * returns {@code true}.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProjectX the x-coordinate of the point to compute the projection of.
+    * @param pointToProjectY the y-coordinate of the point to compute the projection of.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param projectionToPack point in which the projection of the point onto the convex polygon is
+    *           stored. Modified.
+    * @return whether the method succeeded or not.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static boolean orthogonalProjectionOnConvexPolygon2D(double pointToProjectX, double pointToProjectY, List<? extends Point2DReadOnly> convexPolygon2D,
+                                                               int numberOfVertices, Point2DBasics projectionToPack)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return false;
+      if (numberOfVertices == 1)
+      {
+         projectionToPack.set(convexPolygon2D.get(0));
+         return true;
+      }
+      int closestEdgeIndex = closestEdgeIndexToPoint2D(pointToProjectX, pointToProjectY, convexPolygon2D, numberOfVertices);
+      if (closestEdgeIndex == -1)
+         return false;
+      Point2DReadOnly edgeStart = convexPolygon2D.get(closestEdgeIndex);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(closestEdgeIndex, numberOfVertices));
+      return orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, edgeStart, edgeEnd, projectionToPack);
+   }
+
+   /**
+    * This methods calculates which of {@code point1} or {@code point2} is to left or to right from
+    * the point of view of the observer.
+    * <p>
+    * This methods returns an integer that refers to which point meets the test. A value of
+    * {@code 1} refers to {@code point1} and a value of {@code 2} refers to the {@code point2}.
+    * <ul>
+    * <li>If {@code testForLeftSide} is {@code true}, the returned value refers to the point that is
+    * the most to the <b>left</b> from the observer point of view.
+    * <li>If {@code testForLeftSide} is {@code false}, the returned value refers to the point that
+    * is the most to the <b>right</b> from the observer point of view.
+    * </ul>
+    * </p>
+    * 
+    * @param observer the coordinates of the observer. Not modified.
+    * @param point1 the coordinates of the first point. Not modified.
+    * @param point2 the coordinates of the second point. Not modified.
+    * @return either {@code 1} or {@code 2} to refer to either {@code point1} and {@code point2},
+    *         respectively.
+    */
+   public static int whichPointIsToTheSide(Point2DReadOnly observer, Point2DReadOnly point1, Point2DReadOnly point2, boolean testForLeftSide)
+   {
+      return whichPointIsToTheSide(observer.getX(), observer.getY(), point1, point2, testForLeftSide);
+   }
+
+   /**
+    * This methods calculates which of {@code point1} or {@code point2} is to left or to right from
+    * the point of view of the observer.
+    * <p>
+    * This methods returns an integer that refers to which point meets the test. A value of
+    * {@code 1} refers to {@code point1} and a value of {@code 2} refers to the {@code point2}.
+    * <ul>
+    * <li>If {@code testForLeftSide} is {@code true}, the returned value refers to the point that is
+    * the most to the <b>left</b> from the observer point of view.
+    * <li>If {@code testForLeftSide} is {@code false}, the returned value refers to the point that
+    * is the most to the <b>right</b> from the observer point of view.
+    * </ul>
+    * </p>
+    * 
+    * @param observerX the x-coordinate of the observer. Not modified.
+    * @param observerY the y-coordinate of the observer. Not modified.
+    * @param point1 the coordinates of the first point. Not modified.
+    * @param point2 the coordinates of the second point. Not modified.
+    * @return either {@code 1} or {@code 2} to refer to either {@code point1} and {@code point2},
+    *         respectively.
+    */
+   public static int whichPointIsToTheSide(double observerX, double observerY, Point2DReadOnly point1, Point2DReadOnly point2, boolean testForLeftSide)
+   {
+      double observerToPoint1X = point1.getX() - observerX;
+      double observerToPoint1Y = point1.getY() - observerY;
+      double observerToPoint2X = point2.getX() - observerX;
+      double observerToPoint2Y = point2.getY() - observerY;
+
+      // Rotate the vector from observer to point 2 90 degree counter clockwise.
+      double observerToPoint2PerpendicularX = -observerToPoint2Y;
+      double observerToPoint2PerpendicularY = observerToPoint2X;
+
+      // Assuming the observer is looking at point 1 the dot product will be positive if point 2 is on the right of point 1.
+      double dotProduct = observerToPoint1X * observerToPoint2PerpendicularX + observerToPoint1Y * observerToPoint2PerpendicularY;
+
+      if (testForLeftSide)
+         dotProduct = -dotProduct;
+
+      return dotProduct > 0.0 ? 2 : 1;
    }
 
    /**
@@ -407,7 +1352,7 @@ public class EuclidGeometryPolygonTools
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
     * 
-    * @param edgeStartIndex the vertex index of the start of the edge.
+    * @param edgeIndex the vertex index of the start of the edge.
     * @param observer the coordinates of the observer.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -415,11 +1360,15 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
     *         observer cannot see the outside or is lying on the edge.
+    * @throws IndexOutOfBoundsException if {@code edgeIndex} is either negative or greater or equal
+    *            than {@code numberOfVertices}.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
-   public static boolean canObserverSeeEdge(int edgeStartIndex, Point2DReadOnly observer, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+   public static boolean canObserverSeeEdge(int edgeIndex, Point2DReadOnly observer, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
                                             boolean clockwiseOrdered)
    {
-      return canObserverSeeEdge(edgeStartIndex, observer.getX(), observer.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
+      return canObserverSeeEdge(edgeIndex, observer.getX(), observer.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
    }
 
    /**
@@ -433,7 +1382,7 @@ public class EuclidGeometryPolygonTools
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
     * 
-    * @param edgeStartIndex the vertex index of the start of the edge.
+    * @param edgeIndex the vertex index of the start of the edge.
     * @param observerX the x-coordinate of the observer.
     * @param observerY the y-coordinate of the observer.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -442,12 +1391,18 @@ public class EuclidGeometryPolygonTools
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
     *         observer cannot see the outside or is lying on the edge.
+    * @throws IndexOutOfBoundsException if {@code edgeIndex} is either negative or greater or equal
+    *            than {@code numberOfVertices}.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
-   public static boolean canObserverSeeEdge(int edgeStartIndex, double observerX, double observerY, List<? extends Point2DReadOnly> convexPolygon2D,
+   public static boolean canObserverSeeEdge(int edgeIndex, double observerX, double observerY, List<? extends Point2DReadOnly> convexPolygon2D,
                                             int numberOfVertices, boolean clockwiseOrdered)
    {
-      Point2DReadOnly edgeStart = convexPolygon2D.get(edgeStartIndex);
-      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeStartIndex, numberOfVertices));
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+      checkEdgeIndex(edgeIndex, numberOfVertices);
+      Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
       return isPoint2DOnSideOfLine2D(observerX, observerY, edgeStart, edgeEnd, clockwiseOrdered);
    }
 
@@ -667,5 +1622,23 @@ public class EuclidGeometryPolygonTools
    public static int previous(int index, int listSize)
    {
       return wrap(index - 1, listSize);
+   }
+
+   private static void checkVertexIndex(int vertexIndex, int numberOfVertices)
+   {
+      if (vertexIndex < 0 || vertexIndex >= numberOfVertices)
+         throw new IndexOutOfBoundsException("Expected vertexIndex to be in [0; numberOfVertices[, but was: " + vertexIndex);
+   }
+
+   private static void checkEdgeIndex(int edgeIndex, int numberOfVertices)
+   {
+      if (edgeIndex < 0 || edgeIndex >= numberOfVertices)
+         throw new IndexOutOfBoundsException("Expected edgeIndex to be in [0; numberOfVertices[, but was: " + edgeIndex);
+   }
+
+   private static void checkNumberOfVertices(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      if (numberOfVertices <= 0 || numberOfVertices > convexPolygon2D.size())
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + convexPolygon2D.size() + "].");
    }
 }
