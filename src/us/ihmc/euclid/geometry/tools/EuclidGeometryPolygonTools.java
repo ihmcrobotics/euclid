@@ -555,7 +555,7 @@ public class EuclidGeometryPolygonTools
          success = intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, edgeStart, edgeEnd, secondIntersectionToPack);
          if (!success)
             throw new RuntimeException("Inconsistency in algorithms.");
-         return 2;
+         return firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, EPSILON) ? 1 : 2;
       }
       else
       {
@@ -1267,7 +1267,7 @@ public class EuclidGeometryPolygonTools
             return previousEdgeIndex == -1 ? 0 : 1;
       }
 
-      for (int edgeIndex = previousEdgeIndex + 1; edgeIndex < numberOfVertices; edgeIndex++)
+      for (int edgeIndex = next(previousEdgeIndex, numberOfVertices); edgeIndex < numberOfVertices; edgeIndex++)
       {
          Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
          Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));

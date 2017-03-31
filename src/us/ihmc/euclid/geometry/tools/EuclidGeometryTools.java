@@ -2011,7 +2011,7 @@ public class EuclidGeometryTools
       double dx = lineSegmentStartX - pointOnLineX;
       double dy = lineSegmentStartY - pointOnLineY;
 
-      double epsilon = ONE_TRILLIONTH;
+      double epsilon = ONE_TEN_MILLIONTH;
       if (Math.abs(determinant) < epsilon)
       { // The line and the line segment are parallel
            // Check if they are collinear
