@@ -692,21 +692,21 @@ public class EuclidGeometryPolygonTools
                                                                 List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
                                                                 Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
-      int numberOfInterections = intersectionBetweenLine2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices, clockwiseOrdered,
+      int numberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices, clockwiseOrdered,
                                                                              firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfInterections == 2 && !isPoint2DInFrontOfRay2D(secondIntersectionToPack, rayOrigin, rayDirection))
+      if (numberOfIntersections == 2 && !isPoint2DInFrontOfRay2D(secondIntersectionToPack, rayOrigin, rayDirection))
       {
-         numberOfInterections--;
+         numberOfIntersections--;
       }
 
-      if (numberOfInterections >= 1 && !isPoint2DInFrontOfRay2D(firstIntersectionToPack, rayOrigin, rayDirection))
+      if (numberOfIntersections >= 1 && !isPoint2DInFrontOfRay2D(firstIntersectionToPack, rayOrigin, rayDirection))
       {
-         numberOfInterections--;
+         numberOfIntersections--;
          firstIntersectionToPack.set(secondIntersectionToPack);
       }
 
-      return numberOfInterections;
+      return numberOfIntersections;
    }
 
    /**

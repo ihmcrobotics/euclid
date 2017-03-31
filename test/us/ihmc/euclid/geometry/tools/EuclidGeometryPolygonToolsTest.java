@@ -1,11 +1,10 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -275,7 +274,7 @@ public class EuclidGeometryPolygonToolsTest
          {
             Point2DReadOnly vertex = convexPolygon2D.get(index);
             Point2DReadOnly nextVertex = convexPolygon2D.get(next(index, hullSize));
-            expectedArea += EuclidGeometryTools.triangleArea(average, vertex, nextVertex);
+            expectedArea += triangleArea(average, vertex, nextVertex);
          }
          Point2D centroid = new Point2D();
          double actualArea = computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
@@ -290,8 +289,8 @@ public class EuclidGeometryPolygonToolsTest
             Point2DReadOnly nextVertex = convexPolygon2D.get(next(index, hullSize));
 
             double vertexWeight = 0.0;
-            vertexWeight += EuclidGeometryTools.triangleArea(centroid, vertex, previousVertex);
-            vertexWeight += EuclidGeometryTools.triangleArea(centroid, vertex, nextVertex);
+            vertexWeight += triangleArea(centroid, vertex, previousVertex);
+            vertexWeight += triangleArea(centroid, vertex, nextVertex);
             vertexWeight /= 2.0 * actualArea;
             recomputedCentroid.add(vertexWeight * vertex.getX(), vertexWeight * vertex.getY());
          }
@@ -395,7 +394,7 @@ public class EuclidGeometryPolygonToolsTest
          Vector2D orthogonal = new Vector2D();
          orthogonal.sub(nextVertex, vertex);
          orthogonal.normalize();
-         orthogonal = EuclidGeometryTools.perpendicularVector2D(orthogonal);
+         orthogonal = perpendicularVector2D(orthogonal);
          if (!clockwiseOrdered)
             orthogonal.negate();
 
@@ -441,7 +440,7 @@ public class EuclidGeometryPolygonToolsTest
          Vector2D orthogonal = new Vector2D();
          orthogonal.sub(nextVertex, vertex);
          orthogonal.normalize();
-         orthogonal = EuclidGeometryTools.perpendicularVector2D(orthogonal);
+         orthogonal = perpendicularVector2D(orthogonal);
          if (!clockwiseOrdered)
             orthogonal.negate();
 
@@ -449,7 +448,7 @@ public class EuclidGeometryPolygonToolsTest
          assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered, epsilon));
 
          // Using the distance to the centroid as a max
-         double distanceBetweenCentroidAndEdge = EuclidGeometryTools.distanceFromPoint2DToLine2D(centroid, vertex, nextVertex);
+         double distanceBetweenCentroidAndEdge = distanceFromPoint2DToLine2D(centroid, vertex, nextVertex);
          distanceInside = EuclidCoreRandomTools.generateRandomDouble(random, -distanceBetweenCentroidAndEdge, epsilon);
          Point2D insidePoint = new Point2D();
          insidePoint.scaleAdd(distanceInside, orthogonal, pointOnEdge);
@@ -558,7 +557,7 @@ public class EuclidGeometryPolygonToolsTest
          double alphaOutside = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 3.0);
          Point2D outsidePoint = new Point2D();
          outsidePoint.interpolate(centroid, pointOnEdge, alphaOutside);
-         expectedDistance = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(outsidePoint, vertex, nextVertex);
+         expectedDistance = distanceFromPoint2DToLineSegment2D(outsidePoint, vertex, nextVertex);
          actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered);
          assertEquals("EdgeLength = " + vertex.distance(nextVertex), expectedDistance, actualDistance, SMALLEST_EPSILON);
 
@@ -572,7 +571,7 @@ public class EuclidGeometryPolygonToolsTest
          {
             Point2DReadOnly edgeStart = convexPolygon2D.get(j);
             Point2DReadOnly edgeEnd = convexPolygon2D.get(next(j, hullSize));
-            expectedDistance = Math.min(expectedDistance, EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(insidePoint, edgeStart, edgeEnd));
+            expectedDistance = Math.min(expectedDistance, distanceFromPoint2DToLineSegment2D(insidePoint, edgeStart, edgeEnd));
          }
 
          expectedDistance = -expectedDistance;
@@ -704,17 +703,17 @@ public class EuclidGeometryPolygonToolsTest
          Point2D centroid = new Point2D();
          computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
 
-         Point2D v0Max = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(centroid, v0, vn1, vn2);
+         Point2D v0Max = intersectionBetweenTwoLine2Ds(centroid, v0, vn1, vn2);
          Vector2D extrapolationDirection = new Vector2D();
          extrapolationDirection.sub(v0, centroid);
 
-         if (!EuclidGeometryTools.isPoint2DInFrontOfRay2D(v0Max, centroid, extrapolationDirection))
+         if (!isPoint2DInFrontOfRay2D(v0Max, centroid, extrapolationDirection))
             v0Max.scaleAdd(10.0, extrapolationDirection, v0);
 
-         Point2D vn1Max = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(centroid, vn1, v0, vp1);
+         Point2D vn1Max = intersectionBetweenTwoLine2Ds(centroid, vn1, v0, vp1);
          extrapolationDirection.sub(vn1, centroid);
 
-         if (!EuclidGeometryTools.isPoint2DInFrontOfRay2D(vn1Max, centroid, extrapolationDirection))
+         if (!isPoint2DInFrontOfRay2D(vn1Max, centroid, extrapolationDirection))
             vn1Max.scaleAdd(10.0, extrapolationDirection, vn1);
 
          Point2D firstExtrapolatedPoint = new Point2D();
@@ -952,6 +951,60 @@ public class EuclidGeometryPolygonToolsTest
             EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
          else
             EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+      }
+   }
+
+   @Test
+   public void testIntersectionBetweenRay2DAndConvexPolygon2D() throws Exception
+   {
+      Random random = new Random(43545L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test using intersectionBetweenLine2DAndConvexPolygon2D
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D rayOrigin = generateRandomPoint2D(random, 10.0);
+         Vector2D rayDirection = generateRandomVector2D(random, -10.0, 10.0);
+         Point2D firstIntersectionWithLine = new Point2D();
+         Point2D secondIntersectionWithLine = new Point2D();
+         int expectedNumberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                                         firstIntersectionWithLine, secondIntersectionWithLine);
+
+         List<Point2D> expectedIntersections = new ArrayList<>();
+
+         if (expectedNumberOfIntersections == 2 && isPoint2DInFrontOfRay2D(secondIntersectionWithLine, rayOrigin, rayDirection))
+            expectedIntersections.add(secondIntersectionWithLine);
+         if (expectedNumberOfIntersections >= 1 && isPoint2DInFrontOfRay2D(firstIntersectionWithLine, rayOrigin, rayDirection))
+            expectedIntersections.add(firstIntersectionWithLine);
+         expectedNumberOfIntersections = expectedIntersections.size();
+
+         Point2D firstIntersectionWithRay = new Point2D();
+         Point2D secondIntersectionWithRay = new Point2D();
+
+         int actualNumberOfIntersections = intersectionBetweenRay2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                                      firstIntersectionWithRay, secondIntersectionWithRay);
+         assertEquals("Iteration: " + i, expectedNumberOfIntersections, actualNumberOfIntersections);
+
+         if (expectedNumberOfIntersections == 2)
+         {
+            if (firstIntersectionWithLine.distance(expectedIntersections.get(0)) < firstIntersectionWithLine.distance(expectedIntersections.get(1)))
+            {
+               EuclidCoreTestTools.assertTuple2DEquals(firstIntersectionWithRay, expectedIntersections.get(0), EPSILON);
+               EuclidCoreTestTools.assertTuple2DEquals(secondIntersectionWithRay, expectedIntersections.get(1), EPSILON);
+            }
+            else
+            {
+               EuclidCoreTestTools.assertTuple2DEquals(firstIntersectionWithRay, expectedIntersections.get(1), EPSILON);
+               EuclidCoreTestTools.assertTuple2DEquals(secondIntersectionWithRay, expectedIntersections.get(0), EPSILON);
+            }
+         }
+
+         if (expectedNumberOfIntersections == 1)
+            EuclidCoreTestTools.assertTuple2DEquals(expectedIntersections.get(0), firstIntersectionWithRay, EPSILON);
       }
    }
 
