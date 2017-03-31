@@ -3,7 +3,6 @@ package us.ihmc.euclid.geometry.tools;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.areVector2DsParallel;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceBetweenPoint2Ds;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredBetweenPoint2Ds;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.doLine2DAndLineSegment2DIntersect;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D;
@@ -202,6 +201,26 @@ public class EuclidGeometryPolygonTools
     * </p>
     * 
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
+    * @return the size of the convex hull.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int inPlaceGrahamScanConvexHull2D(List<? extends Point2DReadOnly> vertices)
+   {
+      return inPlaceGrahamScanConvexHull2D(vertices, vertices.size());
+   }
+
+   /**
+    * In-place and garbage free implementation of the
+    * <a href="https://en.wikipedia.org/wiki/Graham_scan">Graham scan algorithm</a> for computing
+    * the convex hull 2D of a set of points.
+    * <p>
+    * The given list {@code vertices} is reordered such that the vertices of the clockwise convex
+    * hull are positioned first. The method returns the number of vertices that compose the convex
+    * hull.
+    * </p>
+    * 
+    * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
     * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
     *           will only process the points &in; [0; {@code numberOfVertices}[.
     * @return the size of the convex hull.
@@ -295,7 +314,7 @@ public class EuclidGeometryPolygonTools
 
          if (clockwiseOrdered)
          {
-            for (int i = numberOfVertices - 1; i >= 0; i--)
+            for (int i = 0; i < numberOfVertices; i++)
             {
                Point2DReadOnly ci = convexPolygon2D.get(i);
                Point2DReadOnly ciMinus1 = convexPolygon2D.get(previous(i, numberOfVertices));
@@ -334,10 +353,8 @@ public class EuclidGeometryPolygonTools
             }
             else
             {
-               Cx *= 1.0 / (6.0 * area);
-               Cy *= 1.0 / (6.0 * area);
-
                centroidToPack.set(Cx, Cy);
+               centroidToPack.scale(1.0 / (6.0 * area));
             }
          }
 
@@ -426,6 +443,46 @@ public class EuclidGeometryPolygonTools
                                                         boolean clockwiseOrdered, double epsilon)
    {
       return signedDistanceFromPoint2DToConvexPolygon2D(pointX, pointY, convexPolygon2D, numberOfVertices, clockwiseOrdered) <= epsilon;
+   }
+
+   /**
+    * Determines if the point is inside the convex polygon given the tolerance {@code epsilon}.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The sign of {@code epsilon} is perform the test against the polygon shrunk by
+    * {@code Math.abs(epsilon)} if {@code epsilon < 0.0}, or against the polygon enlarged by
+    * {@code epsilon} if {@code epsilon > 0.0}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
+    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only vertex that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
+    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only edge that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
+    * </ul>
+    * 
+    * 
+    * @param point the coordinates of the query. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param epsilon the tolerance to use during the test.
+    * @return {@code true} if the query is considered to be inside the polygon, {@code false}
+    *         otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static boolean isPoint2DInsideConvexPolygon2D(Point2DReadOnly point, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                        boolean clockwiseOrdered, double epsilon)
+   {
+      return isPoint2DInsideConvexPolygon2D(point.getX(), point.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered, epsilon);
    }
 
    /**
@@ -695,48 +752,57 @@ public class EuclidGeometryPolygonTools
          return distanceFromPoint2DToLineSegment2D(pointX, pointY, convexPolygon2D.get(0), convexPolygon2D.get(1));
 
       boolean isQueryOutsidePolygon = false;
-      double minPositiveDistanceSquared = Double.POSITIVE_INFINITY;
-      double maxNegativeDistanceSquared = Double.NEGATIVE_INFINITY;
+      double minDistance = Double.POSITIVE_INFINITY;
 
       for (int index = 0; index < numberOfVertices; index++)
       {
          Point2DReadOnly edgeStart = convexPolygon2D.get(index);
          Point2DReadOnly edgeEnd = convexPolygon2D.get(next(index, numberOfVertices));
 
-         double percentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointX, pointY, edgeStart, edgeEnd);
-
-         if (percentage < 0.0)
-         {
-            double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, edgeStart);
-            minPositiveDistanceSquared = Math.min(distanceSquared, minPositiveDistanceSquared);
-         }
-         else if (percentage > 1.0)
-         {
-            double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, edgeEnd);
-            minPositiveDistanceSquared = Math.min(distanceSquared, minPositiveDistanceSquared);
-         }
-         else
-         {
-            double projectionX = (1.0 - percentage) * edgeStart.getX() + percentage * edgeEnd.getX();
-            double projectionY = (1.0 - percentage) * edgeStart.getY() + percentage * edgeEnd.getY();
-            double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, projectionX, projectionY);
-
-            if (isQueryOutsidePolygon || EuclidGeometryTools.isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, clockwiseOrdered))
-            { // The query is outside the polygon
-               isQueryOutsidePolygon = true;
-               minPositiveDistanceSquared = Math.min(distanceSquared, minPositiveDistanceSquared);
-            }
-            else
-            { // The query might be inside the polygon
-               maxNegativeDistanceSquared = Math.max(-distanceSquared, maxNegativeDistanceSquared);
-            }
-         }
+         isQueryOutsidePolygon |= isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, clockwiseOrdered);
+         minDistance = Math.min(minDistance, distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, edgeStart, edgeEnd));
       }
 
-      if (isQueryOutsidePolygon)
-         return Math.sqrt(minPositiveDistanceSquared);
-      else
-         return -Math.sqrt(-maxNegativeDistanceSquared);
+      minDistance = Math.sqrt(minDistance);
+      
+      if (!isQueryOutsidePolygon)
+         minDistance = - minDistance;
+      return minDistance;
+   }
+
+   /**
+    * Returns minimum distance between the point and the polygon.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * The return value is negative if the point is inside the polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@link Double#NaN}.
+    * <li>If the polygon has exactly one vertex, the returned value is positive and is equal to the
+    * distance between the query and the polygon's vertex.
+    * <li>If the polygon has exactly two vertices, the returned value is positive and is equal to
+    * the distance and the line segment defined by the polygon's two vertices.
+    * </ul>
+    * </p>
+    * 
+    * @param point the coordinates of the query. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the distance between the query and the polygon, it is negative if the point is inside
+    *         the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static double signedDistanceFromPoint2DToConvexPolygon2D(Point2DReadOnly point, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                   boolean clockwiseOrdered)
+   {
+      return signedDistanceFromPoint2DToConvexPolygon2D(point.getX(), point.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
    }
 
    /**
