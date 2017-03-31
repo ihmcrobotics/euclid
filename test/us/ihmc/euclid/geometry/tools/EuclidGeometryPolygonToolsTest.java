@@ -1,7 +1,17 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.computeConvexPolyong2DArea;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.grahamScanAngleCompare;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.wrap;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D;
 
 import java.util.ArrayList;
@@ -302,12 +312,11 @@ public class EuclidGeometryPolygonToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         List<? extends Point2DReadOnly> convexPolygon2D = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         List<? extends Point2DReadOnly> convexPolygon2D = EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 10.0, 10.0, 100);
          int hullSize = EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D(convexPolygon2D);
          boolean clockwiseOrdered = random.nextBoolean();
          if (!clockwiseOrdered)
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
-         System.out.println("Is clockwise ordered: " + clockwiseOrdered);
 
          for (int edgeIndex = 0; edgeIndex < hullSize; edgeIndex++)
          {
@@ -321,16 +330,12 @@ public class EuclidGeometryPolygonToolsTest
             edgeDirection.sub(edgeEnd, edgeStart);
             assertEquals(0.0, edgeDirection.dot(edgeNormal), EPSILON);
 
-            System.out.println("Dot: " + edgeDirection.dot(edgeNormal));
-            System.out.println(edgeDirection);
-            System.out.println(edgeNormal);
-
             Point2D pointInsidePolygon = new Point2D();
-            pointInsidePolygon.scaleAdd(-0.1, edgeDirection, edgeStart);
+            pointInsidePolygon.scaleAdd(-1.0e-8, edgeNormal, edgeStart);
             assertTrue("Iteration: " + i + ", edgeIndex: " + edgeIndex, isPoint2DInsideConvexPolygon2D(pointInsidePolygon, convexPolygon2D, hullSize, clockwiseOrdered, 0.0));
 
             Point2D pointOutsidePolygon = new Point2D();
-            pointOutsidePolygon.scaleAdd(0.1, edgeDirection, edgeStart);
+            pointOutsidePolygon.scaleAdd(1.0e8, edgeNormal, edgeStart);
             assertFalse(isPoint2DInsideConvexPolygon2D(pointOutsidePolygon, convexPolygon2D, hullSize, clockwiseOrdered, 0.0));
          }
       }
@@ -367,6 +372,92 @@ public class EuclidGeometryPolygonToolsTest
          double alphaInside = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          Point2D insidePoint = new Point2D();
          insidePoint.interpolate(centroid, pointOnEdge, alphaInside);
+         assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with epsilon > 0.0
+         double epsilon = random.nextDouble();
+
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomCircleBasedConvexPolygon2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGiftWrapConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         int vertexIndex = random.nextInt(hullSize);
+         int nextVertexIndex = next(vertexIndex, hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+         Point2DReadOnly nextVertex = convexPolygon2D.get(nextVertexIndex);
+
+         Point2D pointOnEdge = new Point2D();
+         pointOnEdge.interpolate(vertex, nextVertex, random.nextDouble());
+
+         double distanceOutside = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, epsilon);
+         Point2D outsidePoint = new Point2D();
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(nextVertex, vertex);
+         orthogonal.normalize();
+         orthogonal = EuclidGeometryTools.perpendicularVector2D(orthogonal);
+         if (!clockwiseOrdered)
+            orthogonal.negate();
+
+         outsidePoint.scaleAdd(distanceOutside, orthogonal, pointOnEdge);
+         assertTrue(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered, epsilon));
+
+         distanceOutside = EuclidCoreRandomTools.generateRandomDouble(random, epsilon, epsilon + 1.0);
+         outsidePoint.scaleAdd(distanceOutside, orthogonal, pointOnEdge);
+         assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered, epsilon));
+
+         double alphaInside = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         Point2D insidePoint = new Point2D();
+         insidePoint.interpolate(centroid, pointOnEdge, alphaInside);
+         assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with epsilon < 0.0
+         double epsilon = -0.02; // Testing with a small value to avoid weird cases that are hard to deal with.
+
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomCircleBasedConvexPolygon2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGiftWrapConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         int vertexIndex = random.nextInt(hullSize);
+         int nextVertexIndex = next(vertexIndex, hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+         Point2DReadOnly nextVertex = convexPolygon2D.get(nextVertexIndex);
+
+         Point2D pointOnEdge = new Point2D();
+         pointOnEdge.interpolate(vertex, nextVertex, random.nextDouble());
+
+         double alphaOutside = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 3.0);
+         Point2D outsidePoint = new Point2D();
+         outsidePoint.interpolate(centroid, pointOnEdge, alphaOutside);
+         assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
+
+         double distanceInside = EuclidCoreRandomTools.generateRandomDouble(random, epsilon, 0.0);
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(nextVertex, vertex);
+         orthogonal.normalize();
+         orthogonal = EuclidGeometryTools.perpendicularVector2D(orthogonal);
+         if (!clockwiseOrdered)
+            orthogonal.negate();
+
+         outsidePoint.scaleAdd(distanceInside, orthogonal, pointOnEdge);
+         assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered, epsilon));
+
+         // Using the distance to the centroid as a max
+         double distanceBetweenCentroidAndEdge = EuclidGeometryTools.distanceFromPoint2DToLine2D(centroid, vertex, nextVertex);
+         distanceInside = EuclidCoreRandomTools.generateRandomDouble(random, -distanceBetweenCentroidAndEdge, epsilon);
+         Point2D insidePoint = new Point2D();
+         insidePoint.scaleAdd(distanceInside, orthogonal, pointOnEdge);
          assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
       }
    }

@@ -394,13 +394,13 @@ public class EuclidGeometryPolygonTools
       Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
       Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
 
-      double edgeVectorX = edgeEnd.getX() - edgeStart.getX();
-      double edgeVectorY = edgeEnd.getY() - edgeStart.getY();
+      normalToPack.sub(edgeEnd, edgeStart);
+      normalToPack.normalize();
+      EuclidGeometryTools.perpendicularVector2D(normalToPack, normalToPack);
 
-      normalToPack.set(-edgeVectorY, edgeVectorX);
       if (!clockwiseOrdered)
          normalToPack.negate();
-      normalToPack.normalize();
+
       return true;
    }
 
@@ -764,9 +764,9 @@ public class EuclidGeometryPolygonTools
       }
 
       minDistance = Math.sqrt(minDistance);
-      
+
       if (!isQueryOutsidePolygon)
-         minDistance = - minDistance;
+         minDistance = -minDistance;
       return minDistance;
    }
 
