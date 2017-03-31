@@ -617,8 +617,10 @@ public class EuclidGeometryPolygonTools
 
       double lineSegmentStartX = lineSegmentStart.getX();
       double lineSegmentStartY = lineSegmentStart.getY();
-      double lineSegmentDirectionX = lineSegmentEnd.getX() - lineSegmentStart.getX();
-      double lineSegmentDirectionY = lineSegmentEnd.getY() - lineSegmentStart.getY();
+      double lineSegmentEndX = lineSegmentEnd.getX();
+      double lineSegmentEndY = lineSegmentEnd.getY();
+      double lineSegmentDirectionX = lineSegmentEndX - lineSegmentStartX;
+      double lineSegmentDirectionY = lineSegmentEndY - lineSegmentStartY;
 
       int firstEdgeIndex = nextIntersectingEdgeIndex(-1, lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY, convexPolygon2D,
                                                      numberOfVertices);
@@ -627,8 +629,8 @@ public class EuclidGeometryPolygonTools
 
       Point2DReadOnly edgeStart = convexPolygon2D.get(firstEdgeIndex);
       Point2DReadOnly edgeEnd = convexPolygon2D.get(next(firstEdgeIndex, numberOfVertices));
-      boolean success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY,
-                                                             edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), firstIntersectionToPack);
+      boolean success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentEndX, lineSegmentEndY, edgeStart.getX(),
+                                                             edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), firstIntersectionToPack);
       if (!success)
       { // Change reference of secondIntersectionToPack such that if there is any second intersection it'll override the first one.
          secondIntersectionToPack = firstIntersectionToPack;
@@ -643,7 +645,7 @@ public class EuclidGeometryPolygonTools
       {
          edgeStart = convexPolygon2D.get(secondEdgeIndex);
          edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, numberOfVertices));
-         success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY, edgeStart.getX(),
+         success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentEndX, lineSegmentEndY, edgeStart.getX(),
                                                         edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), secondIntersectionToPack);
          numberOfIntersections += success ? 1 : 0;
          return numberOfIntersections;
@@ -1278,7 +1280,7 @@ public class EuclidGeometryPolygonTools
          {
             double edgeDx = edgeEnd.getX() - edgeStart.getX();
             double edgeDy = edgeEnd.getY() - edgeStart.getY();
-            boolean areLineAndEdgeParallel = areVector2DsParallel(lineDirectionX, lineDirectionY, edgeDx, edgeDy, 1.0e-5);
+            boolean areLineAndEdgeParallel = areVector2DsParallel(lineDirectionX, lineDirectionY, edgeDx, edgeDy, EPSILON);
 
             if (areLineAndEdgeParallel) // The line and the edge are collinear.
             {

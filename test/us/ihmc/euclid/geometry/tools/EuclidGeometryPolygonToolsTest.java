@@ -3,18 +3,8 @@ package us.ihmc.euclid.geometry.tools;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.computeConvexPolyong2DArea;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.grahamScanAngleCompare;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.wrap;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.generateRandomPointCloud2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
 
 import java.util.ArrayList;
@@ -68,7 +58,7 @@ public class EuclidGeometryPolygonToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          int numberOfVertices = 100;
-         List<? extends Point2DReadOnly> points = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfVertices);
+         List<? extends Point2DReadOnly> points = generateRandomPointCloud2D(random, 10.0, 10.0, numberOfVertices);
          List<List<? extends Point2DReadOnly>> pointsForEachAlgo = new ArrayList<>();
          while (pointsForEachAlgo.size() < algorithmsToTest.size())
             pointsForEachAlgo.add(new ArrayList<>(points));
@@ -94,7 +84,7 @@ public class EuclidGeometryPolygonToolsTest
       { // Test simple features
          int numberOfPoints = 100;
          int numberOfPointsToProcess = random.nextInt(numberOfPoints - 1) + 1;
-         List<Point2D> listToProcess = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
+         List<Point2D> listToProcess = generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          List<Point2D> original = new ArrayList<>(listToProcess);
 
          int hullSize = algorithmToTest.process(listToProcess, numberOfPointsToProcess);
@@ -139,7 +129,7 @@ public class EuclidGeometryPolygonToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with vertices that already form a convex hull make sure the algorithm just shift the points around so it starts with the min x, max y vertex.
          int numberOfPoints = 100;
-         List<Point2D> vertices = EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 10.0, 1.0, numberOfPoints);
+         List<Point2D> vertices = generateRandomCircleBasedConvexPolygon2D(random, 10.0, 1.0, numberOfPoints);
          int startIndex = EuclidGeometryPolygonTools.findMinXMaxYVertexIndex(vertices, numberOfPoints);
          List<Point2D> convexHullVertices = new ArrayList<>();
          for (int index = 0; index < numberOfPoints; index++)
@@ -155,7 +145,7 @@ public class EuclidGeometryPolygonToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test that the resulting list is convex at every vertex
          int numberOfPoints = 100;
-         List<? extends Point2DReadOnly> points = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
+         List<? extends Point2DReadOnly> points = generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          int hullSize = algorithmToTest.process(points, numberOfPoints);
          for (int index = 0; index < hullSize; index++)
             assertTrue("Is not convex at vertex index: " + index, EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex(index, points, hullSize, true));
@@ -164,7 +154,7 @@ public class EuclidGeometryPolygonToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test that Graham scan sorting algorithm does change the output of the already processed vertices.
          int numberOfPoints = 100;
-         List<? extends Point2DReadOnly> processedList = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
+         List<? extends Point2DReadOnly> processedList = generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          int hullSize = algorithmToTest.process(processedList, numberOfPoints);
          List<? extends Point2DReadOnly> sortedList = new ArrayList<>(processedList);
          EuclidGeometryPolygonTools.grahamScanAngleSort(sortedList, hullSize);
@@ -175,7 +165,7 @@ public class EuclidGeometryPolygonToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test that the sum of the angles from edge to edge is equal to 2*PI, ensuring that the resulting hull does not do several revolutions
          int numberOfPoints = 100;
-         List<? extends Point2DReadOnly> processedList = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
+         List<? extends Point2DReadOnly> processedList = generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          int hullSize = algorithmToTest.process(processedList, numberOfPoints);
 
          double sumOfAngles = 0.0;
@@ -198,7 +188,7 @@ public class EuclidGeometryPolygonToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test that duplicate vertices are removed from the hull
          int numberOfPoints = 100;
-         List<Point2D> processedList = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
+         List<Point2D> processedList = generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          int numberOfDuplicates = random.nextInt(50);
          while (numberOfDuplicates > 0)
          {
@@ -236,7 +226,7 @@ public class EuclidGeometryPolygonToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          int numberOfPoints = 10;
-         List<Point2D> points = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
+         List<Point2D> points = generateRandomPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          List<Point2D> pointsCopy = new ArrayList<>(points);
 
          int minXMaxYIndex = EuclidGeometryPolygonTools.findMinXMaxYVertexIndex(points, points.size());
@@ -270,7 +260,7 @@ public class EuclidGeometryPolygonToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         List<? extends Point2DReadOnly> convexPolygon2D = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
          int hullSize = EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D(convexPolygon2D);
          boolean clockwiseOrdered = random.nextBoolean();
          if (!clockwiseOrdered)
@@ -316,7 +306,7 @@ public class EuclidGeometryPolygonToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         List<? extends Point2DReadOnly> convexPolygon2D = EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 10.0, 10.0, 100);
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomCircleBasedConvexPolygon2D(random, 10.0, 10.0, 100);
          int hullSize = EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D(convexPolygon2D);
          boolean clockwiseOrdered = random.nextBoolean();
          if (!clockwiseOrdered)
@@ -780,6 +770,188 @@ public class EuclidGeometryPolygonToolsTest
          assertEquals("Iteration: " + i, 1, numberOfIntersections);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+      }
+   }
+
+   @Test
+   public void testIntersectionBetweenLineSegment2DAndConvexPolygon2D() throws Exception
+   {
+      Random random = new Random(234324L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup: 2 intersections picked at random on the polygon from which the line segment can be built to test 0, 1, and 2 intersections just by moving the end points on the same line.
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int firstEdgeIndex = random.nextInt(hullSize);
+         int secondEdgeIndex = wrap(random.nextInt(hullSize - 1) + firstEdgeIndex + 1, hullSize); // Making sure the two edges are different
+
+         double alphaFirst = random.nextDouble();
+         Point2D expectedFirstIntersection = new Point2D();
+         {
+            Point2DReadOnly vertex = convexPolygon2D.get(firstEdgeIndex);
+            Point2DReadOnly nextVertex = convexPolygon2D.get(next(firstEdgeIndex, hullSize));
+            expectedFirstIntersection.interpolate(vertex, nextVertex, alphaFirst);
+         }
+         double alphaSecond = random.nextDouble();
+         Point2D expectedSecondIntersection = new Point2D();
+         {
+            Point2DReadOnly vertex = convexPolygon2D.get(secondEdgeIndex);
+            Point2DReadOnly nextVertex = convexPolygon2D.get(next(secondEdgeIndex, hullSize));
+            expectedSecondIntersection.interpolate(vertex, nextVertex, alphaSecond);
+         }
+
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(expectedSecondIntersection, expectedFirstIntersection);
+         lineDirection.normalize();
+
+         Point2D actualFirstIntersection = new Point2D();
+         Point2D actualSecondIntersection = new Point2D();
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         // Make the line-segment endpoints such that we have 2 intersections
+         double alphaOutsideStart = generateRandomDouble(random, -10.0, -0.01);
+         double alphaOutsideEnd = generateRandomDouble(random, 1.01, 10.0);
+         lineSegmentStart.interpolate(expectedFirstIntersection, expectedSecondIntersection, alphaOutsideStart);
+         lineSegmentEnd.interpolate(expectedFirstIntersection, expectedSecondIntersection, alphaOutsideEnd);
+
+         int numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                        clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(2, numberOfIntersections);
+
+         if (expectedFirstIntersection.distance(actualFirstIntersection) < expectedFirstIntersection.distance(actualSecondIntersection))
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALL_EPSILON);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
+         }
+
+         // Make the line-segment endpoints such that we have 0 intersection
+         lineSegmentStart.interpolate(expectedFirstIntersection, expectedSecondIntersection, generateRandomDouble(random, 0.0, 1.0));
+         lineSegmentEnd.interpolate(expectedFirstIntersection, expectedSecondIntersection, generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                    clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(0, numberOfIntersections);
+
+         // Make the line-segment endpoints such that we have 1 intersection (two ways to test)
+         lineSegmentStart.interpolate(expectedFirstIntersection, expectedSecondIntersection, alphaOutsideStart);
+         lineSegmentEnd.interpolate(expectedFirstIntersection, expectedSecondIntersection, generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                    clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(1, numberOfIntersections);
+
+         if (actualFirstIntersection.distance(expectedFirstIntersection) < actualFirstIntersection.distance(expectedSecondIntersection))
+            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
+         else
+            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
+
+         lineSegmentStart.interpolate(expectedFirstIntersection, expectedSecondIntersection, generateRandomDouble(random, 0.0, 1.0));
+         lineSegmentEnd.interpolate(expectedFirstIntersection, expectedSecondIntersection, alphaOutsideEnd);
+
+         numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                    clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(1, numberOfIntersections);
+
+         if (actualFirstIntersection.distance(expectedFirstIntersection) < actualFirstIntersection.distance(expectedSecondIntersection))
+            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALL_EPSILON);
+         else
+            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualFirstIntersection, SMALL_EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup: the line is collinear to an edge picked at random
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int edgeIndex = random.nextInt(hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(edgeIndex);
+         Point2DReadOnly nextVertex = convexPolygon2D.get(next(edgeIndex, hullSize));
+
+         Point2D pointOnLine = new Point2D();
+         pointOnLine.interpolate(vertex, nextVertex, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(nextVertex, vertex);
+         lineDirection.normalize();
+         lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point2D actualFirstIntersection = new Point2D();
+         Point2D actualSecondIntersection = new Point2D();
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         // Make the line-segment completely overlap the edge
+         double alphaStart = generateRandomDouble(random, -10.0, -0.01);
+         double alphaEnd = generateRandomDouble(random, 1.01, 10.0);
+         lineSegmentStart.interpolate(vertex, nextVertex, alphaStart);
+         lineSegmentEnd.interpolate(vertex, nextVertex, alphaEnd);
+
+         int numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                        clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals("Iteration: " + i, 2, numberOfIntersections);
+
+         if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+         }
+
+         // Make the line-segment not overlap the edge (two sides to test)
+         lineSegmentStart.interpolate(vertex, nextVertex, generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(vertex, nextVertex, generateRandomDouble(random, -10.0, 0.0));
+         numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                    clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+
+         lineSegmentStart.interpolate(vertex, nextVertex, generateRandomDouble(random, 1.0, 10.0));
+         lineSegmentEnd.interpolate(vertex, nextVertex, generateRandomDouble(random, 1.0, 10.0));
+         numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                    clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+
+         // Make the line-segment partially overlap (two sides to test)
+         lineSegmentStart.interpolate(vertex, nextVertex, generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(vertex, nextVertex, generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                    clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals("Iteration: " + i, 1, numberOfIntersections);
+
+         if (actualFirstIntersection.distance(vertex) < actualFirstIntersection.distance(nextVertex))
+            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+         else
+            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+
+         // Test second side
+         lineSegmentStart.interpolate(vertex, nextVertex, generateRandomDouble(random, 0.0, 1.0));
+         lineSegmentEnd.interpolate(vertex, nextVertex, generateRandomDouble(random, 1.0, 10.0));
+
+         numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                    clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals("Iteration: " + i, 1, numberOfIntersections);
+
+         if (actualFirstIntersection.distance(vertex) < actualFirstIntersection.distance(nextVertex))
+            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+         else
+            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
       }
    }
 

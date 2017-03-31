@@ -1630,7 +1630,7 @@ public class EuclidGeometryTools
    public static boolean doLineSegment2DsIntersect(double lineSegmentStart1x, double lineSegmentStart1y, double lineSegmentEnd1x, double lineSegmentEnd1y,
                                                    double lineSegmentStart2x, double lineSegmentStart2y, double lineSegmentEnd2x, double lineSegmentEnd2y)
    {
-      double eps = ONE_TRILLIONTH;
+      double eps = ONE_TEN_MILLIONTH;
       double r1numerator, r1denominator, r2numerator, r2denominator;
 
       double deltax1 = lineSegmentEnd1x - lineSegmentStart1x;
@@ -2834,7 +2834,7 @@ public class EuclidGeometryTools
       double lineDirection2x = lineSegmentEnd2x - lineSegmentStart2x;
       double lineDirection2y = lineSegmentEnd2y - lineSegmentStart2y;
 
-      if (Math.abs(-lineDirection1x * lineDirection2y + lineDirection1y * lineDirection2x) > ONE_TRILLIONTH)
+      if (Math.abs(-lineDirection1x * lineDirection2y + lineDirection1y * lineDirection2x) > ONE_TEN_MILLIONTH)
       { // The line segments are not parallel and are intersecting, same as finding the intersection of two lines.
          double pointOnLine1x = lineSegmentStart1x;
          double pointOnLine1y = lineSegmentStart1y;
@@ -2846,7 +2846,7 @@ public class EuclidGeometryTools
       else
       { // The line segments are parallel and intersecting, they must be overlapping.
            // Let's first check for a common endpoint
-         double epsilon = ONE_TRILLIONTH;
+         double epsilon = ONE_TEN_MILLIONTH;
 
          // Let's find the first endpoint that is inside the other line segment and return it.
          double lineSegment1LengthSquare = EuclidCoreTools.normSquared(lineDirection1x, lineDirection1y);
