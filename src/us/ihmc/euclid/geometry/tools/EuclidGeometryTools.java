@@ -522,7 +522,7 @@ public class EuclidGeometryTools
     * @param points the collection of 2D points to compute the average from. Not modified.
     * @return the computed average.
     */
-   public static Point2D averagePoint2Ds(Collection<Point2D> points)
+   public static Point2D averagePoint2Ds(Collection<? extends Point2DReadOnly> points)
    {
       Point2D totalPoint = new Point2D();
 
@@ -545,7 +545,7 @@ public class EuclidGeometryTools
     * @param points the collection of 3D points to compute the average from. Not modified.
     * @return the computed average.
     */
-   public static Point3D averagePoint3Ds(Collection<Point3D> points)
+   public static Point3D averagePoint3Ds(Collection<? extends Point3DReadOnly> points)
    {
       Point3D totalPoint = new Point3D();
 
