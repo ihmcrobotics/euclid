@@ -1009,6 +1009,94 @@ public class EuclidGeometryPolygonToolsTest
    }
 
    @Test
+   public void testOrthogonalProjectionOnConvexPolygon2D() throws Exception
+   {
+      Random random = new Random(43545L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup: Create point on an edge picked at random, shift it orthogonally toward the outside of the polygon
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int edgeIndex = random.nextInt(hullSize);
+         Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, hullSize));
+
+         Vector2D edgeNormal = new Vector2D();
+         edgeNormal(edgeIndex, convexPolygon2D, hullSize, clockwiseOrdered, edgeNormal);
+
+         Point2D expectedProjection = new Point2D();
+         expectedProjection.interpolate(edgeStart, edgeEnd, random.nextDouble());
+
+         Point2D pointToProject = new Point2D();
+         pointToProject.scaleAdd(random.nextDouble(), edgeNormal, expectedProjection);
+
+         Point2D actualProjection = new Point2D();
+         boolean success = orthogonalProjectionOnConvexPolygon2D(pointToProject, convexPolygon2D, hullSize, clockwiseOrdered, actualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup: pick a vertex at random an shift it outside the polygon such that the projection of the resulting point is the vertex.
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int vertexIndex = random.nextInt(hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+
+         Vector2D previousEdgeNormal = new Vector2D();
+         Vector2D nextEdgeNormal = new Vector2D();
+         Vector2D shiftDirection = new Vector2D();
+         edgeNormal(previous(vertexIndex, hullSize), convexPolygon2D, hullSize, clockwiseOrdered, previousEdgeNormal);
+         edgeNormal(vertexIndex, convexPolygon2D, hullSize, clockwiseOrdered, nextEdgeNormal);
+         shiftDirection.interpolate(previousEdgeNormal, nextEdgeNormal, random.nextDouble());
+
+         Point2D pointToProject = new Point2D();
+         pointToProject.scaleAdd(random.nextDouble(), shiftDirection, vertex);
+
+         Point2D acualProjection = new Point2D();
+         boolean success = orthogonalProjectionOnConvexPolygon2D(pointToProject, convexPolygon2D, hullSize, clockwiseOrdered, acualProjection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i, vertex, acualProjection, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup: ensure nothing happens if the query is inside the polygon.
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         int vertexIndex = random.nextInt(hullSize);
+         int nextVertexIndex = next(vertexIndex, hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+         Point2DReadOnly nextVertex = convexPolygon2D.get(nextVertexIndex);
+
+         Point2D pointOnEdge = new Point2D();
+         pointOnEdge.interpolate(vertex, nextVertex, random.nextDouble());
+
+         Point2D pointInside = new Point2D();
+         pointInside.interpolate(centroid, pointOnEdge, random.nextDouble());
+
+         Point2D actualProjection = new Point2D(Double.NaN, Double.NaN);
+         boolean success = orthogonalProjectionOnConvexPolygon2D(pointInside, convexPolygon2D, hullSize, clockwiseOrdered, actualProjection);
+         assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualProjection);
+      }
+   }
+
+   @Test
    public void testRemove() throws Exception
    {
       Random random = new Random(35L);
