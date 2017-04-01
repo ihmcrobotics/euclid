@@ -1,17 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.areVector2DsParallel;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceBetweenPoint2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.doLine2DAndLineSegment2DIntersect;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DInFrontOfRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.orthogonalProjectionOnLineSegment2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import java.util.Collections;
@@ -522,6 +511,54 @@ public class EuclidGeometryPolygonTools
                                                                  boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
                                                                  Point2DBasics secondIntersectionToPack)
    {
+      double pointOnLineX = pointOnLine.getX();
+      double pointOnLineY = pointOnLine.getY();
+      double lineDirectionX = lineDirection.getX();
+      double lineDirectionY = lineDirection.getY();
+
+      return intersectionBetweenLine2DAndConvexPolygon2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D, numberOfVertices,
+                                                         clockwiseOrdered, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and a given
+    * convex polygon 2D.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    * 
+    * @param pointOnLineX the x-coordinate of a point on the line.
+    * @param pointOnLineY the y-coordinate of a point on the line.
+    * @param lineDirectionX the x-component of the direction of the line.
+    * @param lineDirectionY the y-component of the direction of the line.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @return the number of intersections between the line and the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   private static int intersectionBetweenLine2DAndConvexPolygon2D(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
+                                                                  List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                  boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
+                                                                  Point2DBasics secondIntersectionToPack)
+   {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
 
       if (numberOfVertices == 0)
@@ -529,38 +566,55 @@ public class EuclidGeometryPolygonTools
 
       if (numberOfVertices == 1)
       {
-         if (EuclidGeometryTools.isPoint2DOnLine2D(convexPolygon2D.get(0), pointOnLine, lineDirection))
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         if (isPoint2DOnLine2D(vertex.getX(), vertex.getY(), pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY))
          {
             firstIntersectionToPack.set(convexPolygon2D.get(0));
             return 1;
          }
       }
 
-      int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, numberOfVertices);
+      int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D, numberOfVertices);
       if (firstEdgeIndex < 0)
          return 0;
 
       Point2DReadOnly edgeStart = convexPolygon2D.get(firstEdgeIndex);
       Point2DReadOnly edgeEnd = convexPolygon2D.get(next(firstEdgeIndex, numberOfVertices));
-      boolean success = intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, edgeStart, edgeEnd, firstIntersectionToPack);
+      boolean success = intersectionBetweenLine2DAndLineSegment2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart.getX(),
+                                                                  edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), firstIntersectionToPack);
       if (!success)
          throw new RuntimeException("Inconsistency in algorithms.");
 
-      int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, numberOfVertices);
+      int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                      numberOfVertices);
 
-      if (secondEdgeIndex >= 0)
-      {
-         edgeStart = convexPolygon2D.get(secondEdgeIndex);
-         edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, numberOfVertices));
-         success = intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, edgeStart, edgeEnd, secondIntersectionToPack);
-         if (!success)
-            throw new RuntimeException("Inconsistency in algorithms.");
-         return firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, EPSILON) ? 1 : 2;
-      }
-      else
-      {
+      if (secondEdgeIndex < 0)
          return 1;
-      }
+
+      edgeStart = convexPolygon2D.get(secondEdgeIndex);
+      edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, numberOfVertices));
+      success = intersectionBetweenLine2DAndLineSegment2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart.getX(), edgeStart.getY(),
+                                                          edgeEnd.getX(), edgeEnd.getY(), secondIntersectionToPack);
+      if (!success)
+         throw new RuntimeException("Inconsistency in algorithms.");
+
+      if (!firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, EPSILON))
+         return 2;
+
+      secondEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                  numberOfVertices);
+
+      if (secondEdgeIndex < 0 || secondEdgeIndex == firstEdgeIndex)
+         return 1;
+
+      edgeStart = convexPolygon2D.get(secondEdgeIndex);
+      edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, numberOfVertices));
+      success = intersectionBetweenLine2DAndLineSegment2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart.getX(), edgeStart.getY(),
+                                                          edgeEnd.getX(), edgeEnd.getY(), secondIntersectionToPack);
+      if (!success)
+         throw new RuntimeException("Inconsistency in algorithms.");
+
+      return 2;
    }
 
    /**
@@ -600,60 +654,33 @@ public class EuclidGeometryPolygonTools
                                                                         boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
                                                                         Point2DBasics secondIntersectionToPack)
    {
-      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+      double pointOnLineX = lineSegmentStart.getX();
+      double pointOnLineY = lineSegmentStart.getY();
+      double lineDirectionX = lineSegmentEnd.getX() - lineSegmentStart.getX();
+      double lineDirectionY = lineSegmentEnd.getY() - lineSegmentStart.getY();
 
-      if (numberOfVertices == 0)
-         return 0;
+      int numberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                                              numberOfVertices, clockwiseOrdered, firstIntersectionToPack,
+                                                                              secondIntersectionToPack);
 
-      if (numberOfVertices == 1)
+      if (numberOfIntersections == 2)
       {
-         Point2DReadOnly vertex = convexPolygon2D.get(0);
-         if (isPoint2DOnLineSegment2D(vertex, lineSegmentStart, lineSegmentEnd))
+         double percentage = percentageAlongLineSegment2D(secondIntersectionToPack, lineSegmentStart, lineSegmentEnd);
+         if (percentage < -EPSILON || percentage > 1.0 + EPSILON)
+            numberOfIntersections--;
+      }
+
+      if (numberOfIntersections >= 1)
+      {
+         double percentage = percentageAlongLineSegment2D(firstIntersectionToPack, lineSegmentStart, lineSegmentEnd);
+         if (percentage < -EPSILON || percentage > 1.0 + EPSILON)
          {
-            firstIntersectionToPack.set(convexPolygon2D.get(0));
-            return 1;
+            numberOfIntersections--;
+            firstIntersectionToPack.set(secondIntersectionToPack);
          }
       }
 
-      double lineSegmentStartX = lineSegmentStart.getX();
-      double lineSegmentStartY = lineSegmentStart.getY();
-      double lineSegmentEndX = lineSegmentEnd.getX();
-      double lineSegmentEndY = lineSegmentEnd.getY();
-      double lineSegmentDirectionX = lineSegmentEndX - lineSegmentStartX;
-      double lineSegmentDirectionY = lineSegmentEndY - lineSegmentStartY;
-
-      int firstEdgeIndex = nextIntersectingEdgeIndex(-1, lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY, convexPolygon2D,
-                                                     numberOfVertices);
-      if (firstEdgeIndex < 0)
-         return 0;
-
-      Point2DReadOnly edgeStart = convexPolygon2D.get(firstEdgeIndex);
-      Point2DReadOnly edgeEnd = convexPolygon2D.get(next(firstEdgeIndex, numberOfVertices));
-      boolean success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentEndX, lineSegmentEndY, edgeStart.getX(),
-                                                             edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), firstIntersectionToPack);
-      if (!success)
-      { // Change reference of secondIntersectionToPack such that if there is any second intersection it'll override the first one.
-         secondIntersectionToPack = firstIntersectionToPack;
-      }
-
-      int numberOfIntersections = success ? 1 : 0;
-
-      int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY,
-                                                      convexPolygon2D, numberOfVertices);
-
-      if (secondEdgeIndex >= 0)
-      {
-         edgeStart = convexPolygon2D.get(secondEdgeIndex);
-         edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, numberOfVertices));
-         success = intersectionBetweenTwoLineSegment2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentEndX, lineSegmentEndY, edgeStart.getX(),
-                                                        edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY(), secondIntersectionToPack);
-         numberOfIntersections += success ? 1 : 0;
-         return numberOfIntersections;
-      }
-      else
-      {
-         return 1;
-      }
+      return numberOfIntersections;
    }
 
    /**
@@ -1125,13 +1152,49 @@ public class EuclidGeometryPolygonTools
 
       boolean previousEdgeVisible = canObserverSeeEdge(numberOfVertices - 1, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
 
-      for (int edgeIndex = 0; edgeIndex < numberOfVertices - 1; edgeIndex++)
+      for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
       {
          boolean edgeVisible = canObserverSeeEdge(edgeIndex, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
          if (!previousEdgeVisible && edgeVisible)
             return edgeIndex;
+         previousEdgeVisible = edgeVisible;
       }
       return -1;
+   }
+
+   /**
+    * From the point of view of an observer located outside the polygon, only a continuous subset of
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the
+    * first vertex that is in the line-of-sight.
+    * <p>
+    * WARNING:
+    * <ul>
+    * <li>This method assumes that the given vertices already form a convex polygon.
+    * <li>This method assumes that the given observer is located outside the polygon.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>The polygon has no vertices, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param observer the coordinates of the observer.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the index of the first vertex that is in the line-of-sight, {@code -1} if this method
+    *         fails.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int lineOfSightStartIndex(Point2DReadOnly observer, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                           boolean clockwiseOrdered)
+   {
+      return lineOfSightStartIndex(observer.getX(), observer.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
    }
 
    /**
@@ -1181,13 +1244,49 @@ public class EuclidGeometryPolygonTools
 
       boolean previousEdgeVisible = canObserverSeeEdge(numberOfVertices - 1, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
 
-      for (int edgeIndex = 0; edgeIndex < numberOfVertices - 1; edgeIndex++)
+      for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
       {
          boolean edgeVisible = canObserverSeeEdge(edgeIndex, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
          if (previousEdgeVisible && !edgeVisible)
             return edgeIndex;
+         previousEdgeVisible = edgeVisible;
       }
       return -1;
+   }
+
+   /**
+    * From the point of view of an observer located outside the polygon, only a continuous subset of
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the
+    * last vertex that is in the line-of-sight.
+    * <p>
+    * WARNING:
+    * <ul>
+    * <li>This method assumes that the given vertices already form a convex polygon.
+    * <li>This method assumes that the given observer is located outside the polygon.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>The polygon has no vertices, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param observer the coordinates of the observer.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the index of the last vertex that is in the line-of-sight, {@code -1} if this method
+    *         fails.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int lineOfSightEndIndex(Point2DReadOnly observer, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                         boolean clockwiseOrdered)
+   {
+      return lineOfSightEndIndex(observer.getX(), observer.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
    }
 
    /**
@@ -1211,6 +1310,8 @@ public class EuclidGeometryPolygonTools
     * <li>If the line and an edge of the polygon are collinear and the polygon has more than 2
     * vertices, this method returns the index of the previous edge or the next edge if the given
     * {@code previousEdgeIndex} refers to the previous edge.
+    * <li>If the line is going through a vertex, this method considers that the line intersects with
+    * the two adjacent edges.
     * </ul>
     * </p>
     * 
@@ -1256,6 +1357,8 @@ public class EuclidGeometryPolygonTools
     * <li>If the line and an edge of the polygon are collinear and the polygon has more than 2
     * vertices, this method returns the index of the previous edge or the next edge if the given
     * {@code previousEdgeIndex} refers to the previous edge.
+    * <li>If the line is going through a vertex, this method considers that the line intersects with
+    * the two adjacent edges.
     * </ul>
     * </p>
     * 

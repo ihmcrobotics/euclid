@@ -1,16 +1,24 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.generateRandomPointCloud2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2D;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -770,6 +778,35 @@ public class EuclidGeometryPolygonToolsTest
          EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
       }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup: make the line go exactly through one of the vertices
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int vertexIndex = random.nextInt(hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+
+         Point2D pointOnLine = new Point2D(centroid);
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(pointOnLine, vertex);
+
+         Point2D actualFirstIntersection = new Point2D();
+         Point2D actualSecondIntersection = new Point2D();
+
+         int nIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLine, lineDirection, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                          actualFirstIntersection, actualSecondIntersection);
+         assertEquals("Iteration: " + i, 2, nIntersections);
+         if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
+            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+         else
+            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+      }
    }
 
    @Test
@@ -834,8 +871,10 @@ public class EuclidGeometryPolygonToolsTest
          }
 
          // Make the line-segment endpoints such that we have 0 intersection
-         lineSegmentStart.interpolate(expectedFirstIntersection, expectedSecondIntersection, generateRandomDouble(random, 0.0, 1.0));
-         lineSegmentEnd.interpolate(expectedFirstIntersection, expectedSecondIntersection, generateRandomDouble(random, 0.0, 1.0));
+         double alphaStartInside = generateRandomDouble(random, 0.0, 1.0);
+         double alphaEndInside = generateRandomDouble(random, 0.0, 1.0);
+         lineSegmentStart.interpolate(expectedFirstIntersection, expectedSecondIntersection, alphaStartInside);
+         lineSegmentEnd.interpolate(expectedFirstIntersection, expectedSecondIntersection, alphaEndInside);
 
          numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                     clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
@@ -951,6 +990,35 @@ public class EuclidGeometryPolygonToolsTest
             EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
          else
             EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup: make the line-segment start from the centroid and go exactly through one of the vertices
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int vertexIndex = random.nextInt(hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+
+         Point2D lineSegmentStart = new Point2D(centroid);
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(vertex, lineSegmentStart);
+         lineSegmentDirection.scale(1.5);
+         Point2D lineSegmentEnd = new Point2D();
+         lineSegmentEnd.add(lineSegmentStart, lineSegmentDirection);
+
+         Point2D actualFirstIntersection = new Point2D();
+         Point2D actualSecondIntersection = new Point2D();
+
+         int nIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                                 actualFirstIntersection, actualSecondIntersection);
+         assertEquals("Iteration: " + i, 1, nIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
       }
    }
 
@@ -1075,7 +1143,6 @@ public class EuclidGeometryPolygonToolsTest
          if (!clockwiseOrdered)
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
-
          Point2D centroid = new Point2D();
          computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
@@ -1093,6 +1160,96 @@ public class EuclidGeometryPolygonToolsTest
          boolean success = orthogonalProjectionOnConvexPolygon2D(pointInside, convexPolygon2D, hullSize, clockwiseOrdered, actualProjection);
          assertFalse(success);
          EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualProjection);
+      }
+   }
+
+   @Test
+   public void testLineOfSightStartEndIndex() throws Exception
+   {
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D observer = new Point2D();
+         { // Construction of the observer such that it is outside the polygon
+            Point2D centroid = new Point2D();
+            computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+            int vertexIndex = random.nextInt(hullSize);
+            int nextVertexIndex = next(vertexIndex, hullSize);
+            Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+            Point2DReadOnly nextVertex = convexPolygon2D.get(nextVertexIndex);
+
+            Point2D pointOnEdge = new Point2D();
+            pointOnEdge.interpolate(vertex, nextVertex, random.nextDouble());
+
+            observer.interpolate(centroid, pointOnEdge, generateRandomDouble(random, 1.0, 10.0));
+         }
+
+         assertFalse(isPoint2DInsideConvexPolygon2D(observer, convexPolygon2D, hullSize, clockwiseOrdered, 0.0));
+
+         int lineOfSightStartIndex = lineOfSightStartIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
+         int lineOfSightEndIndex = lineOfSightEndIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
+
+         assertNotEquals(-1, lineOfSightStartIndex);
+         assertNotEquals(-1, lineOfSightEndIndex);
+
+         /*
+          * Drawing lines from the observer going through the start/end vertices. Each line should
+          * intersect only once the polygon.
+          */
+         {
+            Point2DReadOnly startVertex = convexPolygon2D.get(lineOfSightStartIndex);
+            Vector2D startDirection = new Vector2D();
+            startDirection.sub(startVertex, observer);
+            assertEquals(1, intersectionBetweenLine2DAndConvexPolygon2D(observer, startDirection, convexPolygon2D, hullSize, clockwiseOrdered, new Point2D(),
+                                                                        new Point2D()));
+
+            Point2DReadOnly endVertex = convexPolygon2D.get(lineOfSightEndIndex);
+            Vector2D endDirection = new Vector2D();
+            endDirection.sub(endVertex, observer);
+            assertEquals(1, intersectionBetweenLine2DAndConvexPolygon2D(observer, endDirection, convexPolygon2D, hullSize, clockwiseOrdered, new Point2D(),
+                                                                        new Point2D()));
+         }
+
+         Set<Integer> lineOfSightIndices = new HashSet<>();
+         lineOfSightIndices.add(lineOfSightStartIndex);
+         lineOfSightIndices.add(lineOfSightEndIndex);
+
+         for (int j = next(lineOfSightStartIndex, hullSize); j != lineOfSightEndIndex; j = next(j, hullSize))
+         {
+            lineOfSightIndices.add(j);
+         }
+
+         /*
+          * Shooting ray from the observer to each vertex of the polygon. If the vertex is in the
+          * line of sight, that means, there should not anything between the observer and the
+          * vertex.
+          */
+         for (Integer currentIndex = 0; currentIndex < hullSize; currentIndex++)
+         {
+            Point2DReadOnly vertex = convexPolygon2D.get(currentIndex);
+
+            Vector2D fromObserverToVertex = new Vector2D();
+            fromObserverToVertex.sub(vertex, observer);
+            Vector2D deltaAwayFromVertex = new Vector2D();
+            deltaAwayFromVertex.setAndNormalize(fromObserverToVertex);
+            deltaAwayFromVertex.scale(-1.0e-3);
+
+            Point2D rightBeforeVertex = new Point2D();
+            rightBeforeVertex.add(fromObserverToVertex, observer);
+            rightBeforeVertex.add(deltaAwayFromVertex);
+
+            int expected = lineOfSightIndices.contains(currentIndex) ? 0 : 1;
+            int actual = intersectionBetweenLineSegment2DAndConvexPolygon2D(observer, rightBeforeVertex, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                            new Point2D(), new Point2D());
+            assertEquals(expected, actual);
+         }
       }
    }
 
