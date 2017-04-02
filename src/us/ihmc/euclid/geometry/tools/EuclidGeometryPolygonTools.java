@@ -25,6 +25,7 @@ public class EuclidGeometryPolygonTools
     * <ul>
     * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
     * line.
+    * <li>the method returns {@code false} if the polygon has less than 3 vertices.
     * </ul>
     * </p>
     * 
@@ -32,6 +33,8 @@ public class EuclidGeometryPolygonTools
     * @param vertices the list of vertices defining the polygon to test. Not modified.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or equal
+    *            than {@code numberOfVertices}.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
@@ -48,6 +51,7 @@ public class EuclidGeometryPolygonTools
     * <ul>
     * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
     * line.
+    * <li>the method returns {@code false} if the polygon has less than 3 vertices.
     * </ul>
     * </p>
     * 
@@ -58,6 +62,8 @@ public class EuclidGeometryPolygonTools
     * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or
     *            equal than {@code numberOfVertices}.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or equal
+    *            than {@code numberOfVertices}.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
@@ -1878,7 +1884,7 @@ public class EuclidGeometryPolygonTools
 
    private static void checkNumberOfVertices(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
-      if (numberOfVertices <= 0 || numberOfVertices > convexPolygon2D.size())
+      if (numberOfVertices < 0 || numberOfVertices > convexPolygon2D.size())
          throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + convexPolygon2D.size() + "].");
    }
 }

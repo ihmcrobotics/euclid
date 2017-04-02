@@ -1,12 +1,9 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint3D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -142,6 +139,24 @@ public abstract class EuclidGeometryRandomTools
 
    public static List<Point2D> generateRandomCircleBasedConvexPolygon2D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices)
    {
+      if (numberOfVertices == 0)
+         return Collections.emptyList();
+      if (numberOfVertices == 1)
+         return Collections.singletonList(generateRandomPoint2D(random, centerMinMax));
+      if (numberOfVertices == 2)
+      {
+         Vector2D halfEdgeLentgh = generateRandomVector2DWithFixedLength(random, 0.5 * maxEdgeLength * random.nextDouble());
+         Point2D center = generateRandomPoint2D(random, centerMinMax);
+         Point2D a = new Point2D();
+         Point2D b = new Point2D();
+         a.add(center, halfEdgeLentgh);
+         b.sub(center, halfEdgeLentgh);
+         List<Point2D> points = new ArrayList<>();
+         points.add(a);
+         points.add(b);
+         return points;
+      }
+
       // Generating random angles from vertex to vertex
       double[] dTheta = new double[numberOfVertices];
       double sum = 0.0;
