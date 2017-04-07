@@ -4670,6 +4670,40 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testIsPoint2DOnLine2D() throws Exception
+   {
+      Random random = new Random(2342334L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D pointOnLine = generateRandomPoint2D(random, 10.0);
+         Vector2D lineDirection = generateRandomVector2D(random, -10.0, 10.0);
+
+         Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineDirection);
+         orthogonal.normalize();
+
+         Point2D query = new Point2D(pointOnLine);
+         query.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
+
+         assertTrue(EuclidGeometryTools.isPoint2DOnLine2D(query, pointOnLine, lineDirection));
+
+         double shift = generateRandomDouble(random, 1.0) * EuclidGeometryTools.IS_POINT_ON_LINE_EPS;
+         query.scaleAdd(shift, orthogonal, query);
+
+         assertTrue(EuclidGeometryTools.isPoint2DOnLine2D(query, pointOnLine, lineDirection));
+
+         query = new Point2D(pointOnLine);
+         query.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
+         shift = generateRandomDouble(random, 1.0, 10.0) * EuclidGeometryTools.IS_POINT_ON_LINE_EPS;
+         if (random.nextBoolean())
+            shift = -shift;
+         query.scaleAdd(shift, orthogonal, query);
+
+         assertFalse(EuclidGeometryTools.isPoint2DOnLine2D(query, pointOnLine, lineDirection));
+      }
+   }
+
+   @Test
    public void testIsPoint2DOnSideOfLine2D() throws Exception
    {
       Random random = new Random(2342L);
