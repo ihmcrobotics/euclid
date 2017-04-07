@@ -1216,7 +1216,7 @@ public class EuclidGeometryPolygonTools
     * </ul>
     * </p>
     * 
-    * @param point the coordinates of the query.
+    * @param point the coordinates of the query. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
@@ -1307,7 +1307,7 @@ public class EuclidGeometryPolygonTools
     * </ul>
     * </p>
     * 
-    * @param observer the coordinates of the observer.
+    * @param observer the coordinates of the observer. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
@@ -1399,7 +1399,7 @@ public class EuclidGeometryPolygonTools
     * </ul>
     * </p>
     * 
-    * @param observer the coordinates of the observer.
+    * @param observer the coordinates of the observer. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
@@ -1719,7 +1719,7 @@ public class EuclidGeometryPolygonTools
     * </p>
     * 
     * @param edgeIndex the vertex index of the start of the edge.
-    * @param observer the coordinates of the observer.
+    * @param observer the coordinates of the observer. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
