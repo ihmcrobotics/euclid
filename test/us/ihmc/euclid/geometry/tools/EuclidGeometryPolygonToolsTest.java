@@ -1861,6 +1861,105 @@ public class EuclidGeometryPolygonToolsTest
             assertEquals(expected, actual);
          }
       }
+
+      { // Test with empty polygon
+         List<? extends Point2DReadOnly> convexPolygon2D = new ArrayList<>();
+         int hullSize = 0;
+         Point2D observer = generateRandomPoint2D(random, 10.0);
+         boolean clockwiseOrdered = true;
+         assertEquals(-1, lineOfSightStartIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered));
+         assertEquals(-1, lineOfSightEndIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered));
+      }
+
+      { // Test with single point polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(1.0, 1.0));
+         int hullSize = 1;
+         Point2D observer = generateRandomPoint2D(random, 10.0);
+         boolean clockwiseOrdered = true;
+         assertEquals(0, lineOfSightStartIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered));
+         assertEquals(0, lineOfSightEndIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with line polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(generateRandomPoint2D(random, 10.0));
+         convexPolygon2D.add(generateRandomPoint2D(random, 10.0));
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D observer = generateRandomPoint2D(random, 10.0);
+
+         int startIndex = lineOfSightStartIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
+         int endIndex = lineOfSightEndIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
+
+         Point2D startVertex = convexPolygon2D.get(startIndex);
+         Point2D endVertex = convexPolygon2D.get(endIndex);
+
+         if (clockwiseOrdered)
+         {
+            assertTrue(isPoint2DOnLeftSideOfLine2D(endVertex, observer, startVertex));
+            assertTrue(isPoint2DOnRightSideOfLine2D(startVertex, observer, endVertex));
+         }
+         else
+         {
+            assertTrue(isPoint2DOnRightSideOfLine2D(endVertex, observer, startVertex));
+            assertTrue(isPoint2DOnLeftSideOfLine2D(startVertex, observer, endVertex));
+         }
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D observer = generateRandomPoint2D(random, 10.0);
+
+         try
+         {
+            lineOfSightStartIndex(observer, convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            lineOfSightStartIndex(observer, convexPolygon2D, -1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            lineOfSightEndIndex(observer, convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            lineOfSightEndIndex(observer, convexPolygon2D, -1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+      }
    }
 
    /**
@@ -1887,79 +1986,79 @@ public class EuclidGeometryPolygonToolsTest
          rayOrigin.set(5.0, -3.0);
          rayDirection.set(0.0, 1.0);
          expected.set(2.0, 0.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, 1.0);
          rayDirection.set(0.5, 0.5);
          expected.set(4.0 / 5.0, 3.0 / 5.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, 1.0);
          rayDirection.set(-0.5, 0.1);
          expected.set(0.0, 1.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.0, 0.1);
          expected.set(-0.5, 0.5);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.3, 0.3);
          expected.set(-0.5, 0.5);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(-0.3, -0.3);
          expected.set(-0.5, 0.5);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.3, 0.31);
          expected.set(-0.5, 0.5);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.75, 0.75);
          rayDirection.set(0.3, 0.29);
          expected.set(0.0, 1.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.75, -0.75);
          rayDirection.set(1.0, 1.0);
          expected.set(1.5, -0.5);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.75, -0.75);
          rayDirection.set(-0.3, -0.3);
          expected.set(1.5, -0.5);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, -1.2);
          rayDirection.set(-2.0, 1.0);
          expected.set(1.0, -1.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(1.0, -1.2);
          rayDirection.set(2.0, -1.0);
          expected.set(1.0, -1.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(-0.1, -0.7);
          rayDirection.set(-2.0, 1.0);
          expected.set(0.0, -0.5);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
       }
 
@@ -1975,13 +2074,22 @@ public class EuclidGeometryPolygonToolsTest
 
          rayOrigin.set(5.0, -3.0);
          rayDirection.set(0.0, 1.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
 
          rayOrigin.set(0.0, 0.0);
          rayDirection.set(1.0, 0.0);
-         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         assertTrue(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+      }
+
+      { // Test with an empty polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         int hullSize = 0;
+         Point2D rayOrigin = new Point2D();
+         Vector2D rayDirection = new Vector2D();
+         Point2D actual = new Point2D();
+         assertFalse(closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual));
       }
 
       Random random = new Random(324234L);

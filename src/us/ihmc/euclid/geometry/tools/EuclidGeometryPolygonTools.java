@@ -1272,7 +1272,7 @@ public class EuclidGeometryPolygonTools
          return 0;
       if (numberOfVertices == 2)
       {
-         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), true);
+         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), !clockwiseOrdered);
          return answer == 1 ? 0 : 1;
       }
 
@@ -1364,7 +1364,7 @@ public class EuclidGeometryPolygonTools
          return 0;
       if (numberOfVertices == 2)
       {
-         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), false);
+         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), clockwiseOrdered);
          return answer == 1 ? 0 : 1;
       }
 
