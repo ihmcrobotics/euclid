@@ -1,12 +1,7 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
+import static org.junit.Assert.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1571,6 +1566,52 @@ public class EuclidGeometryToolsTest
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+      }
+   }
+
+   @Test
+   public void testDistanceFromPoint2DToRay2D() throws Exception
+   {
+      Random random = new Random(43254L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Position the query in front of the ray
+         Point2D rayOrigin = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Vector2D rayDirection = EuclidCoreRandomTools.generateRandomVector2D(random, -10.0, 10.0);
+
+         Vector2D orthogonalToRay = EuclidGeometryTools.perpendicularVector2D(rayDirection);
+         orthogonalToRay.normalize();
+
+         Point2D query = new Point2D();
+         // Position the query on the ray in front of the origin
+         query.scaleAdd(generateRandomDouble(random, 0.0, 10.0), rayDirection, rayOrigin);
+         // Shift it orthogonally
+         query.scaleAdd(generateRandomDouble(random, 10.0), orthogonalToRay, query);
+
+         // Distance should be the same as the distance to the line collinear to the ray
+         double expectedDistance = EuclidGeometryTools.distanceFromPoint2DToLine2D(query, rayOrigin, rayDirection);
+         double actualDistance = EuclidGeometryTools.distanceFromPoint2DToRay2D(query, rayOrigin, rayDirection);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Position the query behind the ray's origin
+         Point2D rayOrigin = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Vector2D rayDirection = EuclidCoreRandomTools.generateRandomVector2D(random, -10.0, 10.0);
+
+         Vector2D orthogonalToRay = EuclidGeometryTools.perpendicularVector2D(rayDirection);
+         orthogonalToRay.normalize();
+
+         Point2D query = new Point2D();
+         // Position the query on the ray behind the origin
+         query.scaleAdd(generateRandomDouble(random, -10.0, 0.0), rayDirection, rayOrigin);
+         // Shift it orthogonally
+         query.scaleAdd(generateRandomDouble(random, 10.0), orthogonalToRay, query);
+
+         // Distance should be the same as the distance to the line collinear to the ray
+         double expectedDistance = query.distance(rayOrigin);
+         double actualDistance = EuclidGeometryTools.distanceFromPoint2DToRay2D(query, rayOrigin, rayDirection);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 

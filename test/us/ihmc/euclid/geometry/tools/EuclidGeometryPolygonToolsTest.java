@@ -560,7 +560,11 @@ public class EuclidGeometryPolygonToolsTest
          }
       }
 
-      {
+      { // Test that the method fails with singleton
+         assertFalse(edgeNormal(0, Collections.singletonList(generateRandomPoint2D(random)), 1, true, new Vector2D()));
+      }
+
+      { // Test exceptions
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomCircleBasedConvexPolygon2D(random, 10.0, 10.0, 100);
          int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
          boolean clockwiseOrdered = random.nextBoolean();
@@ -612,6 +616,121 @@ public class EuclidGeometryPolygonToolsTest
    @Test
    public void testIsPoint2DInsideConvexPolygon2D() throws Exception
    {
+      { // Test examples with single point polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(1.0, 1.0));
+         int hullSize = 1;
+         Point2D query = new Point2D();
+
+         query.set(1.0, 1.0);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 1.0e-10));
+
+         query.set(0.8, 0.9);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+
+         query.set(0.8, 1.1);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.3));
+
+         query.set(1.0, 0.9);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+
+         query.set(2.0, 1.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 1.0));
+
+         query.set(1.0, 2.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 1.0));
+      }
+
+      { // Test examples with line polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(0.0, 0.0));
+         convexPolygon2D.add(new Point2D(1.0, 0.0));
+         int hullSize = 2;
+         Point2D query = new Point2D();
+         double epsilon = 1.0e-10;
+
+         query.set(0.1, 0.0);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+
+         query.set(0.1, 0.1);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(1.5, 0.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(1.0, 0.0);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+
+         query.set(1.0, epsilon * 0.1);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+
+         query.set(1.0, epsilon * 0.1);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(1.5, 0.0);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.5));
+      }
+
+      { // Test examples with triangle polygon
+
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(0.0, 0.0));
+         convexPolygon2D.add(new Point2D(3.0, 5.0));
+         convexPolygon2D.add(new Point2D(5.0, 0.0));
+         int hullSize = 3;
+         Point2D query = new Point2D();
+         double epsilon = 1.0e-10;
+
+         query.set(0.3, 0.0);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(0.0, 0.0);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(2.0, 2.0);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+
+         query.set(1.0, 0.3);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(-1.0, 4.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(6.0, 7.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(10.0, 0.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(0.1, 0.2);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+
+         query.set(3.5, 4.9);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, epsilon));
+
+         query.set(3.5, -1.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+      }
+
+      { // Test using actual data
+
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(-0.06, -0.08));
+         convexPolygon2D.add(new Point2D(0.14, -0.08));
+         convexPolygon2D.add(new Point2D(0.14, -0.19));
+         convexPolygon2D.add(new Point2D(-0.06, -0.19));
+         int hullSize = inPlaceGiftWrapConvexHull2D(convexPolygon2D);
+         Point2D query = new Point2D();
+
+         query.set(0.03, 0.0);
+         assertFalse(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.02));
+
+         query.set(0.03, -0.09);
+         assertTrue(isPoint2DInsideConvexPolygon2D(query, convexPolygon2D, hullSize, true, 0.0));
+      }
+
       Random random = new Random(324534L);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -769,6 +888,66 @@ public class EuclidGeometryPolygonToolsTest
    @Test
    public void testSignedDistanceFromPoint2DToConvexPolygon2D() throws Exception
    {
+      { // Test examples single point polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(0.0, 0.0));
+         int hullSize = 1;
+         Point2D query = new Point2D();
+
+         query.set(2.5, 1.0);
+         double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(Math.sqrt(2.5 * 2.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+      }
+
+      { // Test examples single line polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(0.0, 0.0));
+         convexPolygon2D.add(new Point2D(1.0, 0.0));
+         int hullSize = 2;
+         Point2D query = new Point2D();
+
+         query.set(2.5, 1.0);
+         double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(Math.sqrt(1.5 * 1.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+
+         query.set(0.5, 1.0);
+         distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(1.0, distance, SMALLEST_EPSILON);
+      }
+
+      { // Test examples single line polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(0.0, 0.0));
+         convexPolygon2D.add(new Point2D(10.0, 0.0));
+         convexPolygon2D.add(new Point2D(0.0, 10.0));
+         int hullSize = inPlaceGiftWrapConvexHull2D(convexPolygon2D);
+         Point2D query = new Point2D();
+
+         query.set(10.0, 10.0);
+         double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(5.0 * Math.sqrt(2.0), distance, SMALLEST_EPSILON);
+
+         query.set(1.2, 1.1);
+         distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(-1.1, distance, SMALLEST_EPSILON);
+
+         query.set(0.05, 9.8);
+         distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(-0.05, distance, SMALLEST_EPSILON);
+
+         query.set(9.8, 0.15);
+         distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(-0.5 * Math.sqrt(0.05 * 0.05 * 2.0), distance, SMALLEST_EPSILON);
+
+         query.set(5.0, -0.15);
+         distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(0.15, distance, SMALLEST_EPSILON);
+
+         query.set(15.0, -0.15);
+         distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
+         assertEquals(Math.sqrt(5.0 * 5.0 + 0.15 * 0.15), distance, SMALLEST_EPSILON);
+      }
+
       {// Trivial case: Square
          int n = 4;
          List<Point2DReadOnly> clockwiseSquareVertices = new ArrayList<>();
@@ -937,7 +1116,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D vertex0 = generateRandomPoint2D(random, 10.0);
          Point2D vertex1 = generateRandomPoint2D(random, 10.0);
 
-         List<Point2D> points = new  ArrayList<>();
+         List<Point2D> points = new ArrayList<>();
          points.add(vertex0);
          points.add(vertex1);
          expectedDistance = distanceFromPoint2DToLineSegment2D(query, vertex0, vertex1);
@@ -1680,6 +1859,617 @@ public class EuclidGeometryPolygonToolsTest
             int actual = intersectionBetweenLineSegment2DAndConvexPolygon2D(observer, rightBeforeVertex, convexPolygon2D, hullSize, clockwiseOrdered,
                                                                             new Point2D(), new Point2D());
             assertEquals(expected, actual);
+         }
+      }
+   }
+
+   /**
+    * Could not find a simpler to test this method with a thoroughly different piece of code. So in
+    * addition to the usual random test, there's also a bunch of examples.
+    * 
+    * @throws Exception
+    */
+   @Test
+   public void testClosestPointToNonInterectingRay2D() throws Exception
+   {
+      { // Test examples with a quadrilateral
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(-1.0, 0.0));
+         convexPolygon2D.add(new Point2D(0.0, 1.0));
+         convexPolygon2D.add(new Point2D(2.0, 0.0));
+         convexPolygon2D.add(new Point2D(1.0, -1.0));
+         int hullSize = 4;
+         Point2D rayOrigin = new Point2D();
+         Vector2D rayDirection = new Vector2D();
+         Point2D expected = new Point2D();
+         Point2D actual = new Point2D();
+
+         rayOrigin.set(5.0, -3.0);
+         rayDirection.set(0.0, 1.0);
+         expected.set(2.0, 0.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(1.0, 1.0);
+         rayDirection.set(0.5, 0.5);
+         expected.set(4.0 / 5.0, 3.0 / 5.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(1.0, 1.0);
+         rayDirection.set(-0.5, 0.1);
+         expected.set(0.0, 1.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(-0.75, 0.75);
+         rayDirection.set(0.0, 0.1);
+         expected.set(-0.5, 0.5);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(-0.75, 0.75);
+         rayDirection.set(0.3, 0.3);
+         expected.set(-0.5, 0.5);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(-0.75, 0.75);
+         rayDirection.set(-0.3, -0.3);
+         expected.set(-0.5, 0.5);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(-0.75, 0.75);
+         rayDirection.set(0.3, 0.31);
+         expected.set(-0.5, 0.5);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(-0.75, 0.75);
+         rayDirection.set(0.3, 0.29);
+         expected.set(0.0, 1.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(1.75, -0.75);
+         rayDirection.set(1.0, 1.0);
+         expected.set(1.5, -0.5);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(1.75, -0.75);
+         rayDirection.set(-0.3, -0.3);
+         expected.set(1.5, -0.5);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(1.0, -1.2);
+         rayDirection.set(-2.0, 1.0);
+         expected.set(1.0, -1.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(1.0, -1.2);
+         rayDirection.set(2.0, -1.0);
+         expected.set(1.0, -1.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(-0.1, -0.7);
+         rayDirection.set(-2.0, 1.0);
+         expected.set(0.0, -0.5);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+      }
+
+      { // Test examples with a single point polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         Point2D vertex = new Point2D(1.0, -1.0);
+         convexPolygon2D.add(vertex);
+         int hullSize = 1;
+         Point2D rayOrigin = new Point2D();
+         Vector2D rayDirection = new Vector2D();
+         Point2D expected = vertex;
+         Point2D actual = new Point2D();
+
+         rayOrigin.set(5.0, -3.0);
+         rayDirection.set(0.0, 1.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+
+         rayOrigin.set(0.0, 0.0);
+         rayDirection.set(1.0, 0.0);
+         closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, true, actual);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALLEST_EPSILON);
+      }
+
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup 1: the ray origin is positioned outside a given edge, and its direction is pointing toward the outside of the polygon.
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D rayOrigin = new Point2D();
+         Vector2D rayDirection = new Vector2D();
+
+         int edgeIndex = random.nextInt(hullSize);
+         Point2D pointOnEdge = new Point2D();
+         Vector2D edgeNormal = new Vector2D();
+         Vector2D edgeDirection = new Vector2D();
+         pointOnEdge.interpolate(convexPolygon2D.get(edgeIndex), convexPolygon2D.get(next(edgeIndex, hullSize)), random.nextDouble());
+         edgeNormal(edgeIndex, convexPolygon2D, hullSize, clockwiseOrdered, edgeNormal);
+         edgeDirection.sub(convexPolygon2D.get(edgeIndex), convexPolygon2D.get(next(edgeIndex, hullSize)));
+         edgeDirection.normalize();
+         if (random.nextBoolean())
+            edgeDirection.negate();
+
+         rayOrigin.scaleAdd(generateRandomDouble(random, 0.0, 10.0), edgeNormal, pointOnEdge);
+         rayDirection.interpolate(edgeDirection, edgeNormal, random.nextDouble());
+
+         // Finding the closest vertex to the ray
+         int closestVertexIndexToRay = closestVertexIndexToRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered);
+         Point2DReadOnly closestVertexToRay = convexPolygon2D.get(closestVertexIndexToRay);
+         // Getting the orthogonal projection of the ray's origin
+         Point2D rayOriginProjected = new Point2D();
+         orthogonalProjectionOnConvexPolygon2D(rayOrigin, convexPolygon2D, hullSize, clockwiseOrdered, rayOriginProjected);
+         // Picking the closest of the two
+         double distanceVertexToRay = distanceFromPoint2DToRay2D(closestVertexToRay, rayOrigin, rayDirection);
+         double distancePojectionToRay = distanceFromPoint2DToRay2D(rayOriginProjected, rayOrigin, rayDirection);
+         Point2D expectedClosestPoint = new Point2D();
+         if (distanceVertexToRay < distancePojectionToRay)
+            expectedClosestPoint.set(closestVertexToRay);
+         else
+            expectedClosestPoint.set(rayOriginProjected);
+
+         Point2D actualClosestPoint = new Point2D();
+         boolean success = closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered, actualClosestPoint);
+         assertTrue(success);
+         if (!expectedClosestPoint.epsilonEquals(actualClosestPoint, SMALLEST_EPSILON))
+         {
+            int numberOfIntersections = intersectionBetweenRay2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                                   new Point2D(), new Point2D());
+            if (numberOfIntersections > 0)
+               System.err.println("Intersecting ray, test is bad");
+
+            double distanceExpected = distanceFromPoint2DToRay2D(expectedClosestPoint, rayOrigin, rayDirection);
+            double distanceActual = distanceFromPoint2DToRay2D(actualClosestPoint, rayOrigin, rayDirection);
+            if (distanceExpected > distanceActual)
+               System.err.println("Test is bad");
+         }
+         EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, SMALLEST_EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // (somewhat tricky) Setup: build a line that does NOT intersect with the polygon and put the ray origin somewhere on this line
+         /* 
+          * @formatter:off
+          * - The goal is to build the query line such that it does not intersect with the polygon.
+          * - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 = convexPolygon2D.get(i+1).
+          * - Draw 2 lines going from the centroid through each vertex, they are called extrapolation lines.
+          * - For the line going through v0, find the intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
+          *    The first point defining the query line should be between v0 and v0Max such that the line won't intersect with the edge (vn1, vn2).
+          * - For the line going through vn1, find the intersection vn1Max with the line going through v0 and vp1 = convexPolygon2D.get(i-1).
+          *    The second point defining the query line should be between vn1 and vn1Max such that the line won't intersect with the edge (v0, vp1).
+          * @formatter:on
+          */
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D rayOrigin = new Point2D();
+         Vector2D rayDirection = new Vector2D();
+
+         { // Creation of the non-interesting line
+            int v0Index = random.nextInt(hullSize);
+            int vn1Index = next(v0Index, hullSize);
+            int vn2Index = next(vn1Index, hullSize);
+            int vp1Index = previous(v0Index, hullSize);
+
+            Point2DReadOnly v0 = convexPolygon2D.get(v0Index);
+            Point2DReadOnly vn1 = convexPolygon2D.get(vn1Index);
+            Point2DReadOnly vn2 = convexPolygon2D.get(vn2Index);
+            Point2DReadOnly vp1 = convexPolygon2D.get(vp1Index);
+
+            Point2D centroid = new Point2D();
+            computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+
+            Point2D v0Max = intersectionBetweenTwoLine2Ds(centroid, v0, vn1, vn2);
+            Vector2D extrapolationDirection = new Vector2D();
+            extrapolationDirection.sub(v0, centroid);
+
+            if (!isPoint2DInFrontOfRay2D(v0Max, centroid, extrapolationDirection))
+               v0Max.scaleAdd(10.0, extrapolationDirection, v0);
+
+            Point2D vn1Max = intersectionBetweenTwoLine2Ds(centroid, vn1, v0, vp1);
+            extrapolationDirection.sub(vn1, centroid);
+
+            if (!isPoint2DInFrontOfRay2D(vn1Max, centroid, extrapolationDirection))
+               vn1Max.scaleAdd(10.0, extrapolationDirection, vn1);
+
+            Point2D firstExtrapolatedPoint = new Point2D();
+            Point2D secondExtrapolatedPoint = new Point2D();
+
+            firstExtrapolatedPoint.interpolate(v0, v0Max, generateRandomDouble(random, 0.0, 1.0));
+            secondExtrapolatedPoint.interpolate(vn1, vn1Max, generateRandomDouble(random, 0.0, 1.0));
+
+            Point2D pointOnLine = new Point2D(firstExtrapolatedPoint);
+            Vector2D lineDirection = new Vector2D();
+            lineDirection.sub(secondExtrapolatedPoint, firstExtrapolatedPoint);
+            lineDirection.normalize();
+
+            rayOrigin.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
+            rayDirection.scaleAdd(generateRandomDouble(random, 10.0), lineDirection);
+         }
+
+         // Finding the closest vertex to the ray
+         int closestVertexIndexToRay = closestVertexIndexToRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered);
+         Point2DReadOnly closestVertexToRay = convexPolygon2D.get(closestVertexIndexToRay);
+         // Getting the orthogonal projection of the ray's origin
+         Point2D rayOriginProjected = new Point2D();
+         orthogonalProjectionOnConvexPolygon2D(rayOrigin, convexPolygon2D, hullSize, clockwiseOrdered, rayOriginProjected);
+         // Picking the closest of the two
+         double distanceVertexToRay = distanceFromPoint2DToRay2D(closestVertexToRay, rayOrigin, rayDirection);
+         double distancePojectionToRay = distanceFromPoint2DToRay2D(rayOriginProjected, rayOrigin, rayDirection);
+         Point2D expectedClosestPoint = new Point2D();
+         if (distanceVertexToRay < distancePojectionToRay)
+            expectedClosestPoint.set(closestVertexToRay);
+         else
+            expectedClosestPoint.set(rayOriginProjected);
+
+         Point2D actualClosestPoint = new Point2D();
+         boolean success = closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered, actualClosestPoint);
+         assertTrue(success);
+         if (!expectedClosestPoint.epsilonEquals(actualClosestPoint, SMALLEST_EPSILON))
+         {
+            int numberOfIntersections = intersectionBetweenRay2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                                   new Point2D(), new Point2D());
+            if (numberOfIntersections > 0)
+               System.err.println("Intersecting ray, test is bad");
+
+            double distanceExpected = distanceFromPoint2DToRay2D(expectedClosestPoint, rayOrigin, rayDirection);
+            double distanceActual = distanceFromPoint2DToRay2D(actualClosestPoint, rayOrigin, rayDirection);
+            if (distanceExpected > distanceActual)
+               System.err.println("Test is bad");
+         }
+         EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, SMALLEST_EPSILON);
+      }
+   }
+
+   @Test
+   public void testClosestVertexIndexToLine2D() throws Exception
+   {
+      { // Test examples with triangle
+
+         Point2D vertex1 = new Point2D(0.0, 0.0);
+         Point2D vertex2 = new Point2D(10.0, 0.0);
+         Point2D vertex3 = new Point2D(0.0, 10.0);
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(vertex1);
+         convexPolygon2D.add(vertex2);
+         convexPolygon2D.add(vertex3);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         Point2D firstPointOnLine = new Point2D();
+         Point2D secondPointOnLine = new Point2D();
+         Point2D closestVertex;
+
+         firstPointOnLine.set(-1.0, 1.0);
+         secondPointOnLine.set(1.0, -1.0);
+         closestVertex = convexPolygon2D.get(closestVertexIndexToLine2D(firstPointOnLine, secondPointOnLine, convexPolygon2D, hullSize));
+         assertTrue(vertex1 == closestVertex);
+
+         firstPointOnLine.set(9.0, 0.0);
+         secondPointOnLine.set(0.0, 1.0);
+         closestVertex = convexPolygon2D.get(closestVertexIndexToLine2D(firstPointOnLine, secondPointOnLine, convexPolygon2D, hullSize));
+         assertTrue(vertex2 == closestVertex);
+
+         firstPointOnLine.set(11.0, 0.0);
+         secondPointOnLine.set(0.0, 12.0);
+         closestVertex = convexPolygon2D.get(closestVertexIndexToLine2D(firstPointOnLine, secondPointOnLine, convexPolygon2D, hullSize));
+         assertTrue(vertex2 == closestVertex);
+
+         firstPointOnLine.set(12.0, 0.0);
+         secondPointOnLine.set(0.0, 11.0);
+         closestVertex = convexPolygon2D.get(closestVertexIndexToLine2D(firstPointOnLine, secondPointOnLine, convexPolygon2D, hullSize));
+         assertTrue(vertex3 == closestVertex);
+
+         firstPointOnLine.set(-1.0, 13.0);
+         secondPointOnLine.set(1.0, 14.0);
+         closestVertex = convexPolygon2D.get(closestVertexIndexToLine2D(firstPointOnLine, secondPointOnLine, convexPolygon2D, hullSize));
+         assertTrue(vertex3 == closestVertex);
+      }
+
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D pointOnLine = generateRandomPoint2D(random, 10.0);
+         Vector2D lineDirection = generateRandomVector2D(random, -10.0, 10.0);
+
+         // Nothing smart here, just going through the vertices checking which one is the closest.
+         Point2DReadOnly closestVertex = null;
+         double minDistance = Double.POSITIVE_INFINITY;
+         for (Point2DReadOnly vertex : convexPolygon2D.subList(0, hullSize))
+         {
+            double distance = distanceFromPoint2DToLine2D(vertex, pointOnLine, lineDirection);
+            if (distance < minDistance)
+            {
+               minDistance = distance;
+               closestVertex = vertex;
+            }
+         }
+
+         int actualIndex = closestVertexIndexToLine2D(pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         assertTrue(closestVertex == convexPolygon2D.get(actualIndex));
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D pointOnLine = generateRandomPoint2D(random, 10.0);
+         Vector2D lineDirection = generateRandomVector2D(random, -10.0, 10.0);
+
+         try
+         {
+            closestVertexIndexToLine2D(pointOnLine, lineDirection, convexPolygon2D, convexPolygon2D.size() + 1);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            closestVertexIndexToLine2D(pointOnLine, lineDirection, convexPolygon2D, -1);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+      }
+   }
+
+   @Test
+   public void testClosestVertexIndexToRay2D() throws Exception
+   {
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D rayOrigin = generateRandomPoint2D(random, 10.0);
+         Vector2D rayDirection = generateRandomVector2D(random, -10.0, 10.0);
+
+         // Nothing smart here, just going through the vertices checking which one is the closest.
+         Point2DReadOnly closestVertex = null;
+         double minDistance = Double.POSITIVE_INFINITY;
+         for (Point2DReadOnly vertex : convexPolygon2D.subList(0, hullSize))
+         {
+            double distance = distanceFromPoint2DToRay2D(vertex, rayOrigin, rayDirection);
+            if (distance < minDistance)
+            {
+               minDistance = distance;
+               closestVertex = vertex;
+            }
+         }
+
+         int actualIndex = closestVertexIndexToRay2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered);
+         assertTrue(closestVertex == convexPolygon2D.get(actualIndex));
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D rayOrigin = generateRandomPoint2D(random, 10.0);
+         Vector2D rayDirection = generateRandomVector2D(random, -10.0, 10.0);
+
+         try
+         {
+            closestVertexIndexToRay2D(rayOrigin, rayDirection, convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            closestVertexIndexToRay2D(rayOrigin, rayDirection, convexPolygon2D, -1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+      }
+   }
+
+   @Test
+   public void testClosestVertexIndexToPoint2D() throws Exception
+   {
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D query = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+
+         Point2DReadOnly closestVertex = convexPolygon2D.get(0);
+         for (Point2DReadOnly vertex : convexPolygon2D.subList(0, hullSize))
+         {
+            if (query.distance(vertex) < query.distance(closestVertex))
+               closestVertex = vertex;
+         }
+
+         int closestVertexIndex = closestVertexIndexToPoint2D(query, convexPolygon2D, hullSize);
+         assertTrue(closestVertex == convexPolygon2D.get(closestVertexIndex));
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         try
+         {
+            closestVertexIndexToPoint2D(new Point2D(), convexPolygon2D, convexPolygon2D.size() + 1);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            closestVertexIndexToPoint2D(new Point2D(), convexPolygon2D, -1);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+      }
+   }
+
+   @Test
+   public void testClosestEdgeIndexToPoint2D() throws Exception
+   {
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with the query being outside the polygon
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         int vertexIndex = random.nextInt(hullSize);
+         int nextVertexIndex = next(vertexIndex, hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+         Point2DReadOnly nextVertex = convexPolygon2D.get(nextVertexIndex);
+
+         Point2D pointOnEdge = new Point2D();
+         pointOnEdge.interpolate(vertex, nextVertex, random.nextDouble());
+
+         double alphaOutside = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 3.0);
+         Point2D outsidePoint = new Point2D();
+         outsidePoint.interpolate(centroid, pointOnEdge, alphaOutside);
+
+         // Since it is outside, the closest edge has the closest vertex
+         int closestVertexIndex = closestVertexIndexToPoint2D(outsidePoint, convexPolygon2D, hullSize);
+         // The closest edge has to be one the edges adjacent to the vertex
+         int closestEdgeIndex = closestEdgeIndexToPoint2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered);
+
+         boolean isEdgeAdjacentToClosestVertex = closestEdgeIndex == closestVertexIndex || closestEdgeIndex == previous(closestVertexIndex, hullSize);
+         assertTrue(isEdgeAdjacentToClosestVertex);
+         // The closest edge is also picked such that the query can see the edge.
+         assertTrue(canObserverSeeEdge(closestEdgeIndex, outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with the query being inside the polygon
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         int vertexIndex = random.nextInt(hullSize);
+         int nextVertexIndex = next(vertexIndex, hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+         Point2DReadOnly nextVertex = convexPolygon2D.get(nextVertexIndex);
+
+         Point2D pointOnEdge = new Point2D();
+         pointOnEdge.interpolate(vertex, nextVertex, random.nextDouble());
+
+         double alphaInside = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         Point2D insidePoint = new Point2D();
+         insidePoint.interpolate(centroid, pointOnEdge, alphaInside);
+
+         // Nothing smart here, just going through the edges checking which one is the closest.
+         int expectedIndex = -1;
+         double minDistance = Double.POSITIVE_INFINITY;
+
+         for (int edgeIndex = 0; edgeIndex < hullSize; edgeIndex++)
+         {
+            double distance = distanceFromPoint2DToLineSegment2D(insidePoint, convexPolygon2D.get(edgeIndex), convexPolygon2D.get(next(edgeIndex, hullSize)));
+            if (distance < minDistance)
+            {
+               minDistance = distance;
+               expectedIndex = edgeIndex;
+            }
+         }
+
+         int actualIndex = closestEdgeIndexToPoint2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered);
+         assertEquals(expectedIndex, actualIndex);
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         try
+         {
+            closestEdgeIndexToPoint2D(new Point2D(), convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            closestEdgeIndexToPoint2D(new Point2D(), convexPolygon2D, -1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
          }
       }
    }

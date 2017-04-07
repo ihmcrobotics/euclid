@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,8 +32,8 @@ public class EuclidGeometryPolygonTools
     * @param vertices the list of vertices defining the polygon to test. Not modified.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
-    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or equal
-    *            than {@code numberOfVertices}.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or
+    *            equal than {@code numberOfVertices}.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
@@ -62,15 +61,14 @@ public class EuclidGeometryPolygonTools
     * @return {@code true} if the polygon is convex at the given vertex, {@code false} otherwise.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or
     *            equal than {@code numberOfVertices}.
-    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or equal
-    *            than {@code numberOfVertices}.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is either negative or greater or
+    *            equal than {@code numberOfVertices}.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
    public static boolean isPolygon2DConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
    {
       checkNumberOfVertices(vertices, numberOfVertices);
-      checkVertexIndex(vertexIndex, numberOfVertices);
       Point2DReadOnly vertex = vertices.get(vertexIndex);
       Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
       Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
@@ -384,7 +382,6 @@ public class EuclidGeometryPolygonTools
 
       if (numberOfVertices <= 1)
          return false;
-      checkEdgeIndex(edgeIndex, numberOfVertices);
 
       Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
       Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
@@ -560,10 +557,10 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
-   private static int intersectionBetweenLine2DAndConvexPolygon2D(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
-                                                                  List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
-                                                                  boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
-                                                                  Point2DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine2DAndConvexPolygon2D(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
+                                                                 List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                 boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
+                                                                 Point2DBasics secondIntersectionToPack)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
 
@@ -844,12 +841,19 @@ public class EuclidGeometryPolygonTools
     * Computes the coordinates of the closest point to the ray that belongs to the given convex
     * polygon.
     * <p>
-    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * WARNINGS:
+    * <ul>
+    * <li>This method assumes that the given vertices already form a convex polygon.
+    * <li>This methods assumes that the ray does not intersect with the polygon. Such scenario
+    * should be handled with
+    * {@link #intersectionBetweenRay2DAndConvexPolygon2D(Point2DReadOnly, Vector2DReadOnly, List, int, boolean, Point2DBasics, Point2DBasics)}.
+    * </ul>
     * </p>
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method fails and returns {@code false}.
+    * <li>If the ray is parallel to the closest edge, the closest point to the ray origin is chosen.
     * </ul>
     * </p>
     * 
@@ -865,24 +869,127 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
-   public static boolean closestPointToRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, List<? extends Point2DReadOnly> convexPolygon2D,
-                                             int numberOfVertices, boolean clockwiseOrdered, Point2DBasics closestPointToPack)
+   public static boolean closestPointToNonInterectingRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection,
+                                                           List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
+                                                           Point2DBasics closestPointToPack)
    {
       int closestVertexIndexToLine = closestVertexIndexToLine2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices);
       if (closestVertexIndexToLine == -1)
          return false;
 
       Point2DReadOnly closestVertexToLine = convexPolygon2D.get(closestVertexIndexToLine);
-      if (isPoint2DInFrontOfRay2D(closestVertexToLine, rayOrigin, rayDirection))
-      {
-         closestPointToPack.set(closestVertexToLine);
+      boolean success = orthogonalProjectionOnConvexPolygon2D(rayOrigin, convexPolygon2D, numberOfVertices, clockwiseOrdered, closestPointToPack);
+      if (!success)
+         return false;
+
+      Point2DReadOnly nextEdgeStart = closestVertexToLine;
+      Point2DReadOnly nextEdgeEnd = convexPolygon2D.get(next(closestVertexIndexToLine, numberOfVertices));
+
+      double nextEdgeDirectionX = nextEdgeEnd.getX() - nextEdgeStart.getX();
+      double nextEdgeDirectionY = nextEdgeEnd.getY() - nextEdgeStart.getY();
+      boolean areRayAndNextEdgeParallel = EuclidGeometryTools.areVector2DsParallel(nextEdgeDirectionX, nextEdgeDirectionY, rayDirection.getX(),
+                                                                                   rayDirection.getY(), ONE_TEN_MILLIONTH);
+
+      if (areRayAndNextEdgeParallel)
          return true;
-      }
-      else
+
+      Point2DReadOnly previousEdgeStart = convexPolygon2D.get(previous(closestVertexIndexToLine, numberOfVertices));
+      Point2DReadOnly previousEdgeEnd = closestVertexToLine;
+
+      double previousEdgeDirectionX = previousEdgeEnd.getX() - previousEdgeStart.getX();
+      double previousEdgeDirectionY = previousEdgeEnd.getY() - previousEdgeStart.getY();
+      boolean areRayAndPreviousEdgeParallel = EuclidGeometryTools.areVector2DsParallel(previousEdgeDirectionX, previousEdgeDirectionY, rayDirection.getX(),
+                                                                                       rayDirection.getY(), ONE_TEN_MILLIONTH);
+
+      if (areRayAndPreviousEdgeParallel)
+         return true;
+
+      double distanceToClosestVertex = distanceFromPoint2DToRay2D(closestVertexToLine, rayOrigin, rayDirection);
+      double distanceToProjection = distanceFromPoint2DToRay2D(closestPointToPack, rayOrigin, rayDirection);
+
+      if (distanceToClosestVertex < distanceToProjection)
+         closestPointToPack.set(closestVertexToLine);
+
+      return true;
+   }
+
+   /**
+    * Finds the index of the closest vertex to the given line.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param pointOnLineX the x-coordinate of a point located on the line. Not modified.
+    * @param pointOnLineY the y-coordinate of a point located on the line. Not modified.
+    * @param lineDirectionX the x-coordinate of the direction of the line. Not modified.
+    * @param lineDirectionY the y-coordinate of the direction of the line. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the closest vertex to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestVertexIndexToLine2D(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
+                                                List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      int index = -1;
+      double minDistance = Double.POSITIVE_INFINITY;
+
+      for (int i = 0; i < numberOfVertices; i++)
       {
-         return orthogonalProjectionOnConvexPolygon2D(rayOrigin.getX(), rayOrigin.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered,
-                                                      closestPointToPack);
+         Point2DReadOnly vertex = convexPolygon2D.get(i);
+
+         double distance = EuclidGeometryTools.distanceFromPoint2DToLine2D(vertex.getX(), vertex.getY(), pointOnLineX, pointOnLineY, lineDirectionX,
+                                                                           lineDirectionY);
+
+         if (distance < minDistance)
+         {
+            index = i;
+            minDistance = distance;
+         }
       }
+
+      return index;
+   }
+
+   /**
+    * Finds the index of the closest vertex to the given line.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @return the index of the closest vertex to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestVertexIndexToLine2D(Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine,
+                                                List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   {
+      double pointOnLineX = firstPointOnLine.getX();
+      double pointOnLineY = firstPointOnLine.getY();
+      double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
+      double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
+      return closestVertexIndexToLine2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D, numberOfVertices);
    }
 
    /**
@@ -909,25 +1016,7 @@ public class EuclidGeometryPolygonTools
    public static int closestVertexIndexToLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, List<? extends Point2DReadOnly> convexPolygon2D,
                                                 int numberOfVertices)
    {
-      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
-
-      int index = -1;
-      double minDistance = Double.POSITIVE_INFINITY;
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2DReadOnly vertex = convexPolygon2D.get(i);
-
-         double distance = EuclidGeometryTools.distanceFromPoint2DToLine2D(vertex, pointOnLine, lineDirection);
-
-         if (distance < minDistance)
-         {
-            index = i;
-            minDistance = distance;
-         }
-      }
-
-      return index;
+      return closestVertexIndexToLine2D(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), convexPolygon2D, numberOfVertices);
    }
 
    /**
@@ -955,19 +1044,25 @@ public class EuclidGeometryPolygonTools
    public static int closestVertexIndexToRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, List<? extends Point2DReadOnly> convexPolygon2D,
                                                int numberOfVertices, boolean clockwiseOrdered)
    {
-      int closestVertexIndexToLine = closestVertexIndexToLine2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices);
-      if (closestVertexIndexToLine == -1)
-         return -1;
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
 
-      Point2DReadOnly closestVertexToLine = convexPolygon2D.get(closestVertexIndexToLine);
-      if (isPoint2DInFrontOfRay2D(closestVertexToLine, rayOrigin, rayDirection))
+      int index = -1;
+      double minDistance = Double.POSITIVE_INFINITY;
+
+      for (int i = 0; i < numberOfVertices; i++)
       {
-         return closestVertexIndexToLine;
+         Point2DReadOnly vertex = convexPolygon2D.get(i);
+
+         double distance = EuclidGeometryTools.distanceFromPoint2DToRay2D(vertex, rayOrigin, rayDirection);
+
+         if (distance < minDistance)
+         {
+            index = i;
+            minDistance = distance;
+         }
       }
-      else
-      {
-         return closestEdgeIndexToPoint2D(rayOrigin.getX(), rayOrigin.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
-      }
+
+      return index;
    }
 
    /**
@@ -1025,9 +1120,7 @@ public class EuclidGeometryPolygonTools
 
       for (int i = 0; i < numberOfVertices; i++)
       {
-         Point2DReadOnly vertex = convexPolygon2D.get(i);
-
-         double distanceSquared = normSquared(pointX - vertex.getX(), pointY - vertex.getY());
+         double distanceSquared = distanceSquaredBetweenPoint2Ds(pointX, pointY, convexPolygon2D.get(i));
 
          if (distanceSquared < minDistanceSquared)
          {
@@ -1109,6 +1202,33 @@ public class EuclidGeometryPolygonTools
       }
 
       return isQueryOutsidePolygon ? outsideIndex : insideIndex;
+   }
+
+   /**
+    * Finds the index of the closest edge to the query.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has one or no vertices, this method fails and returns {@code -1}.
+    * </ul>
+    * </p>
+    * 
+    * @param point the coordinates of the query.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the index of the closest edge to the query.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int closestEdgeIndexToPoint2D(Point2DReadOnly point, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                               boolean clockwiseOrdered)
+   {
+      return closestEdgeIndexToPoint2D(point.getX(), point.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
    }
 
    /**
@@ -1868,12 +1988,6 @@ public class EuclidGeometryPolygonTools
    public static int previous(int index, int listSize)
    {
       return wrap(index - 1, listSize);
-   }
-
-   private static void checkVertexIndex(int vertexIndex, int numberOfVertices)
-   {
-      if (vertexIndex < 0 || vertexIndex >= numberOfVertices)
-         throw new IndexOutOfBoundsException("Expected vertexIndex to be in [0; numberOfVertices[, but was: " + vertexIndex);
    }
 
    private static void checkEdgeIndex(int edgeIndex, int numberOfVertices)

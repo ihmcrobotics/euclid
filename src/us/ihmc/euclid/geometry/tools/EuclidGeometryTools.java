@@ -1058,8 +1058,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -1109,8 +1109,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -1152,8 +1152,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -1230,6 +1230,95 @@ public class EuclidGeometryTools
    public static double distanceFromPoint2DToLineSegment2D(Point2DReadOnly point, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
    {
       return distanceFromPoint2DToLineSegment2D(point.getX(), point.getY(), lineSegmentStart, lineSegmentEnd);
+   }
+
+   /**
+    * Returns the minimum distance between a 2D point and a 2D ray defined by its origin and a
+    * direction.
+    * <p>
+    * When the query is located in front of the ray, this is equivalent to calculating the distance
+    * from the query to the line that is collinear with the ray. When the query is located behind
+    * the ray's origin, this is equivalent to calculating the distance between the query and the
+    * origin of the ray.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code rayDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code rayOrigin} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of the query.
+    * @param pointY y-coordinate of the query.
+    * @param rayOriginX x-coordinate of the ray origin.
+    * @param rayOriginY y-coordinate of the ray origin.
+    * @param rayDirectionX x-component of the ray direction.
+    * @param rayDirectionY y-component of the ray direction.
+    * @return the minimum distance between the 2D point and the 2D ray.
+    */
+   public static double distanceFromPoint2DToRay2D(double pointX, double pointY, double rayOriginX, double rayOriginY, double rayDirectionX,
+                                                   double rayDirectionY)
+   {
+      if (isPoint2DInFrontOfRay2D(pointX, pointY, rayOriginX, rayOriginY, rayDirectionX, rayDirectionY))
+         return Math.abs(signedDistanceFromPoint2DToLine2D(pointX, pointY, rayOriginX, rayOriginY, rayDirectionX, rayDirectionY));
+      else
+         return distanceBetweenPoint2Ds(pointX, pointY, rayOriginX, rayOriginY);
+   }
+
+   /**
+    * Returns the minimum distance between a 2D point and a 2D ray defined by its origin and a
+    * direction.
+    * <p>
+    * When the query is located in front of the ray, this is equivalent to calculating the distance
+    * from the query to the line that is collinear with the ray. When the query is located behind
+    * the ray's origin, this is equivalent to calculating the distance between the query and the
+    * origin of the ray.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code rayDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code rayOrigin} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of the query.
+    * @param pointY y-coordinate of the query.
+    * @param rayOrigin a point located on the line. Not modified.
+    * @param rayDirection the direction of the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line.
+    */
+   public static double distanceFromPoint2DToRay2D(double pointX, double pointY, Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
+   {
+      return distanceFromPoint2DToRay2D(pointX, pointY, rayOrigin.getX(), rayOrigin.getY(), rayDirection.getX(), rayDirection.getY());
+   }
+
+   /**
+    * Returns the minimum distance between a 2D point and a 2D ray defined by its origin and a
+    * direction.
+    * <p>
+    * When the query is located in front of the ray, this is equivalent to calculating the distance
+    * from the query to the line that is collinear with the ray. When the query is located behind
+    * the ray's origin, this is equivalent to calculating the distance between the query and the
+    * origin of the ray.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code rayDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code rayOrigin} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query.
+    * @param rayOrigin a point located on the line. Not modified.
+    * @param rayDirection the direction of the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line.
+    */
+   public static double distanceFromPoint2DToRay2D(Point2DReadOnly point, Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
+   {
+      return distanceFromPoint2DToRay2D(point.getX(), point.getY(), rayOrigin, rayDirection);
    }
 
    /**
@@ -4801,8 +4890,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -4827,8 +4916,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
