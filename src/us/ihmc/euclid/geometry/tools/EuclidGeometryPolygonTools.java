@@ -1522,11 +1522,16 @@ public class EuclidGeometryPolygonTools
          Point2DReadOnly edgeStart = convexPolygon2D.get(0);
          Point2DReadOnly edgeEnd = convexPolygon2D.get(1);
          if (doLine2DAndLineSegment2DIntersect(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart, edgeEnd))
-            return previousEdgeIndex == -1 ? 0 : 1;
+         { // Getting here means that this is the first time the method is being called.
+            return 0;
+         }
       }
 
-      for (int edgeIndex = next(previousEdgeIndex, numberOfVertices); edgeIndex < numberOfVertices; edgeIndex++)
+      int edgeIndex = previousEdgeIndex;
+
+      for (int i = 0; i < numberOfVertices; i++)
       {
+         edgeIndex = next(edgeIndex, numberOfVertices);
          Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
          Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
 
@@ -1539,12 +1544,26 @@ public class EuclidGeometryPolygonTools
             boolean areLineAndEdgeParallel = areVector2DsParallel(lineDirectionX, lineDirectionY, edgeDx, edgeDy, EPSILON);
 
             if (areLineAndEdgeParallel) // The line and the edge are collinear.
-            {
-               int newPreviousEdgeIndex = previous(edgeIndex, numberOfVertices);
-               if (newPreviousEdgeIndex != previousEdgeIndex)
-                  return newPreviousEdgeIndex;
+            { // The comparison is to ensure consistent behavior with the first index returned always being the smallest independently from the context.
+               int previousIndex = previous(edgeIndex, numberOfVertices);
+               int nextIndex = next(edgeIndex, numberOfVertices);
+               int firstEdgeIndex, secondEdgeIndex;
+
+               if (previousIndex < nextIndex)
+               {
+                  firstEdgeIndex = previousIndex;
+                  secondEdgeIndex = nextIndex;
+               }
                else
-                  return next(edgeIndex, numberOfVertices);
+               {
+                  firstEdgeIndex = nextIndex;
+                  secondEdgeIndex = previousIndex;
+               }
+
+               if (firstEdgeIndex != previousEdgeIndex)
+                  return firstEdgeIndex;
+               else
+                  return secondEdgeIndex;
             }
             else
                return edgeIndex;

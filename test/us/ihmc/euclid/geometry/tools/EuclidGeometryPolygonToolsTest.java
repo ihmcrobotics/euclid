@@ -1771,6 +1771,60 @@ public class EuclidGeometryPolygonToolsTest
          assertFalse(success);
          EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualProjection);
       }
+
+      { // Test with empty polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         int hullSize = 0;
+         boolean clockwiseOrdered = random.nextBoolean();
+         Point2D point = new Point2D();
+
+         assertFalse(orthogonalProjectionOnConvexPolygon2D(point, convexPolygon2D, hullSize, clockwiseOrdered, point));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with single point polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(generateRandomPoint2D(random, 10.0));
+         int hullSize = 1;
+         boolean clockwiseOrdered = random.nextBoolean();
+         
+         Point2D query = generateRandomPoint2D(random, 10.0);
+         Point2D projection = new Point2D();
+
+         boolean success = orthogonalProjectionOnConvexPolygon2D(query, convexPolygon2D, hullSize, clockwiseOrdered, projection);
+         assertTrue(success);
+         assertEquals(projection, convexPolygon2D.get(0));
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D point = new Point2D();
+
+         try
+         {
+            orthogonalProjectionOnConvexPolygon2D(point, convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered, point);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            orthogonalProjectionOnConvexPolygon2D(point, convexPolygon2D, -1, clockwiseOrdered, point);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+      }
    }
 
    @Test
@@ -1913,7 +1967,7 @@ public class EuclidGeometryPolygonToolsTest
 
       { // Test exceptions
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
-         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         int hullSize = 2;
          boolean clockwiseOrdered = random.nextBoolean();
          if (!clockwiseOrdered)
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
@@ -2576,6 +2630,335 @@ public class EuclidGeometryPolygonToolsTest
             fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
          }
          catch (IllegalArgumentException e)
+         {
+            // good
+         }
+      }
+   }
+
+   @Test
+   public void testNextIntersectingEdgeIndex() throws Exception
+   {
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup 1: Pick two edges random through which the line goes through
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int firstEdgeIndex = random.nextInt(hullSize);
+         int secondEdgeIndex = wrap(random.nextInt(hullSize - 1) + firstEdgeIndex + 1, hullSize); // Making sure the two edges are different
+
+         Point2D pointOnFirstEdge = new Point2D();
+
+         { // Setup first point
+            Point2DReadOnly edgeStart = convexPolygon2D.get(firstEdgeIndex);
+            Point2DReadOnly edgeEnd = convexPolygon2D.get(next(firstEdgeIndex, hullSize));
+            // Avoiding edge cases by keeping the point away from the edge endpoints
+            pointOnFirstEdge.interpolate(edgeStart, edgeEnd, generateRandomDouble(random, 0.05, 0.95));
+         }
+
+         Point2D pointOnSecondEdge = new Point2D();
+
+         { // Setup second point
+            Point2DReadOnly edgeStart = convexPolygon2D.get(secondEdgeIndex);
+            Point2DReadOnly edgeEnd = convexPolygon2D.get(next(secondEdgeIndex, hullSize));
+            // Avoiding edge cases by keeping the point away from the edge endpoints
+            pointOnSecondEdge.interpolate(edgeStart, edgeEnd, generateRandomDouble(random, 0.05, 0.95));
+         }
+
+         Point2D pointOnLine = new Point2D(pointOnFirstEdge);
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(pointOnSecondEdge, pointOnFirstEdge);
+         lineDirection.normalize();
+         pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
+         if (random.nextBoolean())
+            lineDirection.negate();
+         lineDirection.scale(generateRandomDouble(random, 10.0));
+
+         int actualFirstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int actualSecondEdgeIndex = nextIntersectingEdgeIndex(actualFirstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+
+         if (firstEdgeIndex < secondEdgeIndex)
+         {
+            assertEquals(firstEdgeIndex, actualFirstEdgeIndex);
+            assertEquals(secondEdgeIndex, actualSecondEdgeIndex);
+         }
+         else
+         {
+            assertEquals(secondEdgeIndex, actualFirstEdgeIndex);
+            assertEquals(firstEdgeIndex, actualSecondEdgeIndex);
+         }
+
+         // Verify that calling the method once more loops back to the first edge index.
+         int thirdEdgeIndex = nextIntersectingEdgeIndex(actualSecondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         assertEquals(actualFirstEdgeIndex, thirdEdgeIndex);
+
+         // Verify that calling the method with previousEdgeIndex == -2 automatically fails
+         assertEquals(-2, nextIntersectingEdgeIndex(-2, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup 2: Get the line to intersect the polygon at a vertex picked at random
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int vertexIndex = random.nextInt(hullSize);
+         Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+
+         // Get the direction of the two adjacent edges
+         Vector2D nextEdgeDirection = new Vector2D();
+         {
+            Point2DReadOnly edgeStart = vertex;
+            Point2DReadOnly edgeEnd = convexPolygon2D.get(next(vertexIndex, hullSize));
+            nextEdgeDirection.sub(edgeEnd, edgeStart);
+            nextEdgeDirection.normalize();
+         }
+         Vector2D previousEdgeDirection = new Vector2D();
+         {
+            Point2DReadOnly edgeStart = convexPolygon2D.get(previous(vertexIndex, hullSize));
+            Point2DReadOnly edgeEnd = vertex;
+            previousEdgeDirection.sub(edgeEnd, edgeStart);
+            previousEdgeDirection.normalize();
+         }
+
+         Point2D pointOnLine = new Point2D(vertex);
+         Vector2D lineDirection = new Vector2D();
+         // Avoiding edge case about the line being parallel to an edge.
+         lineDirection.interpolate(nextEdgeDirection, previousEdgeDirection, generateRandomDouble(random, 0.05, 0.95));
+         lineDirection.normalize();
+         pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
+         if (random.nextBoolean())
+            lineDirection.negate();
+         lineDirection.scale(generateRandomDouble(random, 10.0));
+
+         // The method should find the two edges adjacent to the vertex
+         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+
+         if (previous(vertexIndex, hullSize) < vertexIndex)
+         {
+            assertEquals(firstEdgeIndex, previous(vertexIndex, hullSize));
+            assertEquals(secondEdgeIndex, vertexIndex);
+         }
+         else
+         {
+            assertEquals(firstEdgeIndex, vertexIndex);
+            assertEquals(secondEdgeIndex, previous(vertexIndex, hullSize));
+         }
+
+         // Verify that calling the method once more loops back to the first edge index.
+         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         assertEquals(thirdEdgeIndex, firstEdgeIndex);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Setup 3: Pick an edge at random, get the line to go through its endpoints
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int edgeIndex = random.nextInt(hullSize);
+
+         Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, hullSize));
+
+         Point2D pointOnLine = new Point2D(edgeStart);
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(edgeEnd, edgeStart);
+         lineDirection.normalize();
+         pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
+         if (random.nextBoolean())
+            lineDirection.negate();
+         lineDirection.scale(generateRandomDouble(random, 10.0));
+
+         // The method should find the 2 edges: edgeIndex + 1, edgeIndex - 1
+         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+
+         int nextEdgeIndex = next(edgeIndex, hullSize);
+         int previousEdgeIndex = previous(edgeIndex, hullSize);
+
+         if (previousEdgeIndex < nextEdgeIndex)
+         {
+            assertEquals(previousEdgeIndex, firstEdgeIndex);
+            assertEquals(nextEdgeIndex, secondEdgeIndex);
+         }
+         else
+         {
+            assertEquals(nextEdgeIndex, firstEdgeIndex);
+            assertEquals(previousEdgeIndex, secondEdgeIndex);
+         }
+
+         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         assertEquals(firstEdgeIndex, thirdEdgeIndex);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // (somewhat tricky) Setup: build a line that does NOT intersect with the polygon
+         /* 
+          * @formatter:off
+          * - The goal is to build the query line such that it does not intersect with the polygon.
+          * - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 = convexPolygon2D.get(i+1).
+          * - Draw 2 lines going from the centroid through each vertex, they are called extrapolation lines.
+          * - For the line going through v0, find the intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
+          *    The first point defining the query line should be between v0 and v0Max such that the line won't intersect with the edge (vn1, vn2).
+          * - For the line going through vn1, find the intersection vn1Max with the line going through v0 and vp1 = convexPolygon2D.get(i-1).
+          *    The second point defining the query line should be between vn1 and vn1Max such that the line won't intersect with the edge (v0, vp1).
+          * @formatter:on
+          */
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         int v0Index = random.nextInt(hullSize);
+         int vn1Index = next(v0Index, hullSize);
+         int vn2Index = next(vn1Index, hullSize);
+         int vp1Index = previous(v0Index, hullSize);
+
+         Point2DReadOnly v0 = convexPolygon2D.get(v0Index);
+         Point2DReadOnly vn1 = convexPolygon2D.get(vn1Index);
+         Point2DReadOnly vn2 = convexPolygon2D.get(vn2Index);
+         Point2DReadOnly vp1 = convexPolygon2D.get(vp1Index);
+
+         Point2D centroid = new Point2D();
+         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+
+         Point2D v0Max = intersectionBetweenTwoLine2Ds(centroid, v0, vn1, vn2);
+         Vector2D extrapolationDirection = new Vector2D();
+         extrapolationDirection.sub(v0, centroid);
+
+         if (!isPoint2DInFrontOfRay2D(v0Max, centroid, extrapolationDirection))
+            v0Max.scaleAdd(10.0, extrapolationDirection, v0);
+
+         Point2D vn1Max = intersectionBetweenTwoLine2Ds(centroid, vn1, v0, vp1);
+         extrapolationDirection.sub(vn1, centroid);
+
+         if (!isPoint2DInFrontOfRay2D(vn1Max, centroid, extrapolationDirection))
+            vn1Max.scaleAdd(10.0, extrapolationDirection, vn1);
+
+         Point2D firstExtrapolatedPoint = new Point2D();
+         Point2D secondExtrapolatedPoint = new Point2D();
+
+         firstExtrapolatedPoint.interpolate(v0, v0Max, generateRandomDouble(random, 0.0, 1.0));
+         secondExtrapolatedPoint.interpolate(vn1, vn1Max, generateRandomDouble(random, 0.0, 1.0));
+
+         Point2D pointOnLine = new Point2D();
+         pointOnLine.interpolate(firstExtrapolatedPoint, secondExtrapolatedPoint, generateRandomDouble(random, 10.0));
+         Vector2D lineDirection = new Vector2D();
+         lineDirection.sub(secondExtrapolatedPoint, firstExtrapolatedPoint);
+         lineDirection.normalize();
+         lineDirection.scale(generateRandomDouble(random, 10.0));
+
+         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+      }
+
+      { // Test with a single point polygon => automatically fails
+         Point2D vertex = generateRandomPoint2D(random, 10.0);
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(vertex);
+         int hullSize = 1;
+
+         // Make the line go through the vertex to ensure the method is failing.
+         Point2D pointOnLine = new Point2D(vertex);
+         Vector2D lineDirection = generateRandomVector2D(random, -10.0, 10.0);
+
+         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with line polygon
+         Point2D vertex1 = generateRandomPoint2D(random, 10.0);
+         Point2D vertex2 = generateRandomPoint2D(random, 10.0);
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(vertex1);
+         convexPolygon2D.add(vertex2);
+         int hullSize = 2;
+
+         Point2D pointOnEdge = new Point2D();
+         pointOnEdge.interpolate(vertex1, vertex2, random.nextDouble());
+
+         Point2D pointOutsideEdge = new Point2D();
+         pointOutsideEdge.interpolate(vertex1, vertex2, 1.0 + random.nextDouble());
+
+         Point2D pointOnLine = new Point2D();
+         Vector2D lineDirection = new Vector2D();
+
+         // Case 1: the line intersects the polygon
+         lineDirection = generateRandomVector2D(random, -10.0, 10.0);
+         pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnEdge);
+
+         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         assertEquals(0, firstEdgeIndex);
+         assertEquals(1, secondEdgeIndex);
+
+         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         assertEquals(firstEdgeIndex, thirdEdgeIndex);
+
+         // Case 2: the line does not intersect the polygon
+         lineDirection = generateRandomVector2D(random, -10.0, 10.0);
+         pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOutsideEdge);
+
+         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D pointOnLine = new Point2D();
+         Vector2D lineDirection = new Vector2D();
+
+         try
+         {
+            nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, convexPolygon2D.size() + 1);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, -1);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            nextIntersectingEdgeIndex(-3, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+            fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
+         }
+         catch (IndexOutOfBoundsException e)
+         {
+            // good
+         }
+
+         try
+         {
+            nextIntersectingEdgeIndex(hullSize, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+            fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
+         }
+         catch (IndexOutOfBoundsException e)
          {
             // good
          }
