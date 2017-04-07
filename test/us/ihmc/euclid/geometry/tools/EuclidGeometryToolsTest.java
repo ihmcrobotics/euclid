@@ -4704,6 +4704,80 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testIsPoint2DOnLineSegment2D() throws Exception
+   {
+      Random random = new Random(2342334L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with query between endpoints
+         Point2D lineSegmentStart = generateRandomPoint2D(random, 10.0);
+         Point2D lineSegmentEnd = generateRandomPoint2D(random, 10.0);
+
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentDirection.normalize();
+
+         Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineSegmentDirection);
+
+         Point2D queryOnLineSegment = new Point2D();
+         queryOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, random.nextDouble());
+
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryOnLineSegment, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryOnLineSegment, lineSegmentEnd, lineSegmentStart));
+
+         Point2D queryShifted = new Point2D();
+         double shift = generateRandomDouble(random, 1.0) * EuclidGeometryTools.IS_POINT_ON_LINE_EPS;
+         queryShifted.scaleAdd(shift, orthogonal, queryOnLineSegment);
+
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentEnd, lineSegmentStart));
+
+         shift = generateRandomDouble(random, 1.0, 10.0) * EuclidGeometryTools.IS_POINT_ON_LINE_EPS;
+         if (random.nextBoolean())
+            shift = -shift;
+         queryShifted.scaleAdd(shift, orthogonal, queryOnLineSegment);
+
+         assertFalse("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentEnd, lineSegmentStart));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with query outside endpoints, the result depends on the distance between the query and the closest endpoint.
+         Point2D lineSegmentStart = generateRandomPoint2D(random, 10.0);
+         Point2D lineSegmentEnd = generateRandomPoint2D(random, 10.0);
+
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentDirection.normalize();
+
+         Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineSegmentDirection);
+
+         Point2D queryOnLineSegment = new Point2D(lineSegmentEnd);
+
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryOnLineSegment, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryOnLineSegment, lineSegmentEnd, lineSegmentStart));
+
+         // Making a shiftVector that shifts the query away by a given distance
+         Point2D queryShifted = new Point2D();
+         Vector2D shift = new Vector2D();
+         if (random.nextBoolean())
+            orthogonal.negate();
+         shift.interpolate(lineSegmentDirection, orthogonal, random.nextDouble());
+         shift.normalize();
+         shift.scale(random.nextDouble() * EuclidGeometryTools.IS_POINT_ON_LINE_EPS);
+         queryShifted.add(lineSegmentEnd, shift);
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentEnd, lineSegmentStart));
+
+         shift.normalize();
+         shift.scale(generateRandomDouble(random, 1.0, 10.0) * EuclidGeometryTools.IS_POINT_ON_LINE_EPS);
+         queryShifted.add(lineSegmentEnd, shift);
+         assertFalse("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.isPoint2DOnLineSegment2D(queryShifted, lineSegmentEnd, lineSegmentStart));
+      }
+   }
+
+   @Test
    public void testIsPoint2DOnSideOfLine2D() throws Exception
    {
       Random random = new Random(2342L);
