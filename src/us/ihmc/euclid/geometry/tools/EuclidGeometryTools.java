@@ -4916,6 +4916,56 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
+    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
+    *         the query is located on the right side of the line.
+    */
+   public static double signedDistanceFromPoint2DToLine2D(Point2DReadOnly point, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      return signedDistanceFromPoint2DToLine2D(point.getX(), point.getY(), firstPointOnLine, secondPointOnLine);
+   }
+
+   /**
+    * Returns the minimum signed distance between a 2D point and an infinitely long 2D line defined
+    * by a point and a direction.
+    * <p>
+    * The calculated distance is negative if the query is located on the right side of the line.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
+    * distance between {@code pointOnLine} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
+    *         the query is located on the right side of the line.
+    */
+   public static double signedDistanceFromPoint2DToLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return signedDistanceFromPoint2DToLine2D(point.getX(), point.getY(), pointOnLine, lineDirection);
+   }
+
+   /**
+    * Returns the minimum signed distance between a 2D point and an infinitely long 2D line defined
+    * by a point and a direction.
+    * <p>
+    * The calculated distance is negative if the query is located on the right side of the line.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
     * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
     * distance between {@code pointOnLine} and the given {@code point}.
     * </ul>

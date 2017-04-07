@@ -5537,6 +5537,49 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testSignedDistanceFromPoint2DToLine2D() throws Exception
+   {
+      Random random = new Random(243234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D firstPointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
+         Vector2D lineDirection = EuclidCoreRandomTools.generateRandomVector2D(random, -10.0, 10.0);
+         Point2D secondPointOnLine = new Point2D();
+         secondPointOnLine.add(firstPointOnLine, lineDirection);
+         
+
+         Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineDirection);
+         orthogonal.normalize();
+         boolean expectingNegativeSign = random.nextBoolean();
+         
+         if (expectingNegativeSign)
+            orthogonal.negate();
+
+         double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+
+         Point2D query = new Point2D();
+         query.scaleAdd(expectedDistance, orthogonal, firstPointOnLine);
+         query.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, query);
+
+         double actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, lineDirection);
+         assertEquals("Iteration: " + i, expectedDistance, expectingNegativeSign ? -actualDistance : actualDistance, EPSILON);
+         actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, secondPointOnLine);
+         assertEquals("Iteration: " + i, expectedDistance, expectingNegativeSign ? -actualDistance : actualDistance, EPSILON);
+
+         // Test with a line direction that a magnitude that is too small
+         lineDirection.normalize();
+         lineDirection.scale(0.999 * EuclidGeometryTools.ONE_TRILLIONTH);
+         secondPointOnLine.add(firstPointOnLine, lineDirection);
+         expectedDistance = firstPointOnLine.distance(query);
+         actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, lineDirection);
+         assertEquals("Iteration: " + i, expectedDistance, actualDistance, EPSILON);
+         actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, secondPointOnLine);
+         assertEquals("Iteration: " + i, expectedDistance, actualDistance, EPSILON);
+      }
+   }
+
+   @Test
    public void testTopVertex3DOfIsoscelesTriangle3D() throws Exception
    {
       Random random = new Random(1176L);
