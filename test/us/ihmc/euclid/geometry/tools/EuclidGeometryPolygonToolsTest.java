@@ -593,7 +593,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            edgeNormal(-1, convexPolygon2D, convexPolygon2D.size(), clockwiseOrdered, new Vector2D());
+            edgeNormal(-1, convexPolygon2D, hullSize, clockwiseOrdered, new Vector2D());
             fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
          }
          catch (IndexOutOfBoundsException e)
@@ -603,7 +603,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            edgeNormal(convexPolygon2D.size(), convexPolygon2D, convexPolygon2D.size(), clockwiseOrdered, new Vector2D());
+            edgeNormal(hullSize, convexPolygon2D, hullSize, clockwiseOrdered, new Vector2D());
             fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
          }
          catch (IndexOutOfBoundsException e)
@@ -1787,7 +1787,7 @@ public class EuclidGeometryPolygonToolsTest
          convexPolygon2D.add(generateRandomPoint2D(random, 10.0));
          int hullSize = 1;
          boolean clockwiseOrdered = random.nextBoolean();
-         
+
          Point2D query = generateRandomPoint2D(random, 10.0);
          Point2D projection = new Point2D();
 
@@ -2607,6 +2607,23 @@ public class EuclidGeometryPolygonToolsTest
          assertEquals(expectedIndex, actualIndex);
       }
 
+      { // Test with empty polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         int hullSize = 0;
+         boolean clockwiseOrdered = true;
+
+         assertEquals(-1, closestEdgeIndexToPoint2D(new Point2D(), convexPolygon2D, hullSize, clockwiseOrdered));
+      }
+
+      { // Test with single point polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(generateRandomPoint2D(random, 10.0));
+         int hullSize = 1;
+         boolean clockwiseOrdered = true;
+
+         assertEquals(-1, closestEdgeIndexToPoint2D(new Point2D(), convexPolygon2D, hullSize, clockwiseOrdered));
+      }
+
       { // Test exceptions
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
          int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
@@ -2956,6 +2973,117 @@ public class EuclidGeometryPolygonToolsTest
          try
          {
             nextIntersectingEdgeIndex(hullSize, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+            fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
+         }
+         catch (IndexOutOfBoundsException e)
+         {
+            // good
+         }
+      }
+   }
+
+   @Test
+   public void testCanObserverSeeEdge() throws Exception
+   {
+      Random random = new Random(324234L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test using a point located inside the polygon, should be able to see any edge
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D pointInside = new Point2D();
+         { // Creating the point inside the polygon
+            Point2D centroid = new Point2D();
+            computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+            int vertexIndex = random.nextInt(hullSize);
+            int nextVertexIndex = next(vertexIndex, hullSize);
+            Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
+            Point2DReadOnly nextVertex = convexPolygon2D.get(nextVertexIndex);
+
+            Point2D pointOnEdge = new Point2D();
+            pointOnEdge.interpolate(vertex, nextVertex, random.nextDouble());
+            pointInside.interpolate(centroid, pointOnEdge, random.nextDouble());
+         }
+
+         for (int edgeIndex = 0; edgeIndex < hullSize; edgeIndex++)
+            assertFalse(canObserverSeeEdge(edgeIndex, pointInside, convexPolygon2D, hullSize, clockwiseOrdered));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test by shooting a ray from the middle of the edge to the observer,
+           // it should be intersecting the polygon either 0 or 1 time depending on whether the observer can see the edge.
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D observer = generateRandomPoint2D(random, 10.0);
+         int edgeIndex = random.nextInt(hullSize);
+
+         Point2D rayOrigin = new Point2D();
+         rayOrigin.interpolate(convexPolygon2D.get(edgeIndex), convexPolygon2D.get(next(edgeIndex, hullSize)), 0.5);
+
+         Vector2D rayDirection = new Vector2D();
+         rayDirection.sub(observer, rayOrigin);
+         rayDirection.normalize();
+         // Shift the origin a little away from the edge
+         rayOrigin.scaleAdd(1.0e-3, rayDirection, rayOrigin);
+
+         int numberOfIntersections = intersectionBetweenRay2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered,
+                                                                                new Point2D(), new Point2D());
+         if (canObserverSeeEdge(edgeIndex, observer, convexPolygon2D, hullSize, clockwiseOrdered))
+            assertEquals(0, numberOfIntersections);
+         else
+            assertEquals(1, numberOfIntersections);
+      }
+
+      { // Test exceptions
+         List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
+         int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+         if (!clockwiseOrdered)
+            Collections.reverse(convexPolygon2D.subList(0, hullSize));
+
+         Point2D observer = new Point2D();
+
+         try
+         {
+            canObserverSeeEdge(0, observer, convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            canObserverSeeEdge(0, observer, convexPolygon2D, -1, clockwiseOrdered);
+            fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
+         }
+         catch (IllegalArgumentException e)
+         {
+            // good
+         }
+
+         try
+         {
+            canObserverSeeEdge(-1, observer, convexPolygon2D, hullSize, clockwiseOrdered);
+            fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
+         }
+         catch (IndexOutOfBoundsException e)
+         {
+            // good
+         }
+
+         try
+         {
+            canObserverSeeEdge(hullSize, observer, convexPolygon2D, hullSize, clockwiseOrdered);
             fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
          }
          catch (IndexOutOfBoundsException e)
