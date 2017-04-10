@@ -1273,8 +1273,8 @@ public class EuclidGeometryPolygonTools
          return 0;
       if (numberOfVertices == 2)
       {
-         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), !clockwiseOrdered);
-         return answer == 1 ? 0 : 1;
+         boolean isOnSide = isPoint2DOnSideOfLine2D(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), clockwiseOrdered);
+         return isOnSide ? 0 : 1;
       }
 
       boolean previousEdgeVisible = canObserverSeeEdge(numberOfVertices - 1, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
@@ -1365,8 +1365,8 @@ public class EuclidGeometryPolygonTools
          return 0;
       if (numberOfVertices == 2)
       {
-         int answer = whichPointIsToTheSide(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), clockwiseOrdered);
-         return answer == 1 ? 0 : 1;
+         boolean isOnSide = isPoint2DOnSideOfLine2D(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), clockwiseOrdered);
+         return isOnSide ? 1 : 0;
       }
 
       boolean previousEdgeVisible = canObserverSeeEdge(numberOfVertices - 1, observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
@@ -1659,72 +1659,6 @@ public class EuclidGeometryPolygonTools
    {
       return orthogonalProjectionOnConvexPolygon2D(pointToProject.getX(), pointToProject.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered,
                                                    projectionToPack);
-   }
-
-   /**
-    * This methods calculates which of {@code point1} or {@code point2} is to left or to right from
-    * the point of view of the observer.
-    * <p>
-    * This methods returns an integer that refers to which point meets the test. A value of
-    * {@code 1} refers to {@code point1} and a value of {@code 2} refers to the {@code point2}.
-    * <ul>
-    * <li>If {@code testForLeftSide} is {@code true}, the returned value refers to the point that is
-    * the most to the <b>left</b> from the observer point of view.
-    * <li>If {@code testForLeftSide} is {@code false}, the returned value refers to the point that
-    * is the most to the <b>right</b> from the observer point of view.
-    * </ul>
-    * </p>
-    * 
-    * @param observer the coordinates of the observer. Not modified.
-    * @param point1 the coordinates of the first point. Not modified.
-    * @param point2 the coordinates of the second point. Not modified.
-    * @return either {@code 1} or {@code 2} to refer to either {@code point1} and {@code point2},
-    *         respectively.
-    */
-   public static int whichPointIsToTheSide(Point2DReadOnly observer, Point2DReadOnly point1, Point2DReadOnly point2, boolean testForLeftSide)
-   {
-      return whichPointIsToTheSide(observer.getX(), observer.getY(), point1, point2, testForLeftSide);
-   }
-
-   /**
-    * This methods calculates which of {@code point1} or {@code point2} is to left or to right from
-    * the point of view of the observer.
-    * <p>
-    * This methods returns an integer that refers to which point meets the test. A value of
-    * {@code 1} refers to {@code point1} and a value of {@code 2} refers to the {@code point2}.
-    * <ul>
-    * <li>If {@code testForLeftSide} is {@code true}, the returned value refers to the point that is
-    * the most to the <b>left</b> from the observer point of view.
-    * <li>If {@code testForLeftSide} is {@code false}, the returned value refers to the point that
-    * is the most to the <b>right</b> from the observer point of view.
-    * </ul>
-    * </p>
-    * 
-    * @param observerX the x-coordinate of the observer. Not modified.
-    * @param observerY the y-coordinate of the observer. Not modified.
-    * @param point1 the coordinates of the first point. Not modified.
-    * @param point2 the coordinates of the second point. Not modified.
-    * @return either {@code 1} or {@code 2} to refer to either {@code point1} and {@code point2},
-    *         respectively.
-    */
-   public static int whichPointIsToTheSide(double observerX, double observerY, Point2DReadOnly point1, Point2DReadOnly point2, boolean testForLeftSide)
-   {
-      double observerToPoint1X = point1.getX() - observerX;
-      double observerToPoint1Y = point1.getY() - observerY;
-      double observerToPoint2X = point2.getX() - observerX;
-      double observerToPoint2Y = point2.getY() - observerY;
-
-      // Rotate the vector from observer to point 2 90 degree counter clockwise.
-      double observerToPoint2PerpendicularX = -observerToPoint2Y;
-      double observerToPoint2PerpendicularY = observerToPoint2X;
-
-      // Assuming the observer is looking at point 1 the dot product will be positive if point 2 is on the right of point 1.
-      double dotProduct = observerToPoint1X * observerToPoint2PerpendicularX + observerToPoint1Y * observerToPoint2PerpendicularY;
-
-      if (testForLeftSide)
-         dotProduct = -dotProduct;
-
-      return dotProduct > 0.0 ? 2 : 1;
    }
 
    /**
