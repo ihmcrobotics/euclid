@@ -379,6 +379,7 @@ public class EuclidGeometryPolygonTools
                                     Vector2DBasics normalToPack)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+      checkEdgeIndex(edgeIndex, numberOfVertices);
 
       if (numberOfVertices <= 1)
          return false;
