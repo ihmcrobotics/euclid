@@ -47,7 +47,10 @@ public class EuclidGeometryIOTools
     */
    public static String getLine3DString(String format, Line3D line3D)
    {
-      return getLine3DString(format, line3D.getPoint(), line3D.getDirection());
+      if (line3D == null)
+         return "null";
+      else
+         return getLine3DString(format, line3D.getPoint(), line3D.getDirection());
    }
 
    /**
@@ -102,7 +105,10 @@ public class EuclidGeometryIOTools
     */
    public static String getLineSegment3DString(String format, LineSegment3D lineSegment3D)
    {
-      return getLineSegment3DString(format, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
+      if (lineSegment3D == null)
+         return "null";
+      else
+         return getLineSegment3DString(format, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
    }
 
    /**
