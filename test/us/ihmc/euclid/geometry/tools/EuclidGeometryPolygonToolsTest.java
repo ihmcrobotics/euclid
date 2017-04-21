@@ -295,7 +295,12 @@ public class EuclidGeometryPolygonToolsTest
          algorithmToTest.process(copy, copy.size());
 
          for (int index = 0; index < copy.size(); index++)
-            assertTrue("Failed at index: " + index, copy.get(index) == convexHullVertices.get(index));
+         {
+            if (copy.get(index) != convexHullVertices.get(index))
+            {
+               fail("Failed at iteration: " + i + ", vertices at index " + index + " are different, expected:\n" + convexHullVertices + "\nactual:\n" + copy);
+            }
+         }
       }
 
       for (int i = 0; i < ITERATIONS; i++)

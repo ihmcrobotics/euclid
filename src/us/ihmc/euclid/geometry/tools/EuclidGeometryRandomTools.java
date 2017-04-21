@@ -163,7 +163,7 @@ public abstract class EuclidGeometryRandomTools
 
       for (int i = 0; i < numberOfVertices; i++)
       {
-         dTheta[i] = random.nextDouble();
+         dTheta[i] = generateRandomDouble(random, 0.001, 1.0);
          sum += dTheta[i];
       }
       // Adding the angle for the last segment
