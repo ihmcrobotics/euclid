@@ -283,6 +283,26 @@ public class EuclidGeometryPolygonToolsTest
       }
 
       for (int i = 0; i < ITERATIONS; i++)
+      { // Test that, the convex hull of several duplicates is a single point.
+         Point2D original = generateRandomPoint2D(random);
+         List<Point2D> listToProcess = new ArrayList<>();
+         for (int j = 0; j < random.nextInt(20); j++)
+            listToProcess.add(new Point2D(original));
+
+         int hullSize = algorithmToTest.process(listToProcess, listToProcess.size());
+
+         if (listToProcess.isEmpty())
+         {
+            assertEquals("Failed at iteration: " + i, 0, hullSize);
+         }
+         else
+         {
+            assertEquals("Failed at iteration: " + i, 1, hullSize);
+            EuclidCoreTestTools.assertTuple2DEquals(original, listToProcess.get(0), SMALLEST_EPSILON);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test with vertices that already form a convex hull make sure the algorithm just shift the points around so it starts with the min x, max y vertex.
          int numberOfPoints = 100;
          List<Point2D> vertices = generateRandomCircleBasedConvexPolygon2D(random, 10.0, 1.0, numberOfPoints);

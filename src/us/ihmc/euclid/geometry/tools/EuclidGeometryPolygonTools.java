@@ -117,6 +117,9 @@ public class EuclidGeometryPolygonTools
     */
    public static int inPlaceGiftWrapConvexHull2D(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
+      if (numberOfVertices == 0)
+         return 0;
+
       checkNumberOfVertices(vertices, numberOfVertices);
 
       /*
@@ -142,6 +145,9 @@ public class EuclidGeometryPolygonTools
          { // Remove any duplicate vertices
             Collections.swap(vertices, candidateIndex, --numberOfVertices);
             candidateVertex = vertices.get(candidateIndex);
+
+            if (numberOfVertices == 1)
+               return numberOfVertices;
          }
 
          for (int vertexIndex = lastHullVertexIndex + 2; vertexIndex <= numberOfVertices; vertexIndex++)
@@ -222,12 +228,29 @@ public class EuclidGeometryPolygonTools
     */
    public static int inPlaceGrahamScanConvexHull2D(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
+      if (numberOfVertices == 0)
+         return 0;
+
       checkNumberOfVertices(vertices, numberOfVertices);
 
       grahamScanAngleSort(vertices, numberOfVertices);
 
       if (numberOfVertices <= 3)
-         return numberOfVertices;
+      {
+         boolean areAllVerticesEqual = true;
+         Point2DReadOnly firstVertex = vertices.get(0);
+
+         for (int vertexIndex = 1; vertexIndex < numberOfVertices; vertexIndex++)
+         {
+            if (!firstVertex.epsilonEquals(vertices.get(vertexIndex), EPSILON))
+            {
+               areAllVerticesEqual = false;
+               break;
+            }
+         }
+
+         return areAllVerticesEqual ? 1 : numberOfVertices;
+      }
 
       int currentIndex = 1;
 
@@ -241,6 +264,10 @@ public class EuclidGeometryPolygonTools
          { // Not convex: remove the current vertex.
             moveElementToEnd(vertices, currentIndex, numberOfVertices);
             numberOfVertices--; // The vertex is not part of the convex hull.
+
+            if (numberOfVertices == 1)
+               return numberOfVertices;
+
             /*
              * Need verify the previous vertex since the current has been updated but always knowing
              * that the first vertex has to be part of the hull.
@@ -1856,6 +1883,9 @@ public class EuclidGeometryPolygonTools
     */
    static int findMinXMaxYVertexIndex(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
+      if (numberOfVertices == 0)
+         return -1;
+
       int minXMaxYIndex = 0;
       Point2DReadOnly minXMaxY = vertices.get(minXMaxYIndex);
 
