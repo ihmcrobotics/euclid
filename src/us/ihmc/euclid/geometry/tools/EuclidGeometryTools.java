@@ -10,6 +10,7 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -2087,66 +2088,17 @@ public class EuclidGeometryTools
       double lineSegmentDirectionX = lineSegmentEndX - lineSegmentStartX;
       double lineSegmentDirectionY = lineSegmentEndY - lineSegmentStartY;
 
-      //      We solve for x the problem of the form: A * x = b
-      //            A      *     x     =      b
-      //      / lineDirectionX -lineSegmentDirectionX \   / alpha \   / lineSegmentStartX - pointOnLineX \
-      //      |                                       | * |       | = |                                  |
-      //      \ lineDirectionY -lineSegmentDirectionY /   \ beta  /   \ lineSegmentStartY - pointOnLineY /
-      //
-      // Only one coefficient of the pair {alpha, beta} is needed to find the coordinates of the intersection.
-      // By using beta, it is possible to also determine if the intersection is between the line segment endpoints: 0 <= beta <= 1.
+      double percentage = percentageOfIntersectionBetweenTwoLine2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY,
+                                                                    pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+      if (Double.isNaN(percentage) || percentage < 0.0 - ONE_TEN_MILLIONTH || percentage > 1.0 + ONE_TEN_MILLIONTH)
+         return false;
 
-      double determinant = -lineDirectionX * lineSegmentDirectionY + lineDirectionY * lineSegmentDirectionX; //(A[0][0] * A[1][1]) - (A[1][0] * A[0][1]);
-      double dx = lineSegmentStartX - pointOnLineX;
-      double dy = lineSegmentStartY - pointOnLineY;
-
-      double epsilon = ONE_TEN_MILLIONTH;
-      if (Math.abs(determinant) < epsilon)
-      { // The line and the line segment are parallel
-           // Check if they are collinear
-         double cross = dx * lineDirectionY - dy * lineDirectionX;
-         if (Math.abs(cross) < epsilon)
-         {
-            /*
-             * The line and the line segment are collinear. There's an infinite number of
-             * intersection. Let's just set the result to lineSegmentStart such that it at least
-             * belongs to the line segment.
-             */
-            if (intersectionToPack != null)
-               intersectionToPack.set(lineSegmentStartX, lineSegmentStartY);
-            return true;
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
+      if (intersectionToPack != null)
       {
-         double oneOverDeterminant = 1.0 / determinant;
-         double AInverse10 = oneOverDeterminant * -lineDirectionY; //-A[1][0];
-         double AInverse11 = oneOverDeterminant * lineDirectionX; // A[0][0];
-
-         double beta = AInverse10 * dx + AInverse11 * dy;// AInverse10 * b[0] + AInverse11 * b[1];
-
-         if (0.0 - epsilon < beta && beta < 1.0 + epsilon)
-         {
-            if (intersectionToPack != null)
-            {
-               if (beta < 0.0)
-                  beta = 0.0;
-               else if (beta > 1.0)
-                  beta = 1.0;
-               intersectionToPack.setX(lineSegmentStartX + beta * lineSegmentDirectionX);
-               intersectionToPack.setY(lineSegmentStartY + beta * lineSegmentDirectionY);
-            }
-            return true;
-         }
-         else
-         {
-            return false;
-         }
+         intersectionToPack.setX(TupleTools.interpolate(lineSegmentStartX, lineSegmentEndX, percentage));
+         intersectionToPack.setY(TupleTools.interpolate(lineSegmentStartY, lineSegmentEndY, percentage));
       }
+      return true;
    }
 
    /**
@@ -4298,6 +4250,80 @@ public class EuclidGeometryTools
 
          return alpha;
       }
+   }
+
+   /**
+    * Computes the intersection between two infinitely long 2D lines each defined by a 2D point and
+    * a 2D direction and returns a percentage {@code alpha} along the first line such that the
+    * intersection coordinates can be computed as follows: <br>
+    * {@code intersection = pointOnLine1 + alpha * lineDirection1}
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and the
+    * returned value is {@link Double#NaN}.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code pointOnLine1}, the returned value {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointOnLine1 a point located on the first line. Not modified.
+    * @param lineDirection1 the first line direction. Not modified.
+    * @param pointOnLine2 a point located on the second line. Not modified.
+    * @param lineDirection2 the second line direction. Not modified.
+    * @return {@code alpha} the percentage along the first line of the intersection location. This
+    *         method returns {@link Double#NaN} if the lines do not intersect.
+    */
+   public static double percentageOfIntersectionBetweenTwoLine2Ds(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly pointOnLine2,
+                                                                  Vector2DReadOnly lineDirection2)
+   {
+      return percentageOfIntersectionBetweenTwoLine2Ds(pointOnLine1.getX(), pointOnLine1.getY(), lineDirection1.getX(), lineDirection1.getY(),
+                                                       pointOnLine2.getX(), pointOnLine2.getY(), lineDirection2.getX(), lineDirection2.getY());
+   }
+
+   /**
+    * Computes the intersection between a 2D line segment and an infinitely long 2D line and returns
+    * a percentage {@code alpha} along the line segment such that the intersection coordinates can
+    * be computed as follows: <br>
+    * {@code intersection = (1.0 - alpha) * lineSegmentStart + alpha * lineSegmentEnd}
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the line segment and the line do not intersect, the method returns {@link Double#NaN}.
+    * <li>if the intersection is outside the line segment's endpoints, the line segment and the line
+    * do not intersect.
+    * <li>if the line segment and the line are parallel but not collinear, they do not intersect and
+    * the returned value is {@link Double#NaN}.
+    * <li>if the line segment and the line are collinear, they are assumed to be intersecting at
+    * {@code lineSegmentStart}, the returned value {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param lineSegmentStart the line segment first endpoint. Not modified.
+    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the line direction. Not modified.
+    * @return {@code alpha} the percentage along the line segment of the intersection location. This
+    *         method returns {@link Double#NaN} if the line segment and the line do not intersect.
+    */
+   public static double percentageOfIntersectionBetweenLineSegment2DAndLine2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd,
+                                                                              Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      double lineSegmentStartX = lineSegmentStart.getX();
+      double lineSegmentStartY = lineSegmentStart.getY();
+      double lineSegmentDirectionX = lineSegmentEnd.getX() - lineSegmentStart.getX();
+      double lineSegmentDirectionY = lineSegmentEnd.getY() - lineSegmentStart.getY();
+      double alpha = percentageOfIntersectionBetweenTwoLine2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY,
+                                                               pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+      if (Double.isNaN(alpha) || alpha < 0.0 - ONE_TEN_MILLIONTH || alpha > 1.0 + ONE_TEN_MILLIONTH)
+         return Double.NaN;
+      else if (alpha < 0.0)
+         return 0.0;
+      else if (alpha > 1.0)
+         return 1.0;
+      else
+         return alpha;
+
    }
 
    /**
