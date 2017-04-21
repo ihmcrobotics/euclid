@@ -3094,7 +3094,7 @@ public class EuclidGeometryPolygonToolsTest
    }
 
    @Test
-   public void testRemove() throws Exception
+   public void testMoveElementToEnd() throws Exception
    {
       Random random = new Random(35L);
 
@@ -3111,7 +3111,7 @@ public class EuclidGeometryPolygonToolsTest
          int removeIndex = random.nextInt(listSize);
          Integer removedElement = pointsCopy.remove(removeIndex);
 
-         EuclidGeometryPolygonTools.remove(points, removeIndex, listSize);
+         EuclidGeometryPolygonTools.moveElementToEnd(points, removeIndex, listSize);
 
          assertTrue(points.get(listSize - 1) == removedElement);
 

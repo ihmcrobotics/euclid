@@ -239,7 +239,7 @@ public class EuclidGeometryPolygonTools
          }
          else
          { // Not convex: remove the current vertex.
-            remove(vertices, currentIndex, numberOfVertices);
+            moveElementToEnd(vertices, currentIndex, numberOfVertices);
             numberOfVertices--; // The vertex is not part of the convex hull.
             /*
              * Need verify the previous vertex since the current has been updated but always knowing
@@ -1827,21 +1827,21 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
-    * Moves the element located at {@code indexToRemove} to {@code listSize - 1} and shifts all the
-    * elements located in [{@code indexToRemove + 1}; {@code listSize - 1}] by {@code -1}.
+    * Moves the element located at {@code indexOfElementToShift} to {@code listSize - 1} and shifts
+    * all the elements located in [{@code indexToRemove + 1}; {@code listSize - 1}] by {@code -1}.
     * 
-    * @param list the list from which the element is to be removed. Modified.
-    * @param indexToRemove the index of the element to remove.
+    * @param list the list from which the element is to be moved. Modified.
+    * @param indexOfElementToMove the index of the element to move to the end of the list.
     * @param listSize the actual size of the list with relevant information.
     */
-   static <T> void remove(List<T> list, int indexToRemove, int listSize)
+   static <T> void moveElementToEnd(List<T> list, int indexOfElementToMove, int listSize)
    {
-      T elementToRemove = list.get(indexToRemove);
+      T elementToMove = list.get(indexOfElementToMove);
 
-      while (indexToRemove < listSize - 1)
-         list.set(indexToRemove, list.get(++indexToRemove));
+      while (indexOfElementToMove < listSize - 1)
+         list.set(indexOfElementToMove, list.get(++indexOfElementToMove));
 
-      list.set(indexToRemove, elementToRemove);
+      list.set(indexOfElementToMove, elementToMove);
    }
 
    /**
