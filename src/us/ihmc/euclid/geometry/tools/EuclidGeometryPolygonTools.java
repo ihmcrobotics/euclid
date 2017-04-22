@@ -1717,8 +1717,6 @@ public class EuclidGeometryPolygonTools
     *           the convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
-    * @param projectionToPack point in which the projection of the point onto the convex polygon is
-    *           stored. Modified.
     * @return the coordinates of the projection, or {@code null} if the method failed.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
