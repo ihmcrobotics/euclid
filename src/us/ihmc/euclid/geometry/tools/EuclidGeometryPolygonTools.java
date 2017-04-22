@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -1641,6 +1642,11 @@ public class EuclidGeometryPolygonTools
          return true;
       }
 
+      if (numberOfVertices == 2)
+      {
+         return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, convexPolygon2D.get(0), convexPolygon2D.get(1), projectionToPack);
+      }
+
       int closestEdgeIndex = closestEdgeIndexToPoint2D(pointToProjectX, pointToProjectY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
 
       if (closestEdgeIndex == -1)
@@ -1686,6 +1692,44 @@ public class EuclidGeometryPolygonTools
    {
       return orthogonalProjectionOnConvexPolygon2D(pointToProject.getX(), pointToProject.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered,
                                                    projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of a 2D point on a given 2D convex polygon.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code false}.
+    * <li>If the polygon has exactly one vertex, the result is the polygon only vertex, this method
+    * returns {@code true}.
+    * <li>If the query is inside the polygon, the method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @param projectionToPack point in which the projection of the point onto the convex polygon is
+    *           stored. Modified.
+    * @return the coordinates of the projection, or {@code null} if the method failed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static Point2D orthogonalProjectionOnConvexPolygon2D(Point2DReadOnly pointToProject, List<? extends Point2DReadOnly> convexPolygon2D,
+                                                               int numberOfVertices, boolean clockwiseOrdered)
+   {
+      Point2D projection = new Point2D();
+      boolean success = orthogonalProjectionOnConvexPolygon2D(pointToProject.getX(), pointToProject.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered,
+                                                              projection);
+      return success ? projection : null;
    }
 
    /**

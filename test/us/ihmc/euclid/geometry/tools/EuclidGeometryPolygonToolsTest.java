@@ -1821,6 +1821,24 @@ public class EuclidGeometryPolygonToolsTest
          assertEquals(projection, convexPolygon2D.get(0));
       }
 
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with a two point polygon
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(generateRandomPoint2D(random, 10.0));
+         convexPolygon2D.add(generateRandomPoint2D(random, 10.0));
+         int hullSize = inPlaceGiftWrapConvexHull2D(convexPolygon2D);
+         boolean clockwiseOrdered = random.nextBoolean();
+
+         Point2D query = generateRandomPoint2D(random, 10.0);
+         Point2D actualProjection = new Point2D();
+         Point2D expectedProjection = new Point2D();
+
+         boolean actualSuccess = orthogonalProjectionOnConvexPolygon2D(query, convexPolygon2D, hullSize, clockwiseOrdered, actualProjection);
+         boolean expectedSuccess = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(query, convexPolygon2D.get(0), convexPolygon2D.get(1), expectedProjection);
+         assertTrue(expectedSuccess == actualSuccess);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, SMALLEST_EPSILON);
+      }
+
       { // Test exceptions
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
          int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
