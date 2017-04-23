@@ -604,9 +604,14 @@ public class EuclidGeometryPolygonTools
             firstIntersectionToPack.set(convexPolygon2D.get(0));
             return 1;
          }
+         else
+         {
+            return 0;
+         }
       }
 
-      int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D, numberOfVertices);
+      int firstEdgeIndex = nextEdgeIndexIntersectingWithLine2D(-1, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                               numberOfVertices);
       if (firstEdgeIndex < 0)
          return 0;
 
@@ -617,8 +622,8 @@ public class EuclidGeometryPolygonTools
       if (!success)
          throw new RuntimeException("Inconsistency in algorithms.");
 
-      int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
-                                                      numberOfVertices);
+      int secondEdgeIndex = nextEdgeIndexIntersectingWithLine2D(firstEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                                numberOfVertices);
 
       if (secondEdgeIndex < 0)
          return 1;
@@ -633,8 +638,8 @@ public class EuclidGeometryPolygonTools
       if (!firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, EPSILON))
          return 2;
 
-      secondEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
-                                                  numberOfVertices);
+      secondEdgeIndex = nextEdgeIndexIntersectingWithLine2D(secondEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                            numberOfVertices);
 
       if (secondEdgeIndex < 0 || secondEdgeIndex == firstEdgeIndex)
          return 1;
@@ -714,6 +719,16 @@ public class EuclidGeometryPolygonTools
     * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
     * the only intersection are stored in {@code firstIntersectionToPack}.
     * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If the line segment is collinear to an edge:
+    * <ul>
+    * <li>The edge entirely contains the line segment: this method finds two intersections which are
+    * the endpoints of the line segment.
+    * <li>The line segment entirely contains the edge: this method finds two intersections which are
+    * the vertices of the edge.
+    * <li>The edge and the line segment partially overlap: this method finds two intersections which
+    * the polygon's vertex that on the line segment and the line segment's endpoint that is on the
+    * polygon's edge.
+    * </ul>
     * </ul>
     * </p>
     * 
@@ -736,33 +751,123 @@ public class EuclidGeometryPolygonTools
                                                                         boolean clockwiseOrdered, Point2DBasics firstIntersectionToPack,
                                                                         Point2DBasics secondIntersectionToPack)
    {
-      double pointOnLineX = lineSegmentStart.getX();
-      double pointOnLineY = lineSegmentStart.getY();
-      double lineDirectionX = lineSegmentEnd.getX() - lineSegmentStart.getX();
-      double lineDirectionY = lineSegmentEnd.getY() - lineSegmentStart.getY();
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
 
-      int numberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
-                                                                              numberOfVertices, clockwiseOrdered, firstIntersectionToPack,
-                                                                              secondIntersectionToPack);
+      if (numberOfVertices == 0)
+         return 0;
 
-      if (numberOfIntersections == 2)
+      if (numberOfVertices == 1)
       {
-         double percentage = percentageAlongLineSegment2D(secondIntersectionToPack, lineSegmentStart, lineSegmentEnd);
-         if (percentage < -EPSILON || percentage > 1.0 + EPSILON)
-            numberOfIntersections--;
-      }
-
-      if (numberOfIntersections >= 1)
-      {
-         double percentage = percentageAlongLineSegment2D(firstIntersectionToPack, lineSegmentStart, lineSegmentEnd);
-         if (percentage < -EPSILON || percentage > 1.0 + EPSILON)
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         if (distanceFromPoint2DToLineSegment2D(vertex, lineSegmentStart, lineSegmentEnd) < ONE_TRILLIONTH)
          {
-            numberOfIntersections--;
-            firstIntersectionToPack.set(secondIntersectionToPack);
+            firstIntersectionToPack.set(convexPolygon2D.get(0));
+            return 1;
+         }
+         else
+         {
+            return 0;
          }
       }
 
-      return numberOfIntersections;
+      double lineSegmentDx = lineSegmentEnd.getX() - lineSegmentStart.getX();
+      double lineSegmentDy = lineSegmentEnd.getY() - lineSegmentStart.getY();
+
+      int foundIntersections = 0;
+      if (numberOfVertices == 2)
+      {
+         Point2DReadOnly vertex0 = convexPolygon2D.get(0);
+         Point2DReadOnly vertex1 = convexPolygon2D.get(1);
+         if (distanceFromPoint2DToLineSegment2D(vertex0, lineSegmentStart, lineSegmentEnd) < ONE_TRILLIONTH)
+         {
+            firstIntersectionToPack.set(vertex0);
+            foundIntersections++;
+         }
+
+         if (distanceFromPoint2DToLineSegment2D(vertex1, lineSegmentStart, lineSegmentEnd) < ONE_TRILLIONTH)
+         {
+            if (foundIntersections == 0)
+               firstIntersectionToPack.set(vertex1);
+            else
+               secondIntersectionToPack.set(vertex1);
+            foundIntersections++;
+         }
+
+         if (foundIntersections == 2)
+            return 2;
+      }
+
+      for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
+      {
+         Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
+         Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
+
+         // check if the end points of the line segments are on this edge
+         if (distanceFromPoint2DToLineSegment2D(lineSegmentStart, edgeStart, edgeEnd) < ONE_TRILLIONTH)
+         {
+            if (foundIntersections == 0)
+               firstIntersectionToPack.set(lineSegmentStart);
+            else
+               secondIntersectionToPack.set(lineSegmentStart);
+
+            foundIntersections++;
+            if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
+               foundIntersections--;
+            if (foundIntersections == 2)
+               return foundIntersections; // No intersection left to find.
+         }
+         if (distanceFromPoint2DToLineSegment2D(lineSegmentEnd, edgeStart, edgeEnd) < ONE_TRILLIONTH)
+         {
+            if (foundIntersections == 0)
+               firstIntersectionToPack.set(lineSegmentEnd);
+            else
+               secondIntersectionToPack.set(lineSegmentEnd);
+
+            foundIntersections++;
+            if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
+               foundIntersections--;
+            if (foundIntersections == 2)
+               return foundIntersections; // No intersection left to find.
+         }
+
+         double edgeVectorX = edgeEnd.getX() - edgeStart.getX();
+         double edgeVectorY = edgeEnd.getY() - edgeStart.getY();
+         double lambda = percentageOfIntersectionBetweenTwoLine2Ds(edgeStart.getX(), edgeStart.getY(), edgeVectorX, edgeVectorY, lineSegmentStart.getX(),
+                                                                   lineSegmentStart.getY(), lineSegmentDx, lineSegmentDy);
+         if (Double.isNaN(lambda))
+            continue;
+
+         // check if within edge bounds:
+         if (lambda < 0.0 - ONE_TRILLIONTH || lambda > 1.0 + ONE_TRILLIONTH)
+            continue;
+
+         if (lambda < 0.0)
+            lambda = 0.0;
+         else if (lambda > 1.0)
+            lambda = 1.0;
+
+         double candidateX = edgeStart.getX() + lambda * edgeVectorX;
+         double candidateY = edgeStart.getY() + lambda * edgeVectorY;
+
+         // check if within segment bounds:
+         if (!isPoint2DInFrontOfRay2D(candidateX, candidateY, lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentDx, lineSegmentDy))
+            continue;
+         if (!isPoint2DInFrontOfRay2D(candidateX, candidateY, lineSegmentEnd.getX(), lineSegmentEnd.getY(), -lineSegmentDx, -lineSegmentDy))
+            continue;
+
+         if (foundIntersections == 0)
+            firstIntersectionToPack.set(candidateX, candidateY);
+         else
+            secondIntersectionToPack.set(candidateX, candidateY);
+
+         foundIntersections++;
+         if (foundIntersections == 2 && firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, ONE_TRILLIONTH))
+            foundIntersections--;
+         if (foundIntersections == 2)
+            return foundIntersections; // No intersection left to find.
+      }
+
+      return foundIntersections;
    }
 
    /**
@@ -780,6 +885,16 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
     * this method returns {@code null}.
     * <li>If no intersections exist, this method returns {@code null}.
+    * <li>If the line segment is collinear to an edge:
+    * <ul>
+    * <li>The edge entirely contains the line segment: this method finds two intersections which are
+    * the endpoints of the line segment.
+    * <li>The line segment entirely contains the edge: this method finds two intersections which are
+    * the vertices of the edge.
+    * <li>The edge and the line segment partially overlap: this method finds two intersections which
+    * the polygon's vertex that on the line segment and the line segment's endpoint that is on the
+    * polygon's edge.
+    * </ul>
     * </ul>
     * </p>
     * 
@@ -1745,11 +1860,11 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
-   public static int nextIntersectingEdgeIndex(int previousEdgeIndex, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
-                                               List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   public static int nextIntersectingEdgeIndexWithLine2D(int previousEdgeIndex, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
+                                                         List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
-      return nextIntersectingEdgeIndex(previousEdgeIndex, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), convexPolygon2D,
-                                       numberOfVertices);
+      return nextEdgeIndexIntersectingWithLine2D(previousEdgeIndex, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                 convexPolygon2D, numberOfVertices);
    }
 
    /**
@@ -1794,8 +1909,8 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
-   public static int nextIntersectingEdgeIndex(int previousEdgeIndex, double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
-                                               List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   public static int nextEdgeIndexIntersectingWithLine2D(int previousEdgeIndex, double pointOnLineX, double pointOnLineY, double lineDirectionX,
+                                                         double lineDirectionY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
       if (previousEdgeIndex < -2 || previousEdgeIndex >= numberOfVertices)

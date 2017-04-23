@@ -1449,6 +1449,312 @@ public class EuclidGeometryPolygonToolsTest
    {
       Random random = new Random(234324L);
 
+      { // Test some examples
+         List<Point2D> convexPolygon2D = new ArrayList<>();
+         convexPolygon2D.add(new Point2D(-1.0, -1.0));
+         convexPolygon2D.add(new Point2D(1.0, -1.0));
+         convexPolygon2D.add(new Point2D(-1.0, 1.0));
+         convexPolygon2D.add(new Point2D(1.0, 1.0));
+         int hullSize = inPlaceGiftWrapConvexHull2D(convexPolygon2D);
+         assertEquals(4, hullSize);
+         boolean clockwiseOrdered = true;
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         Point2D expectedFirstIntersection = new Point2D();
+         Point2D expectedSecondIntersection = new Point2D();
+         Point2D actualFirstIntersection = new Point2D();
+         Point2D actualSecondIntersection = new Point2D();
+         int expectedNumberOfIntersections, actualNumberOfIntersections;
+
+         lineSegmentStart.set(0.0, 0.0);
+         lineSegmentEnd.set(2.0, 0.0);
+         expectedFirstIntersection.set(1.0, 0.0);
+         expectedNumberOfIntersections = 1;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-2.0, 0.0);
+         lineSegmentEnd.set(2.0, 0.0);
+         expectedFirstIntersection.set(1.0, 0.0);
+         expectedSecondIntersection.set(-1.0, 0.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-0.5, 0.0);
+         lineSegmentEnd.set(0.5, 0.0);
+         expectedNumberOfIntersections = 0;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+
+         lineSegmentStart.set(-3.5, 0.0);
+         lineSegmentEnd.set(-1.5, 0.0);
+         expectedNumberOfIntersections = 0;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+
+         lineSegmentStart.set(-1.5, 0.0);
+         lineSegmentEnd.set(0.0, 1.5);
+         expectedFirstIntersection.set(-0.5, 1.0);
+         expectedSecondIntersection.set(-1.0, 0.5);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-1.0, 0.5);
+         lineSegmentEnd.set(-0.5, 1.0);
+         expectedFirstIntersection.set(-0.5, 1.0);
+         expectedSecondIntersection.set(-1.0, 0.5);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-1.5, 1.0);
+         lineSegmentEnd.set(1.5, 1.0);
+         expectedFirstIntersection.set(-1.0, 1.0);
+         expectedSecondIntersection.set(1.0, 1.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-2.5, 1.0);
+         lineSegmentEnd.set(-1.5, 1.0);
+         expectedNumberOfIntersections = 0;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+
+         // FIXME
+         lineSegmentStart.set(1.0, 0.0);
+         lineSegmentEnd.set(1.0, 2.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedSecondIntersection.set(1.0, 0.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.0, 0.0);
+         lineSegmentEnd.set(1.0, 0.5);
+         expectedFirstIntersection.set(1.0, 0.0);
+         expectedSecondIntersection.set(1.0, 0.5);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-0.5, 1.0);
+         lineSegmentEnd.set(-1.0, 0.5);
+         expectedFirstIntersection.set(-0.5, 1.0);
+         expectedSecondIntersection.set(-1.0, 0.5);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-1.5, 0.5);
+         lineSegmentEnd.set(1.5, 0.5);
+         expectedFirstIntersection.set(1.0, 0.5);
+         expectedSecondIntersection.set(-1.0, 0.5);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(0.0, -1.5);
+         lineSegmentEnd.set(1.5, -1.5);
+         expectedNumberOfIntersections = 0;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+
+         lineSegmentStart.set(0.0, 1.5);
+         lineSegmentEnd.set(1.5, 1.5);
+         expectedNumberOfIntersections = 0;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+
+         lineSegmentStart.set(1.0, 1.0);
+         lineSegmentEnd.set(0.5, 1.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedSecondIntersection.set(0.5, 1.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.0, 1.0);
+         lineSegmentEnd.set(1.0, 0.5);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedSecondIntersection.set(1.0, 0.5);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(0.5, 1.0);
+         lineSegmentEnd.set(1.0, 1.0);
+         expectedFirstIntersection.set(0.5, 1.0);
+         expectedSecondIntersection.set(1.0, 1.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.0, 0.5);
+         lineSegmentEnd.set(1.0, 1.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedSecondIntersection.set(1.0, 0.5);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-1.5, 1.0);
+         lineSegmentEnd.set(-0.5, 1.0);
+         expectedFirstIntersection.set(-0.5, 1.0);
+         expectedSecondIntersection.set(-1.0, 1.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-1.5, 1.0);
+         lineSegmentEnd.set(-1.0, 1.0);
+         expectedFirstIntersection.set(-1.0, 1.0);
+         expectedNumberOfIntersections = 1;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-1.0, 1.0);
+         lineSegmentEnd.set(-1.5, 1.0);
+         expectedFirstIntersection.set(-1.0, 1.0);
+         expectedNumberOfIntersections = 1;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.0, 1.0);
+         lineSegmentEnd.set(1.5, 1.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedNumberOfIntersections = 1;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.5, 1.0);
+         lineSegmentEnd.set(1.0, 1.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedNumberOfIntersections = 1;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.5, 1.5);
+         lineSegmentEnd.set(1.0, 1.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedNumberOfIntersections = 1;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(0.5, 1.5);
+         lineSegmentEnd.set(1.0, 1.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedNumberOfIntersections = 1;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(-1.0, -1.0);
+         lineSegmentEnd.set(0.8, 1.0);
+         expectedFirstIntersection.set(0.8, 1.0);
+         expectedSecondIntersection.set(-1.0, -1.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.0, 1.0);
+         lineSegmentEnd.set(-1.0, -1.0);
+         expectedFirstIntersection.set(1.0, 1.0);
+         expectedSecondIntersection.set(-1.0, -1.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.0, -0.5);
+         lineSegmentEnd.set(1.0, 0.0);
+         expectedFirstIntersection.set(1.0, -0.5);
+         expectedSecondIntersection.set(1.0, 0.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+
+         lineSegmentStart.set(1.0, -1.5);
+         lineSegmentEnd.set(1.0, 0.5);
+         expectedFirstIntersection.set(1.0, 0.5);
+         expectedSecondIntersection.set(1.0, -1.0);
+         expectedNumberOfIntersections = 2;
+         actualNumberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
+                                                                                          clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, SMALLEST_EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, SMALLEST_EPSILON);
+      }
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Setup: 2 intersections picked at random on the polygon from which the line segment can be built to test 0, 1, and 2 intersections just by moving the end points on the same line.
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
@@ -1606,12 +1912,18 @@ public class EuclidGeometryPolygonToolsTest
 
          numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                     clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 1, numberOfIntersections);
+         assertEquals("Iteration: " + i, 2, numberOfIntersections);
 
-         if (actualFirstIntersection.distance(vertex) < actualFirstIntersection.distance(nextVertex))
+         if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
+         {
             EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentEnd, actualSecondIntersection, SMALL_EPSILON);
+         }
          else
-            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentEnd, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
+         }
 
          // Test second side
          lineSegmentStart.interpolate(vertex, nextVertex, generateRandomDouble(random, 0.0, 1.0));
@@ -1619,12 +1931,18 @@ public class EuclidGeometryPolygonToolsTest
 
          numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                     clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 1, numberOfIntersections);
+         assertEquals("Iteration: " + i, 2, numberOfIntersections);
 
-         if (actualFirstIntersection.distance(vertex) < actualFirstIntersection.distance(nextVertex))
-            EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
-         else
+         if (nextVertex.distance(actualFirstIntersection) < nextVertex.distance(actualSecondIntersection))
+         {
             EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentStart, actualSecondIntersection, SMALL_EPSILON);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(lineSegmentStart, actualFirstIntersection, SMALL_EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(nextVertex, actualSecondIntersection, SMALL_EPSILON);
+         }
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2697,7 +3015,7 @@ public class EuclidGeometryPolygonToolsTest
    }
 
    @Test
-   public void testNextIntersectingEdgeIndex() throws Exception
+   public void testNextEdgeIndexIntersectingWithLine2D() throws Exception
    {
       Random random = new Random(324234L);
 
@@ -2739,8 +3057,8 @@ public class EuclidGeometryPolygonToolsTest
             lineDirection.negate();
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
-         int actualFirstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int actualSecondEdgeIndex = nextIntersectingEdgeIndex(actualFirstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int actualFirstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int actualSecondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(actualFirstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
 
          if (firstEdgeIndex < secondEdgeIndex)
          {
@@ -2754,11 +3072,11 @@ public class EuclidGeometryPolygonToolsTest
          }
 
          // Verify that calling the method once more loops back to the first edge index.
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(actualSecondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(actualSecondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(actualFirstEdgeIndex, thirdEdgeIndex);
 
          // Verify that calling the method with previousEdgeIndex == -2 automatically fails
-         assertEquals(-2, nextIntersectingEdgeIndex(-2, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-2, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2799,8 +3117,8 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
          // The method should find the two edges adjacent to the vertex
-         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int firstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
 
          if (previous(vertexIndex, hullSize) < vertexIndex)
          {
@@ -2814,7 +3132,7 @@ public class EuclidGeometryPolygonToolsTest
          }
 
          // Verify that calling the method once more loops back to the first edge index.
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(thirdEdgeIndex, firstEdgeIndex);
       }
 
@@ -2841,8 +3159,8 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
          // The method should find the 2 edges: edgeIndex + 1, edgeIndex - 1
-         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int firstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
 
          int nextEdgeIndex = next(edgeIndex, hullSize);
          int previousEdgeIndex = previous(edgeIndex, hullSize);
@@ -2858,7 +3176,7 @@ public class EuclidGeometryPolygonToolsTest
             assertEquals(previousEdgeIndex, secondEdgeIndex);
          }
 
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(firstEdgeIndex, thirdEdgeIndex);
       }
 
@@ -2920,7 +3238,7 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection.normalize();
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
-         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       { // Test with a single point polygon => automatically fails
@@ -2933,7 +3251,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D pointOnLine = new Point2D(vertex);
          Vector2D lineDirection = generateRandomVector2D(random, -10.0, 10.0);
 
-         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2958,19 +3276,19 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection = generateRandomVector2D(random, -10.0, 10.0);
          pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnEdge);
 
-         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int firstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(0, firstEdgeIndex);
          assertEquals(1, secondEdgeIndex);
 
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(firstEdgeIndex, thirdEdgeIndex);
 
          // Case 2: the line does not intersect the polygon
          lineDirection = generateRandomVector2D(random, -10.0, 10.0);
          pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOutsideEdge);
 
-         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       { // Test exceptions
@@ -2985,7 +3303,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, convexPolygon2D.size() + 1);
+            nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, convexPolygon2D.size() + 1);
             fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
          }
          catch (IllegalArgumentException e)
@@ -2995,7 +3313,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, -1);
+            nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, -1);
             fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
          }
          catch (IllegalArgumentException e)
@@ -3005,7 +3323,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(-3, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+            nextIntersectingEdgeIndexWithLine2D(-3, pointOnLine, lineDirection, convexPolygon2D, hullSize);
             fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
          }
          catch (IndexOutOfBoundsException e)
@@ -3015,7 +3333,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(hullSize, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+            nextIntersectingEdgeIndexWithLine2D(hullSize, pointOnLine, lineDirection, convexPolygon2D, hullSize);
             fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
          }
          catch (IndexOutOfBoundsException e)
