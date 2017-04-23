@@ -1860,7 +1860,7 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
-   public static int nextIntersectingEdgeIndexWithLine2D(int previousEdgeIndex, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
+   public static int nextEdgeIndexIntersectingWithLine2D(int previousEdgeIndex, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
                                                          List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
       return nextEdgeIndexIntersectingWithLine2D(previousEdgeIndex, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
