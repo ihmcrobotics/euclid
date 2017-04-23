@@ -604,6 +604,10 @@ public class EuclidGeometryPolygonTools
             firstIntersectionToPack.set(convexPolygon2D.get(0));
             return 1;
          }
+         else
+         {
+            return 0;
+         }
       }
 
       int firstEdgeIndex = nextEdgeIndexIntersectingWithLine2D(-1, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
