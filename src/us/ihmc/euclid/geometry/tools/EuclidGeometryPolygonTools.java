@@ -606,7 +606,8 @@ public class EuclidGeometryPolygonTools
          }
       }
 
-      int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D, numberOfVertices);
+      int firstEdgeIndex = nextEdgeIndexIntersectingWithLine2D(-1, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                               numberOfVertices);
       if (firstEdgeIndex < 0)
          return 0;
 
@@ -617,8 +618,8 @@ public class EuclidGeometryPolygonTools
       if (!success)
          throw new RuntimeException("Inconsistency in algorithms.");
 
-      int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
-                                                      numberOfVertices);
+      int secondEdgeIndex = nextEdgeIndexIntersectingWithLine2D(firstEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                                numberOfVertices);
 
       if (secondEdgeIndex < 0)
          return 1;
@@ -633,8 +634,8 @@ public class EuclidGeometryPolygonTools
       if (!firstIntersectionToPack.epsilonEquals(secondIntersectionToPack, EPSILON))
          return 2;
 
-      secondEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
-                                                  numberOfVertices);
+      secondEdgeIndex = nextEdgeIndexIntersectingWithLine2D(secondEdgeIndex, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, convexPolygon2D,
+                                                            numberOfVertices);
 
       if (secondEdgeIndex < 0 || secondEdgeIndex == firstEdgeIndex)
          return 1;
@@ -1745,11 +1746,11 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
-   public static int nextIntersectingEdgeIndex(int previousEdgeIndex, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
-                                               List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   public static int nextIntersectingEdgeIndexWithLine2D(int previousEdgeIndex, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
+                                                         List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
-      return nextIntersectingEdgeIndex(previousEdgeIndex, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), convexPolygon2D,
-                                       numberOfVertices);
+      return nextEdgeIndexIntersectingWithLine2D(previousEdgeIndex, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                 convexPolygon2D, numberOfVertices);
    }
 
    /**
@@ -1794,8 +1795,8 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
-   public static int nextIntersectingEdgeIndex(int previousEdgeIndex, double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
-                                               List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
+   public static int nextEdgeIndexIntersectingWithLine2D(int previousEdgeIndex, double pointOnLineX, double pointOnLineY, double lineDirectionX,
+                                                         double lineDirectionY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
       if (previousEdgeIndex < -2 || previousEdgeIndex >= numberOfVertices)

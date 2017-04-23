@@ -2697,7 +2697,7 @@ public class EuclidGeometryPolygonToolsTest
    }
 
    @Test
-   public void testNextIntersectingEdgeIndex() throws Exception
+   public void testNextEdgeIndexIntersectingWithLine2D() throws Exception
    {
       Random random = new Random(324234L);
 
@@ -2739,8 +2739,8 @@ public class EuclidGeometryPolygonToolsTest
             lineDirection.negate();
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
-         int actualFirstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int actualSecondEdgeIndex = nextIntersectingEdgeIndex(actualFirstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int actualFirstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int actualSecondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(actualFirstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
 
          if (firstEdgeIndex < secondEdgeIndex)
          {
@@ -2754,11 +2754,11 @@ public class EuclidGeometryPolygonToolsTest
          }
 
          // Verify that calling the method once more loops back to the first edge index.
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(actualSecondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(actualSecondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(actualFirstEdgeIndex, thirdEdgeIndex);
 
          // Verify that calling the method with previousEdgeIndex == -2 automatically fails
-         assertEquals(-2, nextIntersectingEdgeIndex(-2, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-2, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2799,8 +2799,8 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
          // The method should find the two edges adjacent to the vertex
-         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int firstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
 
          if (previous(vertexIndex, hullSize) < vertexIndex)
          {
@@ -2814,7 +2814,7 @@ public class EuclidGeometryPolygonToolsTest
          }
 
          // Verify that calling the method once more loops back to the first edge index.
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(thirdEdgeIndex, firstEdgeIndex);
       }
 
@@ -2841,8 +2841,8 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
          // The method should find the 2 edges: edgeIndex + 1, edgeIndex - 1
-         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int firstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
 
          int nextEdgeIndex = next(edgeIndex, hullSize);
          int previousEdgeIndex = previous(edgeIndex, hullSize);
@@ -2858,7 +2858,7 @@ public class EuclidGeometryPolygonToolsTest
             assertEquals(previousEdgeIndex, secondEdgeIndex);
          }
 
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(firstEdgeIndex, thirdEdgeIndex);
       }
 
@@ -2920,7 +2920,7 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection.normalize();
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
-         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       { // Test with a single point polygon => automatically fails
@@ -2933,7 +2933,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D pointOnLine = new Point2D(vertex);
          Vector2D lineDirection = generateRandomVector2D(random, -10.0, 10.0);
 
-         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2958,19 +2958,19 @@ public class EuclidGeometryPolygonToolsTest
          lineDirection = generateRandomVector2D(random, -10.0, 10.0);
          pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOnEdge);
 
-         int firstEdgeIndex = nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         int secondEdgeIndex = nextIntersectingEdgeIndex(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int firstEdgeIndex = nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int secondEdgeIndex = nextIntersectingEdgeIndexWithLine2D(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(0, firstEdgeIndex);
          assertEquals(1, secondEdgeIndex);
 
-         int thirdEdgeIndex = nextIntersectingEdgeIndex(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextIntersectingEdgeIndexWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          assertEquals(firstEdgeIndex, thirdEdgeIndex);
 
          // Case 2: the line does not intersect the polygon
          lineDirection = generateRandomVector2D(random, -10.0, 10.0);
          pointOnLine.scaleAdd(generateRandomDouble(random, 10.0), lineDirection, pointOutsideEdge);
 
-         assertEquals(-2, nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
+         assertEquals(-2, nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize));
       }
 
       { // Test exceptions
@@ -2985,7 +2985,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, convexPolygon2D.size() + 1);
+            nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, convexPolygon2D.size() + 1);
             fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
          }
          catch (IllegalArgumentException e)
@@ -2995,7 +2995,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(-1, pointOnLine, lineDirection, convexPolygon2D, -1);
+            nextIntersectingEdgeIndexWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, -1);
             fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
          }
          catch (IllegalArgumentException e)
@@ -3005,7 +3005,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(-3, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+            nextIntersectingEdgeIndexWithLine2D(-3, pointOnLine, lineDirection, convexPolygon2D, hullSize);
             fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
          }
          catch (IndexOutOfBoundsException e)
@@ -3015,7 +3015,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            nextIntersectingEdgeIndex(hullSize, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+            nextIntersectingEdgeIndexWithLine2D(hullSize, pointOnLine, lineDirection, convexPolygon2D, hullSize);
             fail("Should have thrown an " + IndexOutOfBoundsException.class.getSimpleName());
          }
          catch (IndexOutOfBoundsException e)
