@@ -943,6 +943,47 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
+    * Computes the coordinates of the closest point to the ray that belongs to the given convex
+    * polygon.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * WARNINGS:
+    * <ul>
+    * <li>This method assumes that the given vertices already form a convex polygon.
+    * <li>This methods assumes that the ray does not intersect with the polygon. Such scenario
+    * should be handled with
+    * {@link #intersectionBetweenRay2DAndConvexPolygon2D(Point2DReadOnly, Vector2DReadOnly, List, int, boolean, Point2DBasics, Point2DBasics)}.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code null}.
+    * <li>If the ray is parallel to the closest edge, the closest point to the ray origin is chosen.
+    * </ul>
+    * </p>
+    * 
+    * @param rayOrigin the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the closest point to the ray or {@code null} if the method failed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static Point2D closestPointToNonInterectingRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection,
+                                                           List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered)
+   {
+      Point2D closestPoint = new Point2D();
+      boolean success = closestPointToNonInterectingRay2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices, clockwiseOrdered, closestPoint);
+      return success ? closestPoint : null;
+   }
+
+   /**
     * Finds the index of the closest vertex to the given line.
     * <p>
     * WARNING: This method assumes that the given vertices already form a convex polygon.
@@ -1275,7 +1316,10 @@ public class EuclidGeometryPolygonTools
     * Edge cases:
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code -1}.
-    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * <li>The observer is inside the polygon, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0} if the observer is
+    * different from the polygon's vertex, or returns {@code -1} if the observer is equal to the
+    * polygon's vertex.
     * </ul>
     * </p>
     * 
@@ -1298,9 +1342,17 @@ public class EuclidGeometryPolygonTools
       if (numberOfVertices == 0)
          return -1;
       if (numberOfVertices == 1)
-         return 0;
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         if (vertex.getX() == observerX && vertex.getY() == observerY)
+            return -1;
+         else
+            return 0;
+      }
       if (numberOfVertices == 2)
       {
+         if (isPoint2DInsideConvexPolygon2D(observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered, 0.0))
+            return -1;
          boolean isOnSide = isPoint2DOnSideOfLine2D(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), clockwiseOrdered);
          return isOnSide ? 0 : 1;
       }
@@ -1332,7 +1384,10 @@ public class EuclidGeometryPolygonTools
     * Edge cases:
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code -1}.
-    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * <li>The observer is inside the polygon, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0} if the observer is
+    * different from the polygon's vertex, or returns {@code -1} if the observer is equal to the
+    * polygon's vertex.
     * </ul>
     * </p>
     * 
@@ -1367,7 +1422,10 @@ public class EuclidGeometryPolygonTools
     * Edge cases:
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code -1}.
-    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * <li>The observer is inside the polygon, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0} if the observer is
+    * different from the polygon's vertex, or returns {@code -1} if the observer is equal to the
+    * polygon's vertex.
     * </ul>
     * </p>
     * 
@@ -1390,9 +1448,17 @@ public class EuclidGeometryPolygonTools
       if (numberOfVertices == 0)
          return -1;
       if (numberOfVertices == 1)
-         return 0;
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         if (vertex.getX() == observerX && vertex.getY() == observerY)
+            return -1;
+         else
+            return 0;
+      }
       if (numberOfVertices == 2)
       {
+         if (isPoint2DInsideConvexPolygon2D(observerX, observerY, convexPolygon2D, numberOfVertices, clockwiseOrdered, 0.0))
+            return -1;
          boolean isOnSide = isPoint2DOnSideOfLine2D(observerX, observerY, convexPolygon2D.get(0), convexPolygon2D.get(1), clockwiseOrdered);
          return isOnSide ? 1 : 0;
       }
@@ -1424,7 +1490,10 @@ public class EuclidGeometryPolygonTools
     * Edge cases:
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code -1}.
-    * <li>The polygon has exactly one vertex, this method returns {@code 0}.
+    * <li>The observer is inside the polygon, this method fails and returns {@code -1}.
+    * <li>The polygon has exactly one vertex, this method returns {@code 0} if the observer is
+    * different from the polygon's vertex, or returns {@code -1} if the observer is equal to the
+    * polygon's vertex.
     * </ul>
     * </p>
     * 
@@ -1442,6 +1511,52 @@ public class EuclidGeometryPolygonTools
                                          boolean clockwiseOrdered)
    {
       return lineOfSightEndIndex(observer.getX(), observer.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
+   }
+
+   /**
+    * From the point of view of an observer located outside the polygon, only a continuous subset of
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the indices of the
+    * first vertex and last vertex that are in the line-of-sight.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * WARNING:
+    * <ul>
+    * <li>This method assumes that the given vertices already form a convex polygon.
+    * <li>This method assumes that the given observer is located outside the polygon.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>The polygon has no vertices, this method fails and returns {@code null}.
+    * <li>The observer is inside the polygon, this method fails and returns {@code null}.
+    * <li>The polygon has exactly one vertex, this method returns {@code new int[]{0, 0}} if the
+    * observer is different from the polygon's vertex, or returns {@code null} if the observer is
+    * equal to the polygon's vertex.
+    * </ul>
+    * </p>
+    * 
+    * @param observer the coordinates of the observer. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return in order the index of the first vertex and the index of the last vertex that are in
+    *         the line-of-sight, {@code null} if this method fails.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static int[] lineOfSightIndices(Point2DReadOnly observer, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                          boolean clockwiseOrdered)
+   {
+      int lineOfSightStartIndex = lineOfSightStartIndex(observer, convexPolygon2D, numberOfVertices, clockwiseOrdered);
+      int lineOfSightEndIndex = lineOfSightEndIndex(observer, convexPolygon2D, numberOfVertices, clockwiseOrdered);
+      if (lineOfSightStartIndex == -1 || lineOfSightEndIndex == -1)
+         return null;
+      else
+         return new int[] {lineOfSightStartIndex, lineOfSightEndIndex};
    }
 
    /**
@@ -1644,7 +1759,8 @@ public class EuclidGeometryPolygonTools
 
       if (numberOfVertices == 2)
       {
-         return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, convexPolygon2D.get(0), convexPolygon2D.get(1), projectionToPack);
+         return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, convexPolygon2D.get(0), convexPolygon2D.get(1),
+                                                                        projectionToPack);
       }
 
       int closestEdgeIndex = closestEdgeIndexToPoint2D(pointToProjectX, pointToProjectY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
@@ -1705,10 +1821,9 @@ public class EuclidGeometryPolygonTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>If the polygon has no vertices, this method fails and returns {@code false}.
-    * <li>If the polygon has exactly one vertex, the result is the polygon only vertex, this method
-    * returns {@code true}.
-    * <li>If the query is inside the polygon, the method fails and returns {@code false}.
+    * <li>If the polygon has no vertices, this method fails and returns {@code null}.
+    * <li>If the polygon has exactly one vertex, the result is the polygon only vertex.
+    * <li>If the query is inside the polygon, the method fails and returns {@code null}.
     * </ul>
     * </p>
     *
