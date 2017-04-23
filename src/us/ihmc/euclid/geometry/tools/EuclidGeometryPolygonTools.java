@@ -650,6 +650,56 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and a given
+    * convex polygon 2D.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
+    * returns {@code null}.
+    * <li>If no intersections exist, this method returns {@code null}.
+    * </ul>
+    * </p>
+    * 
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the intersections between between the line and the polygon or {@code null} if the
+    *         method failed or if there is no intersections.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static Point2D[] intersectionBetweenLine2DAndConvexPolygon2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
+                                                                       List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                       boolean clockwiseOrdered)
+   {
+      Point2D firstIntersection = new Point2D();
+      Point2D secondIntersection = new Point2D();
+
+      int numberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLine, lineDirection, convexPolygon2D, numberOfVertices, clockwiseOrdered,
+                                                                              firstIntersection, secondIntersection);
+
+      switch (numberOfIntersections)
+      {
+      case 1:
+         return new Point2D[] {firstIntersection};
+      case 2:
+         return new Point2D[] {firstIntersection, secondIntersection};
+      default:
+         return null;
+      }
+   }
+
+   /**
     * Computes the coordinates of the possible intersection(s) between a given line segment 2D and a
     * given convex polygon 2D.
     * <p>
@@ -716,6 +766,54 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and a
+    * given convex polygon 2D.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
+    * this method returns {@code null}.
+    * <li>If no intersections exist, this method returns {@code null}.
+    * </ul>
+    * </p>
+    * 
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the intersections between the line segment and the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static Point2D[] intersectionBetweenLineSegment2DAndConvexPolygon2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd,
+                                                                              List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                              boolean clockwiseOrdered)
+   {
+      Point2D firstIntersection = new Point2D();
+      Point2D secondIntersection = new Point2D();
+      int numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, numberOfVertices,
+                                                                                     clockwiseOrdered, firstIntersection, secondIntersection);
+
+      switch (numberOfIntersections)
+      {
+      case 1:
+         return new Point2D[] {firstIntersection};
+      case 2:
+         return new Point2D[] {firstIntersection, secondIntersection};
+      default:
+         return null;
+      }
+   }
+
+   /**
     * Computes the coordinates of the possible intersection(s) between a given ray 2D and a given
     * convex polygon 2D.
     * <p>
@@ -740,10 +838,10 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    *           between the ray and the convex polygon. Can be {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @return the number of intersections between the line and the polygon.
+    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @return the number of intersections between the ray and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
@@ -766,6 +864,54 @@ public class EuclidGeometryPolygonTools
       }
 
       return numberOfIntersections;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and a given
+    * convex polygon 2D.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
+    * returns {@code null}.
+    * <li>If no intersections exist, this method returns {@code null}.
+    * </ul>
+    * </p>
+    * 
+    * @param rayOrigin the ray's origin. Not modified.
+    * @param rayDirection the ray's direction. Not modified.
+    * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
+    *           the convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return the intersections between the ray and the polygon.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
+    */
+   public static Point2D[] intersectionBetweenRay2DAndConvexPolygon2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection,
+                                                                      List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                                      boolean clockwiseOrdered)
+   {
+      Point2D firstIntersection = new Point2D();
+      Point2D secondIntersection = new Point2D();
+      int numberOfIntersections = intersectionBetweenRay2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, numberOfVertices, clockwiseOrdered,
+                                                                             firstIntersection, secondIntersection);
+
+      switch (numberOfIntersections)
+      {
+      case 1:
+         return new Point2D[] {firstIntersection};
+      case 2:
+         return new Point2D[] {firstIntersection, secondIntersection};
+      default:
+         return null;
+      }
    }
 
    /**
