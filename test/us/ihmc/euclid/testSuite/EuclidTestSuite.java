@@ -14,6 +14,7 @@ import us.ihmc.euclid.geometry.BoundingBox2DTest;
 import us.ihmc.euclid.geometry.BoundingBox3DTest;
 import us.ihmc.euclid.geometry.Line3DTest;
 import us.ihmc.euclid.geometry.LineSegment3DTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 
 @RunWith(Suite.class)
@@ -24,7 +25,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
       // 3D
       Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class,
       // Tools tests
-      EuclidGeometryToolsTest.class})
+      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class})
 
 public class EuclidTestSuite
 {

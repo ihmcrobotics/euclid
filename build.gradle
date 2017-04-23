@@ -13,7 +13,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.8
-version = '0.2.2'
+version = '0.3.0'
 
 project.ext.fullVersion = version
 project.ext.vcsUrl = "https://github.com/ihmcrobotics/euclid"
@@ -123,8 +123,8 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile group: 'org.pitest', name: 'pitest', version: '1.1.9'
-    testCompile group: 'org.pitest', name: 'pitest-command-line', version: '1.1.9'
+    testCompile group: 'org.pitest', name: 'pitest', version: '1.2.0'
+    testCompile group: 'org.pitest', name: 'pitest-command-line', version: '1.2.0'
     testCompile group: 'us.ihmc', name: 'ihmc-continuous-integration-framework', version: '0.9.4'
 
     compile group: 'org.ejml', name: 'dense64', version: '0.30'
