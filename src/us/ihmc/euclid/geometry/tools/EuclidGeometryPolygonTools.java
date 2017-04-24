@@ -1942,38 +1942,8 @@ public class EuclidGeometryPolygonTools
          Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
 
          boolean doLineAndEdgeIntersect = doLine2DAndLineSegment2DIntersect(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart, edgeEnd);
-
          if (doLineAndEdgeIntersect)
-         {
-            double edgeDx = edgeEnd.getX() - edgeStart.getX();
-            double edgeDy = edgeEnd.getY() - edgeStart.getY();
-            boolean areLineAndEdgeParallel = areVector2DsParallel(lineDirectionX, lineDirectionY, edgeDx, edgeDy, EPSILON);
-
-            if (areLineAndEdgeParallel) // The line and the edge are collinear.
-            { // The comparison is to ensure consistent behavior with the first index returned always being the smallest independently from the context.
-               int previousIndex = previous(edgeIndex, numberOfVertices);
-               int nextIndex = next(edgeIndex, numberOfVertices);
-               int firstEdgeIndex, secondEdgeIndex;
-
-               if (previousIndex < nextIndex)
-               {
-                  firstEdgeIndex = previousIndex;
-                  secondEdgeIndex = nextIndex;
-               }
-               else
-               {
-                  firstEdgeIndex = nextIndex;
-                  secondEdgeIndex = previousIndex;
-               }
-
-               if (firstEdgeIndex != previousEdgeIndex)
-                  return firstEdgeIndex;
-               else
-                  return secondEdgeIndex;
-            }
-            else
-               return edgeIndex;
-         }
+            return edgeIndex;
       }
 
       return -2;
