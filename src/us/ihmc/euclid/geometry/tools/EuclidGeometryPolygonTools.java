@@ -407,10 +407,11 @@ public class EuclidGeometryPolygonTools
                                     Vector2DBasics normalToPack)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
-      checkEdgeIndex(edgeIndex, numberOfVertices);
 
       if (numberOfVertices <= 1)
          return false;
+
+      checkEdgeIndex(edgeIndex, numberOfVertices);
 
       Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
       Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
