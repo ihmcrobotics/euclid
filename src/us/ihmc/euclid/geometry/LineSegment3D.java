@@ -646,6 +646,14 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    }
 
    /**
+    * Returns a copy of this line segment with the endpoints swapped.
+    */
+   public LineSegment3D flipDirectionCopy()
+   {
+      return new LineSegment3D(secondEndpoint, firstEndpoint);
+   }
+
+   /**
     * Computes the dot product of this line segment with the other line segment such that:<br>
     * {@code this }&middot;
     * {@code other = Math.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
