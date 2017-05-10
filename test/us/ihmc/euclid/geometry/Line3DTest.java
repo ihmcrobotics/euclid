@@ -13,6 +13,7 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 public class Line3DTest
 {
@@ -96,15 +97,6 @@ public class Line3DTest
       line3d.set(new Line3D(expectedPoint, expectedDirection));
       EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
-
-      for (int i = 0; i < 3; i++)
-      {
-         double expectedRandomDouble = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         line3d.getPoint().setElement(i, expectedRandomDouble);
-         assertEquals(expectedRandomDouble, line3d.getPoint().getElement(i), EPSILON);
-         line3d.getDirection().setElement(i, expectedRandomDouble);
-         assertEquals(expectedRandomDouble, line3d.getDirection().getElement(i), EPSILON);
-      }
    }
 
    @Test
@@ -153,21 +145,22 @@ public class Line3DTest
    @Test
    public void testContainsNaN() throws Exception
    {
-      for (int i = 0; i < 3; i++)
-      {
-         Line3D line3D = new Line3D();
-         assertFalse(line3D.containsNaN());
-         line3D.getPoint().setElement(i, Double.NaN);
-         assertTrue(line3D.containsNaN());
-      }
-
-      for (int i = 0; i < 3; i++)
-      {
-         Line3D line3D = new Line3D();
-         assertFalse(line3D.containsNaN());
-         line3D.getDirection().setElement(i, Double.NaN);
-         assertTrue(line3D.containsNaN());
-      }
+      Line3D line3D = new Line3D();
+      assertFalse(line3D.containsNaN());
+      line3D.set(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+      assertFalse(line3D.containsNaN());
+      line3D.set(Double.NaN, 0.0, 0.0, 0.0, 0.0, 1.0);
+      assertTrue(line3D.containsNaN());
+      line3D.set(0.0, Double.NaN, 0.0, 0.0, 0.0, 1.0);
+      assertTrue(line3D.containsNaN());
+      line3D.set(0.0, 0.0, Double.NaN, 0.0, 0.0, 1.0);
+      assertTrue(line3D.containsNaN());
+      line3D.set(0.0, 0.0, 0.0, Double.NaN, 0.0, 1.0);
+      assertTrue(line3D.containsNaN());
+      line3D.set(0.0, 0.0, 0.0, 0.0, Double.NaN, 1.0);
+      assertTrue(line3D.containsNaN());
+      line3D.set(0.0, 0.0, 0.0, 0.0, 1.0, Double.NaN);
+      assertTrue(line3D.containsNaN());
    }
 
    @Test
@@ -278,16 +271,25 @@ public class Line3DTest
 
          for (int j = 0; j < 3; j++)
          {
+            Point3D point = new Point3D();
             line2.set(line1);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getPoint().getElement(j);
-            line2.getPoint().setElement(j, element + 0.999 * epsilon);
+            line1.getPoint(point);
+            point.setElement(j, element + 0.999 * epsilon);
+            line2.setPoint(point);
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getPoint().setElement(j, element - 0.999 * epsilon);
+            line1.getPoint(point);
+            point.setElement(j, element - 0.999 * epsilon);
+            line2.setPoint(point);
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getPoint().setElement(j, element + 1.001 * epsilon);
+            line1.getPoint(point);
+            point.setElement(j, element + 1.001 * epsilon);
+            line2.setPoint(point);
             assertFalse(line1.epsilonEquals(line2, epsilon));
-            line2.getPoint().setElement(j, element - 1.001 * epsilon);
+            line1.getPoint(point);
+            point.setElement(j, element - 1.001 * epsilon);
+            line2.setPoint(point);
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
 
@@ -296,13 +298,13 @@ public class Line3DTest
             line2.set(line1);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getDirection().getElement(j);
-            line2.getDirection().setElement(j, element + 0.999 * epsilon);
+            ((Tuple3DBasics) line2.getDirection()).setElement(j, element + 0.999 * epsilon);
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getDirection().setElement(j, element - 0.999 * epsilon);
+            ((Tuple3DBasics) line2.getDirection()).setElement(j, element - 0.999 * epsilon);
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getDirection().setElement(j, element + 1.001 * epsilon);
+            ((Tuple3DBasics) line2.getDirection()).setElement(j, element + 1.001 * epsilon);
             assertFalse(line1.epsilonEquals(line2, epsilon));
-            line2.getDirection().setElement(j, element - 1.001 * epsilon);
+            ((Tuple3DBasics) line2.getDirection()).setElement(j, element - 1.001 * epsilon);
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
       }
@@ -330,9 +332,9 @@ public class Line3DTest
             line2.set(line1);
             assertTrue(line1.equals(line2));
             double element = line1.getPoint().getElement(j);
-            line2.getPoint().setElement(j, element + epsilon);
+            ((Tuple3DBasics) line2.getPoint()).setElement(j, element + epsilon);
             assertFalse(line1.equals(line2));
-            line2.getPoint().setElement(j, element - epsilon);
+            ((Tuple3DBasics) line2.getPoint()).setElement(j, element - epsilon);
             assertFalse(line1.equals(line2));
          }
 
@@ -341,9 +343,9 @@ public class Line3DTest
             line2.set(line1);
             assertTrue(line1.equals(line2));
             double element = line1.getDirection().getElement(j);
-            line2.getDirection().setElement(j, element + epsilon);
+            ((Tuple3DBasics) line2.getDirection()).setElement(j, element + epsilon);
             assertFalse(line1.equals(line2));
-            line2.getDirection().setElement(j, element - epsilon);
+            ((Tuple3DBasics) line2.getDirection()).setElement(j, element - epsilon);
             assertFalse(line1.equals(line2));
          }
       }
