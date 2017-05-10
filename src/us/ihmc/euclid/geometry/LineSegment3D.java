@@ -12,7 +12,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Represents a finite-length 3D line segment defined by its two 3D endpoints.
- *
  */
 public class LineSegment3D implements GeometryObject<LineSegment3D>
 {
@@ -63,6 +62,18 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
                         double secondEndpointZ)
    {
       set(firstEndpointX, firstEndpointY, firstEndpointZ, secondEndpointX, secondEndpointY, secondEndpointZ);
+   }
+
+   /**
+    * Initializes this line segment to have the given endpoints.
+    * 
+    * @param endpoints a two-element array containing in order the first and second endpoints for
+    *           this line segment. Not modified.
+    * @throws IllegalArgumentException if the given array has a length different than 2.
+    */
+   public LineSegment3D(Point3DReadOnly[] endpoints)
+   {
+      set(endpoints);
    }
 
    /**
@@ -152,6 +163,20 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    }
 
    /**
+    * Redefines this line segment with new endpoints.
+    * 
+    * @param endpoints a two-element array containing in order the first and second endpoints for
+    *           this line segment. Not modified.
+    * @throws IllegalArgumentException if the given array has a length different than 2.
+    */
+   public void set(Point3DReadOnly[] endpoints)
+   {
+      if (endpoints.length != 2)
+         throw new RuntimeException("Length of input array is not correct. Length = " + endpoints.length + ", expected an array of two elements");
+      set(endpoints[0], endpoints[1]);
+   }
+
+   /**
     * Sets this line segment to be same as the given line segment.
     * 
     * @param other the other line segment to copy. Not modified.
@@ -229,12 +254,22 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    }
 
    /**
+    * Computes the squared value of the length of this line segment.
+    * 
+    * @return the length squared of this line segment.
+    */
+   public double lengthSquared()
+   {
+      return firstEndpoint.distanceSquared(secondEndpoint);
+   }
+
+   /**
     * Returns the square of the minimum distance between a point and this given line segment.
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code this.length() < Epsilons.ONE_TRILLIONTH}, this method returns the distance
-    * between {@code firstEndpoint} and the given {@code point}.
+    * <li>if {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code firstEndpoint} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -251,8 +286,8 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code this.length() < Epsilons.ONE_TRILLIONTH}, this method returns the distance
-    * between {@code firstEndpoint} and the given {@code point}.
+    * <li>if {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code firstEndpoint} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -283,7 +318,8 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * Edge cases:
     * <ul>
     * <li>if the length of this line segment is too small, i.e.
-    * {@code this.length() < Epsilons.ONE_TRILLIONTH}, this method returns {@code firstEndpoint}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
+    * {@code firstEndpoint}.
     * <li>the projection can not be outside the line segment. When the projection on the
     * corresponding line is outside the line segment, the result is the closest of the two
     * endpoints.
@@ -297,7 +333,7 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * @return the projection of the point onto the line segment or {@code null} if the method
     *         failed.
     */
-   public Point3D orthogonalProjection(Point3DReadOnly pointToProject)
+   public Point3D orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(pointToProject, firstEndpoint, secondEndpoint);
    }
@@ -308,7 +344,30 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * Edge cases:
     * <ul>
     * <li>if the length of this line segment is too small, i.e.
-    * {@code this.length() < Epsilons.ONE_TRILLIONTH}, this method returns {@code firstEndpoint}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
+    * {@code firstEndpoint}.
+    * <li>the projection can not be outside the line segment. When the projection on the
+    * corresponding line is outside the line segment, the result is the closest of the two
+    * endpoints.
+    * </ul>
+    * </p>
+    * 
+    * @param pointToProject the point to project on this line segment. Modified.
+    * @return whether the method succeeded or not.
+    */
+   public boolean orthogonalProjection(Point3DBasics pointToProject)
+   {
+      return orthogonalProjection(pointToProject, pointToProject);
+   }
+
+   /**
+    * Computes the orthogonal projection of a 3D point on this 3D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of this line segment is too small, i.e.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
+    * {@code firstEndpoint}.
     * <li>the projection can not be outside the line segment. When the projection on the
     * corresponding line is outside the line segment, the result is the closest of the two
     * endpoints.
@@ -336,10 +395,10 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * @return the computed point.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
     */
-   public Point3D pointBetweenEndPointsGivenPercentage(double percentage)
+   public Point3D pointBetweenEndpointsGivenPercentage(double percentage)
    {
       Point3D point = new Point3D();
-      pointBetweenEndPointsGivenPercentage(percentage, point);
+      pointBetweenEndpointsGivenPercentage(percentage, point);
       return point;
    }
 
@@ -351,7 +410,7 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * @param pointToPack where the result is stored. Modified.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
     */
-   public void pointBetweenEndPointsGivenPercentage(double percentage, Point3DBasics pointToPack)
+   public void pointBetweenEndpointsGivenPercentage(double percentage, Point3DBasics pointToPack)
    {
       if (percentage < 0.0 || percentage > 1.0)
          throw new RuntimeException("Percentage must be between 0.0 and 1.0. Was: " + percentage);
@@ -386,6 +445,22 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    public void pointOnLineGivenPercentage(double percentage, Point3DBasics pointToPack)
    {
       pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage);
+   }
+
+   /**
+    * Computes and returns the coordinates of the point located exactly at the middle of this line
+    * segment.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @return the mid-point of this line segment.
+    */
+   public Point3D midpoint()
+   {
+      Point3D midpoint = new Point3D();
+      midpoint(midpoint);
+      return midpoint;
    }
 
    /**
@@ -510,7 +585,8 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code this.length() < Epsilons.ONE_TRILLIONTH}, this method fails and returns {@code 0.0}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails
+    * and returns {@code 0.0}.
     * </ul>
     * </p>
     * 
@@ -540,7 +616,8 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code this.length() < Epsilons.ONE_TRILLIONTH}, this method fails and returns {@code 0.0}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails
+    * and returns {@code 0.0}.
     * </ul>
     * </p>
     * 
@@ -552,8 +629,34 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     */
    public double percentageAlongLineSegment(double x, double y, double z)
    {
-      return EuclidGeometryTools.percentageAlongLineSegment3D(x, y, z, firstEndpoint.getX(), firstEndpoint.getY(), firstEndpoint.getZ(), secondEndpoint.getX(),
-                                                              secondEndpoint.getY(), secondEndpoint.getZ());
+      return EuclidGeometryTools.percentageAlongLineSegment3D(x, y, z, firstEndpoint, secondEndpoint);
+   }
+
+   /**
+    * Swaps this line segment's endpoints.
+    */
+   public void flipDirection()
+   {
+      double x = firstEndpoint.getX();
+      double y = firstEndpoint.getY();
+      double z = firstEndpoint.getZ();
+
+      firstEndpoint.set(secondEndpoint);
+      secondEndpoint.set(x, y, z);
+   }
+
+   /**
+    * Computes the dot product of this line segment with the other line segment such that:<br>
+    * {@code this }&middot;
+    * {@code other = Math.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
+    * where &alpha; is the angle from this to the other line segment.
+    * 
+    * @param other the other line segment used to compute the dot product. Not modified.
+    * @return the value of the dot product.
+    */
+   public double dotProduct(LineSegment3D other)
+   {
+      return EuclidGeometryTools.dotProduct(firstEndpoint, secondEndpoint, other.firstEndpoint, other.secondEndpoint);
    }
 
    /**
@@ -567,8 +670,8 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    }
 
    /**
-    * Gets the first endpoint defining this line by storing its coordinates in the given argument
-    * {@code firstEndpointToPack}.
+    * Gets the first endpoint defining this line segment by storing its coordinates in the given
+    * argument {@code firstEndpointToPack}.
     * 
     * @param firstEndpointToPack point in which the coordinates of this line segment's first
     *           endpoint are stored. Modified.
@@ -576,6 +679,19 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    public void getFirstEndpoint(Point3DBasics firstEndpointToPack)
    {
       firstEndpointToPack.set(firstEndpoint);
+   }
+
+   /**
+    * Gets a copy of the first endpoint of this line segment.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @return the copy of the first endpoint of this line segment.
+    */
+   public Point3D getFirstEndpointCopy()
+   {
+      return new Point3D(firstEndpoint);
    }
 
    /**
@@ -589,8 +705,8 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    }
 
    /**
-    * Gets the second endpoint defining this line by storing its coordinates in the given argument
-    * {@code secondEndpointToPack}.
+    * Gets the second endpoint defining this line segment by storing its coordinates in the given
+    * argument {@code secondEndpointToPack}.
     * 
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
@@ -598,6 +714,108 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    public void getSecondEndpoint(Point3DBasics secondEndpointToPack)
    {
       secondEndpointToPack.set(secondEndpoint);
+   }
+
+   /**
+    * Gets a copy of the second endpoint of this line segment.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @return the copy of the second endpoint of this line segment.
+    */
+   public Point3D getSecondEndpointCopy()
+   {
+      return new Point3D(secondEndpoint);
+   }
+
+   /**
+    * Gets the endpoints defining this line segment by storing their coordinates in the given
+    * arguments.
+    * 
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first
+    *           endpoint are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second
+    *           endpoint are stored. Modified.
+    */
+   public void getEndpoints(Point3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
+   {
+      firstEndpointToPack.set(firstEndpoint);
+      secondEndpointToPack.set(secondEndpoint);
+   }
+
+   /**
+    * Gets a copy of the endpoints of this line segment and returns them in a two-element array.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @return the two-element array containing in order this line segment first and second
+    *         endpoints.
+    */
+   public Point3D[] getEndpointsCopy()
+   {
+      return new Point3D[] {getFirstEndpointCopy(), getSecondEndpointCopy()};
+   }
+
+   /**
+    * Gets the x-coordinate of the first endpoint defining this line segment.
+    * 
+    * @return the first endpoint x-coordinate.
+    */
+   public double getFirstEndpointX()
+   {
+      return firstEndpoint.getX();
+   }
+
+   /**
+    * Gets the y-coordinate of the first endpoint defining this line segment.
+    * 
+    * @return the first endpoint y-coordinate.
+    */
+   public double getFirstEndpointY()
+   {
+      return firstEndpoint.getY();
+   }
+
+   /**
+    * Gets the z-coordinate of the first endpoint defining this line segment.
+    * 
+    * @return the first endpoint z-coordinate.
+    */
+   public double getFirstEndpointZ()
+   {
+      return firstEndpoint.getZ();
+   }
+
+   /**
+    * Gets the x-coordinate of the second endpoint defining this line segment.
+    * 
+    * @return the first endpoint x-coordinate.
+    */
+   public double getSecondEndpointX()
+   {
+      return secondEndpoint.getX();
+   }
+
+   /**
+    * Gets the y-coordinate of the second endpoint defining this line segment.
+    * 
+    * @return the first endpoint y-coordinate.
+    */
+   public double getSecondEndpointY()
+   {
+      return secondEndpoint.getY();
+   }
+
+   /**
+    * Gets the z-coordinate of the second endpoint defining this line segment.
+    * 
+    * @return the first endpoint z-coordinate.
+    */
+   public double getSecondEndpointZ()
+   {
+      return secondEndpoint.getZ();
    }
 
    /**
@@ -614,6 +832,9 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    /**
     * Computes the line on which this line segment is lying. The line's vector is the direction from
     * the first to the second endpoint of this line segment.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     * 
     * @return the line on which this line segment is lying.
     */

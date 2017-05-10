@@ -228,7 +228,7 @@ public class LineSegment3DTest
          Point3D actual = new Point3D();
 
          expected = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(query, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
-         actual = lineSegment3D.orthogonalProjection(query);
+         actual = lineSegment3D.orthogonalProjectionCopy(query);
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
       }
 
@@ -258,7 +258,7 @@ public class LineSegment3DTest
          Point3D expected = new Point3D();
          expected.interpolate(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), percentage);
          Point3D actual = new Point3D();
-         actual = lineSegment3D.pointBetweenEndPointsGivenPercentage(percentage);
+         actual = lineSegment3D.pointBetweenEndpointsGivenPercentage(percentage);
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
       }
 
@@ -270,13 +270,13 @@ public class LineSegment3DTest
          Point3D expected = new Point3D();
          expected.interpolate(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), percentage);
          Point3D actual = new Point3D();
-         lineSegment3D.pointBetweenEndPointsGivenPercentage(percentage, actual);
+         lineSegment3D.pointBetweenEndpointsGivenPercentage(percentage, actual);
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
       }
 
       try
       {
-         new LineSegment3D().pointBetweenEndPointsGivenPercentage(-Double.MIN_VALUE);
+         new LineSegment3D().pointBetweenEndpointsGivenPercentage(-Double.MIN_VALUE);
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -286,7 +286,7 @@ public class LineSegment3DTest
 
       try
       {
-         new LineSegment3D().pointBetweenEndPointsGivenPercentage(1.0 + 1.11025e-16);
+         new LineSegment3D().pointBetweenEndpointsGivenPercentage(1.0 + 1.11025e-16);
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -296,7 +296,7 @@ public class LineSegment3DTest
 
       try
       {
-         new LineSegment3D().pointBetweenEndPointsGivenPercentage(-Double.MIN_VALUE, new Point3D());
+         new LineSegment3D().pointBetweenEndpointsGivenPercentage(-Double.MIN_VALUE, new Point3D());
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -306,7 +306,7 @@ public class LineSegment3DTest
 
       try
       {
-         new LineSegment3D().pointBetweenEndPointsGivenPercentage(1.0 + 1.11025e-16, new Point3D());
+         new LineSegment3D().pointBetweenEndpointsGivenPercentage(1.0 + 1.11025e-16, new Point3D());
          fail("Should have thrown a " + RuntimeException.class.getSimpleName());
       }
       catch (RuntimeException e)
@@ -416,7 +416,7 @@ public class LineSegment3DTest
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
          double percentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          Point3D pointInside;
-         pointInside = lineSegment3D.pointBetweenEndPointsGivenPercentage(percentage);
+         pointInside = lineSegment3D.pointBetweenEndpointsGivenPercentage(percentage);
          assertTrue(lineSegment3D.isBetweenEndpoints(pointInside));
          double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          double epsilonLength = epsilon * lineSegment3D.length();
