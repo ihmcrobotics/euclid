@@ -2147,7 +2147,7 @@ public class EuclidGeometryTools
     * <li>When the line and the line segment are collinear, they are assumed to intersect at
     * {@code lineSegmentStart}.
     * <li>When the line intersects the line segment at one of its endpoints, this method returns
-    * true and the endpoint is the intersection.
+    * {@code true} and the endpoint is the intersection.
     * </ul>
     * </p>
     *
@@ -2784,7 +2784,7 @@ public class EuclidGeometryTools
     * Edge cases:
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns null.
+    * method returns {@code null}.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code pointOnLine1}.
     * </ul>
@@ -3437,7 +3437,7 @@ public class EuclidGeometryTools
     * <li>the right side of this line has a positive y coordinate.
     * </ul>
     * </p>
-    * This method will return false if the point is on the line.
+    * This method will return {@code false} if the point is on the line.
     *
     * @param pointX the x-coordinate of the query point.
     * @param pointY the y-coordinate of the query point.
