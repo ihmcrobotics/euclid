@@ -1608,8 +1608,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>the line segment endpoints are equal, this method returns false whether the endpoints are
-    * on the plane or not.
+    * <li>the line segment endpoints are equal, this method returns {@code false} whether the
+    * endpoints are on the plane or not.
     * <li>one of the line segment endpoints is exactly on the plane, this method returns false.
     * </ul>
     * </p>
@@ -1701,8 +1701,8 @@ public class EuclidGeometryTools
     * Edge cases:
     * <ul>
     * <li>When the two line segments are parallel but not collinear, this method returns false.
-    * <li>When the two line segments are collinear, this methods returns true only if the two line
-    * segments overlap or have at least one common endpoint.
+    * <li>When the two line segments are collinear, this methods returns {@code true} only if the
+    * two line segments overlap or have at least one common endpoint.
     * <li>When the two line segments have a common endpoint, this method returns true.
     * </ul>
     * </p>
@@ -1794,8 +1794,8 @@ public class EuclidGeometryTools
     * Edge cases:
     * <ul>
     * <li>When the two line segments are parallel but not collinear, this method returns false.
-    * <li>When the two line segments are collinear, this methods returns true only if the two line
-    * segments overlap or have at least one common endpoint.
+    * <li>When the two line segments are collinear, this methods returns {@code true} only if the
+    * two line segments overlap or have at least one common endpoint.
     * <li>When the two line segments have a common endpoint, this method returns true.
     * </ul>
     * </p>
@@ -1834,6 +1834,31 @@ public class EuclidGeometryTools
       double vector2Y = end2.getY() - start2.getY();
 
       return vector1X * vector2X + vector1Y * vector2Y;
+   }
+
+   /**
+    * Computes the dot product between two vectors each defined by two points:
+    * <ul>
+    * <li>{@code vector1 = end1 - start1}
+    * <li>{@code vector2 = end2 - start2}
+    * </ul>
+    *
+    * @param start1 the origin of the first vector. Not modified.
+    * @param end1 the end of the first vector. Not modified.
+    * @param start2 the origin of the second vector. Not modified.
+    * @param end2 the end of the second vector. Not modified.
+    * @return the value of the dot product of the two vectors.
+    */
+   public static double dotProduct(Point3DReadOnly start1, Point3DReadOnly end1, Point3DReadOnly start2, Point3DReadOnly end2)
+   {
+      double vector1X = end1.getX() - start1.getX();
+      double vector1Y = end1.getY() - start1.getY();
+      double vector1Z = end1.getZ() - start1.getZ();
+      double vector2X = end2.getX() - start2.getX();
+      double vector2Y = end2.getY() - start2.getY();
+      double vector2Z = end2.getZ() - start2.getZ();
+
+      return vector1X * vector2X + vector1Y * vector2Y + vector1Z * vector2Z;
    }
 
    /**
@@ -2065,7 +2090,7 @@ public class EuclidGeometryTools
     * <li>When the line and the line segment are collinear, they are assumed to intersect at
     * {@code lineSegmentStart}.
     * <li>When the line intersects the line segment at one of its endpoints, this method returns
-    * true and the endpoint is the intersection.
+    * {@code true} and the endpoint is the intersection.
     * </ul>
     * </p>
     *
@@ -2563,7 +2588,7 @@ public class EuclidGeometryTools
    /**
     * Computes the coordinates of the intersection between a plane and a finite length line segment.
     * <p>
-    * This method returns null for the following cases:
+    * This method returns {@code null} for the following cases:
     * <ul>
     * <li>the line segment is parallel to the plane,
     * <li>the line segment endpoints are on one side of the plane,
@@ -2844,8 +2869,8 @@ public class EuclidGeometryTools
     * <ul>
     * <li>When the two line segments are parallel but not collinear, the two line segments do not
     * intersect.
-    * <li>When the two line segments are collinear, this methods returns true only if the two line
-    * segments overlap or have at least one common endpoint.
+    * <li>When the two line segments are collinear, this methods returns {@code true} only if the
+    * two line segments overlap or have at least one common endpoint.
     * <li>When the two line segments have a common endpoint, this method returns true.
     * </ul>
     *
@@ -2991,8 +3016,8 @@ public class EuclidGeometryTools
     * <ul>
     * <li>When the two line segments are parallel but not collinear, the two line segments do not
     * intersect.
-    * <li>When the two line segments are collinear, this methods returns true only if the two line
-    * segments overlap or have at least one common endpoint.
+    * <li>When the two line segments are collinear, this methods returns {@code true} only if the
+    * two line segments overlap or have at least one common endpoint.
     * <li>When the two line segments have a common endpoint, this method returns true.
     * </ul>
     * </p>
@@ -3212,8 +3237,8 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Returns true only if the point is inside the triangle defined by the vertices a, b, and c. The
-    * triangle can be clockwise or counter-clockwise ordered.
+    * Returns {@code true} only if the point is inside the triangle defined by the vertices a, b,
+    * and c. The triangle can be clockwise or counter-clockwise ordered.
     *
     * @param point the point to check if lying inside the triangle. Not modified.
     * @param a first vertex of the triangle. Not modified.
@@ -3322,7 +3347,7 @@ public class EuclidGeometryTools
     * {@code lineEnd} coordinates x = 1, y = 0, a point located on the left side of this line has a
     * negative y coordinate.
     * </p>
-    * This method will return false if the point is on the line.
+    * This method will return {@code false} if the point is on the line.
     *
     * @param point the query point. Not modified.
     * @param firstPointOnLine a first point located on the line. Not modified.
@@ -3344,7 +3369,7 @@ public class EuclidGeometryTools
     * {@code lineEnd} coordinates x = 1, y = 0, a point located on the right side of this line has a
     * positive y coordinate.
     * </p>
-    * This method will return false if the point is on the line.
+    * This method will return {@code false} if the point is on the line.
     *
     * @param point the query point. Not modified.
     * @param firstPointOnLine a first point located on the line. Not modified.
@@ -3368,7 +3393,7 @@ public class EuclidGeometryTools
     * <li>the right side of this line has a positive y coordinate.
     * </ul>
     * </p>
-    * This method will return false if the point is on the line.
+    * This method will return {@code false} if the point is on the line.
     *
     * @param pointX the x-coordinate of the query point.
     * @param pointY the y-coordinate of the query point.
@@ -3405,7 +3430,7 @@ public class EuclidGeometryTools
     * <li>the right side of this line has a positive y coordinate.
     * </ul>
     * </p>
-    * This method will return false if the point is on the line.
+    * This method will return {@code false} if the point is on the line.
     *
     * @param pointX the x-coordinate of the query point.
     * @param pointY the y-coordinate of the query point.
@@ -3470,7 +3495,7 @@ public class EuclidGeometryTools
     * <li>the right side of this line has a positive y coordinate.
     * </ul>
     * </p>
-    * This method will return false if the point is on the line.
+    * This method will return {@code false} if the point is on the line.
     *
     * @param point the query point. Not modified.
     * @param firstPointOnLine a first point located on the line. Not modified.
@@ -3497,7 +3522,7 @@ public class EuclidGeometryTools
     * <li>the right side of this line has a positive y coordinate.
     * </ul>
     * </p>
-    * This method will return false if the point is on the line.
+    * This method will return {@code false} if the point is on the line.
     *
     * @param point the query point. Not modified.
     * @param pointOnLine a point positioned on the infinite line. Not modified.
@@ -4522,6 +4547,43 @@ public class EuclidGeometryTools
     * </ul>
     * </p>
     *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param lineSegmentStart the line segment first endpoint. Not modified.
+    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @return the computed percentage along the line segment representing where the point projection
+    *         is located.
+    */
+   public static double percentageAlongLineSegment3D(double pointX, double pointY, double pointZ, Point3DReadOnly lineSegmentStart,
+                                                     Point3DReadOnly lineSegmentEnd)
+   {
+      return percentageAlongLineSegment3D(pointX, pointY, pointZ, lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentStart.getZ(),
+                                          lineSegmentEnd.getX(), lineSegmentEnd.getY(), lineSegmentEnd.getZ());
+   }
+
+   /**
+    * Computes a percentage along the line segment representing the location of the projection onto
+    * the line segment of the given point. The returned percentage is in ] -&infin;; &infin; [,
+    * {@code 0.0} representing {@code lineSegmentStart}, and {@code 1.0} representing
+    * {@code lineSegmentEnd}.
+    * <p>
+    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
+    * given point is located at the middle of the line segment. The coordinates of the projection of
+    * the point can be computed from the {@code percentage} as follows: <code>
+    * Point3DReadOnly projection = new Point3D(); </br>
+    * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
+    * </code>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the given line segment is too small, i.e.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
+    * method fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
     * @param point the query. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
     * @param lineSegmentEnd the line segment second endpoint. Not modified.
@@ -4530,8 +4592,7 @@ public class EuclidGeometryTools
     */
    public static double percentageAlongLineSegment3D(Point3DReadOnly point, Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
    {
-      return percentageAlongLineSegment3D(point.getX(), point.getY(), point.getZ(), lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentStart.getZ(),
-                                          lineSegmentEnd.getX(), lineSegmentEnd.getY(), lineSegmentEnd.getZ());
+      return percentageAlongLineSegment3D(point.getX(), point.getY(), point.getZ(), lineSegmentStart, lineSegmentEnd);
    }
 
    /**
