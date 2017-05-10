@@ -596,11 +596,15 @@ public class Line3D implements GeometryObject<Line3D>
     * Sets this line to be the same as the given line.
     * 
     * @param other the other line to copy. Not modified.
+    * @throws RuntimeException if the other line has not been initialized yet.
     */
    @Override
    public void set(Line3D other)
    {
-      set(other.getPoint(), other.getDirection());
+      point.set(other.getPoint());
+      direction.set(other.getDirection());
+      hasPointBeenSet = true;
+      hasDirectionBeenSet = true;
    }
 
    /**

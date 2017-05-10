@@ -29,8 +29,22 @@ public class Line3DTest
       Vector3D expectedDirection = new Vector3D();
 
       Line3D line3d = new Line3D();
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      try
+      {
+         EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+      try
+      {
+         EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
 
       expectedPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
       expectedDirection = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
@@ -65,7 +79,7 @@ public class Line3DTest
       Vector3D expectedDirection = new Vector3D();
       Vector3D direction = new Vector3D();
 
-      Line3D line3d = new Line3D();
+      Line3D line3d = new Line3D(EuclidCoreRandomTools.generateRandomPoint3D(random), EuclidCoreRandomTools.generateRandomVector3D(random));
 
       expectedPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
       expectedDirection = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
@@ -127,8 +141,22 @@ public class Line3DTest
 
       Line3D line3D = EuclidGeometryRandomTools.generateRandomLine3D(random);
       line3D.setToZero();
-      EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getPoint());
-      EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getDirection());
+      try
+      {
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getPoint());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
+      try
+      {
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getDirection());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
    }
 
    @Test
@@ -218,18 +246,14 @@ public class Line3DTest
       {
          Line3D line = new Line3D();
 
+         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random);
          Vector3D direction = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
-         line.setDirection(direction);
+         line.set(point, direction);
          assertFalse(direction.epsilonEquals(line.getDirection(), 1.0e-3));
 
          assertTrue(direction.dot(line.getDirection()) > 0.0);
          assertEquals(direction.length(), direction.dot(line.getDirection()), EPSILON);
          assertEquals(1.0, line.getDirection().length(), EPSILON);
-
-         direction = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.9 * EuclidGeometryTools.ONE_TRILLIONTH);
-         line.setDirection(direction);
-         assertTrue(line.containsNaN());
-         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(line.getDirection());
       }
    }
 
