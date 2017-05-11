@@ -13,7 +13,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.8
-version = '0.3.3'
+version = '0.3.4'
 
 project.ext.fullVersion = version
 project.ext.vcsUrl = "https://github.com/ihmcrobotics/euclid"
