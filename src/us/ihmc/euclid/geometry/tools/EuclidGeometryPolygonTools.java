@@ -321,6 +321,7 @@ public class EuclidGeometryPolygonTools
       {
          if (centroidToPack != null)
          {
+            centroidToPack.setToZero();
             for (int i = 0; i < numberOfVertices; i++)
                centroidToPack.add(convexPolygon2D.get(i));
             centroidToPack.scale(1.0 / numberOfVertices);

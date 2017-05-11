@@ -459,7 +459,7 @@ public class EuclidGeometryPolygonToolsTest
             Point2DReadOnly nextVertex = convexPolygon2D.get(next(index, hullSize));
             expectedArea += triangleArea(average, vertex, nextVertex);
          }
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double actualArea = computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          assertEquals(expectedArea, actualArea, SMALLEST_EPSILON);
 
@@ -501,7 +501,7 @@ public class EuclidGeometryPolygonToolsTest
       }
 
       { // Test with empty polygon
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double area = computeConvexPolyong2DArea(Collections.emptyList(), 0, true, centroid);
          assertTrue(Double.isNaN(area));
          EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(centroid);
@@ -509,7 +509,7 @@ public class EuclidGeometryPolygonToolsTest
 
       { // Test with a polygon that has only one vertex
          Point2D vertex = generateRandomPoint2D(random, 10.0);
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double area = computeConvexPolyong2DArea(Collections.singletonList(vertex), 1, true, centroid);
          assertTrue(area == 0.0);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, centroid, SMALLEST_EPSILON);
@@ -522,7 +522,7 @@ public class EuclidGeometryPolygonToolsTest
          points.add(vertex0);
          points.add(vertex1);
          Point2D expectedCentroid = averagePoint2Ds(points);
-         Point2D actualCentroid = new Point2D();
+         Point2D actualCentroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double area = computeConvexPolyong2DArea(points, 2, true, actualCentroid);
          assertTrue(area == 0.0);
          EuclidCoreTestTools.assertTuple2DEquals(expectedCentroid, actualCentroid, SMALLEST_EPSILON);
@@ -542,7 +542,7 @@ public class EuclidGeometryPolygonToolsTest
          points.add(vertex1);
          points.add(vertex2);
 
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          computeConvexPolyong2DArea(points, 3, true, centroid);
          EuclidCoreTestTools.assertTuple2DEquals(vertex0, centroid, SMALLEST_EPSILON);
       }
