@@ -11,6 +11,7 @@ import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2D;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2DWithFixedLength;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -458,7 +459,7 @@ public class EuclidGeometryPolygonToolsTest
             Point2DReadOnly nextVertex = convexPolygon2D.get(next(index, hullSize));
             expectedArea += triangleArea(average, vertex, nextVertex);
          }
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double actualArea = computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          assertEquals(expectedArea, actualArea, SMALLEST_EPSILON);
 
@@ -500,7 +501,7 @@ public class EuclidGeometryPolygonToolsTest
       }
 
       { // Test with empty polygon
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double area = computeConvexPolyong2DArea(Collections.emptyList(), 0, true, centroid);
          assertTrue(Double.isNaN(area));
          EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(centroid);
@@ -508,7 +509,7 @@ public class EuclidGeometryPolygonToolsTest
 
       { // Test with a polygon that has only one vertex
          Point2D vertex = generateRandomPoint2D(random, 10.0);
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double area = computeConvexPolyong2DArea(Collections.singletonList(vertex), 1, true, centroid);
          assertTrue(area == 0.0);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, centroid, SMALLEST_EPSILON);
@@ -521,7 +522,7 @@ public class EuclidGeometryPolygonToolsTest
          points.add(vertex0);
          points.add(vertex1);
          Point2D expectedCentroid = averagePoint2Ds(points);
-         Point2D actualCentroid = new Point2D();
+         Point2D actualCentroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          double area = computeConvexPolyong2DArea(points, 2, true, actualCentroid);
          assertTrue(area == 0.0);
          EuclidCoreTestTools.assertTuple2DEquals(expectedCentroid, actualCentroid, SMALLEST_EPSILON);
@@ -541,7 +542,7 @@ public class EuclidGeometryPolygonToolsTest
          points.add(vertex1);
          points.add(vertex2);
 
-         Point2D centroid = new Point2D();
+         Point2D centroid = EuclidCoreRandomTools.generateRandomPoint2D(random);
          computeConvexPolyong2DArea(points, 3, true, centroid);
          EuclidCoreTestTools.assertTuple2DEquals(vertex0, centroid, SMALLEST_EPSILON);
       }
@@ -2152,7 +2153,8 @@ public class EuclidGeometryPolygonToolsTest
          Point2D expectedProjection = new Point2D();
 
          boolean actualSuccess = orthogonalProjectionOnConvexPolygon2D(query, convexPolygon2D, hullSize, clockwiseOrdered, actualProjection);
-         boolean expectedSuccess = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(query, convexPolygon2D.get(0), convexPolygon2D.get(1), expectedProjection);
+         boolean expectedSuccess = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(query, convexPolygon2D.get(0), convexPolygon2D.get(1),
+                                                                                           expectedProjection);
          assertTrue(expectedSuccess == actualSuccess);
          EuclidCoreTestTools.assertTuple2DEquals(expectedProjection, actualProjection, SMALLEST_EPSILON);
       }
@@ -3158,26 +3160,24 @@ public class EuclidGeometryPolygonToolsTest
             lineDirection.negate();
          lineDirection.scale(generateRandomDouble(random, 10.0));
 
-         // The method should find the 2 edges: edgeIndex + 1, edgeIndex - 1
+         // The method should find the 3 edges: edgeIndex - 1, edgeIndex, edgeIndex + 1
          int firstEdgeIndex = nextEdgeIndexIntersectingWithLine2D(-1, pointOnLine, lineDirection, convexPolygon2D, hullSize);
          int secondEdgeIndex = nextEdgeIndexIntersectingWithLine2D(firstEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         int thirdEdgeIndex = nextEdgeIndexIntersectingWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
 
          int nextEdgeIndex = next(edgeIndex, hullSize);
          int previousEdgeIndex = previous(edgeIndex, hullSize);
 
-         if (previousEdgeIndex < nextEdgeIndex)
-         {
-            assertEquals(previousEdgeIndex, firstEdgeIndex);
-            assertEquals(nextEdgeIndex, secondEdgeIndex);
-         }
-         else
-         {
-            assertEquals(nextEdgeIndex, firstEdgeIndex);
-            assertEquals(previousEdgeIndex, secondEdgeIndex);
-         }
+         int[] expectedIndices = {firstEdgeIndex, secondEdgeIndex, thirdEdgeIndex};
+         int[] acutalIndices = {previousEdgeIndex, edgeIndex, nextEdgeIndex};
 
-         int thirdEdgeIndex = nextEdgeIndexIntersectingWithLine2D(secondEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
-         assertEquals(firstEdgeIndex, thirdEdgeIndex);
+         Arrays.sort(acutalIndices);
+         Arrays.sort(expectedIndices);
+
+         assertArrayEquals(expectedIndices, acutalIndices);
+
+         int fourthEdgeIndex = nextEdgeIndexIntersectingWithLine2D(thirdEdgeIndex, pointOnLine, lineDirection, convexPolygon2D, hullSize);
+         assertEquals(firstEdgeIndex, fourthEdgeIndex);
       }
 
       for (int i = 0; i < ITERATIONS; i++)

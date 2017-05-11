@@ -74,7 +74,7 @@ public class EuclidGeometryPolygonTools
       Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
       Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
 
-      return EuclidGeometryTools.isPoint2DOnSideOfLine2D(vertex, previousVertex, nextVertex, clockwiseOrdered);
+      return isPoint2DOnSideOfLine2D(vertex, previousVertex, nextVertex, clockwiseOrdered);
    }
 
    /**
@@ -321,6 +321,7 @@ public class EuclidGeometryPolygonTools
       {
          if (centroidToPack != null)
          {
+            centroidToPack.setToZero();
             for (int i = 0; i < numberOfVertices; i++)
                centroidToPack.add(convexPolygon2D.get(i));
             centroidToPack.scale(1.0 / numberOfVertices);
@@ -407,17 +408,18 @@ public class EuclidGeometryPolygonTools
                                     Vector2DBasics normalToPack)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
-      checkEdgeIndex(edgeIndex, numberOfVertices);
 
       if (numberOfVertices <= 1)
          return false;
+
+      checkEdgeIndex(edgeIndex, numberOfVertices);
 
       Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
       Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
 
       normalToPack.sub(edgeEnd, edgeStart);
       normalToPack.normalize();
-      EuclidGeometryTools.perpendicularVector2D(normalToPack, normalToPack);
+      perpendicularVector2D(normalToPack, normalToPack);
 
       if (!clockwiseOrdered)
          normalToPack.negate();
@@ -1177,7 +1179,7 @@ public class EuclidGeometryPolygonTools
 
       double nextEdgeDirectionX = nextEdgeEnd.getX() - nextEdgeStart.getX();
       double nextEdgeDirectionY = nextEdgeEnd.getY() - nextEdgeStart.getY();
-      boolean areRayAndNextEdgeParallel = EuclidGeometryTools.areVector2DsParallel(nextEdgeDirectionX, nextEdgeDirectionY, rayDirection.getX(),
+      boolean areRayAndNextEdgeParallel = areVector2DsParallel(nextEdgeDirectionX, nextEdgeDirectionY, rayDirection.getX(),
                                                                                    rayDirection.getY(), ONE_TEN_MILLIONTH);
 
       if (areRayAndNextEdgeParallel)
@@ -1188,7 +1190,7 @@ public class EuclidGeometryPolygonTools
 
       double previousEdgeDirectionX = previousEdgeEnd.getX() - previousEdgeStart.getX();
       double previousEdgeDirectionY = previousEdgeEnd.getY() - previousEdgeStart.getY();
-      boolean areRayAndPreviousEdgeParallel = EuclidGeometryTools.areVector2DsParallel(previousEdgeDirectionX, previousEdgeDirectionY, rayDirection.getX(),
+      boolean areRayAndPreviousEdgeParallel = areVector2DsParallel(previousEdgeDirectionX, previousEdgeDirectionY, rayDirection.getX(),
                                                                                        rayDirection.getY(), ONE_TEN_MILLIONTH);
 
       if (areRayAndPreviousEdgeParallel)
@@ -1279,7 +1281,7 @@ public class EuclidGeometryPolygonTools
       {
          Point2DReadOnly vertex = convexPolygon2D.get(i);
 
-         double distance = EuclidGeometryTools.distanceFromPoint2DToLine2D(vertex.getX(), vertex.getY(), pointOnLineX, pointOnLineY, lineDirectionX,
+         double distance = distanceFromPoint2DToLine2D(vertex.getX(), vertex.getY(), pointOnLineX, pointOnLineY, lineDirectionX,
                                                                            lineDirectionY);
 
          if (distance < minDistance)
@@ -1384,7 +1386,7 @@ public class EuclidGeometryPolygonTools
       {
          Point2DReadOnly vertex = convexPolygon2D.get(i);
 
-         double distance = EuclidGeometryTools.distanceFromPoint2DToRay2D(vertex, rayOrigin, rayDirection);
+         double distance = distanceFromPoint2DToRay2D(vertex, rayOrigin, rayDirection);
 
          if (distance < minDistance)
          {
@@ -1941,38 +1943,8 @@ public class EuclidGeometryPolygonTools
          Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
 
          boolean doLineAndEdgeIntersect = doLine2DAndLineSegment2DIntersect(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, edgeStart, edgeEnd);
-
          if (doLineAndEdgeIntersect)
-         {
-            double edgeDx = edgeEnd.getX() - edgeStart.getX();
-            double edgeDy = edgeEnd.getY() - edgeStart.getY();
-            boolean areLineAndEdgeParallel = areVector2DsParallel(lineDirectionX, lineDirectionY, edgeDx, edgeDy, EPSILON);
-
-            if (areLineAndEdgeParallel) // The line and the edge are collinear.
-            { // The comparison is to ensure consistent behavior with the first index returned always being the smallest independently from the context.
-               int previousIndex = previous(edgeIndex, numberOfVertices);
-               int nextIndex = next(edgeIndex, numberOfVertices);
-               int firstEdgeIndex, secondEdgeIndex;
-
-               if (previousIndex < nextIndex)
-               {
-                  firstEdgeIndex = previousIndex;
-                  secondEdgeIndex = nextIndex;
-               }
-               else
-               {
-                  firstEdgeIndex = nextIndex;
-                  secondEdgeIndex = previousIndex;
-               }
-
-               if (firstEdgeIndex != previousEdgeIndex)
-                  return firstEdgeIndex;
-               else
-                  return secondEdgeIndex;
-            }
-            else
-               return edgeIndex;
-         }
+            return edgeIndex;
       }
 
       return -2;
@@ -2020,7 +1992,7 @@ public class EuclidGeometryPolygonTools
 
       if (numberOfVertices == 2)
       {
-         return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, convexPolygon2D.get(0), convexPolygon2D.get(1),
+         return orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, convexPolygon2D.get(0), convexPolygon2D.get(1),
                                                                         projectionToPack);
       }
 
@@ -2266,7 +2238,7 @@ public class EuclidGeometryPolygonTools
          return 1;
       if (vertex1.epsilonEquals(vertex2, EPSILON))
          return 0;
-      if (EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(vertex1, minXMaxYVertex, vertex2))
+      if (isPoint2DOnLeftSideOfLine2D(vertex1, minXMaxYVertex, vertex2))
          return -1;
       return 1;
    }
