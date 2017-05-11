@@ -432,7 +432,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The sign of {@code epsilon} is perform the test against the polygon shrunk by
+    * The sign of {@code epsilon} is equivalent to performing the test against the polygon shrunk by
     * {@code Math.abs(epsilon)} if {@code epsilon < 0.0}, or against the polygon enlarged by
     * {@code epsilon} if {@code epsilon > 0.0}.
     * </p>
@@ -473,7 +473,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The sign of {@code epsilon} is perform the test against the polygon shrunk by
+    * The sign of {@code epsilon} is equivalent to performing the test against the polygon shrunk by
     * {@code Math.abs(epsilon)} if {@code epsilon < 0.0}, or against the polygon enlarged by
     * {@code epsilon} if {@code epsilon > 0.0}.
     * </p>
@@ -2082,7 +2082,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its its start
+    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its end
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
     * 
@@ -2112,7 +2112,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its its start
+    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its end
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
     * 
