@@ -12,7 +12,11 @@ import org.pitest.mutationtest.commandline.MutationCoverageReport;
 
 import us.ihmc.euclid.geometry.BoundingBox2DTest;
 import us.ihmc.euclid.geometry.BoundingBox3DTest;
+import us.ihmc.euclid.geometry.ConvexPolygon2DTest;
+import us.ihmc.euclid.geometry.Line2DTest;
 import us.ihmc.euclid.geometry.Line3DTest;
+import us.ihmc.euclid.geometry.LineSegment1DTest;
+import us.ihmc.euclid.geometry.LineSegment2DTest;
 import us.ihmc.euclid.geometry.LineSegment3DTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
@@ -20,8 +24,10 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
       // Geometry class tests
+      // 1D
+      LineSegment1DTest.class,
       // 2D
-      BoundingBox2DTest.class,
+      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class,
       // 3D
       Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class,
       // Tools tests

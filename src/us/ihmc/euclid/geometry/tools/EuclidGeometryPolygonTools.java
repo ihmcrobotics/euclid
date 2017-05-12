@@ -433,7 +433,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The sign of {@code epsilon} is perform the test against the polygon shrunk by
+    * It is equivalent to performing the test against the polygon shrunk by
     * {@code Math.abs(epsilon)} if {@code epsilon < 0.0}, or against the polygon enlarged by
     * {@code epsilon} if {@code epsilon > 0.0}.
     * </p>
@@ -474,7 +474,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The sign of {@code epsilon} is perform the test against the polygon shrunk by
+    * It is equivalent to performing the test against the polygon shrunk by
     * {@code Math.abs(epsilon)} if {@code epsilon < 0.0}, or against the polygon enlarged by
     * {@code epsilon} if {@code epsilon > 0.0}.
     * </p>
@@ -741,10 +741,10 @@ public class EuclidGeometryPolygonTools
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    *           between the line segment and the convex polygon. Can be {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @return the number of intersections between the line and the polygon.
+    *           between the line segment and the convex polygon. Can be {@code null}. Modified.
+    * @return the number of intersections between the line segment and the polygon.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
     */
@@ -1179,8 +1179,8 @@ public class EuclidGeometryPolygonTools
 
       double nextEdgeDirectionX = nextEdgeEnd.getX() - nextEdgeStart.getX();
       double nextEdgeDirectionY = nextEdgeEnd.getY() - nextEdgeStart.getY();
-      boolean areRayAndNextEdgeParallel = areVector2DsParallel(nextEdgeDirectionX, nextEdgeDirectionY, rayDirection.getX(),
-                                                                                   rayDirection.getY(), ONE_TEN_MILLIONTH);
+      boolean areRayAndNextEdgeParallel = areVector2DsParallel(nextEdgeDirectionX, nextEdgeDirectionY, rayDirection.getX(), rayDirection.getY(),
+                                                               ONE_TEN_MILLIONTH);
 
       if (areRayAndNextEdgeParallel)
          return true;
@@ -1190,8 +1190,8 @@ public class EuclidGeometryPolygonTools
 
       double previousEdgeDirectionX = previousEdgeEnd.getX() - previousEdgeStart.getX();
       double previousEdgeDirectionY = previousEdgeEnd.getY() - previousEdgeStart.getY();
-      boolean areRayAndPreviousEdgeParallel = areVector2DsParallel(previousEdgeDirectionX, previousEdgeDirectionY, rayDirection.getX(),
-                                                                                       rayDirection.getY(), ONE_TEN_MILLIONTH);
+      boolean areRayAndPreviousEdgeParallel = areVector2DsParallel(previousEdgeDirectionX, previousEdgeDirectionY, rayDirection.getX(), rayDirection.getY(),
+                                                                   ONE_TEN_MILLIONTH);
 
       if (areRayAndPreviousEdgeParallel)
          return true;
@@ -1281,8 +1281,7 @@ public class EuclidGeometryPolygonTools
       {
          Point2DReadOnly vertex = convexPolygon2D.get(i);
 
-         double distance = distanceFromPoint2DToLine2D(vertex.getX(), vertex.getY(), pointOnLineX, pointOnLineY, lineDirectionX,
-                                                                           lineDirectionY);
+         double distance = distanceFromPoint2DToLine2D(vertex.getX(), vertex.getY(), pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
 
          if (distance < minDistance)
          {
@@ -1992,8 +1991,7 @@ public class EuclidGeometryPolygonTools
 
       if (numberOfVertices == 2)
       {
-         return orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, convexPolygon2D.get(0), convexPolygon2D.get(1),
-                                                                        projectionToPack);
+         return orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, convexPolygon2D.get(0), convexPolygon2D.get(1), projectionToPack);
       }
 
       int closestEdgeIndex = closestEdgeIndexToPoint2D(pointToProjectX, pointToProjectY, convexPolygon2D, numberOfVertices, clockwiseOrdered);
@@ -2085,7 +2083,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its its start
+    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its end
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
     * 
@@ -2115,7 +2113,7 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its its start
+    * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its end
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
     * 
@@ -2179,15 +2177,8 @@ public class EuclidGeometryPolygonTools
       int pivotIndex = random.nextInt(endIndex - startIndex) + startIndex;
 
       /*
-       * Partitioning:
-       * // @formatter:off
-       * +------------------------+
-       * |  <= pivot  |  > pivot  |
-       * +------------------------+
-       *              ^
-       *              |
-       *          pivotIndex
-       * // @formatter:on
+       * Partitioning: // @formatter:off +------------------------+ | <= pivot | > pivot |
+       * +------------------------+ ^ | pivotIndex // @formatter:on
        */
       pivotIndex = grahamScanAnglePartition(vertices, minXMaxYVertex, startIndex, endIndex, pivotIndex);
       // Recurse on each side of the pivot
