@@ -104,6 +104,22 @@ public class Line2D implements GeometryObject<Line2D>
    }
 
    /**
+    * Transforms this line using the inverse of the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on this line's point and vector. Not modified.
+    * @throws RuntimeException if this line has not been initialized yet.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
+    */
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      checkHasBeenInitialized();
+      point.applyInverseTransform(transform);
+      direction.applyInverseTransform(transform);
+   }
+
+   /**
     * Transforms this line using the given homogeneous transformation matrix and project the result
     * onto the XY-plane.
     * 

@@ -128,5 +128,5 @@ dependencies {
     testCompile group: 'us.ihmc', name: 'ihmc-continuous-integration-framework', version: '0.9.4'
 
     compile group: 'org.ejml', name: 'dense64', version: '0.30'
-    compile group: 'us.ihmc', name: 'euclid-core', version: '0.4.3'
+    compile group: 'us.ihmc', name: 'euclid-core', version: '0.4.4'
 }

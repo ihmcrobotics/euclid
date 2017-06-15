@@ -1256,6 +1256,30 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    }
 
    /**
+    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
+    */
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      checkIfUpToDate();
+      isUpToDate = false;
+
+      for (int i = 0; i < numberOfVertices; i++)
+      {
+         Point2D vertex = getVertexUnsafe(i);
+         vertex.applyInverseTransform(transform);
+      }
+      update();
+   }
+
+   /**
     * Transforms this convex polygon using the given homogeneous transformation matrix and project
     * the result onto the XY-plane.
     * 
