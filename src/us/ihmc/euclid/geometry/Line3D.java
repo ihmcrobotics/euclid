@@ -100,6 +100,20 @@ public class Line3D implements GeometryObject<Line3D>
       direction.applyTransform(transform);
    }
 
+   /**
+    * Transforms this line using the inverse of the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on this line's point and vector. Not modified.
+    * @throws RuntimeException if this line has not been initialized yet.
+    */
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      checkHasBeenInitialized();
+      point.applyInverseTransform(transform);
+      direction.applyInverseTransform(transform);
+   }
+
    private void checkDistinctPoints(Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
    {
       if (firstPointOnLine.equals(secondPointOnLine))

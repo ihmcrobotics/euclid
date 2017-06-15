@@ -90,6 +90,20 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    }
 
    /**
+    * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
+    */
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      firstEndpoint.applyInverseTransform(transform);
+      secondEndpoint.applyInverseTransform(transform);
+   }
+
+   /**
     * Transforms this line segment using the given homogeneous transformation matrix and project the
     * result onto the XY-plane.
     * 

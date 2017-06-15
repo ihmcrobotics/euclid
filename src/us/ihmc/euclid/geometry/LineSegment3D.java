@@ -864,6 +864,18 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    }
 
    /**
+    * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
+    */
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      transform.inverseTransform(firstEndpoint);
+      transform.inverseTransform(secondEndpoint);
+   }
+
+   /**
     * Tests on a per-component basis on both endpoints if this line segment is equal to
     * {@code other} with the tolerance {@code epsilon}.
     * 
