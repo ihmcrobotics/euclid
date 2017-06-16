@@ -187,7 +187,7 @@ public class Line2D implements GeometryObject<Line2D>
    {
       if (firstPointOnLine.equals(secondPointOnLine))
       {
-         throw new RuntimeException("Tried to create a line from two coincidal points");
+         throw new RuntimeException("Tried to create a line from two coincidal points.");
       }
    }
 
@@ -203,7 +203,7 @@ public class Line2D implements GeometryObject<Line2D>
    {
       if (Math.abs(localVector.getX()) < minAllowableVectorPart && Math.abs(localVector.getY()) < minAllowableVectorPart)
       {
-         throw new RuntimeException("Line length must be greater than zero");
+         throw new RuntimeException("Line length must be greater than zero.");
       }
    }
 
