@@ -1022,6 +1022,72 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Calculates the distance between two points.
+    *
+    * @param firstPointX the x-coordinate of the first point.
+    * @param firstPointY the y-coordinate of the first point.
+    * @param firstPointZ the z-coordinate of the first point.
+    * @param secondPointX the x-coordinate of the second point.
+    * @param secondPointY the y-coordinate of the second point.
+    * @param secondPointZ the z-coordinate of the second point.
+    * @return the distance between the two points.
+    */
+   public static double distanceBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, double secondPointX, double secondPointY, double secondPointZ)
+   {
+      return Math.sqrt(distanceSquaredBetweenPoint3Ds(firstPointX, firstPointY, firstPointZ, secondPointX, secondPointY, secondPointZ));
+   }
+
+   /**
+    * Calculates the distance between two points.
+    *
+    * @param firstPointX the x-coordinate of the first point.
+    * @param firstPointY the y-coordinate of the first point.
+    * @param firstPointZ the z-coordinate of the first point.
+    * @param secondPoint the coordinates of the second point. Not modified.
+    * @return the distance between the two points.
+    */
+   public static double distanceBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, Point3DReadOnly secondPoint)
+   {
+      return Math.sqrt(distanceSquaredBetweenPoint3Ds(firstPointX, firstPointY, firstPointZ, secondPoint));
+   }
+
+   /**
+    * Calculates the square value of the distance between two points.
+    *
+    * @param firstPointX the x-coordinate of the first point.
+    * @param firstPointY the y-coordinate of the first point.
+    * @param firstPointZ the z-coordinate of the first point.
+    * @param secondPointX the x-coordinate of the second point.
+    * @param secondPointY the y-coordinate of the second point.
+    * @param secondPointZ the z-coordinate of the second point.
+    * @return the distance squared between the two points.
+    */
+   public static double distanceSquaredBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, double secondPointX, double secondPointY, double secondPointZ)
+   {
+      double deltaX = secondPointX - firstPointX;
+      double deltaY = secondPointY - firstPointY;
+      double deltaZ = secondPointZ - firstPointZ;
+      return EuclidCoreTools.normSquared(deltaX, deltaY, deltaZ);
+   }
+
+   /**
+    * Calculates the square value of the distance between two points.
+    *
+    * @param firstPointX the x-coordinate of the first point.
+    * @param firstPointY the y-coordinate of the first point.
+    * @param firstPointZ the z-coordinate of the first point.
+    * @param secondPoint the coordinates of the second point. Not modified.
+    * @return the distance squared between the two points.
+    */
+   public static double distanceSquaredBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, Point3DReadOnly secondPoint)
+   {
+      double deltaX = secondPoint.getX() - firstPointX;
+      double deltaY = secondPoint.getY() - firstPointY;
+      double deltaZ = secondPoint.getZ() - firstPointZ;
+      return EuclidCoreTools.normSquared(deltaX, deltaY, deltaZ);
+   }
+
+   /**
     * This methods computes the minimum distance between the two infinitely long 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *

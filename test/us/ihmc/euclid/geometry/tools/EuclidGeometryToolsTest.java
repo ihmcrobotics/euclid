@@ -1198,6 +1198,25 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testDistanceBetweenPoint3Ds() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D firstPoint = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         Point3D secondPoint = EuclidCoreRandomTools.generateRandomPoint3D(random);
+
+         firstPoint.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         secondPoint.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         double expectedDistance = firstPoint.distance(secondPoint);
+         double actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(), secondPoint.getY(), secondPoint.getZ());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+   }
+
+   @Test
    public void testDistanceBetweenTwoLine3Ds() throws Exception
    {
       Point3D closestPointOnLine1 = new Point3D();
