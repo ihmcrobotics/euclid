@@ -1752,9 +1752,36 @@ public class EuclidGeometryToolsTest
 
          double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          Point3D point = new Point3D();
-         point.scaleAdd(expectedDistance / planeNormal.length(), planeNormal, secondPointOnPlane);
+         double scalar = expectedDistance / planeNormal.length();
+         if (random.nextBoolean())
+            scalar = -scalar;
+         point.scaleAdd(scalar, planeNormal, secondPointOnPlane);
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+      }
+   }
+
+   @Test
+   public void testSignedDistanceFromPoint3DToPlane3D() throws Exception
+   {
+      Random random = new Random(1176L);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D pointOnPlane = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
+                                                                                            EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
+
+         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
+         Point3D secondPointOnPlane = new Point3D();
+         secondPointOnPlane.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane, pointOnPlane);
+
+         double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 10.0);
+         Point3D point = new Point3D();
+         point.scaleAdd(expectedDistance / planeNormal.length(), planeNormal, secondPointOnPlane);
+
+         double actualDistance = EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }

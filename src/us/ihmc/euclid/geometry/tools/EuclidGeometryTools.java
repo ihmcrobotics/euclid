@@ -1544,12 +1544,27 @@ public class EuclidGeometryTools
     */
    public static double distanceFromPoint3DToPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
-      double d = -planeNormal.getX() * pointOnPlane.getX() - planeNormal.getY() * pointOnPlane.getY() - planeNormal.getZ() * pointOnPlane.getZ();
+      return Math.abs(signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal));
+   }
 
-      double numerator = planeNormal.getX() * point.getX() + planeNormal.getY() * point.getY() + planeNormal.getZ() * point.getZ() + d;
-      double denominator = planeNormal.length();
-
-      return Math.abs(numerator) / denominator;
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param point the 3D query. Not modified.
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeNormal the normal of the plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      double dx = (point.getX() - pointOnPlane.getX()) * planeNormal.getX();
+      double dy = (point.getY() - pointOnPlane.getY()) * planeNormal.getY();
+      double dz = (point.getZ() - pointOnPlane.getZ()) * planeNormal.getZ();
+      double signedDistance = (dx + dy + dz) / planeNormal.length();
+      return signedDistance;
    }
 
    /**
@@ -2515,11 +2530,16 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Computes the coordinates of the intersection between a plane and an infinitely long line. In
-    * the case the line is parallel to the plane, this method will return {@code null}.
+    * Computes the coordinates of the intersection between a plane and an infinitely long line.
     * <a href="https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection"> Useful link </a>.
     * <p>
     * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line is parallel to the plane, this methods fails and returns {@code null}.
+    * </ul>
     * </p>
     *
     * @param pointOnPlane a point located on the plane. Not modified.
@@ -2531,6 +2551,34 @@ public class EuclidGeometryTools
     */
    public static Point3D intersectionBetweenLine3DAndPlane3D(Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal, Point3DReadOnly pointOnLine,
                                                              Vector3DReadOnly lineDirection)
+   {
+      Point3D intersection = new Point3D();
+      boolean success = intersectionBetweenLine3DAndPlane3D(pointOnPlane, planeNormal, pointOnLine, lineDirection, intersection);
+      if (success)
+         return intersection;
+      else
+         return null;
+   }
+
+   /**
+    * Computes the coordinates of the intersection between a plane and an infinitely long line.
+    * <a href="https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection"> Useful link </a>.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the line is parallel to the plane, this methods fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeNormal the normal of the plane. Not modified.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param intersectionToPack point in which the coordinates of the intersection are stored.
+    * @return {@code true} if the method succeeds, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenLine3DAndPlane3D(Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal, Point3DReadOnly pointOnLine,
+                                                             Vector3DReadOnly lineDirection, Point3DBasics intersectionToPack)
    {
       // Switching to the notation used in https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
       // Note: the algorithm is independent from the magnitudes of planeNormal and lineDirection
@@ -2549,15 +2597,14 @@ public class EuclidGeometryTools
       // Check if the line is parallel to the plane
       if (Math.abs(denominator) < ONE_TRILLIONTH)
       {
-         return null;
+         return false;
       }
       else
       {
          d = numerator / denominator;
 
-         Point3D intersection = new Point3D();
-         intersection.scaleAdd(d, l, l0);
-         return intersection;
+         intersectionToPack.scaleAdd(d, l, l0);
+         return true;
       }
    }
 
