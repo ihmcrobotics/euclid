@@ -1032,7 +1032,8 @@ public class EuclidGeometryTools
     * @param secondPointZ the z-coordinate of the second point.
     * @return the distance between the two points.
     */
-   public static double distanceBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, double secondPointX, double secondPointY, double secondPointZ)
+   public static double distanceBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, double secondPointX, double secondPointY,
+                                                double secondPointZ)
    {
       return Math.sqrt(distanceSquaredBetweenPoint3Ds(firstPointX, firstPointY, firstPointZ, secondPointX, secondPointY, secondPointZ));
    }
@@ -1062,7 +1063,8 @@ public class EuclidGeometryTools
     * @param secondPointZ the z-coordinate of the second point.
     * @return the distance squared between the two points.
     */
-   public static double distanceSquaredBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, double secondPointX, double secondPointY, double secondPointZ)
+   public static double distanceSquaredBetweenPoint3Ds(double firstPointX, double firstPointY, double firstPointZ, double secondPointX, double secondPointY,
+                                                       double secondPointZ)
    {
       double deltaX = secondPointX - firstPointX;
       double deltaY = secondPointY - firstPointY;
@@ -1537,6 +1539,21 @@ public class EuclidGeometryTools
    /**
     * Computes the minimum distance between a given point and a plane.
     *
+    * @param pointX the x-coordinate of the query. Not modified.
+    * @param pointY the y-coordinate of the query. Not modified.
+    * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeNormal the normal of the plane. Not modified.
+    * @return the distance between the point and the plane.
+    */
+   public static double distanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return Math.abs(signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal));
+   }
+
+   /**
+    * Computes the minimum distance between a given point and a plane.
+    *
     * @param point the 3D query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
     * @param planeNormal the normal of the plane. Not modified.
@@ -1553,18 +1570,36 @@ public class EuclidGeometryTools
     * The returned value is negative when the query is located below the plane, positive otherwise.
     * </p>
     *
-    * @param point the 3D query. Not modified.
+    * @param pointX the x-coordinate of the query. Not modified.
+    * @param pointY the y-coordinate of the query. Not modified.
+    * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeNormal the normal of the plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      double dx = (pointX - pointOnPlane.getX()) * planeNormal.getX();
+      double dy = (pointY - pointOnPlane.getY()) * planeNormal.getY();
+      double dz = (pointZ - pointOnPlane.getZ()) * planeNormal.getZ();
+      double signedDistance = (dx + dy + dz) / planeNormal.length();
+      return signedDistance;
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param point the query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
     * @param planeNormal the normal of the plane. Not modified.
     * @return the signed distance between the point and the plane.
     */
    public static double signedDistanceFromPoint3DToPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
-      double dx = (point.getX() - pointOnPlane.getX()) * planeNormal.getX();
-      double dy = (point.getY() - pointOnPlane.getY()) * planeNormal.getY();
-      double dz = (point.getZ() - pointOnPlane.getZ()) * planeNormal.getZ();
-      double signedDistance = (dx + dy + dz) / planeNormal.length();
-      return signedDistance;
+      return signedDistanceFromPoint3DToPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal);
    }
 
    /**
@@ -4304,18 +4339,45 @@ public class EuclidGeometryTools
    public static boolean orthogonalProjectionOnPlane3D(Point3DReadOnly pointToProject, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal,
                                                        Point3DBasics projectionToPack)
    {
+      return orthogonalProjectionOnPlane3D(pointToProject.getX(), pointToProject.getY(), pointToProject.getZ(), pointOnPlane, planeNormal, projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of a 3D point on a given 3D plane defined by a 3D point and
+    * 3D normal.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the plane normal is too small, i.e. less than {@link #ONE_TRILLIONTH},
+    * this method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param x the x-coordinate of the point to compute the projection of. Not modified.
+    * @param y the y-coordinate of the point to compute the projection of. Not modified.
+    * @param z the z-coordinate of the point to compute the projection of. Not modified.
+    * @param pointOnPlane a point on the plane. Not modified.
+    * @param planeNormal the normal of the plane. Not modified.
+    * @param projectionToPack point in which the projection of the point onto the plane is stored.
+    *           Modified.
+    * @return whether the method succeeded or not.
+    */
+   public static boolean orthogonalProjectionOnPlane3D(double x, double y, double z, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal,
+                                                       Point3DBasics projectionToPack)
+   {
       double normalMagnitude = planeNormal.length();
       if (normalMagnitude < ONE_TRILLIONTH)
          return false;
 
-      projectionToPack.sub(pointToProject, pointOnPlane);
+      projectionToPack.set(x, y, z);
+      projectionToPack.sub(pointOnPlane);
       double signedDistance = projectionToPack.getX() * planeNormal.getX() + projectionToPack.getY() * planeNormal.getY()
             + projectionToPack.getZ() * planeNormal.getZ();
       signedDistance /= normalMagnitude * normalMagnitude;
 
-      projectionToPack.setX(pointToProject.getX() - signedDistance * planeNormal.getX());
-      projectionToPack.setY(pointToProject.getY() - signedDistance * planeNormal.getY());
-      projectionToPack.setZ(pointToProject.getZ() - signedDistance * planeNormal.getZ());
+      projectionToPack.setX(x - signedDistance * planeNormal.getX());
+      projectionToPack.setY(y - signedDistance * planeNormal.getY());
+      projectionToPack.setZ(z - signedDistance * planeNormal.getZ());
 
       return true;
    }
