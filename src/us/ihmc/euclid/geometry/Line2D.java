@@ -230,7 +230,7 @@ public class Line2D implements GeometryObject<Line2D>
     * </p>
     *
     * @param point 2D point to compute the distance from the line. Not modified.
-    * @return the minimum distance between the 3D point and this 3D line.
+    * @return the minimum distance between the 2D point and this 2D line.
     * @throws RuntimeException if this line has not been initialized yet.
     */
    public double distance(Point2DReadOnly point)
@@ -613,9 +613,6 @@ public class Line2D implements GeometryObject<Line2D>
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
-    * </p>
-    * <p>
-    * WARNING: This method generates garbage.
     * </p>
     * 
     * @param secondLine the other line that may intersect this line. Not modified.
