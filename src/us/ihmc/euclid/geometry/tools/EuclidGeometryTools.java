@@ -2658,6 +2658,342 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the possible intersections between a line and a cylinder.
+    * <p>
+    * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
+    * </p>
+    * <p>
+    * The cylinder pose is as follows:
+    * <ul>
+    * <li>the cylinder axis is aligned with the z-axis.
+    * <li>the bottom center is located at (0, 0, 0).
+    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * </ul>
+    * </p>
+    * <p>
+    * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param cylinderHeight length of the cylinder.
+    * @param cylinderRadius radius of the cylinder.
+    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the cylinder. It is either equal to
+    *         0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
+    *            negative.
+    */
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderHeight, double cylinderRadius, Point3DReadOnly firstPointOnLine,
+                                                            Point3DReadOnly secondPointOnLine, Point3DBasics firstIntersectionToPack,
+                                                            Point3DBasics secondIntersectionToPack)
+   {
+      double startX = firstPointOnLine.getX();
+      double startY = firstPointOnLine.getY();
+      double startZ = firstPointOnLine.getZ();
+      double endX = secondPointOnLine.getX();
+      double endY = secondPointOnLine.getY();
+      double endZ = secondPointOnLine.getZ();
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderHeight, cylinderRadius, startX, startY, startZ, true, endX, endY, endZ, true,
+                                                        firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and a cylinder.
+    * <p>
+    * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
+    * </p>
+    * <p>
+    * The cylinder pose is as follows:
+    * <ul>
+    * <li>the cylinder axis is aligned with the z-axis.
+    * <li>the bottom center is located at (0, 0, 0).
+    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * </ul>
+    * </p>
+    * <p>
+    * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param cylinderHeight length of the cylinder.
+    * @param cylinderRadius radius of the cylinder.
+    * @param pointOnLine a point located on the infinitely long line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the cylinder. It is either equal to
+    *         0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
+    *            negative.
+    */
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderHeight, double cylinderRadius, Point3DReadOnly pointOnLine,
+                                                            Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+                                                            Point3DBasics secondIntersectionToPack)
+   {
+      double startX = pointOnLine.getX();
+      double startY = pointOnLine.getY();
+      double startZ = pointOnLine.getZ();
+      double endX = pointOnLine.getX() + lineDirection.getX();
+      double endY = pointOnLine.getY() + lineDirection.getY();
+      double endZ = pointOnLine.getZ() + lineDirection.getZ();
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderHeight, cylinderRadius, startX, startY, startZ, true, endX, endY, endZ, true,
+                                                        firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Flexible implementation for computing the intersection between a cylinder and either a line, a
+    * line segment, or a ray.
+    * <p>
+    * The cylinder pose is as follows:
+    * <ul>
+    * <li>the cylinder axis is aligned with the z-axis.
+    * <li>the bottom center is located at (0, 0, 0).
+    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * </ul>
+    * </p>
+    * <p>
+    * Switching between line/line-segment/ray can be done using the two arguments
+    * {@code canIntersectionOccurBeforeStart} and {@code canIntersectionOccurAfterEnd}:
+    * <ul>
+    * <li>{@code canIntersectionOccurBeforeStart == true} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate line/cylinder
+    * intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == false} changes the algorithm to calculate
+    * line-segment/cylinder intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate ray/cylinder
+    * intersection.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param cylinderHeight length of the cylinder.
+    * @param cylinderRadius radius of the cylinder.
+    * @param startX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param startY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param startZ the z-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurBeforeStart specifies whether an intersection can exist before
+    *           {@code start}.
+    * @param endX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param endY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param endZ the z-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurAfterEnd specifies whether an intersection can exist after
+    *           {@code end}.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the cylinder. It is
+    *         either equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
+    *            negative.
+    */
+   private static int intersectionBetweenLine3DAndCylinder3DImpl(double cylinderHeight, double cylinderRadius, double startX, double startY, double startZ,
+                                                                 boolean canIntersectionOccurBeforeStart, double endX, double endY, double endZ,
+                                                                 boolean canIntersectionOccurAfterEnd, Point3DBasics firstIntersectionToPack,
+                                                                 Point3DBasics secondIntersectionToPack)
+   {
+      if (cylinderHeight < 0.0)
+         throw new IllegalArgumentException("The cylinder height has to be positive.");
+      if (cylinderRadius < 0.0)
+         throw new IllegalArgumentException("The cylinder radius has to be positive.");
+
+      if (cylinderHeight == 0.0 || cylinderRadius == 0.0)
+         return 0;
+
+      double radiusSquared = cylinderRadius * cylinderRadius;
+
+      double dIntersection1 = Double.NaN;
+      double dIntersection2 = Double.NaN;
+
+      double dx = endX - startX;
+      double dy = endY - startY;
+      double dz = endZ - startZ;
+
+      if (Math.abs(dz) >= ONE_TRILLIONTH)
+      {
+         double dTop = Double.NaN;
+         { // Compute the intersection with the top face using simplified line-plane intersection.
+            dTop = (cylinderHeight - startZ) / dz;
+            double intersectionX = dTop * dx + startX;
+            double intersectionY = dTop * dy + startY;
+            if (EuclidCoreTools.normSquared(intersectionX, intersectionY) > radiusSquared)
+               dTop = Double.NaN;
+         }
+
+         if (Double.isFinite(dTop))
+            dIntersection1 = dTop;
+
+         double dBottom = Double.NaN;
+         { // Compute the intersection with the bottom face using simplified line-plane intersection.
+            dBottom = -startZ / dz;
+            double intersectionX = dBottom * dx + startX;
+            double intersectionY = dBottom * dy + startY;
+            if (EuclidCoreTools.normSquared(intersectionX, intersectionY) > radiusSquared)
+               dBottom = Double.NaN;
+         }
+
+         if (Double.isFinite(dBottom))
+         {
+            if (Double.isNaN(dIntersection1))
+            {
+               dIntersection1 = dBottom;
+            }
+            else if (dBottom < dIntersection1)
+            {
+               dIntersection2 = dIntersection1;
+               dIntersection1 = dBottom;
+            }
+            else
+            {
+               dIntersection2 = dBottom;
+            }
+         }
+      }
+
+      // If dIntersection2 is not NaN, that means two intersections were found which is the max, so no need to check with the cylinder part.
+      if (Double.isNaN(dIntersection2))
+      { // Compute possible intersections with the cylinder part
+           // Notation used: cylinder axis: pa + va * d; line equation: p + v * d
+        // The cylinder is vertical: va = (0, 0, 1), the bottom is at zero: pa = (0, 0, 0)
+        // Need to solve quadratic equation of the form A * d^2 + B * d + C = 0
+        // A = (v - (v, va)*va)^2 = ( [v_x, v_y, 0]^T )^2
+         double A = EuclidCoreTools.normSquared(dx, dy);
+         // B = 2*(v - (v, va)*va, p - (p, va)*va) = 2 * ( [p_x, p_y, 0]^T, [v_x, v_y, 0]^T)
+         double B = 2.0 * (startX * dx + startY * dy);
+         // C = (p - (p, va)*va)^2 - r^2 = ( [v_x, v_y, 0]^T )^2 - r^2
+         double C = EuclidCoreTools.normSquared(startX, startY) - radiusSquared;
+
+         double delta = Math.sqrt(B * B - 4 * A * C);
+
+         if (Double.isFinite(delta))
+         {
+            double oneOverTwoA = 0.5 / A;
+            double dCylinder1 = (-B + delta) * oneOverTwoA;
+            double dCylinder2 = (-B - delta) * oneOverTwoA;
+
+            double intersection1Z = dCylinder1 * dz + startZ;
+            if (intersection1Z < ONE_TRILLIONTH || intersection1Z > cylinderHeight - ONE_TRILLIONTH)
+               dCylinder1 = Double.NaN;
+
+            if (Double.isFinite(dCylinder1))
+            {
+               if (Double.isNaN(dIntersection1) || Math.abs(dCylinder1 - dIntersection1) < ONE_TRILLIONTH)
+               {
+                  dIntersection1 = dCylinder1;
+               }
+               else if (dCylinder1 < dIntersection1)
+               {
+                  dIntersection2 = dIntersection1;
+                  dIntersection1 = dCylinder1;
+               }
+               else
+               {
+                  dIntersection2 = dCylinder1;
+               }
+            }
+
+            double intersection2Z = dCylinder2 * dz + startZ;
+            if (intersection2Z < ONE_TRILLIONTH || intersection2Z > cylinderHeight - ONE_TRILLIONTH)
+               dCylinder2 = Double.NaN;
+            else if (Math.abs(dCylinder1 - dCylinder2) < ONE_TRILLIONTH)
+               dCylinder2 = Double.NaN;
+
+            if (Double.isFinite(dCylinder2))
+            {
+               if (Double.isNaN(dIntersection1))
+               {
+                  dIntersection1 = dCylinder2;
+               }
+               else if (dCylinder2 < dIntersection1)
+               {
+                  dIntersection2 = dIntersection1;
+                  dIntersection1 = dCylinder2;
+               }
+               else
+               {
+                  dIntersection2 = dCylinder2;
+               }
+            }
+         }
+      }
+
+      if (!canIntersectionOccurBeforeStart)
+      {
+         if (dIntersection2 < 0.0)
+            dIntersection2 = Double.NaN;
+
+         if (dIntersection1 < 0.0)
+         {
+            dIntersection1 = dIntersection2;
+            dIntersection2 = Double.NaN;
+         }
+      }
+
+      if (!canIntersectionOccurAfterEnd)
+      {
+         if (dIntersection2 > 1.0)
+            dIntersection2 = Double.NaN;
+
+         if (dIntersection1 > 1.0)
+         {
+            dIntersection1 = dIntersection2;
+            dIntersection2 = Double.NaN;
+         }
+      }
+
+      if (Double.isNaN(dIntersection1))
+         return 0;
+
+      if (firstIntersectionToPack != null)
+      {
+         firstIntersectionToPack.set(dx, dy, dz);
+         firstIntersectionToPack.scale(dIntersection1);
+         firstIntersectionToPack.add(startX, startY, startZ);
+      }
+
+      if (Double.isNaN(dIntersection2))
+         return 1;
+
+      if (secondIntersectionToPack != null)
+      {
+         secondIntersectionToPack.set(dx, dy, dz);
+         secondIntersectionToPack.scale(dIntersection2);
+         secondIntersectionToPack.add(startX, startY, startZ);
+      }
+
+      return 2;
+   }
+
+   /**
     * Computes the coordinates of the intersection between a plane and an infinitely long line.
     * <a href="https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection"> Useful link </a>.
     * <p>
@@ -2827,6 +3163,58 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the possible intersections between a line segment and a cylinder.
+    * <p>
+    * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
+    * </p>
+    * <p>
+    * The cylinder pose is as follows:
+    * <ul>
+    * <li>the cylinder axis is aligned with the z-axis.
+    * <li>the bottom center is located at (0, 0, 0).
+    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * </ul>
+    * </p>
+    * <p>
+    * In the case the line segment and the cylinder do not intersect, this method returns {@code 0}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param cylinderHeight length of the cylinder.
+    * @param cylinderRadius radius of the cylinder.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line segment and the cylinder. It is either
+    *         equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
+    *            negative.
+    */
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderHeight, double cylinderRadius, Point3DReadOnly lineSegmentStart,
+                                                                   Point3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
+                                                                   Point3DBasics secondIntersectionToPack)
+   {
+      double startX = lineSegmentStart.getX();
+      double startY = lineSegmentStart.getY();
+      double startZ = lineSegmentStart.getZ();
+      double endX = lineSegmentEnd.getX();
+      double endY = lineSegmentEnd.getY();
+      double endZ = lineSegmentEnd.getZ();
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderHeight, cylinderRadius, startX, startY, startZ, false, endX, endY, endZ, false,
+                                                        firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
     * Computes the coordinates of the intersection between a plane and a finite length line segment.
     * <p>
     * This method returns {@code null} for the following cases:
@@ -2960,6 +3348,58 @@ public class EuclidGeometryTools
       return intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMin, boundingBoxMax, firstPointOnLineX, firstPointOnLineY, firstPointOnLineZ, false,
                                                            secondPointOnLineX, secondPointOnLineY, secondPointOnLineZ, true, firstIntersectionToPack,
                                                            secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a ray and a cylinder.
+    * <p>
+    * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
+    * </p>
+    * <p>
+    * The cylinder pose is as follows:
+    * <ul>
+    * <li>the cylinder axis is aligned with the z-axis.
+    * <li>the bottom center is located at (0, 0, 0).
+    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * </ul>
+    * </p>
+    * <p>
+    * In the case the ray and the cylinder do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param cylinderHeight length of the cylinder.
+    * @param cylinderRadius radius of the cylinder.
+    * @param rayOrigin the coordinate of the ray origin. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the ray and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
+    *            negative.
+    */
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderHeight, double cylinderRadius, Point3DReadOnly rayOrigin,
+                                                           Vector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
+                                                           Point3DBasics secondIntersectionToPack)
+   {
+      double startX = rayOrigin.getX();
+      double startY = rayOrigin.getY();
+      double startZ = rayOrigin.getZ();
+      double endX = rayOrigin.getX() + rayDirection.getX();
+      double endY = rayOrigin.getY() + rayDirection.getY();
+      double endZ = rayOrigin.getZ() + rayDirection.getZ();
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderHeight, cylinderRadius, startX, startY, startZ, false, endX, endY, endZ, true,
+                                                        firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
