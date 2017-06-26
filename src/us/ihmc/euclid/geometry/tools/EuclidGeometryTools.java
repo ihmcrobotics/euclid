@@ -2396,8 +2396,12 @@ public class EuclidGeometryTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     * 
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMinX the minimum x-coordinate of the bounding box.
+    * @param boundingBoxMinY the minimum y-coordinate of the bounding box.
+    * @param boundingBoxMinZ the minimum z-coordinate of the bounding box.
+    * @param boundingBoxMaxX the maximum x-coordinate of the bounding box.
+    * @param boundingBoxMaxY the maximum y-coordinate of the bounding box.
+    * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box.
     * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -2420,6 +2424,56 @@ public class EuclidGeometryTools
       double secondPointOnLineX = pointOnLine.getX() + lineDirection.getX();
       double secondPointOnLineY = pointOnLine.getY() + lineDirection.getY();
       double secondPointOnLineZ = pointOnLine.getZ() + lineDirection.getZ();
+      return intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ, boundingBoxMaxX, boundingBoxMaxY, boundingBoxMaxZ,
+                                                           firstPointOnLineX, firstPointOnLineY, firstPointOnLineZ, true, secondPointOnLineX,
+                                                           secondPointOnLineY, secondPointOnLineZ, true, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and an axis-aligned
+    * bounding box.
+    * <p>
+    * <a href=
+    * "https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">Useful
+    * link</a>.
+    * </p>
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * 
+    * @param boundingBoxMinX the minimum x-coordinate of the bounding box.
+    * @param boundingBoxMinY the minimum y-coordinate of the bounding box.
+    * @param boundingBoxMinZ the minimum z-coordinate of the bounding box.
+    * @param boundingBoxMaxX the maximum x-coordinate of the bounding box.
+    * @param boundingBoxMaxY the maximum y-coordinate of the bounding box.
+    * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box.
+    * @param pointOnLine the x-coordinate of a point located on the infinitely long line.
+    * @param pointOnLine the y-coordinate of a point located on the infinitely long line.
+    * @param pointOnLine the z-coordinate of a point located on the infinitely long line.
+    * @param lineDirection the x-component of the direction of the line.
+    * @param lineDirection the y-component of the direction of the line.
+    * @param lineDirection the z-component of the direction of the line.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the bounding box. It is either equal
+    *         to 0, 1, or 2.
+    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
+    *            greater than the maximum coordinate of the bounding box on the same axis.
+    */
+   public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX,
+                                                               double boundingBoxMaxY, double boundingBoxMaxZ, double pointOnLineX, double pointOnLineY,
+                                                               double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ,
+                                                               Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      double firstPointOnLineX = pointOnLineX;
+      double firstPointOnLineY = pointOnLineY;
+      double firstPointOnLineZ = pointOnLineZ;
+      double secondPointOnLineX = pointOnLineX + lineDirectionX;
+      double secondPointOnLineY = pointOnLineY + lineDirectionY;
+      double secondPointOnLineZ = pointOnLineZ + lineDirectionZ;
       return intersectionBetweenLine3DAndBoundingBox3DImpl(boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ, boundingBoxMaxX, boundingBoxMaxY, boundingBoxMaxZ,
                                                            firstPointOnLineX, firstPointOnLineY, firstPointOnLineZ, true, secondPointOnLineX,
                                                            secondPointOnLineY, secondPointOnLineZ, true, firstIntersectionToPack, secondIntersectionToPack);
@@ -2655,6 +2709,62 @@ public class EuclidGeometryTools
       default:
          throw new RuntimeException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
       }
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and a cylinder.
+    * <p>
+    * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
+    * </p>
+    * <p>
+    * The cylinder pose is as follows:
+    * <ul>
+    * <li>the cylinder axis is aligned with the z-axis.
+    * <li>the bottom center is located at (0, 0, 0).
+    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * </ul>
+    * </p>
+    * <p>
+    * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param cylinderHeight length of the cylinder.
+    * @param cylinderRadius radius of the cylinder.
+    * @param pointOnLine the x-coordinate of a point located on the infinitely long line.
+    * @param pointOnLine the y-coordinate of a point located on the infinitely long line.
+    * @param pointOnLine the z-coordinate of a point located on the infinitely long line.
+    * @param lineDirection the x-component of the direction of the line.
+    * @param lineDirection the y-component of the direction of the line.
+    * @param lineDirection the z-component of the direction of the line.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and the cylinder. It is either equal to
+    *         0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
+    *            negative.
+    */
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderHeight, double cylinderRadius, double pointOnLineX, double pointOnLineY,
+                                                            double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ,
+                                                            Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      double startX = pointOnLineX;
+      double startY = pointOnLineY;
+      double startZ = pointOnLineZ;
+      double endX = pointOnLineX + lineDirectionX;
+      double endY = pointOnLineY + lineDirectionY;
+      double endZ = pointOnLineZ + lineDirectionZ;
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderHeight, cylinderRadius, startX, startY, startZ, true, endX, endY, endZ, true,
+                                                        firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -2994,6 +3104,303 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the possible intersections between a line and an ellipsoid.
+    * <p>
+    * The ellipsoid is center at (0, 0, 0).
+    * </p>
+    * <p>
+    * In the case the line and the ellipsoid do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code radiusX}, {@code radiusY}, or {@code radiusZ} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param radiusX radius of the ellipsoid along the x-axis.
+    * @param radiusY radius of the ellipsoid along the y-axis.
+    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @param pointOnLine the x-coordinate of a point located on the infinitely long line.
+    * @param pointOnLine the y-coordinate of a point located on the infinitely long line.
+    * @param pointOnLine the z-coordinate of a point located on the infinitely long line.
+    * @param lineDirection the x-component of the direction of the line.
+    * @param lineDirection the y-component of the direction of the line.
+    * @param lineDirection the z-component of the direction of the line.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
+    *         either equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or
+    *            {@code radiusZ} is negative.
+    */
+   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, double pointOnLineX, double pointOnLineY,
+                                                             double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ,
+                                                             Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      double startX = pointOnLineX;
+      double startY = pointOnLineY;
+      double startZ = pointOnLineZ;
+      double endX = pointOnLineX + lineDirectionX;
+      double endY = pointOnLineY + lineDirectionY;
+      double endZ = pointOnLineZ + lineDirectionZ;
+      return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX, radiusY, radiusZ, startX, startY, startZ, true, endX, endY, endZ, true,
+                                                         firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and an ellipsoid.
+    * <p>
+    * The ellipsoid is center at (0, 0, 0).
+    * </p>
+    * <p>
+    * In the case the line and the ellipsoid do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code radiusX}, {@code radiusY}, or {@code radiusZ} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param radiusX radius of the ellipsoid along the x-axis.
+    * @param radiusY radius of the ellipsoid along the y-axis.
+    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
+    *         either equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or
+    *            {@code radiusZ} is negative.
+    */
+   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, Point3DReadOnly firstPointOnLine,
+                                                             Point3DReadOnly secondPointOnLine, Point3DBasics firstIntersectionToPack,
+                                                             Point3DBasics secondIntersectionToPack)
+   {
+      double startX = firstPointOnLine.getX();
+      double startY = firstPointOnLine.getY();
+      double startZ = firstPointOnLine.getZ();
+      double endX = secondPointOnLine.getX();
+      double endY = secondPointOnLine.getY();
+      double endZ = secondPointOnLine.getZ();
+      return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX, radiusY, radiusZ, startX, startY, startZ, true, endX, endY, endZ, true,
+                                                         firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and an ellipsoid.
+    * <p>
+    * The ellipsoid is center at (0, 0, 0).
+    * </p>
+    * <p>
+    * In the case the line and the ellipsoid do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code radiusX}, {@code radiusY}, or {@code radiusZ} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param radiusX radius of the ellipsoid along the x-axis.
+    * @param radiusY radius of the ellipsoid along the y-axis.
+    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @param pointOnLine a point located on the infinitely long line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
+    *         either equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or
+    *            {@code radiusZ} is negative.
+    */
+   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, Point3DReadOnly pointOnLine,
+                                                             Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+                                                             Point3DBasics secondIntersectionToPack)
+   {
+      double startX = pointOnLine.getX();
+      double startY = pointOnLine.getY();
+      double startZ = pointOnLine.getZ();
+      double endX = pointOnLine.getX() + lineDirection.getX();
+      double endY = pointOnLine.getY() + lineDirection.getY();
+      double endZ = pointOnLine.getZ() + lineDirection.getZ();
+      return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX, radiusY, radiusZ, startX, startY, startZ, true, endX, endY, endZ, true,
+                                                         firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Flexible implementation for computing the intersection between an ellipsoid and either a line,
+    * a line segment, or a ray.
+    * <p>
+    * The ellipsoid is center at (0, 0, 0).
+    * </p>
+    * <p>
+    * Switching between line/line-segment/ray can be done using the two arguments
+    * {@code canIntersectionOccurBeforeStart} and {@code canIntersectionOccurAfterEnd}:
+    * <ul>
+    * <li>{@code canIntersectionOccurBeforeStart == true} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate line/ellipsoid
+    * intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == false} changes the algorithm to calculate
+    * line-segment/ellipsoid intersection.
+    * <li>{@code canIntersectionOccurBeforeStart == false} and
+    * {@code canIntersectionOccurAfterEnd == true} changes the algorithm to calculate ray/ellipsoid
+    * intersection.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code radiusX}, {@code radiusY}, or {@code radiusZ} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param radiusX radius of the ellipsoid along the x-axis.
+    * @param radiusY radius of the ellipsoid along the y-axis.
+    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @param startX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param startY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param startZ the z-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurBeforeStart specifies whether an intersection can exist before
+    *           {@code start}.
+    * @param endX the x-coordinate of a point located on the line/line-segment/ray.
+    * @param endY the y-coordinate of a point located on the line/line-segment/ray.
+    * @param endZ the z-coordinate of a point located on the line/line-segment/ray.
+    * @param canIntersectionOccurAfterEnd specifies whether an intersection can exist after
+    *           {@code end}.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
+    *         either equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or
+    *            {@code radiusZ} is negative.
+    */
+   private static int intersectionBetweenLine3DAndEllipsoid3DImpl(double radiusX, double radiusY, double radiusZ, double startX, double startY, double startZ,
+                                                                  boolean canIntersectionOccurBeforeStart, double endX, double endY, double endZ,
+                                                                  boolean canIntersectionOccurAfterEnd, Point3DBasics firstIntersectionToPack,
+                                                                  Point3DBasics secondIntersectionToPack)
+   {
+      if (radiusX < 0.0)
+         throw new IllegalArgumentException("The ellipsoid x-radius has to be positive.");
+      if (radiusY < 0.0)
+         throw new IllegalArgumentException("The ellipsoid y-radius has to be positive.");
+      if (radiusZ < 0.0)
+         throw new IllegalArgumentException("The ellipsoid z-radius has to be positive.");
+
+      if (radiusX == 0.0 || radiusY == 0.0 || radiusZ == 0.0)
+         return 0;
+
+      double dx = endX - startX;
+      double dy = endY - startY;
+      double dz = endZ - startZ;
+
+      // The equation for an ellipsoid is: x^2/rx^2 + y^2/ry^2 + z^2/rz^2 = 1
+      // Plugging in the equation of the point p that belongs to a line: p = (x, y, z) = x0 + v t
+      // We can write a quadratic equation in t: A t^2 + B t + C = 0
+      // To simplify, let's write p' = (x/rx, y/ry, z/rz)
+      double x = startX / radiusX;
+      double y = startY / radiusY;
+      double z = startZ / radiusZ;
+
+      double vx = dx / radiusX;
+      double vy = dy / radiusY;
+      double vz = dz / radiusZ;
+
+      // By plugging the line equation in the ellipsoid equation we can find A, B, and C
+      // A = vx^2/rx^2 + vy^2/ry^2 + vz^2/rz^2
+      double A = EuclidCoreTools.normSquared(vx, vy, vz);
+      // B = 2 (x*vx/rx^2 + y*vy/ry^2 + z*vz/rz^2)
+      double B = 2.0 * (x * vx + y * vy + z * vz);
+      // C = x^2/rx^2 + y^2/ry^2 + z^2/rz^2 - 1
+      double C = EuclidCoreTools.normSquared(x, y, z) - 1.0;
+
+      double delta = B * B - 4.0 * A * C;
+
+      if (delta < 0.0)
+         return 0;
+
+      double oneOverTwoA = 1.0 / (2.0 * A);
+      delta = Math.sqrt(delta);
+
+      double t1, t2;
+
+      if (delta < ONE_TRILLIONTH)
+      {
+         t1 = -B * oneOverTwoA;
+         t2 = Double.NaN;
+      }
+      else
+      {
+         t1 = (-B - delta) * oneOverTwoA;
+         t2 = (-B + delta) * oneOverTwoA;
+      }
+
+      if (!canIntersectionOccurBeforeStart)
+      {
+         if (t2 < 0.0)
+            t2 = Double.NaN;
+
+         if (t1 < 0.0)
+         {
+            t1 = t2;
+            t2 = Double.NaN;
+         }
+      }
+
+      if (!canIntersectionOccurAfterEnd)
+      {
+         if (t2 > 1.0)
+            t2 = Double.NaN;
+
+         if (t1 > 1.0)
+         {
+            t1 = t2;
+            t2 = Double.NaN;
+         }
+      }
+
+      if (Double.isNaN(t1))
+         return 0;
+
+      if (firstIntersectionToPack != null)
+      {
+         firstIntersectionToPack.set(dx, dy, dz);
+         firstIntersectionToPack.scale(t1);
+         firstIntersectionToPack.add(startX, startY, startZ);
+      }
+
+      if (Double.isNaN(t2))
+         return 1;
+
+      if (secondIntersectionToPack != null)
+      {
+         secondIntersectionToPack.set(dx, dy, dz);
+         secondIntersectionToPack.scale(t2);
+         secondIntersectionToPack.add(startX, startY, startZ);
+      }
+
+      return 2;
+   }
+
+   /**
     * Computes the coordinates of the intersection between a plane and an infinitely long line.
     * <a href="https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection"> Useful link </a>.
     * <p>
@@ -3215,6 +3622,52 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the possible intersections between a line segment and an
+    * ellipsoid.
+    * <p>
+    * The ellipsoid is center at (0, 0, 0).
+    * </p>
+    * <p>
+    * In the case the line segment and the ellipsoid do not intersect, this method returns {@code 0}
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code radiusX}, {@code radiusY}, or {@code radiusZ} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param radiusX radius of the ellipsoid along the x-axis.
+    * @param radiusY radius of the ellipsoid along the y-axis.
+    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
+    *         either equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or
+    *            {@code radiusZ} is negative.
+    */
+   public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, Point3DReadOnly lineSegmentStart,
+                                                                    Point3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
+                                                                    Point3DBasics secondIntersectionToPack)
+   {
+      double startX = lineSegmentStart.getX();
+      double startY = lineSegmentStart.getY();
+      double startZ = lineSegmentStart.getZ();
+      double endX = lineSegmentEnd.getX();
+      double endY = lineSegmentEnd.getY();
+      double endZ = lineSegmentEnd.getZ();
+      return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX, radiusY, radiusZ, startX, startY, startZ, false, endX, endY, endZ, false,
+                                                         firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
     * Computes the coordinates of the intersection between a plane and a finite length line segment.
     * <p>
     * This method returns {@code null} for the following cases:
@@ -3400,6 +3853,51 @@ public class EuclidGeometryTools
       double endZ = rayOrigin.getZ() + rayDirection.getZ();
       return intersectionBetweenLine3DAndCylinder3DImpl(cylinderHeight, cylinderRadius, startX, startY, startZ, false, endX, endY, endZ, true,
                                                         firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a ray and a ellipsoid.
+    * <p>
+    * The ellipsoid is center at (0, 0, 0).
+    * </p>
+    * <p>
+    * In the case the ray and the ellipsoid do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if either {@code radiusX}, {@code radiusY}, or {@code radiusZ} is equal to {@code 0}, this
+    * method fails and return {@code 0}.
+    * </ul>
+    * </p>
+    * 
+    * @param radiusX radius of the ellipsoid along the x-axis.
+    * @param radiusY radius of the ellipsoid along the y-axis.
+    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @param rayOrigin the coordinate of the ray origin. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
+    *           Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
+    *         either equal to 0, 1, or 2.
+    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or
+    *            {@code radiusZ} is negative.
+    */
+   public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, Point3DReadOnly rayOrigin,
+                                                            Vector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
+                                                            Point3DBasics secondIntersectionToPack)
+   {
+      double startX = rayOrigin.getX();
+      double startY = rayOrigin.getY();
+      double startZ = rayOrigin.getZ();
+      double endX = rayOrigin.getX() + rayDirection.getX();
+      double endY = rayOrigin.getY() + rayDirection.getY();
+      double endZ = rayOrigin.getZ() + rayDirection.getZ();
+      return intersectionBetweenLine3DAndEllipsoid3DImpl(radiusX, radiusY, radiusZ, startX, startY, startZ, false, endX, endY, endZ, true,
+                                                         firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
