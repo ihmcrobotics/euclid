@@ -1862,7 +1862,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    /**
     * Returns minimum distance between the point and this polygon.
     * <p>
-    * The return value is negative if the point is inside the polygon.
+    * The returned value is negative if the point is inside the polygon.
     * </p>
     * <p>
     * Edge cases:
