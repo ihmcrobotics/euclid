@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -16,8 +15,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 public class Plane3DTest
 {
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void test()
    {
       Point3D point = new Point3D();
@@ -27,12 +25,11 @@ public class Plane3DTest
       assertFalse(point == plane.getPointCopy());
       normal.normalize();
       assertTrue(normal.equals(plane.getNormalCopy()));
-      Plane3D plane2 = new Plane3D(point,normal);
+      Plane3D plane2 = new Plane3D(point, normal);
       assertTrue(plane2.epsilonEquals(plane, 1e-17));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void testConstructor()
    {
       Plane3D plane = new Plane3D(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
@@ -44,8 +41,7 @@ public class Plane3DTest
       assertTrue(plane.getPointCopy().getZ() == 0.0);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void testIsOnOrAbove()
    {
       Plane3D plane = new Plane3D(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
@@ -57,8 +53,7 @@ public class Plane3DTest
       assertFalse(plane.isOnOrAbove(Q));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void testIsOnOrBelow()
    {
       Plane3D plane = new Plane3D(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
@@ -68,8 +63,7 @@ public class Plane3DTest
       assertFalse(plane.isOnOrBelow(Q));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void testOrthogonalProjection()
    {
       Point3D q = new Point3D(1.0, 2.0, -3.0);
@@ -84,8 +78,7 @@ public class Plane3DTest
       assertTrue(v.equals(plane.orthogonalProjectionCopy(q)));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void testGetZOnPlane()
    {
       Point3D point = new Point3D(1.0, 2.0, -3.0);
@@ -107,8 +100,7 @@ public class Plane3DTest
       assertTrue(Double.isNaN(z));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void testDistance()
    {
       Point3D q = new Point3D(1.0, 1.0, 1.0);
@@ -116,8 +108,7 @@ public class Plane3DTest
       assertEquals(1.0, plane.distance(q), 1e-14);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @Test
    public void testApplyTransform()
    {
       RigidBodyTransform transformation = new RigidBodyTransform();

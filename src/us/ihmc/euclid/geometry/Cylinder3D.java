@@ -96,8 +96,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    public void set(Cylinder3D other)
    {
       setPose(other);
-      setHeight(height);
-      setRadius(radius);
+      setHeight(other.height);
+      setRadius(other.radius);
    }
 
    /**
@@ -260,6 +260,15 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    @Override
    protected double evaluateQuery(double x, double y, double z, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
    {
+      if (radius <= 0.0 || height <= 0.0)
+      {
+         if (closestPointOnSurfaceToPack != null)
+            closestPointOnSurfaceToPack.setToNaN();
+         if (normalToPack != null)
+            normalToPack.setToNaN();
+         return Double.NaN;
+      }
+
       double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
 
       if (xyLengthSquared <= radius * radius)
