@@ -5,6 +5,7 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
@@ -13,6 +14,142 @@ import us.ihmc.euclid.geometry.Plane3D;
 public class EuclidGeometryTestTools
 {
    private static final String DEFAULT_FORMAT = getStringFormat(15, 12);
+
+   /**
+    * Asserts on a per component basis that the two line 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected line 2D.
+    * @param actual the actual line 2D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine2DEquals(Line2D expected, Line2D actual, double epsilon)
+   {
+      assertLine2DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two line 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line 2D.
+    * @param actual the actual line 2D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine2DEquals(String messagePrefix, Line2D expected, Line2D actual, double epsilon)
+   {
+      assertLine2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two line 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line 2D.
+    * @param actual the actual line 2D.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine2DEquals(String messagePrefix, Line2D expected, Line2D actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.epsilonEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
+    * Asserts that the two line 2Ds represent the same physical line.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected line 2D.
+    * @param actual the actual line 2D.
+    * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
+    * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
+    *           parallel lines.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine2DGeometricallyEquals(Line2D expected, Line2D actual, double angleEpsilon, double distanceEpsilon)
+   {
+      assertLine2DGeometricallyEquals(null, expected, actual, angleEpsilon, distanceEpsilon);
+   }
+
+   /**
+    * Asserts that the two line 2Ds represent the same physical line.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line 2D.
+    * @param actual the actual line 2D.
+    * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
+    * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
+    *           parallel lines.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine2DGeometricallyEquals(String messagePrefix, Line2D expected, Line2D actual, double angleEpsilon, double distanceEpsilon)
+   {
+      assertLine2DGeometricallyEquals(messagePrefix, expected, actual, angleEpsilon, distanceEpsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two line 2Ds represent the same physical line.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line 2D.
+    * @param actual the actual line 2D.
+    * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
+    * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
+    *           parallel lines.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine2DGeometricallyEquals(String messagePrefix, Line2D expected, Line2D actual, double angleEpsilon, double distanceEpsilon,
+                                                      String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!EuclidGeometryTools.areLine2DsCollinear(expected.getPoint(), expected.getDirection(), actual.getPoint(), actual.getDirection(), angleEpsilon,
+                                                   distanceEpsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
 
    /**
     * Asserts on a per component basis that the two line 3Ds are equal to an {@code epsilon}.
@@ -614,6 +751,13 @@ public class EuclidGeometryTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, Line2D expected, Line2D actual, String format)
+   {
+      String expectedAsString = getLine2DString(format, expected);
+      String actualAsString = getLine2DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Line3D expected, Line3D actual, String format)

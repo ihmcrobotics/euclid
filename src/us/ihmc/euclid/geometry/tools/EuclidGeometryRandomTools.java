@@ -9,6 +9,7 @@ import java.util.Random;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
@@ -20,6 +21,42 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public abstract class EuclidGeometryRandomTools
 {
+   /**
+    * Generates a random line 2D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line 2D.
+    */
+   public static Line2D generateRandomLine2D(Random random)
+   {
+      return new Line2D(generateRandomPoint2D(random), generateRandomVector2D(random));
+   }
+
+   /**
+    * Generates a random line 2D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-pointMinMax; pointMinMax].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random line 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Line2D generateRandomLine2D(Random random, double pointMinMax)
+   {
+      return new Line2D(generateRandomPoint2D(random, pointMinMax), generateRandomVector2D(random));
+   }
+
    /**
     * Generates a random line 3D.
     * <p>

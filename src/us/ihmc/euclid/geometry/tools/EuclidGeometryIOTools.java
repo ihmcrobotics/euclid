@@ -4,11 +4,13 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -16,6 +18,64 @@ public class EuclidGeometryIOTools
 {
    /** Default format used to print decimal numbers. */
    private static final String DEFAULT_FORMAT = getStringFormat(6, 3);
+
+   /**
+    * Gets a representative {@code String} of {@code line2D} as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param line2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLine2DString(Line2D line2D)
+   {
+      return getLine2DString(DEFAULT_FORMAT, line2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code line2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param line2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLine2DString(String format, Line2D line2D)
+   {
+      if (line2D == null)
+         return "null";
+      else
+         return getLine2DString(format, line2D.getPoint(), line2D.getDirection());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code line2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pointOnLine a point located on the line to get the {@code String} of. Not modified.
+    * @param lineDirection the direction of the line to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLine2DString(String format, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return "Line 2D: point = " + getTuple2DString(format, pointOnLine) + ", direction = " + getTuple2DString(format, lineDirection);
+   }
 
    /**
     * Gets a representative {@code String} of {@code line3D} as follows:
