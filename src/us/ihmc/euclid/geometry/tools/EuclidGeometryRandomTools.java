@@ -10,6 +10,7 @@ import java.util.Random;
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -53,6 +54,42 @@ public abstract class EuclidGeometryRandomTools
    public static Line3D generateRandomLine3D(Random random, double pointMinMax)
    {
       return new Line3D(generateRandomPoint3D(random, pointMinMax), generateRandomVector3D(random));
+   }
+
+   /**
+    * Generates a random line segment 2D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line segment 2D.
+    */
+   public static LineSegment2D generateRandomLineSegment2D(Random random)
+   {
+      return new LineSegment2D(generateRandomPoint2D(random), generateRandomPoint2D(random));
+   }
+
+   /**
+    * Generates a random line segment 2D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each coordinate of the line segment's endpoints.
+    * @return the random line segment 2D.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static LineSegment2D generateRandomLineSegment2D(Random random, double minMax)
+   {
+      return new LineSegment2D(generateRandomPoint2D(random, minMax), generateRandomPoint2D(random, minMax));
    }
 
    /**
