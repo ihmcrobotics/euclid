@@ -482,10 +482,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    @Override
    public boolean epsilonEquals(Orientation2D other, double epsilon)
    {
-      double difference = yaw - other.yaw;
-      if (Double.isNaN(difference) || Math.abs(difference) > epsilon)
-         return false;
-      return true;
+      return EuclidCoreTools.epsilonEquals(yaw, other.yaw, epsilon);
    }
 
    /**
