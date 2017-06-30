@@ -937,6 +937,6 @@ public class Plane3D implements GeometryObject<Plane3D>
    @Override
    public String toString()
    {
-      return "Plane 3D: point on plane = " + point + ", normal = " + normal;
+      return "Plane 3D: point = " + point + ", normal = " + normal;
    }
 }

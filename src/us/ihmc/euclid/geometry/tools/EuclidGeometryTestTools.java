@@ -1,12 +1,13 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Plane3D;
 
 public class EuclidGeometryTestTools
 {
@@ -77,6 +78,78 @@ public class EuclidGeometryTestTools
    }
 
    /**
+    * Asserts that the two line 3Ds represent the same physical line.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected line 3D.
+    * @param actual the actual line 3D.
+    * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
+    * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
+    *           parallel lines.
+    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine3DGeometricallyEquals(Line3D expected, Line3D actual, double angleEpsilon, double distanceEpsilon)
+   {
+      assertLine3DGeometricallyEquals(null, expected, actual, angleEpsilon, distanceEpsilon);
+   }
+
+   /**
+    * Asserts that the two line 3Ds represent the same physical line.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line 3D.
+    * @param actual the actual line 3D.
+    * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
+    * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
+    *           parallel lines.
+    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine3DGeometricallyEquals(String messagePrefix, Line3D expected, Line3D actual, double angleEpsilon, double distanceEpsilon)
+   {
+      assertLine3DGeometricallyEquals(messagePrefix, expected, actual, angleEpsilon, distanceEpsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two line 3Ds represent the same physical line.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line 3D.
+    * @param actual the actual line 3D.
+    * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
+    * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
+    *           parallel lines.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertLine3DGeometricallyEquals(String messagePrefix, Line3D expected, Line3D actual, double angleEpsilon, double distanceEpsilon,
+                                                      String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!EuclidGeometryTools.areLine3DsCollinear(expected.getPoint(), expected.getDirection(), actual.getPoint(), actual.getDirection(), angleEpsilon,
+                                                   distanceEpsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
     * Asserts on a per component basis that the two line segment 3Ds are equal to an
     * {@code epsilon}.
     * <p>
@@ -141,6 +214,73 @@ public class EuclidGeometryTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
+   }
+
+   /**
+    * Asserts that the two line segment 3Ds represent the same physical line segment.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected line segment 3D.
+    * @param actual the actual line segment 3D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment3DGeometricallyEquals(LineSegment3D expected, LineSegment3D actual, double epsilon)
+   {
+      assertLineSegment3DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts that the two line segment 3Ds represent the same physical line segment.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line segment 3D.
+    * @param actual the actual line segment 3D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment3DGeometricallyEquals(String messagePrefix, LineSegment3D expected, LineSegment3D actual, double epsilon)
+   {
+      assertLineSegment3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two line segment 3Ds represent the same physical line segment.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line segment 3D.
+    * @param actual the actual line segment 3D.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment3DGeometricallyEquals(String messagePrefix, LineSegment3D expected, LineSegment3D actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.epsilonEquals(actual, epsilon))
+         return;
+      else if (expected.getFirstEndpoint().epsilonEquals(actual.getSecondEndpoint(), epsilon)
+            && expected.getSecondEndpoint().epsilonEquals(actual.getFirstEndpoint(), epsilon))
+         return;
+      else
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
    /**
@@ -277,6 +417,70 @@ public class EuclidGeometryTestTools
       }
    }
 
+   /**
+    * Asserts on a per component basis that the two plane 3Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected plane 3D.
+    * @param actual the actual plane 3D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertPlane3DEquals(Plane3D expected, Plane3D actual, double epsilon)
+   {
+      assertPlane3DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two plane 3Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected plane 3D.
+    * @param actual the actual plane 3D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertPlane3DEquals(String messagePrefix, Plane3D expected, Plane3D actual, double epsilon)
+   {
+      assertPlane3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two plane 3Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected plane 3D.
+    * @param actual the actual plane 3D.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
+   public static void assertPlane3DEquals(String messagePrefix, Plane3D expected, Plane3D actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.epsilonEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
    private static void throwNotEqualAssertionError(String messagePrefix, Line3D expected, Line3D actual, String format)
    {
       String expectedAsString = getLine3DString(format, expected);
@@ -302,6 +506,13 @@ public class EuclidGeometryTestTools
    {
       String expectedAsString = getBoundingBox3DString(format, expected);
       String actualAsString = getBoundingBox3DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, Plane3D expected, Plane3D actual, String format)
+   {
+      String expectedAsString = getPlane3DString(format, expected);
+      String actualAsString = getPlane3DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 

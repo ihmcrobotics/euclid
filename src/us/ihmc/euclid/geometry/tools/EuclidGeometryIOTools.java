@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -241,4 +242,61 @@ public class EuclidGeometryIOTools
       return "Bounding Box 3D: min = " + getTuple3DString(format, boundingBoxMin) + ", max = " + getTuple3DString(format, boundingBoxMax);
    }
 
+   /**
+    * Gets a representative {@code String} of {@code plane3D} as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param plane3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPlane3DString(Plane3D plane3D)
+   {
+      return getPlane3DString(DEFAULT_FORMAT, plane3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code plane3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param plane3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPlane3DString(String format, Plane3D plane3D)
+   {
+      if (plane3D == null)
+         return "null";
+      else
+         return getPlane3DString(format, plane3D.getPoint(), plane3D.getNormal());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code plane3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pointOnPlane a point located on the plane to get the {@code String} of. Not modified.
+    * @param planeNormal the normal of the plane to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPlane3DString(String format, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return "Plane 3D: point = " + getTuple3DString(format, pointOnPlane) + ", normal = " + getTuple3DString(format, planeNormal);
+   }
 }

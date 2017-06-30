@@ -11,6 +11,7 @@ import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -120,6 +121,35 @@ public abstract class EuclidGeometryRandomTools
       Point3D center = generateRandomPoint3D(random, centerMinMax);
       Vector3D halfSize = generateRandomVector3D(random, 0.0, sizeMax / 2.0);
       return BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
+   }
+
+   /**
+    * Generates a random plane 3D from a random point and a random unit-vector.
+    * <p>
+    * Each coordinate of the random point are in [-1, 1].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random plane 3D.
+    */
+   public static Plane3D generateRandomPlane3D(Random random)
+   {
+      return generateRandomPlane3D(random, 1.0);
+   }
+
+   /**
+    * Generates a random plane 3D from a random point and a random unit-vector.
+    * 
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the random point.
+    * @return the random plane 3D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Plane3D generateRandomPlane3D(Random random, double pointMinMax)
+   {
+      Point3D pointOnPlane = generateRandomPoint3D(random, pointMinMax);
+      Vector3D planeNormal = generateRandomVector3DWithFixedLength(random, 1.0);
+      return new Plane3D(pointOnPlane, planeNormal);
    }
 
    public static List<Point2D> generateRandomPointCloud2D(Random random, double centerMinMax, double minMax, int numberOfPoints)
