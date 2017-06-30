@@ -6,11 +6,11 @@ import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -135,6 +135,67 @@ public class EuclidGeometryIOTools
    public static String getLine3DString(String format, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
       return "Line 3D: point = " + getTuple3DString(format, pointOnLine) + ", direction = " + getTuple3DString(format, lineDirection);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment1D} as follows:
+    *
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
+    *
+    * @param lineSegment1D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment1DString(LineSegment1D lineSegment1D)
+   {
+      return getLineSegment1DString(DEFAULT_FORMAT, lineSegment1D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment1D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param lineSegment1D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment1DString(String format, LineSegment1D lineSegment1D)
+   {
+      if (lineSegment1D == null)
+         return "null";
+      else
+         return getLineSegment1DString(format, lineSegment1D.getFirstEndpoint(), lineSegment1D.getSecondEndpoint());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment1D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment1DString(String format, double lineSegmentStart, double lineSegmentEnd)
+   {
+      return "Line segment 1D: 1st endpoint = " + getStringOf("(", " )", ", ", format, lineSegmentStart) + ", 2nd endpoint = "
+            + getStringOf("(", " )", ", ", format, lineSegmentEnd);
    }
 
    /**
@@ -427,7 +488,7 @@ public class EuclidGeometryIOTools
     */
    public static String getOrientation2DString(String format, double orientation2DAngle)
    {
-      return EuclidCoreIOTools.getStringOf("(", " )", ", ", format, orientation2DAngle);
+      return getStringOf("(", " )", ", ", format, orientation2DAngle);
    }
 
    /**

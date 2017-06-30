@@ -7,6 +7,7 @@ import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
@@ -287,6 +288,140 @@ public class EuclidGeometryTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
+   }
+
+   /**
+    * Asserts on a per component basis that the two line segment 1Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected line segment 1D.
+    * @param actual the actual line segment 1D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment1DEquals(LineSegment1D expected, LineSegment1D actual, double epsilon)
+   {
+      assertLineSegment1DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two line segment 1Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line segment 1D.
+    * @param actual the actual line segment 1D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment1DEquals(String messagePrefix, LineSegment1D expected, LineSegment1D actual, double epsilon)
+   {
+      assertLineSegment1DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two line segment 1Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line segment 1D.
+    * @param actual the actual line segment 1D.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment1DEquals(String messagePrefix, LineSegment1D expected, LineSegment1D actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.epsilonEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
+    * Asserts that the two line segment 1Ds represent the same physical line segment.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected line segment 1D.
+    * @param actual the actual line segment 1D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment1DGeometricallyEquals(LineSegment1D expected, LineSegment1D actual, double epsilon)
+   {
+      assertLineSegment1DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts that the two line segment 1Ds represent the same physical line segment.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line segment 1D.
+    * @param actual the actual line segment 1D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment1DGeometricallyEquals(String messagePrefix, LineSegment1D expected, LineSegment1D actual, double epsilon)
+   {
+      assertLineSegment1DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two line segment 1Ds represent the same physical line segment.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected line segment 1D.
+    * @param actual the actual line segment 1D.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertLineSegment1DGeometricallyEquals(String messagePrefix, LineSegment1D expected, LineSegment1D actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.epsilonEquals(actual, epsilon))
+         return;
+      else if (EuclidCoreTools.epsilonEquals(expected.getFirstEndpoint(), actual.getSecondEndpoint(), epsilon)
+            && EuclidCoreTools.epsilonEquals(expected.getSecondEndpoint(), actual.getFirstEndpoint(), epsilon))
+         return;
+      else
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
    /**
@@ -894,6 +1029,13 @@ public class EuclidGeometryTestTools
    {
       String expectedAsString = getLine3DString(format, expected);
       String actualAsString = getLine3DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, LineSegment1D expected, LineSegment1D actual, String format)
+   {
+      String expectedAsString = getLineSegment1DString(format, expected);
+      String actualAsString = getLineSegment1DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
