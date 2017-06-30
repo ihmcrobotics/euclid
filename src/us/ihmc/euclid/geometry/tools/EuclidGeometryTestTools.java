@@ -9,7 +9,9 @@ import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 
 public class EuclidGeometryTestTools
 {
@@ -690,6 +692,134 @@ public class EuclidGeometryTestTools
    }
 
    /**
+    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected orientation 2D.
+    * @param actual the actual orientation 2D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertOrientation2DEquals(Orientation2D expected, Orientation2D actual, double epsilon)
+   {
+      assertOrientation2DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected orientation 2D.
+    * @param actual the actual orientation 2D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertOrientation2DEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon)
+   {
+      assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected orientation 2D.
+    * @param actual the actual orientation 2D.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertOrientation2DEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.epsilonEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
+    * Asserts that the two orientation 2Ds represent the same physical heading.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected orientation 2D.
+    * @param actual the actual orientation 2D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertOrientation2DGeometricallyEquals(Orientation2D expected, Orientation2D actual, double epsilon)
+   {
+      assertOrientation2DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts that the two orientation 2Ds represent the same physical heading.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected orientation 2D.
+    * @param actual the actual orientation 2D.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon)
+   {
+      assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two orientation 2Ds represent the same physical heading.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected orientation 2D.
+    * @param actual the actual orientation 2D.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
+   public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!EuclidCoreTools.epsilonEquals(0.0, expected.difference(actual), epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
     * Asserts on a per component basis that the two plane 3Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
@@ -792,6 +922,13 @@ public class EuclidGeometryTestTools
    {
       String expectedAsString = getBoundingBox3DString(format, expected);
       String actualAsString = getBoundingBox3DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, Orientation2D expected, Orientation2D actual, String format)
+   {
+      String expectedAsString = getOrientation2DString(format, expected);
+      String actualAsString = getOrientation2DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 

@@ -13,6 +13,7 @@ import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -195,6 +196,40 @@ public abstract class EuclidGeometryRandomTools
       Point3D center = generateRandomPoint3D(random, centerMinMax);
       Vector3D halfSize = generateRandomVector3D(random, 0.0, sizeMax / 2.0);
       return BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random orientation 2D.
+    */
+   public static Orientation2D generateRandomOrientation2D(Random random)
+   {
+      return new Orientation2D(generateRandomDouble(random, Math.PI));
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-{@code minMax}; {@code minMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value orientation 2D's angle.
+    * @return the random orientation 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Orientation2D generateRandomOrientation2D(Random random, double minMax)
+   {
+      return new Orientation2D(generateRandomDouble(random, minMax));
    }
 
    /**

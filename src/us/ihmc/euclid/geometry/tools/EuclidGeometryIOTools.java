@@ -8,7 +8,9 @@ import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -184,8 +186,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment2DString(String format, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
@@ -242,8 +246,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment3DString(String format, Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
@@ -297,8 +303,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of. Not modified.
+    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getBoundingBox2DString(String format, Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax)
@@ -352,13 +360,74 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of. Not modified.
+    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getBoundingBox3DString(String format, Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax)
    {
       return "Bounding Box 3D: min = " + getTuple3DString(format, boundingBoxMin) + ", max = " + getTuple3DString(format, boundingBoxMax);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2D} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(Orientation2D orientation2D)
+   {
+      return getOrientation2DString(DEFAULT_FORMAT, orientation2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, Orientation2D orientation2D)
+   {
+      if (orientation2D == null)
+         return "null";
+      else
+         return getOrientation2DString(format, orientation2D.getYaw());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2DAngle} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param orientation2DAngle the angle of the orientation 2D to get the {@code String} of. Not
+    *           modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, double orientation2DAngle)
+   {
+      return EuclidCoreIOTools.getStringOf("(", " )", ", ", format, orientation2DAngle);
    }
 
    /**
