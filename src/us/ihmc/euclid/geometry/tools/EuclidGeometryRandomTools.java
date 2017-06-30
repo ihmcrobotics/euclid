@@ -298,6 +298,15 @@ public abstract class EuclidGeometryRandomTools
       return new Plane3D(pointOnPlane, planeNormal);
    }
 
+   /**
+    * Generates a random 2D point cloud given a random average, range, and size.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the random average.
+    * @param minMax the range of the point cloud in the three directions.
+    * @param numberOfPoints the size of the point cloud to generate.
+    * @return the random 2D point cloud.
+    */
    public static List<Point2D> generateRandomPointCloud2D(Random random, double centerMinMax, double minMax, int numberOfPoints)
    {
       List<Point2D> pointCloud2D = new ArrayList<>();
@@ -313,6 +322,17 @@ public abstract class EuclidGeometryRandomTools
       return pointCloud2D;
    }
 
+   /**
+    * Generates a random convex polygon 2D which construction is based on the generation of a random
+    * circle onto which the vertices are generated.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
+    * @param maxEdgeLength maximum distance between two successive vertices constraining the size of
+    *           the random circle.
+    * @param numberOfVertices the size of the convex polygon.
+    * @return the random convex polygon 2D.
+    */
    public static List<Point2D> generateRandomCircleBasedConvexPolygon2D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices)
    {
       if (numberOfVertices == 0)
