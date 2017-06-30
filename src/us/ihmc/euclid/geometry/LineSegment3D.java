@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -933,6 +934,6 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    @Override
    public String toString()
    {
-      return "Line segment 3D: 1st endpoint = " + firstEndpoint + ", 2nd endpoint = " + secondEndpoint;
+      return EuclidGeometryIOTools.getLineSegment3DString(this);
    }
 }

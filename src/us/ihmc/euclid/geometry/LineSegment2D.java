@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -1242,7 +1243,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    @Override
    public String toString()
    {
-      return "Line segment 2D: 1st endpoint = " + firstEndpoint + ", 2nd endpoint = " + secondEndpoint;
+      return EuclidGeometryIOTools.getLineSegment2DString(this);
    }
 
    /**

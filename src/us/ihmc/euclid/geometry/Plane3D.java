@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -937,6 +938,6 @@ public class Plane3D implements GeometryObject<Plane3D>
    @Override
    public String toString()
    {
-      return "Plane 3D: point = " + point + ", normal = " + normal;
+      return EuclidGeometryIOTools.getPlane3DString(this);
    }
 }

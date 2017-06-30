@@ -1,8 +1,8 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -532,6 +532,6 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getStringOf("(", " )", ", ", yaw);
+      return EuclidGeometryIOTools.getOrientation2DString(this);
    }
 }

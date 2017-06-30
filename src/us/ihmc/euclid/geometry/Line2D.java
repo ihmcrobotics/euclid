@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -1374,7 +1375,7 @@ public class Line2D implements GeometryObject<Line2D>
    @Override
    public String toString()
    {
-      return "Line 2D: point = " + point + ", direction = " + direction;
+      return EuclidGeometryIOTools.getLine2DString(this);
    }
 
    /**
