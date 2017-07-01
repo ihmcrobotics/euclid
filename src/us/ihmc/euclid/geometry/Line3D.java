@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -750,7 +751,7 @@ public class Line3D implements GeometryObject<Line3D>
    @Override
    public String toString()
    {
-      return "Line 3D: point = " + point + ", direction = " + direction;
+      return EuclidGeometryIOTools.getLine3DString(this);
    }
 
    /**

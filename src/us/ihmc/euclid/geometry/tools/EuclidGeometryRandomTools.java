@@ -9,8 +9,15 @@ import java.util.Random;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment1D;
+import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Orientation2D;
+import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -18,6 +25,42 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public abstract class EuclidGeometryRandomTools
 {
+   /**
+    * Generates a random line 2D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line 2D.
+    */
+   public static Line2D generateRandomLine2D(Random random)
+   {
+      return new Line2D(generateRandomPoint2D(random), generateRandomVector2D(random));
+   }
+
+   /**
+    * Generates a random line 2D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-pointMinMax; pointMinMax].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random line 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Line2D generateRandomLine2D(Random random, double pointMinMax)
+   {
+      return new Line2D(generateRandomPoint2D(random, pointMinMax), generateRandomVector2D(random));
+   }
+
    /**
     * Generates a random line 3D.
     * <p>
@@ -52,6 +95,78 @@ public abstract class EuclidGeometryRandomTools
    public static Line3D generateRandomLine3D(Random random, double pointMinMax)
    {
       return new Line3D(generateRandomPoint3D(random, pointMinMax), generateRandomVector3D(random));
+   }
+
+   /**
+    * Generates a random line segment 1D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint} &in; [-1.0; 1.0].
+    * <li>{@code secondEndpoint} &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line segment 1D.
+    */
+   public static LineSegment1D generateRandomLineSegment1D(Random random)
+   {
+      return new LineSegment1D(generateRandomDouble(random), generateRandomDouble(random));
+   }
+
+   /**
+    * Generates a random line segment 1D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint} &in; [-minMax; minMax].
+    * <li>{@code secondEndpoint} &in; [-minMax; minMax].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each line segment's endpoints.
+    * @return the random line segment 1D.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static LineSegment1D generateRandomLineSegment1D(Random random, double minMax)
+   {
+      return new LineSegment1D(generateRandomDouble(random, minMax), generateRandomDouble(random, minMax));
+   }
+
+   /**
+    * Generates a random line segment 2D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line segment 2D.
+    */
+   public static LineSegment2D generateRandomLineSegment2D(Random random)
+   {
+      return new LineSegment2D(generateRandomPoint2D(random), generateRandomPoint2D(random));
+   }
+
+   /**
+    * Generates a random line segment 2D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each coordinate of the line segment's endpoints.
+    * @return the random line segment 2D.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static LineSegment2D generateRandomLineSegment2D(Random random, double minMax)
+   {
+      return new LineSegment2D(generateRandomPoint2D(random, minMax), generateRandomPoint2D(random, minMax));
    }
 
    /**
@@ -122,6 +237,151 @@ public abstract class EuclidGeometryRandomTools
       return BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
    }
 
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random orientation 2D.
+    */
+   public static Orientation2D generateRandomOrientation2D(Random random)
+   {
+      return new Orientation2D(generateRandomDouble(random, Math.PI));
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-{@code minMax}; {@code minMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value orientation 2D's angle.
+    * @return the random orientation 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Orientation2D generateRandomOrientation2D(Random random, double minMax)
+   {
+      return new Orientation2D(generateRandomDouble(random, minMax));
+   }
+
+   /**
+    * Generates a random plane 3D from a random point and a random unit-vector.
+    * <p>
+    * Each coordinate of the random point are in [-1, 1].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random plane 3D.
+    */
+   public static Plane3D generateRandomPlane3D(Random random)
+   {
+      return generateRandomPlane3D(random, 1.0);
+   }
+
+   /**
+    * Generates a random plane 3D from a random point and a random unit-vector.
+    * 
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the random point.
+    * @return the random plane 3D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Plane3D generateRandomPlane3D(Random random, double pointMinMax)
+   {
+      Point3D pointOnPlane = generateRandomPoint3D(random, pointMinMax);
+      Vector3D planeNormal = generateRandomVector3DWithFixedLength(random, 1.0);
+      return new Plane3D(pointOnPlane, planeNormal);
+   }
+
+   /**
+    * Generates a random pose 2D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code orientation} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random pose 2D.
+    */
+   public static Pose2D generateRandomPose2D(Random random)
+   {
+      return new Pose2D(generateRandomPoint2D(random), generateRandomOrientation2D(random));
+   }
+
+   /**
+    * Generates a random pose 2D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
+    * <li>{@code orientation} &in; [-{@code orientationMinMax}; {@code orientationMinMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random pose 2D.
+    * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
+    */
+   public static Pose2D generateRandomLine2D(Random random, double positionMinMax, double orientationMinMax)
+   {
+      return new Pose2D(generateRandomPoint2D(random, positionMinMax), generateRandomOrientation2D(random, orientationMinMax));
+   }
+
+   /**
+    * Generates a random pose 3D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random pose 3D.
+    */
+   public static Pose3D generateRandomPose3D(Random random)
+   {
+      return new Pose3D(generateRandomPoint3D(random), generateRandomQuaternion(random));
+   }
+
+   /**
+    * Generates a random pose 3D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
+    * <li>{@code orientation.getAngle()} &in; [-{@code orientationMinMax};
+    * {@code orientationMinMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random pose 3D.
+    * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
+    */
+   public static Pose3D generateRandomLine3D(Random random, double positionMinMax, double orientationMinMax)
+   {
+      return new Pose3D(generateRandomPoint3D(random, positionMinMax), generateRandomQuaternion(random, orientationMinMax));
+   }
+
+   /**
+    * Generates a random 2D point cloud given a random average, range, and size.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the random average.
+    * @param minMax the range of the point cloud in the three directions.
+    * @param numberOfPoints the size of the point cloud to generate.
+    * @return the random 2D point cloud.
+    */
    public static List<Point2D> generateRandomPointCloud2D(Random random, double centerMinMax, double minMax, int numberOfPoints)
    {
       List<Point2D> pointCloud2D = new ArrayList<>();
@@ -137,6 +397,17 @@ public abstract class EuclidGeometryRandomTools
       return pointCloud2D;
    }
 
+   /**
+    * Generates a random convex polygon 2D which construction is based on the generation of a random
+    * circle onto which the vertices are generated.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
+    * @param maxEdgeLength maximum distance between two successive vertices constraining the size of
+    *           the random circle.
+    * @param numberOfVertices the size of the convex polygon.
+    * @return the random convex polygon 2D.
+    */
    public static List<Point2D> generateRandomCircleBasedConvexPolygon2D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices)
    {
       if (numberOfVertices == 0)
