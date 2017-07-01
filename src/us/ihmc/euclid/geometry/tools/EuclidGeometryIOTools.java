@@ -4,16 +4,83 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment1D;
+import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Orientation2D;
+import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public class EuclidGeometryIOTools
 {
    /** Default format used to print decimal numbers. */
    private static final String DEFAULT_FORMAT = getStringFormat(6, 3);
+
+   /**
+    * Gets a representative {@code String} of {@code line2D} as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param line2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLine2DString(Line2D line2D)
+   {
+      return getLine2DString(DEFAULT_FORMAT, line2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code line2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param line2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLine2DString(String format, Line2D line2D)
+   {
+      if (line2D == null)
+         return "null";
+      else
+         return getLine2DString(format, line2D.getPoint(), line2D.getDirection());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code line2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pointOnLine a point located on the line to get the {@code String} of. Not modified.
+    * @param lineDirection the direction of the line to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLine2DString(String format, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return "Line 2D: point = " + getTuple2DString(format, pointOnLine) + ", direction = " + getTuple2DString(format, lineDirection);
+   }
 
    /**
     * Gets a representative {@code String} of {@code line3D} as follows:
@@ -74,6 +141,127 @@ public class EuclidGeometryIOTools
    }
 
    /**
+    * Gets a representative {@code String} of {@code lineSegment1D} as follows:
+    *
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
+    *
+    * @param lineSegment1D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment1DString(LineSegment1D lineSegment1D)
+   {
+      return getLineSegment1DString(DEFAULT_FORMAT, lineSegment1D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment1D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param lineSegment1D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment1DString(String format, LineSegment1D lineSegment1D)
+   {
+      if (lineSegment1D == null)
+         return "null";
+      else
+         return getLineSegment1DString(format, lineSegment1D.getFirstEndpoint(), lineSegment1D.getSecondEndpoint());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment1D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment1DString(String format, double lineSegmentStart, double lineSegmentEnd)
+   {
+      return "Line segment 1D: 1st endpoint = " + getStringOf("(", " )", ", ", format, lineSegmentStart) + ", 2nd endpoint = "
+            + getStringOf("(", " )", ", ", format, lineSegmentEnd);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment2D} as follows:
+    *
+    * <pre>
+    * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param lineSegment2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment2DString(LineSegment2D lineSegment2D)
+   {
+      return getLineSegment2DString(DEFAULT_FORMAT, lineSegment2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param lineSegment2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment2DString(String format, LineSegment2D lineSegment2D)
+   {
+      if (lineSegment2D == null)
+         return "null";
+      else
+         return getLineSegment2DString(format, lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code lineSegment2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getLineSegment2DString(String format, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
+   {
+      return "Line segment 2D: 1st endpoint = " + getTuple2DString(format, lineSegmentStart) + ", 2nd endpoint = " + getTuple2DString(format, lineSegmentEnd);
+   }
+
+   /**
     * Gets a representative {@code String} of {@code lineSegment3D} as follows:
     *
     * <pre>
@@ -122,8 +310,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment3DString(String format, Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
@@ -177,8 +367,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of. Not modified.
+    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getBoundingBox2DString(String format, Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax)
@@ -232,8 +424,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of. Not modified.
+    * @param boundingBoxMin the minimum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
+    * @param boundingBoxMax the maximum coordinate of the bounding box to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getBoundingBox3DString(String format, Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax)
@@ -241,4 +435,238 @@ public class EuclidGeometryIOTools
       return "Bounding Box 3D: min = " + getTuple3DString(format, boundingBoxMin) + ", max = " + getTuple3DString(format, boundingBoxMax);
    }
 
+   /**
+    * Gets a representative {@code String} of {@code orientation2D} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(Orientation2D orientation2D)
+   {
+      return getOrientation2DString(DEFAULT_FORMAT, orientation2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, Orientation2D orientation2D)
+   {
+      if (orientation2D == null)
+         return "null";
+      else
+         return getOrientation2DString(format, orientation2D.getYaw());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2DAngle} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param orientation2DAngle the angle of the orientation 2D to get the {@code String} of. Not
+    *           modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, double orientation2DAngle)
+   {
+      return getStringOf("(", " )", ", ", format, orientation2DAngle);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code plane3D} as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param plane3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPlane3DString(Plane3D plane3D)
+   {
+      return getPlane3DString(DEFAULT_FORMAT, plane3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code plane3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param plane3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPlane3DString(String format, Plane3D plane3D)
+   {
+      if (plane3D == null)
+         return "null";
+      else
+         return getPlane3DString(format, plane3D.getPoint(), plane3D.getNormal());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code plane3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pointOnPlane a point located on the plane to get the {@code String} of. Not modified.
+    * @param planeNormal the normal of the plane to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPlane3DString(String format, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return "Plane 3D: point = " + getTuple3DString(format, pointOnPlane) + ", normal = " + getTuple3DString(format, planeNormal);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose2D} as follows:
+    *
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param pose2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose2DString(Pose2D pose2D)
+   {
+      return getPose2DString(DEFAULT_FORMAT, pose2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pose2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose2DString(String format, Pose2D pose2D)
+   {
+      if (pose2D == null)
+         return "null";
+      else
+         return getPose2DString(format, pose2D.getPosition(), pose2D.getYaw());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param position the position part of the pose to get the {@code String} of. Not modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not
+    *           modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose2DString(String format, Point2DReadOnly position, double orientation)
+   {
+      return "Pose 2D: position = " + getTuple2DString(format, position) + ", orientation = " + getOrientation2DString(format, orientation);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose3D} as follows:
+    *
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
+    *
+    * @param pose3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose3DString(Pose3D pose3D)
+   {
+      return getPose3DString(DEFAULT_FORMAT, pose3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pose3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose3DString(String format, Pose3D pose3D)
+   {
+      if (pose3D == null)
+         return "null";
+      else
+         return getPose3DString(format, pose3D.getPosition(), pose3D.getOrientation());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param position the position part of the pose to get the {@code String} of. Not modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not
+    *           modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose3DString(String format, Point3DReadOnly position, QuaternionReadOnly orientation)
+   {
+      return "Pose 3D: position = " + getTuple3DString(format, position) + ", orientation = " + getTuple4DString(format, orientation);
+   }
 }

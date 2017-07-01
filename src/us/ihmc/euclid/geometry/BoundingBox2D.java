@@ -5,6 +5,7 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetw
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.Settable;
@@ -934,6 +935,6 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
    @Override
    public String toString()
    {
-      return "Bounding Box 2D: min = " + minPoint + ", max = " + maxPoint;
+      return EuclidGeometryIOTools.getBoundingBox2DString(this);
    }
 }

@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -187,7 +188,7 @@ public class Line2D implements GeometryObject<Line2D>
    {
       if (firstPointOnLine.equals(secondPointOnLine))
       {
-         throw new RuntimeException("Tried to create a line from two coincidal points");
+         throw new RuntimeException("Tried to create a line from two coincidal points.");
       }
    }
 
@@ -203,7 +204,7 @@ public class Line2D implements GeometryObject<Line2D>
    {
       if (Math.abs(localVector.getX()) < minAllowableVectorPart && Math.abs(localVector.getY()) < minAllowableVectorPart)
       {
-         throw new RuntimeException("Line length must be greater than zero");
+         throw new RuntimeException("Line length must be greater than zero.");
       }
    }
 
@@ -230,7 +231,7 @@ public class Line2D implements GeometryObject<Line2D>
     * </p>
     *
     * @param point 2D point to compute the distance from the line. Not modified.
-    * @return the minimum distance between the 3D point and this 3D line.
+    * @return the minimum distance between the 2D point and this 2D line.
     * @throws RuntimeException if this line has not been initialized yet.
     */
    public double distance(Point2DReadOnly point)
@@ -613,9 +614,6 @@ public class Line2D implements GeometryObject<Line2D>
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
-    * </p>
-    * <p>
-    * WARNING: This method generates garbage.
     * </p>
     * 
     * @param secondLine the other line that may intersect this line. Not modified.
@@ -1377,7 +1375,7 @@ public class Line2D implements GeometryObject<Line2D>
    @Override
    public String toString()
    {
-      return "Line 2D: point = " + point + ", direction = " + direction;
+      return EuclidGeometryIOTools.getLine2DString(this);
    }
 
    /**

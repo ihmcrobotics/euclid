@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry.exceptions;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -82,5 +83,29 @@ public class BoundingBoxException extends RuntimeException
    public BoundingBoxException(Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax)
    {
       super("Improper bounding box 3D: min = " + boundingBoxMin + ", max = " + boundingBoxMax);
+   }
+
+   /**
+    * Creates a new bounding box exception with a default detail message containing the value of the
+    * given minimum and maximum coordinates of the bounding box.
+    * 
+    * @param boundingBoxMinX the minimum x-coordinate of the bounding box to be displayed in the
+    *           detail message.
+    * @param boundingBoxMinY the minimum y-coordinate of the bounding box to be displayed in the
+    *           detail message.
+    * @param boundingBoxMinZ the minimum z-coordinate of the bounding box to be displayed in the
+    *           detail message.
+    * @param boundingBoxMaxX the maximum x-coordinate of the bounding box to be displayed in the
+    *           detail message.
+    * @param boundingBoxMaxY the maximum y-coordinate of the bounding box to be displayed in the
+    *           detail message.
+    * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box to be displayed in the
+    *           detail message.
+    */
+   public BoundingBoxException(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX, double boundingBoxMaxY,
+                               double boundingBoxMaxZ)
+   {
+      super("Improper bounding box 3D: min = " + EuclidCoreIOTools.getStringOf("(", " )", ", ", boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ) + ", max = "
+            + EuclidCoreIOTools.getStringOf("(", " )", ", ", boundingBoxMaxX, boundingBoxMaxY, boundingBoxMaxZ));
    }
 }

@@ -5,6 +5,7 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetw
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.Settable;
@@ -1299,6 +1300,6 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    @Override
    public String toString()
    {
-      return "Bounding Box 3D: min = " + minPoint + ", max = " + maxPoint;
+      return EuclidGeometryIOTools.getBoundingBox3DString(this);
    }
 }

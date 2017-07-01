@@ -6,6 +6,7 @@ import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -14,6 +15,7 @@ import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -26,6 +28,7 @@ public class EuclidGeometryToolsTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
+   private static final double LARGE_EPSILON = 5.0e-10;
 
    @Test
    public void testAngleFromFirstToSecondVector2D() throws Exception
@@ -1198,6 +1201,26 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testDistanceBetweenPoint3Ds() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D firstPoint = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         Point3D secondPoint = EuclidCoreRandomTools.generateRandomPoint3D(random);
+
+         firstPoint.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         secondPoint.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         double expectedDistance = firstPoint.distance(secondPoint);
+         double actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(),
+                                                                             secondPoint.getY(), secondPoint.getZ());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+   }
+
+   @Test
    public void testDistanceBetweenTwoLine3Ds() throws Exception
    {
       Point3D closestPointOnLine1 = new Point3D();
@@ -1733,9 +1756,36 @@ public class EuclidGeometryToolsTest
 
          double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          Point3D point = new Point3D();
-         point.scaleAdd(expectedDistance / planeNormal.length(), planeNormal, secondPointOnPlane);
+         double scalar = expectedDistance / planeNormal.length();
+         if (random.nextBoolean())
+            scalar = -scalar;
+         point.scaleAdd(scalar, planeNormal, secondPointOnPlane);
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+      }
+   }
+
+   @Test
+   public void testSignedDistanceFromPoint3DToPlane3D() throws Exception
+   {
+      Random random = new Random(1176L);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D pointOnPlane = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         pointOnPlane.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         Vector3D planeNormal = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random,
+                                                                                            EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
+
+         Vector3D parallelToPlane = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, planeNormal, true);
+         Point3D secondPointOnPlane = new Point3D();
+         secondPointOnPlane.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), parallelToPlane, pointOnPlane);
+
+         double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 10.0);
+         Point3D point = new Point3D();
+         point.scaleAdd(expectedDistance / planeNormal.length(), planeNormal, secondPointOnPlane);
+
+         double actualDistance = EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
@@ -3147,6 +3197,521 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testIntersectionBetweenLine3DAndCylinder3D() throws Exception
+   {
+      Random random = new Random(65226L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with non intersecting line that goes above the cylinder.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D firstPointOnLine = new Point3D(cylinderRadius, 0.0, cylinderHeight + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), firstPointOnLine, firstPointOnLine);
+
+         Point3D secondPointOnLine = new Point3D(cylinderRadius, 0.0, cylinderHeight + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), secondPointOnLine, secondPointOnLine);
+
+         Vector3D lineDirection = new Vector3D();
+         lineDirection.sub(secondPointOnLine, firstPointOnLine);
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, firstPointOnLine);
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, secondPointOnLine);
+         lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+                                                                                                secondPointOnLine, firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine,
+                                                                                            null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection,
+                                                                                            firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with non intersecting line that goes below the cylinder.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D firstPointOnLine = new Point3D(cylinderRadius, 0.0, -EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), firstPointOnLine, firstPointOnLine);
+
+         Point3D secondPointOnLine = new Point3D(cylinderRadius, 0.0, -EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), secondPointOnLine, secondPointOnLine);
+
+         Vector3D lineDirection = new Vector3D();
+         lineDirection.sub(secondPointOnLine, firstPointOnLine);
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, firstPointOnLine);
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, secondPointOnLine);
+         lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+                                                                                                secondPointOnLine, firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine,
+                                                                                            null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection,
+                                                                                            firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with non intersecting line that hovers around cylinder part.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D firstPointOnLine = new Point3D(cylinderRadius + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0), 0.0,
+                                                EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), firstPointOnLine, firstPointOnLine);
+
+         Vector3D fromCylinderToPoint = new Vector3D(firstPointOnLine);
+         fromCylinderToPoint.setZ(0.0);
+         Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, fromCylinderToPoint, true);
+
+         Point3D secondPointOnLine = new Point3D();
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, firstPointOnLine);
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, firstPointOnLine);
+         lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+                                                                                                secondPointOnLine, firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine,
+                                                                                            null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection,
+                                                                                            firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with intersecting line going through the top and the bottom faces.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D expectedIntersection1 = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, 0.0);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection1, expectedIntersection1);
+
+         Point3D expectedIntersection2 = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, cylinderHeight);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection2, expectedIntersection2);
+
+         Vector3D lineDirection = new Vector3D();
+         lineDirection.sub(expectedIntersection2, expectedIntersection1);
+         lineDirection.normalize();
+
+         Point3D firstPointOnLine = new Point3D();
+         Point3D secondPointOnLine = new Point3D();
+
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, expectedIntersection1);
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), lineDirection, firstPointOnLine);
+         lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+                                                                                                secondPointOnLine, null, null);
+         assertEquals(2, numberOfIntersections);
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection,
+                                                                                            null, null);
+         assertEquals(2, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine, actualIntersection1,
+                                                                    actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection1,
+                                                                    actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, secondPointOnLine, firstPointOnLine, actualIntersection2,
+                                                                    actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         lineDirection.negate();
+         EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection2,
+                                                                    actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting line going through the cylinder part without touching the top and bottom faces.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D expectedIntersection1 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection1, expectedIntersection1);
+
+            Point3D expectedIntersection2 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection2, expectedIntersection2);
+
+            Vector3D lineDirection = new Vector3D();
+            lineDirection.sub(expectedIntersection2, expectedIntersection1);
+            lineDirection.normalize();
+
+            Point3D firstPointOnLine = new Point3D();
+            Point3D secondPointOnLine = new Point3D();
+
+            firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, expectedIntersection1);
+            secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), lineDirection, firstPointOnLine);
+            lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+                                                                                                   secondPointOnLine, null, null);
+            assertEquals(2, numberOfIntersections);
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection,
+                                                                                               null, null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine, actualIntersection1,
+                                                                       actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+            errors.add(expectedIntersection1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+            errors.add(expectedIntersection2.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection1,
+                                                                       actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+            errors.add(expectedIntersection1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+            errors.add(expectedIntersection2.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, secondPointOnLine, firstPointOnLine, actualIntersection2,
+                                                                       actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+            errors.add(expectedIntersection1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+            errors.add(expectedIntersection2.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            lineDirection.negate();
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection2,
+                                                                       actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+            errors.add(expectedIntersection1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+            errors.add(expectedIntersection2.distance(actualIntersection2));
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting line going through the cylinder part once and through the top face.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnTop = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, cylinderHeight);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnTop, pointOnTop);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Vector3D lineDirection = new Vector3D();
+            lineDirection.sub(pointOnCylinder, pointOnTop);
+            lineDirection.normalize();
+
+            Point3D firstPointOnLine = new Point3D();
+            Point3D secondPointOnLine = new Point3D();
+
+            firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnTop);
+            secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), lineDirection, firstPointOnLine);
+            lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+                                                                                                   secondPointOnLine, null, null);
+            assertEquals(2, numberOfIntersections);
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection,
+                                                                                               null, null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine, actualIntersection1,
+                                                                       actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection1,
+                                                                       actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, secondPointOnLine, firstPointOnLine, actualIntersection2,
+                                                                       actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            lineDirection.negate();
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection2,
+                                                                       actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting line going through the cylinder part once and through the bottom face.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnBottom = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, 0.0);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnBottom, pointOnBottom);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Vector3D lineDirection = new Vector3D();
+            lineDirection.sub(pointOnCylinder, pointOnBottom);
+            lineDirection.normalize();
+
+            Point3D firstPointOnLine = new Point3D();
+            Point3D secondPointOnLine = new Point3D();
+
+            firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnBottom);
+            secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), lineDirection, firstPointOnLine);
+            lineDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+                                                                                                   secondPointOnLine, null, null);
+            assertEquals(2, numberOfIntersections);
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection,
+                                                                                               null, null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine, actualIntersection1,
+                                                                       actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection1,
+                                                                       actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, secondPointOnLine, firstPointOnLine, actualIntersection2,
+                                                                       actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            lineDirection.negate();
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, lineDirection, actualIntersection2,
+                                                                       actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+   }
+
+   @Test
+   public void testIntersectionBetweenLine3DAndEllipsoid3D() throws Exception
+   {
+      Random random = new Random(7654L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Non-intersecting line
+         double radiusX = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusY = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+
+         Point3D pointOnEllipsoid = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX, pointOnEllipsoid.getY() / radiusY,
+                                                                         pointOnEllipsoid.getZ() / radiusZ));
+         pointOnEllipsoid.scale(1.0 / sqrtSumOfSquares);
+
+         Vector3D normalAtPoint = new Vector3D(pointOnEllipsoid);
+         normalAtPoint.scale(1.0 / (radiusX * radiusX), 1.0 / (radiusY * radiusY), 1.0 / (radiusZ * radiusZ));
+         normalAtPoint.normalize();
+
+         Point3D firstPointOnLine = new Point3D();
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 10.0), normalAtPoint, pointOnEllipsoid);
+
+         Vector3D lineDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, normalAtPoint, true);
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, firstPointOnLine);
+         Point3D secondPointOnLine = new Point3D();
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, firstPointOnLine);
+
+         Point3D intersection1 = new Point3D();
+         Point3D intersection2 = new Point3D();
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
+                                                                                                 intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection1);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection2);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, lineDirection,
+                                                                                             intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection1);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection2);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
+                                                                                             null, null);
+         assertEquals(0, numberOfIntersections);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, lineDirection, null,
+                                                                                             null);
+         assertEquals(0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Intersecting line
+         double radiusX = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusY = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+
+         Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 10.0);
+         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX, pointOnEllipsoid1.getY() / radiusY,
+                                                                         pointOnEllipsoid1.getZ() / radiusZ));
+         pointOnEllipsoid1.scale(1.0 / sqrtSumOfSquares);
+
+         Point3D pointOnEllipsoid2 = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 10.0);
+         sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX, pointOnEllipsoid2.getY() / radiusY,
+                                                                  pointOnEllipsoid2.getZ() / radiusZ));
+         pointOnEllipsoid2.scale(1.0 / sqrtSumOfSquares);
+
+         Vector3D lineDirection = new Vector3D();
+         lineDirection.sub(pointOnEllipsoid2, pointOnEllipsoid1);
+         lineDirection.normalize();
+
+         Point3D firstPointOnLine = new Point3D();
+         Point3D secondPointOnLine = new Point3D();
+
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnEllipsoid1);
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0), lineDirection, firstPointOnLine);
+
+         Point3D intersection1 = new Point3D();
+         Point3D intersection2 = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
+                                                                                                 intersection1, intersection2);
+         assertEquals(2, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection2, LARGE_EPSILON);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, secondPointOnLine, firstPointOnLine,
+                                                                                             intersection1, intersection2);
+         assertEquals(2, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection2, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection1, LARGE_EPSILON);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, lineDirection,
+                                                                                             intersection1, intersection2);
+         assertEquals(2, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection2, LARGE_EPSILON);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         lineDirection.negate();
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, secondPointOnLine, lineDirection,
+                                                                                             intersection1, intersection2);
+         assertEquals(2, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection2, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection1, LARGE_EPSILON);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+      }
+   }
+
+   @Test
    public void testIntersectionBetweenLine3DAndPlane3D() throws Exception
    {
       Random random = new Random(1176L);
@@ -3539,6 +4104,918 @@ public class EuclidGeometryToolsTest
       assertTrue(percentage >= -epsilon && percentage <= 1.0 + epsilon);
       double distance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(query, lineSegmentStart, lineSegmentEnd);
       assertEquals(0.0, distance, epsilon);
+   }
+
+   @Test
+   public void testIntersectionBetweenLineSegment3DAndCylinder3D() throws Exception
+   {
+      Random random = new Random(65226L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with non intersecting line segment that goes above the cylinder.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D lineSegmentStart = new Point3D(cylinderRadius, 0.0, cylinderHeight + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), lineSegmentStart, lineSegmentStart);
+
+         Point3D lineSegmentEnd = new Point3D(cylinderRadius, 0.0, cylinderHeight + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), lineSegmentEnd, lineSegmentEnd);
+
+         Vector3D lineSegmentDirection = new Vector3D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentStart.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentEnd);
+         lineSegmentDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                       lineSegmentEnd, firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with non intersecting line segment that goes below the cylinder.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D lineSegmentStart = new Point3D(cylinderRadius, 0.0, -EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), lineSegmentStart, lineSegmentStart);
+
+         Point3D lineSegmentEnd = new Point3D(cylinderRadius, 0.0, -EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), lineSegmentEnd, lineSegmentEnd);
+
+         Vector3D lineSegmentDirection = new Vector3D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+         lineSegmentStart.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentEnd);
+         lineSegmentDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                       lineSegmentEnd, firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with non intersecting line segment that hovers around cylinder part.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D lineSegmentStart = new Point3D(cylinderRadius + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0), 0.0,
+                                                EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), lineSegmentStart, lineSegmentStart);
+
+         Vector3D fromCylinderToPoint = new Vector3D(lineSegmentStart);
+         fromCylinderToPoint.setZ(0.0);
+         Vector3D lineSegmentDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, fromCylinderToPoint, true);
+
+         Point3D lineSegmentEnd = new Point3D();
+         lineSegmentEnd.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentStart);
+         lineSegmentStart.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentStart);
+         lineSegmentDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                       lineSegmentEnd, firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with possibly intersecting line segment going through the top and the bottom faces (testing all possibilities).
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D pointOnBottom = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, 0.0);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnBottom, pointOnBottom);
+
+         Point3D pointOnTop = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, cylinderHeight);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnTop, pointOnTop);
+
+         Vector3D lineSegmentDirection = new Vector3D();
+         lineSegmentDirection.sub(pointOnTop, pointOnBottom);
+         lineSegmentDirection.normalize();
+
+         Point3D lineSegmentStart = new Point3D();
+         Point3D lineSegmentEnd = new Point3D();
+
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+
+         // Line segment entirely going through the cylinder
+         lineSegmentStart.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                       lineSegmentEnd, null, null);
+         assertEquals(2, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection2, EPSILON);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                           actualIntersection2, actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection2, EPSILON);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         // Line segment end is inside the cylinder
+         lineSegmentStart.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals(1, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         // Line segment start is inside the cylinder
+         lineSegmentStart.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+         lineSegmentEnd.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals(1, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         // Line segment is before the cylinder
+         lineSegmentStart.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals(0, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         // Line segment is after the cylinder
+         lineSegmentStart.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+         lineSegmentEnd.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals(0, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         // Line segment is inside the cylinder
+         lineSegmentStart.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+         lineSegmentEnd.interpolate(pointOnBottom, pointOnTop, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                   lineSegmentEnd, null, null);
+         assertEquals(0, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+
+         EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                           actualIntersection1, actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with possibly intersecting line segment going through the cylinder part without touching the top and bottom faces (testing all possibilities).
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnCylinder1 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder1, pointOnCylinder1);
+
+            Point3D pointOnCylinder2 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder2, pointOnCylinder2);
+
+            Point3D lineSegmentStart = new Point3D();
+            Point3D lineSegmentEnd = new Point3D();
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            // Line segment entirely going through the cylinder
+            lineSegmentStart.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                          lineSegmentEnd, null, null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder1, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder2, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder2.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection2, actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder1, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder2, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder2.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment end is inside the cylinder
+            lineSegmentStart.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder1, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder1, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment start is inside the cylinder
+            lineSegmentStart.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+            lineSegmentEnd.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder2, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder2.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder2, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder2.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is before cylinder
+            lineSegmentStart.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is after cylinder
+            lineSegmentStart.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            lineSegmentEnd.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is inside cylinder
+            lineSegmentStart.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+            lineSegmentEnd.interpolate(pointOnCylinder1, pointOnCylinder2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting line going through the cylinder part once and through the top face.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnTop = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, cylinderHeight);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnTop, pointOnTop);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Point3D lineSegmentStart = new Point3D();
+            Point3D lineSegmentEnd = new Point3D();
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            // Line segment is entirely going through cylinder
+            lineSegmentStart.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                          lineSegmentEnd, null, null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection2, actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment end is inside cylinder
+            lineSegmentStart.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment start is inside cylinder
+            lineSegmentStart.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+            lineSegmentEnd.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is before cylinder
+            lineSegmentStart.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is after cylinder
+            lineSegmentStart.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            lineSegmentEnd.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is inside cylinder
+            lineSegmentStart.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+            lineSegmentEnd.interpolate(pointOnTop, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with possibly intersecting line going through the cylinder part once and through the bottom face (testing all configurations).
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnBottom = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, 0.0);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnBottom, pointOnBottom);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Vector3D lineDirection = new Vector3D();
+            lineDirection.sub(pointOnCylinder, pointOnBottom);
+            lineDirection.normalize();
+
+            Point3D lineSegmentStart = new Point3D();
+            Point3D lineSegmentEnd = new Point3D();
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            // Line segment is entirely going through cylinder
+            lineSegmentStart.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                          lineSegmentEnd, null, null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection2, actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment end is inside cylinder
+            lineSegmentStart.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment start is inside cylinder
+            lineSegmentStart.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+            lineSegmentEnd.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is before cylinder
+            lineSegmentStart.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            lineSegmentEnd.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            // Line segment is after cylinder
+            lineSegmentStart.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            lineSegmentEnd.interpolate(pointOnBottom, pointOnCylinder, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
+                                                                                                      lineSegmentEnd, null, null);
+            assertEquals(0, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+
+            EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentEnd, lineSegmentStart,
+                                                                              actualIntersection1, actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection1);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+   }
+
+   @Test
+   public void testIntersectionBetweenLineSegment3DAndEllipsoid3D() throws Exception
+   {
+      Random random = new Random(23454L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Non-intersecting line segment
+         double radiusX = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusY = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+
+         Point3D pointOnEllipsoid = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX, pointOnEllipsoid.getY() / radiusY,
+                                                                         pointOnEllipsoid.getZ() / radiusZ));
+         pointOnEllipsoid.scale(1.0 / sqrtSumOfSquares);
+
+         Vector3D normalAtPoint = new Vector3D(pointOnEllipsoid);
+         normalAtPoint.scale(1.0 / (radiusX * radiusX), 1.0 / (radiusY * radiusY), 1.0 / (radiusZ * radiusZ));
+         normalAtPoint.normalize();
+
+         Point3D lineSegmentStart = new Point3D();
+         lineSegmentStart.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 10.0), normalAtPoint, pointOnEllipsoid);
+
+         Vector3D lineSegmentDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, normalAtPoint, true);
+         lineSegmentStart.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentStart);
+         Point3D lineSegmentEnd = new Point3D();
+         lineSegmentEnd.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineSegmentDirection, lineSegmentStart);
+
+         Point3D intersection1 = new Point3D();
+         Point3D intersection2 = new Point3D();
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart,
+                                                                                                        lineSegmentEnd, intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection1);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection2);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart, lineSegmentEnd,
+                                                                                                    null, null);
+         assertEquals(0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Possibly intersecting line segment (testing all configurations)
+         double radiusX = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0);
+         double radiusY = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0);
+         double radiusZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0);
+
+         Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 10.0);
+         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX, pointOnEllipsoid1.getY() / radiusY,
+                                                                         pointOnEllipsoid1.getZ() / radiusZ));
+         pointOnEllipsoid1.scale(1.0 / sqrtSumOfSquares);
+
+         Point3D pointOnEllipsoid2 = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 10.0);
+         sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX, pointOnEllipsoid2.getY() / radiusY,
+                                                                  pointOnEllipsoid2.getZ() / radiusZ));
+         pointOnEllipsoid2.scale(1.0 / sqrtSumOfSquares);
+
+         Point3D intersection1 = new Point3D();
+         Point3D intersection2 = new Point3D();
+         Point3D lineSegmentStart = new Point3D();
+         Point3D lineSegmentEnd = new Point3D();
+
+         // Line segment fully going through the ellipsoid
+         lineSegmentStart.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart,
+                                                                                                        lineSegmentEnd, intersection1, intersection2);
+         assertEquals(2, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection2, LARGE_EPSILON);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentEnd, lineSegmentStart,
+                                                                                                    intersection1, intersection2);
+         assertEquals(2, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection2, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection1, LARGE_EPSILON);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         // Line segment end inside the ellipsoid
+         lineSegmentStart.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart, lineSegmentEnd,
+                                                                                                    intersection1, intersection2);
+         assertEquals(1, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentEnd, lineSegmentStart,
+                                                                                                    intersection1, intersection2);
+         assertEquals(1, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         // Line segment start inside the ellipsoid
+         lineSegmentStart.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+         lineSegmentEnd.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart, lineSegmentEnd,
+                                                                                                    intersection1, intersection2);
+         assertEquals(1, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentEnd, lineSegmentStart,
+                                                                                                    intersection1, intersection2);
+         assertEquals(1, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         // Line segment before the ellipsoid
+         lineSegmentStart.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+         lineSegmentEnd.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart, lineSegmentEnd,
+                                                                                                    intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentEnd, lineSegmentStart,
+                                                                                                    intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         // Line segment after the ellipsoid
+         lineSegmentStart.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+         lineSegmentEnd.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart, lineSegmentEnd,
+                                                                                                    intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentEnd, lineSegmentStart,
+                                                                                                    intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         // Line segment inside the ellipsoid
+         lineSegmentStart.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+         lineSegmentEnd.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart, lineSegmentEnd,
+                                                                                                    intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentEnd, lineSegmentStart,
+                                                                                                    intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+      }
    }
 
    @Test
@@ -4019,6 +5496,668 @@ public class EuclidGeometryToolsTest
       assertTrue(percentage >= -epsilon);
       double distance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, rayOrigin, pointOnRay);
       assertEquals(0.0, distance, epsilon);
+   }
+
+   @Test
+   public void testIntersectionBetweenRay3DAndCylinder3D() throws Exception
+   {
+      Random random = new Random(65226L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with non intersecting ray that goes above the cylinder.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D rayOrigin = new Point3D(cylinderRadius, 0.0, cylinderHeight + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), rayOrigin, rayOrigin);
+
+         Point3D pointOnRay = new Point3D(cylinderRadius, 0.0, cylinderHeight + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnRay, pointOnRay);
+
+         Vector3D rayDirection = new Vector3D();
+         rayDirection.sub(pointOnRay, rayOrigin);
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), rayDirection, rayOrigin);
+         pointOnRay.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), rayDirection, pointOnRay);
+         rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection,
+                                                                                               firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with non intersecting ray that goes below the cylinder.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D rayOrigin = new Point3D(cylinderRadius, 0.0, -EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), rayOrigin, rayOrigin);
+
+         Point3D pointOnRay = new Point3D(cylinderRadius, 0.0, -EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnRay, pointOnRay);
+
+         Vector3D rayDirection = new Vector3D();
+         rayDirection.sub(pointOnRay, rayOrigin);
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), rayDirection, rayOrigin);
+         pointOnRay.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), rayDirection, pointOnRay);
+         rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection,
+                                                                                               firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with non intersecting ray that hovers around cylinder part.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D rayOrigin = new Point3D(cylinderRadius + EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 1.0), 0.0,
+                                         EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), rayOrigin, rayOrigin);
+
+         Vector3D fromCylinderToPoint = new Vector3D(rayOrigin);
+         fromCylinderToPoint.setZ(0.0);
+         Vector3D rayDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, fromCylinderToPoint, true);
+
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), rayDirection, rayOrigin);
+         rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+
+         Point3D firstIntersection = new Point3D();
+         Point3D secondIntersection = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection,
+                                                                                               firstIntersection, secondIntersection);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(firstIntersection);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(secondIntersection);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null, null);
+         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with intersecting ray going entirely through the top and the bottom faces.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D expectedIntersection1 = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, 0.0);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection1, expectedIntersection1);
+
+         Point3D expectedIntersection2 = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, cylinderHeight);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection2, expectedIntersection2);
+
+         Vector3D rayDirection = new Vector3D();
+         rayDirection.sub(expectedIntersection2, expectedIntersection1);
+         rayDirection.normalize();
+
+         Point3D rayOrigin = new Point3D();
+
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0), rayDirection, expectedIntersection1);
+         rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                               null);
+         assertEquals(2, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                   actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+         actualIntersection1.setToNaN();
+         actualIntersection2.setToNaN();
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with intersecting ray starting from inside the cylinder and going through the bottom face.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D expectedIntersection = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, 0.0);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection, expectedIntersection);
+
+         Point3D pointOnTop = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, cylinderHeight);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnTop, pointOnTop);
+
+         Vector3D rayDirection = new Vector3D();
+         rayDirection.sub(expectedIntersection, pointOnTop);
+         rayDirection.normalize();
+
+         Point3D rayOrigin = new Point3D();
+
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, expectedIntersection.distance(pointOnTop)), rayDirection, pointOnTop);
+         rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                               null);
+         assertEquals(1, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                   actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+         actualIntersection1.setToNaN();
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with intersecting ray starting from inside the cylinder and going through the top face.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D pointOnBottom = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, 0.0);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnBottom, pointOnBottom);
+
+         Point3D expectedIntersection = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, cylinderHeight);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection, expectedIntersection);
+
+         Vector3D rayDirection = new Vector3D();
+         rayDirection.sub(expectedIntersection, pointOnBottom);
+         rayDirection.normalize();
+
+         Point3D rayOrigin = new Point3D();
+
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, pointOnBottom.distance(expectedIntersection)), rayDirection, pointOnBottom);
+         rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                               null);
+         assertEquals(1, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                   actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+         actualIntersection1.setToNaN();
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Try with intersecting line going entirely through the top and the bottom faces, but with ray pointing away from the cylinder.
+         double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+         double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+         Point3D pointOnBottom = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, 0.0);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnBottom, pointOnBottom);
+
+         Point3D pointOnTop = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, cylinderRadius), 0.0, cylinderHeight);
+         RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnTop, pointOnTop);
+
+         Vector3D rayDirection = new Vector3D();
+         rayDirection.sub(pointOnTop, pointOnBottom);
+         rayDirection.normalize();
+
+         Point3D rayOrigin = new Point3D();
+
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), rayDirection, pointOnTop);
+         rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                               null);
+         assertEquals(0, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                   actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+
+         rayDirection.negate();
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), rayDirection, pointOnBottom);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null, null);
+         assertEquals(0, numberOfIntersections);
+
+         EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                   actualIntersection2);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection1);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting ray going entirely through the cylinder part without touching the top and bottom faces.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D expectedIntersection1 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection1, expectedIntersection1);
+
+            Point3D expectedIntersection2 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection2, expectedIntersection2);
+
+            Vector3D rayDirection = new Vector3D();
+            rayDirection.sub(expectedIntersection2, expectedIntersection1);
+            rayDirection.normalize();
+
+            Point3D rayOrigin = new Point3D();
+
+            rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0), rayDirection, expectedIntersection1);
+            rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                                  null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+            errors.add(expectedIntersection1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+            errors.add(expectedIntersection2.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting ray starting inside the cylinder and going through the cylinder part without touching the top and bottom faces.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnCylinder1 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder1, pointOnCylinder1);
+
+            Point3D pointOnCylinder2 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder2, pointOnCylinder2);
+
+            Vector3D rayDirection = new Vector3D();
+            rayDirection.sub(pointOnCylinder2, pointOnCylinder1);
+            rayDirection.normalize();
+
+            Point3D rayOrigin = new Point3D();
+
+            rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, pointOnCylinder1.distance(pointOnCylinder2)), rayDirection,
+                               pointOnCylinder1);
+            rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                                  null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder2, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder2.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting line going through the cylinder part without touching the top and bottom faces, but with the ray pointing away from the cylinder.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D expectedIntersection1 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection1, expectedIntersection1);
+
+            Point3D expectedIntersection2 = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), expectedIntersection2, expectedIntersection2);
+
+            Vector3D rayDirection = new Vector3D();
+            rayDirection.sub(expectedIntersection2, expectedIntersection1);
+            rayDirection.normalize();
+
+            Point3D rayOrigin = new Point3D();
+
+            rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0), rayDirection, expectedIntersection1);
+            rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                                  null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, LARGE_EPSILON);
+            errors.add(expectedIntersection1.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, LARGE_EPSILON);
+            errors.add(expectedIntersection2.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting ray going through the cylinder part once and through the top face.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnTop = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, cylinderHeight);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnTop, pointOnTop);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Vector3D rayDirection = new Vector3D();
+            rayDirection.sub(pointOnCylinder, pointOnTop);
+            rayDirection.normalize();
+
+            Point3D rayOrigin = new Point3D();
+
+            rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0), rayDirection, pointOnTop);
+            rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                                  null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting line going through the cylinder part once and through the top face, but the ray only intersecting one of them.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnTop = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, cylinderHeight);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnTop, pointOnTop);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Vector3D rayDirection = new Vector3D();
+            rayDirection.sub(pointOnCylinder, pointOnTop);
+            rayDirection.normalize();
+
+            Point3D rayOrigin = new Point3D();
+
+            rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, pointOnCylinder.distance(pointOnTop)), rayDirection, pointOnTop);
+            rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            // Intersect cylinder part only
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                                  null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+            actualIntersection1.setToNaN();
+
+            // Intersect top face only
+            rayDirection.negate();
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                              null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnTop, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnTop.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+            actualIntersection1.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting ray going through the cylinder part once and through the bottom face.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnBottom = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, 0.0);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnBottom, pointOnBottom);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Vector3D rayDirection = new Vector3D();
+            rayDirection.sub(pointOnCylinder, pointOnBottom);
+            rayDirection.normalize();
+
+            Point3D rayOrigin = new Point3D();
+
+            rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0), rayDirection, pointOnBottom);
+            rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection,
+                                                                                                   null, null);
+            assertEquals(2, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                       actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection2, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection2));
+            actualIntersection1.setToNaN();
+            actualIntersection2.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+
+      {
+         List<Double> errors = new ArrayList<>();
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Try with intersecting line going through the cylinder part once and through the bottom face, but the ray only intersecting one of them.
+            double cylinderRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+            double cylinderHeight = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 1.0);
+
+            Point3D pointOnBottom = new Point3D(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderRadius), 0.0, 0.0);
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnBottom, pointOnBottom);
+
+            Point3D pointOnCylinder = new Point3D(cylinderRadius, 0.0, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, cylinderHeight));
+            RotationMatrixTools.applyYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI), pointOnCylinder, pointOnCylinder);
+
+            Vector3D rayDirection = new Vector3D();
+            rayDirection.sub(pointOnCylinder, pointOnBottom);
+            rayDirection.normalize();
+
+            Point3D rayOrigin = new Point3D();
+
+            rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, pointOnCylinder.distance(pointOnBottom)), rayDirection, pointOnBottom);
+            rayDirection.scale(EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0));
+
+            Point3D actualIntersection1 = new Point3D();
+            Point3D actualIntersection2 = new Point3D();
+
+            // Intersect cylinder part only
+            int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                                  null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnCylinder, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnCylinder.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+            actualIntersection1.setToNaN();
+
+            // Intersect bottom face only
+            rayDirection.negate();
+            numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, null,
+                                                                                              null);
+            assertEquals(1, numberOfIntersections);
+
+            EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, actualIntersection1,
+                                                                      actualIntersection2);
+            EuclidCoreTestTools.assertTuple3DEquals(pointOnBottom, actualIntersection1, LARGE_EPSILON);
+            errors.add(pointOnBottom.distance(actualIntersection1));
+            EuclidCoreTestTools.assertTuple3DIsSetToZero(actualIntersection2);
+            actualIntersection1.setToNaN();
+         }
+
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+      }
+   }
+
+   @Test
+   public void testIntersectionBetweenRay3DAndEllipsoid3D() throws Exception
+   {
+      Random random = new Random(7654L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Non-intersecting line
+         double radiusX = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusY = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+
+         Point3D pointOnEllipsoid = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX, pointOnEllipsoid.getY() / radiusY,
+                                                                         pointOnEllipsoid.getZ() / radiusZ));
+         pointOnEllipsoid.scale(1.0 / sqrtSumOfSquares);
+
+         Vector3D normalAtPoint = new Vector3D(pointOnEllipsoid);
+         normalAtPoint.scale(1.0 / (radiusX * radiusX), 1.0 / (radiusY * radiusY), 1.0 / (radiusZ * radiusZ));
+         normalAtPoint.normalize();
+
+         Point3D rayOrigin = new Point3D();
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0001, 10.0), normalAtPoint, pointOnEllipsoid);
+
+         Vector3D rayDirection = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, normalAtPoint, true);
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), rayDirection, rayOrigin);
+
+         Point3D intersection1 = new Point3D();
+         Point3D intersection2 = new Point3D();
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
+                                                                                                intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection1);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(intersection2);
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection, null, null);
+         assertEquals(0, numberOfIntersections);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Possibly intersecting ray (testing all configurations)
+         double radiusX = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusY = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+         double radiusZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.001, 10.0);
+
+         Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 10.0);
+         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX, pointOnEllipsoid1.getY() / radiusY,
+                                                                         pointOnEllipsoid1.getZ() / radiusZ));
+         pointOnEllipsoid1.scale(1.0 / sqrtSumOfSquares);
+
+         Point3D pointOnEllipsoid2 = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 10.0);
+         sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX, pointOnEllipsoid2.getY() / radiusY,
+                                                                  pointOnEllipsoid2.getZ() / radiusZ));
+         pointOnEllipsoid2.scale(1.0 / sqrtSumOfSquares);
+
+         Vector3D rayDirection = new Vector3D();
+         rayDirection.sub(pointOnEllipsoid2, pointOnEllipsoid1);
+         rayDirection.normalize();
+
+         Point3D rayOrigin = new Point3D();
+         Point3D intersection1 = new Point3D();
+         Point3D intersection2 = new Point3D();
+
+         // Ray entirely goes through the ellipsoid
+         rayOrigin.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+
+         int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
+                                                                                                intersection1, intersection2);
+         assertEquals(2, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid1, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection2, LARGE_EPSILON);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         // Ray starts from inside the ellipsoid
+         rayOrigin.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
+                                                                                                intersection1, intersection2);
+         assertEquals(1, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnEllipsoid2, intersection1, LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+
+         // Ray goes away from the ellipsoid, no intersection
+         rayOrigin.interpolate(pointOnEllipsoid1, pointOnEllipsoid2, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+
+         numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
+                                                                                                intersection1, intersection2);
+         assertEquals(0, numberOfIntersections);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection1);
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(intersection2);
+         intersection1.setToNaN();
+         intersection2.setToNaN();
+      }
    }
 
    @Test
@@ -5547,12 +7686,11 @@ public class EuclidGeometryToolsTest
          Vector2D lineDirection = EuclidCoreRandomTools.generateRandomVector2D(random, -10.0, 10.0);
          Point2D secondPointOnLine = new Point2D();
          secondPointOnLine.add(firstPointOnLine, lineDirection);
-         
 
          Vector2D orthogonal = EuclidGeometryTools.perpendicularVector2D(lineDirection);
          orthogonal.normalize();
          boolean expectingNegativeSign = random.nextBoolean();
-         
+
          if (expectingNegativeSign)
             orthogonal.negate();
 
