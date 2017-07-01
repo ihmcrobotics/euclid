@@ -12,10 +12,12 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public class EuclidGeometryIOTools
 {
@@ -600,11 +602,71 @@ public class EuclidGeometryIOTools
     *
     * @param format the format to use for each number.
     * @param position the position part of the pose to get the {@code String} of. Not modified.
-    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getPose2DString(String format, Point2DReadOnly position, double orientation)
    {
       return "Pose 2D: position = " + getTuple2DString(format, position) + ", orientation = " + getOrientation2DString(format, orientation);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose3D} as follows:
+    *
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
+    *
+    * @param pose3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose3DString(Pose3D pose3D)
+   {
+      return getPose3DString(DEFAULT_FORMAT, pose3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pose3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose3DString(String format, Pose3D pose3D)
+   {
+      if (pose3D == null)
+         return "null";
+      else
+         return getPose3DString(format, pose3D.getPosition(), pose3D.getOrientation());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param position the position part of the pose to get the {@code String} of. Not modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not
+    *           modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose3DString(String format, Point3DReadOnly position, QuaternionReadOnly orientation)
+   {
+      return "Pose 3D: position = " + getTuple3DString(format, position) + ", orientation = " + getTuple4DString(format, orientation);
    }
 }

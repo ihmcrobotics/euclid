@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -1047,6 +1048,6 @@ public class Pose3D implements GeometryObject<Pose3D>
    @Override
    public String toString()
    {
-      return "Pose 3D: position = " + position + ", orientation = " + orientation;
+      return EuclidGeometryIOTools.getPose3DString(this);
    }
 }
