@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -465,6 +466,16 @@ public class Pose2D implements GeometryObject<Pose2D>
    }
 
    /**
+    * Gets the read-only reference of the position part of this pose 2D.
+    *
+    * @return the position part of this pose 2D.
+    */
+   public Point2DReadOnly getPosition()
+   {
+      return position;
+   }
+
+   /**
     * Packs the position part of this pose 2D into the given {@code positionToPack}.
     * 
     * @param positionToPack tuple used to store the position coordinates. Modified.
@@ -597,6 +608,6 @@ public class Pose2D implements GeometryObject<Pose2D>
    @Override
    public String toString()
    {
-      return "Pose 2D: position = " + position + ", orientation = " + orientation;
+      return EuclidGeometryIOTools.getPose2DString(this);
    }
 }

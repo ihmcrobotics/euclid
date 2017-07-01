@@ -16,6 +16,7 @@ import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -296,6 +297,42 @@ public abstract class EuclidGeometryRandomTools
       Point3D pointOnPlane = generateRandomPoint3D(random, pointMinMax);
       Vector3D planeNormal = generateRandomVector3DWithFixedLength(random, 1.0);
       return new Plane3D(pointOnPlane, planeNormal);
+   }
+
+   /**
+    * Generates a random pose 2D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code orientation} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random pose 2D.
+    */
+   public static Pose2D generateRandomPose2D(Random random)
+   {
+      return new Pose2D(generateRandomPoint2D(random), generateRandomOrientation2D(random));
+   }
+
+   /**
+    * Generates a random pose 2D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
+    * <li>{@code orientation} &in; [-{@code orientationMinMax}; {@code orientationMinMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random pose 2D.
+    * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
+    */
+   public static Pose2D generateRandomLine2D(Random random, double positionMinMax, double orientationMinMax)
+   {
+      return new Pose2D(generateRandomPoint2D(random, positionMinMax), generateRandomOrientation2D(random, orientationMinMax));
    }
 
    /**

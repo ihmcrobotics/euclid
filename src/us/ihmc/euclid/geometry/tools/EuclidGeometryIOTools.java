@@ -11,6 +11,7 @@ import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -547,5 +548,63 @@ public class EuclidGeometryIOTools
    public static String getPlane3DString(String format, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
       return "Plane 3D: point = " + getTuple3DString(format, pointOnPlane) + ", normal = " + getTuple3DString(format, planeNormal);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose2D} as follows:
+    *
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param pose2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose2DString(Pose2D pose2D)
+   {
+      return getPose2DString(DEFAULT_FORMAT, pose2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param pose2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose2DString(String format, Pose2D pose2D)
+   {
+      if (pose2D == null)
+         return "null";
+      else
+         return getPose2DString(format, pose2D.getPosition(), pose2D.getYaw());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pose2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param position the position part of the pose to get the {@code String} of. Not modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getPose2DString(String format, Point2DReadOnly position, double orientation)
+   {
+      return "Pose 2D: position = " + getTuple2DString(format, position) + ", orientation = " + getOrientation2DString(format, orientation);
    }
 }
