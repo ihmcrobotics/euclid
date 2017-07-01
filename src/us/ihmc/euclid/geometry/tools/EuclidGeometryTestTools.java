@@ -553,8 +553,8 @@ public class EuclidGeometryTestTools
 
       if (expected.epsilonEquals(actual, epsilon))
          return;
-      else if (expected.getFirstEndpoint().epsilonEquals(actual.getSecondEndpoint(), epsilon)
-            && expected.getSecondEndpoint().epsilonEquals(actual.getFirstEndpoint(), epsilon))
+      else if (EuclidCoreTools.epsilonEquals(0.0, expected.getFirstEndpoint().distance(actual.getSecondEndpoint()), epsilon)
+            && EuclidCoreTools.epsilonEquals(0.0, expected.getSecondEndpoint().distance(actual.getFirstEndpoint()), epsilon))
          return;
       else
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -687,8 +687,8 @@ public class EuclidGeometryTestTools
 
       if (expected.epsilonEquals(actual, epsilon))
          return;
-      else if (expected.getFirstEndpoint().epsilonEquals(actual.getSecondEndpoint(), epsilon)
-            && expected.getSecondEndpoint().epsilonEquals(actual.getFirstEndpoint(), epsilon))
+      else if (EuclidCoreTools.epsilonEquals(0.0, expected.getFirstEndpoint().distance(actual.getSecondEndpoint()), epsilon)
+            && EuclidCoreTools.epsilonEquals(0.0, expected.getSecondEndpoint().distance(actual.getFirstEndpoint()), epsilon))
          return;
       else
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -1092,13 +1092,14 @@ public class EuclidGeometryTestTools
     *
     * @param expected the expected pose 2D.
     * @param actual the actual pose 2D.
-    * @param epsilon the tolerance to use.
+    * @param angleEpsilon the tolerance to use on the orientation part.
+    * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
     */
-   public static void assertPose2DGeometricallyEquals(Pose2D expected, Pose2D actual, double epsilon)
+   public static void assertPose2DGeometricallyEquals(Pose2D expected, Pose2D actual, double angleEpsilon, double distanceEpsilon)
    {
-      assertPose2DGeometricallyEquals(null, expected, actual, epsilon);
+      assertPose2DGeometricallyEquals(null, expected, actual, angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -1110,13 +1111,14 @@ public class EuclidGeometryTestTools
     * @param messagePrefix prefix to add to the error message.
     * @param expected the expected pose 2D.
     * @param actual the actual pose 2D.
-    * @param epsilon the tolerance to use.
+    * @param angleEpsilon the tolerance to use on the orientation part.
+    * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
     */
-   public static void assertPose2DGeometricallyEquals(String messagePrefix, Pose2D expected, Pose2D actual, double epsilon)
+   public static void assertPose2DGeometricallyEquals(String messagePrefix, Pose2D expected, Pose2D actual, double angleEpsilon, double distanceEpsilon)
    {
-      assertPose2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertPose2DGeometricallyEquals(messagePrefix, expected, actual, angleEpsilon, distanceEpsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -1128,13 +1130,15 @@ public class EuclidGeometryTestTools
     * @param messagePrefix prefix to add to the error message.
     * @param expected the expected pose 2D.
     * @param actual the actual pose 2D.
-    * @param epsilon the tolerance to use.
+    * @param angleEpsilon the tolerance to use on the orientation part.
+    * @param epsilon the tolerance to use on the position part.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
     * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
     */
-   public static void assertPose2DGeometricallyEquals(String messagePrefix, Pose2D expected, Pose2D actual, double epsilon, String format)
+   public static void assertPose2DGeometricallyEquals(String messagePrefix, Pose2D expected, Pose2D actual, double angleEpsilon, double distanceEpsilon,
+                                                      String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1142,8 +1146,8 @@ public class EuclidGeometryTestTools
       if (!(expected != null && actual != null))
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
-      if (!EuclidCoreTools.epsilonEquals(0.0, expected.getPositionDistance(actual), epsilon)
-            || !EuclidCoreTools.epsilonEquals(0.0, expected.getOrientationDistance(actual), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(0.0, expected.getPositionDistance(actual), distanceEpsilon)
+            || !EuclidCoreTools.epsilonEquals(0.0, expected.getOrientationDistance(actual), angleEpsilon))
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
@@ -1221,13 +1225,14 @@ public class EuclidGeometryTestTools
     *
     * @param expected the expected pose 3D.
     * @param actual the actual pose 3D.
-    * @param epsilon the tolerance to use.
+    * @param angleEpsilon the tolerance to use on the orientation part.
+    * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
     */
-   public static void assertPose3DGeometricallyEquals(Pose3D expected, Pose3D actual, double epsilon)
+   public static void assertPose3DGeometricallyEquals(Pose3D expected, Pose3D actual, double angleEpsilon, double distanceEpsilon)
    {
-      assertPose3DGeometricallyEquals(null, expected, actual, epsilon);
+      assertPose3DGeometricallyEquals(null, expected, actual, angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -1239,13 +1244,14 @@ public class EuclidGeometryTestTools
     * @param messagePrefix prefix to add to the error message.
     * @param expected the expected pose 3D.
     * @param actual the actual pose 3D.
-    * @param epsilon the tolerance to use.
+    * @param angleEpsilon the tolerance to use on the orientation part.
+    * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
     */
-   public static void assertPose3DGeometricallyEquals(String messagePrefix, Pose3D expected, Pose3D actual, double epsilon)
+   public static void assertPose3DGeometricallyEquals(String messagePrefix, Pose3D expected, Pose3D actual, double angleEpsilon, double distanceEpsilon)
    {
-      assertPose3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertPose3DGeometricallyEquals(messagePrefix, expected, actual, angleEpsilon, distanceEpsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -1257,13 +1263,15 @@ public class EuclidGeometryTestTools
     * @param messagePrefix prefix to add to the error message.
     * @param expected the expected pose 3D.
     * @param actual the actual pose 3D.
-    * @param epsilon the tolerance to use.
+    * @param angleEpsilon the tolerance to use on the orientation part.
+    * @param epsilon the tolerance to use on the position part.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
     * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
     */
-   public static void assertPose3DGeometricallyEquals(String messagePrefix, Pose3D expected, Pose3D actual, double epsilon, String format)
+   public static void assertPose3DGeometricallyEquals(String messagePrefix, Pose3D expected, Pose3D actual, double angleEpsilon, double distanceEpsilon,
+                                                      String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1271,8 +1279,8 @@ public class EuclidGeometryTestTools
       if (!(expected != null && actual != null))
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
-      if (!EuclidCoreTools.epsilonEquals(0.0, expected.getPositionDistance(actual), epsilon)
-            || !EuclidCoreTools.epsilonEquals(0.0, expected.getOrientationDistance(actual), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(0.0, expected.getPositionDistance(actual), distanceEpsilon)
+            || !EuclidCoreTools.epsilonEquals(0.0, expected.getOrientationDistance(actual), angleEpsilon))
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
