@@ -112,15 +112,6 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
     * </p>
     */
    private final RigidBodyTransform transformToRoot;
-   /**
-    * The current transform from the root frame to this reference frame.
-    * <p>
-    * For instance, one can calculate the coordinates in this reference frame P<sub>this</sub> of a
-    * point P expressed in the root frame as follows:<br>
-    * {@code inverseTransformToRoot.transform}(P, P<sub>this</sub>)
-    * </p>
-    */
-   private final RigidBodyTransform inverseTransformToRoot;
 
    /**
     * Field initialized at construction time that specifies if this reference frame represents a
@@ -430,7 +421,6 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
          nameBasedHashCode = NameBasedHashCodeTools.computeStringHashCode(frameName);
 
          transformToRoot = null;
-         inverseTransformToRoot = null;
          this.transformToParent = null;
 
          this.isAStationaryFrame = true;
@@ -441,7 +431,6 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
          nameBasedHashCode = NameBasedHashCodeTools.combineHashCodes(frameName, parentFrame.getName());
 
          transformToRoot = new RigidBodyTransform();
-         inverseTransformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
 
          if (transformToParent != null)
@@ -665,16 +654,16 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
          efficientComputeTransform();
          desiredFrame.efficientComputeTransform();
 
-         if (desiredFrame.inverseTransformToRoot != null)
+         if (desiredFrame.transformToRoot != null)
          {
             if (transformToRoot != null)
             {
-               transformToPack.set(desiredFrame.inverseTransformToRoot);
+               transformToPack.setAndInvert(desiredFrame.transformToRoot);
                transformToPack.multiply(transformToRoot);
             }
             else
             {
-               transformToPack.set(desiredFrame.inverseTransformToRoot);
+               transformToPack.setAndInvert(desiredFrame.transformToRoot);
             }
          }
          else
@@ -747,21 +736,6 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
       return transformToRoot;
    }
 
-   /**
-    * Returns the internal reference to this frame's transform from the root frame to this frame.
-    * <p>
-    * The transform can be used to transform a geometry object defined in the root frame to obtain
-    * its equivalent expressed in this frame.
-    * </p>
-    * 
-    * @return the internal reference to the transform from the root frame to this frame.
-    */
-   public RigidBodyTransform getInverseTransformToRoot()
-   {
-      efficientComputeTransform();
-      return inverseTransformToRoot;
-   }
-
    private void efficientComputeTransform()
    {
       int chainLength = framesStartingWithRootEndingWithThis.length;
@@ -797,7 +771,6 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
                }
 
                referenceFrame.transformToRoot.multiply(referenceFrame.transformToParent);
-               referenceFrame.inverseTransformToRoot.setAndInvert(referenceFrame.transformToRoot);
 
                referenceFrame.transformToRootID = nextTransformToRootID;
             }
