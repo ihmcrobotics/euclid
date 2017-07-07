@@ -9,10 +9,30 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 public class EuclidFrameRandomTools
 {
    /**
+    * Generates a reference frame with a random transform to world frame.
+    *
+    * @param random the random generator to use.
+    * @return the new random reference frame.
+    */
+   public static ReferenceFrame generateRandomReferenceFrame(Random random)
+   {
+      return generateRandomReferenceFrame("randomFrame" + random.nextInt(), random, ReferenceFrame.getWorldFrame());
+   }
+
+   /**
     * Generates a reference frame with a random transform to its parent frame.
-    * <p>
-    * This is usually used for test purposes.
-    * </p>
+    *
+    * @param random the random generator to use.
+    * @param parentFrame the parent frame of the new reference frame.
+    * @return the new random reference frame.
+    */
+   public static ReferenceFrame generateRandomReferenceFrame(Random random, ReferenceFrame parentFrame)
+   {
+      return generateRandomReferenceFrame("randomFrame" + random.nextInt(), random, parentFrame);
+   }
+
+   /**
+    * Generates a reference frame with a random transform to its parent frame.
     *
     * @param frameName the name of the new frame.
     * @param random the random generator to use.
