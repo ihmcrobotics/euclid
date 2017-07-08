@@ -240,7 +240,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * 
     * @param desiredFrame the reference frame in which the geometry object is to be expressed.
     */
-   public final void changeFrame(ReferenceFrame desiredFrame)
+   public void changeFrame(ReferenceFrame desiredFrame)
    {
       // Check for the trivial case: the geometry is already expressed in the desired frame.
       if (desiredFrame == referenceFrame)
