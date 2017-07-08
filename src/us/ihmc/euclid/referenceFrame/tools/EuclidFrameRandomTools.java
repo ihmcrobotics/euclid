@@ -97,7 +97,7 @@ public class EuclidFrameRandomTools
 
       for (int i = 0; i < numberOfReferenceFrames; i++)
       {
-         int parentFrameIndex = random.nextInt(i);
+         int parentFrameIndex = random.nextInt(i + 1);
          ReferenceFrame parentFrame = referenceFrames[parentFrameIndex];
          referenceFrames[i + 1] = generateRandomReferenceFrame(frameNamePrefix + i, random, parentFrame);
       }
