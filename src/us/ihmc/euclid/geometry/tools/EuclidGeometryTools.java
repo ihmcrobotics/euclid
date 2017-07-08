@@ -6461,20 +6461,4 @@ public class EuclidGeometryTools
 
       return Math.sqrt(lengthSideA * lengthSideA + lengthSideB * lengthSideB - 2.0 * lengthSideA * lengthSideB * Math.cos(angleBetweenAAndB));
    }
-
-   /**
-    * Calculates the distance on the XY-plane between two 3D points.
-    * <p>
-    * WARNING: the 3D arguments are projected onto the XY-plane to perform the actual computation in
-    * 2D.
-    * </p>
-    *
-    * @param firstPoint the first point. Not modified.
-    * @param secondPoint the second point. Not modified.
-    * @return the distance between the two points.
-    */
-   public static double xyDistanceBetweenPoint3Ds(Point3DReadOnly firstPoint, Point3DReadOnly secondPoint)
-   {
-      return distanceBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(), secondPoint.getY());
-   }
 }

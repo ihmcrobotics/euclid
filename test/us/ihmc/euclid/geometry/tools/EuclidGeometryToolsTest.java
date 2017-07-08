@@ -7933,21 +7933,4 @@ public class EuclidGeometryToolsTest
          // good
       }
    }
-
-   @Test
-   public void testXYDistanceBetweenPoint3Ds() throws Exception
-   {
-      Random random = new Random(232L);
-
-      for (int i = 0; i < 1000; i++)
-      {
-         Point3D firstPoint3d = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Point3D secondPoint3d = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Point2D firstPoint2d = new Point2D(firstPoint3d.getX(), firstPoint3d.getY());
-         Point2D secondPoint2d = new Point2D(secondPoint3d.getX(), secondPoint3d.getY());
-         double expectedDistance = firstPoint2d.distance(secondPoint2d);
-         double actualDistance = EuclidGeometryTools.xyDistanceBetweenPoint3Ds(firstPoint3d, secondPoint3d);
-         assertEquals(expectedDistance, actualDistance, EPSILON);
-      }
-   }
 }
