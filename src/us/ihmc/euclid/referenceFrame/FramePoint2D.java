@@ -1,11 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.util.Random;
-
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -107,13 +104,6 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
    public FramePoint2D(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
       this(frameTuple3DReadOnly.getReferenceFrame(), new Point2D(frameTuple3DReadOnly));
-   }
-
-   public static FramePoint2D generateRandomFramePoint2d(Random random, ReferenceFrame zUpFrame, double minX, double maxX, double minY, double maxY)
-   {
-      FramePoint2D randomPoint = new FramePoint2D(zUpFrame, EuclidCoreRandomTools.generateRandomPoint2D(random, minX, maxX, minY, maxY));
-
-      return randomPoint;
    }
 
    /**

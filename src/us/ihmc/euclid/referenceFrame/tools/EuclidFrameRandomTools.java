@@ -2,6 +2,10 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.Random;
 
+import us.ihmc.euclid.referenceFrame.FramePoint2D;
+import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.FrameVector2D;
+import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -95,5 +99,37 @@ public class EuclidFrameRandomTools
       }
 
       return referenceFrames;
+   }
+
+   public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame frame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
+   {
+      return new FramePoint3D(frame, EuclidCoreRandomTools.generateRandomPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
+   }
+
+   public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame frame, double minX, double maxX, double minY, double maxY, double minZ,
+                                                       double maxZ)
+   {
+      return new FramePoint3D(frame, EuclidCoreRandomTools.generateRandomPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
+   }
+
+   public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame frame)
+   {
+      return new FrameVector3D(frame, EuclidCoreRandomTools.generateRandomVector3D(random));
+   }
+
+   public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame frame, double minX, double maxX, double minY, double maxY, double minZ,
+                                                         double maxZ)
+   {
+      return new FrameVector3D(frame, EuclidCoreRandomTools.generateRandomVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
+   }
+
+   public static FramePoint2D generateRandomFramePoint2D(Random random, ReferenceFrame zUpFrame, double minX, double maxX, double minY, double maxY)
+   {
+      return new FramePoint2D(zUpFrame, EuclidCoreRandomTools.generateRandomPoint2D(random, minX, maxX, minY, maxY));
+   }
+
+   public static FrameVector2D generateRandomFrameVector2d(Random random, ReferenceFrame zUpFrame)
+   {
+      return new FrameVector2D(zUpFrame, EuclidCoreRandomTools.generateRandomVector2D(random));
    }
 }

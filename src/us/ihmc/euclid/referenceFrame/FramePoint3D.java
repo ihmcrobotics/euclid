@@ -1,11 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.util.Random;
-
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -108,19 +105,6 @@ public class FramePoint3D extends FrameTuple3D<FramePoint3D, Point3D> implements
    public FramePoint3D(FrameTuple3DReadOnly other)
    {
       super(other.getReferenceFrame(), new Point3D(other));
-   }
-
-   public static FramePoint3D generateRandomFramePoint(Random random, ReferenceFrame frame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
-   {
-      FramePoint3D randomPoint = new FramePoint3D(frame, EuclidCoreRandomTools.generateRandomPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
-      return randomPoint;
-   }
-
-   public static FramePoint3D generateRandomFramePoint(Random random, ReferenceFrame frame, double minX, double maxX, double minY, double maxY, double minZ,
-                                                       double maxZ)
-   {
-      FramePoint3D randomPoint = new FramePoint3D(frame, EuclidCoreRandomTools.generateRandomPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
-      return randomPoint;
    }
 
    /**

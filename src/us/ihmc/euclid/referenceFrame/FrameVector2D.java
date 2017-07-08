@@ -1,12 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.util.Random;
-
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -107,13 +104,6 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
    public FrameVector2D(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
       this(frameTuple3DReadOnly.getReferenceFrame(), new Vector2D(frameTuple3DReadOnly));
-   }
-
-   public static FrameVector2D generateRandomFrameVector2d(Random random, ReferenceFrame zUpFrame)
-   {
-      FrameVector2D randomVector = new FrameVector2D(zUpFrame, EuclidCoreRandomTools.generateRandomVector2D(random));
-
-      return randomVector;
    }
 
    /**

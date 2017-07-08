@@ -1,12 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.util.Random;
-
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -109,19 +106,6 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    public FrameVector3D(FrameTuple3DReadOnly other)
    {
       super(other.getReferenceFrame(), new Vector3D(other));
-   }
-
-   public static FrameVector3D generateRandomFrameVector(Random random, ReferenceFrame frame)
-   {
-      FrameVector3D randomVector = new FrameVector3D(frame, EuclidCoreRandomTools.generateRandomVector3D(random));
-      return randomVector;
-   }
-
-   public static FrameVector3D generateRandomFrameVector(Random random, ReferenceFrame frame, double minX, double maxX, double minY, double maxY, double minZ,
-                                                         double maxZ)
-   {
-      FrameVector3D randomVector = new FrameVector3D(frame, EuclidCoreRandomTools.generateRandomVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
-      return randomVector;
    }
 
    /**
