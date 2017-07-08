@@ -3,6 +3,20 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
+/**
+ * Read-only interface for a 2D point expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link Point2DReadOnly}, a {@link ReferenceFrame} is associated to a
+ * {@code FramePoint2DReadOnly}. This allows, for instance, to enforce, at runtime, that operations on
+ * points occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FramePoint2DReadOnly} extends {@code Point2DReadOnly}, it is compatible with
+ * methods only requiring {@code Point2DReadOnly}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FramePoint2DReadOnly}.
+ * </p>
+ */
 public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadOnly
 {
    /**

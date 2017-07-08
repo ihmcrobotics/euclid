@@ -3,6 +3,20 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Read-only interface for a 3D point expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link Point3DReadOnly}, a {@link ReferenceFrame} is associated to
+ * a {@code FramePoint3DReadOnly}. This allows, for instance, to enforce, at runtime, that
+ * operations on points occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FramePoint3DReadOnly} extends {@code Point3DReadOnly}, it is compatible with
+ * methods only requiring {@code Point3DReadOnly}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FramePoint3DReadOnly}.
+ * </p>
+ */
 public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadOnly
 {
    /**
