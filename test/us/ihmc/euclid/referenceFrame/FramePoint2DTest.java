@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 
-public class FramePoint2dTest extends FrameTuple2DTest<FramePoint2D>
+public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
 {
 
    @Override

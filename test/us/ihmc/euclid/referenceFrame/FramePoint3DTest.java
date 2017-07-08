@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-public class FramePointTest extends FrameTuple3DTest<FramePoint3D, Point3D>
+public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
 {
    public static double epsilon = 1e-10;
 

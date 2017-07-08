@@ -19,7 +19,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public class FrameVectorTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
+public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
 {
    @Override
    public FrameVector3D createTuple(ReferenceFrame referenceFrame, double x, double y, double z)

@@ -21,7 +21,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
-public class FrameVector2dTest extends FrameTuple2DTest<FrameVector2D>
+public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
 {
    @Override
    public FrameVector2D createTuple(ReferenceFrame referenceFrame, double x, double y)
