@@ -3,7 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
-public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadOnly, ReferenceFrameHolder
+public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadOnly
 {
    /**
     * Calculates and returns the distance between this frame point and {@code other}.
