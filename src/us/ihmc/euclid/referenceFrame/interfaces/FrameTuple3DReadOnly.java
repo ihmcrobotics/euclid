@@ -1,22 +1,23 @@
-package us.ihmc.euclid.referenceFrame;
+package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
- * Read-only interface for a 2D tuple expressed in a given reference frame.
+ * Read-only interface for a 3D tuple expressed in a given reference frame.
  * <p>
- * In addition to representing a {@link Tuple2DReadOnly}, a {@link ReferenceFrame} is associated to
- * a {@code FrameTuple2DReadOnly}. This allows, for instance, to enforce, at runtime, that
- * operations on tuples occur in the same coordinate system.
+ * In addition to representing a {@link Tuple3DReadOnly}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameTuple3DReadOnly}. This allows, for instance, to enforce, at runtime, that operations on
+ * tuples occur in the same coordinate system.
  * </p>
  * <p>
- * Because a {@code FrameTuple2DReadOnly} extends {@code Tuple2DReadOnly}, it is compatible with
- * methods only requiring {@code Tuple2DReadOnly}. However, these methods do NOT assert that the
+ * Because a {@code FrameTuple3DReadOnly} extends {@code Tuple3DReadOnly}, it is compatible with
+ * methods only requiring {@code Tuple3DReadOnly}. However, these methods do NOT assert that the
  * operation occur in the proper coordinate system. Use this feature carefully and always prefer
- * using methods requiring {@code FrameTuple2DReadOnly}.
+ * using methods requiring {@code FrameTuple3DReadOnly}.
  * </p>
  */
-public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHolder
+public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, ReferenceFrameHolder
 {
    /**
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
@@ -30,12 +31,12 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
     * @return {@code true} if the two tuples are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
     */
-   default boolean epsilonEquals(FrameTuple2DReadOnly other, double epsilon)
+   default boolean epsilonEquals(FrameTuple3DReadOnly other, double epsilon)
    {
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
 
-      return Tuple2DReadOnly.super.epsilonEquals(other, epsilon);
+      return Tuple3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -48,11 +49,11 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
     * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in
     *         the same reference frame, {@code false} otherwise.
     */
-   default boolean equals(FrameTuple2DReadOnly other)
+   default boolean equals(FrameTuple3DReadOnly other)
    {
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
 
-      return Tuple2DReadOnly.super.equals(other);
+      return Tuple3DReadOnly.super.equals(other);
    }
 }

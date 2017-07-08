@@ -1,5 +1,6 @@
-package us.ihmc.euclid.referenceFrame;
+package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
 /**
