@@ -322,12 +322,6 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       }
    }
 
-   public static void assertFrameVectorEquals(FrameVector3D expected, FrameVector3D actual, double delta)
-   {
-      expected.checkReferenceFrameMatch(actual);
-      EuclidCoreTestTools.assertTuple3DEquals(expected.getVector(), actual.getVector(), delta);
-   }
-
    @Override
    public void testOverloading() throws Exception
    {

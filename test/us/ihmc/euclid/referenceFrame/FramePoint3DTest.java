@@ -9,7 +9,6 @@ import org.junit.Test;
 import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -404,12 +403,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       point3dExpected = new Point3D(xyz);
       assertTrue(aFrame == pointToBeTested.getReferenceFrame());
       assertTrue(pointToBeTested.getPoint().epsilonEquals(point3dExpected, epsilon));
-   }
-
-   public static void assertFramePointEquals(FramePoint3D expected, FramePoint3D actual, double delta)
-   {
-      expected.checkReferenceFrameMatch(actual);
-      EuclidCoreTestTools.assertTuple3DEquals(expected.getPoint(), actual.getPoint(), delta);
    }
 
    @Override
