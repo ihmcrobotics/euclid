@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -28,5 +29,12 @@ public class EuclidFrameToolsTest
       methodsToIgnore.put("intersectionBetweenLine3DAndEllipsoid3D", new Class<?>[] {d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
 
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, false, 2, methodsToIgnore);
+   }
+
+   @Ignore
+   @Test
+   public void testReferenceFrameChecked() throws Exception
+   {
+      EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, true, false, true);
    }
 }

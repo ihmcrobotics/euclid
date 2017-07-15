@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -17,6 +20,7 @@ import us.ihmc.euclid.referenceFrame.FrameTuple2D;
 import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
@@ -58,6 +62,28 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector3DBasics.class, FrameVector3D.class);
 
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
+   }
+
+   private final static Map<Class<?>, FrameTypeBuilder> frameTypeBuilders;
+   static
+   {
+      HashMap<Class<?>, FrameTypeBuilder> modifiableMap = new HashMap<>();
+      modifiableMap.put(FrameTuple2DReadOnly.class, FramePoint2D::new);
+      modifiableMap.put(FrameTuple2D.class, FramePoint2D::new);
+      modifiableMap.put(FramePoint2DReadOnly.class, FramePoint2D::new);
+      modifiableMap.put(FramePoint2D.class, FramePoint2D::new);
+      modifiableMap.put(FrameVector2DReadOnly.class, FrameVector2D::new);
+      modifiableMap.put(FrameVector2D.class, FrameVector2D::new);
+
+      modifiableMap.put(FrameTuple3DReadOnly.class, FramePoint3D::new);
+      modifiableMap.put(FrameTuple3D.class, FramePoint3D::new);
+      modifiableMap.put(FramePoint3DReadOnly.class, FramePoint3D::new);
+      modifiableMap.put(FramePoint3D.class, FramePoint3D::new);
+      modifiableMap.put(FrameVector3DReadOnly.class, FrameVector3D::new);
+      modifiableMap.put(FrameVector3D.class, FrameVector3D::new);
+
+      frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
+
    }
 
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
@@ -122,6 +148,52 @@ public class EuclidFrameAPITestTools
       }
    }
 
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeHoldingStaticMethodsToTest, boolean shouldThrowExceptionForReadOnlies,
+                                                             boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables)
+   {
+      assertStaticMethodsCheckReferenceFrame(typeHoldingStaticMethodsToTest, shouldThrowExceptionForReadOnlies, shouldThrowExceptionForMutables,
+                                             shouldChangeFrameOfMutables, m -> true);
+   }
+
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeHoldingStaticMethodsToTest, boolean shouldThrowExceptionForReadOnlies,
+                                                             boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables,
+                                                             Predicate<Method> methodFilter)
+   {
+      // We need at least 2 frame arguments to assert anything.
+      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeHoldingStaticMethodsToTest.getMethods(), 2);
+      // We keep only the public & static methods
+      frameMethods = frameMethods.stream().filter(m -> Modifier.isStatic(m.getModifiers())).filter(m -> Modifier.isPublic(m.getModifiers()))
+                                 .collect(Collectors.toList());
+
+      Random random = new Random();
+      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+
+      for (Method frameMethod : frameMethods)
+      {
+         Class<?>[] parameterTypes = frameMethod.getParameterTypes();
+         Object[] parameters = new Object[parameterTypes.length];
+
+         for (int i = 0; i < parameterTypes.length; i++)
+         {
+            Class<?> parameterType = parameterTypes[i];
+            if (isFrameType(parameterType))
+               parameters[i] = createFrameObject(parameterType, frameA);
+            else
+               parameters[i] = newInstanceOf(parameterType);
+         }
+
+         try
+         {
+            frameMethod.invoke(null, parameters);
+         }
+         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+         {
+            System.err.println("Something went wrong when involing the static method");
+            e.printStackTrace();
+         }
+      }
+   }
+
    private static void assertMethodOverloadedWithSpecificSignature(Method originalMethod, Class<?>[] overloadingSignature, Class<?> typeToSearchIn)
          throws SecurityException
    {
@@ -168,34 +240,58 @@ public class EuclidFrameAPITestTools
       return ret.replace("[", "").replace("]", "");
    }
 
-   private static List<Method> keepOnlyMethodsWithAtLeastOneGeometryArgumentAndNoFrames(Method[] methodsToFilter, int minNumberOfFramelessArgument)
+   private static List<Method> keepOnlyMethodsWithAtLeastNFrameArguments(Method[] methodsToFilter, int minNumberOfFrameArguments)
    {
-      return keepOnlyMethodsWithAtLeastNFramelessArgument(Arrays.asList(methodsToFilter), minNumberOfFramelessArgument);
+      return keepOnlyMethodsWithAtLeastNFrameArguments(Arrays.asList(methodsToFilter), minNumberOfFrameArguments);
    }
 
-   private static List<Method> keepOnlyMethodsWithAtLeastNFramelessArgument(List<Method> methodsToFilter, int minNumberOfFramelessArgument)
+   private static List<Method> keepOnlyMethodsWithAtLeastNFrameArguments(List<Method> methodsToFilter, int minNumberOfFrameArguments)
    {
-      List<Method> filteredMethods = new ArrayList<>();
+      return methodsToFilter.stream().filter(m -> methodHasAtLeastNFrameArguments(m, minNumberOfFrameArguments)).collect(Collectors.toList());
+   }
 
-      for (Method method : methodsToFilter)
+   private static boolean methodHasAtLeastNFrameArguments(Method method, int minNumberOfFrameArguments)
+   {
+      int numberOfFrameArguments = 0;
+
+      for (Class<?> parameterType : method.getParameterTypes())
       {
-         int numberOfFramelessArguments = 0;
-
-         for (Class<?> parameterType : method.getParameterTypes())
+         if (isFrameType(parameterType))
          {
-            if (isFramelessType(parameterType))
-            {
-               numberOfFramelessArguments++;
-               if (numberOfFramelessArguments >= minNumberOfFramelessArgument)
-                  break;
-            }
+            numberOfFrameArguments++;
+            if (numberOfFrameArguments >= minNumberOfFrameArguments)
+               return true;
          }
-
-         if (numberOfFramelessArguments >= minNumberOfFramelessArgument)
-            filteredMethods.add(method);
       }
 
-      return filteredMethods;
+      return numberOfFrameArguments >= minNumberOfFrameArguments;
+   }
+
+   private static List<Method> keepOnlyMethodsWithAtLeastOneGeometryArgumentAndNoFrames(Method[] methodsToFilter, int minNumberOfFramelessArguments)
+   {
+      return keepOnlyMethodsWithAtLeastNFramelessArgument(Arrays.asList(methodsToFilter), minNumberOfFramelessArguments);
+   }
+
+   private static List<Method> keepOnlyMethodsWithAtLeastNFramelessArgument(List<Method> methodsToFilter, int minNumberOfFramelessArguments)
+   {
+      return methodsToFilter.stream().filter(m -> methodHasAtLeastNFramelessArguments(m, minNumberOfFramelessArguments)).collect(Collectors.toList());
+   }
+
+   private static boolean methodHasAtLeastNFramelessArguments(Method method, int minNumberOfFramelessArguments)
+   {
+      int numberOfFramelessArguments = 0;
+
+      for (Class<?> parameterType : method.getParameterTypes())
+      {
+         if (isFramelessType(parameterType))
+         {
+            numberOfFramelessArguments++;
+            if (numberOfFramelessArguments >= minNumberOfFramelessArguments)
+               return true;
+         }
+      }
+
+      return numberOfFramelessArguments >= minNumberOfFramelessArguments;
    }
 
    private static List<Class<?>[]> createExpectedMethodSignaturesWithFrameArgument(Method methodWithoutFrameArguments, boolean createAllCombinations)
@@ -295,5 +391,45 @@ public class EuclidFrameAPITestTools
             return true;
       }
       return false;
+   }
+
+   private static Object createFrameObject(Class<?> type, ReferenceFrame referenceFrame)
+   {
+      FrameTypeBuilder builder = null;
+      Class<?> bestMatchingType = null;
+
+      for (Entry<Class<?>, FrameTypeBuilder> entry : frameTypeBuilders.entrySet())
+      {
+         if (!entry.getKey().isAssignableFrom(type))
+            continue;
+
+         if (bestMatchingType == null || bestMatchingType.isAssignableFrom(entry.getKey()))
+         {
+            bestMatchingType = entry.getKey();
+            builder = entry.getValue();
+         }
+      }
+
+      return builder.newInstance(referenceFrame);
+   }
+
+   private static interface FrameTypeBuilder
+   {
+      Object newInstance(ReferenceFrame referenceFrame);
+   }
+
+   private static Object newInstanceOf(Class<?> type)
+   {
+      if (type.isPrimitive())
+         return 0;
+      try
+      {
+         return type.getConstructor().newInstance();
+      }
+      catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+            | SecurityException e)
+      {
+         throw new RuntimeException("Could instantiate an object of the type: " + type.getSimpleName());
+      }
    }
 }
