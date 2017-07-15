@@ -7,7 +7,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -36,8 +35,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
 
    public abstract T createFrameTuple(ReferenceFrame referenceFrame, double x, double y);
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.3)
-	@Test
+   @Test
    public void testChangeFrame()
    {
       final RigidBodyTransform transformInPlane = new RigidBodyTransform();
@@ -113,8 +111,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       childFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("childFrame", theFrame, theFrameToChildFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSet_doubledouble()
    {
       FrameTuple2D<?, ?> doubleDouble = createFrameTuple(frameTransformInPlane, 0.0, 0.0);
@@ -124,13 +121,12 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertArrayEquals(expecteds1, actuals1, epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetIncludingFrame_ReferenceFrame_double_double()
    {
       Random random = new Random(456456456L);
       FrameTuple2D<?, ?> doubleDouble = createFrameTuple(theFrame, random.nextDouble(), random.nextDouble());
-      double[] expecteds2 = {random.nextDouble(), random.nextDouble()}; 
+      double[] expecteds2 = {random.nextDouble(), random.nextDouble()};
       doubleDouble.setIncludingFrame(aFrame, expecteds2[0], expecteds2[1]);
       double[] actuals2 = {doubleDouble.getX(), doubleDouble.getY()};
       assertArrayEquals(expecteds2, actuals2, epsilon);
@@ -141,14 +137,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          doubleDouble.checkReferenceFrameMatch(theFrame);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSet_FrameTuple2d()
    {
       double[] expecteds1 = {-10.0, 10.0};
@@ -156,7 +151,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       FrameTuple2D<?, ?> sameFrame = createFrameTuple(theFrame, expecteds1[0], expecteds1[1]);
       original.set(sameFrame);
       double[] results1 = {original.getX(), original.getY()};
-      
+
       original.checkReferenceFrameMatch(theFrame);
 
       try
@@ -164,11 +159,11 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.checkReferenceFrameMatch(aFrame);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
-      
+
       assertArrayEquals(expecteds1, results1, epsilon);
 
       try
@@ -177,14 +172,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.set(differentFrame);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetIncludingFrame_FrameTuple2d()
    {
       double[] expecteds1 = {-10.0, 10.0};
@@ -200,16 +194,15 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.checkReferenceFrameMatch(theFrame);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
-      
+
       assertArrayEquals(expecteds1, results1, epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetX_double()
    {
       double x = -123678346.56756;
@@ -218,8 +211,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("These should be equal", x, frameTuple.getX(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetY_double()
    {
       double y = -123678346.56756;
@@ -228,8 +220,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("These should be equal", y, frameTuple.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScale_double()
    {
       double scaleFactor = 2.0;
@@ -241,8 +232,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("These should be equal", y, frameTuple.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScale_doubledouble()
    {
       double scaleXFactor = 2.0;
@@ -254,8 +244,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("These should be equal", y, frameTuple.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testGet_Tuple2d()
    {
       Point2D tuple2dToPack = new Point2D();
@@ -266,8 +255,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("These should be equal", values[1], tuple2dToPack.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetToZero()
    {
       double[] values = {456465.067, 456.898};
@@ -279,8 +267,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("These should be equal", 0.0, frameTuple.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetToZero_ReferenceFrame()
    {
       double[] values = {456465.067, 456.898};
@@ -290,7 +277,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       frameTuple.setToZero(theFrame);
       assertEquals("These should be equal", 0.0, frameTuple.getX(), epsilon);
       assertEquals("These should be equal", 0.0, frameTuple.getY(), epsilon);
-      
+
       frameTuple.checkReferenceFrameMatch(theFrame);
 
       try
@@ -298,41 +285,39 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          frameTuple.checkReferenceFrameMatch(aFrame);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetToNaN()
    {
       double[] values = {456465.067, 456.898};
       FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
       assertFalse(Double.isNaN(frameTuple.getX()));
       assertFalse(Double.isNaN(frameTuple.getY()));
-      frameTuple.setToNaN();      
+      frameTuple.setToNaN();
       assertTrue(Double.isNaN(frameTuple.getX()));
       assertTrue(Double.isNaN(frameTuple.getY()));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSetToNaN_ReferenceFrame()
    {
       double[] values = {456465.067, 456.898};
       FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
-      
+
       assertFalse(Double.isNaN(frameTuple.getX()));
       assertFalse(Double.isNaN(frameTuple.getY()));
       frameTuple.checkReferenceFrameMatch(aFrame);
-      
-      frameTuple.setToNaN(theFrame);      
-      
+
+      frameTuple.setToNaN(theFrame);
+
       assertTrue(Double.isNaN(frameTuple.getX()));
       assertTrue(Double.isNaN(frameTuple.getY()));
-      
+
       frameTuple.checkReferenceFrameMatch(theFrame);
 
       try
@@ -340,14 +325,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          frameTuple.checkReferenceFrameMatch(aFrame);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testCheckForNaN()
    {
       double[] values = {456465.067, 456.898};
@@ -361,14 +345,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          frameTupleNaN.checkForNaN();
          fail("Threw RuntimeException");
       }
-      catch(RuntimeException re)
+      catch (RuntimeException re)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testContainsNaN()
    {
       double[] values = {456465.067, 456.898};
@@ -384,8 +367,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertTrue(bothNaN.containsNaN());
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScale_double_Tuple2d()
    {
       double[] values = {8.0, -5.0};
@@ -398,8 +380,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("Should be equal doubles", scaleFactor * values[1], frameTuple.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScaleAdd_double_Tuple2d_Tuple2d()
    {
       double[] values1 = {8.0, -5.0};
@@ -409,13 +390,12 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       Point2D tuple1 = new Point2D(values1);
       Point2D tuple2 = new Point2D(values2);
 
-      frameTuple.scaleAdd(scaleFactor, tuple1, tuple2);      
+      frameTuple.scaleAdd(scaleFactor, tuple1, tuple2);
       assertEquals("Should be equal doubles", scaleFactor * values1[0] + values2[0], frameTuple.getX(), epsilon);
       assertEquals("Should be equal doubles", scaleFactor * values1[1] + values2[1], frameTuple.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScaleAdd_double_Tuple2d()
    {
       double[] tuple2dValues = {8.0, 5.0};
@@ -424,13 +404,12 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       double scaleFactor1 = 7.43;
       Point2D tuple1 = new Point2D(tuple2dValues);
 
-      frameTuple.scaleAdd(scaleFactor1, tuple1);      
+      frameTuple.scaleAdd(scaleFactor1, tuple1);
       assertEquals("Should be equal doubles", scaleFactor1 * frameTuple2dValues[0] + tuple2dValues[0], frameTuple.getX(), epsilon);
       assertEquals("Should be equal doubles", scaleFactor1 * frameTuple2dValues[1] + tuple2dValues[1], frameTuple.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScale_double_FrameTuple2d()
    {
       FrameTuple2D<?, ?> original = createFrameTuple(theFrame, 1.0, 2.0);
@@ -447,14 +426,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.setAndScale(scaleFactor, different);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScaleAdd_double_FrameTuple2d_FrameTuple2d()
    {
       double[] originalValues = {1.0, 2.0};
@@ -472,7 +450,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.scaleAdd(scaleFactor, original, different);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
@@ -481,14 +459,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.scaleAdd(scaleFactor, different, original);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testScaleAdd_double_FrameTuple2d()
    {
       double scaleFactor = 9.78;
@@ -505,14 +482,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.scaleAdd(scaleFactor, different);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
-      }      
+      }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testAdd_double_Tuple2d_Tuple2d()
    {
       double[] originalValues = {1.9, 3.7};
@@ -524,8 +500,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals(original.getY(), tuple1.getY() + tuple2.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testAdd_FrameTuple2d()
    {
       double[] originalValues = {1.9, 3.7};
@@ -541,14 +516,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.add(different);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testAdd_FrameTuple2d_FrameTuple2d()
    {
       double[] originalValues = {1.9, 3.7};
@@ -564,7 +538,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.add(original, different);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
@@ -573,14 +547,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.add(different, original);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSub_Tuple2d()
    {
       double[] originalValues = {1.9, 3.7};
@@ -591,8 +564,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertEquals("These should be equal: ", originalValues[1] - tuple1.getY(), original.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSub_Tuple2d_Tuple2d()
    {
       double[] originalValues = {1.9, 3.7};
@@ -603,7 +575,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       original.sub(tuple1, tuple2);
       assertEquals("These should be equal: ", tuple1.getX() - tuple2.getX(), original.getX(), epsilon);
       assertEquals("These should be equal: ", tuple1.getY() - tuple2.getY(), original.getY(), epsilon);
-      
+
       FrameTuple2D<?, ?> different = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
 
       try
@@ -611,7 +583,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.sub(original, different);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
@@ -620,14 +592,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.sub(different, original);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSub_FrameTuple2d()
    {
       double[] originalValues = {1.9, 3.7};
@@ -643,14 +614,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.sub(different);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSub_FrameTuple2d_FrameTuple2d()
    {
       double[] originalValues = {1.9, 3.7};
@@ -666,7 +636,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.sub(original, different);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
@@ -675,14 +645,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          original.sub(different, original);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testInterpolate_Tuple2d_Tuple2d_double()
    {
       double[] originalValues = {1.9, 3.7};
@@ -692,12 +661,11 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       double alpha = 2.0;
 
       original.interpolate(tuple1, tuple2, alpha);
-      assertEquals("Should be equal", (1-alpha) * tuple1.getX() + alpha * tuple2.getX(), original.getX(), epsilon);
-      assertEquals("Should be equal", (1-alpha) * tuple1.getY() + alpha * tuple2.getY(), original.getY(), epsilon);
+      assertEquals("Should be equal", (1 - alpha) * tuple1.getX() + alpha * tuple2.getX(), original.getX(), epsilon);
+      assertEquals("Should be equal", (1 - alpha) * tuple1.getY() + alpha * tuple2.getY(), original.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testInterpolate_FrameTuple2d_FrameTuple2d_double()
    {
       double[] originalValues = {1.9, 3.7};
@@ -710,9 +678,9 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       FrameTuple2D<?, ?> different = createFrameTuple(aFrame, differentValues[0], differentValues[1]);
 
       holder.interpolate(original, same, alpha);
-      assertEquals("Should be equal", (1-alpha) * original.getX() + alpha * same.getX(), holder.getX(), epsilon);
-      assertEquals("Should be equal", (1-alpha) * original.getY() + alpha * same.getY(), holder.getY(), epsilon);
-      
+      assertEquals("Should be equal", (1 - alpha) * original.getX() + alpha * same.getX(), holder.getX(), epsilon);
+      assertEquals("Should be equal", (1 - alpha) * original.getY() + alpha * same.getY(), holder.getY(), epsilon);
+
       holder.checkReferenceFrameMatch(original.getReferenceFrame());
 
       try
@@ -720,7 +688,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          holder.checkReferenceFrameMatch(aFrame);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
@@ -730,14 +698,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          holder.interpolate(different, different, alpha);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testClipToMinMax_double_double()
    {
       double minValue = -5.0;
@@ -745,22 +712,20 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, -34345.5455, 45456.45456);
       frameTuple.clipToMinMax(minValue, maxValue);
       assertTrue(frameTuple.getX() >= minValue && frameTuple.getX() <= maxValue);
-      assertTrue(frameTuple.getY() >= minValue && frameTuple.getY() <= maxValue); 
+      assertTrue(frameTuple.getY() >= minValue && frameTuple.getY() <= maxValue);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testNegate()
    {
       double[] originalValues = {1.9, 3.7};
       FrameTuple2D<?, ?> holder = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
       holder.negate();
-      assertEquals("Should be negated", - originalValues[0], holder.getX(), epsilon);
-      assertEquals("Should be negated", - originalValues[1], holder.getY(), epsilon);
+      assertEquals("Should be negated", -originalValues[0], holder.getX(), epsilon);
+      assertEquals("Should be negated", -originalValues[1], holder.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testEpsilonEquals_Tuple2d_double()
    {
       double threshold = 10.0;
@@ -773,8 +738,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertFalse(frameTuple.epsilonEquals(tuple3, threshold));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testEpsilonEquals_FrameTuple2d_double()
    {
       double threshold = 10.0;
@@ -788,8 +752,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
       assertFalse(frameTuple.epsilonEquals(tuple3, threshold));
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testCheckReferenceFrameMatch_ReferenceFrameHolder()
    {
       FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 1.0);
@@ -801,14 +764,13 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          frameTuple.checkReferenceFrameMatch(different);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testCheckReferenceFrameMatch_ReferenceFrame()
    {
       FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 1.0);
@@ -818,7 +780,7 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
          frameTuple.checkReferenceFrameMatch(aFrame);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }

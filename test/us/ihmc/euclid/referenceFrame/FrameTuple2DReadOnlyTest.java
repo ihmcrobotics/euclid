@@ -88,6 +88,7 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
    @Test
    public void testOverloading() throws Exception
    {
-      FrameTuple3DReadOnlyTest.assertSuperMethodsAreOverloaded(FrameTuple2DReadOnly.class, Tuple2DReadOnly.class, FrameTuple2DReadOnly.class, Tuple2DReadOnly.class);
+      FrameTuple3DReadOnlyTest.assertSuperMethodsAreOverloaded(FrameTuple2DReadOnly.class, Tuple2DReadOnly.class, FrameTuple2DReadOnly.class,
+                                                               Tuple2DReadOnly.class);
    }
 }

@@ -9,7 +9,6 @@ import org.ejml.data.DenseMatrix64F;
 import org.junit.Before;
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -64,7 +63,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       childFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("childFrame", theFrame, theFrameToChildFrame);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetXYZ()
    {
@@ -88,7 +86,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       testGetters(frameTuple, x, y, z);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test //Brett was here
    public final void testSetTuple()
    {
@@ -109,10 +106,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       //test non-matching reference frames
       FrameTuple3D<?, ?> ft1 = createFrameTuple(aFrame);
       FrameTuple3D<?, ?> ft2 = createFrameTuple(theFrame);
-      ft1.set(ft2);
+      try
+      {
+         ft1.set(ft2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetFrameTuple()
    {
@@ -191,7 +195,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
 
    // Tests copied from FramePointTest and FrameVectorTest
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testChangeFrameCopy()
    {
@@ -241,7 +244,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
 
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSets() //Brett was here
    {
@@ -273,7 +275,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue("This should be true", alpha.epsilonEquals(beta, 1e-10));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test //Brett was here
    public final void testSetXY()
    {
@@ -288,10 +289,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
 
       //test non-matching reference frames
       FrameTuple3D<?, ?> ft1 = createFrameTuple(aFrame);
-      ft1.set(framepoint2d);
+      try
+      {
+         ft1.set(framepoint2d);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testGets()
    {
@@ -302,7 +310,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       beta.getZ();
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testAddTuple3d()
    {
@@ -313,7 +320,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(alpha.epsilonEquals(expected, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testAddTuple3dTuple3d()
    {
@@ -326,7 +332,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(alpha.epsilonEquals(expected, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testAddFrameTuple() //Brett
    {
@@ -340,10 +345,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
 
       //Test non-matching reference frames
       FrameTuple3D<?, ?> frameTuple2 = createFrameTuple(aFrame, 10.0, 11.0, 12.0);
-      frameTuple1.add(frameTuple2);
+      try
+      {
+         frameTuple1.add(frameTuple2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testAddFrameTupleFrameTuple() //Brett
    {
@@ -378,17 +390,23 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testReferenceFramesAreCheckedOnSet()
    {
       FrameTuple3D<?, ?> framePointOne = createFrameTuple(theFrame);
       FrameTuple3D<?, ?> framePointTwo = createFrameTuple(aFrame);
 
-      framePointOne.set(framePointTwo);
+      try
+      {
+         framePointOne.set(framePointTwo);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testEpsilonEqualsTuple()
    {
@@ -401,7 +419,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(tupleResult == framePointResult);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testEpsilonEqualsFrameTuple()
    {
@@ -435,7 +452,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("return value", expectedReturn, actualReturn);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testGetTuple3d()
    {
@@ -446,7 +462,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(frameTuple.epsilonEquals(tuple3d, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetToZero()
    {
@@ -456,7 +471,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(frameTuple.epsilonEquals(frameTupleZero, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetToZeroReferenceFrame()
    {
@@ -466,7 +480,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(frameTuple.epsilonEquals(frameTupleZero, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetToNaN()
    {
@@ -477,7 +490,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(Double.isNaN(frameTuple.getZ()));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetToNaNReferenceFrame()
    {
@@ -489,7 +501,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(Double.isNaN(frameTuple.getZ()));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testGetReferenceFrame()
    {
@@ -500,7 +511,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("return value", expectedReturn, actualReturn);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testGetX()
    {
@@ -511,7 +521,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("return value", expectedReturn, actualReturn, Double.MIN_VALUE);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testGetY()
    {
@@ -522,7 +531,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("return value", expectedReturn, actualReturn, Double.MIN_VALUE);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testGetZ()
    {
@@ -533,27 +541,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("return value", expectedReturn, actualReturn, Double.MIN_VALUE);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testSet()
-   {
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame);
-
-      FrameTuple3D<?, ?> framePoint = null;
-      framePoint1.set(framePoint);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testSet1()
-   {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-
-      FrameTuple3D<?, ?> frameVector = null;
-      framePoint.set(frameVector);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSet2()
    {
@@ -569,7 +556,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(z, framePoint.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetX()
    {
@@ -581,7 +567,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(x, framePoint.getX(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetY()
    {
@@ -593,7 +578,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(y, framePoint.getY(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetZ()
    {
@@ -605,7 +589,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(z, framePoint.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubTuple3d()
    {
@@ -618,7 +601,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(frameTuple1.epsilonEquals(tuple1, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubTuple3dTuple3d()
    {
@@ -635,7 +617,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(expectedFrameTuple.epsilonEquals(expectedTuple, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubFrameTuple()
    {
@@ -663,7 +644,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubFrameTupleFrameTuple()
    {
@@ -709,49 +689,23 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testCheckReferenceFrameMatch() throws ReferenceFrameMismatchException
    {
       FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
 
       ReferenceFrame frame = null;
-      framePoint.checkReferenceFrameMatch(frame);
+      try
+      {
+         framePoint.checkReferenceFrameMatch(frame);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testCheckReferenceFrameMatch1() throws ReferenceFrameMismatchException
-   {
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame);
-
-      FrameTuple3D<?, ?> framePoint = null;
-      framePoint1.checkReferenceFrameMatch(framePoint);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testCheckReferenceFrameMatch2() throws ReferenceFrameMismatchException
-   {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-
-      FrameTuple3D<?, ?> frameVector = null;
-      framePoint.checkReferenceFrameMatch(frameVector);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testWeightedAverageNullPointerException()
-   {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-
-      FrameTuple3D<?, ?> point1 = null;
-      FrameTuple3D<?, ?> point2 = null;
-      double weightedAverage = 0.0;
-      framePoint.interpolate(point1, point2, weightedAverage);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testFramePoint()
    {
@@ -761,18 +715,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       createFrameTuple(referenceFrame);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testFramePoint1()
-   {
-      createFrameTuple(theFrame);
-
-      ReferenceFrame referenceFrame = null;
-      Point3D point = null;
-      createFrameTuple(referenceFrame, point);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testFramePoint2()
    {
@@ -785,27 +727,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       createFrameTuple(referenceFrame, x, y, z);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testFramePoint3()
-   {
-      createFrameTuple(theFrame);
-
-      FrameTuple3D<?, ?> framePoint = null;
-      createFrameTuple(framePoint);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test
-   public final void testFramePoint4()
-   {
-      createFrameTuple(theFrame);
-
-      FrameTuple3D<?, ?> frameVector = null;
-      createFrameTuple(frameVector);
-   }
-
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test //Brett was here
    public final void testScale()
    {
@@ -826,10 +747,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("return value", 3.0, framePoint.getZ(), Double.MIN_VALUE);
 
       //test non-matching reference frames
-      framePoint.setAndScale(scaleFactor, tuple1);
+      try
+      {
+         framePoint.setAndScale(scaleFactor, tuple1);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleVector()
    {
@@ -844,7 +772,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(-4.6, framePoint.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleVectorException()
    {
@@ -852,10 +779,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector = createFrameTuple(aFrame, 1.0, 3.0, -2.0);
       double scale = 2.3;
 
-      framePoint.setAndScale(scale, frameVector);
+      try
+      {
+         framePoint.setAndScale(scale, frameVector);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScalePoint()
    {
@@ -870,7 +804,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(-4.6, framePoint.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScalePointException()
    {
@@ -878,10 +811,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> framePoint2 = createFrameTuple(aFrame, 1.0, 3.0, -2.0);
       double scale = 2.3;
 
-      framePoint.setAndScale(scale, framePoint2);
+      try
+      {
+         framePoint.setAndScale(scale, framePoint2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddVectorVector() //Brett was here
    {
@@ -917,7 +857,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddVectorVectorException1()
    {
@@ -926,10 +865,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      framePoint.scaleAdd(scale, frameVector1, frameVector2);
+      try
+      {
+         framePoint.scaleAdd(scale, frameVector1, frameVector2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddVectorVectorException2()
    {
@@ -938,10 +884,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector2 = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      framePoint.scaleAdd(scale, frameVector1, frameVector2);
+      try
+      {
+         framePoint.scaleAdd(scale, frameVector1, frameVector2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddVectorPoint()
    {
@@ -966,7 +919,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(framePointResult1.epsilonEquals(framePointResult2, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddVectorPointException1()
    {
@@ -979,10 +931,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector1 = createFrameTuple(aFrame, vector1);
       FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, vector2);
 
-      framePointResult1.scaleAdd(scale, frameVector1, framePoint1);
+      try
+      {
+         framePointResult1.scaleAdd(scale, frameVector1, framePoint1);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddVectorPointException2()
    {
@@ -995,10 +954,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector1 = createFrameTuple(theFrame, vector1);
       FrameTuple3D<?, ?> framePoint1 = createFrameTuple(aFrame, vector2);
 
-      framePointResult1.scaleAdd(scale, frameVector1, framePoint1);
+      try
+      {
+         framePointResult1.scaleAdd(scale, frameVector1, framePoint1);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddPointVectorException1()
    {
@@ -1011,10 +977,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector1 = createFrameTuple(aFrame, vector1);
       FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, vector2);
 
-      framePointResult1.scaleAdd(scale, framePoint1, frameVector1);
+      try
+      {
+         framePointResult1.scaleAdd(scale, framePoint1, frameVector1);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddPointVectorException2()
    {
@@ -1027,10 +1000,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector1 = createFrameTuple(theFrame, vector1);
       FrameTuple3D<?, ?> framePoint1 = createFrameTuple(aFrame, vector2);
 
-      framePointResult1.scaleAdd(scale, framePoint1, frameVector1);
+      try
+      {
+         framePointResult1.scaleAdd(scale, framePoint1, frameVector1);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddPointPoint()
    {
@@ -1046,7 +1026,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(2.3 * -2.0 + 3.6, framePointResult.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddPointPointException1()
    {
@@ -1055,10 +1034,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> framePoint2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      framePointResult.scaleAdd(scale, framePoint1, framePoint2);
+      try
+      {
+         framePointResult.scaleAdd(scale, framePoint1, framePoint2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddPointPointException2()
    {
@@ -1067,10 +1053,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> framePoint2 = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      framePointResult.scaleAdd(scale, framePoint1, framePoint2);
+      try
+      {
+         framePointResult.scaleAdd(scale, framePoint1, framePoint2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test //Brett was here
    public final void testScaleAddScaleTuple()
    {
@@ -1086,10 +1079,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
 
       //test non-matching reference frames
       FrameTuple3D<?, ?> ft1 = createFrameTuple(aFrame);
-      ft1.scaleAdd(scale, frameVector);
+      try
+      {
+         ft1.scaleAdd(scale, frameVector);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddVectorException()
    {
@@ -1097,10 +1097,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> frameVector = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      framePointResult.scaleAdd(scale, frameVector);
+      try
+      {
+         framePointResult.scaleAdd(scale, frameVector);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddPoint()
    {
@@ -1115,7 +1122,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(2.3 * -2.0 + 3.6, framePointResult.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testScaleAddPointException()
    {
@@ -1123,10 +1129,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       FrameTuple3D<?, ?> framePoint = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      framePointResult.scaleAdd(scale, framePoint);
+      try
+      {
+         framePointResult.scaleAdd(scale, framePoint);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubFramePoint()
    {
@@ -1138,7 +1151,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(expectedResult.epsilonEquals(framePoint1, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubFrameVector()
    {
@@ -1150,7 +1162,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(expectedResult.epsilonEquals(framePoint, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubPointPoint()
    {
@@ -1163,7 +1174,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(expectedResult.epsilonEquals(actualResult, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubPointVector()
    {
@@ -1176,7 +1186,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(expectedResult.epsilonEquals(actualResult, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSubVectorPoint()
    {
@@ -1189,7 +1198,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(expectedResult.epsilonEquals(actualResult, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testSetNaN()
    {
@@ -1207,7 +1215,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertTrue(Double.isNaN(frameVector2.getZ()));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testCheckForNaNAndContainsNaN()
    {
@@ -1231,7 +1238,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertFalse(framePoint.containsNaN());
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testInterpolate()
    {
@@ -1254,7 +1260,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals((1.0 - alpha) * frameTuple4.getZ() + alpha * frameTuple5.getZ(), resultTuple.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testPackMatrix() //Brett was here
    {
@@ -1290,7 +1295,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testClipToMinMax() //Brett was here
    {
@@ -1301,7 +1305,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("Should be equal", 10, frameTuple.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testNegate() //Brett was here
    {
@@ -1313,7 +1316,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("Should be equal", frameTuple.getZ(), frameTupleToNegate.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testAbsolute()
    {

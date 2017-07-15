@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.AffineTransform;
@@ -45,7 +45,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       return 1.0e-15;
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testRunTestMain()
    {
@@ -200,7 +199,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
 
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testOtherConstructors() //Brett was here
    {
@@ -213,13 +211,13 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertEquals("These should be equal", position, framePositionName.getPoint());
       assertEquals("These should be equal", aFrame, framePositionName.getReferenceFrame());
 
-      double[] doubleArray = { 7.0, 7.0, 7.0 };
+      double[] doubleArray = {7.0, 7.0, 7.0};
       Tuple3DBasics position2 = new Point3D(doubleArray);
       FramePoint3D framePositionArray = new FramePoint3D(theFrame, doubleArray);
       assertEquals("These should be equal", position2, framePositionArray.getPoint());
       assertEquals("These should be equal", theFrame, framePositionArray.getReferenceFrame());
 
-      double[] doubleArray2 = { -7.0, 14.0, 21.0 };
+      double[] doubleArray2 = {-7.0, 14.0, 21.0};
       Tuple3DBasics position3 = new Point3D(doubleArray2);
       FramePoint3D framePositionArrayName = new FramePoint3D(theFrame, doubleArray2);
       assertEquals("These should be equal", position3, framePositionArrayName.getPoint());
@@ -231,7 +229,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertEquals("These should be equal", theFrame, frameName.getReferenceFrame());
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testGetXYplaneDistance()
    {
@@ -242,10 +239,17 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
 
       //Test for reference frame mismatch
       FramePoint3D thirdPoint = new FramePoint3D(aFrame, 4.0, -2.0, -3.0);
-      firstPoint.distanceXY(thirdPoint);
+      try
+      {
+         firstPoint.distanceXY(thirdPoint);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testDistance() //Brett
    {
@@ -258,10 +262,17 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertEquals("return value", expectedReturn, actualReturn, Double.MIN_VALUE);
 
       //Test for reference frame mismatch
-      framePoint1.distance(framePoint2);
+      try
+      {
+         framePoint1.distance(framePoint2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testDistanceSquared() //Brett
    {
@@ -274,10 +285,17 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertEquals("return value", expectedReturn, actualReturn, Double.MIN_VALUE);
 
       //Test for reference frame mismatch
-      framePoint1.distanceSquared(framePoint2);
+      try
+      {
+         framePoint1.distanceSquared(framePoint2);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testGetPoint()
    {
@@ -289,7 +307,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertTrue(tuple3d.epsilonEquals(tuple3dCopy, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testFrameChanges()
    {
@@ -304,7 +321,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       framePoint.checkReferenceFrameMatch(theFrame);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testApplyTransform()
    {
@@ -323,7 +339,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertEquals(16.0, frameTuple.getZ(), epsilon);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testApplyTransformScale()
    {
@@ -339,7 +354,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertTrue(expectedResultPoint.epsilonEquals(resultPoint, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testApplyTransformTranslate()
    {
@@ -356,7 +370,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertTrue(expectedResultPoint.epsilonEquals(resultPoint, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public final void testApplyTransformRotateZ()
    {
@@ -373,12 +386,12 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
       assertTrue(expectedResultPoint.epsilonEquals(resultPoint, epsilon));
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testConstructors()
    {
       Random random = new Random();
-      double[] xyz = new double[]{EuclidCoreRandomTools.generateRandomDouble(random, Double.MAX_VALUE), EuclidCoreRandomTools.generateRandomDouble(random, Double.MAX_VALUE), EuclidCoreRandomTools.generateRandomDouble(random, Double.MAX_VALUE)};
+      double[] xyz = new double[] {EuclidCoreRandomTools.generateRandomDouble(random), EuclidCoreRandomTools.generateRandomDouble(random),
+            EuclidCoreRandomTools.generateRandomDouble(random)};
       FramePoint3D pointToBeTested;
       ReferenceFrame referenceFrame = null;
       pointToBeTested = new FramePoint3D(referenceFrame, xyz);
@@ -394,9 +407,11 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
 
       pointToBeTested = new FramePoint3D(aFrame, point3dExpected);
       assertTrue(aFrame == pointToBeTested.getReferenceFrame());
-      assertTrue("Expected: " + point3dExpected + ", actual: " + pointToBeTested.getPoint(), point3dExpected.epsilonEquals(pointToBeTested.getPoint(), epsilon));
+      assertTrue("Expected: " + point3dExpected + ", actual: " + pointToBeTested.getPoint(),
+                 point3dExpected.epsilonEquals(pointToBeTested.getPoint(), epsilon));
 
-      xyz = new double[]{EuclidCoreRandomTools.generateRandomDouble(random, Double.MAX_VALUE), EuclidCoreRandomTools.generateRandomDouble(random, Double.MAX_VALUE), EuclidCoreRandomTools.generateRandomDouble(random, Double.MAX_VALUE)};
+      xyz = new double[] {EuclidCoreRandomTools.generateRandomDouble(random), EuclidCoreRandomTools.generateRandomDouble(random),
+            EuclidCoreRandomTools.generateRandomDouble(random)};
       pointToBeTested = new FramePoint3D(referenceFrame, xyz);
 
       pointToBeTested = new FramePoint3D(aFrame, xyz);

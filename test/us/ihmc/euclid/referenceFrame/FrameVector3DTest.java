@@ -7,7 +7,6 @@ import java.util.Random;
 import org.junit.After;
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -50,8 +49,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       return 1.0e-15;
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void allConstructorsWork() //Brett
    {
       Tuple3DBasics tuple = new Point3D(1.0, 1.0, 1.0);
@@ -90,24 +88,22 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       //      FrameVector frameXYZString = new FrameVector(referenceFrame, x, y, z name);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameChanges()
    {
       FrameVector3D frameVector = new FrameVector3D(theFrame);
-      
+
       FrameVector3D result = new FrameVector3D(frameVector);
 
       result = new FrameVector3D(frameVector);
       result.changeFrame(childFrame);
       result.checkReferenceFrameMatch(childFrame);
-      
+
       frameVector.changeFrame(theFrame); //cause of failure
       frameVector.checkReferenceFrameMatch(theFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testGetVector()
    {
       FrameVector3D frameVector = new FrameVector3D(theFrame, 10.0, 20.0, 30.0);
@@ -116,8 +112,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       assertEquals("These should be equal", 20.0, expected.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testDot() //Brett
    {
       FrameVector3D frameVector1 = new FrameVector3D(theFrame, 1.0, 2.0, 3.0);
@@ -125,14 +120,21 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       double dotProduct = frameVector1.dot(frameVector2);
       double expected = 140.0;
       assertEquals("This should be equal", expected, dotProduct, epsilon);
-      
+
       //test for mismatched reference frames
       FrameVector3D frameVector3 = new FrameVector3D(aFrame, 0.0, 1.0, 2.0);
-      frameVector1.dot(frameVector3);
+      try
+      {
+         frameVector1.dot(frameVector3);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testAngle() //Brett
    {
       FrameVector3D frameVector1 = new FrameVector3D(theFrame, 1.0, 2.0, 3.0);
@@ -143,60 +145,64 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       double l2 = frameVector2.length();
       double denom = l1 * l2;
       double numer = frameVector1.dot(frameVector2);
-      double arg = numer/denom;
+      double arg = numer / denom;
       double expected = Math.acos(arg);
       assertEquals("These should be equal", expected, actual, epsilon);
-      
+
       //test for mismatched reference frames
       FrameVector3D frameVector3 = new FrameVector3D(aFrame, 0.0, 1.0, 2.0);
-      frameVector1.angle(frameVector3);
+      try
+      {
+         frameVector1.angle(frameVector3);
+         fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName());
+      }
+      catch (ReferenceFrameMismatchException e)
+      {
+         // Good.
+      }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testLength() //Brett was here
    {
-      for(int i = 0; i < 100; i++) //compare against Vector3d.length()
+      for (int i = 0; i < 100; i++) //compare against Vector3d.length()
       {
          Random random = new Random(45456L);
          Vector3D vector3d = EuclidCoreRandomTools.generateRandomVector3D(random);
-         FrameVector3D frameVector= new FrameVector3D(theFrame, vector3d);
+         FrameVector3D frameVector = new FrameVector3D(theFrame, vector3d);
          double vector3dResult = vector3d.length();
          double frameVectorResult = frameVector.length();
          assertEquals("These should be equal", vector3dResult, frameVectorResult, epsilon);
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testLengthSquared() //Brett was here
    {
       FrameVector3D frameVector = new FrameVector3D(theFrame, 0.0, 4.0, 3.0);
       assertEquals("These should be equal", 25.0, frameVector.lengthSquared(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testApplyTransform() //Brett was here
    {
-      for(int i = 0; i < 100; i++)
+      for (int i = 0; i < 100; i++)
       {
          Random random = new Random(45456L);
          Vector3D vector3d = EuclidCoreRandomTools.generateRandomVector3D(random);
          FrameVector3D frameVector = new FrameVector3D(theFrame, vector3d);
          RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
 
-         frameVector.applyTransform(transform);  //Compare transform of Vector3d and FrameVector
+         frameVector.applyTransform(transform); //Compare transform of Vector3d and FrameVector
          transform.transform(vector3d);
          assertTrue(frameVector.getVector().epsilonEquals(vector3d, epsilon));
-      }      
+      }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testCrosses() //Brett
    {
-      FrameVector3D frameVector1 = createFrameTuple(theFrame, 1, 2, 3); 
+      FrameVector3D frameVector1 = createFrameTuple(theFrame, 1, 2, 3);
       FrameVector3D frameVector2 = createFrameTuple(theFrame, 0, 1, 2);
       FrameVector3D v2other = createFrameTuple(aFrame, 0, 1, 2);
       FrameVector3D result = createFrameTuple(theFrame, 0, 0, 0);
@@ -212,7 +218,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
          result.cross(frameVector1, v2other);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
@@ -222,12 +228,12 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
          result.cross(v2other, frameVector1);
          fail();
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
 
-      for(int i = 0; i < 100; i++) //compare against Vector3d.cross()
+      for (int i = 0; i < 100; i++) //compare against Vector3d.cross()
       {
          Random random = new Random(45456L);
          Vector3D v1 = EuclidCoreRandomTools.generateRandomVector3D(random);
@@ -238,7 +244,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
          FrameVector3D fv2 = new FrameVector3D(theFrame, v2);
          FrameVector3D fv3 = new FrameVector3D(theFrame, v3);
 
-         v3.cross(v1, v2);  //Compare cross of Vector3d and FrameVector
+         v3.cross(v1, v2); //Compare cross of Vector3d and FrameVector
          fv3.cross(fv1, fv2);
          assertTrue(fv3.getVector().epsilonEquals(v3, epsilon));
 
@@ -247,7 +253,6 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       }
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test
    public void testCrossWithVector3d()
    {
@@ -255,36 +260,34 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       FrameVector3D expectedFrameVector = new FrameVector3D(theFrame);
       FrameVector3D actualFrameVector = new FrameVector3D(theFrame);
 
-      for(int i = 0; i < 100; i++) //compare against Vector3d.cross()
+      for (int i = 0; i < 100; i++) //compare against Vector3d.cross()
       {
          Vector3D v1 = EuclidCoreRandomTools.generateRandomVector3D(random);
          Vector3D v2 = EuclidCoreRandomTools.generateRandomVector3D(random);
          Vector3D v3 = EuclidCoreRandomTools.generateRandomVector3D(random);
-         
 
-         v3.cross(v1, v2);  //Compare cross of Vector3d and FrameVector
+         v3.cross(v1, v2); //Compare cross of Vector3d and FrameVector
          expectedFrameVector.set(v3);
          actualFrameVector.cross(v1, v2);
          assertTrue(actualFrameVector.epsilonEquals(expectedFrameVector, epsilon));
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testNormalize() //Brett
    {
-      for(int i = 0; i < 100; i++) //sum of squares of normalized vector equals 1
+      for (int i = 0; i < 100; i++) //sum of squares of normalized vector equals 1
       {
          Random random = new Random(45456L);
          Vector3D vector3d = EuclidCoreRandomTools.generateRandomVector3D(random);
          FrameVector3D v1 = new FrameVector3D(theFrame, vector3d);
          v1.normalize();
-         double sumOfSquares = v1.getX()*v1.getX() + v1.getY()*v1.getY() + v1.getZ()*v1.getZ(); 
+         double sumOfSquares = v1.getX() * v1.getX() + v1.getY() * v1.getY() + v1.getZ() * v1.getZ();
          assertEquals("These should be equal", 1.0, sumOfSquares, epsilon);
       }
    }
 
-	@Test
+   @Test
    public void testLimitLength() throws Exception
    {
       Random random = new Random(546456);
@@ -311,7 +314,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
          expectedVector.set(bigVector);
          expectedVector.normalize();
          expectedVector.scale(maximumLength);
-         
+
          hasBeenLimited = bigVector.clipToMaxLength(maximumLength);
 
          assertTrue(hasBeenLimited);

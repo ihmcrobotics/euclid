@@ -7,7 +7,6 @@ import java.util.Random;
 import org.junit.After;
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -44,8 +43,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       return 1.0e-15;
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testOne()
    {
       FramePoint2D point = new FramePoint2D(worldFrame, 1.0, 2.0);
@@ -54,8 +52,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame_double_double_String()
    {
       FramePoint2D point = new FramePoint2D(worldFrame, 1.0, 2.0);
@@ -75,8 +72,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_FrameTuple2d()
    {
       FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 2.0);
@@ -98,8 +94,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame()
    {
       FramePoint2D point = new FramePoint2D(theFrame);
@@ -118,8 +113,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(0.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d()
    {
       FramePoint2D point = new FramePoint2D();
@@ -139,8 +133,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(0.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame_double_double()
    {
       FramePoint2D point = new FramePoint2D(worldFrame, 1.0, 2.0);
@@ -148,28 +141,25 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame_double()
    {
-      double[] position = { 1.0, 2.0 };
+      double[] position = {1.0, 2.0};
       FramePoint2D point = new FramePoint2D(worldFrame, position);
       assertEquals(1.0, point.getX(), 1e-7);
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame_double_String()
    {
-      double[] position = { 1.0, 2.0 };
+      double[] position = {1.0, 2.0};
       FramePoint2D point = new FramePoint2D(worldFrame, position);
       assertEquals(1.0, point.getX(), 1e-7);
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame_String()
    {
       FramePoint2D point = new FramePoint2D(worldFrame);
@@ -177,8 +167,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(0.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame_Tuple2d()
    {
       Point2D position = new Point2D(1.0, 2.0);
@@ -187,8 +176,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFramePoint2d_ReferenceFrame_Tuple2d_String()
    {
       Point2D position = new Point2D(1.0, 2.0);
@@ -197,8 +185,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals(2.0, point.getY(), 1e-7);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testDistance_FramePoint2d()
    {
       FramePoint2D point1 = new FramePoint2D(theFrame, 1.0, 2.0);
@@ -222,8 +209,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testDistanceSquared_FramePoint2d()
    {
       FramePoint2D point1 = new FramePoint2D(theFrame, 1.0, 2.0);
@@ -247,8 +233,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testGetPoint()
    {
       FramePoint2D point1 = new FramePoint2D(theFrame, 1.0, 2.0);
@@ -257,8 +242,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals("Should be equal", point1.getY(), point2d.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testApplyTransform_Transform3D_boolean()
    {
       boolean requireTransformInPlane = false;
@@ -284,7 +268,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
          //Good
       }
 
-      double[] matrix = { 6.0, 7.0, 0.0 };
+      double[] matrix = {6.0, 7.0, 0.0};
       RigidBodyTransform transform2 = EuclidCoreRandomTools.generateRandomRigidBodyTransform2D(random);
 
       Point3D pointToTransform2 = new Point3D(matrix);
@@ -298,8 +282,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals("Should be equal", pointToTransform2.getY(), pointToTest2.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testApplyTransform_Transform3D()
    {
       Random random = new Random(398742498237598750L);
@@ -318,7 +301,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
          //Good
       }
 
-      double[] matrix = { 6.0, 7.0 };
+      double[] matrix = {6.0, 7.0};
       RigidBodyTransform transform2 = EuclidCoreRandomTools.generateRandomRigidBodyTransform2D(random);
       FramePoint2D pointToTransform2 = new FramePoint2D(null, matrix);
       FramePoint2D pointToTest2 = new FramePoint2D(null, matrix);
@@ -330,24 +313,23 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       assertEquals("Should be equal", pointToTransform2.getY(), pointToTest2.getY(), epsilon);
    }
 
-//	@DeployableTestMethod(estimatedDuration = 0.0)
-//	@Test
-//   public void testApplyTransformCopy_Transform3D()
-//   {
-//      double[] matrix = { 6.0, 7.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0 };
-//      RigidBodyTransform transform = new RigidBodyTransform(matrix);
-//      FramePoint2d pointToTransform2 = new FramePoint2d(null, matrix);
-//      FramePoint2d pointToTest2 = new FramePoint2d(null, matrix);
-//
-//      pointToTransform2.applyTransform(transform);
-//      FramePoint2d copy = pointToTest2.applyTransformCopy(transform);
-//
-//      assertEquals("Should be equal", pointToTransform2.getX(), copy.getX(), epsilon);
-//      assertEquals("Should be equal", pointToTransform2.getY(), copy.getY(), epsilon);
-//   }
+   //	@DeployableTestMethod(estimatedDuration = 0.0)
+   //	@Test
+   //   public void testApplyTransformCopy_Transform3D()
+   //   {
+   //      double[] matrix = { 6.0, 7.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0 };
+   //      RigidBodyTransform transform = new RigidBodyTransform(matrix);
+   //      FramePoint2d pointToTransform2 = new FramePoint2d(null, matrix);
+   //      FramePoint2d pointToTest2 = new FramePoint2d(null, matrix);
+   //
+   //      pointToTransform2.applyTransform(transform);
+   //      FramePoint2d copy = pointToTest2.applyTransformCopy(transform);
+   //
+   //      assertEquals("Should be equal", pointToTransform2.getX(), copy.getX(), epsilon);
+   //      assertEquals("Should be equal", pointToTransform2.getY(), copy.getY(), epsilon);
+   //   }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testChangeFrame_ReferenceFrame()
    {
       FramePoint2D frame = new FramePoint2D(theFrame);
@@ -366,8 +348,7 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testChangeFrameAndProjectToXYPlane_ReferenceFrame()
    {
       FramePoint2D frame = new FramePoint2D(theFrame);
@@ -388,8 +369,8 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
 
    double sumOfSquares(FramePoint2D framePoint1, FramePoint2D framePoint2)
    {
-      double ret = (framePoint2.getX() - framePoint1.getX()) * (framePoint2.getX() - framePoint1.getX()) + (framePoint2.getY() - framePoint1.getY())
-            * (framePoint2.getY() - framePoint1.getY());
+      double ret = (framePoint2.getX() - framePoint1.getX()) * (framePoint2.getX() - framePoint1.getX())
+            + (framePoint2.getY() - framePoint1.getY()) * (framePoint2.getY() - framePoint1.getY());
       return ret;
    }
 

@@ -7,7 +7,6 @@ import java.util.Random;
 import org.junit.After;
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
@@ -46,8 +45,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
    {
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameVector2d_ReferenceFrame_double_double_String()
    {
       double x = 5.7, y = 56.3;
@@ -57,8 +55,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameVector2d_ReferenceFrame_double_double()
    {
       double x = 5.7, y = 56.3;
@@ -68,8 +65,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameVector2d()
    {
       FrameVector2D frame = new FrameVector2D();
@@ -78,8 +74,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getReferenceFrame(), ReferenceFrame.getWorldFrame());
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameVector2d_ReferenceFrame_Tuple2d()
    {
       double x = 5.7, y = 56.3;
@@ -90,8 +85,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameVector2d_ReferenceFrame_double()
    {
       double x = 5.7, y = 56.3;
@@ -102,8 +96,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameVector2d_ReferenceFrame()
    {
       double x = 0.0, y = 0.0;
@@ -113,8 +106,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testFrameVector2d_FrameTuple2d()
    {
       double x = 5.7, y = 56.3;
@@ -125,8 +117,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getReferenceFrame(), frameTuple.getReferenceFrame());
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testGetVector()
    {
       double x = 5.6, y = 45.67;
@@ -136,13 +127,12 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", frame.getY(), vector2d.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testDot_FrameVector2d()
    {
       Random random = new Random(4556L);
-      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), 
-            y1 = random.nextDouble(), y2 = random.nextDouble(), y3 = random.nextDouble();
+      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), y1 = random.nextDouble(), y2 = random.nextDouble(),
+            y3 = random.nextDouble();
       FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
       FrameVector2D frame2 = new FrameVector2D(theFrame, x2, y2);
       FrameVector2D frame3 = new FrameVector2D(aFrame, x3, y3);
@@ -154,19 +144,18 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
          frame1.dot(frame3);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testCross_FrameVector2d()
    {
       Random random = new Random(4556L);
-      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), 
-            y1 = random.nextDouble(), y2 = random.nextDouble(), y3 = random.nextDouble();
+      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), y1 = random.nextDouble(), y2 = random.nextDouble(),
+            y3 = random.nextDouble();
       FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
       FrameVector2D frame2 = new FrameVector2D(theFrame, x2, y2);
       FrameVector2D frame3 = new FrameVector2D(aFrame, x3, y3);
@@ -178,23 +167,22 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
          frame1.cross(frame3);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testAngle_FrameVector2d()
    {
       Random random = new Random(4556L);
-      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), 
-            y1 = random.nextDouble(), y2 = random.nextDouble(), y3 = random.nextDouble();
+      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), y1 = random.nextDouble(), y2 = random.nextDouble(),
+            y3 = random.nextDouble();
       FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
       FrameVector2D frame2 = new FrameVector2D(theFrame, x2, y2);
       FrameVector2D frame3 = new FrameVector2D(aFrame, x3, y3);
-      
+
       Vector2D vector1 = new Vector2D(x1, y1);
       Vector2D vector2 = new Vector2D(x2, y2);
 
@@ -206,12 +194,12 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
          frame1.angle(frame3);
          fail("Should have thrown ReferenceFrameMismatchException");
       }
-      catch(ReferenceFrameMismatchException rfme)
+      catch (ReferenceFrameMismatchException rfme)
       {
          //Good
       }
 
-      for (int i = 0; i<1000; i++)
+      for (int i = 0; i < 1000; i++)
       {
          double firstVectorLength = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
          double secondVectorLength = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
@@ -233,8 +221,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       }
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testNormalize()
    {
       double x1 = 1.0, y1 = 1.0;
@@ -245,8 +232,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", 1.0, result, epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testLength()
    {
       double x1 = 1.0, y1 = 1.0;
@@ -255,8 +241,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", result, frame1.length(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testLengthSquared()
    {
       double x1 = 1.0, y1 = 1.0;
@@ -265,8 +250,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", result, frame1.lengthSquared(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testChangeFrame_ReferenceFrame()
    {
       FrameVector2D frameVector = new FrameVector2D(theFrame);
@@ -277,22 +261,21 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       frameVector.checkReferenceFrameMatch(childFrame);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testApplyTransform_Transform3D()
-   {  
+   {
       Random random = new Random(398742498237598750L);
       RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
 
       Vector3D vectorToTransform = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 100.0, 0.0, 100.0, 0.0, 0.0);
-      FrameVector2D vectorToTest = new FrameVector2D(null, new Vector2D(vectorToTransform.getX(), vectorToTransform.getY())); 
+      FrameVector2D vectorToTest = new FrameVector2D(null, new Vector2D(vectorToTransform.getX(), vectorToTransform.getY()));
 
       try
       {
          vectorToTest.applyTransform(transform);
          fail("Should have thrown RuntimeException");
       }
-      catch(RuntimeException re)
+      catch (RuntimeException re)
       {
          //Good
       }
@@ -310,22 +293,21 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", vectorToTransform2.getY(), vectorToTest2.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testApplyTransformCopy_Transform3D()
    {
       Random random = new Random(398742498237598750L);
       RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
 
       Vector3D vectorToTransform = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 100.0, 0.0, 100.0, 0.0, 0.0);
-      FrameVector2D vectorToTest = new FrameVector2D(null, new Vector2D(vectorToTransform.getX(), vectorToTransform.getY())); 
+      FrameVector2D vectorToTest = new FrameVector2D(null, new Vector2D(vectorToTransform.getX(), vectorToTransform.getY()));
 
       try
       {
          vectorToTest.applyTransform(transform);
          fail("Should have thrown RuntimeException");
       }
-      catch(RuntimeException re)
+      catch (RuntimeException re)
       {
          //Good
       }
@@ -343,8 +325,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       assertEquals("Should be equal", vectorToTransform2.getY(), vectorToTest2.getY(), epsilon);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testSets()
    {
       FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
@@ -358,8 +339,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       alpha.set(beta);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testadd()
    {
       FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
@@ -368,8 +348,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
 
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testInterpolate()
    {
       FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), -1.0, 0.0, 17.0);
@@ -380,8 +359,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       gamma.interpolate(beta, alpha, 1);
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testGetReferenceFrame()
    {
       FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
@@ -390,8 +368,7 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       beta.getReferenceFrame();
    }
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test
+   @Test
    public void testGets()
    {
       FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
