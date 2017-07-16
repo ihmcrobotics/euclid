@@ -2712,7 +2712,7 @@ public class EuclidFrameTools
    {
       point.checkReferenceFrameMatch(pointOnLine);
       point.checkReferenceFrameMatch(lineDirection);
-      return isPoint2DOnSideOfLine2D(point, pointOnLine, lineDirection, testLeftSide);
+      return EuclidGeometryTools.isPoint2DOnSideOfLine2D(point, pointOnLine, lineDirection, testLeftSide);
    }
 
    /**
@@ -3795,7 +3795,7 @@ public class EuclidFrameTools
    {
       point.checkReferenceFrameMatch(pointOnLine);
       point.checkReferenceFrameMatch(lineDirection);
-      return signedDistanceFromPoint2DToLine2D(point, pointOnLine, lineDirection);
+      return EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(point, pointOnLine, lineDirection);
    }
 
    /**
