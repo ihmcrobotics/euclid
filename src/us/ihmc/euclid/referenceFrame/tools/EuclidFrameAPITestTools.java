@@ -7,13 +7,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.junit.Assert;
+
+import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameTuple2D;
@@ -21,6 +26,7 @@ import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
@@ -28,6 +34,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -83,26 +90,61 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameVector3D.class, FrameVector3D::new);
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
+   }
 
+   private final static Map<Class<?>, GenericTypeBuilder> genericTypeBuilders;
+   static
+   {
+      HashMap<Class<?>, GenericTypeBuilder> modifiableMap = new HashMap<>();
+      modifiableMap.put(AxisAngleBasics.class, AxisAngle::new);
+
+      genericTypeBuilders = Collections.unmodifiableMap(modifiableMap);
+   }
+
+   private final static Set<Class<?>> frameReadOnlyTypes;
+   static
+   {
+      Set<Class<?>> modifiableSet = new HashSet<>();
+      modifiableSet.add(FrameTuple2DReadOnly.class);
+      modifiableSet.add(FramePoint2DReadOnly.class);
+      modifiableSet.add(FrameVector2DReadOnly.class);
+      modifiableSet.add(FrameTuple3DReadOnly.class);
+      modifiableSet.add(FramePoint3DReadOnly.class);
+      modifiableSet.add(FrameVector3DReadOnly.class);
+
+      frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
+   }
+
+   private final static Set<Class<?>> frameMutableTypes;
+   static
+   {
+      Set<Class<?>> modifiableSet = new HashSet<>();
+      modifiableSet.add(FrameTuple2D.class);
+      modifiableSet.add(FramePoint2D.class);
+      modifiableSet.add(FrameVector2D.class);
+      modifiableSet.add(FrameTuple3D.class);
+      modifiableSet.add(FramePoint3D.class);
+      modifiableSet.add(FrameVector3D.class);
+
+      frameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
 
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-                                                        boolean assertOverloadingWithFramelessObjects)
+         boolean assertOverloadingWithFramelessObjects)
    {
       assertOverloadingWithFrameObjects(typeWithFrameObjects, typeWithFramelessObjectsOnly, assertAllCombinations, assertOverloadingWithFramelessObjects, 1,
-                                        m -> true);
+            m -> true);
    }
 
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-                                                        boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments)
+         boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments)
    {
       assertOverloadingWithFrameObjects(typeWithFrameObjects, typeWithFramelessObjectsOnly, assertAllCombinations, assertOverloadingWithFramelessObjects,
-                                        minNumberOfGeometryArguments, m -> true);
+            minNumberOfGeometryArguments, m -> true);
    }
 
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-                                                        boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments,
-                                                        Map<String, Class<?>[]> methodsToIgnore)
+         boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments, Map<String, Class<?>[]> methodsToIgnore)
    {
       Predicate<Method> methodFilter = new Predicate<Method>()
       {
@@ -122,16 +164,15 @@ public class EuclidFrameAPITestTools
       };
 
       assertOverloadingWithFrameObjects(typeWithFrameObjects, typeWithFramelessObjectsOnly, assertAllCombinations, assertOverloadingWithFramelessObjects,
-                                        minNumberOfGeometryArguments, methodFilter);
+            minNumberOfGeometryArguments, methodFilter);
    }
 
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-                                                        boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments,
-                                                        Predicate<Method> framelessMethodFilter)
+         boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments, Predicate<Method> framelessMethodFilter)
    {
       // The frame methods are all the methods from 'typeWithFramelessObjectsOnly' that have at least one geometry argument.
       List<Method> framelessMethods = keepOnlyMethodsWithAtLeastOneGeometryArgumentAndNoFrames(typeWithFramelessObjectsOnly.getMethods(),
-                                                                                               minNumberOfGeometryArguments);
+            minNumberOfGeometryArguments);
 
       for (Method framelessMethod : framelessMethods)
       {
@@ -149,25 +190,27 @@ public class EuclidFrameAPITestTools
    }
 
    public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeHoldingStaticMethodsToTest, boolean shouldThrowExceptionForReadOnlies,
-                                                             boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables)
+         boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables) throws Throwable
    {
       assertStaticMethodsCheckReferenceFrame(typeHoldingStaticMethodsToTest, shouldThrowExceptionForReadOnlies, shouldThrowExceptionForMutables,
-                                             shouldChangeFrameOfMutables, m -> true);
+            shouldChangeFrameOfMutables, m -> true);
    }
 
    public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeHoldingStaticMethodsToTest, boolean shouldThrowExceptionForReadOnlies,
-                                                             boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables,
-                                                             Predicate<Method> methodFilter)
+         boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables, Predicate<Method> methodFilter) throws Throwable
    {
       // We need at least 2 frame arguments to assert anything.
       List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeHoldingStaticMethodsToTest.getMethods(), 2);
       // We keep only the public & static methods
       frameMethods = frameMethods.stream().filter(m -> Modifier.isStatic(m.getModifiers())).filter(m -> Modifier.isPublic(m.getModifiers()))
-                                 .collect(Collectors.toList());
+            .collect(Collectors.toList());
 
-      Random random = new Random();
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+      ReferenceFrame frameA = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("frameA", ReferenceFrame.getWorldFrame(),
+            new RigidBodyTransform());
+      ReferenceFrame frameB = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("frameB", ReferenceFrame.getWorldFrame(),
+            new RigidBodyTransform());
 
+      // First check that the method is fine with all the arguments in the same frame.
       for (Method frameMethod : frameMethods)
       {
          Class<?>[] parameterTypes = frameMethod.getParameterTypes();
@@ -176,22 +219,106 @@ public class EuclidFrameAPITestTools
          for (int i = 0; i < parameterTypes.length; i++)
          {
             Class<?> parameterType = parameterTypes[i];
-            if (isFrameType(parameterType))
-               parameters[i] = createFrameObject(parameterType, frameA);
-            else
-               parameters[i] = newInstanceOf(parameterType);
+            instantiateParameterType(frameA, parameters, i, parameterType);
          }
 
-         try
+         invokeStaticMethod(frameMethod, parameters);
+      }
+
+      // Check that the method checks the reference frames.
+      for (Method frameMethod : frameMethods)
+      {
+         Class<?>[] parameterTypes = frameMethod.getParameterTypes();
+
+         int numberOfArgumentsToTest = 0;
+         for (Class<?> parameterType : parameterTypes)
          {
-            frameMethod.invoke(null, parameters);
+            if (shouldThrowExceptionForReadOnlies && isFrameTypeReadOnly(parameterType))
+               numberOfArgumentsToTest++;
+            if (shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType))
+               numberOfArgumentsToTest++;
          }
-         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+         int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToTest);
+
+         for (int i = 1; i < numberOfCombinations - 1; i++)
          {
-            System.err.println("Something went wrong when involing the static method");
-            e.printStackTrace();
+            Object[] parameters = new Object[parameterTypes.length];
+            int currentByte = 0;
+
+            for (int j = 0; j < parameterTypes.length; j++)
+            {
+               Class<?> parameterType = parameterTypes[j];
+               boolean mutateFrame = shouldThrowExceptionForReadOnlies && isFrameTypeReadOnly(parameterType);
+               mutateFrame |= shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType);
+
+               if (!mutateFrame)
+               {
+                  instantiateParameterType(frameA, parameters, j, parameterType);
+               }
+               else
+               {
+                  ReferenceFrame frame = frameA;
+                  int mask = (int) Math.pow(2, currentByte);
+                  if ((i & mask) != 0)
+                     frame = frameB;
+                  instantiateParameterType(frame, parameters, j, parameterType);
+                  currentByte++;
+               }
+            }
+
+            try
+            {
+               invokeStaticMethod(frameMethod, parameters);
+               Assert.fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName() + "\nMethod: " + getMethodSimpleName(frameMethod)
+                     + "\nArguments used: " + Arrays.toString(parameters) + "\nArgument types: " + getArgumentTypeString(parameters));
+            }
+            catch (ReferenceFrameMismatchException e)
+            {
+               // Good
+            }
          }
       }
+   }
+
+   private static boolean isFrameTypeReadOnly(Class<?> frameType)
+   {
+      return frameReadOnlyTypes.contains(frameType) && !frameMutableTypes.contains(frameType);
+   }
+
+   private static boolean isFrameTypeMutable(Class<?> frameType)
+   {
+      return frameMutableTypes.contains(frameType);
+   }
+
+   private static void invokeStaticMethod(Method frameMethod, Object[] parameters) throws Throwable
+   {
+      try
+      {
+         frameMethod.invoke(null, parameters);
+      }
+      catch (IllegalAccessException | IllegalArgumentException e)
+      {
+         System.err.println("Something went wrong when involing the static method: " + getMethodSimpleName(frameMethod));
+         System.err.println("Objects used as parameters: " + getArgumentTypeString(parameters));
+         e.printStackTrace();
+         throw e;
+      }
+      catch (InvocationTargetException e)
+      {
+         throw e.getCause();
+      }
+   }
+
+   private static String getArgumentTypeString(Object[] arguments)
+   {
+      String string = "";
+      for (int i = 0; i < arguments.length; i++)
+      {
+         string += arguments[i].getClass().getSimpleName();
+         if (i < arguments.length - 1)
+            string += ", ";
+      }
+      return string;
    }
 
    private static void assertMethodOverloadedWithSpecificSignature(Method originalMethod, Class<?>[] overloadingSignature, Class<?> typeToSearchIn)
@@ -393,6 +520,14 @@ public class EuclidFrameAPITestTools
       return false;
    }
 
+   static void instantiateParameterType(ReferenceFrame frameA, Object[] parameters, int i, Class<?> parameterType)
+   {
+      if (isFrameType(parameterType))
+         parameters[i] = createFrameObject(parameterType, frameA);
+      else
+         parameters[i] = newInstanceOf(parameterType);
+   }
+
    private static Object createFrameObject(Class<?> type, ReferenceFrame referenceFrame)
    {
       FrameTypeBuilder builder = null;
@@ -418,10 +553,24 @@ public class EuclidFrameAPITestTools
       Object newInstance(ReferenceFrame referenceFrame);
    }
 
+   private static interface GenericTypeBuilder
+   {
+      Object newInstance();
+   }
+
    private static Object newInstanceOf(Class<?> type)
    {
+      if (genericTypeBuilders.containsKey(type))
+         return genericTypeBuilders.get(type).newInstance();
+
       if (type.isPrimitive())
-         return 0;
+      {
+         if (type.equals(Boolean.TYPE))
+            return false;
+         else
+            return 0;
+      }
+
       try
       {
          return type.getConstructor().newInstance();

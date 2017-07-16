@@ -47,14 +47,13 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
-                                             FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon,
-                                             double distanceEspilon)
+         FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1);
       firstPointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine2);
       return EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
-                                                     distanceEspilon);
+            distanceEspilon);
    }
 
    /**
@@ -82,7 +81,7 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly firstPointOnLine2,
-                                             FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
+         FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
@@ -115,7 +114,7 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly pointOnLine2,
-                                             FrameVector2DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
+         FrameVector2DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
@@ -148,14 +147,13 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine3DsCollinear(FramePoint3DReadOnly firstPointOnLine1, FramePoint3DReadOnly secondPointOnLine1,
-                                             FramePoint3DReadOnly firstPointOnLine2, FramePoint3DReadOnly secondPointOnLine2, double angleEpsilon,
-                                             double distanceEspilon)
+         FramePoint3DReadOnly firstPointOnLine2, FramePoint3DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1);
       firstPointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine2);
       return EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
-                                                     distanceEspilon);
+            distanceEspilon);
    }
 
    /**
@@ -183,7 +181,7 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine3DsCollinear(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1, FramePoint3DReadOnly pointOnLine2,
-                                             FrameVector3DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
+         FrameVector3DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
@@ -220,7 +218,7 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean arePlane3DsCoincident(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1, FramePoint3DReadOnly pointOnPlane2,
-                                               FrameVector3DReadOnly planeNormal2, double angleEpsilon, double distanceEpsilon)
+         FrameVector3DReadOnly planeNormal2, double angleEpsilon, double distanceEpsilon)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1);
       pointOnPlane1.checkReferenceFrameMatch(pointOnPlane2);
@@ -405,8 +403,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double closestPoint3DsBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1,
-                                                         FramePoint3DReadOnly pointOnLine2, FrameVector3DReadOnly lineDirection2,
-                                                         FramePoint3D closestPointOnLine1ToPack, FramePoint3D closestPointOnLine2ToPack)
+         FramePoint3DReadOnly pointOnLine2, FrameVector3DReadOnly lineDirection2, FramePoint3D closestPointOnLine1ToPack,
+         FramePoint3D closestPointOnLine2ToPack)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
@@ -416,7 +414,7 @@ public class EuclidFrameTools
       if (closestPointOnLine2ToPack != null)
          closestPointOnLine2ToPack.setToZero(pointOnLine1.getReferenceFrame());
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, closestPointOnLine1ToPack,
-                                                                  closestPointOnLine2ToPack);
+            closestPointOnLine2ToPack);
    }
 
    /**
@@ -438,8 +436,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double closestPoint3DsBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
-                                                                FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2,
-                                                                FramePoint3D closestPointOnLineSegment1ToPack, FramePoint3D closestPointOnLineSegment2ToPack)
+         FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2, FramePoint3D closestPointOnLineSegment1ToPack,
+         FramePoint3D closestPointOnLineSegment2ToPack)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
@@ -449,7 +447,7 @@ public class EuclidFrameTools
       if (closestPointOnLineSegment2ToPack != null)
          closestPointOnLineSegment2ToPack.setToZero(lineSegmentStart1.getReferenceFrame());
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
-                                                                         closestPointOnLineSegment1ToPack, closestPointOnLineSegment2ToPack);
+            closestPointOnLineSegment1ToPack, closestPointOnLineSegment2ToPack);
    }
 
    /**
@@ -483,7 +481,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1, FramePoint3DReadOnly pointOnLine2,
-                                                  FrameVector3DReadOnly lineDirection2)
+         FrameVector3DReadOnly lineDirection2)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
@@ -504,7 +502,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
-                                                         FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2)
+         FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
@@ -631,7 +629,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceFromPoint2DToLineSegment2D(double pointX, double pointY, FramePoint2DReadOnly lineSegmentStart,
-                                                           FramePoint2DReadOnly lineSegmentEnd)
+         FramePoint2DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(pointX, pointY, lineSegmentStart, lineSegmentEnd);
@@ -655,7 +653,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceFromPoint2DToLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart,
-                                                           FramePoint2DReadOnly lineSegmentEnd)
+         FramePoint2DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart);
       point.checkReferenceFrameMatch(lineSegmentEnd);
@@ -796,7 +794,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
-                                                           FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(pointX, pointY, pointZ, lineSegmentStart, lineSegmentEnd);
@@ -820,7 +818,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceFromPoint3DToLineSegment3D(FramePoint3DReadOnly point, FramePoint3DReadOnly lineSegmentStart,
-                                                           FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart);
       point.checkReferenceFrameMatch(lineSegmentEnd);
@@ -840,7 +838,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
-                                                     FrameVector3DReadOnly planeNormal)
+         FrameVector3DReadOnly planeNormal)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       return EuclidGeometryTools.distanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal);
@@ -879,7 +877,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
-                                                           FrameVector3DReadOnly planeNormal)
+         FrameVector3DReadOnly planeNormal)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal);
@@ -924,7 +922,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceSquaredFromPoint2DToLineSegment2D(double pointX, double pointY, FramePoint2DReadOnly lineSegmentStart,
-                                                                  FramePoint2DReadOnly lineSegmentEnd)
+         FramePoint2DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, lineSegmentStart, lineSegmentEnd);
@@ -950,7 +948,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceSquaredFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
-                                                                  FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(pointX, pointY, pointZ, lineSegmentStart, lineSegmentEnd);
@@ -974,7 +972,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double distanceSquaredFromPoint3DToLineSegment3D(FramePoint3DReadOnly point, FramePoint3DReadOnly lineSegmentStart,
-                                                                  FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart);
       point.checkReferenceFrameMatch(lineSegmentEnd);
@@ -1001,7 +999,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean doesLineSegment3DIntersectPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                           FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       pointOnPlane.checkReferenceFrameMatch(lineSegmentStart);
@@ -1033,11 +1031,11 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean doLine2DAndLineSegment2DIntersect(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
-                                                           FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+         FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, lineSegmentStart,
-                                                                   lineSegmentEnd);
+            lineSegmentEnd);
    }
 
    /**
@@ -1062,7 +1060,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean doLine2DAndLineSegment2DIntersect(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                           FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+         FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       pointOnLine.checkReferenceFrameMatch(lineSegmentStart);
@@ -1091,7 +1089,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean doLineSegment2DsIntersect(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                   FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
+         FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
@@ -1177,11 +1175,19 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                               FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
-                                                               FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
+         FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine, FramePoint2D firstIntersectionToPack,
+         FramePoint2D secondIntersectionToPack)
    {
-      return EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, firstPointOnLine, secondPointOnLine,
-                                                                           firstIntersectionToPack, secondIntersectionToPack);
+      boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
+      boundingBoxMin.checkReferenceFrameMatch(firstPointOnLine);
+      boundingBoxMin.checkReferenceFrameMatch(secondPointOnLine);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
+            secondPointOnLine, firstIntersectionToPack, secondIntersectionToPack);
+      if (numberOfIntersections >= 1)
+         firstIntersectionToPack.setIncludingFrame(boundingBoxMin.getReferenceFrame(), firstIntersectionToPack);
+      if (numberOfIntersections == 2)
+         secondIntersectionToPack.setIncludingFrame(boundingBoxMin.getReferenceFrame(), secondIntersectionToPack);
+      return numberOfIntersections;
    }
 
    /**
@@ -1213,8 +1219,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                               FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                               FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
+         FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection, FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(pointOnLine);
@@ -1224,7 +1229,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(boundingBoxMin.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection, firstIntersectionToPack,
-                                                                           secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -1255,7 +1260,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint2D intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                                        FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+         FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       pointOnLine.checkReferenceFrameMatch(lineSegmentStart);
@@ -1292,8 +1297,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                                   FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                                   FramePoint2D intersectionToPack)
+         FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd, FramePoint2D intersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       pointOnLine.checkReferenceFrameMatch(lineSegmentStart);
@@ -1335,8 +1339,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                               FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
-                                                               FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine, FramePoint3D firstIntersectionToPack,
+         FramePoint3D secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(firstPointOnLine);
@@ -1346,7 +1350,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(boundingBoxMin.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine, secondPointOnLine,
-                                                                           firstIntersectionToPack, secondIntersectionToPack);
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1378,8 +1382,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                               FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
-                                                               FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(pointOnLine);
@@ -1389,7 +1392,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(boundingBoxMin.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection, firstIntersectionToPack,
-                                                                           secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -1425,9 +1428,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX,
-                                                               double boundingBoxMaxY, double boundingBoxMaxZ, FramePoint3DReadOnly pointOnLine,
-                                                               FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack,
-                                                               FramePoint3D secondIntersectionToPack)
+         double boundingBoxMaxY, double boundingBoxMaxZ, FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
+         FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       if (firstIntersectionToPack != null)
@@ -1435,8 +1437,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(pointOnLine.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ, boundingBoxMaxX, boundingBoxMaxY,
-                                                                           boundingBoxMaxZ, pointOnLine, lineDirection, firstIntersectionToPack,
-                                                                           secondIntersectionToPack);
+            boundingBoxMaxZ, pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1480,8 +1481,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly firstPointOnLine,
-                                                            FramePoint3DReadOnly secondPointOnLine, FramePoint3D firstIntersectionToPack,
-                                                            FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly secondPointOnLine, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
       if (firstIntersectionToPack != null)
@@ -1489,7 +1489,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(firstPointOnLine.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine, secondPointOnLine,
-                                                                        firstIntersectionToPack, secondIntersectionToPack);
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1533,8 +1533,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly pointOnLine,
-                                                            FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack,
-                                                            FramePoint3D secondIntersectionToPack)
+         FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       if (firstIntersectionToPack != null)
@@ -1542,7 +1541,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(pointOnLine.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, pointOnLine, lineDirection, firstIntersectionToPack,
-                                                                        secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -1579,8 +1578,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly firstPointOnLine,
-                                                             FramePoint3DReadOnly secondPointOnLine, FramePoint3D firstIntersectionToPack,
-                                                             FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly secondPointOnLine, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
       if (firstIntersectionToPack != null)
@@ -1588,7 +1586,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(firstPointOnLine.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
-                                                                         firstIntersectionToPack, secondIntersectionToPack);
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1625,8 +1623,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly pointOnLine,
-                                                             FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack,
-                                                             FramePoint3D secondIntersectionToPack)
+         FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       if (firstIntersectionToPack != null)
@@ -1634,7 +1631,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(pointOnLine.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, pointOnLine, lineDirection, firstIntersectionToPack,
-                                                                         secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -1660,7 +1657,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint3D intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                                  FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
+         FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       pointOnPlane.checkReferenceFrameMatch(pointOnLine);
@@ -1694,8 +1691,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                             FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
-                                                             FramePoint3D intersectionToPack)
+         FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FramePoint3D intersectionToPack)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       pointOnPlane.checkReferenceFrameMatch(pointOnLine);
@@ -1744,8 +1740,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLineSegment2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                                      FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                                      FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
+         FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd, FramePoint2D firstIntersectionToPack,
+         FramePoint2D secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentStart);
@@ -1755,7 +1751,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, lineSegmentStart, lineSegmentEnd,
-                                                                                  firstIntersectionToPack, secondIntersectionToPack);
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1797,8 +1793,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLineSegment3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                                      FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                                                      FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd, FramePoint3D firstIntersectionToPack,
+         FramePoint3D secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentStart);
@@ -1808,7 +1804,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, lineSegmentStart, lineSegmentEnd,
-                                                                                  firstIntersectionToPack, secondIntersectionToPack);
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1852,8 +1848,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly lineSegmentStart,
-                                                                   FramePoint3DReadOnly lineSegmentEnd, FramePoint3D firstIntersectionToPack,
-                                                                   FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly lineSegmentEnd, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       if (firstIntersectionToPack != null)
@@ -1861,7 +1856,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart, lineSegmentEnd,
-                                                                               firstIntersectionToPack, secondIntersectionToPack);
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1899,8 +1894,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly lineSegmentStart,
-                                                                    FramePoint3DReadOnly lineSegmentEnd, FramePoint3D firstIntersectionToPack,
-                                                                    FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly lineSegmentEnd, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       if (firstIntersectionToPack != null)
@@ -1908,7 +1902,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart, lineSegmentEnd,
-                                                                                firstIntersectionToPack, secondIntersectionToPack);
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1938,7 +1932,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint3D intersectionBetweenLineSegment3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                                         FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       pointOnPlane.checkReferenceFrameMatch(lineSegmentStart);
@@ -1993,8 +1987,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenRay2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                              FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
-                                                              FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
+         FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection, FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(rayOrigin);
@@ -2004,7 +1997,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(rayOrigin.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection, firstIntersectionToPack,
-                                                                          secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -2045,8 +2038,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenRay3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                              FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection,
-                                                              FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
+         FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(rayOrigin);
@@ -2056,7 +2048,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(rayOrigin.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection, firstIntersectionToPack,
-                                                                          secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -2100,8 +2092,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenRay3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly rayOrigin,
-                                                           FrameVector3DReadOnly rayDirection, FramePoint3D firstIntersectionToPack,
-                                                           FramePoint3D secondIntersectionToPack)
+         FrameVector3DReadOnly rayDirection, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
       if (firstIntersectionToPack != null)
@@ -2109,7 +2100,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(rayOrigin.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection, firstIntersectionToPack,
-                                                                       secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -2146,8 +2137,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly rayOrigin,
-                                                            FrameVector3DReadOnly rayDirection, FramePoint3D firstIntersectionToPack,
-                                                            FramePoint3D secondIntersectionToPack)
+         FrameVector3DReadOnly rayDirection, FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
       if (firstIntersectionToPack != null)
@@ -2155,7 +2145,7 @@ public class EuclidFrameTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToZero(rayOrigin.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection, firstIntersectionToPack,
-                                                                        secondIntersectionToPack);
+            secondIntersectionToPack);
    }
 
    /**
@@ -2183,7 +2173,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
-                                                            FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2)
+         FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1);
       firstPointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
@@ -2222,7 +2212,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
-                                                            FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
+         FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
@@ -2257,7 +2247,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
-                                                       FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2, FramePoint2D intersectionToPack)
+         FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2, FramePoint2D intersectionToPack)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
@@ -2293,7 +2283,7 @@ public class EuclidFrameTools
     *            the same reference frame.s
     */
    public static FramePoint2D intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                                   FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
+         FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
@@ -2328,8 +2318,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                              FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
-                                                              FramePoint2D intersectionToPack)
+         FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2, FramePoint2D intersectionToPack)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
@@ -2337,7 +2326,7 @@ public class EuclidFrameTools
       if (intersectionToPack != null)
          intersectionToPack.setToZero(lineSegmentStart1.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
-                                                                      intersectionToPack);
+            intersectionToPack);
    }
 
    /**
@@ -2372,8 +2361,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
-                                                        FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2, double angleThreshold,
-                                                        FramePoint3D pointOnIntersectionToPack, FrameVector3D intersectionDirectionToPack)
+         FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2, double angleThreshold, FramePoint3D pointOnIntersectionToPack,
+         FrameVector3D intersectionDirectionToPack)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1);
       pointOnPlane1.checkReferenceFrameMatch(pointOnPlane2);
@@ -2383,7 +2372,7 @@ public class EuclidFrameTools
       if (intersectionDirectionToPack != null)
          intersectionDirectionToPack.setToZero(planeNormal1.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, angleThreshold,
-                                                                pointOnIntersectionToPack, intersectionDirectionToPack);
+            pointOnIntersectionToPack, intersectionDirectionToPack);
    }
 
    /**
@@ -2417,8 +2406,8 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
-                                                        FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2,
-                                                        FramePoint3D pointOnIntersectionToPack, FrameVector3D intersectionDirectionToPack)
+         FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2, FramePoint3D pointOnIntersectionToPack,
+         FrameVector3D intersectionDirectionToPack)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1);
       pointOnPlane1.checkReferenceFrameMatch(pointOnPlane2);
@@ -2428,7 +2417,7 @@ public class EuclidFrameTools
       if (intersectionDirectionToPack != null)
          intersectionDirectionToPack.setToZero(planeNormal1.getReferenceFrame());
       return EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, pointOnIntersectionToPack,
-                                                                intersectionDirectionToPack);
+            intersectionDirectionToPack);
    }
 
    /**
@@ -2615,7 +2604,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(double pointX, double pointY, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
-                                                 boolean testLeftSide)
+         boolean testLeftSide)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
       return EuclidGeometryTools.isPoint2DOnSideOfLine2D(pointX, pointY, firstPointOnLine, secondPointOnLine, testLeftSide);
@@ -2646,7 +2635,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                 boolean testLeftSide)
+         boolean testLeftSide)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       return EuclidGeometryTools.isPoint2DOnSideOfLine2D(pointX, pointY, pointOnLine, lineDirection, testLeftSide);
@@ -2677,7 +2666,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
-                                                 boolean testLeftSide)
+         boolean testLeftSide)
    {
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
@@ -2708,7 +2697,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                 boolean testLeftSide)
+         boolean testLeftSide)
    {
       point.checkReferenceFrameMatch(pointOnLine);
       point.checkReferenceFrameMatch(lineDirection);
@@ -2736,7 +2725,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FrameVector3D normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
-                                                         FramePoint3DReadOnly thirdPointOnPlane)
+         FramePoint3DReadOnly thirdPointOnPlane)
    {
       firstPointOnPlane.checkReferenceFrameMatch(secondPointOnPlane);
       firstPointOnPlane.checkReferenceFrameMatch(thirdPointOnPlane);
@@ -2766,7 +2755,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
-                                                   FramePoint3DReadOnly thirdPointOnPlane, FrameVector3D normalToPack)
+         FramePoint3DReadOnly thirdPointOnPlane, FrameVector3D normalToPack)
    {
       firstPointOnPlane.checkReferenceFrameMatch(secondPointOnPlane);
       firstPointOnPlane.checkReferenceFrameMatch(thirdPointOnPlane);
@@ -2797,7 +2786,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
-                                                           FramePoint2DReadOnly secondPointOnLine)
+         FramePoint2DReadOnly secondPointOnLine)
    {
       pointToProject.checkReferenceFrameMatch(firstPointOnLine);
       pointToProject.checkReferenceFrameMatch(secondPointOnLine);
@@ -2830,7 +2819,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
-                                                      FramePoint2DReadOnly secondPointOnLine, FramePoint2D projectionToPack)
+         FramePoint2DReadOnly secondPointOnLine, FramePoint2D projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(firstPointOnLine);
       pointToProject.checkReferenceFrameMatch(secondPointOnLine);
@@ -2861,7 +2850,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
-                                                           FrameVector2DReadOnly lineDirection)
+         FrameVector2DReadOnly lineDirection)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine);
       pointToProject.checkReferenceFrameMatch(lineDirection);
@@ -2895,8 +2884,11 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
-                                                      FrameVector2DReadOnly lineDirection, FramePoint2D projectionToPack)
+         FrameVector2DReadOnly lineDirection, FramePoint2D projectionToPack)
    {
+      pointToProject.checkReferenceFrameMatch(pointOnLine);
+      pointToProject.checkReferenceFrameMatch(lineDirection);
+      projectionToPack.setToZero(pointToProject.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, pointOnLine, lineDirection, projectionToPack);
    }
 
@@ -2923,8 +2915,11 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint3D orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
-                                                           FrameVector3DReadOnly lineDirection)
+         FrameVector3DReadOnly lineDirection)
    {
+      pointToProject.checkReferenceFrameMatch(pointOnLine);
+      pointToProject.checkReferenceFrameMatch(lineDirection);
+
       Point3D projection = EuclidGeometryTools.orthogonalProjectionOnLine3D(pointToProject, pointOnLine, lineDirection);
       if (projection == null)
          return null;
@@ -2954,7 +2949,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
-                                                      FrameVector3DReadOnly lineDirection, FramePoint3D projectionToPack)
+         FrameVector3DReadOnly lineDirection, FramePoint3D projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine);
       pointToProject.checkReferenceFrameMatch(lineDirection);
@@ -2989,8 +2984,11 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint2D orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
-                                                                  FramePoint2DReadOnly lineSegmentEnd)
+         FramePoint2DReadOnly lineSegmentEnd)
    {
+      pointToProject.checkReferenceFrameMatch(lineSegmentStart);
+      pointToProject.checkReferenceFrameMatch(lineSegmentEnd);
+
       Point2D projection = EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProject, lineSegmentStart, lineSegmentEnd);
       if (projection == null)
          return null;
@@ -3024,7 +3022,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX, double pointToProjectY, FramePoint2DReadOnly lineSegmentStart,
-                                                             FramePoint2DReadOnly lineSegmentEnd, FramePoint2D projectionToPack)
+         FramePoint2DReadOnly lineSegmentEnd, FramePoint2D projectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       projectionToPack.setToZero(lineSegmentStart.getReferenceFrame());
@@ -3056,7 +3054,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
-                                                             FramePoint2DReadOnly lineSegmentEnd, FramePoint2D projectionToPack)
+         FramePoint2DReadOnly lineSegmentEnd, FramePoint2D projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart);
       pointToProject.checkReferenceFrameMatch(lineSegmentEnd);
@@ -3091,7 +3089,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint3D orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
-                                                                  FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentEnd)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart);
       pointToProject.checkReferenceFrameMatch(lineSegmentEnd);
@@ -3127,7 +3125,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
-                                                             FramePoint3DReadOnly lineSegmentEnd, FramePoint3D projectionToPack)
+         FramePoint3DReadOnly lineSegmentEnd, FramePoint3D projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart);
       pointToProject.checkReferenceFrameMatch(lineSegmentEnd);
@@ -3154,7 +3152,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FramePoint3D orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
-                                                            FrameVector3DReadOnly planeNormal)
+         FrameVector3DReadOnly planeNormal)
    {
       pointToProject.checkReferenceFrameMatch(pointOnPlane);
       pointToProject.checkReferenceFrameMatch(planeNormal);
@@ -3186,7 +3184,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
-                                                       FrameVector3DReadOnly planeNormal, FramePoint3D projectionToPack)
+         FrameVector3DReadOnly planeNormal, FramePoint3D projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnPlane);
       pointToProject.checkReferenceFrameMatch(planeNormal);
@@ -3217,7 +3215,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean orthogonalProjectionOnPlane3D(double x, double y, double z, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                       FramePoint3D projectionToPack)
+         FramePoint3D projectionToPack)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       projectionToPack.setToZero(pointOnPlane.getReferenceFrame());
@@ -3249,7 +3247,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double percentageOfIntersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
-                                                                  FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
+         FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
@@ -3285,7 +3283,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double percentageOfIntersectionBetweenLineSegment2DAndLine2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                                              FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+         FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       lineSegmentStart.checkReferenceFrameMatch(pointOnLine);
@@ -3400,7 +3398,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double percentageAlongLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
-                                                     FramePoint3DReadOnly lineSegmentEnd)
+         FramePoint3DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.percentageAlongLineSegment3D(pointX, pointY, pointZ, lineSegmentStart, lineSegmentEnd);
@@ -3466,7 +3464,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean perpendicularBisector2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd, FramePoint2D bisectorStartToPack,
-                                                 FrameVector2D bisectorDirectionToPack)
+         FrameVector2D bisectorDirectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       bisectorStartToPack.setToZero(lineSegmentStart.getReferenceFrame());
@@ -3508,7 +3506,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static List<Point2D> perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                              double bisectorSegmentHalfLength)
+         double bisectorSegmentHalfLength)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength);
@@ -3549,14 +3547,13 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                        double bisectorSegmentHalfLength, FramePoint2D bisectorSegmentStartToPack,
-                                                        FramePoint2D bisectorSegmentEndToPack)
+         double bisectorSegmentHalfLength, FramePoint2D bisectorSegmentStartToPack, FramePoint2D bisectorSegmentEndToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       bisectorSegmentStartToPack.setToZero(lineSegmentStart.getReferenceFrame());
       bisectorSegmentEndToPack.setToZero(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength, bisectorSegmentStartToPack,
-                                                                bisectorSegmentEndToPack);
+            bisectorSegmentEndToPack);
    }
 
    /**
@@ -3628,13 +3625,13 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static FrameVector3D perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
-                                                                        FramePoint3DReadOnly secondPointOnLine, FramePoint3D orthogonalProjectionToPack)
+         FramePoint3DReadOnly secondPointOnLine, FramePoint3D orthogonalProjectionToPack)
    {
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
       orthogonalProjectionToPack.setToZero(point.getReferenceFrame());
       Vector3D perpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine,
-                                                                                                  orthogonalProjectionToPack);
+            orthogonalProjectionToPack);
       if (perpendicularVector == null)
          return null;
       else
@@ -3669,15 +3666,14 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static boolean perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
-                                                                  FramePoint3DReadOnly secondPointOnLine, FramePoint3D orthogonalProjectionToPack,
-                                                                  FrameVector3D perpendicularVectorToPack)
+         FramePoint3DReadOnly secondPointOnLine, FramePoint3D orthogonalProjectionToPack, FrameVector3D perpendicularVectorToPack)
    {
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
       orthogonalProjectionToPack.setToZero(point.getReferenceFrame());
       perpendicularVectorToPack.setToZero(point.getReferenceFrame());
       return EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine, orthogonalProjectionToPack,
-                                                                          perpendicularVectorToPack);
+            perpendicularVectorToPack);
    }
 
    /**
@@ -3704,7 +3700,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, FramePoint2DReadOnly firstPointOnLine,
-                                                          FramePoint2DReadOnly secondPointOnLine)
+         FramePoint2DReadOnly secondPointOnLine)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
       return EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(pointX, pointY, firstPointOnLine, secondPointOnLine);
@@ -3762,7 +3758,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static double signedDistanceFromPoint2DToLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine,
-                                                          FramePoint2DReadOnly secondPointOnLine)
+         FramePoint2DReadOnly secondPointOnLine)
    {
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
@@ -3813,8 +3809,7 @@ public class EuclidFrameTools
     *            the same reference frame.
     */
    public static void topVertex3DOfIsoscelesTriangle3D(FramePoint3DReadOnly baseVertexA, FramePoint3DReadOnly baseVertexC,
-                                                       FrameVector3DReadOnly trianglePlaneNormal, double ccwAngleAboutNormalAtTopVertex,
-                                                       FramePoint3D topVertexBToPack)
+         FrameVector3DReadOnly trianglePlaneNormal, double ccwAngleAboutNormalAtTopVertex, FramePoint3D topVertexBToPack)
    {
       baseVertexA.checkReferenceFrameMatch(baseVertexC);
       baseVertexA.checkReferenceFrameMatch(trianglePlaneNormal);

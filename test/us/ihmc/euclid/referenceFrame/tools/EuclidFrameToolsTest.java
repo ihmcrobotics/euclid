@@ -31,9 +31,8 @@ public class EuclidFrameToolsTest
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, false, 2, methodsToIgnore);
    }
 
-   @Ignore
    @Test
-   public void testReferenceFrameChecked() throws Exception
+   public void testReferenceFrameChecked() throws Throwable
    {
       EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, true, false, true);
    }
