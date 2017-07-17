@@ -107,6 +107,6 @@ public abstract class FrameTuple3DReadOnlyTest<T extends FrameTuple3DReadOnly> e
    public static <A extends B, B, C extends D, D> void assertSuperMethodsAreOverloaded(Class<A> overloadingParameterType, Class<B> originalParameterType,
                                                                                        Class<C> typeToTest, Class<D> superType)
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(overloadingParameterType, originalParameterType, true, false);
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(overloadingParameterType, originalParameterType, true);
    }
 }

@@ -27,12 +27,12 @@ public class EuclidFrameToolsTest
       methodsToIgnore.put("intersectionBetweenLine3DAndCylinder3D", new Class<?>[] {d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
       methodsToIgnore.put("intersectionBetweenLine3DAndEllipsoid3D", new Class<?>[] {d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
 
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, false, 2, methodsToIgnore);
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodsToIgnore);
    }
 
    @Test
    public void testReferenceFrameChecked() throws Throwable
    {
-      EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, true, false, true);
+      EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, false, true);
    }
 }

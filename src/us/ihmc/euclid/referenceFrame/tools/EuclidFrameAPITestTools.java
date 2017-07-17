@@ -129,29 +129,86 @@ public class EuclidFrameAPITestTools
       frameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
 
-   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-         boolean assertOverloadingWithFramelessObjects)
+   /**
+    * Asserts, using reflection, that all methods with frameless arguments, such as
+    * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
+    * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
+    * 
+    * @param typeWithFrameMethods refers to the type to be tested. This asserts that
+    *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
+    *           overload {@code typeWithFramelessMethods}.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
+    *           that are to be overloaded.
+    * @param assertAllCombinations when {@code false}, this asserts that for each method in
+    *           {@code typeWithFramelessMethods} there is one overloading method in
+    *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
+    *           When {@code true}, this asserts that for each method in
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
+    *           all the possible combinations of frame & frameless arguments, except for the
+    *           original frameless signature.
+    */
+   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations)
    {
-      assertOverloadingWithFrameObjects(typeWithFrameObjects, typeWithFramelessObjectsOnly, assertAllCombinations, assertOverloadingWithFramelessObjects, 1,
-            m -> true);
+      assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, 1);
    }
 
-   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-         boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments)
+   /**
+    * Asserts, using reflection, that all methods with frameless arguments, such as
+    * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
+    * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
+    * 
+    * @param typeWithFrameMethods refers to the type to be tested. This asserts that
+    *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
+    *           overload {@code typeWithFramelessMethods}.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
+    *           that are to be overloaded.
+    * @param assertAllCombinations when {@code false}, this asserts that for each method in
+    *           {@code typeWithFramelessMethods} there is one overloading method in
+    *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
+    *           When {@code true}, this asserts that for each method in
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
+    *           all the possible combinations of frame & frameless arguments, except for the
+    *           original frameless signature.
+    * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
+    *           {@code typeWithFramelessMethods}.
+    */
+   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
+         int minNumberOfFramelessArguments)
    {
-      assertOverloadingWithFrameObjects(typeWithFrameObjects, typeWithFramelessObjectsOnly, assertAllCombinations, assertOverloadingWithFramelessObjects,
-            minNumberOfGeometryArguments, m -> true);
+      assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, minNumberOfFramelessArguments, m -> true);
    }
 
-   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-         boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments, Map<String, Class<?>[]> methodsToIgnore)
+   /**
+    * Asserts, using reflection, that all methods with frameless arguments, such as
+    * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
+    * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
+    * 
+    * @param typeWithFrameMethods refers to the type to be tested. This asserts that
+    *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
+    *           overload {@code typeWithFramelessMethods}.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
+    *           that are to be overloaded.
+    * @param assertAllCombinations when {@code false}, this asserts that for each method in
+    *           {@code typeWithFramelessMethods} there is one overloading method in
+    *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
+    *           When {@code true}, this asserts that for each method in
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
+    *           all the possible combinations of frame & frameless arguments, except for the
+    *           original frameless signature.
+    * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
+    *           {@code typeWithFramelessMethods}.
+    * @param framelessMethodsToIgnore map containing the name and argument types of the methods in
+    *           {@code typeWithFramelessMethods} to be ignored in this test.
+    */
+   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
+         int minNumberOfFramelessArguments, Map<String, Class<?>[]> framelessMethodsToIgnore)
    {
       Predicate<Method> methodFilter = new Predicate<Method>()
       {
          @Override
          public boolean test(Method m)
          {
-            for (Entry<String, Class<?>[]> methodToIgnore : methodsToIgnore.entrySet())
+            for (Entry<String, Class<?>[]> methodToIgnore : framelessMethodsToIgnore.entrySet())
             {
                if (m.getName().equals(methodToIgnore.getKey()))
                {
@@ -163,16 +220,38 @@ public class EuclidFrameAPITestTools
          }
       };
 
-      assertOverloadingWithFrameObjects(typeWithFrameObjects, typeWithFramelessObjectsOnly, assertAllCombinations, assertOverloadingWithFramelessObjects,
-            minNumberOfGeometryArguments, methodFilter);
+      assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, minNumberOfFramelessArguments, methodFilter);
    }
 
-   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameObjects, Class<?> typeWithFramelessObjectsOnly, boolean assertAllCombinations,
-         boolean assertOverloadingWithFramelessObjects, int minNumberOfGeometryArguments, Predicate<Method> framelessMethodFilter)
+   /**
+    * Asserts, using reflection, that all methods with frameless arguments, such as
+    * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
+    * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
+    * 
+    * @param typeWithFrameMethods refers to the type to be tested. This asserts that
+    *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
+    *           overload {@code typeWithFramelessMethods}.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
+    *           that are to be overloaded.
+    * @param assertAllCombinations when {@code false}, this asserts that for each method in
+    *           {@code typeWithFramelessMethods} there is one overloading method in
+    *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
+    *           When {@code true}, this asserts that for each method in
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
+    *           all the possible combinations of frame & frameless arguments, except for the
+    *           original frameless signature.
+    * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
+    *           {@code typeWithFramelessMethods}.
+    * @param framelessMethodFilter custom filter used on the methods of
+    *           {@code typeWithFramelessMethods}. The assertions are performed on the methods for
+    *           which {@code framelessMethodFilter.test(method)} returns {@code true}.
+    */
+   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
+         int minNumberOfFramelessArguments, Predicate<Method> framelessMethodFilter)
    {
       // The frame methods are all the methods from 'typeWithFramelessObjectsOnly' that have at least one geometry argument.
-      List<Method> framelessMethods = keepOnlyMethodsWithAtLeastOneGeometryArgumentAndNoFrames(typeWithFramelessObjectsOnly.getMethods(),
-            minNumberOfGeometryArguments);
+      List<Method> framelessMethods = keepOnlyMethodsWithAtLeastOneGeometryArgumentAndNoFrames(typeWithFramelessMethods.getMethods(),
+            minNumberOfFramelessArguments);
 
       for (Method framelessMethod : framelessMethods)
       {
@@ -183,25 +262,92 @@ public class EuclidFrameAPITestTools
 
             for (Class<?>[] expectedMethodSignature : expectedMethodSignatures)
             {
-               assertMethodOverloadedWithSpecificSignature(typeWithFrameObjects, typeWithFramelessObjectsOnly, framelessMethod, expectedMethodSignature,
-                     typeWithFrameObjects);
+               assertMethodOverloadedWithSpecificSignature(typeWithFrameMethods, typeWithFramelessMethods, framelessMethod, expectedMethodSignature,
+                     typeWithFrameMethods);
             }
          }
       }
    }
 
-   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeHoldingStaticMethodsToTest, boolean shouldThrowExceptionForReadOnlies,
-         boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables) throws Throwable
+   /**
+    * Asserts, using reflection, that the methods, that are public and static, in
+    * {@code typeHoldingStaticMethodsToTest} are properly checking and/or setting reference frames
+    * of their arguments.
+    * <p>
+    * This assertion expects methods to be declaring arguments as read-only to inform that they are
+    * used as input only, and as mutable to inform that they are the output(s).
+    * </p>
+    * <p>
+    * Note that this does not perform any assertion for methods with only 1 frame argument.
+    * </p>
+    * <p>
+    * This expects methods to throw a {@link ReferenceFrameMismatchException} to indicate that the
+    * operation cannot be performed because at least two arguments are expressed in a different
+    * reference frame.
+    * </p>
+    * 
+    * @param typeDeclaringStaticMethodsToTest the type in which the methods are to be tested.
+    * @param shouldThrowExceptionForMutables indicates that the methods should throw a
+    *           {@link ReferenceFrameMismatchException} when at least two of the mutable arguments,
+    *           for instance {@code FramePoint3D} or {@code FrameTuple2D}, are expressed in a
+    *           different frame.
+    * @param shouldChangeFrameOfMutables indicates that the methods should set the reference frame
+    *           of the mutable arguments, such as {@code FramePoint3D} or {@code FrameTuple2D}. This
+    *           option is incompatible with {@code shouldThrowExceptionForMutables}.
+    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} and
+    *            {@code shouldThrowExceptionForMutables} are both set to {@code true}.
+    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} is set to {@code true}
+    *            and {@code shouldThrowExceptionForReadOnlies} is set to {@code false}.
+    * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
+    */
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, boolean shouldThrowExceptionForMutables,
+         boolean shouldChangeFrameOfMutables) throws Throwable
    {
-      assertStaticMethodsCheckReferenceFrame(typeHoldingStaticMethodsToTest, shouldThrowExceptionForReadOnlies, shouldThrowExceptionForMutables,
-            shouldChangeFrameOfMutables, m -> true);
+      assertStaticMethodsCheckReferenceFrame(typeDeclaringStaticMethodsToTest, shouldThrowExceptionForMutables, shouldChangeFrameOfMutables, m -> true);
    }
 
-   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeHoldingStaticMethodsToTest, boolean shouldThrowExceptionForReadOnlies,
-         boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables, Predicate<Method> methodFilter) throws Throwable
+   /**
+    * Asserts, using reflection, that the methods, that are public and static, in
+    * {@code typeHoldingStaticMethodsToTest} are properly checking and/or setting reference frames
+    * of their arguments.
+    * <p>
+    * This assertion expects methods to be declaring arguments as read-only to inform that they are
+    * used as input only, and as mutable to inform that they are the output(s).
+    * </p>
+    * <p>
+    * Note that this does not perform any assertion for methods with only 1 frame argument.
+    * </p>
+    * <p>
+    * This expects methods to throw a {@link ReferenceFrameMismatchException} to indicate that the
+    * operation cannot be performed because at least two arguments are expressed in a different
+    * reference frame.
+    * </p>
+    * 
+    * @param typeDeclaringStaticMethodsToTest the type in which the methods are to be tested.
+    * @param shouldThrowExceptionForMutables indicates that the methods should throw a
+    *           {@link ReferenceFrameMismatchException} when at least two of the mutable arguments,
+    *           for instance {@code FramePoint3D} or {@code FrameTuple2D}, are expressed in a
+    *           different frame.
+    * @param shouldChangeFrameOfMutables indicates that the methods should set the reference frame
+    *           of the mutable arguments, such as {@code FramePoint3D} or {@code FrameTuple2D}. This
+    *           option is incompatible with {@code shouldThrowExceptionForMutables}.
+    * @param methodFilter custom filter used on the methods. The assertions are performed on the
+    *           methods for which {@code methodFilter.test(method)} returns {@code true}.
+    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} and
+    *            {@code shouldThrowExceptionForMutables} are both set to {@code true}.
+    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} is set to {@code true}
+    *            and {@code shouldThrowExceptionForReadOnlies} is set to {@code false}.
+    * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
+    */
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, boolean shouldThrowExceptionForMutables,
+         boolean shouldChangeFrameOfMutables, Predicate<Method> methodFilter) throws Throwable, IllegalArgumentException
    {
+      if (shouldThrowExceptionForMutables && shouldChangeFrameOfMutables)
+         throw new IllegalArgumentException(
+               "Incompatible selection. A method cannot check reference frames of mutable argument AND set their reference frame.");
+
       // We need at least 2 frame arguments to assert anything.
-      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeHoldingStaticMethodsToTest.getMethods(), 2);
+      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeDeclaringStaticMethodsToTest.getMethods(), 2);
       // We keep only the public & static methods
       frameMethods = frameMethods.stream().filter(m -> Modifier.isStatic(m.getModifiers())).filter(m -> Modifier.isPublic(m.getModifiers()))
             .collect(Collectors.toList());
@@ -236,7 +382,7 @@ public class EuclidFrameAPITestTools
          int numberOfArgumentsToTest = 0;
          for (Class<?> parameterType : parameterTypes)
          {
-            if (shouldThrowExceptionForReadOnlies && isFrameTypeReadOnly(parameterType))
+            if (isFrameTypeReadOnly(parameterType))
                numberOfArgumentsToTest++;
             if (shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType))
                numberOfArgumentsToTest++;
@@ -251,7 +397,7 @@ public class EuclidFrameAPITestTools
             for (int j = 0; j < parameterTypes.length; j++)
             {
                Class<?> parameterType = parameterTypes[j];
-               boolean mutateFrame = shouldThrowExceptionForReadOnlies && isFrameTypeReadOnly(parameterType);
+               boolean mutateFrame = isFrameTypeReadOnly(parameterType);
                mutateFrame |= shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType);
 
                if (!mutateFrame)
@@ -273,7 +419,7 @@ public class EuclidFrameAPITestTools
             {
                invokeStaticMethod(frameMethod, parameters);
                String message = "Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName();
-               message += "\nType being tested: " + typeHoldingStaticMethodsToTest.getSimpleName();
+               message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
                message += "\nMethod: " + getMethodSimpleName(frameMethod);
                message += "\nArguments used: " + Arrays.toString(parameters);
                message += "\nArgument types: " + getArgumentTypeString(parameters);
@@ -314,7 +460,7 @@ public class EuclidFrameAPITestTools
                   if (newFrame != frameA)
                   {
                      String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + i + "th parameter.";
-                     message += "\nType being tested: " + typeHoldingStaticMethodsToTest.getSimpleName();
+                     message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
                      message += "\nArguments used: " + Arrays.toString(parameters);
                      message += "\nArgument types: " + getArgumentTypeString(parameters);
                      Assert.fail(message);
