@@ -183,7 +183,8 @@ public class EuclidFrameAPITestTools
 
             for (Class<?>[] expectedMethodSignature : expectedMethodSignatures)
             {
-               assertMethodOverloadedWithSpecificSignature(framelessMethod, expectedMethodSignature, typeWithFrameObjects);
+               assertMethodOverloadedWithSpecificSignature(typeWithFrameObjects, typeWithFramelessObjectsOnly, framelessMethod, expectedMethodSignature,
+                     typeWithFrameObjects);
             }
          }
       }
@@ -204,6 +205,8 @@ public class EuclidFrameAPITestTools
       // We keep only the public & static methods
       frameMethods = frameMethods.stream().filter(m -> Modifier.isStatic(m.getModifiers())).filter(m -> Modifier.isPublic(m.getModifiers()))
             .collect(Collectors.toList());
+      // Apply the custom filter
+      frameMethods = frameMethods.stream().filter(methodFilter).collect(Collectors.toList());
 
       ReferenceFrame frameA = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("frameA", ReferenceFrame.getWorldFrame(),
             new RigidBodyTransform());
@@ -269,12 +272,54 @@ public class EuclidFrameAPITestTools
             try
             {
                invokeStaticMethod(frameMethod, parameters);
-               Assert.fail("Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName() + "\nMethod: " + getMethodSimpleName(frameMethod)
-                     + "\nArguments used: " + Arrays.toString(parameters) + "\nArgument types: " + getArgumentTypeString(parameters));
+               String message = "Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName();
+               message += "\nType being tested: " + typeHoldingStaticMethodsToTest.getSimpleName();
+               message += "\nMethod: " + getMethodSimpleName(frameMethod);
+               message += "\nArguments used: " + Arrays.toString(parameters);
+               message += "\nArgument types: " + getArgumentTypeString(parameters);
+               Assert.fail(message);
             }
             catch (ReferenceFrameMismatchException e)
             {
                // Good
+            }
+         }
+      }
+
+      // Check that the frame of each mutable is changed (optional)
+      if (shouldChangeFrameOfMutables)
+      {
+         for (Method frameMethod : frameMethods)
+         {
+            Class<?>[] parameterTypes = frameMethod.getParameterTypes();
+            Object[] parameters = new Object[parameterTypes.length];
+
+            for (int i = 0; i < parameterTypes.length; i++)
+            {
+               Class<?> parameterType = parameterTypes[i];
+               if (isFrameTypeMutable(parameterType))
+                  instantiateParameterType(frameB, parameters, i, parameterType);
+               else
+                  instantiateParameterType(frameA, parameters, i, parameterType);
+            }
+
+            invokeStaticMethod(frameMethod, parameters);
+
+            for (int i = 0; i < parameterTypes.length; i++)
+            {
+               Class<?> parameterType = parameterTypes[i];
+               if (isFrameTypeMutable(parameterType))
+               {
+                  ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
+                  if (newFrame != frameA)
+                  {
+                     String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + i + "th parameter.";
+                     message += "\nType being tested: " + typeHoldingStaticMethodsToTest.getSimpleName();
+                     message += "\nArguments used: " + Arrays.toString(parameters);
+                     message += "\nArgument types: " + getArgumentTypeString(parameters);
+                     Assert.fail(message);
+                  }
+               }
             }
          }
       }
@@ -321,8 +366,8 @@ public class EuclidFrameAPITestTools
       return string;
    }
 
-   private static void assertMethodOverloadedWithSpecificSignature(Method originalMethod, Class<?>[] overloadingSignature, Class<?> typeToSearchIn)
-         throws SecurityException
+   private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethod, Method originalMethod,
+         Class<?>[] overloadingSignature, Class<?> typeToSearchIn) throws SecurityException
    {
       try
       {
@@ -332,8 +377,14 @@ public class EuclidFrameAPITestTools
 
          { // Assert the return type is proper
             if (originalReturnType == null && overloadingReturnType != null)
-               throw new AssertionError("Inconsistency found in the return type.\nOriginal method: " + getMethodSimpleName(originalMethod)
-                     + "\nOverloading method: " + getMethodSimpleName(overloadingMethod));
+            {
+               String message = "Inconsistency found in the return type.";
+               message += "\nOriginal method: " + getMethodSimpleName(originalMethod);
+               message += "\nOverloading method: " + getMethodSimpleName(overloadingMethod);
+               message += "\nOriginal type declaring method: " + typeWithOriginalMethod.getSimpleName();
+               message += "\nType overloading original: " + typeWithOverloadingMethods.getSimpleName();
+               throw new AssertionError(message);
+            }
 
             if (overloadingReturnType.equals(originalReturnType))
                return;

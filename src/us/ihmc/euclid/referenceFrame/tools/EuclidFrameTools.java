@@ -1181,13 +1181,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(firstPointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
-            secondPointOnLine, firstIntersectionToPack, secondIntersectionToPack);
-      if (numberOfIntersections >= 1)
-         firstIntersectionToPack.setIncludingFrame(boundingBoxMin.getReferenceFrame(), firstIntersectionToPack);
-      if (numberOfIntersections == 2)
-         secondIntersectionToPack.setIncludingFrame(boundingBoxMin.getReferenceFrame(), secondIntersectionToPack);
-      return numberOfIntersections;
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setToZero(boundingBoxMin.getReferenceFrame());
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setToZero(boundingBoxMin.getReferenceFrame());
+      return EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, firstPointOnLine, secondPointOnLine,
+            firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**

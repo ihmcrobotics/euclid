@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
