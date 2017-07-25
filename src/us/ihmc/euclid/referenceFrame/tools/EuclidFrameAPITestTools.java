@@ -57,7 +57,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class EuclidFrameAPITestTools
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
-   private final static int ITERATIONS = 1000;
+   private final static int FRAME_CHECK_ITERATIONS = 100;
+   private final static int FUNCTIONALITY_ITERATIONS = 500;
    private final static Random random = new Random(345345);
    private final static double epsilon = 1.0e-12;
 
@@ -392,7 +393,7 @@ public class EuclidFrameAPITestTools
       // Methods returning a frame type
       List<Method> methodsWithReturnFrameType = frameMethods.stream().filter(m -> isFrameType(m.getReturnType())).collect(Collectors.toList());
 
-      for (int iteration = 0; iteration < ITERATIONS; iteration++)
+      for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
       {
          ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
@@ -595,92 +596,95 @@ public class EuclidFrameAPITestTools
                framelessMethodParameterTypes[i] = frameMethodParameterTypes[i];
          }
 
-         try
+         for (int iteration = 0; iteration < FUNCTIONALITY_ITERATIONS; iteration++)
          {
-            Method framelessMethod = typeWithFramelessMethods.getMethod(frameMethodName, framelessMethodParameterTypes);
-            Object[] frameMethodParameters = instantiateParameterTypes(worldFrame, frameMethodParameterTypes);
-            Object[] framelessMethodParameters = clone(frameMethodParameters);
-            Throwable expectedException = null;
-            Object framelessMethodReturnObject = null;
-            Object frameMethodReturnObject = null;
-
             try
             {
-               framelessMethodReturnObject = invokeStaticMethod(framelessMethod, framelessMethodParameters);
-            }
-            catch (Throwable e)
-            {
-               expectedException = e;
-            }
+               Method framelessMethod = typeWithFramelessMethods.getMethod(frameMethodName, framelessMethodParameterTypes);
+               Object[] frameMethodParameters = instantiateParameterTypes(worldFrame, frameMethodParameterTypes);
+               Object[] framelessMethodParameters = clone(frameMethodParameters);
+               Throwable expectedException = null;
+               Object framelessMethodReturnObject = null;
+               Object frameMethodReturnObject = null;
 
-            try
-            {
-               frameMethodReturnObject = invokeStaticMethod(frameMethod, frameMethodParameters);
-            }
-            catch (Throwable e)
-            {
-               if (e.getClass() != expectedException.getClass())
+               try
                {
-                  String message = "";
-                  message += "The method: " + getMethodSimpleName(frameMethod);
-                  message += "\ndid not throw the same exception as the original method: " + getMethodSimpleName(framelessMethod);
-                  message += "\nExpected exception class: " + expectedException.getClass().getSimpleName();
-                  message += "\nActual exception class: " + e.getClass().getSimpleName();
-                  throw new AssertionError(message);
+                  framelessMethodReturnObject = invokeStaticMethod(framelessMethod, framelessMethodParameters);
                }
-               else
+               catch (Throwable e)
                {
-                  continue;
+                  expectedException = e;
                }
-            }
 
-            for (int i = 0; i < frameMethodParameters.length; i++)
-            {
-               Object framelessParameter = framelessMethodParameters[i];
-               Object frameParameter = frameMethodParameters[i];
+               try
+               {
+                  frameMethodReturnObject = invokeStaticMethod(frameMethod, frameMethodParameters);
+               }
+               catch (Throwable e)
+               {
+                  if (e.getClass() != expectedException.getClass())
+                  {
+                     String message = "";
+                     message += "The method: " + getMethodSimpleName(frameMethod);
+                     message += "\ndid not throw the same exception as the original method: " + getMethodSimpleName(framelessMethod);
+                     message += "\nExpected exception class: " + expectedException.getClass().getSimpleName();
+                     message += "\nActual exception class: " + e.getClass().getSimpleName();
+                     throw new AssertionError(message);
+                  }
+                  else
+                  {
+                     continue;
+                  }
+               }
 
-               if (!epsilonEquals(framelessParameter, frameParameter, epsilon))
+               for (int i = 0; i < frameMethodParameters.length; i++)
+               {
+                  Object framelessParameter = framelessMethodParameters[i];
+                  Object frameParameter = frameMethodParameters[i];
+
+                  if (!epsilonEquals(framelessParameter, frameParameter, epsilon))
+                  {
+                     String message = "";
+                     message += "Detected a frame method inconsistent with its original frameless method.";
+                     message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
+                     message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
+                     message += "\nFrame arguments after call:\n" + Arrays.toString(frameMethodParameters);
+                     message += "\nFrameless arguments after call:\n" + toStringAsFramelessObjects(framelessMethodParameters);
+                     throw new AssertionError(message);
+                  }
+               }
+
+               if (!epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, epsilon))
                {
                   String message = "";
                   message += "Detected a frame method inconsistent with its original frameless method.";
                   message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
                   message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-                  message += "\nFrame arguments after call:\n" + Arrays.toString(frameMethodParameters);
-                  message += "\nFrameless arguments after call:\n" + toStringAsFramelessObjects(framelessMethodParameters);
+                  message += "\nFrame method returned:" + frameMethodReturnObject;
+                  message += "\nFrameless method returned:\n" + toStringAsFramelessObject(framelessMethodReturnObject);
                   throw new AssertionError(message);
                }
             }
-
-            if (!epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, epsilon))
+            catch (NoSuchMethodException e)
             {
                String message = "";
-               message += "Detected a frame method inconsistent with its original frameless method.";
-               message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-               message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-               message += "\nFrame method returned:" + frameMethodReturnObject;
-               message += "\nFrameless method returned:\n" + toStringAsFramelessObject(framelessMethodReturnObject);
-               throw new AssertionError(message);
+               message += "-------------------------------------------------------------------";
+               message += "Could not find the corresponding method: " + getMethodSimpleName(frameMethod);
+               message += "\nMethod is from type: " + typeWithFrameMethodsToTest.getSimpleName();
+               message += "\nSearched in: " + typeWithFramelessMethods.getSimpleName();
+               message += "\nSearched with argument type: " + getSimpleNames(framelessMethodParameterTypes);
+               message += "-------------------------------------------------------------------";
+               System.err.println(message);
             }
-         }
-         catch (NoSuchMethodException e)
-         {
-            String message = "";
-            message += "-------------------------------------------------------------------";
-            message += "Could not find the corresponding method: " + getMethodSimpleName(frameMethod);
-            message += "\nMethod is from type: " + typeWithFrameMethodsToTest.getSimpleName();
-            message += "\nSearched in: " + typeWithFramelessMethods.getSimpleName();
-            message += "\nSearched with argument type: " + getSimpleNames(framelessMethodParameterTypes);
-            message += "-------------------------------------------------------------------";
-            System.err.println(message);
-         }
-         catch (SecurityException e)
-         {
-            String message = "";
-            message += "-------------------------------------------------------------------";
-            message += "Unable to access method with name: " + frameMethodName + " and argument types: " + getSimpleNames(framelessMethodParameterTypes);
-            message += "\nin type: " + typeWithFramelessMethods.getSimpleName();
-            message += "-------------------------------------------------------------------";
-            System.err.println(message);
+            catch (SecurityException e)
+            {
+               String message = "";
+               message += "-------------------------------------------------------------------";
+               message += "Unable to access method with name: " + frameMethodName + " and argument types: " + getSimpleNames(framelessMethodParameterTypes);
+               message += "\nin type: " + typeWithFramelessMethods.getSimpleName();
+               message += "-------------------------------------------------------------------";
+               System.err.println(message);
+            }
          }
       }
    }

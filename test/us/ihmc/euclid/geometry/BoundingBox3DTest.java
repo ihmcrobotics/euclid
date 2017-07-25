@@ -1602,8 +1602,25 @@ public class BoundingBox3DTest
          actualN = boundingBox3D.intersectionWithLine3D(line3D.getPoint(), line3D.getDirection(), actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         }
 
          actualFirstIntersection.setToZero();
          actualSecondIntersection.setToZero();
@@ -1611,13 +1628,30 @@ public class BoundingBox3DTest
          actualN = boundingBox3D.intersectionWithLine3D(line3D, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         }
       }
    }
 
    @Test
-   public void testintersectionWithLineSegment3D() throws Exception
+   public void testIntersectionWithLineSegment3D() throws Exception
    {
       Random random = new Random(435345L);
 
@@ -1638,8 +1672,17 @@ public class BoundingBox3DTest
                                                                actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         if (expectedN == 1)
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
          {
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
@@ -1655,8 +1698,17 @@ public class BoundingBox3DTest
          actualN = boundingBox3D.intersectionWithLineSegment3D(lineSegment3D, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         if (expectedN == 1)
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
          {
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);
@@ -1669,7 +1721,7 @@ public class BoundingBox3DTest
    }
 
    @Test
-   public void testintersectionWithRay3D() throws Exception
+   public void testIntersectionWithRay3D() throws Exception
    {
       Random random = new Random(435345L);
 
@@ -1688,8 +1740,17 @@ public class BoundingBox3DTest
          actualN = boundingBox3D.intersectionWithRay3D(ray3D.getPoint(), ray3D.getDirection(), actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         if (expectedN == 1)
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
          {
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(expectedSecondIntersection);
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualSecondIntersection);

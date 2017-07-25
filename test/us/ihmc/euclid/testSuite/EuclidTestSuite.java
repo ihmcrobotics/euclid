@@ -26,6 +26,12 @@ import us.ihmc.euclid.geometry.Sphere3DTest;
 import us.ihmc.euclid.geometry.Torus3DTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
+import us.ihmc.euclid.referenceFrame.FramePoint2DTest;
+import us.ihmc.euclid.referenceFrame.FramePoint3DTest;
+import us.ihmc.euclid.referenceFrame.FrameVector2DTest;
+import us.ihmc.euclid.referenceFrame.FrameVector3DTest;
+import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -37,7 +43,16 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
       // 3D
       Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class,
       // Tools tests
-      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class})
+      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class,
+      // Reference frame framework tests
+      ReferenceFrameTest.class,
+      // 1D
+      // 2D
+      FramePoint2DTest.class, FrameVector2DTest.class,
+      // 3D
+      FramePoint3DTest.class, FrameVector3DTest.class,
+      // Tools tests
+      EuclidFrameToolsTest.class})
 
 public class EuclidTestSuite
 {

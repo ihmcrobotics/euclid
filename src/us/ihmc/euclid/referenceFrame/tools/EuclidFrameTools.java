@@ -1158,7 +1158,8 @@ public class EuclidFrameTools
     * two given points defining the line.
     * <p>
     * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
@@ -1187,13 +1188,11 @@ public class EuclidFrameTools
                                                                                                 secondPointOnLine, firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1208,7 +1207,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
@@ -1236,13 +1236,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
                                                                                                 firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1298,6 +1296,8 @@ public class EuclidFrameTools
     * {@code lineSegmentStart}.
     * <li>When the line intersects the line segment at one of its endpoints, this method returns
     * {@code true} and the endpoint is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
     * </ul>
     * </p>
     *
@@ -1321,7 +1321,7 @@ public class EuclidFrameTools
       boolean success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                       intersectionToPack);
 
-      if (success && intersectionToPack != null)
+      if (intersectionToPack != null)
          intersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), intersectionToPack);
 
       return success;
@@ -1340,7 +1340,8 @@ public class EuclidFrameTools
     * two given points defining the line.
     * <p>
     * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * 
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
@@ -1369,13 +1370,11 @@ public class EuclidFrameTools
                                                                                                 secondPointOnLine, firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1418,13 +1417,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
                                                                                                 firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1439,7 +1436,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * 
     * @param boundingBoxMinX the minimum x-coordinate of the bounding box.
@@ -1472,13 +1470,11 @@ public class EuclidFrameTools
                                                                                                 lineDirection, firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1498,7 +1494,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -1532,13 +1529,11 @@ public class EuclidFrameTools
                                                                                              secondPointOnLine, firstIntersectionToPack,
                                                                                              secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1558,7 +1553,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -1591,13 +1587,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, pointOnLine, lineDirection,
                                                                                              firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1609,7 +1603,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line and the ellipsoid do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -1643,13 +1638,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
                                                                                               firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1661,7 +1654,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line and the ellipsoid do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -1695,13 +1689,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, pointOnLine, lineDirection,
                                                                                               firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1791,8 +1783,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line segment and the bounding box do not intersect, this method returns
-    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
-    * unmodified.
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the line segment and the bounding box,
@@ -1826,13 +1818,11 @@ public class EuclidFrameTools
                                                                                                        lineSegmentEnd, firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1851,8 +1841,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line segment and the bounding box do not intersect, this method returns
-    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
-    * unmodified.
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the line segment and the bounding box,
@@ -1886,13 +1876,11 @@ public class EuclidFrameTools
                                                                                                        lineSegmentEnd, firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1912,7 +1900,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line segment and the cylinder do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -1946,13 +1935,11 @@ public class EuclidFrameTools
                                                                                                     lineSegmentEnd, firstIntersectionToPack,
                                                                                                     secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1965,7 +1952,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the line segment and the ellipsoid do not intersect, this method returns {@code 0}
-    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -2000,13 +1988,11 @@ public class EuclidFrameTools
                                                                                                      lineSegmentEnd, firstIntersectionToPack,
                                                                                                      secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2069,7 +2055,8 @@ public class EuclidFrameTools
     * </p>
     * </p>
     * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the ray and the bounding box,
@@ -2102,13 +2089,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
                                                                                                firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2127,7 +2112,8 @@ public class EuclidFrameTools
     * </p>
     * </p>
     * In the case the ray and the bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the ray and the bounding box,
@@ -2160,13 +2146,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
                                                                                                firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2186,7 +2170,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the ray and the cylinder do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -2219,13 +2204,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection,
                                                                                             firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2237,7 +2220,8 @@ public class EuclidFrameTools
     * </p>
     * <p>
     * In the case the ray and the ellipsoid do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
@@ -2271,13 +2255,11 @@ public class EuclidFrameTools
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
                                                                                              firstIntersectionToPack, secondIntersectionToPack);
 
-      if (numberOfIntersections >= 1)
-      { // Set the correct reference frame.
-         if (firstIntersectionToPack != null)
-            firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-         if (secondIntersectionToPack != null)
-            secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
-      }
+      // Set the correct reference frame.
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2368,6 +2350,8 @@ public class EuclidFrameTools
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code pointOnLine1}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
     * </ul>
     * </p>
     *
@@ -2388,7 +2372,7 @@ public class EuclidFrameTools
       pointOnLine1.checkReferenceFrameMatch(lineDirection2);
       boolean success = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, intersectionToPack);
 
-      if (success && intersectionToPack != null)
+      if (intersectionToPack != null)
          intersectionToPack.setIncludingFrame(pointOnLine1.getReferenceFrame(), intersectionToPack);
 
       return success;
@@ -2441,7 +2425,9 @@ public class EuclidFrameTools
     * intersect.
     * <li>When the two line segments are collinear, this methods returns {@code true} only if the
     * two line segments overlap or have at least one common endpoint.
-    * <li>When the two line segments have a common endpoint, this method returns true.
+    * <li>When the two line segments have a common endpoint, this method returns {@code true}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
     * </ul>
     * </p>
     *
@@ -2464,7 +2450,7 @@ public class EuclidFrameTools
       boolean success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
                                                                                  intersectionToPack);
 
-      if (success && intersectionToPack != null)
+      if (intersectionToPack != null)
          intersectionToPack.setIncludingFrame(lineSegmentStart1.getReferenceFrame(), intersectionToPack);
 
       return success;
@@ -2485,6 +2471,9 @@ public class EuclidFrameTools
     * fails and returns {@code false}.
     * <li>When the angle between the two planes is below {@code angleThreshold}, this methods fails
     * and returns {@code false}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code pointOnIntersectionToPack} and {@code intersectionDirectionToPack} are set to
+    * {@link Double#NaN}.
     * </ul>
     * </p>
     *
@@ -2511,13 +2500,11 @@ public class EuclidFrameTools
       boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, angleThreshold,
                                                                            pointOnIntersectionToPack, intersectionDirectionToPack);
 
-      if (success)
-      {
-         if (pointOnIntersectionToPack != null)
-            pointOnIntersectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), pointOnIntersectionToPack);
-         if (intersectionDirectionToPack != null)
-            intersectionDirectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), intersectionDirectionToPack);
-      }
+      if (pointOnIntersectionToPack != null)
+         pointOnIntersectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), pointOnIntersectionToPack);
+      if (intersectionDirectionToPack != null)
+         intersectionDirectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), intersectionDirectionToPack);
+
       return success;
    }
 
