@@ -1,5 +1,7 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import static org.junit.Assert.*;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
@@ -206,7 +209,7 @@ public class EuclidFrameAPITestTools
     *           {@code typeWithFramelessMethods}.
     */
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
-         int minNumberOfFramelessArguments)
+                                                        int minNumberOfFramelessArguments)
    {
       assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, minNumberOfFramelessArguments, m -> true);
    }
@@ -234,7 +237,7 @@ public class EuclidFrameAPITestTools
     *           {@code typeWithFramelessMethods} to be ignored in this test.
     */
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
-         int minNumberOfFramelessArguments, Map<String, Class<?>[]> framelessMethodsToIgnore)
+                                                        int minNumberOfFramelessArguments, Map<String, Class<?>[]> framelessMethodsToIgnore)
    {
       Predicate<Method> methodFilter = new Predicate<Method>()
       {
@@ -280,7 +283,7 @@ public class EuclidFrameAPITestTools
     *           which {@code framelessMethodFilter.test(method)} returns {@code true}.
     */
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
-         int minNumberOfFramelessArguments, Predicate<Method> framelessMethodFilter)
+                                                        int minNumberOfFramelessArguments, Predicate<Method> framelessMethodFilter)
    {
       // The frame methods are all the methods from 'typeWithFramelessMethods' that have at least one geometry argument.
       List<Method> framelessMethods = keepOnlyMethodsWithAtLeastNFramelessArguments(typeWithFramelessMethods.getMethods(), minNumberOfFramelessArguments);
@@ -295,7 +298,7 @@ public class EuclidFrameAPITestTools
             for (Class<?>[] expectedMethodSignature : expectedMethodSignatures)
             {
                assertMethodOverloadedWithSpecificSignature(typeWithFrameMethods, typeWithFramelessMethods, framelessMethod, expectedMethodSignature,
-                     typeWithFrameMethods);
+                                                           typeWithFrameMethods);
             }
          }
       }
@@ -333,7 +336,8 @@ public class EuclidFrameAPITestTools
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
    public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, boolean shouldThrowExceptionForMutables,
-         boolean shouldChangeFrameOfMutables) throws Throwable
+                                                             boolean shouldChangeFrameOfMutables)
+         throws Throwable
    {
       assertStaticMethodsCheckReferenceFrame(typeDeclaringStaticMethodsToTest, shouldThrowExceptionForMutables, shouldChangeFrameOfMutables, m -> true);
    }
@@ -372,17 +376,17 @@ public class EuclidFrameAPITestTools
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
    public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, boolean shouldThrowExceptionForMutables,
-         boolean shouldChangeFrameOfMutables, Predicate<Method> methodFilter) throws Throwable, IllegalArgumentException
+                                                             boolean shouldChangeFrameOfMutables, Predicate<Method> methodFilter)
+         throws Throwable, IllegalArgumentException
    {
       if (shouldThrowExceptionForMutables && shouldChangeFrameOfMutables)
-         throw new IllegalArgumentException(
-               "Incompatible selection. A method cannot check reference frames of mutable argument AND set their reference frame.");
+         throw new IllegalArgumentException("Incompatible selection. A method cannot check reference frames of mutable argument AND set their reference frame.");
 
       // We need at least 2 frame arguments to assert anything.
       List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeDeclaringStaticMethodsToTest.getMethods(), 2);
       // We keep only the public & static methods
       frameMethods = frameMethods.stream().filter(m -> Modifier.isStatic(m.getModifiers())).filter(m -> Modifier.isPublic(m.getModifiers()))
-            .collect(Collectors.toList());
+                                 .collect(Collectors.toList());
       // Apply the custom filter
       frameMethods = frameMethods.stream().filter(methodFilter).collect(Collectors.toList());
       // Methods returning a frame type
@@ -516,7 +520,7 @@ public class EuclidFrameAPITestTools
                      ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
                      if (newFrame != frameA)
                      {
-                        String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + i + "th parameter.";
+                        String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (i + 1) + "th parameter.";
                         message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
                         message += "\nArguments used: " + Arrays.toString(parameters);
                         message += "\nArgument types: " + getArgumentTypeString(parameters);
@@ -712,6 +716,12 @@ public class EuclidFrameAPITestTools
       if (framelessParameter != null ^ frameParameter != null)
          return false;
 
+      if (framelessParameter instanceof Clearable && frameParameter instanceof Clearable)
+      {
+         if (((Clearable) framelessParameter).containsNaN() && ((Clearable) frameParameter).containsNaN())
+            return true;
+      }
+
       if (isFramelessObject(framelessParameter))
       {
          if (!isFrameObject(frameParameter) && !isFramelessObject(frameParameter))
@@ -754,14 +764,22 @@ public class EuclidFrameAPITestTools
       {
          if (!Double.class.isInstance(frameParameter) && !Float.class.isInstance(frameParameter))
             throw new RuntimeException("Reached unexpected state.");
-         return EuclidCoreTools.epsilonEquals(((Number) framelessParameter).doubleValue(), ((Number) frameParameter).doubleValue(), epsilon);
+         try
+         {
+            assertEquals(((Number) framelessParameter).doubleValue(), ((Number) frameParameter).doubleValue(), epsilon);
+            return true;
+         }
+         catch (AssertionError e)
+         {
+            return false;
+         }
       }
-      
+
       if (Integer.class.isInstance(framelessParameter) || Long.class.isInstance(framelessParameter))
       {
          if (!Integer.class.isInstance(frameParameter) && !Long.class.isInstance(frameParameter))
             throw new RuntimeException("Reached unexpected state.");
-         
+
          return ((Number) framelessParameter).longValue() == ((Number) frameParameter).doubleValue();
       }
 
@@ -778,8 +796,28 @@ public class EuclidFrameAPITestTools
          return ((EpsilonComparable<S>) framelessParameter).epsilonEquals((S) frameParameter, epsilon);
       }
 
-      throw new RuntimeException(
-            "Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & " + frameParameter.getClass().getSimpleName());
+      if (framelessParameter instanceof List)
+      {
+         if (frameParameter instanceof List)
+         {
+            List<?> framelessList = (List<?>) framelessParameter;
+            List<?> frameList = (List<?>) frameParameter;
+            assertEquals(framelessList.size(), frameList.size());
+            for (int i = 0; i < framelessList.size(); i++)
+            {
+               if (!epsilonEquals(framelessList.get(i), frameList.get(i), epsilon))
+                  return false;
+            }
+            return true;
+         }
+         else
+         {
+            throw new RuntimeException("Reached unexpected state.");
+         }
+      }
+
+      throw new RuntimeException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
+            + frameParameter.getClass().getSimpleName());
    }
 
    private static boolean isFrameTypeReadOnly(Class<?> frameType)
@@ -829,7 +867,8 @@ public class EuclidFrameAPITestTools
    }
 
    private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethod, Method originalMethod,
-         Class<?>[] overloadingSignature, Class<?> typeToSearchIn) throws SecurityException
+                                                                   Class<?>[] overloadingSignature, Class<?> typeToSearchIn)
+         throws SecurityException
    {
       try
       {
