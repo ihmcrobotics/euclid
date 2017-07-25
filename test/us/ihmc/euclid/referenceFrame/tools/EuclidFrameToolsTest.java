@@ -35,4 +35,10 @@ public class EuclidFrameToolsTest
    {
       EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, false, true);
    }
+
+   @Test
+   public void testConservedFunctionality() throws Exception
+   {
+      EuclidFrameAPITestTools.assertFunctionalityIsConserved(EuclidFrameTools.class, EuclidGeometryTools.class);
+   }
 }
