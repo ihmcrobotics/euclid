@@ -39,6 +39,6 @@ public class EuclidFrameToolsTest
    @Test
    public void testConservedFunctionality() throws Exception
    {
-      EuclidFrameAPITestTools.assertFunctionalityIsConserved(EuclidFrameTools.class, EuclidGeometryTools.class);
+      EuclidFrameAPITestTools.assertStaticMethodsPreserveFunctionality(EuclidFrameTools.class, EuclidGeometryTools.class);
    }
 }

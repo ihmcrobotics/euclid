@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -573,14 +574,47 @@ public class EuclidFrameAPITestTools
       }
    }
 
-   public static void assertFunctionalityIsConserved(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods)
+   /**
+    * Assuming the type {@code typeWithFrameMethodsToTest} declares the same static methods as
+    * declared in {@code typeWithFramlessMethods} with the difference of dealing with reference
+    * frame holders, this method asserts that the methods in {@code typeWithFrameMethodsToTest} does
+    * not change the underlying algorithms.
+    * <p>
+    * For each method declared in {@code typeWithFrameMethodsToTest}, this methods searched for the
+    * equivalent method in {@code typeWithFramelessMethods} and the methods from both classes are
+    * invoked to compare the output.
+    * </p>
+    * 
+    * @param typeWithFrameMethodsToTest the type in which the methods are to be tested.
+    * @param typeWithFramelessMethods the type declaring the methods against which the methods from
+    *           {@code typeWithFrameMethodsToTest} are to be compared.
+    */
+   public static void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods)
    {
-      assertFunctionalityIsConserved(typeWithFrameMethodsToTest, typeWithFramelessMethods, m -> true);
+      assertStaticMethodsPreserveFunctionality(typeWithFrameMethodsToTest, typeWithFramelessMethods, m -> true);
    }
 
-   public static void assertFunctionalityIsConserved(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods, Predicate<Method> methodFilter)
+   /**
+    * Assuming the type {@code typeWithFrameMethodsToTest} declares the same static methods as
+    * declared in {@code typeWithFramlessMethods} with the difference of dealing with reference
+    * frame holders, this method asserts that the methods in {@code typeWithFrameMethodsToTest} does
+    * not change the underlying algorithms.
+    * <p>
+    * For each method declared in {@code typeWithFrameMethodsToTest}, this methods searched for the
+    * equivalent method in {@code typeWithFramelessMethods} and the methods from both classes are
+    * invoked to compare the output.
+    * </p>
+    * 
+    * @param typeWithFrameMethodsToTest the type in which the methods are to be tested.
+    * @param typeWithFramelessMethods the type declaring the methods against which the methods from
+    *           {@code typeWithFrameMethodsToTest} are to be compared.
+    * @param methodFilter custom filter used on the methods. The assertions are performed on the
+    *           methods for which {@code methodFilter.test(method)} returns {@code true}.
+    */
+   public static void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods,
+                                                               Predicate<Method> methodFilter)
    {
-      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeWithFrameMethodsToTest.getMethods(), 1);
+      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeWithFrameMethodsToTest.getMethods(), 0);
 
       for (Method frameMethod : frameMethods)
       {
@@ -602,6 +636,14 @@ public class EuclidFrameAPITestTools
             {
                Method framelessMethod = typeWithFramelessMethods.getMethod(frameMethodName, framelessMethodParameterTypes);
                Object[] frameMethodParameters = instantiateParameterTypes(worldFrame, frameMethodParameterTypes);
+
+               if (frameMethodParameters == null)
+               {
+                  String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod) + ". The method is not tested.";
+                  System.err.println(message);
+                  break;
+               }
+
                Object[] framelessMethodParameters = clone(frameMethodParameters);
                Throwable expectedException = null;
                Object framelessMethodReturnObject = null;
@@ -1142,6 +1184,7 @@ public class EuclidFrameAPITestTools
       return clone;
    }
 
+   @SuppressWarnings("unchecked")
    private static <F extends FrameGeometryObject<F, G>, G extends GeometryObject<G>> void set(Object fToSet, Object fToRead)
    {
       ((F) fToSet).setIncludingFrame((F) fToRead);
@@ -1151,7 +1194,11 @@ public class EuclidFrameAPITestTools
    {
       Object[] parameters = new Object[parameterTypes.length];
       for (int i = 0; i < parameterTypes.length; i++)
+      {
          parameters[i] = instantiateParameterType(frame, parameterTypes[i]);
+         if (parameters[i] == null)
+            return null;
+      }
       return parameters;
    }
 
@@ -1218,6 +1265,16 @@ public class EuclidFrameAPITestTools
             return EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
          else
             return 0;
+      }
+
+      if (Collection.class.equals(type))
+      {
+         return null;
+      }
+
+      if (Object.class.equals(type))
+      {
+         return null;
       }
 
       try
