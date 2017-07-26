@@ -17,15 +17,15 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
    public static final double EPSILON = 1.0e-12;
    public static final int ITERATIONS = 100;
 
-   protected abstract G createEmptyGeometryObject();
+   public abstract G createEmptyGeometryObject();
 
-   protected abstract G createRandomGeometryObject(Random random);
+   public abstract G createRandomGeometryObject(Random random);
 
-   protected abstract F createEmptyFrameGeometryObject(ReferenceFrame referenceFrame);
+   public abstract F createEmptyFrameGeometryObject(ReferenceFrame referenceFrame);
 
-   protected abstract F createFrameGeometryObject(ReferenceFrame referenceFrame, G geometryObject);
+   public abstract F createFrameGeometryObject(ReferenceFrame referenceFrame, G geometryObject);
 
-   protected abstract F createRandomFrameGeometryObject(Random random, ReferenceFrame referenceFrame);
+   public abstract F createRandomFrameGeometryObject(Random random, ReferenceFrame referenceFrame);
 
    @Test
    public void testSetToZero() throws Exception
@@ -70,7 +70,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          F frameGeometryObject = createRandomFrameGeometryObject(random, initialFrame);
          assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
          assertFalse(frameGeometryObject.getGeometryObject().containsNaN());
-         frameGeometryObject.setToZero();
+         frameGeometryObject.setToNaN();
          assertTrue(frameGeometryObject.getGeometryObject().containsNaN());
 
          frameGeometryObject = createRandomFrameGeometryObject(random, initialFrame);
@@ -78,14 +78,14 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
          assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
          assertFalse(frameGeometryObject.getGeometryObject().containsNaN());
-         frameGeometryObject.setToZero(newFrame);
+         frameGeometryObject.setToNaN(newFrame);
          assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
          assertTrue(frameGeometryObject.getGeometryObject().containsNaN());
       }
    }
 
    @Test
-   public void testContains() throws Exception
+   public void testContainsNaN() throws Exception
    {
       Random random = new Random(63);
 
@@ -98,7 +98,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
          assertFalse(frameGeometryObject.containsNaN());
          assertFalse(frameGeometryObject.getGeometryObject().containsNaN());
-         frameGeometryObject.setToZero();
+         frameGeometryObject.setToNaN();
          assertTrue(frameGeometryObject.containsNaN());
          assertTrue(frameGeometryObject.getGeometryObject().containsNaN());
 
@@ -108,7 +108,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
          assertFalse(frameGeometryObject.containsNaN());
          assertFalse(frameGeometryObject.getGeometryObject().containsNaN());
-         frameGeometryObject.setToZero(newFrame);
+         frameGeometryObject.setToNaN(newFrame);
          assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
          assertTrue(frameGeometryObject.containsNaN());
          assertTrue(frameGeometryObject.getGeometryObject().containsNaN());
@@ -162,7 +162,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
          expectedGeometry.set(frameGeometry.getGeometryObject());
 
-         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1);
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
          differenceFrameIndex %= referenceFrames.length;
          ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
 
@@ -203,7 +203,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
          frameGeometry2.getGeometryObject().set(frameGeometry1.getGeometryObject());
 
-         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1);
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
          differenceFrameIndex %= referenceFrames.length;
          ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
 
@@ -278,9 +278,8 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
-         G expectedGeometry = createRandomGeometryObject(random);
-         expectedGeometry.setToZero();
-         RigidBodyTransform transform = initialFrame.getTransformToDesiredFrame(anotherFrame);
+         G expectedGeometry = createEmptyGeometryObject();
+         RigidBodyTransform transform = anotherFrame.getTransformToDesiredFrame(initialFrame);
          expectedGeometry.applyTransform(transform);
 
          F frameGeometry = createRandomFrameGeometryObject(random, initialFrame);

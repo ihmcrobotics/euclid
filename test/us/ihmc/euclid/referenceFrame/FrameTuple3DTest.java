@@ -2,8 +2,12 @@ package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import org.ejml.data.DenseMatrix64F;
 import org.junit.Before;
@@ -12,40 +16,39 @@ import org.junit.Test;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Tuple3DBasicsTest;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends Tuple3DBasics & GeometryObject<T>> extends FrameTuple3DReadOnlyTest<F>
 {
-   private static final boolean VERBOSE = false;
-
    public static final double epsilon = 1e-10;
 
-   public abstract FrameTuple3D<?, ?> createEmptyFrameTuple();
-
-   public FrameTuple3D<?, ?> createFrameTuple(ReferenceFrame referenceFrame, double x, double y, double z)
+   public final F createTuple(ReferenceFrame referenceFrame)
    {
-      return createFrameTuple(referenceFrame, x, y, z);
+      return createTuple(referenceFrame, 0.0, 0.0, 0.0);
    }
 
-   public FrameTuple3D<?, ?> createFrameTuple(ReferenceFrame referenceFrame)
+   public final F createTuple(ReferenceFrame referenceFrame, Tuple3DBasics tuple)
    {
-      return createFrameTuple(referenceFrame, 0.0, 0.0, 0.0);
+      return createTuple(referenceFrame, tuple.getX(), tuple.getY(), tuple.getZ());
    }
 
-   public FrameTuple3D<?, ?> createFrameTuple(ReferenceFrame referenceFrame, Tuple3DBasics tuple)
+   public final F createTuple(F frameTuple)
    {
-      return createFrameTuple(referenceFrame, tuple.getX(), tuple.getY(), tuple.getZ());
+      return createTuple(frameTuple.getReferenceFrame(), frameTuple);
    }
 
-   public FrameTuple3D<?, ?> createFrameTuple(FrameTuple3D<?, ?> frameTuple)
+   public final F createRandomTuple(Random random, ReferenceFrame referenceFrame)
    {
-      return createFrameTuple(frameTuple.getReferenceFrame(), frameTuple);
+      return createTuple(referenceFrame, random.nextDouble(), random.nextDouble(), random.nextDouble());
    }
 
    protected ReferenceFrame theFrame = ReferenceFrame.constructARootFrame("theFrame");
@@ -66,7 +69,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSetXYZ()
    {
-      FrameTuple3D<?, ?> frameTuple = createEmptyFrameTuple();
+      F frameTuple = createEmptyTuple();
 
       Random random = new Random(15613L);
 
@@ -89,7 +92,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test //Brett was here
    public final void testSetTuple()
    {
-      FrameTuple3D<?, ?> frameTuple = createEmptyFrameTuple();
+      F frameTuple = createEmptyTuple();
       Random random = new Random(15613L);
       RigidBodyTransform randomTransform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
       ReferenceFrame randomFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("childFrame", ReferenceFrame.getWorldFrame(), randomTransform);
@@ -104,8 +107,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       testGetters(frameTuple, randomTuple);
 
       //test non-matching reference frames
-      FrameTuple3D<?, ?> ft1 = createFrameTuple(aFrame);
-      FrameTuple3D<?, ?> ft2 = createFrameTuple(theFrame);
+      F ft1 = createTuple(aFrame);
+      F ft2 = createTuple(theFrame);
       try
       {
          ft1.set(ft2);
@@ -120,8 +123,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSetFrameTuple()
    {
-      FrameTuple3D<?, ?> frameTuple = createEmptyFrameTuple();
-      FrameTuple3D<?, ?> randomFrameTuple = createEmptyFrameTuple();
+      F frameTuple = createEmptyTuple();
+      F randomFrameTuple = createEmptyTuple();
 
       Random random = new Random(15613L);
 
@@ -146,37 +149,21 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(randomFrame, frameTuple.getReferenceFrame());
 
       frameTuple.set(randomFrameTuple);
-      assertTuplesEqual(frameTuple, randomFrameTuple);
+      EuclidFrameTestTools.assertFrameTuple3DEquals(frameTuple, randomFrameTuple, epsilon);
 
-      frameTuple = createEmptyFrameTuple();
+      frameTuple = createEmptyTuple();
 
       frameTuple.setIncludingFrame(randomFrameTuple);
-      assertTuplesEqual(frameTuple, randomFrameTuple);
+      EuclidFrameTestTools.assertFrameTuple3DEquals(frameTuple, randomFrameTuple, epsilon);
    }
 
-   private final void checkEquals(FrameTuple3D<?, ?> v1, FrameTuple3D<?, ?> v2)
-   {
-      if (!v1.epsilonEquals(v2, 1e-7))
-      {
-         throw new RuntimeException("Frame Vectors don't match. v1 = " + v1 + ", v2 = " + v2);
-      }
-
-   }
-
-   private final void assertTuplesEqual(FrameTuple3D<?, ?> frameTupleToTest, FrameTuple3D<?, ?> frameTuple2)
-   {
-      testGetters(frameTupleToTest, new Point3D(frameTuple2));
-      assertEquals(frameTuple2.getReferenceFrame(), frameTupleToTest.getReferenceFrame());
-      assertTrue(frameTupleToTest.epsilonEquals(frameTuple2, epsilon));
-   }
-
-   private final void testGetters(FrameTuple3D<?, ?> frameTuple, Tuple3DBasics tuple)
+   private final void testGetters(F frameTuple, Tuple3DBasics tuple)
    {
       testGetters(frameTuple, tuple.getX(), tuple.getY(), tuple.getZ());
       assertTrue(frameTuple.epsilonEquals(tuple, epsilon));
    }
 
-   private final void testGetters(FrameTuple3D<?, ?> frameTuple, double x, double y, double z)
+   private final void testGetters(F frameTuple, double x, double y, double z)
    {
       assertEquals(x, frameTuple.getX(), epsilon);
       assertEquals(y, frameTuple.getY(), epsilon);
@@ -196,16 +183,16 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    // Tests copied from FramePointTest and FrameVectorTest
 
    @Test
-   public final void testChangeFrameCopy()
+   public final void testChangeFrame() throws Exception
    {
       Random random = new Random(1776L);
 
-      FrameTuple3D<?, ?> vWorld = createFrameTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
+      F vWorld = createTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
 
       int numberOfFrames = 10;
       ReferenceFrame[] frames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random, numberOfFrames);
 
-      ArrayList<FrameTuple3D<?, ?>> resultVectors = new ArrayList<FrameTuple3D<?, ?>>();
+      ArrayList<F> resultVectors = new ArrayList<F>();
       resultVectors.add(vWorld);
 
       // Choose random paths and move the vectors around those paths:
@@ -215,7 +202,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       {
          int pathLength = random.nextInt(20);
 
-         FrameTuple3D<?, ?> vector = vWorld;
+         F vector = createTuple(vWorld);
 
          for (int j = 0; j < pathLength; j++)
          {
@@ -223,33 +210,26 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
             vector.changeFrame(frames[frameIndex]);
          }
 
+         vector.changeFrame(vWorld.getReferenceFrame());
          resultVectors.add(vector);
       }
 
       // Now compare all sets of 2 vectors. If they are in the same frame, they should have the same values
-      for (FrameTuple3D<?, ?> resultVector1 : resultVectors)
+      for (F resultVector1 : resultVectors)
       {
-         // Print out the vectors:
-         if (VERBOSE)
-            //            System.out.println("resultVector1 = " + resultVector1);
-
-            for (FrameTuple3D<?, ?> resultVector2 : resultVectors)
-            {
-               if (resultVector1.getReferenceFrame() == resultVector2.getReferenceFrame())
-               {
-                  checkEquals(resultVector1, resultVector2);
-               }
-            }
+         for (F resultVector2 : resultVectors)
+         {
+            EuclidFrameTestTools.assertFrameTuple3DEquals(resultVector1, resultVector2, epsilon);
+         }
       }
-
    }
 
    @Test
-   public final void testSets() //Brett was here
+   public final void testSets() throws Exception //Brett was here
    {
-      FrameTuple3D<?, ?> alpha = createFrameTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
-      FrameTuple3D<?, ?> beta = createFrameTuple(ReferenceFrame.getWorldFrame(), 8.0, -2.0, 0.0);
-      FrameTuple3D<?, ?> ones = createFrameTuple(ReferenceFrame.getWorldFrame(), 1.0, 1.0, 1.0);
+      F alpha = createTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
+      F beta = createTuple(ReferenceFrame.getWorldFrame(), 8.0, -2.0, 0.0);
+      F ones = createTuple(ReferenceFrame.getWorldFrame(), 1.0, 1.0, 1.0);
 
       alpha.set(1.0, 1.0, 1.0);
       assertTrue("This should be true", alpha.epsilonEquals(ones, 1e-10));
@@ -278,7 +258,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test //Brett was here
    public final void testSetXY()
    {
-      FrameTuple3D<?, ?> alpha = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
+      F alpha = createTuple(theFrame, 1.0, 2.0, 3.0);
       FramePoint2D framepoint2d = new FramePoint2D(theFrame);
       framepoint2d.set(-1.0, -2.0);
 
@@ -288,7 +268,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals("This should be equal", 0.0, alpha.getZ(), epsilon);
 
       //test non-matching reference frames
-      FrameTuple3D<?, ?> ft1 = createFrameTuple(aFrame);
+      F ft1 = createTuple(aFrame);
       try
       {
          ft1.set(framepoint2d);
@@ -303,8 +283,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testGets()
    {
-      FrameTuple3D<?, ?> alpha = createFrameTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
-      FrameTuple3D<?, ?> beta = createFrameTuple(ReferenceFrame.getWorldFrame(), 7.0, 0.0, -6.0);
+      F alpha = createTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
+      F beta = createTuple(ReferenceFrame.getWorldFrame(), 7.0, 0.0, -6.0);
       alpha.getX();
       beta.getY();
       beta.getZ();
@@ -313,8 +293,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testAddTuple3d()
    {
-      FrameTuple3D<?, ?> alpha = createFrameTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
-      FrameTuple3D<?, ?> expected = createFrameTuple(ReferenceFrame.getWorldFrame(), 2.0, 3.0, 4.0);
+      F alpha = createTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
+      F expected = createTuple(ReferenceFrame.getWorldFrame(), 2.0, 3.0, 4.0);
       Point3D tuple1 = new Point3D(1.0, 1.0, 1.0);
       alpha.add(tuple1);
       assertTrue(alpha.epsilonEquals(expected, epsilon));
@@ -323,8 +303,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testAddTuple3dTuple3d()
    {
-      FrameTuple3D<?, ?> alpha = createFrameTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0);
-      FrameTuple3D<?, ?> expected = createFrameTuple(ReferenceFrame.getWorldFrame(), 2.0, 2.0, 2.0);
+      F alpha = createTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0);
+      F expected = createTuple(ReferenceFrame.getWorldFrame(), 2.0, 2.0, 2.0);
       Point3D tuple1 = new Point3D(1.0, 1.0, 1.0);
       Point3D tuple2 = new Point3D(1.0, 1.0, 1.0);
 
@@ -335,8 +315,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testAddFrameTuple() //Brett
    {
-      FrameTuple3D<?, ?> frameTuple1 = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> vector = createFrameTuple(theFrame, 10.0, 11.0, 12.0);
+      F frameTuple1 = createTuple(theFrame);
+      F vector = createTuple(theFrame, 10.0, 11.0, 12.0);
       frameTuple1.add(vector);
 
       assertEquals(10.0, frameTuple1.getX(), epsilon);
@@ -344,7 +324,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(12.0, frameTuple1.getZ(), epsilon);
 
       //Test non-matching reference frames
-      FrameTuple3D<?, ?> frameTuple2 = createFrameTuple(aFrame, 10.0, 11.0, 12.0);
+      F frameTuple2 = createTuple(aFrame, 10.0, 11.0, 12.0);
       try
       {
          frameTuple1.add(frameTuple2);
@@ -359,17 +339,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testAddFrameTupleFrameTuple() //Brett
    {
-      FrameTuple3D<?, ?> expected = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> frameTuple1 = createFrameTuple(theFrame, 0.1, 0.1, 0.1);
-      FrameTuple3D<?, ?> frameTuple2 = createFrameTuple(theFrame, 10, 10, 10);
+      F expected = createTuple(theFrame);
+      F frameTuple1 = createTuple(theFrame, 0.1, 0.1, 0.1);
+      F frameTuple2 = createTuple(theFrame, 10, 10, 10);
 
       expected.add(frameTuple1, frameTuple2);
       assertEquals(10.1, expected.getX(), epsilon);
       assertEquals(10.1, expected.getY(), epsilon);
       assertEquals(10.1, expected.getZ(), epsilon);
 
-      FrameTuple3D<?, ?> expected2 = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> frameTuple2frame = createFrameTuple(aFrame, 10, 10, 10);
+      F expected2 = createTuple(theFrame);
+      F frameTuple2frame = createTuple(aFrame, 10, 10, 10);
       try
       {
          expected2.add(frameTuple1, frameTuple2frame);
@@ -393,8 +373,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testReferenceFramesAreCheckedOnSet()
    {
-      FrameTuple3D<?, ?> framePointOne = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePointTwo = createFrameTuple(aFrame);
+      F framePointOne = createTuple(theFrame);
+      F framePointTwo = createTuple(aFrame);
 
       try
       {
@@ -410,7 +390,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testEpsilonEqualsTuple()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
+      F framePoint = createTuple(theFrame, 1.0, 2.0, 3.0);
       Point3D tuple1 = new Point3D(1.0, 2.0, 3.0);
 
       boolean tupleResult = tuple1.epsilonEquals(tuple1, epsilon);
@@ -422,32 +402,32 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testEpsilonEqualsFrameTuple()
    {
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(aFrame, 1.0, 2.0, 3.0);
+      F framePoint1 = createTuple(theFrame, 1.0, 2.0, 3.0);
+      F framePoint2 = createTuple(aFrame, 1.0, 2.0, 3.0);
 
       assertFalse(framePoint1.epsilonEquals(framePoint2, epsilon)); //test with non-matching refernce frames
 
       double threshold = 0.5;
       boolean expectedReturn = true;
 
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.1, 2.1, 3.1);
+      F framePoint = createTuple(theFrame, 1.1, 2.1, 3.1);
       boolean actualReturn = framePoint1.epsilonEquals(framePoint, threshold);
       assertEquals("return value", expectedReturn, actualReturn);
 
-      framePoint = createFrameTuple(theFrame, 1.2, 2.2, 3.2);
+      framePoint = createTuple(theFrame, 1.2, 2.2, 3.2);
       actualReturn = framePoint1.epsilonEquals(framePoint, threshold);
       assertEquals("return value", expectedReturn, actualReturn);
 
       expectedReturn = false;
-      framePoint = createFrameTuple(theFrame, 1.7, 2.1, 3.1);
+      framePoint = createTuple(theFrame, 1.7, 2.1, 3.1);
       actualReturn = framePoint1.epsilonEquals(framePoint, threshold);
       assertEquals("return value", expectedReturn, actualReturn);
 
-      framePoint = createFrameTuple(theFrame, 1.1, 2.7, 3.1);
+      framePoint = createTuple(theFrame, 1.1, 2.7, 3.1);
       actualReturn = framePoint1.epsilonEquals(framePoint, threshold);
       assertEquals("return value", expectedReturn, actualReturn);
 
-      framePoint = createFrameTuple(theFrame, 0, 0, 0);
+      framePoint = createTuple(theFrame, 0, 0, 0);
       actualReturn = framePoint1.epsilonEquals(framePoint, threshold);
       assertEquals("return value", expectedReturn, actualReturn);
    }
@@ -455,7 +435,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testGetTuple3d()
    {
-      FrameTuple3D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
+      F frameTuple = createTuple(theFrame, 1.0, 2.0, 3.0);
       Vector3D tuple3d = new Vector3D();
       frameTuple.get(tuple3d);
 
@@ -463,48 +443,53 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    }
 
    @Test
-   public final void testSetToZero()
+   public final void testSetToZero() throws Exception
    {
-      FrameTuple3D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
-      FrameTuple3D<?, ?> frameTupleZero = createFrameTuple(theFrame, 0.0, 0.0, 0.0);
+      F frameTuple = createTuple(theFrame, 1.0, 2.0, 3.0);
+      F frameTupleZero = createTuple(theFrame, 0.0, 0.0, 0.0);
       frameTuple.setToZero();
       assertTrue(frameTuple.epsilonEquals(frameTupleZero, epsilon));
-   }
 
-   @Test
-   public final void testSetToZeroReferenceFrame()
-   {
-      FrameTuple3D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
-      FrameTuple3D<?, ?> frameTupleZero = createFrameTuple(aFrame, 0.0, 0.0, 0.0);
+      frameTuple = createTuple(theFrame, 1.0, 2.0, 3.0);
+      frameTupleZero = createTuple(aFrame, 0.0, 0.0, 0.0);
       frameTuple.setToZero(aFrame);
       assertTrue(frameTuple.epsilonEquals(frameTupleZero, epsilon));
    }
 
    @Test
-   public final void testSetToNaN()
+   public final void testSetToNaN() throws Exception
    {
-      FrameTuple3D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
+      F frameTuple = createTuple(theFrame, 1.0, 2.0, 3.0);
       frameTuple.setToNaN();
       assertTrue(Double.isNaN(frameTuple.getX()));
       assertTrue(Double.isNaN(frameTuple.getY()));
       assertTrue(Double.isNaN(frameTuple.getZ()));
-   }
 
-   @Test
-   public final void testSetToNaNReferenceFrame()
-   {
-      FrameTuple3D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
+      frameTuple = createTuple(theFrame, 1.0, 2.0, 3.0);
       frameTuple.setToNaN(aFrame);
       assertTrue(frameTuple.getReferenceFrame() == aFrame);
       assertTrue(Double.isNaN(frameTuple.getX()));
       assertTrue(Double.isNaN(frameTuple.getY()));
       assertTrue(Double.isNaN(frameTuple.getZ()));
+
+      F frameVector = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F frameVector2 = createTuple(theFrame, 20.0, -7.0, -14.0);
+
+      frameVector.setToNaN();
+      assertTrue(Double.isNaN(frameVector.getX()));
+      assertTrue(Double.isNaN(frameVector.getY()));
+      assertTrue(Double.isNaN(frameVector.getZ()));
+
+      frameVector2.setToNaN(theFrame);
+      assertTrue(Double.isNaN(frameVector2.getX()));
+      assertTrue(Double.isNaN(frameVector2.getY()));
+      assertTrue(Double.isNaN(frameVector2.getZ()));
    }
 
    @Test
    public final void testGetReferenceFrame()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
+      F framePoint = createTuple(theFrame);
 
       ReferenceFrame expectedReturn = theFrame;
       ReferenceFrame actualReturn = framePoint.getReferenceFrame();
@@ -514,7 +499,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testGetX()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.1, 1.2, 1.3);
+      F framePoint = createTuple(theFrame, 1.1, 1.2, 1.3);
 
       double expectedReturn = 1.1;
       double actualReturn = framePoint.getX();
@@ -524,7 +509,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testGetY()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.1, 1.2, 1.3);
+      F framePoint = createTuple(theFrame, 1.1, 1.2, 1.3);
 
       double expectedReturn = 1.2;
       double actualReturn = framePoint.getY();
@@ -534,7 +519,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testGetZ()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.1, 1.2, 1.3);
+      F framePoint = createTuple(theFrame, 1.1, 1.2, 1.3);
 
       double expectedReturn = 1.3;
       double actualReturn = framePoint.getZ();
@@ -544,7 +529,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSet2()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
+      F framePoint = createTuple(theFrame);
 
       double x = 0.0;
       double y = 0.0;
@@ -559,7 +544,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSetX()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
+      F framePoint = createTuple(theFrame);
 
       double x = 0.0;
       framePoint.setX(x);
@@ -570,7 +555,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSetY()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
+      F framePoint = createTuple(theFrame);
 
       double y = 0.0;
       framePoint.setY(y);
@@ -581,7 +566,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSetZ()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
+      F framePoint = createTuple(theFrame);
 
       double z = 0.0;
       framePoint.setZ(z);
@@ -592,7 +577,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubTuple3d()
    {
-      FrameTuple3D<?, ?> frameTuple1 = createFrameTuple(theFrame, 1.0, 1.0, 1.0);
+      F frameTuple1 = createTuple(theFrame, 1.0, 1.0, 1.0);
       Point3D tuple1 = new Point3D(1.0, 1.0, 1.0);
 
       frameTuple1.sub(tuple1);
@@ -604,9 +589,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubTuple3dTuple3d()
    {
-      FrameTuple3D<?, ?> frameTuple1 = createFrameTuple(theFrame, 1.0, 1.0, 1.0);
-      FrameTuple3D<?, ?> frameTuple2 = createFrameTuple(theFrame, 1.0, 1.0, 1.0);
-      FrameTuple3D<?, ?> expectedFrameTuple = createFrameTuple(theFrame, 0.0, 0.0, 0.0);
+      F frameTuple1 = createTuple(theFrame, 1.0, 1.0, 1.0);
+      F frameTuple2 = createTuple(theFrame, 1.0, 1.0, 1.0);
+      F expectedFrameTuple = createTuple(theFrame, 0.0, 0.0, 0.0);
       Point3D tuple1 = new Point3D(1.0, 1.0, 1.0);
       Point3D tuple2 = new Point3D(1.0, 1.0, 1.0);
       Point3D expectedTuple = new Point3D(0.0, 0.0, 0.0);
@@ -620,9 +605,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubFrameTuple()
    {
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePoint = null;
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(aFrame);
+      F framePoint1 = createTuple(theFrame);
+      F framePoint = null;
+      F framePoint2 = createTuple(aFrame);
 
       try
       {
@@ -647,10 +632,10 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubFrameTupleFrameTuple()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(aFrame);
-      FrameTuple3D<?, ?> point1 = null;
-      FrameTuple3D<?, ?> point2 = null;
+      F framePoint = createTuple(theFrame);
+      F framePoint2 = createTuple(aFrame);
+      F point1 = null;
+      F point2 = null;
       try
       {
          framePoint.sub(point1, point2);
@@ -692,7 +677,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testCheckReferenceFrameMatch() throws ReferenceFrameMismatchException
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
+      F framePoint = createTuple(theFrame);
 
       ReferenceFrame frame = null;
       try
@@ -709,29 +694,29 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testFramePoint()
    {
-      createFrameTuple(theFrame);
+      createTuple(theFrame);
 
       ReferenceFrame referenceFrame = null;
-      createFrameTuple(referenceFrame);
+      createTuple(referenceFrame);
    }
 
    @Test
    public final void testFramePoint2()
    {
-      createFrameTuple(theFrame);
+      createTuple(theFrame);
 
       ReferenceFrame referenceFrame = null;
       double x = 0.0;
       double y = 0.0;
       double z = 0.0;
-      createFrameTuple(referenceFrame, x, y, z);
+      createTuple(referenceFrame, x, y, z);
    }
 
    @Test //Brett was here
    public final void testScale()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 5.0, 5.0, 5.0);
-      FrameTuple3D<?, ?> tuple1 = createFrameTuple(aFrame, 5.0, 5.0, 5.0);
+      F framePoint = createTuple(theFrame, 5.0, 5.0, 5.0);
+      F tuple1 = createTuple(aFrame, 5.0, 5.0, 5.0);
 
       double scaleFactor = 4.0;
       framePoint.scale(scaleFactor);
@@ -761,8 +746,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleVector()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(theFrame, 1.0, 3.0, -2.0);
+      F framePoint = createTuple(theFrame);
+      F frameVector = createTuple(theFrame, 1.0, 3.0, -2.0);
       double scale = 2.3;
 
       framePoint.setAndScale(scale, frameVector);
@@ -775,8 +760,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleVectorException()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(aFrame, 1.0, 3.0, -2.0);
+      F framePoint = createTuple(theFrame);
+      F frameVector = createTuple(aFrame, 1.0, 3.0, -2.0);
       double scale = 2.3;
 
       try
@@ -793,8 +778,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScalePoint()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(theFrame, 1.0, 3.0, -2.0);
+      F framePoint = createTuple(theFrame);
+      F framePoint2 = createTuple(theFrame, 1.0, 3.0, -2.0);
       double scale = 2.3;
 
       framePoint.setAndScale(scale, framePoint2);
@@ -807,8 +792,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScalePointException()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(aFrame, 1.0, 3.0, -2.0);
+      F framePoint = createTuple(theFrame);
+      F framePoint2 = createTuple(aFrame, 1.0, 3.0, -2.0);
       double scale = 2.3;
 
       try
@@ -825,9 +810,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddVectorVector() //Brett was here
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
+      F framePoint = createTuple(theFrame);
+      F frameVector1 = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F frameVector2 = createTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       framePoint.scaleAdd(scale, frameVector1, frameVector2);
@@ -836,7 +821,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(scale * -1.5 + 3.0, framePoint.getY(), epsilon);
       assertEquals(scale * -2.0 + 3.6, framePoint.getZ(), epsilon);
 
-      FrameTuple3D<?, ?> frameVector3 = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
+      F frameVector3 = createTuple(aFrame, 1.0, 3.0, 3.6);
       try
       {
          framePoint.scaleAdd(scale, frameVector1, frameVector3);
@@ -860,9 +845,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddVectorVectorException1()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(aFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
+      F framePoint = createTuple(theFrame);
+      F frameVector1 = createTuple(aFrame, 7.0, -1.5, -2.0);
+      F frameVector2 = createTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       try
@@ -879,9 +864,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddVectorVectorException2()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector2 = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
+      F framePoint = createTuple(theFrame);
+      F frameVector1 = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F frameVector2 = createTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       try
@@ -898,17 +883,17 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddVectorPoint()
    {
-      FrameTuple3D<?, ?> framePointResult1 = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePointResult2 = createFrameTuple(theFrame);
+      F framePointResult1 = createTuple(theFrame);
+      F framePointResult2 = createTuple(theFrame);
 
       Vector3D vector1 = new Vector3D(7.0, -1.5, -2.0);
       Vector3D vector2 = new Vector3D(1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(theFrame, vector1);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, vector2);
-      FrameTuple3D<?, ?> frameVector2 = createFrameTuple(theFrame, vector2);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(theFrame, vector1);
+      F frameVector1 = createTuple(theFrame, vector1);
+      F framePoint1 = createTuple(theFrame, vector2);
+      F frameVector2 = createTuple(theFrame, vector2);
+      F framePoint2 = createTuple(theFrame, vector1);
 
       framePointResult1.scaleAdd(scale, frameVector1, framePoint1);
       assertEquals(2.3 * 7.0 + 1.0, framePointResult1.getX(), epsilon);
@@ -922,14 +907,14 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddVectorPointException1()
    {
-      FrameTuple3D<?, ?> framePointResult1 = createFrameTuple(theFrame);
+      F framePointResult1 = createTuple(theFrame);
 
       Vector3D vector1 = new Vector3D(7.0, -1.5, -2.0);
       Vector3D vector2 = new Vector3D(1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(aFrame, vector1);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, vector2);
+      F frameVector1 = createTuple(aFrame, vector1);
+      F framePoint1 = createTuple(theFrame, vector2);
 
       try
       {
@@ -945,14 +930,14 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddVectorPointException2()
    {
-      FrameTuple3D<?, ?> framePointResult1 = createFrameTuple(theFrame);
+      F framePointResult1 = createTuple(theFrame);
 
       Vector3D vector1 = new Vector3D(7.0, -1.5, -2.0);
       Vector3D vector2 = new Vector3D(1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(theFrame, vector1);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(aFrame, vector2);
+      F frameVector1 = createTuple(theFrame, vector1);
+      F framePoint1 = createTuple(aFrame, vector2);
 
       try
       {
@@ -968,14 +953,14 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddPointVectorException1()
    {
-      FrameTuple3D<?, ?> framePointResult1 = createFrameTuple(theFrame);
+      F framePointResult1 = createTuple(theFrame);
 
       Vector3D vector1 = new Vector3D(7.0, -1.5, -2.0);
       Vector3D vector2 = new Vector3D(1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(aFrame, vector1);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, vector2);
+      F frameVector1 = createTuple(aFrame, vector1);
+      F framePoint1 = createTuple(theFrame, vector2);
 
       try
       {
@@ -991,14 +976,14 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddPointVectorException2()
    {
-      FrameTuple3D<?, ?> framePointResult1 = createFrameTuple(theFrame);
+      F framePointResult1 = createTuple(theFrame);
 
       Vector3D vector1 = new Vector3D(7.0, -1.5, -2.0);
       Vector3D vector2 = new Vector3D(1.0, 3.0, 3.6);
       double scale = 2.3;
 
-      FrameTuple3D<?, ?> frameVector1 = createFrameTuple(theFrame, vector1);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(aFrame, vector2);
+      F frameVector1 = createTuple(theFrame, vector1);
+      F framePoint1 = createTuple(aFrame, vector2);
 
       try
       {
@@ -1014,9 +999,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddPointPoint()
    {
-      FrameTuple3D<?, ?> framePointResult = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
+      F framePointResult = createTuple(theFrame);
+      F framePoint1 = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F framePoint2 = createTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       framePointResult.scaleAdd(scale, framePoint1, framePoint2);
@@ -1029,9 +1014,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddPointPointException1()
    {
-      FrameTuple3D<?, ?> framePointResult = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(aFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
+      F framePointResult = createTuple(theFrame);
+      F framePoint1 = createTuple(aFrame, 7.0, -1.5, -2.0);
+      F framePoint2 = createTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       try
@@ -1048,9 +1033,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddPointPointException2()
    {
-      FrameTuple3D<?, ?> framePointResult = createFrameTuple(theFrame);
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
+      F framePointResult = createTuple(theFrame);
+      F framePoint1 = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F framePoint2 = createTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       try
@@ -1067,8 +1052,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test //Brett was here
    public final void testScaleAddScaleTuple()
    {
-      FrameTuple3D<?, ?> framePointResult = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
+      F framePointResult = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F frameVector = createTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       framePointResult.scaleAdd(scale, frameVector);
@@ -1078,7 +1063,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       assertEquals(2.3 * -2.0 + 3.6, framePointResult.getZ(), epsilon);
 
       //test non-matching reference frames
-      FrameTuple3D<?, ?> ft1 = createFrameTuple(aFrame);
+      F ft1 = createTuple(aFrame);
       try
       {
          ft1.scaleAdd(scale, frameVector);
@@ -1093,8 +1078,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddVectorException()
    {
-      FrameTuple3D<?, ?> framePointResult = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
+      F framePointResult = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F frameVector = createTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       try
@@ -1111,8 +1096,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddPoint()
    {
-      FrameTuple3D<?, ?> framePointResult = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
+      F framePointResult = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F framePoint = createTuple(theFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       framePointResult.scaleAdd(scale, framePoint);
@@ -1125,8 +1110,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testScaleAddPointException()
    {
-      FrameTuple3D<?, ?> framePointResult = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(aFrame, 1.0, 3.0, 3.6);
+      F framePointResult = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F framePoint = createTuple(aFrame, 1.0, 3.0, 3.6);
       double scale = 2.3;
 
       try
@@ -1143,9 +1128,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubFramePoint()
    {
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
-      FrameTuple3D<?, ?> expectedResult = createFrameTuple(theFrame, 6.0, -4.5, -5.6);
+      F framePoint1 = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F framePoint2 = createTuple(theFrame, 1.0, 3.0, 3.6);
+      F expectedResult = createTuple(theFrame, 6.0, -4.5, -5.6);
 
       framePoint1.sub(framePoint2);
       assertTrue(expectedResult.epsilonEquals(framePoint1, epsilon));
@@ -1154,9 +1139,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubFrameVector()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
-      FrameTuple3D<?, ?> expectedResult = createFrameTuple(theFrame, 6.0, -4.5, -5.6);
+      F framePoint = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F frameVector = createTuple(theFrame, 1.0, 3.0, 3.6);
+      F expectedResult = createTuple(theFrame, 6.0, -4.5, -5.6);
 
       framePoint.sub(frameVector);
       assertTrue(expectedResult.epsilonEquals(framePoint, epsilon));
@@ -1165,11 +1150,11 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubPointPoint()
    {
-      FrameTuple3D<?, ?> framePoint1 = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint2 = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
-      FrameTuple3D<?, ?> expectedResult = createFrameTuple(theFrame, 6.0, -4.5, -5.6);
+      F framePoint1 = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F framePoint2 = createTuple(theFrame, 1.0, 3.0, 3.6);
+      F expectedResult = createTuple(theFrame, 6.0, -4.5, -5.6);
 
-      FrameTuple3D<?, ?> actualResult = createFrameTuple(theFrame);
+      F actualResult = createTuple(theFrame);
       actualResult.sub(framePoint1, framePoint2);
       assertTrue(expectedResult.epsilonEquals(actualResult, epsilon));
    }
@@ -1177,11 +1162,11 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubPointVector()
    {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
-      FrameTuple3D<?, ?> expectedResult = createFrameTuple(theFrame, 6.0, -4.5, -5.6);
+      F framePoint = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F frameVector = createTuple(theFrame, 1.0, 3.0, 3.6);
+      F expectedResult = createTuple(theFrame, 6.0, -4.5, -5.6);
 
-      FrameTuple3D<?, ?> actualResult = createFrameTuple(theFrame);
+      F actualResult = createTuple(theFrame);
       actualResult.sub(framePoint, frameVector);
       assertTrue(expectedResult.epsilonEquals(actualResult, epsilon));
    }
@@ -1189,70 +1174,30 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testSubVectorPoint()
    {
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.0, 3.0, 3.6);
-      FrameTuple3D<?, ?> expectedResult = createFrameTuple(theFrame, 6.0, -4.5, -5.6);
+      F frameVector = createTuple(theFrame, 7.0, -1.5, -2.0);
+      F framePoint = createTuple(theFrame, 1.0, 3.0, 3.6);
+      F expectedResult = createTuple(theFrame, 6.0, -4.5, -5.6);
 
-      FrameTuple3D<?, ?> actualResult = createFrameTuple(theFrame);
+      F actualResult = createTuple(theFrame);
       actualResult.sub(frameVector, framePoint);
       assertTrue(expectedResult.epsilonEquals(actualResult, epsilon));
    }
 
    @Test
-   public final void testSetNaN()
-   {
-      FrameTuple3D<?, ?> frameVector = createFrameTuple(theFrame, 7.0, -1.5, -2.0);
-      FrameTuple3D<?, ?> frameVector2 = createFrameTuple(theFrame, 20.0, -7.0, -14.0);
-
-      frameVector.setToNaN();
-      assertTrue(Double.isNaN(frameVector.getX()));
-      assertTrue(Double.isNaN(frameVector.getY()));
-      assertTrue(Double.isNaN(frameVector.getZ()));
-
-      frameVector2.setToNaN(theFrame);
-      assertTrue(Double.isNaN(frameVector2.getX()));
-      assertTrue(Double.isNaN(frameVector2.getY()));
-      assertTrue(Double.isNaN(frameVector2.getZ()));
-   }
-
-   @Test
-   public final void testCheckForNaNAndContainsNaN()
-   {
-      FrameTuple3D<?, ?> framePoint = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
-      assertFalse(framePoint.containsNaN());
-
-      framePoint.setX(Double.NaN);
-      assertTrue(framePoint.containsNaN());
-
-      framePoint.setX(1.0);
-      assertFalse(framePoint.containsNaN());
-      framePoint.setY(Double.NaN);
-      assertTrue(framePoint.containsNaN());
-
-      framePoint.setY(2.0);
-      assertFalse(framePoint.containsNaN());
-      framePoint.setZ(Double.NaN);
-      assertTrue(framePoint.containsNaN());
-
-      framePoint.setZ(3.0);
-      assertFalse(framePoint.containsNaN());
-   }
-
-   @Test
    public final void testInterpolate()
    {
-      FrameTuple3D<?, ?> frameTuple1 = createFrameTuple(ReferenceFrame.getWorldFrame(), -1.0, 0.0, 17.0);
-      FrameTuple3D<?, ?> frameTuple2 = createFrameTuple(ReferenceFrame.getWorldFrame(), 3.3, 30.0, 9.0);
-      FrameTuple3D<?, ?> frameTuple3 = createFrameTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.8, 3.0);
+      F frameTuple1 = createTuple(ReferenceFrame.getWorldFrame(), -1.0, 0.0, 17.0);
+      F frameTuple2 = createTuple(ReferenceFrame.getWorldFrame(), 3.3, 30.0, 9.0);
+      F frameTuple3 = createTuple(ReferenceFrame.getWorldFrame(), 1.0, 2.8, 3.0);
 
       frameTuple3.interpolate(frameTuple1, frameTuple2, 3.0);
       frameTuple3.interpolate(frameTuple2, frameTuple1, 1);
 
-      FrameTuple3D<?, ?> frameTuple4 = createFrameTuple(theFrame, 1.0, 2.0, 3.0);
-      FrameTuple3D<?, ?> frameTuple5 = createFrameTuple(theFrame, 0.0, -1.0, 8.2);
+      F frameTuple4 = createTuple(theFrame, 1.0, 2.0, 3.0);
+      F frameTuple5 = createTuple(theFrame, 0.0, -1.0, 8.2);
       double alpha = 0.57;
 
-      FrameTuple3D<?, ?> resultTuple = createFrameTuple(frameTuple4.getReferenceFrame(), frameTuple4.getX(), frameTuple4.getY(), frameTuple4.getZ());
+      F resultTuple = createTuple(frameTuple4.getReferenceFrame(), frameTuple4.getX(), frameTuple4.getY(), frameTuple4.getZ());
       resultTuple.interpolate(frameTuple4, frameTuple5, alpha);
 
       assertEquals((1.0 - alpha) * frameTuple4.getX() + alpha * frameTuple5.getX(), resultTuple.getX(), epsilon);
@@ -1264,7 +1209,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    public final void testPackMatrix() //Brett was here
    {
       ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
-      FrameTuple3D<?, ?> frametuple = createFrameTuple(worldFrame, 10.0, 10.0, 10.0);
+      F frametuple = createTuple(worldFrame, 10.0, 10.0, 10.0);
       Random ran = new Random(4564L);
       int numberOfIterations = 100;
       int startRow;
@@ -1298,7 +1243,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testClipToMinMax() //Brett was here
    {
-      FrameTuple3D<?, ?> frameTuple = createFrameTuple(ReferenceFrame.getWorldFrame(), -5.0, 3.0, 10.0);
+      F frameTuple = createTuple(ReferenceFrame.getWorldFrame(), -5.0, 3.0, 10.0);
       frameTuple.clipToMinMax(4, 10); //call clipToMinMax(4, 10)
       assertEquals("Should be equal", 4, frameTuple.getX(), epsilon);
       assertEquals("Should be equal", 4, frameTuple.getY(), epsilon);
@@ -1308,8 +1253,8 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testNegate() //Brett was here
    {
-      FrameTuple3D<?, ?> frameTuple = createFrameTuple(ReferenceFrame.getWorldFrame(), -5.0, 0.0, 10.0);
-      FrameTuple3D<?, ?> frameTupleToNegate = createFrameTuple(ReferenceFrame.getWorldFrame(), 5.0, 0.0, -10.0);
+      F frameTuple = createTuple(ReferenceFrame.getWorldFrame(), -5.0, 0.0, 10.0);
+      F frameTupleToNegate = createTuple(ReferenceFrame.getWorldFrame(), 5.0, 0.0, -10.0);
       frameTupleToNegate.negate();
       assertEquals("Should be equal", frameTuple.getX(), frameTupleToNegate.getX(), epsilon);
       assertEquals("Should be equal", frameTuple.getY(), frameTupleToNegate.getY(), epsilon);
@@ -1319,15 +1264,15 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    @Test
    public final void testAbsolute()
    {
-      FrameTuple3D<?, ?> expectedFrameTuple = createFrameTuple(ReferenceFrame.getWorldFrame(), 5.0, 0.0, 10.0);
-      FrameTuple3D<?, ?> actualFrameTuple = createFrameTuple(ReferenceFrame.getWorldFrame(), 5.0, 0.0, -10.0);
+      F expectedFrameTuple = createTuple(ReferenceFrame.getWorldFrame(), 5.0, 0.0, 10.0);
+      F actualFrameTuple = createTuple(ReferenceFrame.getWorldFrame(), 5.0, 0.0, -10.0);
       actualFrameTuple.absolute();
       assertEquals("Should be equal", expectedFrameTuple.getX(), actualFrameTuple.getX(), epsilon);
       assertEquals("Should be equal", expectedFrameTuple.getY(), actualFrameTuple.getY(), epsilon);
       assertEquals("Should be equal", expectedFrameTuple.getZ(), actualFrameTuple.getZ(), epsilon);
 
-      expectedFrameTuple = createFrameTuple(ReferenceFrame.getWorldFrame(), 5.0, 1.0, 10.0);
-      actualFrameTuple = createFrameTuple(ReferenceFrame.getWorldFrame(), 5.0, -1.0, -10.0);
+      expectedFrameTuple = createTuple(ReferenceFrame.getWorldFrame(), 5.0, 1.0, 10.0);
+      actualFrameTuple = createTuple(ReferenceFrame.getWorldFrame(), 5.0, -1.0, -10.0);
       actualFrameTuple.absolute();
       assertEquals("Should be equal", expectedFrameTuple.getX(), actualFrameTuple.getX(), epsilon);
       assertEquals("Should be equal", expectedFrameTuple.getY(), actualFrameTuple.getY(), epsilon);
@@ -1339,5 +1284,112 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    {
       super.testOverloading();
       assertSuperMethodsAreOverloaded(FrameTuple3DReadOnly.class, Tuple3DReadOnly.class, FrameTuple3D.class, Tuple3DBasics.class);
+   }
+
+   @Test
+   public void testReferenceFrameChecks() throws Throwable
+   {
+      Random random = new Random(234);
+      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomTuple(random, frame), false, true, methodFilter);
+   }
+
+   @Test
+   public void testFrameGeometryObjectFeatures() throws Throwable
+   {
+      FrameGeometryObjectTest<F, T> frameGeometryObjectTest = new FrameGeometryObjectTest<F, T>()
+      {
+         @Override
+         public T createEmptyGeometryObject()
+         {
+            return createEmptyTuple().getGeometryObject();
+         }
+
+         @Override
+         public T createRandomGeometryObject(Random random)
+         {
+            return createRandomTuple(random).getGeometryObject();
+         }
+
+         @Override
+         public F createEmptyFrameGeometryObject(ReferenceFrame referenceFrame)
+         {
+            return createEmptyTuple(referenceFrame);
+         }
+
+         @Override
+         public F createFrameGeometryObject(ReferenceFrame referenceFrame, T geometryObject)
+         {
+            return createTuple(referenceFrame, geometryObject);
+         }
+
+         @Override
+         public F createRandomFrameGeometryObject(Random random, ReferenceFrame referenceFrame)
+         {
+            return createRandomTuple(random, referenceFrame);
+         }
+      };
+
+      for (Method testMethod : frameGeometryObjectTest.getClass().getMethods())
+      {
+         if (!testMethod.getName().startsWith("test"))
+            continue;
+         if (!Modifier.isPublic(testMethod.getModifiers()))
+            continue;
+         if (Modifier.isStatic(testMethod.getModifiers()))
+            continue;
+
+         try
+         {
+            testMethod.invoke(frameGeometryObjectTest);
+         }
+         catch (InvocationTargetException e)
+         {
+            throw e.getCause();
+         }
+      }
+   }
+
+   @Test
+   public void testTuple3DBasicsFeatures() throws Exception
+   {
+      Tuple3DBasicsTest<F> tuple3dBasicsTest = new Tuple3DBasicsTest<F>()
+      {
+         @Override
+         public F createEmptyTuple()
+         {
+            return FrameTuple3DTest.this.createEmptyTuple();
+         }
+
+         @Override
+         public F createTuple(double x, double y, double z)
+         {
+            return FrameTuple3DTest.this.createTuple(x, y, z);
+         }
+
+         @Override
+         public F createRandomTuple(Random random)
+         {
+            return FrameTuple3DTest.this.createRandomTuple(random);
+         }
+
+         @Override
+         public double getEpsilon()
+         {
+            return FrameTuple3DTest.this.getEpsilon();
+         }
+      };
+
+      for (Method testMethod : tuple3dBasicsTest.getClass().getMethods())
+      {
+         if (!testMethod.getName().startsWith("test"))
+            continue;
+         if (!Modifier.isPublic(testMethod.getModifiers()))
+            continue;
+         if (Modifier.isStatic(testMethod.getModifiers()))
+            continue;
+
+         testMethod.invoke(tuple3dBasicsTest);
+      }
    }
 }

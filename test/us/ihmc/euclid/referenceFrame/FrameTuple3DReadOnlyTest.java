@@ -15,24 +15,24 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 public abstract class FrameTuple3DReadOnlyTest<T extends FrameTuple3DReadOnly> extends Tuple3DReadOnlyTest<T>
 {
    @Override
-   public T createEmptyTuple()
+   public final T createEmptyTuple()
    {
       return createTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0);
    }
 
-   public T createEmptyTuple(ReferenceFrame referenceFrame)
+   public final T createEmptyTuple(ReferenceFrame referenceFrame)
    {
       return createTuple(referenceFrame, 0.0, 0.0, 0.0);
    }
 
    @Override
-   public T createRandomTuple(Random random)
+   public final T createRandomTuple(Random random)
    {
       return createTuple(ReferenceFrame.getWorldFrame(), random.nextDouble(), random.nextDouble(), random.nextDouble());
    }
 
    @Override
-   public T createTuple(double x, double y, double z)
+   public final T createTuple(double x, double y, double z)
    {
       return createTuple(ReferenceFrame.getWorldFrame(), x, y, z);
    }
@@ -42,6 +42,8 @@ public abstract class FrameTuple3DReadOnlyTest<T extends FrameTuple3DReadOnly> e
    @Test
    public void testEpsilonEquals() throws Exception
    {
+      super.testEpsilonEquals();
+
       Random random = new Random(621541L);
       double epsilon = 0.0;
 

@@ -24,18 +24,6 @@ public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D, Point3D>
    @Override
    public FramePoint3D createTuple(ReferenceFrame referenceFrame, double x, double y, double z)
    {
-      return createFrameTuple(referenceFrame, x, y, z);
-   }
-
-   @Override
-   public FramePoint3D createEmptyFrameTuple()
-   {
-      return new FramePoint3D();
-   }
-
-   @Override
-   public FramePoint3D createFrameTuple(ReferenceFrame referenceFrame, double x, double y, double z)
-   {
       return new FramePoint3D(referenceFrame, x, y, z);
    }
 

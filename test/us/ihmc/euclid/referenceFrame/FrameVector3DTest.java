@@ -20,25 +20,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
 {
-   @Override
-   public FrameVector3D createTuple(ReferenceFrame referenceFrame, double x, double y, double z)
-   {
-      return createFrameTuple(referenceFrame, x, y, z);
-   }
-
    @After
    public void tearDown()
    {
    }
 
    @Override
-   public FrameVector3D createEmptyFrameTuple()
-   {
-      return new FrameVector3D();
-   }
-
-   @Override
-   public FrameVector3D createFrameTuple(ReferenceFrame referenceFrame, double x, double y, double z)
+   public FrameVector3D createTuple(ReferenceFrame referenceFrame, double x, double y, double z)
    {
       return new FrameVector3D(referenceFrame, x, y, z);
    }
@@ -202,10 +190,10 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
    @Test
    public void testCrosses() //Brett
    {
-      FrameVector3D frameVector1 = createFrameTuple(theFrame, 1, 2, 3);
-      FrameVector3D frameVector2 = createFrameTuple(theFrame, 0, 1, 2);
-      FrameVector3D v2other = createFrameTuple(aFrame, 0, 1, 2);
-      FrameVector3D result = createFrameTuple(theFrame, 0, 0, 0);
+      FrameVector3D frameVector1 = createTuple(theFrame, 1, 2, 3);
+      FrameVector3D frameVector2 = createTuple(theFrame, 0, 1, 2);
+      FrameVector3D v2other = createTuple(aFrame, 0, 1, 2);
+      FrameVector3D result = createTuple(theFrame, 0, 0, 0);
       Vector3D expected = new Vector3D(1, -2, 1);
 
       result.cross(frameVector1, frameVector2);
