@@ -395,7 +395,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * @return the {@code String} representation of this frame geometry object.
     */
    @Override
-   public final String toString()
+   public String toString()
    {
       return geometryObject + "-" + referenceFrame;
    }

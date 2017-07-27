@@ -325,6 +325,22 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
    }
 
    @Test
+   public void testGetGeometryObject() throws Exception
+   {
+      Random random = new Random(43563);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         G expectedGeometry = createRandomGeometryObject(random);
+         G actualGeometryObject = createEmptyGeometryObject();
+         F frameGeometry = createFrameGeometryObject(ReferenceFrame.getWorldFrame(), expectedGeometry);
+         frameGeometry.get(actualGeometryObject);
+
+         assertTrue(expectedGeometry.epsilonEquals(actualGeometryObject, EPSILON));
+      }
+   }
+
+   @Test
    public void testApplyTransform() throws Exception
    {
       Random random = new Random(43563);
@@ -455,6 +471,40 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          frameGeometry.applyInverseTransform(transform);
          assertTrue(initialFrame == frameGeometry.getReferenceFrame());
          assertTrue(expectedGeometry.epsilonEquals(frameGeometry.getGeometryObject(), EPSILON));
+      }
+   }
+
+   @Test
+   public void testEquals() throws Exception
+   {
+      Random random = new Random(43563);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+
+         G expectedGeometry = createRandomGeometryObject(random);
+         F frameGeometry1 = createFrameGeometryObject(worldFrame, expectedGeometry);
+         F frameGeometry2 = createFrameGeometryObject(worldFrame, expectedGeometry);
+
+         assertFalse(frameGeometry1.equals((Object) null));
+         assertFalse(frameGeometry1.equals((F) null));
+         assertFalse(frameGeometry1.equals(new Object()));
+
+         assertTrue(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
+         assertTrue(frameGeometry1.equals(frameGeometry2));
+         assertTrue(frameGeometry1.equals((Object) frameGeometry2));
+
+         frameGeometry2 = createFrameGeometryObject(randomFrame, expectedGeometry);
+         assertTrue(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
+         assertFalse(frameGeometry1.equals(frameGeometry2));
+         assertFalse(frameGeometry1.equals((Object) frameGeometry2));
+
+         frameGeometry2 = createRandomFrameGeometryObject(random, randomFrame);
+         assertFalse(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
+         assertFalse(frameGeometry1.equals(frameGeometry2));
+         assertFalse(frameGeometry1.equals((Object) frameGeometry2));
       }
    }
 }

@@ -4,6 +4,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -87,6 +88,18 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    }
 
    /**
+    * Creates a new frame vector and initializes its x and y coordinate to {@code tuple2DReadOnly}
+    * and to the given reference frame.
+    *
+    * @param referenceFrame the initial frame for this frame vector.
+    * @param tuple2DReadOnly the tuple to copy the coordinates from. Not modified.
+    */
+   public FrameVector3D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      super(referenceFrame, new Vector3D(tuple2DReadOnly));
+   }
+
+   /**
     * Creates a new frame vector and initializes its reference frame x and y components from
     * {@code frameTuple2DReadOnly}.
     *
@@ -133,8 +146,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public void cross(FrameVector3DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      tuple.cross(tuple, other);
+      cross((FrameTuple3DReadOnly) other);
    }
 
    /**
@@ -150,7 +162,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    public void cross(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
       checkReferenceFrameMatch(frameTuple3DReadOnly);
-      tuple.cross(tuple, frameTuple3DReadOnly);
+      tuple.cross(frameTuple3DReadOnly);
    }
 
    /**

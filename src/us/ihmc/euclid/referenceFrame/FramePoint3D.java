@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -83,6 +84,18 @@ public class FramePoint3D extends FrameTuple3D<FramePoint3D, Point3D> implements
    public FramePoint3D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
    {
       super(referenceFrame, new Point3D(tuple3DReadOnly));
+   }
+
+   /**
+    * Creates a new frame point and initializes its x and y coordinate to {@code tuple2DReadOnly}
+    * and to the given reference frame.
+    *
+    * @param referenceFrame the initial frame for this frame point.
+    * @param tuple2DReadOnly the tuple to copy the coordinates from. Not modified.
+    */
+   public FramePoint3D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      super(referenceFrame, new Point3D(tuple2DReadOnly));
    }
 
    /**
