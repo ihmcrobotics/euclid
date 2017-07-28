@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
@@ -272,9 +273,22 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
    {
       Random random = new Random(6572);
 
+      boolean use2DTransforms = false;
+
+      try
+      {
+         RigidBodyTransform transform = new RigidBodyTransform();
+         transform.setRotationRoll(1.0);
+         createRandomFrameGeometryObject(random, ReferenceFrame.getWorldFrame()).applyTransform(transform);
+      }
+      catch (NotAMatrix2DException e)
+      {
+         use2DTransforms = true;
+      }
+
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random, use2DTransforms);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
@@ -294,9 +308,22 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
    {
       Random random = new Random(43563);
 
+      boolean use2DTransforms = false;
+
+      try
+      {
+         RigidBodyTransform transform = new RigidBodyTransform();
+         transform.setRotationRoll(1.0);
+         createRandomFrameGeometryObject(random, ReferenceFrame.getWorldFrame()).applyTransform(transform);
+      }
+      catch (NotAMatrix2DException e)
+      {
+         use2DTransforms = true;
+      }
+
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random, use2DTransforms);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 

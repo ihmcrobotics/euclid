@@ -7,6 +7,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple2D.Tuple2DReadOnlyTest;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -88,7 +89,6 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
    @Test
    public void testOverloading() throws Exception
    {
-      FrameTuple3DReadOnlyTest.assertSuperMethodsAreOverloaded(FrameTuple2DReadOnly.class, Tuple2DReadOnly.class, FrameTuple2DReadOnly.class,
-                                                               Tuple2DReadOnly.class);
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple2DReadOnly.class, Tuple2DReadOnly.class, true);
    }
 }

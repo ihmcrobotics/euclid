@@ -7,6 +7,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * {@code FrameVector2D} is a 2D vector expressed in a given reference frame.
@@ -86,6 +87,18 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
    }
 
    /**
+    * Creates a new frame vector and initializes it to the x and y coordinates of
+    * {@code tuple3DReadOnly} and to the given reference frame.
+    *
+    * @param referenceFrame the initial frame for this frame vector.
+    * @param tuple3DReadOnly the tuple to copy the coordinates from. Not modified.
+    */
+   public FrameVector2D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+   {
+      this(referenceFrame, new Vector2D(tuple3DReadOnly));
+   }
+
+   /**
     * Creates a new frame vector and initializes it to {@code other}.
     *
     * @param other the tuple to copy the components and reference frame from. Not modified.
@@ -99,7 +112,8 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
     * Creates a new frame vector and initializes it to x and y components of
     * {@code frameTuple3DReadOnly}.
     *
-    * @param frameTuple3DReadOnly the tuple to copy the components and reference frame from. Not modified.
+    * @param frameTuple3DReadOnly the tuple to copy the components and reference frame from. Not
+    *           modified.
     */
    public FrameVector2D(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
@@ -115,18 +129,8 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
     */
    public void setAndNormalize(FrameVector2DReadOnly other)
    {
+      checkReferenceFrameMatch(other);
       tuple.setAndNormalize(other);
-   }
-
-   /**
-    * Calculates and returns the value of the cross product of this frame vector with {@code other}.
-    *
-    * @param other the second term in the cross product. Not modified.
-    * @return the value of the cross product.
-    */
-   public double cross(FrameVector2DReadOnly other)
-   {
-      return FrameVector2DReadOnly.super.cross(other);
    }
 
    /**

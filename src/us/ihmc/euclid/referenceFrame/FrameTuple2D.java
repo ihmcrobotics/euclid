@@ -33,6 +33,12 @@ public abstract class FrameTuple2D<S extends FrameTuple2D<S, T>, T extends Tuple
       set(x, y);
    }
 
+   public final void setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple)
+   {
+      this.referenceFrame = referenceFrame;
+      set(tuple);
+   }
+
    /**
     * Sets this tuple's components {@code x}, {@code y} in order from the given array
     * {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
@@ -106,12 +112,6 @@ public abstract class FrameTuple2D<S extends FrameTuple2D<S, T>, T extends Tuple
    {
       this.referenceFrame = referenceFrame;
       tuple.set(startRow, column, tupleDenseMatrix);
-   }
-
-   public final void setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple)
-   {
-      this.referenceFrame = referenceFrame;
-      set(tuple);
    }
 
    /**
@@ -211,12 +211,6 @@ public abstract class FrameTuple2D<S extends FrameTuple2D<S, T>, T extends Tuple
    public final void get(Tuple2DBasics tuple2dToPack)
    {
       tuple2dToPack.set(tuple);
-   }
-
-   public final void checkForNaN()
-   {
-      if (containsNaN())
-         throw new RuntimeException(getClass().getSimpleName() + " " + this + " has a NaN!");
    }
 
    /**

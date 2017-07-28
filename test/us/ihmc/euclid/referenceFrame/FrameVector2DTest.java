@@ -2,34 +2,25 @@ package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
-import org.junit.After;
 import org.junit.Test;
 
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
-public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
+public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D, Vector2D>
 {
-   @Override
-   public FrameVector2D createTuple(ReferenceFrame referenceFrame, double x, double y)
-   {
-      return createFrameTuple(referenceFrame, x, y);
-   }
+   private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
 
    @Override
-   public FrameVector2D createFrameTuple(ReferenceFrame referenceFrame, double x, double y)
+   public FrameVector2D createTuple(ReferenceFrame referenceFrame, double x, double y)
    {
       return new FrameVector2D(referenceFrame, x, y);
    }
@@ -40,348 +31,104 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
       return 1.0e-15;
    }
 
-   @After
-   public void tearDown()
-   {
-   }
-
    @Test
-   public void testFrameVector2d_ReferenceFrame_double_double_String()
+   public void testConstructors() throws Exception
    {
-      double x = 5.7, y = 56.3;
-      FrameVector2D frame = new FrameVector2D(theFrame, x, y);
-      assertEquals("Should be equal", frame.getX(), x, epsilon);
-      assertEquals("Should be equal", frame.getY(), y, epsilon);
-      assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
-   }
+      Random random = new Random(435345);
 
-   @Test
-   public void testFrameVector2d_ReferenceFrame_double_double()
-   {
-      double x = 5.7, y = 56.3;
-      FrameVector2D frame = new FrameVector2D(theFrame, x, y);
-      assertEquals("Should be equal", frame.getX(), x, epsilon);
-      assertEquals("Should be equal", frame.getY(), y, epsilon);
-      assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
-   }
+      { // Test FrameVector2D()
+         FrameVector2D frameVector2D = new FrameVector2D();
+         assertTrue(frameVector2D.referenceFrame == worldFrame);
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(frameVector2D);
+      }
 
-   @Test
-   public void testFrameVector2d()
-   {
-      FrameVector2D frame = new FrameVector2D();
-      assertEquals("Should be equal", frame.getX(), 0.0, epsilon);
-      assertEquals("Should be equal", frame.getY(), 0.0, epsilon);
-      assertEquals("Should be equal", frame.getReferenceFrame(), ReferenceFrame.getWorldFrame());
-   }
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameVector2D(ReferenceFrame referenceFrame)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameVector2D frameVector2D = new FrameVector2D(randomFrame);
+         assertTrue(frameVector2D.referenceFrame == randomFrame);
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(frameVector2D);
+      }
 
-   @Test
-   public void testFrameVector2d_ReferenceFrame_Tuple2d()
-   {
-      double x = 5.7, y = 56.3;
-      Point2D tuple = new Point2D(x, y);
-      FrameVector2D frame = new FrameVector2D(theFrame, tuple);
-      assertEquals("Should be equal", frame.getX(), x, epsilon);
-      assertEquals("Should be equal", frame.getY(), y, epsilon);
-      assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
-   }
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameVector2D(ReferenceFrame referenceFrame, double x, double y)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         Vector2D randomTuple = EuclidCoreRandomTools.generateRandomVector2D(random);
+         FrameVector2D frameVector2D = new FrameVector2D(randomFrame, randomTuple.getX(), randomTuple.getY());
+         assertTrue(frameVector2D.referenceFrame == randomFrame);
+         EuclidCoreTestTools.assertTuple2DEquals(randomTuple, frameVector2D, EPSILON);
+      }
 
-   @Test
-   public void testFrameVector2d_ReferenceFrame_double()
-   {
-      double x = 5.7, y = 56.3;
-      double[] vector = {x, y};
-      FrameVector2D frame = new FrameVector2D(theFrame, vector);
-      assertEquals("Should be equal", frame.getX(), x, epsilon);
-      assertEquals("Should be equal", frame.getY(), y, epsilon);
-      assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
-   }
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameVector2D(ReferenceFrame referenceFrame, double[] pointArray)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         Vector2D randomTuple = EuclidCoreRandomTools.generateRandomVector2D(random);
+         double[] array = new double[3];
+         randomTuple.get(array);
+         FrameVector2D frameVector2D = new FrameVector2D(randomFrame, array);
+         assertTrue(frameVector2D.referenceFrame == randomFrame);
+         EuclidCoreTestTools.assertTuple2DEquals(randomTuple, frameVector2D, EPSILON);
+      }
 
-   @Test
-   public void testFrameVector2d_ReferenceFrame()
-   {
-      double x = 0.0, y = 0.0;
-      FrameVector2D frame = new FrameVector2D(theFrame);
-      assertEquals("Should be equal", frame.getX(), x, epsilon);
-      assertEquals("Should be equal", frame.getY(), y, epsilon);
-      assertEquals("Should be equal", frame.getReferenceFrame(), theFrame);
-   }
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameVector2D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         Vector3D randomTuple = EuclidCoreRandomTools.generateRandomVector3D(random);
+         FrameVector2D frameVector2D = new FrameVector2D(randomFrame, randomTuple);
+         assertTrue(frameVector2D.referenceFrame == randomFrame);
+         EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(randomTuple), frameVector2D, EPSILON);
+      }
 
-   @Test
-   public void testFrameVector2d_FrameTuple2d()
-   {
-      double x = 5.7, y = 56.3;
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, x, y);
-      FrameVector2D frame = new FrameVector2D(frameTuple);
-      assertEquals("Should be equal", frame.getX(), x, epsilon);
-      assertEquals("Should be equal", frame.getY(), y, epsilon);
-      assertEquals("Should be equal", frame.getReferenceFrame(), frameTuple.getReferenceFrame());
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameVector2D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         Vector2D randomTuple2D = EuclidCoreRandomTools.generateRandomVector2D(random);
+         FrameVector2D frameVector2D = new FrameVector2D(randomFrame, randomTuple2D);
+         assertTrue(frameVector2D.referenceFrame == randomFrame);
+         EuclidCoreTestTools.assertTuple2DEquals(randomTuple2D, frameVector2D, EPSILON);
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameVector2D(FrameTuple2DReadOnly frameTuple2DReadOnly)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameVector2D randomFrameTuple2D = EuclidFrameRandomTools.generateRandomFrameVector2D(random, randomFrame);
+         FrameVector2D frameVector2D = new FrameVector2D(randomFrameTuple2D);
+         assertTrue(frameVector2D.referenceFrame == randomFrame);
+         EuclidCoreTestTools.assertTuple2DEquals(randomFrameTuple2D, frameVector2D, EPSILON);
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameVector2D(FrameTuple3DReadOnly other)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameVector3D randomTuple = EuclidFrameRandomTools.generateRandomFrameVector3D(random, randomFrame);
+         FrameVector2D frameVector2D = new FrameVector2D(randomTuple);
+         assertTrue(frameVector2D.referenceFrame == randomFrame);
+         EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(randomTuple), frameVector2D, EPSILON);
+      }
    }
 
    @Test
    public void testGetVector()
    {
-      double x = 5.6, y = 45.67;
-      FrameVector2D frame = new FrameVector2D(aFrame, x, y);
-      Vector2DReadOnly vector2d = frame.getVector();
-      assertEquals("Should be equal", frame.getX(), vector2d.getX(), epsilon);
-      assertEquals("Should be equal", frame.getY(), vector2d.getY(), epsilon);
-   }
+      Random random = new Random(43535);
 
-   @Test
-   public void testDot_FrameVector2d()
-   {
-      Random random = new Random(4556L);
-      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), y1 = random.nextDouble(), y2 = random.nextDouble(),
-            y3 = random.nextDouble();
-      FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
-      FrameVector2D frame2 = new FrameVector2D(theFrame, x2, y2);
-      FrameVector2D frame3 = new FrameVector2D(aFrame, x3, y3);
-
-      double result = frame1.dot(frame2);
-      assertEquals("Should be equal", result, frame1.getX() * frame2.getX() + frame1.getY() * frame2.getY(), epsilon);
-      try
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         frame1.dot(frame3);
-         fail("Should have thrown ReferenceFrameMismatchException");
+         Vector2D expected = EuclidCoreRandomTools.generateRandomVector2D(random);
+         FrameVector2D frameVector = new FrameVector2D(worldFrame, expected);
+         Vector2D actual = frameVector.getVector();
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(frameVector, actual, EPSILON);
       }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testCross_FrameVector2d()
-   {
-      Random random = new Random(4556L);
-      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), y1 = random.nextDouble(), y2 = random.nextDouble(),
-            y3 = random.nextDouble();
-      FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
-      FrameVector2D frame2 = new FrameVector2D(theFrame, x2, y2);
-      FrameVector2D frame3 = new FrameVector2D(aFrame, x3, y3);
-
-      double result = frame1.cross(frame2);
-      assertEquals("Should be equal", result, frame1.getX() * frame2.getY() - frame1.getY() * frame2.getX(), epsilon);
-      try
-      {
-         frame1.cross(frame3);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testAngle_FrameVector2d()
-   {
-      Random random = new Random(4556L);
-      double x1 = random.nextDouble(), x2 = random.nextDouble(), x3 = random.nextDouble(), y1 = random.nextDouble(), y2 = random.nextDouble(),
-            y3 = random.nextDouble();
-      FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
-      FrameVector2D frame2 = new FrameVector2D(theFrame, x2, y2);
-      FrameVector2D frame3 = new FrameVector2D(aFrame, x3, y3);
-
-      Vector2D vector1 = new Vector2D(x1, y1);
-      Vector2D vector2 = new Vector2D(x2, y2);
-
-      double result = frame1.angle(frame2);
-      double resultVector = vector1.angle(vector2);
-      assertEquals("Should be equal", result, resultVector, epsilon);
-      try
-      {
-         frame1.angle(frame3);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-
-      for (int i = 0; i < 1000; i++)
-      {
-         double firstVectorLength = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
-         double secondVectorLength = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
-         FrameVector2D firstVector = EuclidFrameRandomTools.generateRandomFrameVector2D(random, worldFrame);
-         firstVector.scale(firstVectorLength / firstVector.length());
-         FrameVector2D secondVector = new FrameVector2D();
-
-         for (double yaw = -Math.PI; yaw <= Math.PI; yaw += Math.PI / 100.0)
-         {
-            double c = Math.cos(yaw);
-            double s = Math.sin(yaw);
-            secondVector.setX(firstVector.getX() * c - firstVector.getY() * s);
-            secondVector.setY(firstVector.getX() * s + firstVector.getY() * c);
-            secondVector.scale(secondVectorLength / firstVectorLength);
-            double computedYaw = firstVector.angle(secondVector);
-            double yawDifference = EuclidCoreTools.angleDifferenceMinusPiToPi(yaw, computedYaw);
-            assertEquals(0.0, yawDifference, 1.0e-12);
-         }
-      }
-   }
-
-   @Test
-   public void testNormalize()
-   {
-      double x1 = 1.0, y1 = 1.0;
-      FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
-
-      frame1.normalize();
-      double result = frame1.getX() * frame1.getX() + frame1.getY() * frame1.getY();
-      assertEquals("Should be equal", 1.0, result, epsilon);
-   }
-
-   @Test
-   public void testLength()
-   {
-      double x1 = 1.0, y1 = 1.0;
-      FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
-      double result = Math.sqrt(frame1.getX() * frame1.getX() + frame1.getY() * frame1.getY());
-      assertEquals("Should be equal", result, frame1.length(), epsilon);
-   }
-
-   @Test
-   public void testLengthSquared()
-   {
-      double x1 = 1.0, y1 = 1.0;
-      FrameVector2D frame1 = new FrameVector2D(theFrame, x1, y1);
-      double result = frame1.getX() * frame1.getX() + frame1.getY() * frame1.getY();
-      assertEquals("Should be equal", result, frame1.lengthSquared(), epsilon);
-   }
-
-   @Test
-   public void testChangeFrame_ReferenceFrame()
-   {
-      FrameVector2D frameVector = new FrameVector2D(theFrame);
-      frameVector.changeFrame(childFrame);
-      frameVector.checkReferenceFrameMatch(childFrame);
-
-      frameVector.changeFrame(childFrame);
-      frameVector.checkReferenceFrameMatch(childFrame);
-   }
-
-   @Test
-   public void testApplyTransform_Transform3D()
-   {
-      Random random = new Random(398742498237598750L);
-      RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-
-      Vector3D vectorToTransform = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 100.0, 0.0, 100.0, 0.0, 0.0);
-      FrameVector2D vectorToTest = new FrameVector2D(null, new Vector2D(vectorToTransform.getX(), vectorToTransform.getY()));
-
-      try
-      {
-         vectorToTest.applyTransform(transform);
-         fail("Should have thrown RuntimeException");
-      }
-      catch (RuntimeException re)
-      {
-         //Good
-      }
-
-      double[] matrix = {6.0, 7.0, 0.0};
-      RigidBodyTransform transform2 = EuclidCoreRandomTools.generateRandomRigidBodyTransform2D(random);
-
-      Vector3D vectorToTransform2 = new Vector3D(matrix);
-      FrameVector2D vectorToTest2 = new FrameVector2D(null, matrix);
-
-      transform2.transform(vectorToTransform2);
-      vectorToTest2.applyTransform(transform2);
-
-      assertEquals("Should be equal", vectorToTransform2.getX(), vectorToTest2.getX(), epsilon);
-      assertEquals("Should be equal", vectorToTransform2.getY(), vectorToTest2.getY(), epsilon);
-   }
-
-   @Test
-   public void testApplyTransformCopy_Transform3D()
-   {
-      Random random = new Random(398742498237598750L);
-      RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-
-      Vector3D vectorToTransform = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 100.0, 0.0, 100.0, 0.0, 0.0);
-      FrameVector2D vectorToTest = new FrameVector2D(null, new Vector2D(vectorToTransform.getX(), vectorToTransform.getY()));
-
-      try
-      {
-         vectorToTest.applyTransform(transform);
-         fail("Should have thrown RuntimeException");
-      }
-      catch (RuntimeException re)
-      {
-         //Good
-      }
-
-      double[] matrix = {6.0, 7.0, 0.0};
-      RigidBodyTransform transform2 = EuclidCoreRandomTools.generateRandomRigidBodyTransform2D(random);
-
-      Vector3D vectorToTransform2 = new Vector3D(matrix);
-      FrameVector2D vectorToTest2 = new FrameVector2D(null, matrix);
-
-      transform2.transform(vectorToTransform2);
-      vectorToTest2.applyTransform(transform2);
-
-      assertEquals("Should be equal", vectorToTransform2.getX(), vectorToTest2.getX(), epsilon);
-      assertEquals("Should be equal", vectorToTransform2.getY(), vectorToTest2.getY(), epsilon);
-   }
-
-   @Test
-   public void testSets()
-   {
-      FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
-      FrameVector3D beta = new FrameVector3D(ReferenceFrame.getWorldFrame(), 8.0, -2.0, 0.0);
-      alpha.set(0.0, 0.0, 0.0);
-      alpha.setX(-7.0);
-      alpha.setY(10.3);
-      alpha.setZ(1.9);
-      alpha.set(10, 20, 30);
-      alpha.setX(0);
-      alpha.set(beta);
-   }
-
-   @Test
-   public void testadd()
-   {
-      FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
-      FrameVector3D beta = new FrameVector3D(ReferenceFrame.getWorldFrame(), 7.0, 0.0, 6.0);
-      alpha.add(beta);
-
-   }
-
-   @Test
-   public void testInterpolate()
-   {
-      FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), -1.0, 0.0, 17.0);
-      FrameVector3D beta = new FrameVector3D(ReferenceFrame.getWorldFrame(), 3.3, 30.0, 9.0);
-      FrameVector3D gamma = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.8, 3.0);
-
-      gamma.interpolate(alpha, beta, 3.0);
-      gamma.interpolate(beta, alpha, 1);
-   }
-
-   @Test
-   public void testGetReferenceFrame()
-   {
-      FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
-      FrameVector3D beta = new FrameVector3D(ReferenceFrame.getWorldFrame(), 0.0, 20.0, 5.0);
-      alpha.getReferenceFrame();
-      beta.getReferenceFrame();
-   }
-
-   @Test
-   public void testGets()
-   {
-      FrameVector3D alpha = new FrameVector3D(ReferenceFrame.getWorldFrame(), 1.0, 2.0, 3.0);
-      FrameVector3D beta = new FrameVector3D(ReferenceFrame.getWorldFrame(), 7.0, 0.0, -6.0);
-      alpha.getX();
-      beta.getY();
-      beta.getZ();
    }
 
    @Override
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      FrameTuple3DReadOnlyTest.assertSuperMethodsAreOverloaded(FrameTuple2DReadOnly.class, Tuple2DReadOnly.class, FrameVector2D.class, Vector2DBasics.class);
+      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
+      framelessMethodsToIgnore.put("set", new Class<?>[]{Vector2D.class});
+      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[]{Vector2D.class, Double.TYPE});
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector2D.class, Vector2D.class, true, 1, framelessMethodsToIgnore);
    }
 }

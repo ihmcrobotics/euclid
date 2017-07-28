@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -316,13 +318,6 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       }
    }
 
-   @Override
-   public void testOverloading() throws Exception
-   {
-      super.testOverloading();
-      assertSuperMethodsAreOverloaded(FrameTuple3DReadOnly.class, Tuple3DReadOnly.class, FrameTuple3D.class, Tuple3DBasics.class);
-   }
-
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
@@ -339,6 +334,14 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       GenericTypeBuilder framelessTypeBuilber = () -> createRandomTuple(random).getGeometryObject();
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
+   }
+
+   @Override
+   public void testOverloading() throws Exception
+   {
+      super.testOverloading();
+      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple3D.class, Tuple3DBasics.class, true, 1, framelessMethodsToIgnore);
    }
 
    @Test

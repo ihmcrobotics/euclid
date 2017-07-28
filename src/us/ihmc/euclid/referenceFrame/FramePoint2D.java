@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * {@code FramePoint2D} is a 2D point expressed in a given reference frame.
@@ -82,6 +83,18 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
    public FramePoint2D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
    {
       super(referenceFrame, new Point2D(tuple2DReadOnly));
+   }
+
+   /**
+    * Creates a new frame point and initializes it to the x and y coordinates of
+    * {@code tuple3DReadOnly} and to the given reference frame.
+    *
+    * @param referenceFrame the initial frame for this frame point.
+    * @param tuple3DReadOnly the tuple to copy the coordinates from. Not modified.
+    */
+   public FramePoint2D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+   {
+      this(referenceFrame, new Point2D(tuple3DReadOnly));
    }
 
    /**

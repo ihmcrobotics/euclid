@@ -93,22 +93,6 @@ public abstract class FrameTuple3DReadOnlyTest<T extends FrameTuple3DReadOnly> e
    @Test
    public void testOverloading() throws Exception
    {
-      assertSuperMethodsAreOverloaded(FrameTuple3DReadOnly.class, Tuple3DReadOnly.class, FrameTuple3DReadOnly.class, Tuple3DReadOnly.class);
-   }
-
-   /**
-    * The main purpose of this method is to ensure that FrameObject, extending Object, is
-    * overloading all the original method such as "set(Object)" with "set(FrameObject)".
-    * 
-    * @param overloadingParameterType the type with which the typeToTest should be overloading super
-    *           methods.
-    * @param originalParameterType the type look for for in the super type.
-    * @param typeToTest the type (class or interface) to test the API of.
-    * @param superType the super type of the tested type.
-    */
-   public static <A extends B, B, C extends D, D> void assertSuperMethodsAreOverloaded(Class<A> overloadingParameterType, Class<B> originalParameterType,
-                                                                                       Class<C> typeToTest, Class<D> superType)
-   {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(overloadingParameterType, originalParameterType, true);
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple3DReadOnly.class, Tuple3DReadOnly.class, true);
    }
 }

@@ -2,787 +2,303 @@ package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.function.Predicate;
 
-import org.junit.Before;
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.ops.RandomMatrices;
 import org.junit.Test;
 
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBuilder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple2D.Tuple2DBasicsTest;
+import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
-public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends FrameTuple2DReadOnlyTest<T>
+public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends Tuple2DBasics & GeometryObject<T>> extends FrameTuple2DReadOnlyTest<F>
 {
-   protected static final boolean VERBOSE = false;
+   public static final double EPSILON = 1e-10;
 
-   protected static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
-   private ReferenceFrame frameTransformInPlane;
-   private ReferenceFrame frameTransformNOTInPlane;
+   public final F createTuple(ReferenceFrame referenceFrame)
+   {
+      return createTuple(referenceFrame, 0.0, 0.0);
+   }
 
-   protected static final double epsilon = 1e-10;
+   public final F createTuple(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple)
+   {
+      return createTuple(referenceFrame, tuple.getX(), tuple.getY());
+   }
 
-   protected ReferenceFrame theFrame = ReferenceFrame.constructARootFrame("theFrame");
+   public final F createTuple(F frameTuple)
+   {
+      return createTuple(frameTuple.getReferenceFrame(), frameTuple);
+   }
 
-   protected ReferenceFrame aFrame = ReferenceFrame.constructARootFrame("aFrame");
-
-   protected RigidBodyTransform theFrameToChildFrame;
-
-   protected ReferenceFrame childFrame;
-
-   public abstract T createFrameTuple(ReferenceFrame referenceFrame, double x, double y);
+   public final F createRandomTuple(Random random, ReferenceFrame referenceFrame)
+   {
+      return createTuple(referenceFrame, random.nextDouble(), random.nextDouble());
+   }
 
    @Test
-   public void testChangeFrame()
+   public void testSetIncludingFrame() throws Exception
    {
-      final RigidBodyTransform transformInPlane = new RigidBodyTransform();
-      final RigidBodyTransform transformNOTInPlane = new RigidBodyTransform();
-      frameTransformInPlane = new ReferenceFrame("frameTransformInPlane", worldFrame)
-      {
-         private static final long serialVersionUID = 5529935689015384902L;
+      Random random = new Random(2342);
 
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
-         {
-            transformToParent.set(transformInPlane);
-         }
-      };
-      frameTransformNOTInPlane = new ReferenceFrame("frameTransformNOTInPlane", worldFrame)
-      {
-         private static final long serialVersionUID = 5529935689015384902L;
+      ReferenceFrame initialFrame = ReferenceFrame.getWorldFrame();
 
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
-         {
-            transformToParent.set(transformNOTInPlane);
-         }
-      };
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double x, double y)
+         double x = random.nextDouble();
+         double y = random.nextDouble();
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         frameTuple.setIncludingFrame(newFrame, x, y);
+         tuple.set(x, y);
+         assertEquals(newFrame, frameTuple.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+      }
 
-      Random random = new Random(251654165L);
-      T framePoint2d = createFrameTuple(worldFrame, 2.0, 4.0);
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+         Tuple2DReadOnly input = EuclidCoreRandomTools.generateRandomPoint2D(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         frameTuple.setIncludingFrame(newFrame, input);
+         tuple.set(input);
+         assertEquals(newFrame, frameTuple.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+      }
 
-      for (int i = 0; i < 10000; i++)
-      {
-         transformInPlane.setIdentity();
-         transformInPlane.setRotationYawAndZeroTranslation(EuclidCoreRandomTools.generateRandomDouble(random, -Math.PI, Math.PI));
-         transformInPlane.setTranslation(EuclidCoreRandomTools.generateRandomVector3D(random));
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double[] tupleArray)
+         double[] input = new double[random.nextInt(20)];
+         for (int j = 0; j < input.length; j++)
+            input[j] = random.nextDouble();
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
 
-         transformNOTInPlane.setIdentity();
-         transformNOTInPlane.set(EuclidCoreRandomTools.generateRandomRigidBodyTransform(random));
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         Exception expectedException = null;
 
-         frameTransformInPlane.update();
-         frameTransformNOTInPlane.update();
-
-         Point2D point2d = EuclidCoreRandomTools.generateRandomPoint2D(random, 1.0, 1.0);
-
-         framePoint2d.setIncludingFrame(worldFrame, point2d);
          try
          {
-            framePoint2d.changeFrame(frameTransformInPlane);
+            tuple.set(input);
          }
-         catch (RuntimeException e)
+         catch (Exception e)
          {
-            e.printStackTrace();
-            System.out.println("Iteration: " + i);
-            System.out.println(transformInPlane);
-            fail("Should NOT have thrown a RuntimeException");
+            expectedException = e;
          }
-
-         framePoint2d.setIncludingFrame(worldFrame, point2d);
          try
          {
-            framePoint2d.changeFrame(frameTransformNOTInPlane);
-            System.out.println("Iteration: " + i);
-            System.out.println(transformNOTInPlane);
-            fail("Should have thrown a RuntimeException");
+            frameTuple.setIncludingFrame(newFrame, input);
+            if (expectedException != null)
+               throw new AssertionError("Should have thrown an exception.");
+
+            assertEquals(newFrame, frameTuple.getReferenceFrame());
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
          }
-         catch (RuntimeException e)
+         catch (Exception e)
          {
-            // Good
+            if (expectedException == null)
+               throw new AssertionError("Should not have thrown an exception.");
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+               throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
-   }
 
-   @Before
-   public final void setUp() throws Exception
-   {
-      theFrameToChildFrame = new RigidBodyTransform();
-      childFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("childFrame", theFrame, theFrameToChildFrame);
-   }
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startIndex, double[] tupleArray)
+         int startIndex = random.nextInt(10);
+         double[] input = new double[random.nextInt(20)];
+         for (int j = 0; j < input.length; j++)
+            input[j] = random.nextDouble();
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
 
-   @Test
-   public void testSet_doubledouble()
-   {
-      FrameTuple2D<?, ?> doubleDouble = createFrameTuple(frameTransformInPlane, 0.0, 0.0);
-      double[] expecteds1 = {-10.0, 10.0};
-      doubleDouble.set(expecteds1[0], expecteds1[1]);
-      double[] actuals1 = {doubleDouble.getX(), doubleDouble.getY()};
-      assertArrayEquals(expecteds1, actuals1, epsilon);
-   }
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         Exception expectedException = null;
 
-   @Test
-   public void testSetIncludingFrame_ReferenceFrame_double_double()
-   {
-      Random random = new Random(456456456L);
-      FrameTuple2D<?, ?> doubleDouble = createFrameTuple(theFrame, random.nextDouble(), random.nextDouble());
-      double[] expecteds2 = {random.nextDouble(), random.nextDouble()};
-      doubleDouble.setIncludingFrame(aFrame, expecteds2[0], expecteds2[1]);
-      double[] actuals2 = {doubleDouble.getX(), doubleDouble.getY()};
-      assertArrayEquals(expecteds2, actuals2, epsilon);
-      doubleDouble.checkReferenceFrameMatch(aFrame);
+         try
+         {
+            tuple.set(startIndex, input);
+         }
+         catch (Exception e)
+         {
+            expectedException = e;
+         }
+         try
+         {
+            frameTuple.setIncludingFrame(newFrame, startIndex, input);
+            if (expectedException != null)
+               throw new AssertionError("Should have thrown an exception.");
 
-      try
-      {
-         doubleDouble.checkReferenceFrameMatch(theFrame);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testSet_FrameTuple2d()
-   {
-      double[] expecteds1 = {-10.0, 10.0};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, 0.0, 0.0);
-      FrameTuple2D<?, ?> sameFrame = createFrameTuple(theFrame, expecteds1[0], expecteds1[1]);
-      original.set(sameFrame);
-      double[] results1 = {original.getX(), original.getY()};
-
-      original.checkReferenceFrameMatch(theFrame);
-
-      try
-      {
-         original.checkReferenceFrameMatch(aFrame);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
+            assertEquals(newFrame, frameTuple.getReferenceFrame());
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         }
+         catch (Exception e)
+         {
+            if (expectedException == null)
+               throw new AssertionError("Should not have thrown an exception.");
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+               throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
+         }
       }
 
-      assertArrayEquals(expecteds1, results1, epsilon);
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
+         DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
 
-      try
-      {
-         FrameTuple2D<?, ?> differentFrame = createFrameTuple(aFrame, expecteds1[0], expecteds1[1]);
-         original.set(differentFrame);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         Exception expectedException = null;
 
-   @Test
-   public void testSetIncludingFrame_FrameTuple2d()
-   {
-      double[] expecteds1 = {-10.0, 10.0};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, 0.0, 0.0);
-      FrameTuple2D<?, ?> modified = createFrameTuple(aFrame, expecteds1[0], expecteds1[1]);
-      original.setIncludingFrame(modified);
-      double[] results1 = {original.getX(), original.getY()};
+         try
+         {
+            tuple.set(input);
+         }
+         catch (Exception e)
+         {
+            expectedException = e;
+         }
+         try
+         {
+            frameTuple.setIncludingFrame(newFrame, input);
+            if (expectedException != null)
+               throw new AssertionError("Should have thrown an exception.");
 
-      original.checkReferenceFrameMatch(modified.getReferenceFrame());
-
-      try
-      {
-         original.checkReferenceFrameMatch(theFrame);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-
-      assertArrayEquals(expecteds1, results1, epsilon);
-   }
-
-   @Test
-   public void testSetX_double()
-   {
-      double x = -123678346.56756;
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 0.0, 0.0);
-      frameTuple.setX(x);
-      assertEquals("These should be equal", x, frameTuple.getX(), epsilon);
-   }
-
-   @Test
-   public void testSetY_double()
-   {
-      double y = -123678346.56756;
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 0.0, 0.0);
-      frameTuple.setY(y);
-      assertEquals("These should be equal", y, frameTuple.getY(), epsilon);
-   }
-
-   @Test
-   public void testScale_double()
-   {
-      double scaleFactor = 2.0;
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 2.0, 2.0);
-      double x = scaleFactor * frameTuple.getX();
-      double y = scaleFactor * frameTuple.getY();
-      frameTuple.scale(scaleFactor);
-      assertEquals("These should be equal", x, frameTuple.getX(), epsilon);
-      assertEquals("These should be equal", y, frameTuple.getY(), epsilon);
-   }
-
-   @Test
-   public void testScale_doubledouble()
-   {
-      double scaleXFactor = 2.0;
-      double scaleYFactor = 3.0;
-      double x = scaleXFactor * 2, y = scaleYFactor * 2;
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 2.0, 2.0);
-      frameTuple.scale(scaleXFactor, scaleYFactor);
-      assertEquals("These should be equal", x, frameTuple.getX(), epsilon);
-      assertEquals("These should be equal", y, frameTuple.getY(), epsilon);
-   }
-
-   @Test
-   public void testGet_Tuple2d()
-   {
-      Point2D tuple2dToPack = new Point2D();
-      double[] values = {456465.067, 456.898};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
-      frameTuple.get(tuple2dToPack);
-      assertEquals("These should be equal", values[0], tuple2dToPack.getX(), epsilon);
-      assertEquals("These should be equal", values[1], tuple2dToPack.getY(), epsilon);
-   }
-
-   @Test
-   public void testSetToZero()
-   {
-      double[] values = {456465.067, 456.898};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
-      assertEquals("These should be equal", values[0], frameTuple.getX(), epsilon);
-      assertEquals("These should be equal", values[1], frameTuple.getY(), epsilon);
-      frameTuple.setToZero();
-      assertEquals("These should be equal", 0.0, frameTuple.getX(), epsilon);
-      assertEquals("These should be equal", 0.0, frameTuple.getY(), epsilon);
-   }
-
-   @Test
-   public void testSetToZero_ReferenceFrame()
-   {
-      double[] values = {456465.067, 456.898};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
-      assertEquals("These should be equal", values[0], frameTuple.getX(), epsilon);
-      assertEquals("These should be equal", values[1], frameTuple.getY(), epsilon);
-      frameTuple.setToZero(theFrame);
-      assertEquals("These should be equal", 0.0, frameTuple.getX(), epsilon);
-      assertEquals("These should be equal", 0.0, frameTuple.getY(), epsilon);
-
-      frameTuple.checkReferenceFrameMatch(theFrame);
-
-      try
-      {
-         frameTuple.checkReferenceFrameMatch(aFrame);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testSetToNaN()
-   {
-      double[] values = {456465.067, 456.898};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
-      assertFalse(Double.isNaN(frameTuple.getX()));
-      assertFalse(Double.isNaN(frameTuple.getY()));
-      frameTuple.setToNaN();
-      assertTrue(Double.isNaN(frameTuple.getX()));
-      assertTrue(Double.isNaN(frameTuple.getY()));
-   }
-
-   @Test
-   public void testSetToNaN_ReferenceFrame()
-   {
-      double[] values = {456465.067, 456.898};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
-
-      assertFalse(Double.isNaN(frameTuple.getX()));
-      assertFalse(Double.isNaN(frameTuple.getY()));
-      frameTuple.checkReferenceFrameMatch(aFrame);
-
-      frameTuple.setToNaN(theFrame);
-
-      assertTrue(Double.isNaN(frameTuple.getX()));
-      assertTrue(Double.isNaN(frameTuple.getY()));
-
-      frameTuple.checkReferenceFrameMatch(theFrame);
-
-      try
-      {
-         frameTuple.checkReferenceFrameMatch(aFrame);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testCheckForNaN()
-   {
-      double[] values = {456465.067, 456.898};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, values[0], values[1]);
-      FrameTuple2D<?, ?> frameTupleNaN = createFrameTuple(aFrame, values[0], values[1]);
-      frameTupleNaN.setToNaN();
-
-      frameTuple.checkForNaN();
-      try
-      {
-         frameTupleNaN.checkForNaN();
-         fail("Threw RuntimeException");
-      }
-      catch (RuntimeException re)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testContainsNaN()
-   {
-      double[] values = {456465.067, 456.898};
-      FrameTuple2D<?, ?> neitherNaN = createFrameTuple(aFrame, values[0], values[1]);
-      FrameTuple2D<?, ?> xNaN = createFrameTuple(aFrame, Double.NaN, values[1]);
-      FrameTuple2D<?, ?> yNaN = createFrameTuple(aFrame, values[0], Double.NaN);
-      FrameTuple2D<?, ?> bothNaN = createFrameTuple(aFrame, values[0], values[1]);
-      bothNaN.setToNaN();
-
-      assertFalse(neitherNaN.containsNaN());
-      assertTrue(xNaN.containsNaN());
-      assertTrue(yNaN.containsNaN());
-      assertTrue(bothNaN.containsNaN());
-   }
-
-   @Test
-   public void testScale_double_Tuple2d()
-   {
-      double[] values = {8.0, -5.0};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, 0.0, 0.0);
-      double scaleFactor = 7.0;
-      Point2D tuple2d = new Point2D(values);
-      frameTuple.setAndScale(scaleFactor, tuple2d);
-
-      assertEquals("Should be equal doubles", scaleFactor * values[0], frameTuple.getX(), epsilon);
-      assertEquals("Should be equal doubles", scaleFactor * values[1], frameTuple.getY(), epsilon);
-   }
-
-   @Test
-   public void testScaleAdd_double_Tuple2d_Tuple2d()
-   {
-      double[] values1 = {8.0, -5.0};
-      double[] values2 = {19.6, -3.9};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, 0.0, 0.0);
-      double scaleFactor = -7.43;
-      Point2D tuple1 = new Point2D(values1);
-      Point2D tuple2 = new Point2D(values2);
-
-      frameTuple.scaleAdd(scaleFactor, tuple1, tuple2);
-      assertEquals("Should be equal doubles", scaleFactor * values1[0] + values2[0], frameTuple.getX(), epsilon);
-      assertEquals("Should be equal doubles", scaleFactor * values1[1] + values2[1], frameTuple.getY(), epsilon);
-   }
-
-   @Test
-   public void testScaleAdd_double_Tuple2d()
-   {
-      double[] tuple2dValues = {8.0, 5.0};
-      double[] frameTuple2dValues = {6.4, 3.9};
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(aFrame, frameTuple2dValues[0], frameTuple2dValues[1]);
-      double scaleFactor1 = 7.43;
-      Point2D tuple1 = new Point2D(tuple2dValues);
-
-      frameTuple.scaleAdd(scaleFactor1, tuple1);
-      assertEquals("Should be equal doubles", scaleFactor1 * frameTuple2dValues[0] + tuple2dValues[0], frameTuple.getX(), epsilon);
-      assertEquals("Should be equal doubles", scaleFactor1 * frameTuple2dValues[1] + tuple2dValues[1], frameTuple.getY(), epsilon);
-   }
-
-   @Test
-   public void testScale_double_FrameTuple2d()
-   {
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, 1.0, 2.0);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, 3.0, 4.0);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, 5.0, 6.0);
-      double scaleFactor = 7.0;
-
-      original.setAndScale(scaleFactor, same);
-      assertEquals("These shoud be equal", original.getX(), scaleFactor * same.getX(), epsilon);
-      assertEquals("These shoud be equal", original.getY(), scaleFactor * same.getY(), epsilon);
-
-      try
-      {
-         original.setAndScale(scaleFactor, different);
-         fail();
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testScaleAdd_double_FrameTuple2d_FrameTuple2d()
-   {
-      double[] originalValues = {1.0, 2.0};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, 3.0, 4.0);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, 5.0, 6.0);
-      double scaleFactor = 7.0;
-
-      original.scaleAdd(scaleFactor, original, same);
-      assertEquals("These shoud be equal", original.getX(), scaleFactor * originalValues[0] + same.getX(), epsilon);
-      assertEquals("These shoud be equal", original.getY(), scaleFactor * originalValues[1] + same.getY(), epsilon);
-
-      try
-      {
-         original.scaleAdd(scaleFactor, original, different);
-         fail();
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-      try
-      {
-         original.scaleAdd(scaleFactor, different, original);
-         fail();
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testScaleAdd_double_FrameTuple2d()
-   {
-      double scaleFactor = 9.78;
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
-
-      original.scaleAdd(scaleFactor, same);
-      assertEquals(scaleFactor * originalValues[0] + same.getX(), original.getX(), epsilon);
-      assertEquals(scaleFactor * originalValues[1] + same.getY(), original.getY(), epsilon);
-      try
-      {
-         original.scaleAdd(scaleFactor, different);
-         fail();
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testAdd_double_Tuple2d_Tuple2d()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      Point2D tuple1 = new Point2D(1.6, 43.6);
-      Point2D tuple2 = new Point2D(5.665, 34.7);
-      original.add(tuple1, tuple2);
-      assertEquals(original.getX(), tuple1.getX() + tuple2.getX(), epsilon);
-      assertEquals(original.getY(), tuple1.getY() + tuple2.getY(), epsilon);
-   }
-
-   @Test
-   public void testAdd_FrameTuple2d()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
-
-      original.add(same);
-      assertEquals(originalValues[0] + originalValues[0], original.getX(), epsilon);
-      assertEquals(originalValues[1] + originalValues[1], original.getY(), epsilon);
-      try
-      {
-         original.add(different);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testAdd_FrameTuple2d_FrameTuple2d()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
-
-      original.add(original, same);
-      assertEquals(originalValues[0] + originalValues[0], original.getX(), epsilon);
-      assertEquals(originalValues[1] + originalValues[1], original.getY(), epsilon);
-      try
-      {
-         original.add(original, different);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-      try
-      {
-         original.add(different, original);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testSub_Tuple2d()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      Point2D tuple1 = new Point2D(originalValues[0], originalValues[1]);
-      original.sub(tuple1);
-      assertEquals("These should be equal: ", originalValues[0] - tuple1.getX(), original.getX(), epsilon);
-      assertEquals("These should be equal: ", originalValues[1] - tuple1.getY(), original.getY(), epsilon);
-   }
-
-   @Test
-   public void testSub_Tuple2d_Tuple2d()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      Point2D tuple1 = new Point2D(originalValues[0], originalValues[1]);
-      Point2D tuple2 = new Point2D(originalValues[0], originalValues[1]);
-
-      original.sub(tuple1, tuple2);
-      assertEquals("These should be equal: ", tuple1.getX() - tuple2.getX(), original.getX(), epsilon);
-      assertEquals("These should be equal: ", tuple1.getY() - tuple2.getY(), original.getY(), epsilon);
-
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
-
-      try
-      {
-         original.sub(original, different);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-      try
-      {
-         original.sub(different, original);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testSub_FrameTuple2d()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
-
-      original.sub(same);
-      assertEquals(originalValues[0] - originalValues[0], original.getX(), epsilon);
-      assertEquals(originalValues[1] - originalValues[1], original.getY(), epsilon);
-      try
-      {
-         original.sub(different);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testSub_FrameTuple2d_FrameTuple2d()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
-
-      original.sub(original, same);
-      assertEquals(originalValues[0] - originalValues[0], original.getX(), epsilon);
-      assertEquals(originalValues[1] - originalValues[1], original.getY(), epsilon);
-      try
-      {
-         original.sub(original, different);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-      try
-      {
-         original.sub(different, original);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
-
-   @Test
-   public void testInterpolate_Tuple2d_Tuple2d_double()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      Point2D tuple1 = new Point2D(6.7, 45.6);
-      Point2D tuple2 = new Point2D(56.6, 3.5);
-      double alpha = 2.0;
-
-      original.interpolate(tuple1, tuple2, alpha);
-      assertEquals("Should be equal", (1 - alpha) * tuple1.getX() + alpha * tuple2.getX(), original.getX(), epsilon);
-      assertEquals("Should be equal", (1 - alpha) * tuple1.getY() + alpha * tuple2.getY(), original.getY(), epsilon);
-   }
-
-   @Test
-   public void testInterpolate_FrameTuple2d_FrameTuple2d_double()
-   {
-      double[] originalValues = {1.9, 3.7};
-      double[] sameValues = {0.4, 2.6};
-      double[] differentValues = {2.7, 4.0};
-      double alpha = 2.7;
-      FrameTuple2D<?, ?> holder = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> original = createFrameTuple(theFrame, originalValues[0], originalValues[1]);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, sameValues[0], sameValues[1]);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, differentValues[0], differentValues[1]);
-
-      holder.interpolate(original, same, alpha);
-      assertEquals("Should be equal", (1 - alpha) * original.getX() + alpha * same.getX(), holder.getX(), epsilon);
-      assertEquals("Should be equal", (1 - alpha) * original.getY() + alpha * same.getY(), holder.getY(), epsilon);
-
-      holder.checkReferenceFrameMatch(original.getReferenceFrame());
-
-      try
-      {
-         holder.checkReferenceFrameMatch(aFrame);
-         fail("Should have thrown ReferenceFrameMismatchException");
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
+            assertEquals(newFrame, frameTuple.getReferenceFrame());
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         }
+         catch (Exception e)
+         {
+            if (expectedException == null)
+               throw new AssertionError("Should not have thrown an exception.");
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+               throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
+         }
       }
 
-      try
-      {
-         holder.interpolate(different, different, alpha);
-         fail("Should have thrown ReferenceFrameMismatchException");
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
+         int startRow = random.nextInt(10);
+         DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
+
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         Exception expectedException = null;
+
+         try
+         {
+            tuple.set(startRow, input);
+         }
+         catch (Exception e)
+         {
+            expectedException = e;
+         }
+         try
+         {
+            frameTuple.setIncludingFrame(newFrame, startRow, input);
+            if (expectedException != null)
+               throw new AssertionError("Should have thrown an exception.");
+
+            assertEquals(newFrame, frameTuple.getReferenceFrame());
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         }
+         catch (Exception e)
+         {
+            if (expectedException == null)
+               throw new AssertionError("Should not have thrown an exception.");
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+               throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
+         }
       }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F tupleDenseMatrix)
+         int startRow = random.nextInt(10);
+         int column = random.nextInt(10);
+         DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
+
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         Exception expectedException = null;
+
+         try
+         {
+            tuple.set(startRow, column, input);
+         }
+         catch (Exception e)
+         {
+            expectedException = e;
+         }
+         try
+         {
+            frameTuple.setIncludingFrame(newFrame, startRow, column, input);
+            if (expectedException != null)
+               throw new AssertionError("Should have thrown an exception.");
+
+            assertEquals(newFrame, frameTuple.getReferenceFrame());
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+         }
+         catch (Exception e)
+         {
+            if (expectedException == null)
+               throw new AssertionError("Should not have thrown an exception.");
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+               throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
+         }
       }
-   }
 
-   @Test
-   public void testClipToMinMax_double_double()
-   {
-      double minValue = -5.0;
-      double maxValue = 5.0;
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, -34345.5455, 45456.45456);
-      frameTuple.clipToMinMax(minValue, maxValue);
-      assertTrue(frameTuple.getX() >= minValue && frameTuple.getX() <= maxValue);
-      assertTrue(frameTuple.getY() >= minValue && frameTuple.getY() <= maxValue);
-   }
-
-   @Test
-   public void testNegate()
-   {
-      double[] originalValues = {1.9, 3.7};
-      FrameTuple2D<?, ?> holder = createFrameTuple(aFrame, originalValues[0], originalValues[1]);
-      holder.negate();
-      assertEquals("Should be negated", -originalValues[0], holder.getX(), epsilon);
-      assertEquals("Should be negated", -originalValues[1], holder.getY(), epsilon);
-   }
-
-   @Test
-   public void testEpsilonEquals_Tuple2d_double()
-   {
-      double threshold = 10.0;
-      Point2D tuple1 = new Point2D(10.0, 10.0);
-      Point2D tuple2 = new Point2D(11.0, 11.0);
-      Point2D tuple3 = new Point2D(11.1, 11.1);
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 1.0);
-      assertTrue(frameTuple.epsilonEquals(tuple1, threshold));
-      assertTrue(frameTuple.epsilonEquals(tuple2, threshold));
-      assertFalse(frameTuple.epsilonEquals(tuple3, threshold));
-   }
-
-   @Test
-   public void testEpsilonEquals_FrameTuple2d_double()
-   {
-      double threshold = 10.0;
-      FrameTuple2D<?, ?> tuple1 = createFrameTuple(theFrame, 10.0, 10.0);
-      FrameTuple2D<?, ?> tuple2 = createFrameTuple(theFrame, 11.0, 11.0);
-      FrameTuple2D<?, ?> tuple3 = createFrameTuple(theFrame, 11.1, 11.1);
-
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 1.0);
-      assertTrue(frameTuple.epsilonEquals(tuple1, threshold));
-      assertTrue(frameTuple.epsilonEquals(tuple2, threshold));
-      assertFalse(frameTuple.epsilonEquals(tuple3, threshold));
-   }
-
-   @Test
-   public void testCheckReferenceFrameMatch_ReferenceFrameHolder()
-   {
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 1.0);
-      FrameTuple2D<?, ?> same = createFrameTuple(theFrame, 1.0, 1.0);
-      FrameTuple2D<?, ?> different = createFrameTuple(aFrame, 1.0, 1.0);
-      frameTuple.checkReferenceFrameMatch(same);
-      try
-      {
-         frameTuple.checkReferenceFrameMatch(different);
-         fail();
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(FrameTuple2DReadOnly other)
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameTuple2DReadOnly input = EuclidFrameRandomTools.generateRandomFramePoint2D(random, newFrame);
+         F frameTuple = createRandomTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         frameTuple.setIncludingFrame(input);
+         tuple.set(input);
+         assertEquals(newFrame, frameTuple.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
       }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
-      }
-   }
 
-   @Test
-   public void testCheckReferenceFrameMatch_ReferenceFrame()
-   {
-      FrameTuple2D<?, ?> frameTuple = createFrameTuple(theFrame, 1.0, 1.0);
-      frameTuple.checkReferenceFrameMatch(theFrame);
-      try
-      {
-         frameTuple.checkReferenceFrameMatch(aFrame);
-         fail();
-      }
-      catch (ReferenceFrameMismatchException rfme)
-      {
-         //Good
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(FrameTuple3DReadOnly other)
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameTuple3DReadOnly input = EuclidFrameRandomTools.generateRandomFramePoint3D(random, newFrame);
+         F frameTuple = createRandomTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         frameTuple.setIncludingFrame(input);
+         tuple.set(input);
+         assertEquals(newFrame, frameTuple.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
       }
    }
 
@@ -790,6 +306,124 @@ public abstract class FrameTuple2DTest<T extends FrameTuple2D<?, ?>> extends Fra
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      FrameTuple3DReadOnlyTest.assertSuperMethodsAreOverloaded(FrameTuple2DReadOnly.class, Tuple2DReadOnly.class, FrameTuple2D.class, Tuple2DBasics.class);
+      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple2D.class, Tuple2DBasics.class, true, 1, framelessMethodsToIgnore);
+   }
+
+   @Test
+   public void testReferenceFrameChecks() throws Throwable
+   {
+      Random random = new Random(234);
+      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomTuple(random, frame), false, true, methodFilter);
+   }
+
+   @Test
+   public void testConsistencyWithTuple2D() throws Exception
+   {
+      Random random = new Random(3422);
+      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple2DReadOnly) tuple);
+      GenericTypeBuilder framelessTypeBuilber = () -> createRandomTuple(random).getGeometryObject();
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
+      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
+   }
+
+   @Test
+   public void testFrameGeometryObjectFeatures() throws Throwable
+   {
+      FrameGeometryObjectTest<F, T> frameGeometryObjectTest = new FrameGeometryObjectTest<F, T>()
+      {
+         @Override
+         public T createEmptyGeometryObject()
+         {
+            return createEmptyTuple().getGeometryObject();
+         }
+
+         @Override
+         public T createRandomGeometryObject(Random random)
+         {
+            return createRandomTuple(random).getGeometryObject();
+         }
+
+         @Override
+         public F createEmptyFrameGeometryObject(ReferenceFrame referenceFrame)
+         {
+            return createEmptyTuple(referenceFrame);
+         }
+
+         @Override
+         public F createFrameGeometryObject(ReferenceFrame referenceFrame, T geometryObject)
+         {
+            return createTuple(referenceFrame, geometryObject);
+         }
+
+         @Override
+         public F createRandomFrameGeometryObject(Random random, ReferenceFrame referenceFrame)
+         {
+            return createRandomTuple(random, referenceFrame);
+         }
+      };
+
+      for (Method testMethod : frameGeometryObjectTest.getClass().getMethods())
+      {
+         if (!testMethod.getName().startsWith("test"))
+            continue;
+         if (!Modifier.isPublic(testMethod.getModifiers()))
+            continue;
+         if (Modifier.isStatic(testMethod.getModifiers()))
+            continue;
+
+         try
+         {
+            testMethod.invoke(frameGeometryObjectTest);
+         }
+         catch (InvocationTargetException e)
+         {
+            throw e.getCause();
+         }
+      }
+   }
+
+   @Test
+   public void testTuple2DBasicsFeatures() throws Exception
+   {
+      Tuple2DBasicsTest<F> tuple3dBasicsTest = new Tuple2DBasicsTest<F>()
+      {
+         @Override
+         public F createEmptyTuple()
+         {
+            return FrameTuple2DTest.this.createEmptyTuple();
+         }
+
+         @Override
+         public F createTuple(double x, double y)
+         {
+            return FrameTuple2DTest.this.createTuple(x, y);
+         }
+
+         @Override
+         public F createRandomTuple(Random random)
+         {
+            return FrameTuple2DTest.this.createRandomTuple(random);
+         }
+
+         @Override
+         public double getEpsilon()
+         {
+            return FrameTuple2DTest.this.getEpsilon();
+         }
+      };
+
+      for (Method testMethod : tuple3dBasicsTest.getClass().getMethods())
+      {
+         if (!testMethod.getName().startsWith("test"))
+            continue;
+         if (!Modifier.isPublic(testMethod.getModifiers()))
+            continue;
+         if (Modifier.isStatic(testMethod.getModifiers()))
+            continue;
+
+         testMethod.invoke(tuple3dBasicsTest);
+      }
    }
 }

@@ -2,19 +2,19 @@ package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
 
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
 {
@@ -130,6 +130,9 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      assertSuperMethodsAreOverloaded(FrameTuple3DReadOnly.class, Tuple3DReadOnly.class, FrameVector3D.class, Vector3DBasics.class);
+      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
+      framelessMethodsToIgnore.put("set", new Class<?>[]{Vector3D.class});
+      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[]{Vector3D.class, Double.TYPE});
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector3D.class, Vector3D.class, true, 1, framelessMethodsToIgnore);
    }
 }
