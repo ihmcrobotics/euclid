@@ -10,31 +10,49 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 
+import us.ihmc.euclid.geometry.BoundingBox2DTest;
+import us.ihmc.euclid.geometry.BoundingBox3DTest;
+import us.ihmc.euclid.geometry.Box3DTest;
+import us.ihmc.euclid.geometry.ConvexPolygon2DTest;
+import us.ihmc.euclid.geometry.Cylinder3DTest;
+import us.ihmc.euclid.geometry.Ellipsoid3DTest;
+import us.ihmc.euclid.geometry.Line2DTest;
+import us.ihmc.euclid.geometry.Line3DTest;
+import us.ihmc.euclid.geometry.LineSegment1DTest;
+import us.ihmc.euclid.geometry.LineSegment2DTest;
+import us.ihmc.euclid.geometry.LineSegment3DTest;
+import us.ihmc.euclid.geometry.Ramp3DTest;
+import us.ihmc.euclid.geometry.Sphere3DTest;
+import us.ihmc.euclid.geometry.Torus3DTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 import us.ihmc.euclid.referenceFrame.FramePoint2DTest;
 import us.ihmc.euclid.referenceFrame.FramePoint3DTest;
 import us.ihmc.euclid.referenceFrame.FrameVector2DTest;
 import us.ihmc.euclid.referenceFrame.FrameVector3DTest;
+import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
       // Geometry class tests
       // 1D
-//      LineSegment1DTest.class,
-//      // 2D
-//      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class,
-//      // 3D
-//      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class,
-//      // Tools tests
-//      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class,
-//      // Reference frame framework tests
-//      ReferenceFrameTest.class,
+      LineSegment1DTest.class,
+      // 2D
+      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class,
+      // 3D
+      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class,
+      // Tools tests
+      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class,
+      // Reference frame framework tests
+      ReferenceFrameTest.class,
       // 1D
       // 2D
       FramePoint2DTest.class, FrameVector2DTest.class,
       // 3D
       FramePoint3DTest.class, FrameVector3DTest.class,
       // Tools tests
-//      EuclidFrameToolsTest.class,
+      EuclidFrameToolsTest.class,
       })
 
 public class EuclidTestSuite
