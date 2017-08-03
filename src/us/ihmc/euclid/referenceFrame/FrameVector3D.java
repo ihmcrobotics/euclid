@@ -128,7 +128,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public void setAndNormalize(FrameTuple3DReadOnly other)
+   public final void setAndNormalize(FrameTuple3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       tuple.setAndNormalize(other);
@@ -144,7 +144,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public void cross(FrameVector3DReadOnly other)
+   public final void cross(FrameVector3DReadOnly other)
    {
       cross((FrameTuple3DReadOnly) other);
    }
@@ -159,7 +159,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     * @throws ReferenceFrameMismatchException if {@code frameTuple3DReadOnly} is not expressed in
     *            the same reference frame as {@code this}.
     */
-   public void cross(FrameTuple3DReadOnly frameTuple3DReadOnly)
+   public final void cross(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
       checkReferenceFrameMatch(frameTuple3DReadOnly);
       tuple.cross(frameTuple3DReadOnly);
@@ -176,7 +176,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     * @throws ReferenceFrameMismatchException if either {@code frameVector1} or {@code frameVector2}
     *            is not expressed in the same reference frame as {@code this}.
     */
-   public void cross(FrameVector3DReadOnly frameVector1, FrameVector3DReadOnly frameVector2)
+   public final void cross(FrameVector3DReadOnly frameVector1, FrameVector3DReadOnly frameVector2)
    {
       cross((FrameTuple3DReadOnly) frameVector1, (FrameTuple3DReadOnly) frameVector2);
    }
@@ -192,7 +192,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
     *            is not expressed in the same reference frame as {@code this}.
     */
-   public void cross(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   public final void cross(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
       checkReferenceFrameMatch(frameTuple2);
@@ -210,7 +210,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public void cross(FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
+   public final void cross(FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
       tuple.cross(frameTuple1, tuple2);
@@ -227,7 +227,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public void cross(Tuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   public final void cross(Tuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
       tuple.cross(frameTuple1, frameTuple2);
@@ -238,7 +238,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     *
     * @return the vector of {@code this}.
     */
-   public Vector3D getVector()
+   public final Vector3D getVector()
    {
       return tuple;
    }

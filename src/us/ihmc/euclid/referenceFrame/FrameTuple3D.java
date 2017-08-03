@@ -13,7 +13,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
- * {@code FrameTuple3D} is the base implementation for {@link FramePoint3D} and {@link FrameVector3D}.
+ * {@code FrameTuple3D} is the base implementation for {@link FramePoint3D} and
+ * {@link FrameVector3D}.
  * <p>
  * In addition to representing a {@link Tuple3DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FrameTuple3D}. This allows, for instance, to enforce, at runtime, that operations on
@@ -37,7 +38,7 @@ public abstract class FrameTuple3D<S extends FrameTuple3D<S, T>, T extends Tuple
    /**
     * Creates a new frame tuple and initializes its current reference frame and tuple.
     * <p>
-    * The given {@code geometryObject}'s reference is saved internally for performing all the future
+    * The given {@code tuple}'s reference is saved internally for performing all the future
     * operations with this {@code FrameTuple3D}.
     * </p>
     * 
@@ -82,7 +83,7 @@ public abstract class FrameTuple3D<S extends FrameTuple3D<S, T>, T extends Tuple
     * @throws ReferenceFrameMismatchException if {@code frameTuple2DReadOnly} is not expressed in
     *            the same frame as {@code this}.
     */
-   public void set(FrameTuple2DReadOnly frameTuple2DReadOnly)
+   public final void set(FrameTuple2DReadOnly frameTuple2DReadOnly)
    {
       checkReferenceFrameMatch(frameTuple2DReadOnly);
       tuple.set(frameTuple2DReadOnly);
@@ -97,7 +98,7 @@ public abstract class FrameTuple3D<S extends FrameTuple3D<S, T>, T extends Tuple
     * @throws ReferenceFrameMismatchException if {@code frameTuple2DReadOnly} is not expressed in
     *            the same frame as {@code this}.
     */
-   public void set(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)
+   public final void set(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)
    {
       checkReferenceFrameMatch(frameTuple2DReadOnly);
       tuple.set(frameTuple2DReadOnly, z);

@@ -124,7 +124,7 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
     *
     * @return the point of {@code this}.
     */
-   public Point2D getPoint()
+   public final Point2D getPoint()
    {
       return tuple;
    }

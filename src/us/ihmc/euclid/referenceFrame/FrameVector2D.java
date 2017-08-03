@@ -127,7 +127,7 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public void setAndNormalize(FrameVector2DReadOnly other)
+   public final void setAndNormalize(FrameVector2DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       tuple.setAndNormalize(other);
@@ -138,7 +138,7 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
     *
     * @return the vector of {@code this}.
     */
-   public Vector2D getVector()
+   public final Vector2D getVector()
    {
       return tuple;
    }
