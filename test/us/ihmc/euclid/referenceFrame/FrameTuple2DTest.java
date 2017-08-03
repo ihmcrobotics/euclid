@@ -54,6 +54,27 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
    }
 
    @Test
+   public void testChangeFrameAndProjectToXYPlane() throws Exception
+   {
+      Random random = new Random(345345);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame initialFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+
+         T tuple = createRandomTuple(random).getGeometryObject();
+         F frameTuple = createTuple(initialFrame, tuple);
+
+         tuple.applyTransform(initialFrame.getTransformToDesiredFrame(newFrame), false);
+         frameTuple.changeFrameAndProjectToXYPlane(newFrame);
+
+         assertTrue(newFrame == frameTuple.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+      }
+   }
+
+   @Test
    public void testSetIncludingFrame() throws Exception
    {
       Random random = new Random(2342);
