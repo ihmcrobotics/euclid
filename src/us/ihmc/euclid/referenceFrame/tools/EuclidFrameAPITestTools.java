@@ -1,7 +1,5 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static org.junit.Assert.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -1183,15 +1181,10 @@ public class EuclidFrameAPITestTools
       {
          if (!Double.class.isInstance(frameParameter) && !Float.class.isInstance(frameParameter))
             throw new RuntimeException("Reached unexpected state.");
-         try
-         {
-            assertEquals(((Number) framelessParameter).doubleValue(), ((Number) frameParameter).doubleValue(), epsilon);
-            return true;
-         }
-         catch (AssertionError e)
-         {
-            return false;
-         }
+
+         double framelessDouble = ((Number) framelessParameter).doubleValue();
+         double frameDouble = ((Number) frameParameter).doubleValue();
+         return Double.compare(framelessDouble, frameDouble) == 0 || EuclidCoreTools.epsilonEquals(framelessDouble, frameDouble, epsilon);
       }
 
       if (Integer.class.isInstance(framelessParameter) || Long.class.isInstance(framelessParameter))
@@ -1199,7 +1192,7 @@ public class EuclidFrameAPITestTools
          if (!Integer.class.isInstance(frameParameter) && !Long.class.isInstance(frameParameter))
             throw new RuntimeException("Reached unexpected state.");
 
-         return ((Number) framelessParameter).longValue() == ((Number) frameParameter).doubleValue();
+         return ((Number) framelessParameter).longValue() == ((Number) frameParameter).longValue();
       }
 
       if (Boolean.class.isInstance(framelessParameter))
@@ -1221,7 +1214,10 @@ public class EuclidFrameAPITestTools
          {
             List<?> framelessList = (List<?>) framelessParameter;
             List<?> frameList = (List<?>) frameParameter;
-            assertEquals(framelessList.size(), frameList.size());
+
+            if (framelessList.size() != frameList.size())
+               return false;
+
             for (int i = 0; i < framelessList.size(); i++)
             {
                if (!epsilonEquals(framelessList.get(i), frameList.get(i), epsilon))
@@ -1242,28 +1238,32 @@ public class EuclidFrameAPITestTools
 
       if (framelessParameter instanceof float[] && frameParameter instanceof float[])
       {
-         try
-         {
-            assertArrayEquals((float[]) framelessParameter, (float[]) frameParameter, (float) epsilon);
-            return true;
-         }
-         catch (AssertionError e)
-         {
+         float[] framelessArray = (float[]) framelessParameter;
+         float[] frameArray = (float[]) frameParameter;
+
+         if (framelessArray.length != frameArray.length)
             return false;
+         for (int i = 0; i < framelessArray.length; i++)
+         {
+            if (Float.compare(framelessArray[i], frameArray[i]) != 0 && !EuclidCoreTools.epsilonEquals(framelessArray[i], frameArray[i], epsilon))
+               return false;
          }
+         return true;
       }
 
       if (framelessParameter instanceof double[] && frameParameter instanceof double[])
       {
-         try
-         {
-            assertArrayEquals((double[]) framelessParameter, (double[]) frameParameter, (float) epsilon);
-            return true;
-         }
-         catch (AssertionError e)
-         {
+         double[] framelessArray = (double[]) framelessParameter;
+         double[] frameArray = (double[]) frameParameter;
+
+         if (framelessArray.length != frameArray.length)
             return false;
+         for (int i = 0; i < framelessArray.length; i++)
+         {
+            if (Double.compare(framelessArray[i], frameArray[i]) != 0 && !EuclidCoreTools.epsilonEquals(framelessArray[i], frameArray[i], epsilon))
+               return false;
          }
+         return true;
       }
 
       if (framelessParameter instanceof String && frameParameter instanceof String)
@@ -1391,7 +1391,7 @@ public class EuclidFrameAPITestTools
    private static String getSimpleNames(Class<?>[] types)
    {
       String ret = Arrays.stream(types).map(t -> t.getSimpleName()).collect(Collectors.toList()).toString();
-      return ret.replace("[", "").replace("]", "");
+      return ret.substring(1, ret.length() - 1);
    }
 
    private static List<Method> keepOnlyMethodsWithAtLeastNFrameArguments(Method[] methodsToFilter, int minNumberOfFrameArguments)
