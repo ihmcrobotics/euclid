@@ -27,8 +27,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  */
 public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> implements FrameVector2DReadOnly, Vector2DBasics
 {
-   private static final long serialVersionUID = -610124454205790361L;
-
    /**
     * Creates a new frame vector and initializes it components to zero and its reference frame to
     * {@link ReferenceFrame#getWorldFrame()}.

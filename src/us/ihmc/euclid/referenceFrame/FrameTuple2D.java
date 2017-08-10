@@ -1,7 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.io.Serializable;
-
 import org.ejml.data.DenseMatrix64F;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -29,10 +27,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * </p>
  */
 public abstract class FrameTuple2D<S extends FrameTuple2D<S, T>, T extends Tuple2DBasics & GeometryObject<T>> extends FrameGeometryObject<S, T>
-      implements FrameTuple2DReadOnly, Tuple2DBasics, Serializable
+      implements FrameTuple2DReadOnly, Tuple2DBasics
 {
-   private static final long serialVersionUID = 6275308250031489785L;
-
    /** Tuple used to perform the operations. */
    protected final T tuple;
 

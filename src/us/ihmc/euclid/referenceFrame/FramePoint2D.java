@@ -26,8 +26,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  */
 public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements FramePoint2DReadOnly, Point2DBasics
 {
-   private static final long serialVersionUID = -1287148635726098768L;
-
    /**
     * Creates a new frame point and initializes it coordinates to zero and its reference frame to
     * {@link ReferenceFrame#getWorldFrame()}.
