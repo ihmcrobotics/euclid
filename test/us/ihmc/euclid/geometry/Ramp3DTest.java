@@ -184,7 +184,7 @@ public class Ramp3DTest
          double minZ = 0.0;
          double maxZ = 1.0;
 
-         Point3D pointToTestOnRamp = EuclidCoreRandomTools.generateRandomPoint3D(random, minX, minY, minZ, maxX, maxY, maxZ);
+         Point3D pointToTestOnRamp = EuclidCoreRandomTools.generateRandomPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ);
          pointToTestOnRamp = transformFromAngledToWorldFrame(ramp, pointToTestOnRamp);
          ramp.orthogonalProjection(pointToTestOnRamp);
 

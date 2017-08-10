@@ -1057,7 +1057,7 @@ public class BoundingBox2DTest
    }
 
    @Test
-   public void testintersectionWithLine2D() throws Exception
+   public void testIntersectionWithLine2D() throws Exception
    {
       Random random = new Random(435345L);
 
@@ -1078,8 +1078,25 @@ public class BoundingBox2DTest
          actualN = boundingBox2D.intersectionWithLine2D(pointOnLine, lineDirection, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
+         {
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(expectedSecondIntersection);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualSecondIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(expectedSecondIntersection, actualSecondIntersection, EPSILON);
+         }
       }
    }
 
@@ -1106,8 +1123,17 @@ public class BoundingBox2DTest
                                                                actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         if (expectedN == 1)
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
          {
             EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(expectedSecondIntersection);
             EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualSecondIntersection);
@@ -1140,8 +1166,18 @@ public class BoundingBox2DTest
          actualN = boundingBox2D.intersectionWithRay2D(rayOrigin, rayDirection, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
-         EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
-         if (expectedN == 1)
+
+         if (expectedN == 0)
+         {
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(expectedFirstIntersection);
+            EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualFirstIntersection);
+         }
+         else
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(expectedFirstIntersection, actualFirstIntersection, EPSILON);
+         }
+
+         if (expectedN <= 1)
          {
             EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(expectedSecondIntersection);
             EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualSecondIntersection);

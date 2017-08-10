@@ -647,7 +647,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * Computes the coordinates of the two intersections between a line and this bounding box.
     * <p>
     * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
     *
     * @param pointOnLine a point located on the infinitely long line. Not modified.
@@ -674,8 +674,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * </p>
     * <p>
     * In the case the line segment and this bounding box do not intersect, this method returns
-    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
-    * unmodified.
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the line segment and the bounding box,
@@ -707,7 +706,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * </p>
     * </p>
     * In the case the ray and this bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the ray and this bounding box,

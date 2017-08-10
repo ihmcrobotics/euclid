@@ -1008,8 +1008,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * </p>
     * <p>
     * In the case the line segment and this bounding box do not intersect, this method returns
-    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains
-    * unmodified.
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the line segment and the bounding box,
@@ -1041,7 +1040,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * </p>
     * </p>
     * In the case the ray and this bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the ray and this bounding box,
