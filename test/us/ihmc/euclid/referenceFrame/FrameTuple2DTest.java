@@ -28,6 +28,7 @@ import us.ihmc.euclid.tuple2D.Tuple2DBasicsTest;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends Tuple2DBasics & GeometryObject<T>> extends FrameTuple2DReadOnlyTest<F>
 {
@@ -98,6 +99,19 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
          Tuple2DReadOnly input = EuclidCoreRandomTools.generateRandomPoint2D(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         F frameTuple = createRandomTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
+         assertEquals(initialFrame, frameTuple.getReferenceFrame());
+         frameTuple.setIncludingFrame(newFrame, input);
+         tuple.set(input);
+         assertEquals(newFrame, frameTuple.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+         Tuple3DReadOnly input = EuclidCoreRandomTools.generateRandomPoint3D(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple2DBasics tuple = new Vector2D();
