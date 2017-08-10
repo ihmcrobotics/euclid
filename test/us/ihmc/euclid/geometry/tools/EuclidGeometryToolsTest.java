@@ -477,6 +477,8 @@ public class EuclidGeometryToolsTest
    @Test
    public void testAveragePoint2Ds() throws Exception
    {
+      assertNull(EuclidGeometryTools.averagePoint2Ds(new ArrayList<>()));
+
       ArrayList<Point2D> points = new ArrayList<Point2D>();
       Point2D a = new Point2D(1.0, 4.6);
       Point2D b = new Point2D(5.2, 6.0);
@@ -526,6 +528,8 @@ public class EuclidGeometryToolsTest
    @Test
    public void testAveragePoint3Ds() throws Exception
    {
+      assertNull(EuclidGeometryTools.averagePoint3Ds(new ArrayList<>()));
+
       ArrayList<Point3D> points = new ArrayList<Point3D>();
       Point3D a = new Point3D(4.3, 5.6, 3.6);
       Point3D b = new Point3D(8.1, 8.4, 0.0);

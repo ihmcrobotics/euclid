@@ -525,6 +525,9 @@ public class EuclidGeometryTools
     */
    public static Point2D averagePoint2Ds(Collection<? extends Point2DReadOnly> points)
    {
+      if (points.isEmpty())
+         return null;
+
       Point2D totalPoint = new Point2D();
 
       for (Point2DReadOnly point : points)
@@ -548,6 +551,9 @@ public class EuclidGeometryTools
     */
    public static Point3D averagePoint3Ds(Collection<? extends Point3DReadOnly> points)
    {
+      if (points.isEmpty())
+         return null;
+
       Point3D totalPoint = new Point3D();
 
       for (Point3DReadOnly point : points)

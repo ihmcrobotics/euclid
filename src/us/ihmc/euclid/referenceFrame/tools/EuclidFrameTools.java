@@ -293,6 +293,9 @@ public class EuclidFrameTools
     */
    public static FramePoint2D averagePoint2Ds(Collection<? extends FramePoint2DReadOnly> points)
    {
+      if (points.isEmpty())
+         return null;
+
       FramePoint2D totalPoint = new FramePoint2D(points.iterator().next().getReferenceFrame());
 
       for (FramePoint2DReadOnly point : points)
@@ -318,6 +321,9 @@ public class EuclidFrameTools
     */
    public static FramePoint3D averagePoint3Ds(Collection<? extends FramePoint3DReadOnly> points)
    {
+      if (points.isEmpty())
+         return null;
+
       FramePoint3D totalPoint = new FramePoint3D(points.iterator().next().getReferenceFrame());
 
       for (FramePoint3DReadOnly point : points)
