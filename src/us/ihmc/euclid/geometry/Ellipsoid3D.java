@@ -211,7 +211,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * Computes the coordinates of the possible intersections between a line and this ellipsoid.
     * <p>
     * In the case the line and this box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
     * 
     * @param pointOnLine a point expressed in world located on the infinitely long line. Not
