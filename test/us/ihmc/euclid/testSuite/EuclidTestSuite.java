@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 
+import us.ihmc.euclid.AxisTest;
 import us.ihmc.euclid.geometry.BoundingBox2DTest;
 import us.ihmc.euclid.geometry.BoundingBox3DTest;
 import us.ihmc.euclid.geometry.Box3DTest;
@@ -53,6 +54,8 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
       FramePoint3DTest.class, FrameVector3DTest.class,
       // Tools tests
       EuclidFrameToolsTest.class,
+      // Axis test
+      AxisTest.class,
       })
 
 public class EuclidTestSuite
