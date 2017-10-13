@@ -22,6 +22,10 @@ public enum Axis
     */
    Z(0.0, 0.0, 1.0);
 
+   /**
+    * Static final field holding the return from {@link #values()}. This field should be used in
+    * place of calling values() for garbage-free operations.
+    */
    public static final Axis[] values = values();
 
    private final Vector3DReadOnly axisVector;
@@ -76,7 +80,9 @@ public enum Axis
    /**
     * Gets the value of the tuple for the given axis.
     *
-    * @return double value of tuple for axis
+    * @param tuple the tuple to get value from
+    * @param axis the {@link Axis} to get value for
+    * @return the double value of {@code tuple} for {@code axis}
     */
    public static double get(Tuple3DBasics tuple, Axis axis)
    {
@@ -98,23 +104,27 @@ public enum Axis
 
    /**
     * Sets the value of the given tuple for the given axis to the given value.
+    *
+    * @param tupleToModify the tuple to set value of
+    * @param axis the {@link Axis} to set value for
+    * @param value the double value to set to
     */
-   public static void set(Tuple3DBasics tuple, Axis axis, double value)
+   public static void set(Tuple3DBasics tupleToModify, Axis axis, double value)
    {
       switch (axis)
       {
       case X :
-         tuple.setX(value);
+         tupleToModify.setX(value);
 
          break;
 
       case Y :
-         tuple.setY(value);
+         tupleToModify.setY(value);
 
          break;
 
       case Z :
-         tuple.setZ(value);
+         tupleToModify.setZ(value);
 
          break;
 
