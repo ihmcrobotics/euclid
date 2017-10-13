@@ -80,7 +80,7 @@ public enum Axis
    /**
     * Gets the value of the tuple for the given axis.
     *
-    * @param tuple the tuple to get value from
+    * @param tuple the tuple to get value from. Not modified.
     * @param axis the {@link Axis} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}
     */
