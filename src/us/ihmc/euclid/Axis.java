@@ -81,7 +81,7 @@ public enum Axis
     * Gets the value of the tuple for the given axis.
     *
     * @param tuple the tuple to get value from
-    * @param axis the {@link Axis} to get value for
+    * @param axis the {@link Axis} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}
     */
    public static double get(Tuple3DBasics tuple, Axis axis)
@@ -106,7 +106,7 @@ public enum Axis
     * Sets the value of the given tuple for the given axis to the given value.
     *
     * @param tupleToModify the tuple to set value of
-    * @param axis the {@link Axis} to set value for
+    * @param axis the {@link Axis} to set value for. Not modified.
     * @param value the double value to set to
     */
    public static void set(Tuple3DBasics tupleToModify, Axis axis, double value)
