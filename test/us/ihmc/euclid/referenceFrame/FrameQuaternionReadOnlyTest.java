@@ -29,12 +29,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
       return createTuple(ReferenceFrame.getWorldFrame(), x, y, z, s);
    }
 
-   public abstract T createQuaternionUnsafe(ReferenceFrame referenceFrame, double x, double y, double z, double s);
-
-   public T createQuaternionUnsafe(double x, double y, double z, double s) {
-      return createQuaternionUnsafe(ReferenceFrame.getWorldFrame(), x, y, z, s);
-   }
-
    public abstract T createTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s);
 
    @Override
