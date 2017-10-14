@@ -1,29 +1,42 @@
 package us.ihmc.euclid.referenceFrame;
 
+import org.ejml.data.DenseMatrix64F;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.*;
 
 /**
- * {@code FrameVector4D} is a 4D vector expressed in a given reference frame.
+ * {@code FrameQuaternion} is a quaternion expressed in a given reference frame.
  * <p>
- * In addition to representing a {@link Vector4DBasics}, a {@link ReferenceFrame} is associated to a
- * {@code FrameVector4D}. This allows, for instance, to enforce, at runtime, that operations on
+ * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameQuaternion}. This allows, for instance, to enforce, at runtime, that operations on
  * vectors occur in the same coordinate system. Also, via the method
  * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a vector in
  * different reference frame.
  * </p>
  * <p>
- * Because a {@code FrameVector4D} extends {@code Vector4DBasics}, it is compatible with methods
- * only requiring {@code Vector4DBasics}. However, these methods do NOT assert that the operation
+ * Because a {@code FrameQuaternion} extends {@code QuaternionBasics}, it is compatible with methods
+ * only requiring {@code QuaternionBasics}. However, these methods do NOT assert that the operation
  * occur in the proper coordinate system. Use this feature carefully and always prefer using methods
- * requiring {@code FrameVector4D}.
+ * requiring {@code FrameQuaternion}.
  * </p>
  */
-public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Vector4D> implements FrameVector4DReadOnly, Vector4DBasics
+public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> implements FrameQuaternionReadOnly, QuaternionBasics
 {
    /**
     * Creates a new frame vector and initializes it components to zero and its reference frame to
@@ -42,7 +55,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Vector4D> imp
     */
    public FrameQuaternion(ReferenceFrame referenceFrame)
    {
-      super(referenceFrame, new Vector4D());
+      super(referenceFrame, new Quaternion());
    }
 
    /**
@@ -56,23 +69,23 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Vector4D> imp
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, double x, double y, double z, double s)
    {
-      super(referenceFrame, new Vector4D(x, y, z, s));
+      super(referenceFrame, new Quaternion(x, y, z, s));
    }
 
    /**
-    * Creates a new frame vector and initializes its component {@code x}, {@code y}, {@code z} in
+    * Creates a new frame quaternion and initializes its component {@code x}, {@code y}, {@code z} in
     * order from the given array and initializes its reference frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
-    * @param vectorArray the array containing this vector's components. Not modified.
+    * @param vectorArray the array containing this quaternion's components. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, double[] vectorArray)
    {
-      super(referenceFrame, new Vector4D(vectorArray));
+      super(referenceFrame, new Quaternion(vectorArray));
    }
 
    /**
-    * Creates a new frame vector and initializes it to {@code tuple4DReadOnly} and to the given
+    * Creates a new frame quaternion and initializes it to {@code tuple4DReadOnly} and to the given
     * reference frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
@@ -80,39 +93,48 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Vector4D> imp
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
    {
-      super(referenceFrame, new Vector4D(tuple4DReadOnly));
+      super(referenceFrame, new Quaternion(tuple4DReadOnly));
    }
 
    /**
-    * Creates a new frame vector and initializes it to {@code other}.
+    * Creates a new frame quaternion and initializes it to {@code other}.
     *
     * @param other the tuple to copy the components and reference frame from. Not modified.
     */
-   public FrameQuaternion(FrameTuple4DReadOnly other)
+   public FrameQuaternion(FrameQuaternionReadOnly other)
    {
-      super(other.getReferenceFrame(), new Vector4D(other));
+      super(other.getReferenceFrame(), new Quaternion(other));
    }
 
    /**
-    * Sets this frame vector to {@code other} and then calls {@link #normalize()}.
+    * Sets this frame quaternion to {@code other} and then calls {@link #normalize()}.
     *
-    * @param other the other frame vector to copy the values from. Not modified.
+    * @param other the other frame quaternion to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void setAndNormalize(FrameTuple4DReadOnly other)
+   public final void setAndNormalize(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
       tuple.setAndNormalize(other);
    }
 
    /**
-    * Gets the read-only reference to the vector used in {@code this}.
+    * Gets the read-only reference to the quaternion used in {@code this}.
     *
-    * @return the vector of {@code this}.
+    * @return the quaternion of {@code this}.
     */
-   public final Vector4D getVector()
+   public final Quaternion getVector()
    {
       return tuple;
+   }
+
+   @Override
+   public void setUnsafe(double qx, double qy, double qz, double qs)
+   {
+      setX(qx);
+      setY(qy);
+      setZ(qz);
+      setS(qs);
    }
 }
