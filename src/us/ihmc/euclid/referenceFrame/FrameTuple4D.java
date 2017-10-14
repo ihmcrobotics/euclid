@@ -47,34 +47,6 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
 
    /** {@inheritDoc} */
    @Override
-   public final void setX(double x)
-   {
-      tuple.setX(x);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setY(double y)
-   {
-      tuple.setY(y);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setZ(double z)
-   {
-      tuple.setZ(z);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setS(double s)
-   {
-      tuple.setS(s);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public final void set(double x, double y, double z, double s)
    {
       tuple.set(x, y, z, s);

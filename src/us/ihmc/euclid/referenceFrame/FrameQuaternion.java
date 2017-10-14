@@ -118,9 +118,6 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    @Override
    public void setUnsafe(double qx, double qy, double qz, double qs)
    {
-      setX(qx);
-      setY(qy);
-      setZ(qz);
-      setS(qs);
+      tuple.setUnsafe(qx, qy, qz, qs);
    }
 }
