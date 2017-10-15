@@ -2,17 +2,14 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.Random;
 
-import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FramePoint3D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
-import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 public class EuclidFrameRandomTools
 {
@@ -583,5 +580,17 @@ public class EuclidFrameRandomTools
    public static FrameVector2D generateRandomFrameVector2D(Random random, ReferenceFrame referenceFrame, Tuple2DReadOnly min, Tuple2DReadOnly max)
    {
       return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.generateRandomVector2D(random, min, max));
+   }
+
+   /**
+    * Generates a random frame quaternion.
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame quaternion's reference frame.
+    * @return the random frame quaternion.
+    */
+   public static FrameQuaternion generateRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random));
    }
 }
