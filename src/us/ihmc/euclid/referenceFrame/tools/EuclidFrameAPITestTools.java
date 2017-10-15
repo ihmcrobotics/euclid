@@ -1372,7 +1372,7 @@ public class EuclidFrameAPITestTools
       }
       catch (NoSuchMethodException e)
       {
-         throw new AssertionError("The original method:\n" + getMethodSimpleName(originalMethod) + "\nis not properly overloaded, expected to find:\n"
+         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + getMethodSimpleName(originalMethod) + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n"
                + getMethodSimpleName(originalMethod.getReturnType(), originalMethod.getName(), overloadingSignature));
       }
    }
