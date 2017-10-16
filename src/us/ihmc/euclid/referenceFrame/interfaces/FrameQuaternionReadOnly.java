@@ -5,12 +5,14 @@ import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameTuple2D;
 import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -656,5 +658,23 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    {
       checkReferenceFrameMatch(quaternionToTransform);
       inverseTransform(quaternionToTransform, quaternionToTransform);
+   }
+
+   /**
+    * Computes and packs the orientation described by this quaternion as a rotation vector.
+    * <p>
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
+    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
+    * of the same axis-angle.
+    * </p>
+    *
+    * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code quaternionToTransform}
+    *            do not match.
+    */
+   default void get(FrameVector3D rotationVectorToPack)
+   {
+      checkReferenceFrameMatch(rotationVectorToPack);
+      RotationVectorConversion.convertQuaternionToRotationVector(this, rotationVectorToPack);
    }
 }
