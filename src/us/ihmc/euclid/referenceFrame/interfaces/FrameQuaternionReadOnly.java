@@ -677,4 +677,19 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       checkReferenceFrameMatch(rotationVectorToPack);
       RotationVectorConversion.convertQuaternionToRotationVector(this, rotationVectorToPack);
    }
+
+   /**
+    * Computes and returns the distance from this quaternion to {@code other}.
+    *
+    * @param other the other quaternion to measure the distance. Not modified.
+    * @return the angle representing the distance between the two quaternions. It is contained in
+    *         [0, 2<i>pi</i>]
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code quaternionOriginal}
+    *            do not match.
+    */
+   default double distance(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return 2.0 * Math.acos(dot(other));
+   }
 }
