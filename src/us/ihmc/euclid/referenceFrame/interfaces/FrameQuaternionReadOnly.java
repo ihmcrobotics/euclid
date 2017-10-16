@@ -692,4 +692,21 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       checkReferenceFrameMatch(other);
       return 2.0 * Math.acos(dot(other));
    }
+
+   /**
+    * Computes and packs the orientation described by this quaternion as the Euler angles.
+    * <p>
+    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
+    * sometimes undefined.
+    * </p>
+    *
+    * @param tupleToTransform the tuple in which the Euler angles are stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code tupleToTransform}
+    *            do not match.
+    */
+   default void getEuler(FrameVector3D tupleToTransform)
+   {
+      checkReferenceFrameMatch(tupleToTransform);
+      YawPitchRollConversion.convertQuaternionToYawPitchRoll(this, tupleToTransform);
+   }
 }
