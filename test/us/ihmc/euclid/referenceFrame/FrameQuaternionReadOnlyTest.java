@@ -1,6 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
+import org.junit.Test;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.tuple4D.Tuple4DReadOnlyTest;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 import java.util.Random;
 
@@ -35,5 +39,11 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
    public double getEpsilon()
    {
       return 1e-10;
+   }
+
+   @Test
+   public void testOverloading() throws Exception
+   {
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternionReadOnly.class, QuaternionReadOnly.class, true);
    }
 }

@@ -1,9 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
 import org.junit.Test;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<FrameQuaternion>
 {
@@ -18,6 +20,10 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternionReadOnly.class, QuaternionReadOnly.class, true);
+      super.testOverloading();
+      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
+      framelessMethodsToIgnore.put("set", new Class<?>[]{Quaternion.class});
+      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[]{Quaternion.class, Double.TYPE});
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternion.class, Quaternion.class, true, 1, framelessMethodsToIgnore);
    }
 }
