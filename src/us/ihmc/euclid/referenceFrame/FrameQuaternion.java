@@ -5,7 +5,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.rotationConversion.QuaternionConversion;
 import us.ihmc.euclid.tools.QuaternionTools;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -382,7 +381,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    public final void setAndConjugate(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      set((QuaternionReadOnly)other);
+      set((QuaternionReadOnly) other);
       conjugate();
    }
 
@@ -394,7 +393,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    public final void setAndInverse(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      set((QuaternionReadOnly)other);
+      set((QuaternionReadOnly) other);
       inverse();
    }
 
