@@ -366,6 +366,57 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Sets this quaternion to the conjugate of {@code other}.
+    *
+    * <pre>
+    *      / -qx \
+    * q* = | -qy |
+    *      | -qz |
+    *      \  qs /
+    * </pre>
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void setAndConjugate(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      set((QuaternionReadOnly)other);
+      conjugate();
+   }
+
+   /**
+    * Sets this quaternion to the inverse of {@code other}.
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    */
+   public final void setAndInverse(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      set((QuaternionReadOnly)other);
+      inverse();
+   }
+
+   /**
+    * Sets this quaternion to represent the same orientation as the given Euler angles
+    * {@code eulerAngles}.
+    * <p>
+    * This is equivalent to
+    * {@code this.setYawPitchRoll(eulerAngles.getZ(), eulerAngles.getY(), eulerAngles.getX())}.
+    * </p>
+    *
+    * @param eulerAngles the Euler angles to copy the orientation from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code eulerAngles} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void setEuler(FrameVector3DReadOnly eulerAngles)
+   {
+      checkReferenceFrameMatch(eulerAngles);
+      QuaternionConversion.convertYawPitchRollToQuaternion(eulerAngles.getZ(), eulerAngles.getY(), eulerAngles.getX(), this);
+   }
+
+   /**
     * Gets the read-only reference to the quaternion used in {@code this}.
     *
     * @return the quaternion of {@code this}.
