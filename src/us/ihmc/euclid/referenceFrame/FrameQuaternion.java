@@ -495,6 +495,54 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Pre-multiplies this quaternion by {@code other}.
+    * <p>
+    * this = other * this
+    * </p>
+    *
+    * @param other the other quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void preMultiply(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionTools.multiply(other, this, this);
+   }
+
+   /**
+    * Sets this quaternion to the multiplication of the conjugate of {@code other} and {@code this}.
+    * <p>
+    * this = other* * this
+    * </p>
+    *
+    * @param other the other quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void preMultiplyConjugateOther(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionTools.multiplyConjugateLeft(other, this, this);
+   }
+
+   /**
+    * Sets this quaternion to the multiplication of {@code other} and the conjugate of {@code this}.
+    * <p>
+    * this = other * this*
+    * </p>
+    *
+    * @param other the other quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void preMultiplyConjugateThis(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionTools.multiplyConjugateRight(other, this, this);
+   }
+
+   /**
     * Gets the read-only reference to the quaternion used in {@code this}.
     *
     * @return the quaternion of {@code this}.
