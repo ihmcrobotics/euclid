@@ -111,6 +111,19 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Sets this frame quaternion to {@code other} and then calls {@link #negate()}.
+    *
+    * @param other the other frame quaternion to set to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void setAndNegate(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      tuple.setAndNegate(other);
+   }
+
+   /**
     * Gets the read-only reference to the quaternion used in {@code this}.
     *
     * @return the quaternion of {@code this}.
