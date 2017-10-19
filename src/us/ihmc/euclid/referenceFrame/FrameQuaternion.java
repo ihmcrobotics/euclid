@@ -543,6 +543,31 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Sets this quaternion to the same orientation described by the given rotation vector
+    * {@code rotationVector}.
+    * <p>
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
+    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
+    * of the same axis-angle.
+    * </p>
+    *
+    * @param rotation vector the rotation vector used to set this quaternion. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code rotationVector} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void set(FrameVector3DReadOnly rotationVector)
+   {
+      checkReferenceFrameMatch(rotationVector);
+      QuaternionConversion.convertRotationVectorToQuaternion(rotationVector, this);
+   }
+
+   public final void set(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      setUnsafe(other.getX(), other.getY(), other.getZ(), other.getS());
+   }
+
+   /**
     * Gets the read-only reference to the quaternion used in {@code this}.
     *
     * @return the quaternion of {@code this}.
