@@ -2,8 +2,13 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.rotationConversion.QuaternionConversion;
+import us.ihmc.euclid.tools.QuaternionTools;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
@@ -110,7 +115,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     *
     * @return the quaternion of {@code this}.
     */
-   public final Quaternion getVector()
+   public final QuaternionReadOnly getQuaternion()
    {
       return tuple;
    }
