@@ -417,6 +417,52 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Sets this quaternion to the difference of {@code q1} and {@code q2}.
+    * <p>
+    * this = q1<sup>-1</sup> * q2
+    * </p>
+    *
+    * @param q1 the first quaternion in the difference. Not modified.
+    * @param q2 the second quaternion in the difference. Not modified.
+    */
+   public final void difference(FrameQuaternionReadOnly q1, QuaternionReadOnly q2)
+   {
+      QuaternionTools.multiplyConjugateLeft(q1, q2, this);
+   }
+
+   /**
+    * Sets this quaternion to the difference of {@code q1} and {@code q2}.
+    * <p>
+    * this = q1<sup>-1</sup> * q2
+    * </p>
+    *
+    * @param q1 the first quaternion in the difference. Not modified.
+    * @param q2 the second quaternion in the difference. Not modified.
+    */
+   public final void difference(QuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   {
+      QuaternionTools.multiplyConjugateLeft(q1, q2, this);
+   }
+
+   /**
+    * Sets this quaternion to the difference of {@code q1} and {@code q2}.
+    * <p>
+    * this = q1<sup>-1</sup> * q2
+    * </p>
+    *
+    * @param q1 the first quaternion in the difference. Not modified.
+    * @param q2 the second quaternion in the difference. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same
+    *            reference frame as {@code q2}.
+    */
+   public final void difference(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   {
+      q1.checkReferenceFrameMatch(q2);
+      changeFrame(q1.getReferenceFrame());
+      QuaternionTools.multiplyConjugateLeft(q1, q2, this);
+   }
+
+   /**
     * Gets the read-only reference to the quaternion used in {@code this}.
     *
     * @return the quaternion of {@code this}.
