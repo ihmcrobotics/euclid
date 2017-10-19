@@ -42,7 +42,7 @@ public class BoundingBoxException extends RuntimeException
     */
    public BoundingBoxException(BoundingBox2D badBoundingBox2D)
    {
-      super("Improper bounding box 2D: " + badBoundingBox2D == null ? "bounding box is null" : badBoundingBox2D.toString());
+      super("Improper bounding box 2D: " + (badBoundingBox2D == null ? "bounding box is null" : badBoundingBox2D.toString()));
    }
 
    /**
@@ -68,7 +68,7 @@ public class BoundingBoxException extends RuntimeException
     */
    public BoundingBoxException(BoundingBox3D badBoundingBox3D)
    {
-      super("Improper bounding box 3D: " + badBoundingBox3D == null ? "bounding box is null" : badBoundingBox3D.toString());
+      super("Improper bounding box 3D: " + (badBoundingBox3D == null ? "bounding box is null" : badBoundingBox3D.toString()));
    }
 
    /**
