@@ -124,6 +124,187 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Performs a linear interpolation in SO(3) from {@code this} to {@code qf} given the percentage
+    * {@code alpha}.
+    * <p>
+    * The interpolation method used here is often called a <i>Spherical Linear Interpolation</i> or
+    * SLERP.
+    * </p>
+    *
+    * @param qf the other quaternion used for the interpolation. Not modified.
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
+    *           modifying this quaternion, while a value of 1 is equivalent to setting this
+    *           quaternion to {@code qf}.
+    * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void interpolate(FrameQuaternionReadOnly qf, double alpha)
+   {
+      checkReferenceFrameMatch(qf);
+
+      double cosHalfTheta = dot(qf);
+      double sign = 1.0;
+
+      if (cosHalfTheta < 0.0)
+      {
+         sign = -1.0;
+         cosHalfTheta = -cosHalfTheta;
+      }
+
+      double alpha0 = 1.0 - alpha;
+      double alphaf = alpha;
+
+      if (1.0 - cosHalfTheta > 1.0e-12)
+      {
+         double halfTheta = Math.acos(cosHalfTheta);
+         double sinHalfTheta = Math.sin(halfTheta);
+         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
+         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
+      }
+
+      double qx = alpha0 * getX() + sign * alphaf * qf.getX();
+      double qy = alpha0 * getY() + sign * alphaf * qf.getY();
+      double qz = alpha0 * getZ() + sign * alphaf * qf.getZ();
+      double qs = alpha0 * getS() + sign * alphaf * qf.getS();
+      set(qx, qy, qz, qs);
+   }
+
+   /**
+    * Performs a linear interpolation in SO(3) from {@code q0} to {@code qf} given the percentage
+    * {@code alpha}.
+    * <p>
+    * The interpolation method used here is often called a <i>Spherical Linear Interpolation</i> or
+    * SLERP.
+    * </p>
+    *
+    * @param q0 the first quaternion used in the interpolation. Not modified.
+    * @param qf the second quaternion used in the interpolation. Not modified.
+    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
+    *           this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
+    *           quaternion to {@code qf}.
+    * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void interpolate(FrameQuaternionReadOnly q0, QuaternionReadOnly qf, double alpha)
+   {
+      double cosHalfTheta = q0.dot(qf);
+      double sign = 1.0;
+
+      if (cosHalfTheta < 0.0)
+      {
+         sign = -1.0;
+         cosHalfTheta = -cosHalfTheta;
+      }
+
+      double alpha0 = 1.0 - alpha;
+      double alphaf = alpha;
+
+      if (1.0 - cosHalfTheta > 1.0e-12)
+      {
+         double halfTheta = Math.acos(cosHalfTheta);
+         double sinHalfTheta = Math.sin(halfTheta);
+         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
+         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
+      }
+
+      double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();
+      double qy = alpha0 * q0.getY() + sign * alphaf * qf.getY();
+      double qz = alpha0 * q0.getZ() + sign * alphaf * qf.getZ();
+      double qs = alpha0 * q0.getS() + sign * alphaf * qf.getS();
+      set(qx, qy, qz, qs);
+   }
+
+   /**
+    * Performs a linear interpolation in SO(3) from {@code q0} to {@code qf} given the percentage
+    * {@code alpha}.
+    * <p>
+    * The interpolation method used here is often called a <i>Spherical Linear Interpolation</i> or
+    * SLERP.
+    * </p>
+    *
+    * @param q0 the first quaternion used in the interpolation. Not modified.
+    * @param qf the second quaternion used in the interpolation. Not modified.
+    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
+    *           this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
+    *           quaternion to {@code qf}.
+    */
+   public final void interpolate(QuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
+   {
+      double cosHalfTheta = q0.dot(qf);
+      double sign = 1.0;
+
+      if (cosHalfTheta < 0.0)
+      {
+         sign = -1.0;
+         cosHalfTheta = -cosHalfTheta;
+      }
+
+      double alpha0 = 1.0 - alpha;
+      double alphaf = alpha;
+
+      if (1.0 - cosHalfTheta > 1.0e-12)
+      {
+         double halfTheta = Math.acos(cosHalfTheta);
+         double sinHalfTheta = Math.sin(halfTheta);
+         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
+         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
+      }
+
+      double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();
+      double qy = alpha0 * q0.getY() + sign * alphaf * qf.getY();
+      double qz = alpha0 * q0.getZ() + sign * alphaf * qf.getZ();
+      double qs = alpha0 * q0.getS() + sign * alphaf * qf.getS();
+      set(qx, qy, qz, qs);
+   }
+
+   /**
+    * Performs a linear interpolation in SO(3) from {@code q0} to {@code qf} given the percentage
+    * {@code alpha}.
+    * <p>
+    * The interpolation method used here is often called a <i>Spherical Linear Interpolation</i> or
+    * SLERP.
+    * </p>
+    *
+    * @param q0 the first quaternion used in the interpolation. Not modified.
+    * @param qf the second quaternion used in the interpolation. Not modified.
+    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
+    *           this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
+    *           quaternion to {@code qf}.
+    * @throws ReferenceFrameMismatchException if {@code q0} is not expressed in the same
+    *            reference frame as {@code qf}.
+    */
+   public final void interpolate(FrameQuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
+   {
+      q0.checkReferenceFrameMatch(qf);
+
+      double cosHalfTheta = q0.dot(qf);
+      double sign = 1.0;
+
+      if (cosHalfTheta < 0.0)
+      {
+         sign = -1.0;
+         cosHalfTheta = -cosHalfTheta;
+      }
+
+      double alpha0 = 1.0 - alpha;
+      double alphaf = alpha;
+
+      if (1.0 - cosHalfTheta > 1.0e-12)
+      {
+         double halfTheta = Math.acos(cosHalfTheta);
+         double sinHalfTheta = Math.sin(halfTheta);
+         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
+         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
+      }
+
+      double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();
+      double qy = alpha0 * q0.getY() + sign * alphaf * qf.getY();
+      double qz = alpha0 * q0.getZ() + sign * alphaf * qf.getZ();
+      double qs = alpha0 * q0.getS() + sign * alphaf * qf.getS();
+      set(qx, qy, qz, qs);
+   }
+
+   /**
     * Gets the read-only reference to the quaternion used in {@code this}.
     *
     * @return the quaternion of {@code this}.
