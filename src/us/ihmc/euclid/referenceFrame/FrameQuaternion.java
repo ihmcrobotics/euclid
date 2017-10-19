@@ -305,6 +305,67 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Multiplies this quaternion by {@code other}.
+    * <p>
+    * this = this * other
+    * </p>
+    *
+    * @param other the other quaternion to multiply this. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public final void multiply(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionTools.multiply(this, other, this);
+   }
+
+   /**`
+    * Sets this quaternion to the multiplication of {@code q1} and {@code q2}.
+    * <p>
+    * this = q1 * q2
+    * </p>
+    *
+    * @param q1 the first quaternion in the multiplication. Not modified.
+    * @param q2 the second quaternion in the multiplication. Not modified.
+    */
+   public final void multiply(FrameQuaternionReadOnly q1, QuaternionReadOnly q2)
+   {
+      QuaternionTools.multiply(q1, q2, this);
+   }
+
+   /**`
+    * Sets this quaternion to the multiplication of {@code q1} and {@code q2}.
+    * <p>
+    * this = q1 * q2
+    * </p>
+    *
+    * @param q1 the first quaternion in the multiplication. Not modified.
+    * @param q2 the second quaternion in the multiplication. Not modified.
+    */
+   public final void multiply(QuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   {
+      QuaternionTools.multiply(q1, q2, this);
+   }
+
+   /**`
+    * Sets this quaternion to the multiplication of {@code q1} and {@code q2}.
+    * <p>
+    * this = q1 * q2
+    * </p>
+    *
+    * @param q1 the first quaternion in the multiplication. Not modified.
+    * @param q2 the second quaternion in the multiplication. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same
+    *            reference frame as {@code q2}.
+    */
+   public final void multiply(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   {
+      q1.checkReferenceFrameMatch(q2);
+      QuaternionTools.multiply(q1, q2, this);
+   }
+
+   /**
     * Gets the read-only reference to the quaternion used in {@code this}.
     *
     * @return the quaternion of {@code this}.
