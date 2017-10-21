@@ -132,4 +132,40 @@ public enum Axis
          throw new IndexOutOfBoundsException();
       }
    }
+
+   /**
+    * Obtains the next axis, in a clockwise fashion.
+    *
+    * @return next clockwise axis
+    */
+   public Axis getNextClockwiseAxis()
+   {
+      switch (this)
+      {
+      case X:
+         return Z;
+      case Y:
+         return X;
+      default:
+         return Y;
+      }
+   }
+
+   /**
+    * Obtains the next axis, in a counterclockwise fashion.
+    *
+    * @return next counterclockwise axis
+    */
+   public Axis getNextAntiClockwiseAxis()
+   {
+      switch (this)
+      {
+      case X:
+         return Y;
+      case Y:
+         return Z;
+      default:
+         return X;
+      }
+   }
 }
