@@ -139,33 +139,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     */
    public final void interpolate(FrameQuaternionReadOnly qf, double alpha)
    {
-      checkReferenceFrameMatch(qf);
-
-      double cosHalfTheta = dot(qf);
-      double sign = 1.0;
-
-      if (cosHalfTheta < 0.0)
-      {
-         sign = -1.0;
-         cosHalfTheta = -cosHalfTheta;
-      }
-
-      double alpha0 = 1.0 - alpha;
-      double alphaf = alpha;
-
-      if (1.0 - cosHalfTheta > 1.0e-12)
-      {
-         double halfTheta = Math.acos(cosHalfTheta);
-         double sinHalfTheta = Math.sin(halfTheta);
-         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
-         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
-      }
-
-      double qx = alpha0 * getX() + sign * alphaf * qf.getX();
-      double qy = alpha0 * getY() + sign * alphaf * qf.getY();
-      double qz = alpha0 * getZ() + sign * alphaf * qf.getZ();
-      double qs = alpha0 * getS() + sign * alphaf * qf.getS();
-      set(qx, qy, qz, qs);
+      interpolate(this, qf, alpha);
    }
 
    /**
