@@ -9,8 +9,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
- * {@code FrameTuple4D} is the base implementation for {@link FramePoint4D} and
- * {@link FrameVector4D}.
+ * {@code FrameTuple4D} is the base implementation for {@link FrameQuaternion}.
  * <p>
  * In addition to representing a {@link Tuple4DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FrameTuple4D}. This allows, for instance, to enforce, at runtime, that operations on
