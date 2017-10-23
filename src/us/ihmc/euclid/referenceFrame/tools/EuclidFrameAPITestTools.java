@@ -1753,7 +1753,7 @@ public class EuclidFrameAPITestTools
       catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
             | SecurityException e)
       {
-         throw new RuntimeException("Could instantiate an object of the type: " + type.getSimpleName());
+         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName());
       }
    }
 
