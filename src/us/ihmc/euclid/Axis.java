@@ -156,7 +156,7 @@ public enum Axis
     *
     * @return next counterclockwise axis
     */
-   public Axis getNextAntiClockwiseAxis()
+   public Axis getNextCounterClockwiseAxis()
    {
       switch (this)
       {
