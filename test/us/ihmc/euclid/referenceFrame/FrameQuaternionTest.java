@@ -1,14 +1,22 @@
 package us.ihmc.euclid.referenceFrame;
 
 import org.junit.Test;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.function.Predicate;
 
 import static org.junit.Assert.fail;
 
@@ -573,6 +581,14 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
             }
          }
       }
+   }
+
+   @Test
+   public void testConsistencyWithQuaternion() {
+      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createTuple(frame, ((QuaternionReadOnly)tuple).getX(), ((QuaternionReadOnly)tuple).getY(), ((QuaternionReadOnly)tuple).getZ(), ((QuaternionReadOnly)tuple).getS());
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> createRandomTuple(random).getGeometryObject();
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && Arrays.stream(m.getParameterTypes()).noneMatch(param -> param.getName().contains("4D") || (!param.getName().contains("Quaternion") && param.getName().contains("ReadOnly")));
+      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }
 
    @Test
