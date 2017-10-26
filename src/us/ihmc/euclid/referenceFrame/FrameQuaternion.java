@@ -202,7 +202,6 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     */
    public final void interpolate(FrameQuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
    {
-      System.out.println(":(...");
       checkReferenceFrameMatch(q0);
       checkReferenceFrameMatch(qf);
       tuple.interpolate(q0, qf, alpha);
