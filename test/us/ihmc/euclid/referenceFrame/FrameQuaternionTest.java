@@ -36,6 +36,8 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testReferenceFrameChecks()
    {
+      super.testReferenceFrameChecks();
+
       ReferenceFrame frame;
       FrameQuaternion fq0;
       FrameQuaternion fq1;
