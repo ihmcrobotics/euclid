@@ -290,6 +290,215 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
          }
       }
 
+      // inverseTransform
+      for (int i = 0; i < 100; ++i)
+      {
+         referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         quaternion = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+
+         if (random.nextDouble() > 0.5)
+         {
+            ft2dro = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
+            t2db = EuclidCoreRandomTools.generateRandomPoint2D(random);
+            t2dro = EuclidCoreRandomTools.generateRandomPoint2D(random);
+            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
+            ft3d0 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, referenceFrame);
+            ft3d1 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, referenceFrame);
+            ft3dro = EuclidFrameRandomTools.generateRandomFramePoint3D(random, referenceFrame);
+            t3db = EuclidCoreRandomTools.generateRandomPoint3D(random);
+            fqro = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+            qb = EuclidCoreRandomTools.generateRandomQuaternion(random);
+            fq = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+
+            try
+            {
+               quaternion.inverseTransform(ft2dro, t2db, false);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(t2dro, ft2d, false);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft2dro, ft2d, false);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft3d0);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft3d0, ft3d1);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft3dro, t3db);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(fqro, qb);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(fqro, fq);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(fq);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+         }
+         else
+         {
+            otherFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+
+            ft2dro = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
+            t2db = EuclidCoreRandomTools.generateRandomPoint2D(random);
+            t2dro = EuclidCoreRandomTools.generateRandomPoint2D(random);
+            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
+            ft3d0 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
+            ft3d1 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
+            ft3dro = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
+            t3db = EuclidCoreRandomTools.generateRandomPoint3D(random);
+            fqro = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, otherFrame);
+            qb = EuclidCoreRandomTools.generateRandomQuaternion(random);
+            fq = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, otherFrame);
+
+            try
+            {
+               quaternion.inverseTransform(ft2dro, t2db, false);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(t2dro, ft2d, false);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft2dro, ft2d, false);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft3d0);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft3d0, ft3d1);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft3dro, t3db);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(fqro, qb);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(fqro, fq);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(fq);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+         }
+      }
+
       // get
       for (int i = 0; i < 100; ++i) {
          referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
