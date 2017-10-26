@@ -160,31 +160,8 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     */
    public final void interpolate(FrameQuaternionReadOnly q0, QuaternionReadOnly qf, double alpha)
    {
-      double cosHalfTheta = q0.dot(qf);
-      double sign = 1.0;
-
-      if (cosHalfTheta < 0.0)
-      {
-         sign = -1.0;
-         cosHalfTheta = -cosHalfTheta;
-      }
-
-      double alpha0 = 1.0 - alpha;
-      double alphaf = alpha;
-
-      if (1.0 - cosHalfTheta > 1.0e-12)
-      {
-         double halfTheta = Math.acos(cosHalfTheta);
-         double sinHalfTheta = Math.sin(halfTheta);
-         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
-         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
-      }
-
-      double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();
-      double qy = alpha0 * q0.getY() + sign * alphaf * qf.getY();
-      double qz = alpha0 * q0.getZ() + sign * alphaf * qf.getZ();
-      double qs = alpha0 * q0.getS() + sign * alphaf * qf.getS();
-      set(qx, qy, qz, qs);
+      checkReferenceFrameMatch(q0);
+      tuple.interpolate(q0, qf, alpha);
    }
 
    /**
@@ -203,31 +180,8 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     */
    public final void interpolate(QuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
    {
-      double cosHalfTheta = q0.dot(qf);
-      double sign = 1.0;
-
-      if (cosHalfTheta < 0.0)
-      {
-         sign = -1.0;
-         cosHalfTheta = -cosHalfTheta;
-      }
-
-      double alpha0 = 1.0 - alpha;
-      double alphaf = alpha;
-
-      if (1.0 - cosHalfTheta > 1.0e-12)
-      {
-         double halfTheta = Math.acos(cosHalfTheta);
-         double sinHalfTheta = Math.sin(halfTheta);
-         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
-         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
-      }
-
-      double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();
-      double qy = alpha0 * q0.getY() + sign * alphaf * qf.getY();
-      double qz = alpha0 * q0.getZ() + sign * alphaf * qf.getZ();
-      double qs = alpha0 * q0.getS() + sign * alphaf * qf.getS();
-      set(qx, qy, qz, qs);
+      checkReferenceFrameMatch(qf);
+      tuple.interpolate(q0, qf, alpha);
    }
 
    /**
@@ -248,33 +202,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     */
    public final void interpolate(FrameQuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
    {
-      q0.checkReferenceFrameMatch(qf);
-
-      double cosHalfTheta = q0.dot(qf);
-      double sign = 1.0;
-
-      if (cosHalfTheta < 0.0)
-      {
-         sign = -1.0;
-         cosHalfTheta = -cosHalfTheta;
-      }
-
-      double alpha0 = 1.0 - alpha;
-      double alphaf = alpha;
-
-      if (1.0 - cosHalfTheta > 1.0e-12)
-      {
-         double halfTheta = Math.acos(cosHalfTheta);
-         double sinHalfTheta = Math.sin(halfTheta);
-         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
-         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
-      }
-
-      double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();
-      double qy = alpha0 * q0.getY() + sign * alphaf * qf.getY();
-      double qz = alpha0 * q0.getZ() + sign * alphaf * qf.getZ();
-      double qs = alpha0 * q0.getS() + sign * alphaf * qf.getS();
-      set(qx, qy, qz, qs);
+      System.out.println(":(...");
+      checkReferenceFrameMatch(q0);
+      checkReferenceFrameMatch(qf);
+      tuple.interpolate(q0, qf, alpha);
    }
 
    /**
