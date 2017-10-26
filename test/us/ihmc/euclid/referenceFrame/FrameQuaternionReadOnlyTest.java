@@ -79,6 +79,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
       FrameTuple3D ft3d1;
       FrameTuple3DReadOnly ft3dro;
       Tuple3DBasics t3db;
+      FrameVector3D fv3d;
 
       // transform
       for (int i = 0; i < 100; ++i)
@@ -284,6 +285,81 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             }
             catch (ReferenceFrameMismatchException excepted)
             {
+
+            }
+         }
+      }
+
+      // get
+      for (int i = 0; i < 100; ++i) {
+         referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         quaternion = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+
+         if (random.nextDouble() > 0.5) {
+            fv3d = EuclidFrameRandomTools.generateRandomFrameVector3D(random, referenceFrame);
+
+            try {
+               quaternion.get(fv3d);
+            } catch (ReferenceFrameMismatchException excepted) {
+               fail();
+            }
+         } else {
+            fv3d = EuclidFrameRandomTools.generateRandomFrameVector3D(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
+
+            try {
+               quaternion.get(fv3d);
+               fail();
+            } catch (ReferenceFrameMismatchException ignored) {
+
+            }
+         }
+      }
+
+      // getEuler
+      for (int i = 0; i < 100; ++i) {
+         referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         quaternion = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+
+         if (random.nextDouble() > 0.5) {
+            fv3d = EuclidFrameRandomTools.generateRandomFrameVector3D(random, referenceFrame);
+
+            try {
+               quaternion.getEuler(fv3d);
+            } catch (ReferenceFrameMismatchException excepted) {
+               fail();
+            }
+         } else {
+            fv3d = EuclidFrameRandomTools.generateRandomFrameVector3D(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
+
+            try {
+               quaternion.getEuler(fv3d);
+               fail();
+            } catch (ReferenceFrameMismatchException ignored) {
+
+            }
+         }
+      }
+
+      // distance
+      for (int i = 0; i < 100; ++i) {
+         referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         quaternion = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+
+         if (random.nextDouble() > 0.5) {
+            fqro = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+
+            try {
+               quaternion.distance(fqro);
+            } catch (ReferenceFrameMismatchException excepted) {
+               fail();
+            }
+         } else {
+            fqro = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
+
+            try {
+               quaternion.distance(fqro);
+               fail();
+            } catch (ReferenceFrameMismatchException ignored) {
 
             }
          }
