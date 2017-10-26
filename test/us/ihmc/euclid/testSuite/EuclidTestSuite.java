@@ -32,6 +32,12 @@ import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
 import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
       // Geometry class tests
