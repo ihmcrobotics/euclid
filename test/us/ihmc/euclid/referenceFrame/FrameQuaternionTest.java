@@ -704,7 +704,6 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          if (Modifier.isStatic(testMethod.getModifiers()))
             continue;
 
-         System.out.println(testMethod.getName());
          testMethod.invoke(quaternionBasicsTest);
       }
    }
