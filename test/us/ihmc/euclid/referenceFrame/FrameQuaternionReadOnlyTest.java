@@ -188,8 +188,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             ft2dro = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
             t2db = EuclidCoreRandomTools.generateRandomPoint2D(random);
-            t2dro = EuclidCoreRandomTools.generateRandomPoint2D(random);
-            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
+            ft2d = new FramePoint2D(referenceFrame);
             ft3d0 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
             ft3d1 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
             ft3dro = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
@@ -201,16 +200,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             try
             {
                quaternion.transform(ft2dro, t2db, false);
-               fail();
-            }
-            catch (ReferenceFrameMismatchException ignored)
-            {
-
-            }
-
-            try
-            {
-               quaternion.transform(t2dro, ft2d, false);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
@@ -397,7 +386,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             ft2dro = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
             t2db = EuclidCoreRandomTools.generateRandomPoint2D(random);
-            t2dro = EuclidCoreRandomTools.generateRandomPoint2D(random);
             ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
             ft3d0 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
             ft3d1 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
@@ -410,16 +398,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             try
             {
                quaternion.inverseTransform(ft2dro, t2db, false);
-               fail();
-            }
-            catch (ReferenceFrameMismatchException ignored)
-            {
-
-            }
-
-            try
-            {
-               quaternion.inverseTransform(t2dro, ft2d, false);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
