@@ -13,12 +13,12 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
    @Override
    public final T createEmptyTuple()
    {
-      return createTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0, 0.0);
+      return createTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0, 1.0);
    }
 
    public final T createEmptyTuple(ReferenceFrame referenceFrame)
    {
-      return createTuple(referenceFrame, 0.0, 0.0, 0.0, 0.0);
+      return createTuple(referenceFrame, 0.0, 0.0, 0.0, 1.0);
    }
 
    @Override
