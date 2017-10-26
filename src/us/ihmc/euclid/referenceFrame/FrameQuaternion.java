@@ -360,8 +360,8 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     */
    public final void difference(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      q1.checkReferenceFrameMatch(q2);
-      changeFrame(q1.getReferenceFrame());
+      checkReferenceFrameMatch(q1);
+      checkReferenceFrameMatch(q2);
       QuaternionTools.multiplyConjugateLeft(q1, q2, this);
    }
 
