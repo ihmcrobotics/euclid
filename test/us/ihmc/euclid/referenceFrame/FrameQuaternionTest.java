@@ -178,63 +178,6 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          }
       }
 
-      // interpolate
-      for (int i = 0; i < 100; ++i)
-      {
-         fq0 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame = EuclidFrameRandomTools.generateRandomReferenceFrame(random));
-
-         if (random.nextDouble() > 0.5)
-         {
-            fq1 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame);
-
-            try
-            {
-               fq0.interpolate(fq1, alpha);
-            }
-            catch (ReferenceFrameMismatchException excepted)
-            {
-               fail();
-            }
-
-            fq2 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame);
-
-            try
-            {
-               fq0.interpolate(fq1, fq2, alpha);
-            }
-            catch (ReferenceFrameMismatchException excepted)
-            {
-               fail();
-            }
-         }
-         else
-         {
-            fq1 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
-
-            try
-            {
-               fq0.interpolate(fq1, alpha);
-               fail();
-            }
-            catch (ReferenceFrameMismatchException ignored)
-            {
-
-            }
-
-            fq2 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
-
-            try
-            {
-               fq0.interpolate(fq1, fq2, alpha);
-               fail();
-            }
-            catch (ReferenceFrameMismatchException ignored)
-            {
-
-            }
-         }
-      }
-
       // multiply
       for (int i = 0; i < 100; ++i)
       {
@@ -605,6 +548,15 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
 
             try
             {
+               fq0.interpolate(fq1, alpha);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
                fq0.interpolate(fq1, fq2, 0.5);
             }
             catch (ReferenceFrameMismatchException excepted)
@@ -624,6 +576,16 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          else
          {
             fq1 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
+
+            try
+            {
+               fq0.interpolate(fq1, alpha);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
 
             try
             {
