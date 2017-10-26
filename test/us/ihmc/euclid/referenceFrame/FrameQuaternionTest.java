@@ -5,6 +5,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.QuaternionBasicsTest;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<FrameQuaternion>
@@ -344,11 +346,21 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          {
             fq1 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
 
-            fq2 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
+            fq2 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame);
 
             try
             {
                fq0.difference(fq1, fq2);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               fq0.difference(fq2, fq1);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
@@ -633,6 +645,15 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
 
             }
          }
+      }
+   }
+
+   @Test
+   public void testSetAndGetQuaternion() {
+      for (int i = 0; i < 100; ++i) {
+         Quaternion q = EuclidCoreRandomTools.generateRandomQuaternion(random);
+
+         assertTrue(createTuple(q.getX(), q.getY(), q.getZ(), q.getS()).getQuaternion().epsilonEquals(q, getEpsilon()));
       }
    }
 
