@@ -1,51 +1,35 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.MatrixFeatures;
 import org.ejml.ops.RandomMatrices;
-
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.*;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class EuclidFrameAPITestTools
 {
@@ -122,8 +106,12 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
       modifiableMap.put(Vector3DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
 
-      modifiableMap.put(AxisAngleBasics.class, () -> EuclidCoreRandomTools.generateRandomAxisAngle(random));
+      modifiableMap.put(AxisAngleReadOnly.class, () -> EuclidCoreRandomTools.generateRandomAxisAngle(random));
 
+      modifiableMap.put(Tuple4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
+      modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector4D(random));
+      modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.generateRandomRotationMatrix(random));
+      modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomMatrix3D(random));
       modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
       modifiableMap.put(QuaternionBasics.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
 
