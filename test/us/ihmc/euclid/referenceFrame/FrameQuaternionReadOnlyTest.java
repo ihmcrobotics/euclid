@@ -203,7 +203,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(ft2dro, t2db, false);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -213,7 +213,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(t2dro, ft2d, false);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -223,7 +223,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(ft2dro, ft2d, false);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -233,7 +233,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(ft3d0);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -243,7 +243,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(ft3d0, ft3d1);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -253,7 +253,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(ft3dro, t3db);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -263,7 +263,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(fqro, qb);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -273,7 +273,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(fqro, fq);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
@@ -283,7 +283,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                quaternion.transform(fq);
                fail();
             }
-            catch (ReferenceFrameMismatchException excepted)
+            catch (ReferenceFrameMismatchException ignored)
             {
 
             }
