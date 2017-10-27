@@ -89,7 +89,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
       for (int i = 0; i < 100; ++i)
       {
          referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         quaternion = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+         quaternion = createEmptyTuple(referenceFrame);
 
          if (random.nextDouble() > 0.5)
          {
@@ -116,6 +116,15 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             try
             {
+               quaternion.transform(ft2dro, t2db);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
                quaternion.transform(t2dro, ft2d, false);
             }
             catch (ReferenceFrameMismatchException excepted)
@@ -197,12 +206,18 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                fail();
             }
 
-            quaternion = createEmptyTuple(referenceFrame);
-            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
-
             try
             {
                quaternion.transform(ft2d);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.transform(ft2d, false);
             }
             catch (ReferenceFrameMismatchException excepted)
             {
@@ -215,7 +230,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             ft2dro = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
             t2db = EuclidCoreRandomTools.generateRandomPoint2D(random);
-            ft2d = new FramePoint2D(otherFrame);
+            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
             ft3d0 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
             ft3d1 = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
             ft3dro = EuclidFrameRandomTools.generateRandomFramePoint3D(random, otherFrame);
@@ -236,15 +251,13 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             try
             {
-               quaternion.transform(t2dro, ft2d, false);
+               quaternion.transform(ft2dro, t2db);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
             {
 
             }
-
-            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
 
             try
             {
@@ -326,12 +339,19 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             }
 
-            quaternion = createEmptyTuple(referenceFrame);
-            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
-
             try
             {
                quaternion.transform(ft2d);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.transform(ft2d, false);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
@@ -345,7 +365,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
       for (int i = 0; i < 100; ++i)
       {
          referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         quaternion = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
+         quaternion = createEmptyTuple(referenceFrame);
 
          if (random.nextDouble() > 0.5)
          {
@@ -373,15 +393,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             try
             {
-               quaternion.inverseTransform(t2dro, ft2d, false);
-            }
-            catch (ReferenceFrameMismatchException excepted)
-            {
-               fail();
-            }
-
-            try
-            {
                quaternion.inverseTransform(ft2dro, ft2d, false);
             }
             catch (ReferenceFrameMismatchException excepted)
@@ -392,6 +403,15 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             try
             {
                quaternion.inverseTransform(ft2d, false);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft2d);
             }
             catch (ReferenceFrameMismatchException excepted)
             {
@@ -458,8 +478,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                fail();
             }
 
-            quaternion = createEmptyTuple(referenceFrame);
-
             try {
                quaternion.inverseTransform(ft2dro, t2db);
             } catch (ReferenceFrameMismatchException excepted) {
@@ -468,18 +486,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             try {
                quaternion.inverseTransform(ft2dro, ft2d);
-            } catch (ReferenceFrameMismatchException excepted) {
-               fail();
-            }
-
-            try {
-               quaternion.inverseTransform(t2dro, ft2d);
-            } catch (ReferenceFrameMismatchException excepted) {
-               fail();
-            }
-
-            try {
-               quaternion.inverseTransform(ft2d);
             } catch (ReferenceFrameMismatchException excepted) {
                fail();
             }
@@ -524,6 +530,16 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             try
             {
                quaternion.inverseTransform(ft2d, false);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft2d);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
@@ -597,8 +613,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             } catch (ReferenceFrameMismatchException ignored) {
 
             }
-
-            quaternion = createEmptyTuple(referenceFrame);
 
             try {
                quaternion.inverseTransform(ft2dro, t2db);
