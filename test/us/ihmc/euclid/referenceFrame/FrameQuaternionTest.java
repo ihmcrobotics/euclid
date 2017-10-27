@@ -811,4 +811,22 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          testMethod.invoke(quaternionBasicsTest);
       }
    }
+
+   @Test(timeout = 30000)
+   public void testSetAndNormalize() {
+      for (int i = 0; i < 100; ++i) {
+         ReferenceFrame frame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         
+         FrameQuaternion fq = createEmptyTuple(frame);
+         FrameQuaternion fqro = createEmptyTuple(frame);
+
+         fqro.setUnsafe(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
+
+         fq.setAndNormalize(fqro);
+
+         fqro.normalize();
+
+         assertTrue(fq.epsilonEquals(fqro, getEpsilon()));
+      }
+   }
 }
