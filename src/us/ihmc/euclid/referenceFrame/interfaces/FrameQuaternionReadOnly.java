@@ -77,7 +77,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed, boolean checkIfTransformInXYPlane)
    {
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.transform(this, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
@@ -138,7 +138,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.transform(this, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
@@ -241,7 +241,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     */
    default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3D tupleTransformed)
    {
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.transform(this, tupleOriginal, tupleTransformed);
    }
 
@@ -260,7 +260,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3D tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.transform(this, tupleOriginal, tupleTransformed);
    }
 
@@ -294,7 +294,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     */
    default void transform(QuaternionReadOnly tupleOriginal, FrameQuaternion tupleTransformed)
    {
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.transform(this, tupleOriginal, tupleTransformed);
    }
 
@@ -313,7 +313,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default void transform(FrameQuaternionReadOnly tupleOriginal, FrameQuaternion tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.transform(this, tupleOriginal, tupleTransformed);
    }
 
@@ -363,7 +363,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     */
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3D tupleTransformed)
    {
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.inverseTransform(this, tupleOriginal, tupleTransformed);
    }
 
@@ -403,7 +403,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed, boolean checkIfTransformInXYPlane)
    {
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.inverseTransform(this, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
@@ -426,7 +426,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      tupleTransformed.changeFrame(getReferenceFrame());
+      tupleTransformed.setToZero(getReferenceFrame());
       QuaternionTools.inverseTransform(this, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
@@ -620,7 +620,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     */
    default void inverseTransform(QuaternionReadOnly quaternionOriginal, FrameQuaternion quaternionTransformed)
    {
-      quaternionTransformed.changeFrame(getReferenceFrame());
+      quaternionTransformed.setToZero(getReferenceFrame());
       QuaternionTools.inverseTransform(this, quaternionOriginal, quaternionTransformed);
    }
 
@@ -639,7 +639,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default void inverseTransform(FrameQuaternionReadOnly quaternionOriginal, FrameQuaternion quaternionTransformed)
    {
       checkReferenceFrameMatch(quaternionOriginal);
-      quaternionTransformed.changeFrame(getReferenceFrame());
+      quaternionTransformed.setToZero(getReferenceFrame());
       QuaternionTools.inverseTransform(this, quaternionOriginal, quaternionTransformed);
    }
 
