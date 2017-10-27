@@ -123,6 +123,8 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
                fail();
             }
 
+            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
+
             try
             {
                quaternion.transform(ft2dro, ft2d, false);
@@ -231,6 +233,18 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             {
 
             }
+
+            try
+            {
+               quaternion.transform(t2dro, ft2d, false);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
 
             try
             {
