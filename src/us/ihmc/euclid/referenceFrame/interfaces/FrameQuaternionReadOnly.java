@@ -655,7 +655,6 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     */
    default void inverseTransform(FrameQuaternion quaternionToTransform)
    {
-      checkReferenceFrameMatch(quaternionToTransform);
       inverseTransform(quaternionToTransform, quaternionToTransform);
    }
 
