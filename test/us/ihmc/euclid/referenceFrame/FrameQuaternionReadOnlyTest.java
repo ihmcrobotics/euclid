@@ -148,6 +148,15 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             try
             {
+               quaternion.transform(ft3dro, ft3d1);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
                quaternion.transform(ft3dro, t3db);
             }
             catch (ReferenceFrameMismatchException excepted)
@@ -176,6 +185,15 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             try
             {
                quaternion.transform(fq);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               quaternion.transform(ft2d);
             }
             catch (ReferenceFrameMismatchException excepted)
             {
@@ -239,6 +257,16 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             try
             {
+               quaternion.transform(ft3dro, ft3d1);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
                quaternion.transform(ft3dro, t3db);
                fail();
             }
@@ -270,6 +298,16 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             try
             {
                quaternion.transform(fq);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.transform(ft2d);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
