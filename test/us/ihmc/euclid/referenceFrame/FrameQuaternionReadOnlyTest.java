@@ -196,6 +196,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             }
 
             quaternion = createEmptyTuple(referenceFrame);
+            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
 
             try
             {
@@ -312,6 +313,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             }
 
             quaternion = createEmptyTuple(referenceFrame);
+            ft2d = EuclidFrameRandomTools.generateRandomFramePoint2D(random, otherFrame);
 
             try
             {
