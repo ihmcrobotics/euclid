@@ -366,6 +366,15 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
 
             try
             {
+               quaternion.inverseTransform(ft2d, false);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
                quaternion.inverseTransform(ft3d0);
             }
             catch (ReferenceFrameMismatchException excepted)
@@ -446,6 +455,16 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> ext
             try
             {
                quaternion.inverseTransform(ft2dro, ft2d, false);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               quaternion.inverseTransform(ft2d, false);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
