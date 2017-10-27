@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import org.junit.Test;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
@@ -485,6 +486,8 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          }
       }
 
+      FrameQuaternionReadOnly fqro;
+
       // set
       for (int i = 0; i < 100; ++i)
       {
@@ -493,10 +496,20 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          if (random.nextDouble() > 0.5)
          {
             fq1 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame);
+            fqro = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame);
 
             try
             {
                fq0.set(fq1);
+            }
+            catch (ReferenceFrameMismatchException excepted)
+            {
+               fail();
+            }
+
+            try
+            {
+               fq0.set(fqro);
             }
             catch (ReferenceFrameMismatchException excepted)
             {
@@ -515,10 +528,21 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          else
          {
             fq1 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
+            fqro = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, EuclidFrameRandomTools.generateRandomReferenceFrame(random));
 
             try
             {
                fq0.set(fq1);
+               fail();
+            }
+            catch (ReferenceFrameMismatchException ignored)
+            {
+
+            }
+
+            try
+            {
+               fq0.set(fqro);
                fail();
             }
             catch (ReferenceFrameMismatchException ignored)
