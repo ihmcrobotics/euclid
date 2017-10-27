@@ -34,7 +34,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       return ret;
    }
 
-   @Test
+   @Test(timeout = 30000)
    public void testReferenceFrameChecks()
    {
       super.testReferenceFrameChecks();
@@ -677,7 +677,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       }
    }
 
-   @Test
+   @Test(timeout = 30000)
    public void testSetAndGetQuaternion() {
       for (int i = 0; i < 100; ++i) {
          Quaternion q = EuclidCoreRandomTools.generateRandomQuaternion(random);
@@ -686,7 +686,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       }
    }
 
-   @Test
+   @Test(timeout = 30000)
    public void testConsistencyWithQuaternion() {
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createTuple(frame, ((QuaternionReadOnly)tuple).getX(), ((QuaternionReadOnly)tuple).getY(), ((QuaternionReadOnly)tuple).getZ(), ((QuaternionReadOnly)tuple).getS());
       EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> createRandomTuple(random).getGeometryObject();
@@ -694,7 +694,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }
 
-   @Test
+   @Test(timeout = 30000)
    public void testOverloading() throws Exception
    {
       super.testOverloading();
@@ -704,7 +704,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternion.class, Quaternion.class, true, 1, framelessMethodsToIgnore);
    }
 
-   @Test
+   @Test(timeout = 30000)
    public void testFrameGeometryObjectFeatures() throws Throwable
    {
       FrameGeometryObjectTest<FrameQuaternion, Quaternion> frameGeometryObjectTest = new FrameGeometryObjectTest<FrameQuaternion, Quaternion>()
@@ -767,7 +767,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       }
    }
 
-   @Test
+   @Test(timeout = 30000)
    public void testQuaternionBasicsFeatures() throws Exception
    {
       QuaternionBasicsTest<FrameQuaternion> quaternionBasicsTest = new QuaternionBasicsTest<FrameQuaternion>()
