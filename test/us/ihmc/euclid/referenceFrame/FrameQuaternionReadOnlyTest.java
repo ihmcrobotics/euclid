@@ -21,7 +21,7 @@ import java.util.Random;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternion> extends Tuple4DReadOnlyTest<T>
+public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadOnly> extends Tuple4DReadOnlyTest<T>
 {
    private Random random = new Random(System.currentTimeMillis());
 
