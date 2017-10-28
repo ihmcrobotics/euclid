@@ -1,13 +1,16 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertRotationVectorEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple2DEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple3DEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple4DEquals;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 
 public class EuclidFrameTestTools
 {
@@ -207,18 +210,62 @@ public class EuclidFrameTestTools
    }
 
    /**
-    * Assert that {@link Tuple3DBasics#setToZero()} has just been called on the given tuple.
+    * Asserts on a per component basis that the two frame tuples are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected frame tuple.
+    * @param actual the actual frame tuple.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two tuples are not equal or not expressed in the reference
+    *            frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameTuple4DEquals(FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual, double epsilon)
+   {
+      assertFrameTuple4DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame tuples are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param tupleToAssert the query. Not modified.
+    * @param expected the expected frame tuple.
+    * @param actual the actual frame tuple.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two tuples are not equal or not expressed in the reference
+    *            frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameTuple4DEquals(String messagePrefix, FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual, double epsilon)
+   {
+      assertFrameTuple4DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame tuples are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected the expected frame tuple.
+    * @param actual the actual frame tuple.
+    * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the tuple has not been set to zero. If the argument is equal to
-    *            {@code null}.
+    * @throws AssertionError if the two tuples are not equal or not expressed in the reference
+    *            frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameTuple3DIsSetToZero(String messagePrefix, FrameTuple3DReadOnly tupleToAssert, String format)
+   public static void assertFrameTuple4DEquals(String messagePrefix, FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual, double epsilon, String format)
    {
-      assertTuple3DIsSetToZero(messagePrefix, tupleToAssert, format);
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      assertTuple4DEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, FrameTuple2DReadOnly expected, FrameTuple2DReadOnly actual, String format)
@@ -232,6 +279,13 @@ public class EuclidFrameTestTools
    {
       String expectedAsString = appendFrameName(getTuple3DString(format, expected), expected);
       String actualAsString = appendFrameName(getTuple3DString(format, actual), actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual, String format)
+   {
+      String expectedAsString = appendFrameName(getTuple4DString(format, expected), expected);
+      String actualAsString = appendFrameName(getTuple4DString(format, actual), actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
