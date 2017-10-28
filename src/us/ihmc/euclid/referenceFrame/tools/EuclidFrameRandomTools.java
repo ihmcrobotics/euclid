@@ -9,7 +9,6 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 public class EuclidFrameRandomTools
 {
@@ -583,8 +582,11 @@ public class EuclidFrameRandomTools
    }
 
    /**
-    * Generates a random frame quaternion.
-    *
+    * Generates a random frame quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
+    * </p>
+    * 
     * @param random the random generator to use.
     * @param referenceFrame the random frame quaternion's reference frame.
     * @return the random frame quaternion.
@@ -592,5 +594,22 @@ public class EuclidFrameRandomTools
    public static FrameQuaternion generateRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random));
+   }
+
+   /**
+    * Generates a random frame quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated quaternion is in [-{@code minMaxAngle};
+    * {@code minMaxAngle}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMaxAngle the maximum absolute angle described by the generated quaternion.
+    * @return the random frame quaternion.
+    * @throws RuntimeException if {@code minMaxAngle < 0}.
+    */
+   public static FrameQuaternion generateRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
+   {
+      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random, minMaxAngle));
    }
 }
