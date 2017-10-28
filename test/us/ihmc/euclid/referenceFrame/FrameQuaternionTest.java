@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -248,6 +248,21 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       framelessMethodsToIgnore.put("set", new Class<?>[] {Quaternion.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Quaternion.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternion.class, Quaternion.class, true, 1, framelessMethodsToIgnore);
+   }
+
+   @Test
+   public void testGetQuaternion()
+   {
+      Random random = new Random(43535);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         Quaternion expected = EuclidCoreRandomTools.generateRandomQuaternion(random);
+         FrameQuaternion frameQuaternion = new FrameQuaternion(worldFrame, expected);
+         QuaternionReadOnly actual = frameQuaternion.getQuaternion();
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertTuple4DEquals(frameQuaternion, actual, EPSILON);
+      }
    }
 
    @Test
