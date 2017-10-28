@@ -612,4 +612,18 @@ public class EuclidFrameRandomTools
    {
       return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random, minMaxAngle));
    }
+
+   /**
+    * Generates a random 4D frame vector.
+    * <p>
+    * {@code vector}<sub>i</sub> &in; [-1.0; 1.0].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random 4D frame vector.
+    */
+   public static FrameVector4D generateRandomFrameVector4D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameVector4D(referenceFrame, EuclidCoreRandomTools.generateRandomVector4D(random));
+   }
 }

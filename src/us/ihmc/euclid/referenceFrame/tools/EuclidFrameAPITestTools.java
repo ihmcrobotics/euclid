@@ -1,8 +1,17 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.MatrixFeatures;
 import org.ejml.ops.RandomMatrices;
+
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.interfaces.Clearable;
@@ -18,18 +27,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.*;
 import us.ihmc.euclid.tuple3D.interfaces.*;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import us.ihmc.euclid.tuple4D.interfaces.*;
 
 public class EuclidFrameAPITestTools
 {
@@ -58,6 +56,10 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector3DReadOnly.class, FrameVector3DReadOnly.class);
       modifiableMap.put(Vector3DBasics.class, FrameVector3D.class);
 
+      modifiableMap.put(Tuple4DReadOnly.class, FrameTuple4DReadOnly.class);
+      modifiableMap.put(Tuple4DBasics.class, FrameTuple4D.class);
+      modifiableMap.put(Vector4DReadOnly.class, FrameVector4DReadOnly.class);
+      modifiableMap.put(Vector4DBasics.class, FrameVector4D.class);
       modifiableMap.put(QuaternionReadOnly.class, FrameQuaternionReadOnly.class);
       modifiableMap.put(QuaternionBasics.class, FrameQuaternion.class);
 
@@ -82,6 +84,10 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector3D(random, frame));
       modifiableMap.put(FrameVector3D.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector3D(random, frame));
 
+      modifiableMap.put(FrameTuple4DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
+      modifiableMap.put(FrameTuple4D.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
+      modifiableMap.put(FrameVector4DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector4D(random, frame));
+      modifiableMap.put(FrameVector4D.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector4D(random, frame));
       modifiableMap.put(FrameQuaternionReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
       modifiableMap.put(FrameQuaternion.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
 
@@ -109,7 +115,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(AxisAngleReadOnly.class, () -> EuclidCoreRandomTools.generateRandomAxisAngle(random));
 
       modifiableMap.put(Tuple4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
+      modifiableMap.put(Tuple4DBasics.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
       modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector4D(random));
+      modifiableMap.put(Vector4DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector4D(random));
       modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.generateRandomRotationMatrix(random));
       modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomMatrix3D(random));
       modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
@@ -128,6 +136,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameTuple3DReadOnly.class);
       modifiableSet.add(FramePoint3DReadOnly.class);
       modifiableSet.add(FrameVector3DReadOnly.class);
+      modifiableSet.add(FrameTuple4DReadOnly.class);
+      modifiableSet.add(FrameVector4DReadOnly.class);
       modifiableSet.add(FrameQuaternionReadOnly.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
@@ -143,6 +153,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameTuple3D.class);
       modifiableSet.add(FramePoint3D.class);
       modifiableSet.add(FrameVector3D.class);
+      modifiableSet.add(FrameTuple4D.class);
+      modifiableSet.add(FrameVector4D.class);
       modifiableSet.add(FrameQuaternion.class);
 
       frameMutableTypes = Collections.unmodifiableSet(modifiableSet);

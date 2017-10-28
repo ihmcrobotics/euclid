@@ -1,10 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -12,6 +9,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, QuaternionReadOnly
 {
@@ -366,6 +365,79 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
+    * Transforms the vector part of the given 4D vector.
+    * <p>
+    * vectorToTransform.s = vectorToTransform.s <br>
+    * vectorToTransform.xyz = this * vectorToTransform.xyz * this<sup>-1</sup>
+    * </p>
+    *
+    * @param vectorToTransform the vector to transform. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorToTransform} do not match.
+    */
+   default void transform(FrameVector4D vectorToTransform)
+   {
+      checkReferenceFrameMatch(vectorToTransform);
+      QuaternionReadOnly.super.transform(vectorToTransform);
+   }
+
+   /**
+    * Transforms the vector part of the given 4D vector {@code vectorOriginal} and stores the result
+    * into {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this * vectorOriginal.xyz * this<sup>-1</sup>
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorOriginal} do not match.
+    */
+   default void transform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorOriginal);
+      QuaternionReadOnly.super.transform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Transforms the vector part of the given 4D vector {@code vectorOriginal} and stores the result
+    * into {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this * vectorOriginal.xyz * this<sup>-1</sup>
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    */
+   default void transform(Vector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   {
+      vectorTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Transforms the vector part of the given 4D vector {@code vectorOriginal} and stores the result
+    * into {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this * vectorOriginal.xyz * this<sup>-1</sup>
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorOriginal} do not match.
+    */
+   default void transform(FrameVector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorOriginal);
+      vectorTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
     * Performs the inverse of the transform to the given tuple {@code tupleToTransform}.
     * <p>
     * tupleToTransform = this<sup>-1</sup> * tupleToTransform * this
@@ -663,5 +735,79 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       checkReferenceFrameMatch(quaternionOriginal);
       quaternionTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.inverseTransform(quaternionOriginal, quaternionTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the vector part the given 4D vector by this
+    * quaternion.
+    * <p>
+    * vectorToTransform.s = vectorToTransform.s <br>
+    * vectorToTransform.xyz = this<sup>-1</sup> * vectorToTransform.xyz * this
+    * </p>
+    *
+    * @param vectorToTransform the vector to transform. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorToTransform} do not match.
+    */
+   default void inverseTransform(FrameVector4D vectorToTransform)
+   {
+      checkReferenceFrameMatch(vectorToTransform);
+      QuaternionReadOnly.super.inverseTransform(vectorToTransform);
+   }
+
+   /**
+    * Performs the inverse of the transform to the vector part the given 4D vector
+    * {@code vectorOriginal} by this quaternion and stores the result in {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz * this
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorOriginal} do not match.
+    */
+   default void inverseTransform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorOriginal);
+      QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the vector part the given 4D vector
+    * {@code vectorOriginal} by this quaternion and stores the result in {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz * this
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    */
+   default void inverseTransform(Vector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   {
+      vectorTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the vector part the given 4D vector
+    * {@code vectorOriginal} by this quaternion and stores the result in {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz * this
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorOriginal} do not match.
+    */
+   default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorOriginal);
+      vectorTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
    }
 }

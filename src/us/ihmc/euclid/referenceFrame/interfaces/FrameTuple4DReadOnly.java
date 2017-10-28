@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
@@ -19,6 +20,24 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  */
 public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHolder
 {
+   /**
+    * Calculates and returns the value of the dot product of this tuple with {@code other}.
+    * <p>
+    * For instance, the dot product of two tuples p and q is defined as: <br>
+    * p . q = &sum;<sub>i=1:4</sub>(p<sub>i</sub> * q<sub>i</sub>)
+    * </p>
+    *
+    * @param other the other vector used for the dot product. Not modified.
+    * @return the value of the dot product.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   default double dot(FrameTuple4DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Tuple4DReadOnly.super.dot(other);
+   }
+
    /**
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.

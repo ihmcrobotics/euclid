@@ -3,7 +3,9 @@ package us.ihmc.euclid.referenceFrame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -78,6 +80,47 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameQuaternion(random, frame), false, true, methodFilter);
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandom2DFrameQuaternion(random, frame), false, true, methodFilter);
+   }
+
+   @Test
+   public void testFrameTuple4DReadOnlyFeatures() throws Throwable
+   {
+      FrameTuple4DReadOnlyTest<FrameQuaternionReadOnly> frameTuple4DReadOnlyTest = new FrameTuple4DReadOnlyTest<FrameQuaternionReadOnly>()
+      {
+
+         @Override
+         public FrameQuaternionReadOnly createTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s)
+         {
+            return createFrameQuaternion(referenceFrame, x, y, z, s);
+         }
+
+         @Override
+         public double getEpsilon()
+         {
+            return FrameQuaternionReadOnlyTest.this.getEpsilon();
+         }
+      };
+
+      for (Method testMethod : frameTuple4DReadOnlyTest.getClass().getMethods())
+      {
+         if (!testMethod.getName().startsWith("test"))
+            continue;
+         if (!Modifier.isPublic(testMethod.getModifiers()))
+            continue;
+         if (Modifier.isStatic(testMethod.getModifiers()))
+            continue;
+//         if (testMethod.getName().equals("testGetGeometryObject"))
+//            continue;
+
+         try
+         {
+            testMethod.invoke(frameTuple4DReadOnlyTest);
+         }
+         catch (InvocationTargetException e)
+         {
+            throw e.getCause();
+         }
+      }
    }
 
    @Test
