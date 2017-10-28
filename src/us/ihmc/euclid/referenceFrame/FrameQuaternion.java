@@ -1,10 +1,14 @@
 package us.ihmc.euclid.referenceFrame;
 
+import org.ejml.data.DenseMatrix64F;
+
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.rotationConversion.QuaternionConversion;
-import us.ihmc.euclid.tools.QuaternionTools;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -13,8 +17,8 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 /**
  * {@code FrameQuaternion} is a quaternion expressed in a given reference frame.
  * <p>
- * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to a
- * {@code FrameQuaternion}. This allows, for instance, to enforce, at runtime, that operations on
+ * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to
+ * a {@code FrameQuaternion}. This allows, for instance, to enforce, at runtime, that operations on
  * vectors occur in the same coordinate system. Also, via the method
  * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a vector in
  * different reference frame.
@@ -63,15 +67,34 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
-    * Creates a new frame quaternion and initializes its component {@code x}, {@code y}, {@code z} in
-    * order from the given array and initializes its reference frame.
+    * Creates a new frame quaternion and initializes its component {@code x}, {@code y}, {@code z}
+    * in order from the given array and initializes its reference frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
-    * @param vectorArray the array containing this quaternion's components. Not modified.
+    * @param quaternionArray the array containing this quaternion's components. Not modified.
     */
-   public FrameQuaternion(ReferenceFrame referenceFrame, double[] vectorArray)
+   public FrameQuaternion(ReferenceFrame referenceFrame, double[] quaternionArray)
    {
-      super(referenceFrame, new Quaternion(vectorArray));
+      super(referenceFrame, new Quaternion(quaternionArray));
+   }
+
+   /**
+    * Creates a new quaternion and initializes its component {@code x}, {@code y}, {@code z},
+    * {@code s} in order from the given matrix.
+    * <p>
+    * The quaternion is immediately normalized.
+    * </p>
+    *
+    * @param matrix the dense-matrix containing this quaternion's components. Not modified.
+    */
+   public FrameQuaternion(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
+   {
+      super(referenceFrame, new Quaternion(matrix));
+   }
+
+   public FrameQuaternion(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
+   {
+      super(referenceFrame, new Quaternion(quaternionReadOnly));
    }
 
    /**
@@ -87,6 +110,44 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Creates a new quaternion and initializes such that it represents the same orientation as the
+    * given {@code rotationMatrix}.
+    *
+    * @param rotationMatrix the rotation matrix to initialize this quaternion. Not modified.
+    */
+   public FrameQuaternion(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrix)
+   {
+      super(referenceFrame, new Quaternion(rotationMatrix));
+   }
+
+   /**
+    * Creates a new quaternion and initializes such that it represents the same orientation as the
+    * given {@code axisAngle}.
+    *
+    * @param axisAngle the axis-angle to initialize this quaternion. Not modified.
+    */
+   public FrameQuaternion(ReferenceFrame referenceFrame, AxisAngleReadOnly axisAngle)
+   {
+      super(referenceFrame, new Quaternion(axisAngle));
+   }
+
+   /**
+    * Creates a new quaternion and initializes such that it represents the same orientation as the
+    * given {@code rotationVector}.
+    * <p>
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
+    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
+    * of the same axis-angle.
+    * </p>
+    *
+    * @param rotationVector the rotation vector to initialize this quaternion. Not modified.
+    */
+   public FrameQuaternion(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
+   {
+      super(referenceFrame, new Quaternion(rotationVector));
+   }
+
+   /**
     * Creates a new frame quaternion and initializes it to {@code other}.
     *
     * @param other the tuple to copy the components and reference frame from. Not modified.
@@ -96,6 +157,12 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
       super(other.getReferenceFrame(), new Quaternion(other));
    }
 
+   @Override
+   public void setUnsafe(double qx, double qy, double qz, double qs)
+   {
+      tuple.setUnsafe(qx, qy, qz, qs);
+   }
+
    /**
     * Sets this frame quaternion to {@code other} and then calls {@link #normalize()}.
     *
@@ -103,7 +170,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void setAndNormalize(FrameQuaternionReadOnly other)
+   public void setAndNormalize(FrameTuple4DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       tuple.setAndNormalize(other);
@@ -116,7 +183,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void setAndNegate(FrameQuaternionReadOnly other)
+   public void setAndNegate(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
       tuple.setAndNegate(other);
@@ -134,12 +201,13 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not
     *           modifying this quaternion, while a value of 1 is equivalent to setting this
     *           quaternion to {@code qf}.
-    * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same reference
+    *            frame as {@code this}.
     */
-   public final void interpolate(FrameQuaternionReadOnly qf, double alpha)
+   public void interpolate(FrameQuaternionReadOnly qf, double alpha)
    {
-      interpolate(this, qf, alpha);
+      checkReferenceFrameMatch(qf);
+      tuple.interpolate(qf, alpha);
    }
 
    /**
@@ -155,10 +223,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
     *           quaternion to {@code qf}.
-    * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code q0} is not expressed in the same reference
+    *            frame as {@code this}.
     */
-   public final void interpolate(FrameQuaternionReadOnly q0, QuaternionReadOnly qf, double alpha)
+   public void interpolate(FrameQuaternionReadOnly q0, QuaternionReadOnly qf, double alpha)
    {
       checkReferenceFrameMatch(q0);
       tuple.interpolate(q0, qf, alpha);
@@ -177,8 +245,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
     *           quaternion to {@code qf}.
+    * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same reference
+    *            frame as {@code this}.
     */
-   public final void interpolate(QuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
+   public void interpolate(QuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
    {
       checkReferenceFrameMatch(qf);
       tuple.interpolate(q0, qf, alpha);
@@ -197,10 +267,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
     *           quaternion to {@code qf}.
-    * @throws ReferenceFrameMismatchException if {@code q0} is not expressed in the same
-    *            reference frame as {@code qf}.
+    * @throws ReferenceFrameMismatchException if either {@code q0} or {@code qf} is not expressed in
+    *            the same frame as {@code this}.
     */
-   public final void interpolate(FrameQuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
+   public void interpolate(FrameQuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
    {
       checkReferenceFrameMatch(q0);
       checkReferenceFrameMatch(qf);
@@ -217,13 +287,13 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void multiply(FrameQuaternionReadOnly other)
+   public void multiply(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      QuaternionTools.multiply(this, other, this);
+      tuple.multiply(other);
    }
 
-   /**`
+   /**
     * Sets this quaternion to the multiplication of {@code q1} and {@code q2}.
     * <p>
     * this = q1 * q2
@@ -231,13 +301,16 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     *
     * @param q1 the first quaternion in the multiplication. Not modified.
     * @param q2 the second quaternion in the multiplication. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same reference
+    *            frame as {@code this}.
     */
-   public final void multiply(FrameQuaternionReadOnly q1, QuaternionReadOnly q2)
+   public void multiply(FrameQuaternionReadOnly q1, QuaternionReadOnly q2)
    {
-      QuaternionTools.multiply(q1, q2, this);
+      checkReferenceFrameMatch(q1);
+      tuple.multiply(q1, q2);
    }
 
-   /**`
+   /**
     * Sets this quaternion to the multiplication of {@code q1} and {@code q2}.
     * <p>
     * this = q1 * q2
@@ -245,13 +318,16 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     *
     * @param q1 the first quaternion in the multiplication. Not modified.
     * @param q2 the second quaternion in the multiplication. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code q2} is not expressed in the same reference
+    *            frame as {@code this}.
     */
-   public final void multiply(QuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   public void multiply(QuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      QuaternionTools.multiply(q1, q2, this);
+      checkReferenceFrameMatch(q2);
+      tuple.multiply(q1, q2);
    }
 
-   /**`
+   /**
     * Sets this quaternion to the multiplication of {@code q1} and {@code q2}.
     * <p>
     * this = q1 * q2
@@ -259,13 +335,14 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     *
     * @param q1 the first quaternion in the multiplication. Not modified.
     * @param q2 the second quaternion in the multiplication. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same
-    *            reference frame as {@code q2}.
+    * @throws ReferenceFrameMismatchException if either {@code q1} or {@code q2} is not expressed in
+    *            the same frame as {@code this}.
     */
-   public final void multiply(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   public void multiply(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      q1.checkReferenceFrameMatch(q2);
-      QuaternionTools.multiply(q1, q2, this);
+      checkReferenceFrameMatch(q1);
+      checkReferenceFrameMatch(q2);
+      tuple.multiply(q1, q2);
    }
 
    /**
@@ -282,7 +359,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void setAndConjugate(FrameQuaternionReadOnly other)
+   public void setAndConjugate(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
       set((QuaternionReadOnly) other);
@@ -294,11 +371,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     *
     * @param other the other quaternion to copy the values from. Not modified.
     */
-   public final void setAndInverse(FrameQuaternionReadOnly other)
+   public void setAndInverse(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      set((QuaternionReadOnly) other);
-      inverse();
+      tuple.setAndInverse(other);
    }
 
    /**
@@ -313,10 +389,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code eulerAngles} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void setEuler(FrameVector3DReadOnly eulerAngles)
+   public void setEuler(FrameVector3DReadOnly eulerAngles)
    {
       checkReferenceFrameMatch(eulerAngles);
-      QuaternionConversion.convertYawPitchRollToQuaternion(eulerAngles.getZ(), eulerAngles.getY(), eulerAngles.getX(), this);
+      tuple.setEuler(eulerAngles);
    }
 
    /**
@@ -328,9 +404,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @param q1 the first quaternion in the difference. Not modified.
     * @param q2 the second quaternion in the difference. Not modified.
     */
-   public final void difference(FrameQuaternionReadOnly q1, QuaternionReadOnly q2)
+   public void difference(FrameQuaternionReadOnly q1, QuaternionReadOnly q2)
    {
-      QuaternionTools.multiplyConjugateLeft(q1, q2, this);
+      checkReferenceFrameMatch(q1);
+      tuple.difference(q1, q2);
    }
 
    /**
@@ -342,9 +419,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @param q1 the first quaternion in the difference. Not modified.
     * @param q2 the second quaternion in the difference. Not modified.
     */
-   public final void difference(QuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   public void difference(QuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      QuaternionTools.multiplyConjugateLeft(q1, q2, this);
+      checkReferenceFrameMatch(q2);
+      tuple.difference(q1, q2);
    }
 
    /**
@@ -355,14 +433,14 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     *
     * @param q1 the first quaternion in the difference. Not modified.
     * @param q2 the second quaternion in the difference. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same
-    *            reference frame as {@code q2}.
+    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same reference
+    *            frame as {@code q2}.
     */
-   public final void difference(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
+   public void difference(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
       checkReferenceFrameMatch(q1);
       checkReferenceFrameMatch(q2);
-      QuaternionTools.multiplyConjugateLeft(q1, q2, this);
+      tuple.difference(q1, q2);
    }
 
    /**
@@ -375,10 +453,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void multiplyConjugateOther(FrameQuaternionReadOnly other)
+   public void multiplyConjugateOther(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      QuaternionTools.multiplyConjugateRight(this, other, this);
+      tuple.multiplyConjugateOther(other);
    }
 
    /**
@@ -388,13 +466,13 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * </p>
     *
     * @param other the other quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same
-    *            reference frame as {@code q2}.
+    * @throws ReferenceFrameMismatchException if {@code q1} is not expressed in the same reference
+    *            frame as {@code q2}.
     */
-   public final void multiplyConjugateThis(FrameQuaternionReadOnly other)
+   public void multiplyConjugateThis(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      QuaternionTools.multiplyConjugateLeft(this, other, this);
+      tuple.multiplyConjugateThis(other);
    }
 
    /**
@@ -407,10 +485,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void preMultiply(FrameQuaternionReadOnly other)
+   public void preMultiply(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      QuaternionTools.multiply(other, this, this);
+      tuple.preMultiply(other);
    }
 
    /**
@@ -423,10 +501,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void preMultiplyConjugateOther(FrameQuaternionReadOnly other)
+   public void preMultiplyConjugateOther(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      QuaternionTools.multiplyConjugateLeft(other, this, this);
+      tuple.preMultiplyConjugateOther(other);
    }
 
    /**
@@ -439,10 +517,10 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void preMultiplyConjugateThis(FrameQuaternionReadOnly other)
+   public void preMultiplyConjugateThis(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      QuaternionTools.multiplyConjugateRight(other, this, this);
+      tuple.preMultiplyConjugateThis(other);
    }
 
    /**
@@ -458,16 +536,16 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * @throws ReferenceFrameMismatchException if {@code rotationVector} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public final void set(FrameVector3DReadOnly rotationVector)
+   public void set(FrameVector3DReadOnly rotationVector)
    {
       checkReferenceFrameMatch(rotationVector);
-      QuaternionConversion.convertRotationVectorToQuaternion(rotationVector, this);
+      tuple.set(rotationVector);
    }
 
-   public final void set(FrameQuaternionReadOnly other)
+   public void set(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      setUnsafe(other.getX(), other.getY(), other.getZ(), other.getS());
+      tuple.set(other);
    }
 
    /**
@@ -478,11 +556,5 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    public final QuaternionReadOnly getQuaternion()
    {
       return tuple;
-   }
-
-   @Override
-   public void setUnsafe(double qx, double qy, double qz, double qs)
-   {
-      tuple.setUnsafe(qx, qy, qz, qs);
    }
 }
