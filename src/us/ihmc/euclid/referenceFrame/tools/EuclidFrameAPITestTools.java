@@ -671,7 +671,7 @@ public class EuclidFrameAPITestTools
                }
                catch (Throwable t)
                {
-                  if (!isExceptionAcceptable(t))
+                  if (!(t instanceof ReferenceFrameMismatchException))
                      throw t;
                }
             }
