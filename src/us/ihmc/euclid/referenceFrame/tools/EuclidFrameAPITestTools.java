@@ -589,11 +589,11 @@ public class EuclidFrameAPITestTools
       {
          ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
-         ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
 
          // First check that the method is fine with the holder and all the arguments in the same frame.
          for (Method frameMethod : frameMethods)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -617,6 +617,7 @@ public class EuclidFrameAPITestTools
          // Check that the method checks the reference frames.
          for (Method frameMethod : frameMethods)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
 
             int numberOfArgumentsToTest = 0;
@@ -682,6 +683,7 @@ public class EuclidFrameAPITestTools
          {
             for (Method frameMethod : frameMethods)
             {
+               ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
                Class<?>[] parameterTypes = frameMethod.getParameterTypes();
                Object[] parameters = new Object[parameterTypes.length];
 
@@ -728,6 +730,7 @@ public class EuclidFrameAPITestTools
          // Check for methods returning a frame type that the reference frame is properly set.
          for (Method frameMethod : methodsWithReturnFrameType)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -1360,7 +1363,8 @@ public class EuclidFrameAPITestTools
       }
       catch (NoSuchMethodException e)
       {
-         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + getMethodSimpleName(originalMethod) + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n"
+         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + getMethodSimpleName(originalMethod)
+               + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n"
                + getMethodSimpleName(originalMethod.getReturnType(), originalMethod.getName(), overloadingSignature));
       }
    }
