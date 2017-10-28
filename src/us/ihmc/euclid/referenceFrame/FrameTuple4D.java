@@ -91,6 +91,19 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
    }
 
    /**
+    * Sets this frame tuple to {@code other} and then calls {@link #normalize()}.
+    *
+    * @param other the other frame tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   public void setAndNormalize(FrameTuple4DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      tuple.setAndNormalize(other);
+   }
+
+   /**
     * Sets this frame tuple's components to {@code x}, {@code y}, {@code z} and {@code s} and sets its
     * reference frame to {@code referenceFrame}.
     *

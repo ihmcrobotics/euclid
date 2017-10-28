@@ -13,9 +13,9 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * <p>
  * In addition to representing a {@link Point3DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FramePoint3D}. This allows, for instance, to enforce, at runtime, that operations on
- * vectors occur in the same coordinate system. Also, via the method
+ * points occur in the same coordinate system. Also, via the method
  * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a point in different
- * reference frame.
+ * reference frames.
  * </p>
  * <p>
  * Because a {@code FramePoint3D} extends {@code Point3DBasics}, it is compatible with methods only
