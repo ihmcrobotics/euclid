@@ -57,7 +57,7 @@ import java.net.URISyntaxException;
       // 3D
       FramePoint3DTest.class, FrameVector3DTest.class,
       // 4D
-      FrameQuaternionTest.class,
+      FrameQuaternionTest.class, FrameVector4DTest.class,
       // Tools tests
       EuclidFrameToolsTest.class, NameBasedHashCodeToolsTest.class,
       // Exceptions tests

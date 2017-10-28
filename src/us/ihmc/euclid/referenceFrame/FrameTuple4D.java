@@ -104,8 +104,8 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
    }
 
    /**
-    * Sets this frame tuple's components to {@code x}, {@code y}, {@code z} and {@code s} and sets its
-    * reference frame to {@code referenceFrame}.
+    * Sets this frame tuple's components to {@code x}, {@code y}, {@code z} and {@code s} and sets
+    * its reference frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame tuple.
     * @param x the new value for the x-component of this tuple.
@@ -133,8 +133,8 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z} in order from the given array
-    * {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
+    * given array {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
     * @param tupleArray the array containing the new values for this tuple's components. Not
@@ -147,8 +147,8 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z} in order from the given array
-    * {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
+    * given array {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
     * @param startIndex the first index to start reading from in the array.
@@ -162,8 +162,8 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z} in order from the given column
-    * vector starting to read from its first row index and sets this tuple frame to
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
+    * given column vector starting to read from its first row index and sets this tuple frame to
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
@@ -177,8 +177,8 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z} in order from the given column
-    * vector starting to read from {@code startRow} and sets this tuple frame to
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
+    * given column vector starting to read from {@code startRow} and sets this tuple frame to
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
@@ -193,9 +193,9 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z} in order from the given matrix
-    * starting to read from {@code startRow} at the column index {@code column} and sets this tuple
-    * frame to {@code referenceFrame}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
+    * given matrix starting to read from {@code startRow} at the column index {@code column} and
+    * sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
     * @param startRow the first row index to start reading in the dense-matrix.

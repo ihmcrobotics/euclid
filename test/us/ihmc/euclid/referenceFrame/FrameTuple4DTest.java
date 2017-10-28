@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,11 +16,13 @@ import org.ejml.ops.RandomMatrices;
 import org.junit.Test;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple4D.Tuple4DBasicsTest;
@@ -273,6 +276,20 @@ public abstract class FrameTuple4DTest<F extends FrameTuple4D<F, T>, T extends T
             if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests setIncludingFrame(FrameTuple4DReadOnly other)
+         ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+
+         FrameTuple4DReadOnly frameTupleReadOnly = createRandomTuple(random, frameA);
+         F frameTuple = createRandomTuple(random, frameB);
+
+         frameTuple.setIncludingFrame(frameTupleReadOnly);
+         assertTrue(frameTupleReadOnly.getReferenceFrame() == frameTuple.referenceFrame);
+         EuclidCoreTestTools.assertTuple4DEquals(frameTuple, frameTupleReadOnly, EPSILON);
+         EuclidFrameTestTools.assertFrameTuple4DEquals(frameTuple, frameTupleReadOnly, EPSILON);
       }
    }
 
