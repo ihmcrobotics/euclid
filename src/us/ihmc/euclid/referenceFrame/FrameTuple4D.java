@@ -97,7 +97,7 @@ public abstract class FrameTuple4D<S extends FrameTuple4D<S, T>, T extends Tuple
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   public void setAndNormalize(FrameTuple4DReadOnly other)
+   public final void setAndNormalize(FrameTuple4DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       tuple.setAndNormalize(other);
