@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
@@ -29,6 +30,8 @@ public interface FrameVector4DReadOnly extends Vector4DReadOnly, FrameTuple4DRea
     *
     * @param other the other frame vector used for the dot product. Not modified.
     * @return the value of the dot product.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
     */
    default double dot(FrameVector4DReadOnly other)
    {
