@@ -155,7 +155,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -194,7 +194,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -230,7 +230,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -267,7 +267,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -305,7 +305,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(e.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
