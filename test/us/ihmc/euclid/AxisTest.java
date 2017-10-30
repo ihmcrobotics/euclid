@@ -146,4 +146,15 @@ public class AxisTest
       assertEquals(randomVector.getY(), Axis.get(randomVector, Axis.Y), allowedDelta);
       assertEquals(randomVector.getZ(), Axis.get(randomVector, Axis.Z), allowedDelta);
    }
+
+   @ContinuousIntegrationTest(estimatedDuration =  0.0)
+   @Test(timeout = 30000)
+   public void testClockwiseAxisGetters() {
+	   assertEquals(Axis.Z, Axis.X.getNextClockwiseAxis());
+	   assertEquals(Axis.X, Axis.Y.getNextClockwiseAxis());
+	   assertEquals(Axis.Y, Axis.Z.getNextClockwiseAxis());
+	   assertEquals(Axis.Y, Axis.X.getNextCounterClockwiseAxis());
+	   assertEquals(Axis.Z, Axis.Y.getNextCounterClockwiseAxis());
+	   assertEquals(Axis.X, Axis.Z.getNextCounterClockwiseAxis());
+   }
 }

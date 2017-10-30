@@ -25,6 +25,7 @@ import us.ihmc.euclid.geometry.LineSegment3DTest;
 import us.ihmc.euclid.geometry.Ramp3DTest;
 import us.ihmc.euclid.geometry.Sphere3DTest;
 import us.ihmc.euclid.geometry.Torus3DTest;
+import us.ihmc.euclid.geometry.exceptions.BoundingBoxExceptionTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 import us.ihmc.euclid.referenceFrame.FramePoint2DTest;
@@ -33,6 +34,7 @@ import us.ihmc.euclid.referenceFrame.FrameVector2DTest;
 import us.ihmc.euclid.referenceFrame.FrameVector3DTest;
 import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
+import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -53,9 +55,11 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
       // 3D
       FramePoint3DTest.class, FrameVector3DTest.class,
       // Tools tests
-      EuclidFrameToolsTest.class,
+      EuclidFrameToolsTest.class, NameBasedHashCodeToolsTest.class,
+      // Exceptions tests
+      BoundingBoxExceptionTest.class,
       // Axis test
-      AxisTest.class,
+      AxisTest.class
       })
 
 public class EuclidTestSuite
