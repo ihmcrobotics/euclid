@@ -21,7 +21,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @return the angle representing the distance between the two quaternions. It is contained in
     *         [0, 2<i>pi</i>]
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code quaternionOriginal} do not match.
+    *            {@code other} do not match.
     */
    default double distance(FrameQuaternionReadOnly other)
    {
@@ -39,7 +39,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code quaternionToTransform} do not match.
+    *            {@code rotationVectorToPack} do not match.
     */
    default void get(FrameVector3D rotationVectorToPack)
    {
@@ -54,7 +54,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * sometimes undefined.
     * </p>
     *
-    * @param tupleToTransform the tuple in which the Euler angles are stored. Modified.
+    * @param eulerAnglesToPack the vector in which the Euler angles are stored. Modified.
     */
    default void getEuler(FrameVector3D eulerAnglesToPack)
    {
