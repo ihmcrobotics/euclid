@@ -289,12 +289,12 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
    }
 
    /**
-    * Subtracts the given frame tuple to this frame vector.
+    * Subtracts the given frame tuple from this frame vector.
     * <p>
     * this = this - frameTuple4DReadOnly
     * </p>
     *
-    * @param frameTuple4DReadOnly the frame tuple to subtract to this frame vector.
+    * @param frameTuple4DReadOnly the frame tuple to subtract from this frame vector.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
     *            the same frame as {@code this}.
     */
@@ -305,13 +305,13 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
    }
 
    /**
-    * Sets this frame vector to the difference of the two given frame tuples.
+    * Sets this frame vector to the difference of the two given tuples.
     * <p>
     * this = frameTuple1 - tuple2
     * </p>
     *
     * @param frameTuple1 the first frame tuple. Not modified.
-    * @param tuple2 the second frame tuple to subtract to {@code tuple1}. Not modified.
+    * @param tuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
     *            frame as {@code this}.
     */
@@ -322,13 +322,13 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
    }
 
    /**
-    * Sets this frame vector to the difference of the two given frame tuples.
+    * Sets this frame vector to the difference of the two given tuples.
     * <p>
     * this = tuple1 - frameTuple2
     * </p>
     *
     * @param tuple1 the first tuple. Not modified.
-    * @param frameTuple2 the second frame tuple to subtract to {@code tuple1}. Not modified.
+    * @param frameTuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
     *            frame as {@code this}.
     */
@@ -345,7 +345,7 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     * </p>
     *
     * @param frameTuple1 the first frame tuple. Not modified.
-    * @param frameTuple2 the second frame tuple to subtract to {@code tuple1}. Not modified.
+    * @param frameTuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
     *            is not expressed in the same frame as {@code this}.
     */
@@ -511,7 +511,7 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     * @param frameTuple4DReadOnly the frame tuple used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not
     *           modifying this vector, while a value of 1 is equivalent to setting this vector to
-    *           {@code tupleReadOnly}.
+    *           {@code frameTuple4DReadOnly}.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
     *            the same frame as {@code this}.
     */
@@ -543,7 +543,7 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
    }
 
    /**
-    * Performs a linear interpolation from {@code tuple1} to {@code frameTuple2s} given the
+    * Performs a linear interpolation from {@code tuple1} to {@code frameTuple2} given the
     * percentage {@code alpha}.
     * <p>
     * this = (1.0 - alpha) * tuple1 + alpha * frameTuple2
