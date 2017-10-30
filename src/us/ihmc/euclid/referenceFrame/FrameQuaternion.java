@@ -185,7 +185,7 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
     * of the same axis-angle.
     * </p>
     *
-    * @param rotation vector the rotation vector used to set this quaternion. Not modified.
+    * @param rotationVector vector the rotation vector used to set this quaternion. Not modified.
     * @throws ReferenceFrameMismatchException if {@code rotationVector} is not expressed in the same
     *            reference frame as {@code this}.
     */
