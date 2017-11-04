@@ -743,6 +743,14 @@ public class Line3D implements GeometryObject<Line3D>
    }
 
    /**
+    *
+    */
+   public boolean isCollinear(Line3D other, double epsilon)
+   {
+      return EuclidGeometryTools.areLine3DsCollinear(this.point, this.direction, other.point, other.direction, epsilon, epsilon);
+   }
+
+   /**
     * Provides a {@code String} representation of this line 3D as follows:<br>
     * Line 3D: point = (x, y, z), direction = (x, y, z)
     *
