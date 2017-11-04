@@ -140,4 +140,24 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
    {
       return tuple;
    }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame vectors
+    * are geometrically similar, i.e. the length of the distance between them is
+    * less than or equal to {@code epsilon}.
+    *
+    * @param other the frame vector to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    * @return {@code true} if the two frame vectors represent the same geometry,
+    *            {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(FrameVector2D other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+
+      return Vector2DBasics.super.geometricallyEquals(other, epsilon);
+   }
 }
