@@ -758,7 +758,8 @@ public class Line3D implements GeometryObject<Line3D>
     * Compares {@code this} with {@code other} to determine if the two lines are collinear.
     *
     * @param other the line to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
+    * @param angleEpsilon the tolerance of the comparison for angle.
+    * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
    public boolean isCollinear(Line3D other, double angleEpsilon, double distanceEpsilon)
