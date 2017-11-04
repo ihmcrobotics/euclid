@@ -66,7 +66,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Creates a new box 3D identical to {@code other}.
-    * 
+    *
     * @param other the other box to copy. Not modified.
     */
    public Box3D(Box3D other)
@@ -76,7 +76,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Creates a new box 3D and initializes its size.
-    * 
+    *
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
     * @param height the size of this box along the z-axis.
@@ -90,7 +90,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Creates a new box 3D and initializes its pose and size.
-    * 
+    *
     * @param position the position of this box. Not modified.
     * @param orientation the orientation of this box. Not modified.
     * @param length the size of this box along the x-axis.
@@ -107,7 +107,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Creates a new box 3D and initializes its pose and size.
-    * 
+    *
     * @param pose the position and orientation of this box. Not modified.
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
@@ -123,7 +123,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Creates a new box 3D and initializes its pose and size.
-    * 
+    *
     * @param pose the position and orientation of this box. Not modified.
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
@@ -139,7 +139,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Creates a new box 3D and initializes its pose and size.
-    * 
+    *
     * @param pose the position and orientation of this box. Not modified.
     * @param size the size of this box along in order the x, y, and z axes.
     * @throws IllegalArgumentException if any of {@code size}'s elements is negative.
@@ -159,7 +159,7 @@ public class Box3D extends Shape3D<Box3D>
    /**
     * Tests separately and on a per component basis if the pose and the size of this box and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
-    * 
+    *
     * @param other the other box which pose and size is to be compared against this box pose and
     *           size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -260,7 +260,7 @@ public class Box3D extends Shape3D<Box3D>
     * considers the pose of this box 3D such that if it has a non-zero orientation the bounding box
     * will be bigger than this box.
     * </p>
-    * 
+    *
     * @param boundingBoxToPack the bounding box to pack. Modified.
     */
    public void getBoundingBox3D(BoundingBox3D boundingBoxToPack)
@@ -279,7 +279,7 @@ public class Box3D extends Shape3D<Box3D>
     * <p>
     * This method is equivalent to {@link #getPosition(Tuple3DBasics)}.
     * </p>
-    * 
+    *
     * @param centerToPack the point in which the coordinates of the center of this box are stored.
     *           Modified.
     */
@@ -290,7 +290,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Gets this box length, i.e. the size along the x-axis.
-    * 
+    *
     * @return this box length.
     */
    public double getLength()
@@ -300,7 +300,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Gets this box width, i.e. the size along the y-axis.
-    * 
+    *
     * @return this box width.
     */
    public double getWidth()
@@ -310,7 +310,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Gets this box height, i.e. the size along the z-axis.
-    * 
+    *
     * @return this box height.
     */
    public double getHeight()
@@ -320,7 +320,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Gets this box size along the x-axis, i.e. its length.
-    * 
+    *
     * @return this box size along the x-axis.
     */
    public double getSizeX()
@@ -330,7 +330,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Gets this box size along the y-axis, i.e. its width.
-    * 
+    *
     * @return this box size along the y-axis.
     */
    public double getSizeY()
@@ -340,7 +340,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Gets this box size along the z-axis, i.e. its height.
-    * 
+    *
     * @return this box size along the z-axis.
     */
    public double getSizeZ()
@@ -350,7 +350,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Packs the world coordinates of one of this box vertices.
-    * 
+    *
     * @param vertexIndex the index in [0, 7] of the vertex to pack.
     * @param vertexToPack point in which the coordinates of the vertex are stored. Modified.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 7].
@@ -372,7 +372,7 @@ public class Box3D extends Shape3D<Box3D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return an array of 8 {@code Point3D} with this box vertices.
     */
    public Point3D[] getVertices()
@@ -385,7 +385,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Pack the coordinates in world of the 8 vertices of this box in the given array.
-    * 
+    *
     * @param verticesToPack the array in which the coordinates are stored. Modified.
     * @throws IllegalArgumentException if the length of the given array is different than 8.
     * @throws NullPointerException if any of the 8 first elements of the given array is
@@ -406,7 +406,7 @@ public class Box3D extends Shape3D<Box3D>
     * In the case the line and this box do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
-    * 
+    *
     * @param line the line expressed in world coordinates that may intersect this box. Not modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
     *           {@code null}. Modified.
@@ -426,7 +426,7 @@ public class Box3D extends Shape3D<Box3D>
     * In the case the line and this box do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
-    * 
+    *
     * @param pointOnLine a point expressed in world located on the infinitely long line. Not
     *           modified.
     * @param lineDirection the direction expressed in world of the line. Not modified.
@@ -474,7 +474,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Applies the given scale factor to the size of this box.
-    * 
+    *
     * @param scale the scale factor to use.
     * @throws IllegalArgumentException if {@code scale} is negative.
     */
@@ -487,7 +487,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Copies the {@code other} box data into {@code this}.
-    * 
+    *
     * @param other the other box to copy. Not modified.
     */
    @Override
@@ -499,7 +499,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Sets the size of this box.
-    * 
+    *
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
     * @param height the size of this box along the z-axis.
@@ -546,5 +546,21 @@ public class Box3D extends Shape3D<Box3D>
    public String toString()
    {
       return "Box 3D: size = " + size + ", pose =\n" + getPoseString();
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two boxes are
+    * geometrically similar, i.e. the pose and size of each box are geometrically
+    * similar given {@code epsilon}.
+    *
+    * @param other the box to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two boxes represent the same geometry, {@code false}
+    *            otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Box3D other, double epsilon)
+   {
+      return this.size.geometricallyEquals(other.size, epsilon) && this.shapePose.geometricallyEquals(other.shapePose, epsilon);
    }
 }
