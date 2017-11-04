@@ -1444,4 +1444,21 @@ public class Line2D implements GeometryObject<Line2D>
       double parameterAtIntercept = -point.getX() / direction.getX();
       return parameterAtIntercept * direction.getY() + point.getY();
    }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are
+    * geometrically similar, i.e. the length of the distance between the direction of
+    * the two lines is less than or equal to {@code epsilon} and the distance between the
+    * closest points between the two lines is less than or equal to {@code epsilon}.
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false}
+    *            otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Line2D other, double epsilon)
+   {
+      return isCollinear(other, epsilon);
+   }
 }
