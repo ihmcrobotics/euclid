@@ -534,4 +534,20 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    {
       return EuclidGeometryIOTools.getOrientation2DString(this);
    }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two orientations are
+    * geometrically similar, i.e. the difference in yaw of {@code this} and {@code other}
+    * is less than or equal to {@code epsilon}.
+    *
+    * @param other the orientation to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two orientations represent the same geometry, {@code false}
+    *            otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Orientation2D other, double epsilon)
+   {
+      return Math.abs(this.yaw - other.yaw) <= epsilon;
+   }
 }
