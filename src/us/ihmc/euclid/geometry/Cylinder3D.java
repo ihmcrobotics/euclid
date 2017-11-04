@@ -36,7 +36,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D identical to {@code other}.
-    * 
+    *
     * @param other the other cylinder to copy. Not modified.
     */
    public Cylinder3D(Cylinder3D other)
@@ -46,7 +46,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D and initializes its height and radius.
-    * 
+    *
     * @param height the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
     * @throws IllegalArgumentException if either {@code height} or {@code radius} is negative.
@@ -59,7 +59,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D and initializes its pose, height, and radius.
-    * 
+    *
     * @param pose the position and orientation of this cylinder. Not modified.
     * @param height the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
@@ -74,7 +74,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D and initializes its pose, height, and radius.
-    * 
+    *
     * @param pose the position and orientation of this cylinder. Not modified.
     * @param height the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
@@ -89,7 +89,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Copies the {@code other} cylinder data into {@code this}.
-    * 
+    *
     * @param other the other cylinder to copy. Not modified.
     */
    @Override
@@ -102,7 +102,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Sets the radius of this cylinder.
-    * 
+    *
     * @param radius the new radius for this cylinder.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
@@ -115,7 +115,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Sets the height of this cylinder.
-    * 
+    *
     * @param height the cylinder length along the z-axis.
     * @throws IllegalArgumentException if {@code height} is negative.
     */
@@ -128,7 +128,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Gets the radius of this cylinder.
-    * 
+    *
     * @return the value of the radius.
     */
    public double getRadius()
@@ -138,7 +138,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Gets the height of this cylinder.
-    * 
+    *
     * @return the value of the height.
     */
    public double getHeight()
@@ -174,7 +174,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    /**
     * Tests separately and on a per component basis if the pose and the size of this cylinder and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
-    * 
+    *
     * @param other the other cylinder which pose and size is to be compared against this cylinder
     *           pose and size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -183,8 +183,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    @Override
    public boolean epsilonEquals(Cylinder3D other, double epsilon)
    {
-      return EuclidCoreTools.epsilonEquals(height, other.height, epsilon) && EuclidCoreTools.epsilonEquals(radius, other.radius, epsilon)
-            && super.epsilonEqualsPose(other, epsilon);
+      return EuclidCoreTools.epsilonEquals(height, other.height, epsilon) && EuclidCoreTools.epsilonEquals(radius, other.radius, epsilon) && super
+            .epsilonEqualsPose(other, epsilon);
    }
 
    /**
@@ -193,7 +193,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
-    * 
+    *
     * @param line the line expressed in world coordinates that may intersect this cylinder. Not
     *           modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
@@ -214,7 +214,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
-    * 
+    *
     * @param pointOnLine a point expressed in world located on the infinitely long line. Not
     *           modified.
     * @param lineDirection the direction expressed in world of the line. Not modified.
@@ -236,8 +236,9 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       double dyLocal = TransformationTools.computeTransformedY(shapePose, true, lineDirection);
       double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(height, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal, dzLocal,
-                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools
+            .intersectionBetweenLine3DAndCylinder3D(height, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal, dzLocal, firstIntersectionToPack,
+                                                    secondIntersectionToPack);
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
       if (secondIntersectionToPack != null && numberOfIntersections == 2)
@@ -398,5 +399,22 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    public String toString()
    {
       return "Cylinder 3D: height = " + height + ", radius = " + radius + ", pose=\n" + getPoseString();
+   }
+
+   /**
+    * Compares {@code this} and {@code other} to determine if the two cylinders are
+    * geometrically similar, i.e. the difference between their radius and height are
+    * less than or equal to {@code epsilon} and their poses are geometrically similar
+    * given {@code epsilon}.
+    *
+    * @param other the cylinder to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Cylinder3D other, double epsilon)
+   {
+      return this.shapePose.geometricallyEquals(other.shapePose, epsilon) && Math.abs(this.height - other.height) <= epsilon
+            && Math.abs(this.radius - other.radius) <= epsilon;
    }
 }
