@@ -2,11 +2,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.Random;
 
-import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FramePoint3D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
-import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -583,5 +579,51 @@ public class EuclidFrameRandomTools
    public static FrameVector2D generateRandomFrameVector2D(Random random, ReferenceFrame referenceFrame, Tuple2DReadOnly min, Tuple2DReadOnly max)
    {
       return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.generateRandomVector2D(random, min, max));
+   }
+
+   /**
+    * Generates a random frame quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame quaternion's reference frame.
+    * @return the random frame quaternion.
+    */
+   public static FrameQuaternion generateRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random));
+   }
+
+   /**
+    * Generates a random frame quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated quaternion is in [-{@code minMaxAngle};
+    * {@code minMaxAngle}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMaxAngle the maximum absolute angle described by the generated quaternion.
+    * @return the random frame quaternion.
+    * @throws RuntimeException if {@code minMaxAngle < 0}.
+    */
+   public static FrameQuaternion generateRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
+   {
+      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random, minMaxAngle));
+   }
+
+   /**
+    * Generates a random 4D frame vector.
+    * <p>
+    * {@code vector}<sub>i</sub> &in; [-1.0; 1.0].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random 4D frame vector.
+    */
+   public static FrameVector4D generateRandomFrameVector4D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameVector4D(referenceFrame, EuclidCoreRandomTools.generateRandomVector4D(random));
    }
 }

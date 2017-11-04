@@ -16,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * {@code FrameVector2D}. This allows, for instance, to enforce, at runtime, that operations on
  * vectors occur in the same coordinate system. Also, via the method
  * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a vector in
- * different reference frame.
+ * different reference frames.
  * </p>
  * <p>
  * Because a {@code FrameVector2D} extends {@code Vector2DBasics}, it is compatible with methods

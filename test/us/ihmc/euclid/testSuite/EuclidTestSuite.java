@@ -1,40 +1,22 @@
 package us.ihmc.euclid.testSuite;
 
-import java.awt.Desktop;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.pitest.mutationtest.commandline.MutationCoverageReport;
+import us.ihmc.euclid.AxisTest;
+import us.ihmc.euclid.geometry.*;
+import us.ihmc.euclid.geometry.exceptions.BoundingBoxExceptionTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
+import us.ihmc.euclid.referenceFrame.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
+import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.pitest.mutationtest.commandline.MutationCoverageReport;
-
-import us.ihmc.euclid.AxisTest;
-import us.ihmc.euclid.geometry.BoundingBox2DTest;
-import us.ihmc.euclid.geometry.BoundingBox3DTest;
-import us.ihmc.euclid.geometry.Box3DTest;
-import us.ihmc.euclid.geometry.ConvexPolygon2DTest;
-import us.ihmc.euclid.geometry.Cylinder3DTest;
-import us.ihmc.euclid.geometry.Ellipsoid3DTest;
-import us.ihmc.euclid.geometry.Line2DTest;
-import us.ihmc.euclid.geometry.Line3DTest;
-import us.ihmc.euclid.geometry.LineSegment1DTest;
-import us.ihmc.euclid.geometry.LineSegment2DTest;
-import us.ihmc.euclid.geometry.LineSegment3DTest;
-import us.ihmc.euclid.geometry.Ramp3DTest;
-import us.ihmc.euclid.geometry.Sphere3DTest;
-import us.ihmc.euclid.geometry.Torus3DTest;
-import us.ihmc.euclid.geometry.exceptions.BoundingBoxExceptionTest;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
-import us.ihmc.euclid.referenceFrame.FramePoint2DTest;
-import us.ihmc.euclid.referenceFrame.FramePoint3DTest;
-import us.ihmc.euclid.referenceFrame.FrameVector2DTest;
-import us.ihmc.euclid.referenceFrame.FrameVector3DTest;
-import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
-import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -54,6 +36,8 @@ import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
       FramePoint2DTest.class, FrameVector2DTest.class,
       // 3D
       FramePoint3DTest.class, FrameVector3DTest.class,
+      // 4D
+      FrameQuaternionTest.class, FrameVector4DTest.class,
       // Tools tests
       EuclidFrameToolsTest.class, NameBasedHashCodeToolsTest.class,
       // Exceptions tests

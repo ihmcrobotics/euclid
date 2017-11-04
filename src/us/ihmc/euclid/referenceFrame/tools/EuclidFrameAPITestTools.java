@@ -3,17 +3,8 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -21,42 +12,22 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.MatrixFeatures;
 import org.ejml.ops.RandomMatrices;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
-import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FramePoint3D;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
-import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple4D.interfaces.*;
 
 public class EuclidFrameAPITestTools
 {
@@ -85,6 +56,13 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector3DReadOnly.class, FrameVector3DReadOnly.class);
       modifiableMap.put(Vector3DBasics.class, FrameVector3D.class);
 
+      modifiableMap.put(Tuple4DReadOnly.class, FrameTuple4DReadOnly.class);
+      modifiableMap.put(Tuple4DBasics.class, FrameTuple4D.class);
+      modifiableMap.put(Vector4DReadOnly.class, FrameVector4DReadOnly.class);
+      modifiableMap.put(Vector4DBasics.class, FrameVector4D.class);
+      modifiableMap.put(QuaternionReadOnly.class, FrameQuaternionReadOnly.class);
+      modifiableMap.put(QuaternionBasics.class, FrameQuaternion.class);
+
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
 
@@ -105,6 +83,13 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FramePoint3D.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint3D(random, frame));
       modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector3D(random, frame));
       modifiableMap.put(FrameVector3D.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector3D(random, frame));
+
+      modifiableMap.put(FrameTuple4DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
+      modifiableMap.put(FrameTuple4D.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
+      modifiableMap.put(FrameVector4DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector4D(random, frame));
+      modifiableMap.put(FrameVector4D.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector4D(random, frame));
+      modifiableMap.put(FrameQuaternionReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
+      modifiableMap.put(FrameQuaternion.class, frame -> EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -127,7 +112,16 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
       modifiableMap.put(Vector3DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
 
-      modifiableMap.put(AxisAngleBasics.class, () -> EuclidCoreRandomTools.generateRandomAxisAngle(random));
+      modifiableMap.put(AxisAngleReadOnly.class, () -> EuclidCoreRandomTools.generateRandomAxisAngle(random));
+
+      modifiableMap.put(Tuple4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
+      modifiableMap.put(Tuple4DBasics.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
+      modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector4D(random));
+      modifiableMap.put(Vector4DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector4D(random));
+      modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.generateRandomRotationMatrix(random));
+      modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomMatrix3D(random));
+      modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
+      modifiableMap.put(QuaternionBasics.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
 
       framelessTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -142,6 +136,9 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameTuple3DReadOnly.class);
       modifiableSet.add(FramePoint3DReadOnly.class);
       modifiableSet.add(FrameVector3DReadOnly.class);
+      modifiableSet.add(FrameTuple4DReadOnly.class);
+      modifiableSet.add(FrameVector4DReadOnly.class);
+      modifiableSet.add(FrameQuaternionReadOnly.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -156,6 +153,9 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameTuple3D.class);
       modifiableSet.add(FramePoint3D.class);
       modifiableSet.add(FrameVector3D.class);
+      modifiableSet.add(FrameTuple4D.class);
+      modifiableSet.add(FrameVector4D.class);
+      modifiableSet.add(FrameQuaternion.class);
 
       frameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -601,11 +601,11 @@ public class EuclidFrameAPITestTools
       {
          ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
-         ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
 
          // First check that the method is fine with the holder and all the arguments in the same frame.
          for (Method frameMethod : frameMethods)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -629,6 +629,7 @@ public class EuclidFrameAPITestTools
          // Check that the method checks the reference frames.
          for (Method frameMethod : frameMethods)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
 
             int numberOfArgumentsToTest = 0;
@@ -683,7 +684,7 @@ public class EuclidFrameAPITestTools
                }
                catch (Throwable t)
                {
-                  if (!isExceptionAcceptable(t))
+                  if (!(t instanceof ReferenceFrameMismatchException))
                      throw t;
                }
             }
@@ -694,6 +695,7 @@ public class EuclidFrameAPITestTools
          {
             for (Method frameMethod : frameMethods)
             {
+               ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
                Class<?>[] parameterTypes = frameMethod.getParameterTypes();
                Object[] parameters = new Object[parameterTypes.length];
 
@@ -740,6 +742,7 @@ public class EuclidFrameAPITestTools
          // Check for methods returning a frame type that the reference frame is properly set.
          for (Method frameMethod : methodsWithReturnFrameType)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -1372,7 +1375,8 @@ public class EuclidFrameAPITestTools
       }
       catch (NoSuchMethodException e)
       {
-         throw new AssertionError("The original method:\n" + getMethodSimpleName(originalMethod) + "\nis not properly overloaded, expected to find:\n"
+         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + getMethodSimpleName(originalMethod)
+               + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n"
                + getMethodSimpleName(originalMethod.getReturnType(), originalMethod.getName(), overloadingSignature));
       }
    }

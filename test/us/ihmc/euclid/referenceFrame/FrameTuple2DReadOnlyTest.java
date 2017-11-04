@@ -42,6 +42,8 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
    @Test
    public void testEpsilonEquals() throws Exception
    {
+      super.testEpsilonEquals();
+
       Random random = new Random(621541L);
       double epsilon = 0.0;
 
