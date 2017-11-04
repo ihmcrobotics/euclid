@@ -926,6 +926,23 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    }
 
    /**
+    * Compares {@code this} to {@code other} to determine if the two line segments are
+    * geometrically similar, i.e. each endpoint of {@code this} fall within a distance
+    * less than or equal to {@code epsilon} of an endpoint of {@code other}.
+    *
+    * @param other the line segment to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two line segments represent the same geometry, {@code false}
+    *            otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(LineSegment3D other, double epsilon)
+   {
+      return (this.firstEndpoint.geometricallyEquals(other.firstEndpoint, epsilon) && this.secondEndpoint.geometricallyEquals(other.secondEndpoint, epsilon))
+            || (this.firstEndpoint.geometricallyEquals(other.secondEndpoint, epsilon) && this.secondEndpoint.geometricallyEquals(other.firstEndpoint, epsilon));
+   }
+
+   /**
     * Provides a {@code String} representation of this line segment 3D as follows:<br>
     * Line segment 3D: 1st endpoint = (x, y, z), 2nd endpoint = (x, y, z)
     *
