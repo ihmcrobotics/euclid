@@ -29,7 +29,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
 
    /**
     * Creates a new sphere 3D identical to {@code other}
-    *
+    * 
     * @param other the other sphere to copy. Not modified.
     */
    public Sphere3D(Sphere3D other)
@@ -39,7 +39,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
 
    /**
     * Creates a new sphere 3D and initializes its radius.
-    *
+    * 
     * @param radius the radius for this sphere.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
@@ -50,7 +50,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
 
    /**
     * Creates a new sphere 3D and initializes its position and radius.
-    *
+    * 
     * @param center the coordinates of this sphere. Not modified.
     * @param radius the radius for this sphere.
     * @throws IllegalArgumentException if {@code radius} is negative.
@@ -62,7 +62,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
 
    /**
     * Creates a new sphere 3D and initializes its position and radius.
-    *
+    * 
     * @param centerX the x-coordinate of this sphere. Not modified.
     * @param centerY the y-coordinate of this sphere. Not modified.
     * @param centerZ the z-coordinate of this sphere. Not modified.
@@ -77,7 +77,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
 
    /**
     * Gets the radius of this sphere.
-    *
+    * 
     * @return the value of the radius.
     */
    public double getRadius()
@@ -87,7 +87,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
 
    /**
     * Sets the radius of this sphere.
-    *
+    * 
     * @param radius the radius for this sphere.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
@@ -100,7 +100,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
 
    /**
     * Copies the {@code other} sphere data into {@code this}.
-    *
+    * 
     * @param other the other sphere to copy. Not modified.
     */
    @Override
@@ -116,7 +116,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * In the case the line and this sphere do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
-    *
+    * 
     * @param line the line expressed in world coordinates that may intersect this sphere. Not
     *           modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
@@ -137,7 +137,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * In the case the line and this sphere do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
     * </p>
-    *
+    * 
     * @param pointOnLine a point expressed in world located on the infinitely long line. Not
     *           modified.
     * @param lineDirection the direction expressed in world of the line. Not modified.s
@@ -215,7 +215,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
    /**
     * Tests separately and on a per component basis if the pose and the radius of this sphere and
     * {@code other}'s pose and radius are equal to an {@code epsilon}.
-    *
+    * 
     * @param other the other sphere which pose and radius is to be compared against this radius pose
     *           and radius. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -256,7 +256,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * m00, m01, m02 | m03 <br>
     * m10, m11, m12 | m13 <br>
     * m20, m21, m22 | m23
-    *
+    * 
     * @return the {@code String} representing this box 3D.
     */
    @Override
@@ -270,7 +270,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * geometrically similar, i.e. the pose of each sphere is geometrically similar
     * given {@code epsilon} and the difference between the radius of each sphere is
     * less than or equal to {@code epsilon}.
-    *
+    * 
     * @param other the sphere to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false}

@@ -30,7 +30,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Creates a new pose 2D and initializes it with the given parameters.
-    *
+    * 
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param yaw the angle in radians for the orientation.
@@ -42,7 +42,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Creates a new pose 2D and initializes it to {@code other}.
-    *
+    * 
     * @param other the other pose 2D used to initialize this. Not modified.
     */
    public Pose2D(Pose2D other)
@@ -52,7 +52,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Creates a new pose 2D and initializes it with the given parameters.
-    *
+    * 
     * @param position tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
@@ -88,7 +88,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets the x-coordinate of the position.
-    *
+    * 
     * @param x the x-coordinate of the position.
     */
    public void setX(double x)
@@ -98,7 +98,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets the y-coordinate of the position.
-    *
+    * 
     * @param y the y-coordinate of the position.
     */
    public void setY(double y)
@@ -108,7 +108,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets the orientation yaw angle value.
-    *
+    * 
     * @param yaw the orientation angle value.
     */
    public void setYaw(double yaw)
@@ -118,7 +118,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets the position coordinates.
-    *
+    * 
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     */
@@ -129,7 +129,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets the position to the given tuple.
-    *
+    * 
     * @param position the tuple with the new position coordinates. Not modified.
     */
    public void setPosition(Tuple2DReadOnly position)
@@ -139,7 +139,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets the orientation angle value.
-    *
+    * 
     * @param yaw the orientation angle value.
     */
    public void setOrientation(double yaw)
@@ -149,7 +149,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets the orientation from the given orientation 2D.
-    *
+    * 
     * @param orientation the orientation with the new angle value for this. Not modified.
     */
    public void setOrientation(Orientation2D orientation)
@@ -159,7 +159,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets all the components of this pose 2D.
-    *
+    * 
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param yaw the orientation angle value.
@@ -172,7 +172,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets both position and orientation.
-    *
+    * 
     * @param position the tuple with the new position coordinates. Not modified.
     * @param orientation the orientation with the new angle value for this. Not modified.
     */
@@ -184,7 +184,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets this pose 2D to the {@code other} pose 2D.
-    *
+    * 
     * @param other the other pose 2D. Not modified.
     */
    @Override
@@ -199,7 +199,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * <p>
     * The given transform has to represent a 2D transformation.
     * </p>
-    *
+    * 
     * @param rigidBodyTransform the transform use to set this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of the transform does not represent a 2D
     *            transformation.
@@ -211,7 +211,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Sets this pose 2D to match the given rigid-body transform.
-    *
+    * 
     * @param rigidBodyTransform the transform use to set this pose 2D. Not modified.
     * @param checkIsTransform2D indicates whether or not the method should check that the rotation
     *           part of the given transform represents a 2D rotation in the XY-plane.
@@ -234,7 +234,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * this.position = (1.0 - alpha) * this.position + alpha * other.position<br>
     * this.orientation = (1.0 - alpha) * this.orientation + alpha * other.orientation
     * </p>
-    *
+    * 
     * @param other the other pose 2D used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not
     *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
@@ -253,7 +253,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * this.position = (1.0 - alpha) * pose1.position + alpha * pose2.position<br>
     * this.orientation = (1.0 - alpha) * pose1.orientation + alpha * pose2.orientation
     * </p>
-    *
+    * 
     * @param pose1 the first pose 2D used in the interpolation. Not modified.
     * @param pose2 the second pose 2D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
@@ -273,7 +273,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * If the translation is expressed in the local coordinates described by this pose 2D, use
     * {@link #appendTranslation(double, double)}.
     * </p>
-    *
+    * 
     * @param x the translation distance along the x-axis.
     * @param y the translation distance along the y-axis.
     */
@@ -289,7 +289,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * If the {@code translation} is expressed in the local coordinates described by this pose 2D,
     * use {@link #appendTranslation(Tuple2DReadOnly)}.
     * </p>
-    *
+    * 
     * @param translation tuple containing the translation to apply to this pose 2D. Not modified.
     */
    public void prependTranslation(Tuple2DReadOnly translation)
@@ -303,7 +303,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * <p>
     * If the rotation should not affect this pose's position, use {@link #appendRotation(double)}.
     * </p>
-    *
+    * 
     * @param yaw the angle about the z-axis to prepend to this pose 2D.
     */
    public void prependRotation(double yaw)
@@ -319,7 +319,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * If the rotation should not affect this pose's position, use
     * {@link #appendRotation(Orientation2D)}.
     * </p>
-    *
+    * 
     * @param orientation the orientation to prepend to this pose 2D. Not modified.
     */
    public void prependRotation(Orientation2D orientation)
@@ -333,7 +333,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * Use this method if the translation (x, y) is expressed in the local coordinates described by
     * this pose 2D. Otherwise, use {@link #prependTranslation(double, double)}.
     * </p>
-    *
+    * 
     * @param x the translation distance along the x-axis.
     * @param y the translation distance along the y-axis.
     */
@@ -353,7 +353,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * Use this method if the {@code translation} is expressed in the local coordinates described by
     * this pose 2D. Otherwise, use {@link #prependTranslation(Tuple2DReadOnly)}.
     * </p>
-    *
+    * 
     * @param translation tuple containing the translation to apply to this pose 2D. Not modified.
     */
    public void appendTranslation(Tuple2DReadOnly translation)
@@ -367,7 +367,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * If the position part of this pose 2D is to be rotated by the given angle, use
     * {@link #prependRotation(double)}.
     * </p>
-    *
+    * 
     * @param yaw the angle about the z-axis to append to this pose 2D.
     */
    public void appendRotation(double yaw)
@@ -381,7 +381,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * If the position part of this pose 2D is to be rotated by the given {@code orientation}, use
     * {@link #prependRotation(Orientation2D)}.
     * </p>
-    *
+    * 
     * @param orientation the orientation to append to this pose 2D. Not modified.
     */
    public void appendRotation(Orientation2D orientation)
@@ -391,7 +391,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Computes the distance between the position of this pose 2D and the given {@code point}.
-    *
+    * 
     * @param point the other point used to measure the distance. Not modified.
     * @return the distance between this pose and the given {@code point}.
     */
@@ -402,7 +402,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Computes the distances between the position part of the two poses.
-    *
+    * 
     * @param other the other pose used to measure the distance. Not modified.
     * @return the distance between the position part of the two poses.
     */
@@ -413,10 +413,17 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Computes the absolute angle difference between the orientation part of this pose 2D and the
+<<<<<<< Upstream, based on origin/develop
     * give {@code other}.
     *
     * @param other the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code other}.
+=======
+    * give {@code orientation}.
+    * 
+    * @param orientation the orientation used to compute the orientation distance. Not modified.
+    * @return the absolute angle difference between {@code this} and {@code orientation}.
+>>>>>>> 341fca5 Revert IntelliJ tampering of trailing spaces in JavaDoc
     */
    public double getOrientationDistance(Orientation2D other)
    {
@@ -425,7 +432,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Computes the absolute angle difference between this pose 2D and {@code other}.
-    *
+    * 
     * @param other the other pose 2D used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this.orientation} and
     *         {@code other.orientation}.
@@ -437,7 +444,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Gets the x-coordinate of the position part of this pose 2D.
-    *
+    * 
     * @return the x-coordinate of this pose 2D.
     */
    public double getX()
@@ -447,7 +454,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Gets the y-coordinate of the position part of this pose 2D.
-    *
+    * 
     * @return the y-coordinate of this pose 2D.
     */
    public double getY()
@@ -457,7 +464,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Gets the yaw angle of the orientation part of this pose 2D.
-    *
+    * 
     * @return the yaw angle of this pose 2D.
     */
    public double getYaw()
@@ -467,7 +474,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Gets the read-only reference of the position part of this pose 2D.
-    *
+    * 
     * @return the position part of this pose 2D.
     */
    public Point2DReadOnly getPosition()
@@ -477,7 +484,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Packs the position part of this pose 2D into the given {@code positionToPack}.
-    *
+    * 
     * @param positionToPack tuple used to store the position coordinates. Modified.
     */
    public void getPosition(Tuple2DBasics positionToPack)
@@ -487,7 +494,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
+    * 
     * @param orientationToPack used to store the orientation of this pose 2D. Modified.
     */
    public void getOrientation(Orientation2D orientationToPack)
@@ -497,7 +504,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Packs this pose 2D into the given {@code transformToPack}.
-    *
+    * 
     * @param transformToPack the rigid-body transform that is set to represent this pose 2D.
     *           Modified.
     */
@@ -509,7 +516,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Transforms the position and orientation parts of this pose 2D by the given {@code transform}.
-    *
+    * 
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY plane.
@@ -524,7 +531,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Transforms the position and orientation parts of this pose 2D by the inverse of the given
     * {@code transform}.
-    *
+    * 
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY plane.
@@ -538,7 +545,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Tests on a per component basis, if this pose 2D is exactly equal to {@code other}.
-    *
+    * 
     * @param other the other pose 2D to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
     *         otherwise.
@@ -554,7 +561,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(Pose2D)}, it returns {@code false} otherwise.
-    *
+    * 
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
@@ -574,7 +581,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
-    *
+    * 
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
@@ -588,7 +595,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
-    *
+    * 
     * @param other the query. Not modified.
     * @param positionEpsilon the tolerance to use for comparing the position part.
     * @param orientationEpsilon the tolerance to use for comparing the orientation part.
@@ -604,7 +611,7 @@ public class Pose2D implements GeometryObject<Pose2D>
     * geometrically similar, i.e. the position of {@code this} falls within a distance
     * less than or equal to {@code epsilon} of the position of {@code other} and the
     * magnitude of the difference of the orientations is less than or equal to {@code epsilon}.
-    *
+    * 
     * @param other the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false}
@@ -619,7 +626,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Provides a {@code String} representation of this pose 2D as follows:<br>
     * Pose 2D: position = (x, y), orientation = (yaw)
-    *
+    * 
     * @return the {@code String} representing this pose 2D.
     */
    @Override

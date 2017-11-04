@@ -41,7 +41,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Creates a new torus 3D identical to {@code other}.
-    *
+    * 
     * @param other the other torus to copy. Not modified.
     */
    public Torus3D(Torus3D other)
@@ -51,7 +51,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Creates a new torus 3D and initializes its radii.
-    *
+    * 
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
     * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
@@ -64,7 +64,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Creates a new torus 3D and initializes its pose and radii.
-    *
+    * 
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
@@ -78,7 +78,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Creates a new torus 3D and initializes its pose and radii.
-    *
+    * 
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
@@ -92,7 +92,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Copies the {@code other} torus data into {@code this}.
-    *
+    * 
     * @param other the other torus to copy. Not modified.
     */
    @Override
@@ -105,7 +105,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Sets the pose and radii of this torus 3D.
-    *
+    * 
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
@@ -120,7 +120,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Sets the pose and radii of this torus 3D.
-    *
+    * 
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
@@ -135,7 +135,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Sets the radii of this torus 3D.
-    *
+    * 
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
     * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
@@ -157,7 +157,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Gets the radius from the torus center to the tube center.
-    *
+    * 
     * @return this torus main radius.
     */
    public double getRadius()
@@ -167,7 +167,7 @@ public class Torus3D extends Shape3D<Torus3D>
 
    /**
     * Gets the radius of the tube of this torus.
-    *
+    * 
     * @return the radius of the tube.
     */
    public double getTubeRadius()
@@ -178,7 +178,7 @@ public class Torus3D extends Shape3D<Torus3D>
    /**
     * Tests separately and on a per component basis if the pose and the radii of this torus and
     * {@code other}'s pose and radii are equal to an {@code epsilon}.
-    *
+    * 
     * @param other the other torus which pose and radii is to be compared against this torus pose
     *           and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -222,7 +222,7 @@ public class Torus3D extends Shape3D<Torus3D>
     * m00, m01, m02 | m03 <br>
     * m10, m11, m12 | m13 <br>
     * m20, m21, m22 | m23
-    *
+    * 
     * @return the {@code String} representing this torus 3D.
     */
    @Override
@@ -320,7 +320,7 @@ public class Torus3D extends Shape3D<Torus3D>
     * geometrically similar, i.e. the pose of each torus is geometrically similar
     * given {@code epsilon} and the difference between the two radii of each sphere
     * are less than or equal to {@code epsilon}.
-    *
+    * 
     * @param other the torus to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two tori represent the same geometry, {@code false}
