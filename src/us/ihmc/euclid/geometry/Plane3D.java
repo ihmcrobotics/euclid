@@ -940,4 +940,16 @@ public class Plane3D implements GeometryObject<Plane3D>
    {
       return EuclidGeometryIOTools.getPlane3DString(this);
    }
+
+   /**
+    *
+    * @param other the plane to compare to.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the planes are coincident, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Plane3D other, double epsilon)
+   {
+      return isCoincident(other, epsilon, epsilon);
+   }
 }
