@@ -1374,7 +1374,19 @@ public class Line2D implements GeometryObject<Line2D>
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
    public boolean isCollinear(Line2D other, double epsilon) {
-      return EuclidGeometryTools.areLine2DsCollinear(this.point, this.direction, other.point, other.direction, epsilon, epsilon);
+      return isCollinear(other, epsilon, epsilon);
+   }
+
+   /**
+    * Compares {@code this} with {@code other} to determine if the two lines are collinear.
+    *
+    * @param other the line to compare to. Not modified.
+    * @param angleEpsilon the tolerance of the comparison for angle.
+    * @param distanceEpsilon the tolerance of the comparison for distance.
+    * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    */
+   public boolean isCollinear(Line2D other, double angleEpsilon, double distanceEpsilon) {
+      return EuclidGeometryTools.areLine2DsCollinear(this.point, this.direction, other.point, other.direction, angleEpsilon, distanceEpsilon);
    }
 
    /**
