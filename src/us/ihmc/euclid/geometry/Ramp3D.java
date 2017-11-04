@@ -44,7 +44,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Creates a new ramp 3D identical to {@code other}.
-    * 
+    *
     * @param other the other ramp to copy. Not modified.
     */
    public Ramp3D(Ramp3D other)
@@ -54,7 +54,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Creates a new ramp 3D and initializes its size.
-    * 
+    *
     * @param length the size of this ramp along the x-axis.
     * @param width the size of this ramp along the y-axis.
     * @param height the size of this ramp along the z-axis.
@@ -68,7 +68,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Creates a new ramp 3D and initializes its pose and size.
-    * 
+    *
     * @param pose the position and orientation for this ramp. Not modified.
     * @param length the size of this ramp along the x-axis.
     * @param width the size of this ramp along the y-axis.
@@ -84,7 +84,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Creates a new ramp 3D and initializes its pose and size.
-    * 
+    *
     * @param pose the position and orientation for this ramp. Not modified.
     * @param length the size of this ramp along the x-axis.
     * @param width the size of this ramp along the y-axis.
@@ -100,7 +100,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Copies the {@code other} ramp data into {@code this}.
-    * 
+    *
     * @param other the other ramp to copy. Not modified.
     */
    @Override
@@ -112,7 +112,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Sets the size along the x-axis for this ramp.
-    * 
+    *
     * @param length the size of this ramp along the x-axis.
     * @throws IllegalArgumentException if {@code length} is negative.
     */
@@ -125,7 +125,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Sets the size along the y-axis for this ramp.
-    * 
+    *
     * @param width the size of this ramp along the y-axis.
     * @throws IllegalArgumentException if {@code width} is negative.
     */
@@ -137,7 +137,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Sets the size along the z-axis for this ramp.
-    * 
+    *
     * @param height the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if {@code height} is negative.
     */
@@ -150,7 +150,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Sets the size of this ramp.
-    * 
+    *
     * @param size tuple with the new size for this ramp. Not modified.
     * @throws IllegalArgumentException if any of {@code size} components is negative.
     */
@@ -161,7 +161,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Sets the size of this ramp.
-    * 
+    *
     * @param length the size of this ramp along the x-axis.
     * @param width the size of this ramp along the y-axis.
     * @param height the size of this ramp along the z-axis.
@@ -185,7 +185,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Gets the size of this ramp along the x-axis.
-    * 
+    *
     * @return this ramp's length.
     */
    public double getLength()
@@ -195,7 +195,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Gets the size of this ramp along the y-axis.
-    * 
+    *
     * @return this ramp's width.
     */
    public double getWidth()
@@ -205,7 +205,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Gets the size of this ramp along the z-axis.
-    * 
+    *
     * @return this ramp's height.
     */
    public double getHeight()
@@ -219,7 +219,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
     * Note that this is different than {@link #getLength()}. The returned value is equal to:
     * &radic;(this.length<sup>2</sup> + this.height<sup>2</sup>)
     * </p>
-    * 
+    *
     * @return the length of the slope.
     */
    public double getRampLength()
@@ -229,7 +229,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Computes and packs the surface normal of the slope face of this ramp.
-    * 
+    *
     * @param surfaceNormalToPack the surface normal of the slope. Modified.
     */
    public void getRampSurfaceNormal(Vector3DBasics surfaceNormalToPack)
@@ -243,7 +243,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
     * <p>
     * The angle is positive and in [0, <i>pi</i>].
     * </p>
-    * 
+    *
     * @return the slope angle.
     */
    public double getRampIncline()
@@ -525,7 +525,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
    /**
     * Tests separately and on a per component basis if the pose and the size of this ramp and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
-    * 
+    *
     * @param other the other ramp which pose and size is to be compared against this ramp pose and
     *           size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -591,5 +591,21 @@ public class Ramp3D extends Shape3D<Ramp3D>
    public String toString()
    {
       return "Ramp 3D: size = " + size + ", + pose =\n" + getPoseString();
+   }
+
+   /**
+    * Compares {@code this} and {@code other} to determine if the two ramps are
+    * geometrically similar, i.e. the difference between their size are less than
+    * or equal to {@code epsilon} and their poses are geometrically similar given
+    * {@code epsilon}.
+    *
+    * @param other the ramp to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Ramp3D other, double epsilon)
+   {
+      return this.shapePose.geometricallyEquals(other.shapePose, epsilon) && this.size.geometricallyEquals(other.size, epsilon);
    }
 }
