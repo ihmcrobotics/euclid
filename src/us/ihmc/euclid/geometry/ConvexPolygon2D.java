@@ -2677,4 +2677,34 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    {
       edgeToPack.set(getVertex(edgeIndex), getNextVertex(edgeIndex));
    }
+
+   /**
+    * Compares {@code this} and {@code other} to determine if the two convex polygons
+    * are geometrically similar, i.e. each point of {@code this} is within a distance
+    * {@code epsilon} of some point of {@code other} and none share the same point.
+    *
+    * @param other the convex polygon to compare to.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the convex polygons represent the same geometry, {@code false}
+    *            otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(ConvexPolygon2D other, double epsilon)
+   {
+      if (this.numberOfVertices != other.numberOfVertices)
+         return false;
+
+      int indexOfClosestOtherPoint = other.getClosestVertexIndex(clockwiseOrderedVertices.get(0));
+
+      for (int counter = 0, thisPointIndex = 0; counter < numberOfVertices; ++counter) {
+         thisPointIndex = (thisPointIndex + 1) % numberOfVertices;
+
+         int otherPointIndex = (indexOfClosestOtherPoint + counter) % numberOfVertices;
+
+         if (!this.clockwiseOrderedVertices.get(thisPointIndex).geometricallyEquals(other.clockwiseOrderedVertices.get(otherPointIndex), epsilon))
+            return false;
+      }
+
+      return true;
+   }
 }
