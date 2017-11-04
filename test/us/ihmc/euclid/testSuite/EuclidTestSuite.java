@@ -1,30 +1,10 @@
 package us.ihmc.euclid.testSuite;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
-
 import us.ihmc.euclid.AxisTest;
-import us.ihmc.euclid.geometry.BoundingBox2DTest;
-import us.ihmc.euclid.geometry.BoundingBox3DTest;
-import us.ihmc.euclid.geometry.Box3DTest;
-import us.ihmc.euclid.geometry.ConvexPolygon2DTest;
-import us.ihmc.euclid.geometry.Cylinder3DTest;
-import us.ihmc.euclid.geometry.Ellipsoid3DTest;
-import us.ihmc.euclid.geometry.Line2DTest;
-import us.ihmc.euclid.geometry.Line3DTest;
-import us.ihmc.euclid.geometry.LineSegment1DTest;
-import us.ihmc.euclid.geometry.LineSegment2DTest;
-import us.ihmc.euclid.geometry.LineSegment3DTest;
-import us.ihmc.euclid.geometry.Ramp3DTest;
-import us.ihmc.euclid.geometry.Sphere3DTest;
-import us.ihmc.euclid.geometry.Torus3DTest;
+import us.ihmc.euclid.geometry.*;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxExceptionTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
