@@ -137,8 +137,8 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
     * @param epsilon the tolerance of the comparison.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in
     *            the same reference frame as {@code this}.
-    * @return {@code true} if {@code other} is geometrically similar to {@code this}
-    *            within {@code epsilon}, {@code false} otherwise.
+    * @return {@code true} if the two frame points represent the same geometry,
+    *            {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(FramePoint2D other, double epsilon)
