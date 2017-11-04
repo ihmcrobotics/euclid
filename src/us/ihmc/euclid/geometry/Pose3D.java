@@ -45,7 +45,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param z the z-coordinate of the position.
@@ -63,7 +63,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Creates a new pose 3D and initializes it to {@code other}.
-    * 
+    *
     * @param other the other pose 3D used to initialize this. Not modified.
     */
    public Pose3D(Pose3D other)
@@ -73,7 +73,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Creates a new pose 3D and initializes it with the given rigid-body transform.
-    * 
+    *
     * @param rigidBodyTransform the transform used to initialize this. Not modified.
     */
    public Pose3D(RigidBodyTransform rigidBodyTransform)
@@ -83,7 +83,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Creates a new pose 3D and initializes it with the given parameters.
-    * 
+    *
     * @param position tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
@@ -120,7 +120,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the x-coordinate of the position.
-    * 
+    *
     * @param x the x-coordinate of the position.
     */
    public void setX(double x)
@@ -130,7 +130,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the y-coordinate of the position.
-    * 
+    *
     * @param y the y-coordinate of the position.
     */
    public void setY(double y)
@@ -140,7 +140,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the z-coordinate of the position.
-    * 
+    *
     * @param z the z-coordinate of the position.
     */
    public void setZ(double z)
@@ -150,7 +150,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the position coordinates.
-    * 
+    *
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param z the z-coordinate of the position.
@@ -162,7 +162,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the position to the given tuple.
-    * 
+    *
     * @param position the tuple with the new position coordinates. Not modified.
     */
    public void setPosition(Tuple3DReadOnly position)
@@ -172,7 +172,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the x and y coordinates from the given tuple 2D, the z coordinate remains unchanged.
-    * 
+    *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
     */
    public void setPositionXY(Tuple2DReadOnly position2D)
@@ -186,7 +186,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * The quaternion is normalized internally.
     * </p>
-    * 
+    *
     * @param qx the x-component of the quaternion's vector part.
     * @param qy the y-component of the quaternion's vector part.
     * @param qz the z-component of the quaternion's vector part.
@@ -199,7 +199,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the orientation part of this pose 3D with the given quaternion.
-    * 
+    *
     * @param orientation the quaternion used to set this pose's orientation. Not modified.
     */
    public void setOrientation(QuaternionReadOnly orientation)
@@ -209,7 +209,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the orientation part of this pose 3D with the given rotation matrix.
-    * 
+    *
     * @param orientation the rotation matrix used to set this pose's orientation. Not modified.
     */
    public void setOrientation(RotationMatrixReadOnly orientation)
@@ -219,7 +219,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets the orientation part of this pose 3D with the given axis-angle.
-    * 
+    *
     * @param orientation the axis-angle used to set this pose's orientation. Not modified.
     */
    public void setOrientation(AxisAngleReadOnly orientation)
@@ -233,7 +233,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
     */
    public void setOrientationYawPitchRoll(double[] yawPitchRoll)
@@ -247,7 +247,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @param yaw the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll the angle to rotate about the x-axis.
@@ -263,7 +263,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param z the z-coordinate of the position.
@@ -279,7 +279,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets this pose 3D to the {@code other} pose 3D.
-    * 
+    *
     * @param other the other pose 3D. Not modified.
     */
    @Override
@@ -291,7 +291,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets this pose 3D to match the given rigid-body transform.
-    * 
+    *
     * @param rigidBodyTransform the transform use to set this pose 3D. Not modified.
     */
    public void set(RigidBodyTransform rigidBodyTransform)
@@ -301,7 +301,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets this pose 3D to match the given quaternion-based transform.
-    * 
+    *
     * @param quaternionBasedTransform the transform use to set this pose 3D. Not modified.
     */
    public void set(QuaternionBasedTransform quaternionBasedTransform)
@@ -311,7 +311,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets both position and orientation.
-    * 
+    *
     * @param position the tuple with the new position coordinates. Not modified.
     * @param orientation the quaternion with the new orientation. Not modified.
     */
@@ -323,7 +323,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets both position and orientation.
-    * 
+    *
     * @param position the tuple with the new position coordinates. Not modified.
     * @param orientation the rotation matrix with the new orientation. Not modified.
     */
@@ -335,7 +335,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Sets both position and orientation.
-    * 
+    *
     * @param position the tuple with the new position coordinates. Not modified.
     * @param orientation the axis-angle with the new orientation. Not modified.
     */
@@ -382,7 +382,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * this.position = (1.0 - alpha) * this.position + alpha * other.position<br>
     * this.orientation = (1.0 - alpha) * this.orientation + alpha * other.orientation
     * </p>
-    * 
+    *
     * @param other the other pose 3D used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not
     *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
@@ -401,7 +401,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * this.position = (1.0 - alpha) * pose1.position + alpha * pose2.position<br>
     * this.orientation = (1.0 - alpha) * pose1.orientation + alpha * pose2.orientation
     * </p>
-    * 
+    *
     * @param pose1 the first pose 3D used in the interpolation. Not modified.
     * @param pose2 the second pose 3D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
@@ -421,7 +421,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * If the translation is expressed in the local coordinates described by this pose 3D, use
     * {@link #appendTranslation(double, double, double)}.
     * </p>
-    * 
+    *
     * @param x the translation distance along the x-axis.
     * @param y the translation distance along the y-axis.
     * @param z the translation distance along the z-axis.
@@ -438,7 +438,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * If the {@code translation} is expressed in the local coordinates described by this pose 3D,
     * use {@link #appendTranslation(Tuple3DReadOnly)}.
     * </p>
-    * 
+    *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     */
    public void prependTranslation(Tuple3DReadOnly translation)
@@ -449,7 +449,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
     * orientation part.
-    * 
+    *
     * @param rotation the rotation to prepend to this pose 3D. Not modified.
     */
    public void prependRotation(QuaternionReadOnly rotation)
@@ -461,7 +461,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
     * orientation part.
-    * 
+    *
     * @param rotation the rotation to prepend to this pose 3D. Not modified.
     */
    public void prependRotation(RotationMatrixReadOnly rotation)
@@ -473,7 +473,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
     * orientation part.
-    * 
+    *
     * @param rotation the rotation to prepend to this pose 3D. Not modified.
     */
    public void prependRotation(AxisAngleReadOnly rotation)
@@ -485,7 +485,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Prepends a rotation about the z-axis to this pose 3D: Rotates the position part and prepends
     * the rotation to the orientation part.
-    * 
+    *
     * @param yaw the angle to rotate about the z-axis.
     */
    public void prependYawRotation(double yaw)
@@ -497,7 +497,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Prepends a rotation about the y-axis to this pose 3D: Rotates the position part and prepends
     * the rotation to the orientation part.
-    * 
+    *
     * @param pitch the angle to rotate about the y-axis.
     */
    public void prependPitchRotation(double pitch)
@@ -509,7 +509,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Prepends a rotation about the x-axis to this pose 3D: Rotates the position part and prepends
     * the rotation to the orientation part.
-    * 
+    *
     * @param roll the angle to rotate about the x-axis.
     */
    public void prependRollRotation(double roll)
@@ -523,7 +523,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * This is the same as {@link #applyTransform(Transform)}.
     * </p>
-    * 
+    *
     * @param transform the transform to prepend to this pose 3D. Not modified.
     */
    public void prependTransform(RigidBodyTransform transform)
@@ -536,7 +536,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * This is the same as {@link #applyTransform(Transform)}.
     * </p>
-    * 
+    *
     * @param transform the transform to prepend to this pose 3D. Not modified.
     */
    public void prependTransform(QuaternionBasedTransform transform)
@@ -550,7 +550,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * Use this method if the translation (x, y, z) is expressed in the local coordinates described
     * by this pose 3D. Otherwise, use {@link #prependTranslation(double, double, double)}.
     * </p>
-    * 
+    *
     * @param x the translation distance along the x-axis.
     * @param y the translation distance along the y-axis.
     * @param z the translation distance along the z-axis.
@@ -572,7 +572,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * Use this method if the {@code translation} is expressed in the local coordinates described by
     * this pose 3D. Otherwise, use {@link #prependTranslation(Tuple2DReadOnly)}.
     * </p>
-    * 
+    *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     */
    public void appendTranslation(Tuple3DReadOnly translation)
@@ -587,7 +587,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * follows:<br>
     * {@code this.orientation = this.orientation * rotation}
     * </p>
-    * 
+    *
     * @param rotation the rotation to append to this pose 3D. Not modified.
     */
    public void appendRotation(QuaternionReadOnly rotation)
@@ -602,7 +602,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * follows:<br>
     * {@code this.orientation = this.orientation * rotation}
     * </p>
-    * 
+    *
     * @param rotation the rotation to append to this pose 3D. Not modified.
     */
    public void appendRotation(RotationMatrixReadOnly rotation)
@@ -615,14 +615,14 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * More precisely, the position part is unchanged while the orientation part is updated as
     * follows:<br>
-    * 
+    *
     * <pre>
     *                                       / cos(yaw) -sin(yaw) 0 \
     * this.orientation = this.orientation * | sin(yaw)  cos(yaw) 0 |
     *                                       \    0         0     1 /
     * </pre>
     * </p>
-    * 
+    *
     * @param yaw the angle to rotate about the z-axis.
     */
    public void appendYawRotation(double yaw)
@@ -635,14 +635,14 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * More precisely, the position part is unchanged while the orientation part is updated as
     * follows:<br>
-    * 
+    *
     * <pre>
     *                                       /  cos(pitch) 0 sin(pitch) \
     * this.orientation = this.orientation * |      0      1     0      |
     *                                       \ -sin(pitch) 0 cos(pitch) /
     * </pre>
     * </p>
-    * 
+    *
     * @param pitch the angle to rotate about the y-axis.
     */
    public void appendPitchRotation(double pitch)
@@ -655,14 +655,14 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * More precisely, the position part is unchanged while the orientation part is updated as
     * follows:<br>
-    * 
+    *
     * <pre>
     *                                       / 1     0          0     \
     * this.orientation = this.orientation * | 0 cos(roll) -sin(roll) |
     *                                       \ 0 sin(roll)  cos(roll) /
     * </pre>
     * </p>
-    * 
+    *
     * @param roll the angle to rotate about the x-axis.
     */
    public void appendRollRotation(double roll)
@@ -673,7 +673,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Appends the given {@code transform} to this pose 3D.
-    * 
+    *
     * @param transform the rigid-body transform to append to this pose 3D. Not modified.
     */
    public void appendTransform(RigidBodyTransform transform)
@@ -684,7 +684,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Appends the given {@code transform} to this pose 3D.
-    * 
+    *
     * @param transform the quaternion-based transform to append to this pose 3D. Not modified.
     */
    public void appendTransform(QuaternionBasedTransform transform)
@@ -695,7 +695,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Computes the distance between the position of this pose 3D and the given {@code point}.
-    * 
+    *
     * @param point the other point used to measure the distance. Not modified.
     * @return the distance between this pose and the given {@code point}.
     */
@@ -706,7 +706,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Computes the distances between the position part of the two poses.
-    * 
+    *
     * @param other the other pose used to measure the distance. Not modified.
     * @return the distance between the position part of the two poses.
     */
@@ -718,7 +718,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Computes the smallest angle representing the difference between the orientation part of this
     * pose 3D and the give {@code orientation}.
-    * 
+    *
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this} and {@code orientation}, it is contained in
     *         [0, <i>pi</i>].
@@ -730,7 +730,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Computes the absolute angle difference between this pose 3D and {@code other}.
-    * 
+    *
     * @param other the other pose 3D used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this.orientation} and {@code other.orientation},
     *         it is contained in [0, <i>pi</i>].
@@ -762,7 +762,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Gets the x-coordinate of the position part of this pose 3D.
-    * 
+    *
     * @return the x-coordinate of this pose 3D.
     */
    public double getX()
@@ -772,7 +772,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Gets the y-coordinate of the position part of this pose 3D.
-    * 
+    *
     * @return the y-coordinate of this pose 3D.
     */
    public double getY()
@@ -782,7 +782,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Gets the z-coordinate of the position part of this pose 3D.
-    * 
+    *
     * @return the z-coordinate of this pose 3D.
     */
    public double getZ()
@@ -837,7 +837,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Packs the position part of this pose 3D into the given {@code positionToPack}.
-    * 
+    *
     * @param positionToPack tuple used to store the position coordinates. Modified.
     */
    public void getPosition(Tuple3DBasics positionToPack)
@@ -847,7 +847,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    * 
+    *
     * @param orientationToPack used to store the orientation of this pose 3D. Modified.
     */
    public void getOrientation(RotationMatrix orientationToPack)
@@ -857,7 +857,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    * 
+    *
     * @param orientationToPack used to store the orientation of this pose 3D. Modified.
     */
    public void getOrientation(QuaternionBasics orientationToPack)
@@ -867,7 +867,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    * 
+    *
     * @param orientationToPack used to store the orientation of this pose 3D. Modified.
     */
    public void getOrientation(AxisAngleBasics orientationToPack)
@@ -908,7 +908,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Packs this pose 3D into the given {@code transformToPack}.
-    * 
+    *
     * @param transformToPack the rigid-body transform that is set to represent this pose 3D.
     *           Modified.
     */
@@ -919,7 +919,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Packs this pose 3D into the given {@code transformToPack}.
-    * 
+    *
     * @param transformToPack the quaternion-based transform that is set to represent this pose 3D.
     *           Modified.
     */
@@ -991,7 +991,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
-    * 
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
@@ -1005,7 +1005,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
-    * 
+    *
     * @param other the query. Not modified.
     * @param positionEpsilon the tolerance to use for comparing the position part.
     * @param orientationEpsilon the tolerance to use for comparing the orientation part.
@@ -1019,7 +1019,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Provides a {@code String} representation of the position part of this pose 3D as follows:<br>
     * (x, y, z)
-    * 
+    *
     * @return the {@code String} representing the position part of this pose 3D.
     */
    public String printOutPosition()
@@ -1031,7 +1031,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * Provides a {@code String} representation of the orientation part of this pose 3D as
     * follows:<br>
     * (qx, qy, qz, qs)
-    * 
+    *
     * @return the {@code String} representing the orientation part of this pose 3D.
     */
    public String printOutOrientation()
@@ -1049,5 +1049,22 @@ public class Pose3D implements GeometryObject<Pose3D>
    public String toString()
    {
       return EuclidGeometryIOTools.getPose3DString(this);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two poses are
+    * geometrically similar, i.e. the position of {@code this} falls within a distance
+    * less than or equal to {@code epsilon} of the position of {@code other} and the
+    * magnitude of the difference of the orientations is less than or equal to {@code epsilon}.
+    *
+    * @param other the pose to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two poses represent the same geometry, {@code false}
+    *            otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Pose3D other, double epsilon)
+   {
+      return this.position.geometricallyEquals(other.position, epsilon) && this.orientation.geometricallyEquals(other.orientation, epsilon);
    }
 }
