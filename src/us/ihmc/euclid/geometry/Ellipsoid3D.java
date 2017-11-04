@@ -395,4 +395,20 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    {
       return "Ellipsoid 3D: radii = " + radii + ", pose =\n" + getPoseString();
    }
+
+   /**
+    * Compares {@code this} and {@code other} to determine if the two ellipsoids are
+    * geometrically similar.
+    * <p>
+    * Equivalent to {@link #epsilonEquals(Ellipsoid3D, double)}
+    *
+    * @param other the ellipsoid to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
+   {
+      return epsilonEquals(other, epsilon);
+   }
 }
