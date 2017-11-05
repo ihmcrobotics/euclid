@@ -474,7 +474,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Gets the read-only reference of the position part of this pose 2D.
-    * 
+    *
     * @return the position part of this pose 2D.
     */
    public Point2DReadOnly getPosition()
@@ -516,7 +516,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Transforms the position and orientation parts of this pose 2D by the given {@code transform}.
-    * 
+    *
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY plane.
@@ -531,7 +531,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Transforms the position and orientation parts of this pose 2D by the inverse of the given
     * {@code transform}.
-    * 
+    *
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY plane.
@@ -545,7 +545,7 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Tests on a per component basis, if this pose 2D is exactly equal to {@code other}.
-    * 
+    *
     * @param other the other pose 2D to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
     *         otherwise.
@@ -561,7 +561,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(Pose2D)}, it returns {@code false} otherwise.
-    * 
+    *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
@@ -626,7 +626,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    /**
     * Provides a {@code String} representation of this pose 2D as follows:<br>
     * Pose 2D: position = (x, y), orientation = (yaw)
-    * 
+    *
     * @return the {@code String} representing this pose 2D.
     */
    @Override

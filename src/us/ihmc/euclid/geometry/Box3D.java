@@ -290,7 +290,7 @@ public class Box3D extends Shape3D<Box3D>
 
    /**
     * Gets this box length, i.e. the size along the x-axis.
-    *
+    * 
     * @return this box length.
     */
    public double getLength()
@@ -539,7 +539,7 @@ public class Box3D extends Shape3D<Box3D>
     * m00, m01, m02 | m03 <br>
     * m10, m11, m12 | m13 <br>
     * m20, m21, m22 | m23
-    * 
+    *
     * @return the {@code String} representing this box 3D.
     */
    @Override

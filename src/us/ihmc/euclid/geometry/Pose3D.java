@@ -615,7 +615,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * More precisely, the position part is unchanged while the orientation part is updated as
     * follows:<br>
-    *
+    * 
     * <pre>
     *                                       / cos(yaw) -sin(yaw) 0 \
     * this.orientation = this.orientation * | sin(yaw)  cos(yaw) 0 |
@@ -635,7 +635,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * More precisely, the position part is unchanged while the orientation part is updated as
     * follows:<br>
-    *
+    * 
     * <pre>
     *                                       /  cos(pitch) 0 sin(pitch) \
     * this.orientation = this.orientation * |      0      1     0      |
@@ -655,7 +655,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * <p>
     * More precisely, the position part is unchanged while the orientation part is updated as
     * follows:<br>
-    *
+    * 
     * <pre>
     *                                       / 1     0          0     \
     * this.orientation = this.orientation * | 0 cos(roll) -sin(roll) |
@@ -742,7 +742,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Gets the read-only reference of the position part of this pose 3D.
-    * 
+    *
     * @return the position part of this pose 3D.
     */
    public Point3DReadOnly getPosition()
@@ -752,7 +752,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Gets the read-only reference to the orientation part of this pose 3D.
-    * 
+    *
     * @return the orientation part of this pose 3D.
     */
    public QuaternionReadOnly getOrientation()
@@ -797,7 +797,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @return the yaw angle around the z-axis.
     */
    public double getYaw()
@@ -812,7 +812,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @return the pitch angle around the y-axis.
     */
    public double getPitch()
@@ -827,7 +827,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @return the roll angle around the x-axis.
     */
    public double getRoll()
@@ -882,7 +882,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
     */
    public void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
@@ -898,7 +898,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
     * of the same axis-angle.
     * </p>
-    * 
+    *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
     */
    public void getRotationVector(Vector3DBasics rotationVectorToPack)
@@ -930,7 +930,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Transforms the position and orientation parts of this pose 3D by the given {@code transform}.
-    * 
+    *
     * @param transform the geometric transform to apply on this pose 3D. Not modified.
     */
    @Override
@@ -943,7 +943,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Transforms the position and orientation parts of this pose 3D by the inverse of the given
     * {@code transform}.
-    * 
+    *
     * @param transform the geometric transform to apply on this pose 3D. Not modified.
     */
    @Override
@@ -955,7 +955,7 @@ public class Pose3D implements GeometryObject<Pose3D>
 
    /**
     * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
-    * 
+    *
     * @param other the other pose 3D to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
     *         otherwise.
@@ -971,7 +971,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(Pose3D)}, it returns {@code false} otherwise.
-    * 
+    *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
@@ -1042,7 +1042,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    /**
     * Provides a {@code String} representation of this pose 3D as follows:<br>
     * Pose 3D: position = (x, y, z), orientation = (qx, qy, qz, qs)
-    * 
+    *
     * @return the {@code String} representing this pose 3D.
     */
    @Override

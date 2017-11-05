@@ -229,7 +229,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
 
    /**
     * Computes and packs the surface normal of the slope face of this ramp.
-    *
+    * 
     * @param surfaceNormalToPack the surface normal of the slope. Modified.
     */
    public void getRampSurfaceNormal(Vector3DBasics surfaceNormalToPack)
@@ -584,7 +584,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
     * m00, m01, m02 | m03 <br>
     * m10, m11, m12 | m13 <br>
     * m20, m21, m22 | m23
-    * 
+    *
     * @return the {@code String} representing this box 3D.
     */
    @Override

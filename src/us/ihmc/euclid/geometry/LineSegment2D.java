@@ -203,7 +203,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * returns the distance between {@code firstEndpoint} and the given {@code point}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point 3D point to compute the distance from this line segment. Not modified.
     * @return the minimum distance between the 2D point and this 2D line segment.
     */
@@ -221,7 +221,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * returns the distance between {@code firstEndpoint} and the given {@code point}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point 3D point to compute the distance from this line segment. Not modified.
     * @return the minimum distance between the 2D point and this 2D line segment.
     */
@@ -260,7 +260,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
-    * 
+    *
     * @param other the other line segment 2D to compare against this. Not modified.
     * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
     *         otherwise.
@@ -276,7 +276,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(LineSegment2D)}, it returns {@code false} otherwise.
-    * 
+    *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
@@ -575,7 +575,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param secondLineSegment the other line segment that may intersect this line segment. Not
     *           modified.
     * @return the intersection point if it exists, {@code null} otherwise.
@@ -599,7 +599,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <li>When the two line segments have a common endpoint, this method returns true.
     * </ul>
     * </p>
-    * 
+    *
     * @param secondLineSegment the other line segment that may intersect this line segment. Not
     *           modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
@@ -690,7 +690,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * </ul>
     * </p>
     * This method will return {@code false} if the point is on this line.
-    * 
+    *
     * @param point the coordinates of the query point.
     * @return {@code true} if the point is on the left side of this line segment, {@code false} if
     *         the point is on the right side or exactly on this line segment.
@@ -743,7 +743,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * </ul>
     * </p>
     * This method will return {@code false} if the point is on this line.
-    * 
+    *
     * @param point the coordinates of the query point.
     * @return {@code true} if the point is on the right side of this line segment, {@code false} if
     *         the point is on the left side or exactly on this line segment.
@@ -1238,7 +1238,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Provides a {@code String} representation of this line segment 2D as follows:<br>
     * Line segment 2D: 1st endpoint = (x, y), 2nd endpoint = (x, y)
-    * 
+    *
     * @return the {@code String} representing this line segment 2D.
     */
    @Override

@@ -256,7 +256,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * m00, m01, m02 | m03 <br>
     * m10, m11, m12 | m13 <br>
     * m20, m21, m22 | m23
-    * 
+    *
     * @return the {@code String} representing this box 3D.
     */
    @Override
