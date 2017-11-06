@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +13,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
@@ -124,6 +127,42 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
       framelessMethodsToIgnore.put("set", new Class<?>[] {Vector4D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Vector4D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector4D.class, Vector4D.class, true, 1, framelessMethodsToIgnore);
+   }
+
+   @Test
+   public void testGeometricallyEquals() {
+      Random random = new Random(58722L);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+         double epsilon = random.nextDouble();
+
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameVector4D fv = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
+         FrameVector4D fv0 = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
+
+         if (fv.getVector().geometricallyEquals(fv0.getVector(), epsilon)) {
+            assertTrue(fv.geometricallyEquals(fv0, epsilon));
+         } else {
+            assertFalse(fv.geometricallyEquals(fv0, epsilon));
+         }
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+         double epsilon = random.nextDouble();
+
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame referenceFrame0 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+
+         FrameVector4D fv = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
+         FrameVector4D fv0 = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame0);
+
+         try {
+            fv.geometricallyEquals(fv0, epsilon);
+            fail();
+         } catch (ReferenceFrameMismatchException ignored) {
+
+         }
+      }
    }
 
    @Test
