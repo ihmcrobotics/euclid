@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
@@ -133,5 +134,41 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D, Point2D>
       framelessMethodsToIgnore.put("set", new Class<?>[]{Point2D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[]{Point2D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FramePoint2D.class, Point2D.class, true, 1, framelessMethodsToIgnore);
+   }
+
+   @Test
+   public void testGeometricallyEquals() {
+      Random random = new Random(58722L);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+         double epsilon = random.nextDouble();
+
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FramePoint2D fp = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
+         FramePoint2D fp0 = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
+
+         if (fp.getPoint().geometricallyEquals(fp0.getPoint(), epsilon)) {
+            assertTrue(fp.geometricallyEquals(fp0, epsilon));
+         } else {
+            assertFalse(fp.geometricallyEquals(fp0, epsilon));
+         }
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+         double epsilon = random.nextDouble();
+
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame referenceFrame0 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+
+         FramePoint2D fp = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame);
+         FramePoint2D fp0 = EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame0);
+
+         try {
+            fp.geometricallyEquals(fp0, epsilon);
+            fail();
+         } catch (ReferenceFrameMismatchException ignored) {
+
+         }
+      }
    }
 }
