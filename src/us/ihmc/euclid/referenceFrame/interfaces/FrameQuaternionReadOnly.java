@@ -810,4 +810,31 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       vectorTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
    }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame quaternions are
+    * geometrically similar, i.e. the magnitude of their difference is less than or equal
+    * to {@code epsilon}.
+    *
+    * @param other the frame quaternion to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    * @return {@code true} if the two frame quaternions represent the same geometry,
+    *            {@code false} otherwise.
+    */
+   default boolean geometricallyEquals(FrameQuaternionReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+
+      return QuaternionReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
+   /** {@inheritDoc} */
+   default double distancePrecise(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+
+      return QuaternionReadOnly.super.distancePrecise(other);
+   }
 }
