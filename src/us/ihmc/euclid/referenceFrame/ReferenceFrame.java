@@ -48,9 +48,8 @@ import us.ihmc.euclid.utils.NameBasedHashCodeTools;
  * express a geometry in a different frame.
  * </p>
  */
-public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeHolder
+public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 {
-   private static final long serialVersionUID = 9129810880579453658L;
    /** The name of this reference frame. The name should preferably be unique. */
    private final String frameName;
    /**
