@@ -561,6 +561,30 @@ public class Box3D extends Shape3D<Box3D>
    @Override
    public boolean geometricallyEquals(Box3D other, double epsilon)
    {
-      return this.size.geometricallyEquals(other.size, epsilon) && this.shapePose.geometricallyEquals(other.shapePose, epsilon);
+      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
+      
+      if (!this.size.epsilonEquals(other.size, epsilon))
+      {         
+         Size3D rotatedSize = new Size3D(this.size.getX(), this.size.getY(), this.size.getZ());
+         
+         shapePose.getRotationMatrix().transform(rotatedSize);
+         
+         rotatedSize.absolute();
+         
+         if (!rotatedSize.epsilonEquals(other.size, epsilon))
+         {
+            rotatedSize = new Size3D(other.size.getX(), other.size.getY(), other.size.getZ());
+            
+            other.shapePose.getRotationMatrix().transform(rotatedSize);
+
+            rotatedSize.absolute();
+            
+            if (!this.size.epsilonEquals(rotatedSize, epsilon))
+               return false;
+         }
+      }
+      
+      return true;
    }
 }
