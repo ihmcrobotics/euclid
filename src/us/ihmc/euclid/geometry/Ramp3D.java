@@ -606,6 +606,6 @@ public class Ramp3D extends Shape3D<Ramp3D>
    @Override
    public boolean geometricallyEquals(Ramp3D other, double epsilon)
    {
-      return this.shapePose.geometricallyEquals(other.shapePose, epsilon) && this.size.geometricallyEquals(other.size, epsilon);
+      return this.shapePose.geometricallyEquals(other.shapePose, epsilon) && this.size.epsilonEquals(other.size, epsilon);
    }
 }
