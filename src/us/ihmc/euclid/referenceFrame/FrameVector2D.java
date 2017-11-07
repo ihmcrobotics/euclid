@@ -156,8 +156,6 @@ public class FrameVector2D extends FrameTuple2D<FrameVector2D, Vector2D> impleme
    @Override
    public boolean geometricallyEquals(FrameVector2D other, double epsilon)
    {
-      checkReferenceFrameMatch(other);
-
-      return Vector2DBasics.super.geometricallyEquals(other, epsilon);
+      return FrameVector2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
