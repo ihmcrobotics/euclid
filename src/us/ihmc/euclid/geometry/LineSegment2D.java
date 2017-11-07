@@ -576,14 +576,14 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param secondLineSegment the other line segment that may intersect this line segment. Not
+    * @param other the other line segment that may intersect this line segment. Not
     *           modified.
     * @return the intersection point if it exists, {@code null} otherwise.
     */
-   public Point2D intersectionWith(LineSegment2D secondLineSegment)
+   public Point2D intersectionWith(LineSegment2D other)
    {
       return EuclidGeometryTools
-            .intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, secondLineSegment.firstEndpoint, secondLineSegment.secondEndpoint);
+            .intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, other.firstEndpoint, other.secondEndpoint);
    }
 
    /**
@@ -600,15 +600,15 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * </ul>
     * </p>
     *
-    * @param secondLineSegment the other line segment that may intersect this line segment. Not
+    * @param other the other line segment that may intersect this line segment. Not
     *           modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
-   public boolean intersectionWith(LineSegment2D secondLineSegment, Point2D intersectionToPack)
+   public boolean intersectionWith(LineSegment2D other, Point2D intersectionToPack)
    {
       return EuclidGeometryTools
-            .intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, secondLineSegment.firstEndpoint, secondLineSegment.secondEndpoint,
+            .intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, other.firstEndpoint, other.secondEndpoint,
                                                   intersectionToPack);
    }
 
