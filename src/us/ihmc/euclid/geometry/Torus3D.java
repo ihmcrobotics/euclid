@@ -5,6 +5,7 @@ import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -30,7 +31,9 @@ public class Torus3D extends Shape3D<Torus3D>
    private double radius;
    /** Represents the radius of the tube */
    private double tubeRadius;
-
+   /** Represents the axis of rotation */
+   private Vector3D axis;
+   
    /**
     * Creates a new torus 3D with a radius of {@code 1}, and tube radius of {@code 0.1}.
     */
@@ -329,7 +332,15 @@ public class Torus3D extends Shape3D<Torus3D>
    @Override
    public boolean geometricallyEquals(Torus3D other, double epsilon)
    {
-      return this.shapePose.geometricallyEquals(other.shapePose, epsilon) && Math.abs(this.radius - other.radius) <= epsilon
-            && Math.abs(this.tubeRadius - other.tubeRadius) <= epsilon;
+      if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.tubeRadius - other.tubeRadius) > epsilon)
+         return false;
+      
+      this.axis = new Vector3D(0, 0, 1);
+      this.axis.applyTransform(this.shapePose);
+      
+      other.axis = new Vector3D(0, 0, 1);
+      other.axis.applyTransform(other.shapePose);
+      
+      return this.axis.geometricallyEquals(other.axis, epsilon);
    }
 }
