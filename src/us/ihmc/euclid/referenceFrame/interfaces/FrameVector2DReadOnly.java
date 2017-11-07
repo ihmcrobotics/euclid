@@ -64,4 +64,23 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
       checkReferenceFrameMatch(tuple);
       return Vector2DReadOnly.super.cross(tuple);
    }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame vectors
+    * are geometrically similar, i.e. the length of the distance between them is
+    * less than or equal to {@code epsilon}.
+    *
+    * @param other the frame vector to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    * @return {@code true} if the two frame vectors represent the same geometry,
+    *            {@code false} otherwise.
+    */
+   default boolean geometricallyEquals(FrameVector2DReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+
+      return Vector2DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
 }
