@@ -588,8 +588,6 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    @Override
    public boolean geometricallyEquals(FrameQuaternion other, double epsilon)
    {
-      checkReferenceFrameMatch(other);
-
-      return QuaternionBasics.super.geometricallyEquals(other, epsilon);
+      return FrameQuaternionReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
