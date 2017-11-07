@@ -144,8 +144,6 @@ public class FramePoint3D extends FrameTuple3D<FramePoint3D, Point3D> implements
    @Override
    public boolean geometricallyEquals(FramePoint3D other, double epsilon)
    {
-      checkReferenceFrameMatch(other);
-
-      return Point3DBasics.super.geometricallyEquals(other, epsilon);
+      return FramePoint3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
