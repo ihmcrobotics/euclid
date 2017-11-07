@@ -29,6 +29,14 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       return QuaternionReadOnly.super.distance(other);
    }
 
+   /** {@inheritDoc} */
+   default double distancePrecise(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+
+      return QuaternionReadOnly.super.distancePrecise(other);
+   }
+
    /**
     * Computes and packs the orientation described by this quaternion as a rotation vector.
     * <p>
@@ -828,13 +836,5 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       checkReferenceFrameMatch(other);
 
       return QuaternionReadOnly.super.geometricallyEquals(other, epsilon);
-   }
-
-   /** {@inheritDoc} */
-   default double distancePrecise(FrameQuaternionReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-
-      return QuaternionReadOnly.super.distancePrecise(other);
    }
 }
