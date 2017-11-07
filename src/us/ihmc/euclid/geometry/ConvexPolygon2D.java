@@ -2696,10 +2696,8 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
       int indexOfClosestOtherPoint = other.getClosestVertexIndex(clockwiseOrderedVertices.get(0));
 
-      for (int counter = 0, thisPointIndex = 0; counter < numberOfVertices; ++counter) {
-         thisPointIndex = (thisPointIndex + 1) % numberOfVertices;
-
-         int otherPointIndex = (indexOfClosestOtherPoint + counter) % numberOfVertices;
+      for (int thisPointIndex = 0; thisPointIndex < numberOfVertices; ++thisPointIndex) {
+         int otherPointIndex = (indexOfClosestOtherPoint + thisPointIndex) % numberOfVertices;
 
          if (!this.clockwiseOrderedVertices.get(thisPointIndex).geometricallyEquals(other.clockwiseOrderedVertices.get(otherPointIndex), epsilon))
             return false;
