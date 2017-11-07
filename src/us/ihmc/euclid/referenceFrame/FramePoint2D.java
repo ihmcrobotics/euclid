@@ -143,8 +143,6 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
    @Override
    public boolean geometricallyEquals(FramePoint2D other, double epsilon)
    {
-      checkReferenceFrameMatch(other);
-
-      return Point2DBasics.super.geometricallyEquals(other, epsilon);
+      return FramePoint2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
