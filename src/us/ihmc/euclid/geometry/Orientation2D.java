@@ -548,6 +548,6 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    @Override
    public boolean geometricallyEquals(Orientation2D other, double epsilon)
    {
-      return Math.abs(this.yaw - other.yaw) <= epsilon;
+      return Math.abs(EuclidCoreTools.angleDifferenceMinusPiToPi(this.yaw, other.yaw)) <= epsilon;
    }
 }
