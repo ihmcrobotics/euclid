@@ -610,8 +610,6 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
    @Override
    public boolean geometricallyEquals(FrameVector4D other, double epsilon)
    {
-      checkReferenceFrameMatch(other);
-
-      return Vector4DBasics.super.geometricallyEquals(other, epsilon);
+      return FrameVector4DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
