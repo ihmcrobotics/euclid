@@ -409,6 +409,30 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    @Override
    public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
    {
-      return epsilonEquals(other, epsilon);
+      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
+
+      if (!this.radii.epsilonEquals(other.radii, epsilon))
+      {
+         Size3D rotatedSize = new Size3D(this.radii.getX(), this.radii.getY(), this.radii.getZ());
+
+         shapePose.getRotationMatrix().transform(rotatedSize);
+
+         rotatedSize.absolute();
+
+         if (!rotatedSize.epsilonEquals(other.radii, epsilon))
+         {
+            rotatedSize = new Size3D(other.radii.getX(), other.radii.getY(), other.radii.getZ());
+
+            other.shapePose.getRotationMatrix().transform(rotatedSize);
+
+            rotatedSize.absolute();
+
+            if (!this.radii.epsilonEquals(rotatedSize, epsilon))
+               return false;
+         }
+      }
+
+      return true;
    }
 }
