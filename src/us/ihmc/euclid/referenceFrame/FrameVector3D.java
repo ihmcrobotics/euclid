@@ -256,8 +256,6 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    @Override
    public boolean geometricallyEquals(FrameVector3D other, double epsilon)
    {
-      checkReferenceFrameMatch(other);
-
-      return Vector3DBasics.super.geometricallyEquals(other, epsilon);
+      return FrameVector3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
