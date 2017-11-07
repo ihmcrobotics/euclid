@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -25,6 +26,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    private double radius;
    /** Z coordinate of the top face, the bottom face being at {@code 0.0}. */
    private double height;
+   /** Vector of (radius, radius, height). Automatically updated. */
+   private Vector3D dimensions = new Vector3D();
 
    /**
     * Creates a new cylinder with height of {@code 1} and radius of {@code 0.5}.
@@ -111,6 +114,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (radius < 0.0)
          throw new IllegalArgumentException("The radius of a Cylinder3D cannot be negative: " + radius);
       this.radius = radius;
+      this.dimensions.setX(radius);
+      this.dimensions.setY(radius);
    }
 
    /**
@@ -124,6 +129,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (height < 0.0)
          throw new IllegalArgumentException("The height of a Cylinder3D cannot be negative: " + height);
       this.height = height;
+      this.dimensions.setZ(height);
    }
 
    /**
@@ -414,7 +420,33 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    @Override
    public boolean geometricallyEquals(Cylinder3D other, double epsilon)
    {
-      return this.shapePose.geometricallyEquals(other.shapePose, epsilon) && Math.abs(this.height - other.height) <= epsilon
-            && Math.abs(this.radius - other.radius) <= epsilon;
+      if (Math.abs(this.radius - other.radius) > epsilon)
+         return false;
+      
+      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
+
+      if (!this.dimensions.epsilonEquals(other.dimensions, epsilon))
+      {
+         Vector3D rotatedDimensions = new Vector3D(this.radius, this.radius, this.height);
+
+         shapePose.getRotationMatrix().transform(rotatedDimensions);
+
+         rotatedDimensions.absolute();
+
+         if (!rotatedDimensions.epsilonEquals(other.dimensions, epsilon))
+         {
+            rotatedDimensions = new Vector3D(other.dimensions.getX(), other.dimensions.getY(), other.dimensions.getZ());
+
+            other.shapePose.getRotationMatrix().transform(rotatedDimensions);
+
+            rotatedDimensions.absolute();
+
+            if (!this.dimensions.epsilonEquals(rotatedDimensions, epsilon))
+               return false;
+         }
+      }
+
+      return true;
    }
 }
