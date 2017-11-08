@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -340,6 +341,71 @@ public class Ellipsoid3DTest
          ellipsoidCopy.getPosition(centerCopy);
 
          EuclidCoreTestTools.assertTuple3DEquals(center, centerCopy, 1e-10);
+      }
+   }
+
+   @Test
+   public void testGeometricallyEquals() {
+      Random random = new Random(89725L);
+      Ellipsoid3D firstEllipsoid, secondEllipsoid;
+      double radiusX, radiusY, radiusZ;
+      double epsilon = 1e-7;
+
+      for (int i = 0; i < iterations; ++i) {
+         radiusX = random.nextDouble();
+         radiusY = random.nextDouble();
+         radiusZ = random.nextDouble();
+
+         firstEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+
+         secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         // SecondBox = (LX, HZ, WY)
+         secondEllipsoid = new Ellipsoid3D(radiusX, radiusZ, radiusY);
+
+         assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         secondEllipsoid.appendTransform(new RigidBodyTransform(new AxisAngle(1.0, 0.0, 0.0, Math.PI / 2.0), new Vector3D()));
+
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         // SecondBox = (WY, LX, HZ)
+         secondEllipsoid = new Ellipsoid3D(radiusY, radiusX, radiusZ);
+
+         assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         secondEllipsoid.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 0.0, 1.0, Math.PI / 2.0), new Vector3D()));
+
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         // SecondBox = (HZ, WY, LX)
+         secondEllipsoid = new Ellipsoid3D(radiusZ, radiusY, radiusX);
+
+         assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         secondEllipsoid.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 1.0, 0.0, Math.PI / 2.0), new Vector3D()));
+
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         // SecondBox = (HZ, LX, WY)
+         secondEllipsoid = new Ellipsoid3D(radiusZ, radiusX, radiusY);
+
+         assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         secondEllipsoid.appendTransform(new RigidBodyTransform(0,1,0,0,0,0,1,0,1,0,0,0));
+
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         // SecondBox = (WY, HZ, LX)
+         secondEllipsoid = new Ellipsoid3D(radiusY, radiusZ, radiusX);
+
+         assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+         secondEllipsoid.appendTransform(new RigidBodyTransform(0,0,1,0,1,0,0,0,0,1,0,0));
+
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
       }
    }
 
