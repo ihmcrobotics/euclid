@@ -420,7 +420,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    @Override
    public boolean geometricallyEquals(Cylinder3D other, double epsilon)
    {
-      if (Math.abs(this.radius - other.radius) > epsilon)
+      if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.height - other.height) > epsilon)
          return false;
       
       if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
