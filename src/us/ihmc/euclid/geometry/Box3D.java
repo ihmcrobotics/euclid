@@ -12,6 +12,10 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
+
 /**
  * {@code Box3D} represents an axis-aligned box with a length, a width, and a height.
  * <p>
@@ -447,13 +451,13 @@ public class Box3D extends Shape3D<Box3D>
       double maxY = halfSize.getY();
       double maxZ = halfSize.getZ();
 
-      double xLocal = TransformationTools.computeTransformedX(shapePose, true, pointOnLine);
-      double yLocal = TransformationTools.computeTransformedY(shapePose, true, pointOnLine);
-      double zLocal = TransformationTools.computeTransformedZ(shapePose, true, pointOnLine);
+      double xLocal = computeTransformedX(shapePose, true, pointOnLine);
+      double yLocal = computeTransformedY(shapePose, true, pointOnLine);
+      double zLocal = computeTransformedZ(shapePose, true, pointOnLine);
 
-      double dxLocal = TransformationTools.computeTransformedX(shapePose, true, lineDirection);
-      double dyLocal = TransformationTools.computeTransformedY(shapePose, true, lineDirection);
-      double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
+      double dxLocal = computeTransformedX(shapePose, true, lineDirection);
+      double dyLocal = computeTransformedY(shapePose, true, lineDirection);
+      double dzLocal = computeTransformedZ(shapePose, true, lineDirection);
 
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ, xLocal, yLocal, zLocal,
                                                                                                 dxLocal, dyLocal, dzLocal, firstIntersectionToPack,
@@ -561,30 +565,34 @@ public class Box3D extends Shape3D<Box3D>
    @Override
    public boolean geometricallyEquals(Box3D other, double epsilon)
    {
-      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
-         return false;
-      
-      if (!this.size.epsilonEquals(other.size, epsilon))
-      {         
-         Size3D rotatedSize = new Size3D(this.size.getX(), this.size.getY(), this.size.getZ());
-         
-         shapePose.getRotationMatrix().transform(rotatedSize);
-         
-         rotatedSize.absolute();
-         
-         if (!rotatedSize.epsilonEquals(other.size, epsilon))
-         {
-            rotatedSize = new Size3D(other.size.getX(), other.size.getY(), other.size.getZ());
-            
-            other.shapePose.getRotationMatrix().transform(rotatedSize);
-
-            rotatedSize.absolute();
-            
-            if (!this.size.epsilonEquals(rotatedSize, epsilon))
-               return false;
-         }
+      if (size.epsilonEquals(other.size, epsilon))
+      {
+         return shapePose.geometricallyEquals(other.shapePose, epsilon);
       }
-      
+      else
+      {
+         if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+            return false;
+
+         double thisSizeWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, size));
+         double otherSizeWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.size));
+
+         if (!EuclidCoreTools.epsilonEquals(thisSizeWorldX, otherSizeWorldX, epsilon))
+            return false;
+
+         double thisSizeWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, size));
+         double otherSizeWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.size));
+
+         if (!EuclidCoreTools.epsilonEquals(thisSizeWorldY, otherSizeWorldY, epsilon))
+            return false;
+
+         double thisSizeWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, size));
+         double otherSizeWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.size));
+
+         if (!EuclidCoreTools.epsilonEquals(thisSizeWorldZ, otherSizeWorldZ, epsilon))
+            return false;
+      }
+
       return true;
    }
 }
