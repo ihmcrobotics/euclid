@@ -12,6 +12,10 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
+
 /**
  * {@code Ellipsoid3D} represents a 3D ellipsoid defined by its three main radii and with its origin
  * at its center.
@@ -409,28 +413,32 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    @Override
    public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
    {
-      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
-         return false;
-
-      if (!this.radii.epsilonEquals(other.radii, epsilon))
+      if (radii.epsilonEquals(other.radii, epsilon))
       {
-         Size3D rotatedSize = new Size3D(this.radii.getX(), this.radii.getY(), this.radii.getZ());
+         return shapePose.geometricallyEquals(other.shapePose, epsilon);
+      }
+      else
+      {
+         if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+            return false;
 
-         shapePose.getRotationMatrix().transform(rotatedSize);
+         double thisRadiiWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, radii));
+         double otherRadiiWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.radii));
 
-         rotatedSize.absolute();
+         if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldX, otherRadiiWorldX, epsilon))
+            return false;
 
-         if (!rotatedSize.epsilonEquals(other.radii, epsilon))
-         {
-            rotatedSize = new Size3D(other.radii.getX(), other.radii.getY(), other.radii.getZ());
+         double thisRadiiWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, radii));
+         double otherRadiiWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.radii));
 
-            other.shapePose.getRotationMatrix().transform(rotatedSize);
+         if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldY, otherRadiiWorldY, epsilon))
+            return false;
 
-            rotatedSize.absolute();
+         double thisRadiiWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, radii));
+         double otherRadiiWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.radii));
 
-            if (!this.radii.epsilonEquals(rotatedSize, epsilon))
-               return false;
-         }
+         if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldZ, otherRadiiWorldZ, epsilon))
+            return false;
       }
 
       return true;
