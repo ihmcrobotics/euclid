@@ -26,8 +26,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    private double radius;
    /** Z coordinate of the top face, the bottom face being at {@code 0.0}. */
    private double height;
-   /** Vector of (radius, radius, height). Automatically updated. */
-   private Vector3D dimensions = new Vector3D();
+   /** Represents the axis of rotation - updated and used only by {@link #geometricallyEquals(Cylinder3D, double)}. */
+   private Vector3D axis;
 
    /**
     * Creates a new cylinder with height of {@code 1} and radius of {@code 0.5}.
@@ -114,8 +114,6 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (radius < 0.0)
          throw new IllegalArgumentException("The radius of a Cylinder3D cannot be negative: " + radius);
       this.radius = radius;
-      this.dimensions.setX(radius);
-      this.dimensions.setY(radius);
    }
 
    /**
@@ -129,7 +127,6 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (height < 0.0)
          throw new IllegalArgumentException("The height of a Cylinder3D cannot be negative: " + height);
       this.height = height;
-      this.dimensions.setZ(height);
    }
 
    /**
@@ -422,30 +419,12 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    {
       if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.height - other.height) > epsilon)
          return false;
-      
-      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
-         return false;
 
-      if (!this.dimensions.epsilonEquals(other.dimensions, epsilon))
-      {
-         Vector3D rotatedDimensions = new Vector3D(this.radius, this.radius, this.height);
+      this.axis = new Vector3D(0, 0, 1);
+      this.axis.applyTransform(this.shapePose);
 
-         shapePose.getRotationMatrix().transform(rotatedDimensions);
-
-         rotatedDimensions.absolute();
-
-         if (!rotatedDimensions.epsilonEquals(other.dimensions, epsilon))
-         {
-            rotatedDimensions = new Vector3D(other.dimensions.getX(), other.dimensions.getY(), other.dimensions.getZ());
-
-            other.shapePose.getRotationMatrix().transform(rotatedDimensions);
-
-            rotatedDimensions.absolute();
-
-            if (!this.dimensions.epsilonEquals(rotatedDimensions, epsilon))
-               return false;
-         }
-      }
+      other.axis = new Vector3D(0, 0, 1);
+      other.axis.applyTransform(other.shapePose);
 
       return true;
    }
