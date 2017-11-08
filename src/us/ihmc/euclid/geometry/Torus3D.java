@@ -31,8 +31,6 @@ public class Torus3D extends Shape3D<Torus3D>
    private double radius;
    /** Represents the radius of the tube */
    private double tubeRadius;
-   /** Represents the axis of rotation - updated and used only by {@link #geometricallyEquals(Torus3D, double)}. */
-   private Vector3D axis;
    
    /**
     * Creates a new torus 3D with a radius of {@code 1}, and tube radius of {@code 0.1}.
@@ -335,12 +333,7 @@ public class Torus3D extends Shape3D<Torus3D>
       if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.tubeRadius - other.tubeRadius) > epsilon)
          return false;
       
-      this.axis = new Vector3D(0, 0, 1);
-      this.axis.applyTransform(this.shapePose);
-      
-      other.axis = new Vector3D(0, 0, 1);
-      other.axis.applyTransform(other.shapePose);
-      
-      return this.axis.geometricallyEquals(other.axis, epsilon);
+      return EuclidGeometryTools.areVector3DsParallel(this.shapePose.getM02(), this.shapePose.getM12(), this.shapePose.getM22(), 
+               other.shapePose.getM02(), other.shapePose.getM12(), other.shapePose.getM22(), epsilon);
    }
 }

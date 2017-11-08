@@ -26,8 +26,6 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    private double radius;
    /** Z coordinate of the top face, the bottom face being at {@code 0.0}. */
    private double height;
-   /** Represents the axis of rotation - updated and used only by {@link #geometricallyEquals(Cylinder3D, double)}. */
-   private Vector3D axis;
 
    /**
     * Creates a new cylinder with height of {@code 1} and radius of {@code 0.5}.
@@ -420,12 +418,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.height - other.height) > epsilon)
          return false;
 
-      this.axis = new Vector3D(0, 0, 1);
-      this.axis.applyTransform(this.shapePose);
-
-      other.axis = new Vector3D(0, 0, 1);
-      other.axis.applyTransform(other.shapePose);
-
-      return true;
+      return EuclidGeometryTools.areVector3DsParallel(this.shapePose.getM02(), this.shapePose.getM12(), this.shapePose.getM22(),
+               other.shapePose.getM02(), other.shapePose.getM12(), other.shapePose.getM22(), epsilon);
    }
 }
