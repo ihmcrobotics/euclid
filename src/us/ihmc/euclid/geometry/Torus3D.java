@@ -31,7 +31,7 @@ public class Torus3D extends Shape3D<Torus3D>
    private double radius;
    /** Represents the radius of the tube */
    private double tubeRadius;
-   /** Represents the axis of rotation */
+   /** Represents the axis of rotation - updated and used only by {@link #geometricallyEquals(Torus3D, double)}. */
    private Vector3D axis;
    
    /**
