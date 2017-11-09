@@ -565,33 +565,26 @@ public class Box3D extends Shape3D<Box3D>
    @Override
    public boolean geometricallyEquals(Box3D other, double epsilon)
    {
-      if (size.epsilonEquals(other.size, epsilon))
-      {
-         return shapePose.geometricallyEquals(other.shapePose, epsilon);
-      }
-      else
-      {
-         if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
-            return false;
+      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
 
-         double thisSizeWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, size));
-         double otherSizeWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.size));
+      double thisSizeWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, size));
+      double otherSizeWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.size));
 
-         if (!EuclidCoreTools.epsilonEquals(thisSizeWorldX, otherSizeWorldX, epsilon))
-            return false;
+      if (!EuclidCoreTools.epsilonEquals(thisSizeWorldX, otherSizeWorldX, epsilon))
+         return false;
 
-         double thisSizeWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, size));
-         double otherSizeWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.size));
+      double thisSizeWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, size));
+      double otherSizeWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.size));
 
-         if (!EuclidCoreTools.epsilonEquals(thisSizeWorldY, otherSizeWorldY, epsilon))
-            return false;
+      if (!EuclidCoreTools.epsilonEquals(thisSizeWorldY, otherSizeWorldY, epsilon))
+         return false;
 
-         double thisSizeWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, size));
-         double otherSizeWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.size));
+      double thisSizeWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, size));
+      double otherSizeWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.size));
 
-         if (!EuclidCoreTools.epsilonEquals(thisSizeWorldZ, otherSizeWorldZ, epsilon))
-            return false;
-      }
+      if (!EuclidCoreTools.epsilonEquals(thisSizeWorldZ, otherSizeWorldZ, epsilon))
+         return false;
 
       return true;
    }
