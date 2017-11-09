@@ -413,33 +413,26 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    @Override
    public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
    {
-      if (radii.epsilonEquals(other.radii, epsilon))
-      {
-         return shapePose.geometricallyEquals(other.shapePose, epsilon);
-      }
-      else
-      {
-         if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
-            return false;
+      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
 
-         double thisRadiiWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, radii));
-         double otherRadiiWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.radii));
+      double thisRadiiWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, radii));
+      double otherRadiiWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.radii));
 
-         if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldX, otherRadiiWorldX, epsilon))
-            return false;
+      if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldX, otherRadiiWorldX, epsilon))
+         return false;
 
-         double thisRadiiWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, radii));
-         double otherRadiiWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.radii));
+      double thisRadiiWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, radii));
+      double otherRadiiWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.radii));
 
-         if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldY, otherRadiiWorldY, epsilon))
-            return false;
+      if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldY, otherRadiiWorldY, epsilon))
+         return false;
 
-         double thisRadiiWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, radii));
-         double otherRadiiWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.radii));
+      double thisRadiiWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, radii));
+      double otherRadiiWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.radii));
 
-         if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldZ, otherRadiiWorldZ, epsilon))
-            return false;
-      }
+      if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldZ, otherRadiiWorldZ, epsilon))
+         return false;
 
       return true;
    }
