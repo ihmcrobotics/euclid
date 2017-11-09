@@ -8,8 +8,9 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import us.ihmc.euclid.geometry.Torus3D;
+import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -478,7 +479,101 @@ public class Torus3DTest
       assertFalse(torus3d.isInsideOrOnSurface(new Point3D(tx-(radius-(thickness+epsilon)), ty, tz)));
       assertFalse(torus3d.isInsideOrOnSurface(new Point3D(tx, ty-(radius-(thickness+epsilon)), tz)));
    }
+   
+   @Test
+   public void testGeometricallyEquals() {
+      Random random = new Random(89725L);
+      Torus3D firstTorus, secondTorus;
+      RigidBodyTransform rbt;
+      double radius, tubeRadius;
+      double epsilon = 1e-7;
+      
+	   for (int i = 0; i < iterations; ++i) {
+         rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         radius = 1.0 + random.nextDouble();
+         tubeRadius = random.nextDouble();
 
+         firstTorus = new Torus3D(rbt, radius, tubeRadius);
+         secondTorus = new Torus3D(rbt, radius, tubeRadius);
+
+         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+         
+         secondTorus.appendTransform(EuclidCoreRandomTools.generateRandomRigidBodyTransform(random));
+         
+         assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
+      }
+      
+      for (int i = 0; i < iterations; ++i) {
+         rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         radius = 1.0 + random.nextDouble();
+         tubeRadius = random.nextDouble();
+
+         firstTorus = new Torus3D(rbt, radius, tubeRadius);
+         
+         secondTorus = new Torus3D(rbt, radius + 0.99 * epsilon, tubeRadius);
+
+         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+         
+         secondTorus = new Torus3D(rbt, radius, tubeRadius + 0.99 * epsilon);
+
+         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+      }
+      
+      for (int i = 0; i < iterations; ++i) {
+         rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         radius = 1.0 + random.nextDouble();
+         tubeRadius = random.nextDouble();
+
+         firstTorus = new Torus3D(rbt, radius, tubeRadius);
+         
+         secondTorus = new Torus3D(rbt, radius + 1.01 * epsilon, tubeRadius);
+         
+         assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
+         
+         secondTorus = new Torus3D(rbt, radius, tubeRadius + 1.01 * epsilon);
+         
+         assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
+      }
+      
+      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      radius = 1.0 + random.nextDouble();
+      tubeRadius = random.nextDouble();
+
+      firstTorus = new Torus3D(rbt, radius, tubeRadius);
+      secondTorus = new Torus3D(rbt, radius, tubeRadius);
+
+      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+
+      secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(1.0, 0.0, 0.0, Math.PI), new Vector3D()));
+      
+      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+      
+      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      radius = 1.0 + random.nextDouble();
+      tubeRadius = random.nextDouble();
+
+      firstTorus = new Torus3D(rbt, radius, tubeRadius);
+      secondTorus = new Torus3D(rbt, radius, tubeRadius);
+
+      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+
+      secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 1.0, 0.0, Math.PI), new Vector3D()));
+      
+      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+      
+      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      radius = 1.0 + random.nextDouble();
+      tubeRadius = random.nextDouble();
+
+      firstTorus = new Torus3D(rbt, radius, tubeRadius);
+      secondTorus = new Torus3D(rbt, radius, tubeRadius);
+
+      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+
+      secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 0.0, 1.0, Math.PI), new Vector3D()));
+      
+      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+   }
 	
 	@Test
    public void testIndependenceOfCopiedTransforms()
