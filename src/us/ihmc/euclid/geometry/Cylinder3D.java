@@ -418,6 +418,9 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.height - other.height) > epsilon)
          return false;
 
+      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
+
       /*
         Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
         inherently lies on the XY plane) is the same axis that the other cylinder is aligned on

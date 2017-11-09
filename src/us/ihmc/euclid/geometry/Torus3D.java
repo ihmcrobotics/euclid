@@ -333,6 +333,9 @@ public class Torus3D extends Shape3D<Torus3D>
       if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.tubeRadius - other.tubeRadius) > epsilon)
          return false;
       
+      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
+      
       /*
         Here, we check that the axis the torus is aligned on (the Z axis, since the cylinder
         inherently lies on the XY plane) is the same axis that the other torus is aligned on
