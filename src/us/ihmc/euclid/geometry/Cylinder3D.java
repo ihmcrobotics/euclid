@@ -418,6 +418,21 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.height - other.height) > epsilon)
          return false;
 
+      /*
+        Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
+        inherently lies on the XY plane) is the same axis that the other cylinder is aligned on
+        using EuclidGeometryTools#areVector3DsParallel().
+        
+        We could do this by transforming two (0, 0, 1) vectors by each shapePose, but for each:
+        
+        / r00 r01 r02 \   / 0 \   / r02 \
+        | r10 r11 r12 | * | 0 | = | r12 |
+        \ r20 r21 r22 /   \ 1 /   \ r22 /
+        
+        So rather than perform this transform, just check that the last column of the rotation
+        matrix of each cylinder (M02, M12, and M22 in shapePose) are aligned vectors.
+       */
+      
       return EuclidGeometryTools.areVector3DsParallel(this.shapePose.getM02(), this.shapePose.getM12(), this.shapePose.getM22(),
                other.shapePose.getM02(), other.shapePose.getM12(), other.shapePose.getM22(), epsilon);
    }
