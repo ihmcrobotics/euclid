@@ -413,7 +413,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    @Override
    public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
    {
-      if (!shapePose.getTranslationVector().epsilonEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
          return false;
 
       double thisRadiiWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, radii));

@@ -418,7 +418,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (Math.abs(this.radius - other.radius) > epsilon || Math.abs(this.height - other.height) > epsilon)
          return false;
 
-      if (!this.shapePose.getTranslationVector().epsilonEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!this.shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
          return false;
 
       /*
