@@ -407,6 +407,33 @@ public class Ellipsoid3DTest
 
          assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
       }
+
+      radiusX = random.nextDouble();
+      radiusY = random.nextDouble();
+      radiusZ = random.nextDouble();
+
+      firstEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+      secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+
+      assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
+      secondEllipsoid.appendTransform(new RigidBodyTransform(1,0,0,0.99 * epsilon,0,1,0,0,0,0,1,0));
+      assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+      secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+      secondEllipsoid.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0.99 * epsilon,0,0,1,0));
+      assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+      secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+      secondEllipsoid.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0,0,0,1,0.99 * epsilon));
+      assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+      secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+      secondEllipsoid.appendTransform(new RigidBodyTransform(1,0,0,1.01 * epsilon,0,1,0,0,0,0,1,0));
+      assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+      secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+      secondEllipsoid.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,1.01 * epsilon,0,0,1,0));
+      assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+      secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+      secondEllipsoid.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0,0,0,1,1.01 * epsilon));
+      assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
    }
 
    private RigidBodyTransform randomTransform(Random random)
