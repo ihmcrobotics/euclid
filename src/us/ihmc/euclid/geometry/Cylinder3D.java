@@ -249,7 +249,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    @Override
    protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
    {
-      if (z < -epsilon || z > height + epsilon)
+      if (z < -(height/2.0 + epsilon) || z > (height/2.0 + epsilon))
          return false;
 
       double radiusWithEpsilon = radius + epsilon;
