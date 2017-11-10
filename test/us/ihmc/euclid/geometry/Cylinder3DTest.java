@@ -117,27 +117,27 @@ public class Cylinder3DTest
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
       pointToCheck = new Point3D(0.0, 0.0, -0.0001);
-      assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
-
-      pointToCheck = new Point3D(0.0, 0.0, height + 0.0001);
-      assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
-
-      pointToCheck = new Point3D(0.0, 0.0, height - 0.0001);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(radius + 0.001, 0.0, height / 2.0);
+      pointToCheck = new Point3D(0.0, 0.0, (height / 2.0) + 0.0001);
       assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(radius - 0.001, 0.0, height / 2.0);
+      pointToCheck = new Point3D(0.0, 0.0, -(height / 2.0) + 0.0001);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(0.0, radius + 0.001, height / 2.0);
+      pointToCheck = new Point3D(radius + 0.001, 0.0, height / 4.0);
       assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(0.0, radius - 0.001, height / 2.0);
+      pointToCheck = new Point3D(radius - 0.001, 0.0, height / 4.0);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(radius / 2.0, radius / 2.0, height / 2.0);
+      pointToCheck = new Point3D(0.0, radius + 0.001, height / 4.0);
+      assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
+
+      pointToCheck = new Point3D(0.0, radius - 0.001, height / 4.0);
+      assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
+
+      pointToCheck = new Point3D(radius / 2.0, radius / 2.0, height / 4.0);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
    }
 
@@ -156,31 +156,31 @@ public class Cylinder3DTest
 
       Cylinder3D cylinder3d = new Cylinder3D(transform, height, radius);
 
-      Point3D pointToCheck = new Point3D(translateX, translateY, translateZ + 0.0001);
+      Point3D pointToCheck = new Point3D(translateX, translateY, translateZ - (height / 2.0) + 0.0001);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX, translateY, translateZ - 0.0001);
+      pointToCheck = new Point3D(translateX, translateY, translateZ - (height / 2.0) - 0.0001);
       assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX, translateY, translateZ + height + 0.0001);
+      pointToCheck = new Point3D(translateX, translateY, translateZ + (height / 2.0) + 0.0001);
       assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX, translateY, translateZ + height - 0.0001);
+      pointToCheck = new Point3D(translateX, translateY, translateZ + (height / 2.0) - 0.0001);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX + radius + 0.001, translateY, translateZ + height / 2.0);
+      pointToCheck = new Point3D(translateX + radius + 0.001, translateY, translateZ + height / 4.0);
       assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX + radius - 0.001, translateY, translateZ + height / 2.0);
+      pointToCheck = new Point3D(translateX + radius - 0.001, translateY, translateZ + height / 4.0);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX, translateY + radius + 0.001, translateZ + height / 2.0);
+      pointToCheck = new Point3D(translateX, translateY + radius + 0.001, translateZ + height / 4.0);
       assertFalse(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX, translateY + radius - 0.001, translateZ + height / 2.0);
+      pointToCheck = new Point3D(translateX, translateY + radius - 0.001, translateZ + height / 4.0);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
 
-      pointToCheck = new Point3D(translateX + radius / 2.0, translateY + radius / 2.0, translateZ + height / 2.0);
+      pointToCheck = new Point3D(translateX + radius / 2.0, translateY + radius / 2.0, translateZ + height / 4.0);
       assertTrue(cylinder3d.isInsideOrOnSurface(pointToCheck));
    }
 
@@ -204,9 +204,9 @@ public class Cylinder3DTest
       double height = 2.0;
       double radius = 1.0;
       Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Point3D pointToCheckAndPack = new Point3D(0.5, 0.25, 3);
+      Point3D pointToCheckAndPack = new Point3D(0.5, 0.25, 1.5);
 
-      Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), height);
+      Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), (height / 2.0));
       cylinder3d.orthogonalProjection(pointToCheckAndPack);
       assertPointEquals(expectedProjection, pointToCheckAndPack);
    }
@@ -217,9 +217,9 @@ public class Cylinder3DTest
       double height = 2.0;
       double radius = 1.0;
       Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Point3D pointToCheckAndPack = new Point3D(0.5, 0.25, -1);
+      Point3D pointToCheckAndPack = new Point3D(0.5, 0.25, -height);
 
-      Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), 0);
+      Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), -1.0);
       cylinder3d.orthogonalProjection(pointToCheckAndPack);
       assertPointEquals(expectedProjection, pointToCheckAndPack);
    }
@@ -257,7 +257,7 @@ public class Cylinder3DTest
       Vector3D normalToPack = new Vector3D();
       Point3D closestPointToPack = new Point3D();
 
-      Point3D pointToCheck = new Point3D(0.5, 0, 1);
+      Point3D pointToCheck = new Point3D(0.5, 0, 0.5);
       Vector3D expectedNormal = new Vector3D(1, 0, 0);
       cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
       assertEquals(expectedNormal, normalToPack);
@@ -317,7 +317,7 @@ public class Cylinder3DTest
       Vector3D normalToPack = new Vector3D();
       Point3D closestPointToPack = new Point3D();
 
-      Point3D pointToCheck = new Point3D(0.0, 2.0, 3.0);
+      Point3D pointToCheck = new Point3D(0.0, 2.0, 2.0);
       Vector3D expectedNormal = new Vector3D(0.0, 1.0, 1.0);
       expectedNormal.normalize();
       cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
@@ -362,7 +362,7 @@ public class Cylinder3DTest
       EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, normalToPack, 1e-7);
       assertFalse(isInside);
 
-      pointToCheck.set(tx, ty, tz + height - 0.011);
+      pointToCheck.set(tx, ty, tz + (height / 2.0) - 0.011);
       isInside = cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
       assertTrue(isInside);
       EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, normalToPack, 1e-7);
