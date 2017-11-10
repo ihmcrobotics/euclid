@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * Shape description:
  * <ul>
  * <li>The cylinder's axis is the z-axis.
- * <li>The cylinder's origin is at the center of the bottom face.
+ * <li>The cylinder's origin is its centroid.
  * </ul>
  * </p>
  */
