@@ -1955,4 +1955,64 @@ public class BoundingBox3DTest
       assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY - smallestEpsilon, maxZ)));
       assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ - smallestEpsilon)));
    }
+   
+   @Test
+   public void testGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(987234L);
+      BoundingBox3D firstBox, secondBox;
+      Point3D firstPoint, secondPoint, thirdPoint;
+      double epsilon = 1e-7;
+   
+      for (int i = 0; i < ITERATIONS; ++i) {
+         firstPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.1, 2.5);
+         secondPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 2.5, 5.0);
+   
+         thirdPoint = new Point3D(firstPoint);
+   
+         firstBox = new BoundingBox3D(firstPoint, secondPoint);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+   
+         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint.setX(firstPoint.getX() + epsilon * 0.99);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint = new Point3D(firstPoint);
+         thirdPoint.setY(firstPoint.getY() + epsilon * 0.99);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint = new Point3D(firstPoint);
+         thirdPoint.setX(firstPoint.getX() - epsilon * 0.99);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint = new Point3D(firstPoint);
+         thirdPoint.setY(firstPoint.getY() - epsilon * 0.99);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint = new Point3D(firstPoint);
+         thirdPoint.setX(firstPoint.getX() + epsilon * 1.01);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint = new Point3D(firstPoint);
+         thirdPoint.setY(firstPoint.getY() + epsilon * 1.01);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint = new Point3D(firstPoint);
+         thirdPoint.setX(firstPoint.getX() - epsilon * 1.01);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+   
+         thirdPoint = new Point3D(firstPoint);
+         thirdPoint.setY(firstPoint.getY() - epsilon * 1.01);
+         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
+         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+      }
+   }
 }
