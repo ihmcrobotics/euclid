@@ -24,9 +24,9 @@ import java.net.URISyntaxException;
       // 1D
       LineSegment1DTest.class,
       // 2D
-      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class, Orientation2DTest.class,
+      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class, Orientation2DTest.class, Pose2DTest.class,
       // 3D
-      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class,
+      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class, Pose3DTest.class,
       // Tools tests
       EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class,
       // Reference frame framework tests
