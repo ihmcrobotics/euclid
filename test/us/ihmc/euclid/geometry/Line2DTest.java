@@ -7,10 +7,12 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -1474,20 +1476,54 @@ public class Line2DTest
    {
       Random random = new Random(56021L);
       Line2D firstLine, secondLine;
-      double pointX, pointY, directionX, directionY;
-      double epsilon = 1e-7;
+      double epsilon = 1e-6;
+      Vector2D orthogonal, direction;
+      
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         secondLine = new Line2D(firstLine);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
          
-      pointX = random.nextDouble();
-      pointY = random.nextDouble();
-      directionX = random.nextDouble();
-      directionY = random.nextDouble();
+         orthogonal = firstLine.perpendicularVector();
+         orthogonal.scale((0.99 * epsilon) / orthogonal.length());
+        
+         secondLine.translate(orthogonal.getX(), orthogonal.getY());
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
          
-      firstLine = new Line2D(pointX, pointY, directionX, directionY);
-      secondLine = new Line2D(firstLine);
+         secondLine.set(firstLine);
+         orthogonal = firstLine.perpendicularVector();
+         orthogonal.scale((1.01 * epsilon) / orthogonal.length());
          
-      assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
-      assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
-      assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
-      assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+         secondLine.translate(orthogonal.getX(), orthogonal.getY());
+         assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
+      }  
+      
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         secondLine = new Line2D(firstLine);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+         
+         direction = new Vector2D(secondLine.getDirection());
+         RotationMatrixTools.applyYawRotation(epsilon * 0.99, direction, direction);
+         secondLine.setDirection(direction);
+         
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+         
+         direction = new Vector2D(secondLine.getDirection());
+         RotationMatrixTools.applyYawRotation(epsilon * 1.01, direction, direction);
+         secondLine.setDirection(direction);
+         
+         assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
+      }      
    }
 }
