@@ -1048,4 +1048,108 @@ public class LineSegment2DTest
       assertEquals(null, line1.intersectionWith(line9));
    }
 
+   @Test
+   public void testGeometricallyEquals() {
+      Random random = new Random(19263L);
+      double firstX, firstY, secondX, secondY;
+      int iterations = 1000;
+      double epsilon = 1e-7;
+      
+      for (int i = 0; i < iterations; ++i) {
+         firstX = random.nextDouble();
+         firstY = random.nextDouble();
+         secondX = random.nextDouble();
+         secondY = random.nextDouble();
+         
+         segment1Point1 = new Point2D(firstX, firstY);
+         segment1Point2 = new Point2D(secondX, secondY);
+         segment2Point1 = new Point2D(segment1Point1);
+         segment2Point2 = new Point2D(segment1Point2);
+         
+         testSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         
+         assertTrue(testSegment1.geometricallyEquals(testSegment1, epsilon));
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         assertTrue(testSegment2.geometricallyEquals(testSegment1, epsilon));
+         assertTrue(testSegment2.geometricallyEquals(testSegment2, epsilon));
+         
+         // Test true where 2-1 is +- 0.99*epsilon of 1-1 for each element
+         segment2Point1 = new Point2D(segment1Point1.getX() + epsilon * 0.99, segment1Point1.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point2D(segment1Point1.getX(), segment1Point1.getY() + epsilon * 0.99);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point2D(segment1Point1.getX() - epsilon * 0.99, segment1Point1.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point2D(segment1Point1.getX(), segment1Point1.getY() - epsilon * 0.99);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         // Reset 2-1 to 1-1
+         segment2Point1 = new Point2D(segment1Point1);
+         
+         // Test true where 2-2 is +- 0.99*epsilon of 1-2 for each element
+         segment2Point2 = new Point2D(segment1Point2.getX() + epsilon * 0.99, segment1Point2.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point2D(segment1Point2.getX(), segment1Point2.getY() + epsilon * 0.99);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point2D(segment1Point2.getX() - epsilon * 0.99, segment1Point2.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point2D(segment1Point2.getX(), segment1Point2.getY() - epsilon * 0.99);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         // Reset 2-2 to 1-2
+         segment2Point2 = new Point2D(segment1Point2);
+         
+         // Test false where 2-1 is +- 1.01*epsilon of 1-1 for each element
+         segment2Point1 = new Point2D(segment1Point1.getX() + epsilon * 1.01, segment1Point1.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point2D(segment1Point1.getX(), segment1Point1.getY() + epsilon * 1.01);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point2D(segment1Point1.getX() - epsilon * 1.01, segment1Point1.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point2D(segment1Point1.getX(), segment1Point1.getY() - epsilon * 1.01);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         // Reset 2-1 to 1-1
+         segment2Point1 = new Point2D(segment1Point1);
+         
+         // Test false where 2-2 is +- 1.01*epsilon of 1-2 for each element
+         segment2Point2 = new Point2D(segment1Point2.getX() + epsilon * 1.01, segment1Point2.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point2D(segment1Point2.getX(), segment1Point2.getY() + epsilon * 1.01);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point2D(segment1Point2.getX() - epsilon * 1.01, segment1Point2.getY());
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point2D(segment1Point2.getX(), segment1Point2.getY() - epsilon * 1.01);
+         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+      }
+   }
 }

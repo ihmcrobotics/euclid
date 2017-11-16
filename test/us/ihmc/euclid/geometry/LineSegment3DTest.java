@@ -660,4 +660,144 @@ public class LineSegment3DTest
          }
       }
    }
+
+   @Test
+   public void testGeometricallyEquals() {
+      Random random = new Random(19263L);
+      double firstX, firstY, firstZ, secondX, secondY, secondZ;
+      double epsilon = 1e-7;
+      Point3D segment1Point1, segment1Point2, segment2Point1, segment2Point2;
+      LineSegment3D testSegment1, testSegment2;
+
+      for (int i = 0; i < ITERATIONS; ++i) {
+         firstX = random.nextDouble();
+         firstY = random.nextDouble();
+         firstZ = random.nextDouble();
+         secondX = random.nextDouble();
+         secondY = random.nextDouble();
+         secondZ = random.nextDouble();
+
+         segment1Point1 = new Point3D(firstX, firstY, firstZ);
+         segment1Point2 = new Point3D(secondX, secondY, secondZ);
+         segment2Point1 = new Point3D(segment1Point1);
+         segment2Point2 = new Point3D(segment1Point2);
+
+         testSegment1 = new LineSegment3D(segment1Point1, segment1Point2);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+
+         assertTrue(testSegment1.geometricallyEquals(testSegment1, epsilon));
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         assertTrue(testSegment2.geometricallyEquals(testSegment1, epsilon));
+         assertTrue(testSegment2.geometricallyEquals(testSegment2, epsilon));
+
+         // Test true where 2-1 is +- 0.99*epsilon of 1-1 for each element
+         segment2Point1 = new Point3D(segment1Point1.getX() + epsilon * 0.99, segment1Point1.getY(), segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY() + epsilon * 0.99, segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY(), segment1Point1.getZ() + epsilon * 0.99);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX() - epsilon * 0.99, segment1Point1.getY(), segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY() - epsilon * 0.99, segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY(), segment1Point1.getZ() - epsilon * 0.99);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         // Reset 2-1 to 1-1
+         segment2Point1 = new Point3D(segment1Point1);
+         
+         // Test true where 2-2 is +- 0.99*epsilon of 1-2 for each element
+         segment2Point2 = new Point3D(segment1Point2.getX() + epsilon * 0.99, segment1Point2.getY(), segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY() + epsilon * 0.99, segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY(), segment1Point2.getZ() + epsilon * 0.99);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX() - epsilon * 0.99, segment1Point2.getY(), segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY() - epsilon * 0.99, segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY(), segment1Point2.getZ() - epsilon * 0.99);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         // Reset 2-2 to 1-2
+         segment2Point2 = new Point3D(segment1Point2);
+
+         // Test false where 2-1 is +- 1.01*epsilon of 1-1 for each element
+         segment2Point1 = new Point3D(segment1Point1.getX() + epsilon * 1.01, segment1Point1.getY(), segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY() + epsilon * 1.01, segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY(), segment1Point1.getZ() + epsilon * 1.01);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX() - epsilon * 1.01, segment1Point1.getY(), segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY() - epsilon * 1.01, segment1Point1.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point1 = new Point3D(segment1Point1.getX(), segment1Point1.getY(), segment1Point1.getZ() - epsilon * 1.01);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         // Reset 2-1 to 1-1
+         segment2Point1 = new Point3D(segment1Point1);
+
+         // Test false where 2-2 is +- 1.01*epsilon of 1-2 for each element
+         segment2Point2 = new Point3D(segment1Point2.getX() + epsilon * 1.01, segment1Point2.getY(), segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY() + epsilon * 1.01, segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY(), segment1Point2.getZ() + epsilon * 1.01);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX() - epsilon * 1.01, segment1Point2.getY(), segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY() - epsilon * 1.01, segment1Point2.getZ());
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+         
+         segment2Point2 = new Point3D(segment1Point2.getX(), segment1Point2.getY(), segment1Point2.getZ() - epsilon * 1.01);
+         testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
+         assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
+      }
+   }
 }
