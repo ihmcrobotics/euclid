@@ -374,4 +374,28 @@ public class Line3DTest
          }
       }
    }
+
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(56021L);
+      Line3D firstLine, secondLine;
+      double pointX, pointY, pointZ, directionX, directionY, directionZ;
+      double epsilon = 1e-7;
+
+      pointX = random.nextDouble();
+      pointY = random.nextDouble();
+      pointZ = random.nextDouble();
+      directionX = random.nextDouble();
+      directionY = random.nextDouble();
+      directionZ = random.nextDouble();
+
+      firstLine = new Line3D(pointX, pointY, pointZ, directionX, directionY, directionZ);
+      secondLine = new Line3D(firstLine);
+
+      assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+   }
 }

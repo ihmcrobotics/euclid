@@ -1468,4 +1468,26 @@ public class Line2DTest
       delta = 1e-12;
       assertEquals("Distance to a horizontal line not calculated correctly", 3.0, distance, delta);
    }
+   
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(56021L);
+      Line2D firstLine, secondLine;
+      double pointX, pointY, directionX, directionY;
+      double epsilon = 1e-7;
+         
+      pointX = random.nextDouble();
+      pointY = random.nextDouble();
+      directionX = random.nextDouble();
+      directionY = random.nextDouble();
+         
+      firstLine = new Line2D(pointX, pointY, directionX, directionY);
+      secondLine = new Line2D(firstLine);
+         
+      assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+   }
 }
