@@ -383,7 +383,7 @@ public class Line3DTest
       Random random = new Random(57021L);
       Line3D firstLine, secondLine;
       double epsilon = 1e-6;
-      Vector3D orthogonal;
+      Vector3D orthogonal, direction = new Vector3D();
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
@@ -408,7 +408,7 @@ public class Line3DTest
          secondLine.translate(orthogonal.getX(), orthogonal.getY(), orthogonal.getZ());
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
       }
-
+      
       for (int i = 0; i < ITERATIONS; ++i)
       {
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
@@ -421,12 +421,18 @@ public class Line3DTest
          
          orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
          
-         secondLine.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 0.99), new Vector3D()));
+         secondLine.getDirection(direction);
+         direction.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 0.99), new Vector3D()));
+         secondLine.setDirection(direction);
+         
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
 
          secondLine.set(firstLine);
+
+         secondLine.getDirection(direction);
+         direction.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 1.01), new Vector3D()));
+         secondLine.setDirection(direction);
          
-         secondLine.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 1.01), new Vector3D()));
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
       }
    }
