@@ -6,14 +6,19 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
+import java.util.Random;
+
 public class Plane3DTest
 {
+   private int ITERATIONS = 1000;
 
    @Test
    public void test()
@@ -136,5 +141,39 @@ public class Plane3DTest
       RigidBodyTransform transformation4 = new RigidBodyTransform();
       transformation4.setRotationPitchAndZeroTranslation(Math.PI / 2);
       transformation4.setTranslation(new Vector3D(1.0, 2.0, 3.0));
+   }
+   
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(9608123L);
+      Plane3D firstPlane, secondPlane;
+      Vector3D norm;
+      double epsilon = 1e-5;
+      
+      for (int i = 0; i < ITERATIONS; ++i) {
+         System.out.println(i);
+         firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         secondPlane = new Plane3D(firstPlane);
+         
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon));
+         assertTrue(secondPlane.geometricallyEquals(firstPlane, epsilon));
+         assertTrue(firstPlane.geometricallyEquals(firstPlane, epsilon));
+         assertTrue(secondPlane.geometricallyEquals(secondPlane, epsilon));
+         
+         norm = secondPlane.getNormalCopy();
+         norm.applyTransform(new RigidBodyTransform(new AxisAngle(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), 0.99 * epsilon), new Vector3D()));
+         secondPlane.setNormal(norm);
+         
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon));
+         
+         secondPlane = new Plane3D(firstPlane);
+
+         norm = secondPlane.getNormalCopy();
+         norm.applyTransform(new RigidBodyTransform(new AxisAngle(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), 1.01 * epsilon), new Vector3D()));
+         secondPlane.setNormal(norm);
+         
+         assertFalse(firstPlane.geometricallyEquals(secondPlane, epsilon));
+      }
    }
 }
