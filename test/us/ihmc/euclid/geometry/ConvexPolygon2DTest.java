@@ -7,9 +7,15 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class ConvexPolygon2DTest
 {
@@ -1473,6 +1479,69 @@ public class ConvexPolygon2DTest
       Point2D[] expected9 = new Point2D[] {new Point2D(3.0, 3.0), new Point2D(2.0, 2.0)};
       assertPointsEqual(expected9, polygon.intersectionWith(segment9), false);
       assertTrue(polygon.intersectionWith(segment9, result1, result2) == 2);
+   }
+   
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(89762L);
+      ConvexPolygon2D firstPolygon, secondPolygon;
+      int iterations = 1000;
+      int numberOfVertices;
+      double epsilon = 1e-6;
+      
+      for (int i = 0; i < iterations; ++i) {
+         numberOfVertices = 3 + random.nextInt(10);
+         
+         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+         firstPolygon.scale(10.0);
+         secondPolygon = new ConvexPolygon2D(firstPolygon);
+         
+         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+         assertTrue(secondPolygon.geometricallyEquals(firstPolygon, epsilon));
+         assertTrue(firstPolygon.geometricallyEquals(firstPolygon, epsilon));
+         assertTrue(secondPolygon.geometricallyEquals(secondPolygon, epsilon));
+         
+         secondPolygon.applyTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0.0, 0.0, 1.0), 0.1 * epsilon), new Vector3D()));
+      
+         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+         
+         secondPolygon = new ConvexPolygon2D(firstPolygon);
+         
+         secondPolygon.applyTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0.0, 0.0, 1.0), 10.0 * epsilon), new Vector3D()));
+         
+         assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+      }
+      for (int i = 0; i < iterations; ++i) {
+         numberOfVertices = 3 + random.nextInt(10);
+         
+         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+         firstPolygon.scale(10.0);
+         secondPolygon = new ConvexPolygon2D(firstPolygon);
+         
+         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+         assertTrue(secondPolygon.geometricallyEquals(firstPolygon, epsilon));
+         assertTrue(firstPolygon.geometricallyEquals(firstPolygon, epsilon));
+         assertTrue(secondPolygon.geometricallyEquals(secondPolygon, epsilon));
+         
+         secondPolygon.translate(0.99 * epsilon, 0);
+      
+         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+         
+         secondPolygon = new ConvexPolygon2D(firstPolygon);
+         secondPolygon.translate(0, 0.99 * epsilon);
+
+         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+         
+         secondPolygon.translate(1.01 * epsilon, 0);
+      
+         assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+         
+         secondPolygon = new ConvexPolygon2D(firstPolygon);
+         secondPolygon.translate(0, 1.01 * epsilon);
+
+         assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+      }
    }
 
    private static void assertEdgesEqual(LineSegment2D expected, LineSegment2D actual)
