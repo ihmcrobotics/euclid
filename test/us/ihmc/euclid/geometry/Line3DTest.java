@@ -6,10 +6,12 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -374,28 +376,58 @@ public class Line3DTest
          }
       }
    }
-
+   
    @Test
    public void testGeometricallyEquals()
    {
-      Random random = new Random(56021L);
+      Random random = new Random(57021L);
       Line3D firstLine, secondLine;
-      double pointX, pointY, pointZ, directionX, directionY, directionZ;
-      double epsilon = 1e-7;
+      double epsilon = 1e-6;
+      Vector3D orthogonal;
 
-      pointX = random.nextDouble();
-      pointY = random.nextDouble();
-      pointZ = random.nextDouble();
-      directionX = random.nextDouble();
-      directionY = random.nextDouble();
-      directionZ = random.nextDouble();
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         secondLine = new Line3D(firstLine);
 
-      firstLine = new Line3D(pointX, pointY, pointZ, directionX, directionY, directionZ);
-      secondLine = new Line3D(firstLine);
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
 
-      assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
-      assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
-      assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
-      assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+         orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
+         orthogonal.scale((0.99 * epsilon) / orthogonal.length());
+
+         secondLine.translate(orthogonal.getX(), orthogonal.getY(), orthogonal.getZ());
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+
+         secondLine.set(firstLine);
+         
+         orthogonal.scale((1.01 * epsilon) / orthogonal.length());
+         
+         secondLine.translate(orthogonal.getX(), orthogonal.getY(), orthogonal.getZ());
+         assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         secondLine = new Line3D(firstLine);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+         
+         orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
+         
+         secondLine.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 0.99), new Vector3D()));
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+
+         secondLine.set(firstLine);
+         
+         secondLine.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 1.01), new Vector3D()));
+         assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
    }
 }
