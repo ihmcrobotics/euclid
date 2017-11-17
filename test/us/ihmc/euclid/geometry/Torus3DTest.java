@@ -535,44 +535,25 @@ public class Torus3DTest
          assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
       
-      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-      radius = 1.0 + random.nextDouble();
-      tubeRadius = random.nextDouble();
-
-      firstTorus = new Torus3D(rbt, radius, tubeRadius);
-      secondTorus = new Torus3D(rbt, radius, tubeRadius);
-
-      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
-
-      secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(1.0, 0.0, 0.0, Math.PI), new Vector3D()));
       
-      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
-      
-      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-      radius = 1.0 + random.nextDouble();
-      tubeRadius = random.nextDouble();
+      for (int i = 0; i < iterations; ++i)
+      {
+         rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         radius = 1.0 + random.nextDouble();
+         tubeRadius = random.nextDouble();
 
-      firstTorus = new Torus3D(rbt, radius, tubeRadius);
-      secondTorus = new Torus3D(rbt, radius, tubeRadius);
+         firstTorus = new Torus3D(rbt, radius, tubeRadius);
+         secondTorus = new Torus3D(rbt, radius, tubeRadius);
 
-      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
-      secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 1.0, 0.0, Math.PI), new Vector3D()));
-      
-      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
-      
-      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-      radius = 1.0 + random.nextDouble();
-      tubeRadius = random.nextDouble();
+         Vector3D vec = EuclidCoreRandomTools.generateRandomVector3D(random);
+         vec.setZ(0);
+         vec.normalize();
+         secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(vec, Math.PI), new Vector3D()));
 
-      firstTorus = new Torus3D(rbt, radius, tubeRadius);
-      secondTorus = new Torus3D(rbt, radius, tubeRadius);
-
-      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
-
-      secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 0.0, 1.0, Math.PI), new Vector3D()));
-      
-      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
+      }
    }
 	
 	@Test
