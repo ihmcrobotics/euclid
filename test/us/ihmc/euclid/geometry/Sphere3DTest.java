@@ -99,6 +99,17 @@ public class Sphere3DTest
       Point3D center;
       double radius;
       double epsilon = 1e-7;
+
+      center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+      radius = random.nextDouble();
+
+      firstSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
+      secondSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
+
+      assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
+      assertTrue(secondSphere.geometricallyEquals(firstSphere, epsilon));
+      assertTrue(firstSphere.geometricallyEquals(firstSphere, epsilon));
+      assertTrue(secondSphere.geometricallyEquals(secondSphere, epsilon));
       
       for (int i = 0; i < iterations; ++i) {
          center = EuclidCoreRandomTools.generateRandomPoint3D(random);
@@ -147,11 +158,6 @@ public class Sphere3DTest
       
       firstSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
       secondSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
-      
-      assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
-      assertTrue(secondSphere.geometricallyEquals(firstSphere, epsilon));
-      assertTrue(firstSphere.geometricallyEquals(firstSphere, epsilon));
-      assertTrue(secondSphere.geometricallyEquals(secondSphere, epsilon));
       
       secondSphere = new Sphere3D(center.getX() + epsilon * 0.99, center.getY(), center.getZ(), radius);
       assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));

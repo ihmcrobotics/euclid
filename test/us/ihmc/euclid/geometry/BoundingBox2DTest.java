@@ -1372,6 +1372,17 @@ public class BoundingBox2DTest
       BoundingBox2D firstBox, secondBox;
       Point2D firstPoint, secondPoint, thirdPoint;
       double epsilon = 1e-7;
+
+      firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
+      secondPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
+      
+      firstBox = new BoundingBox2D(firstPoint, secondPoint);
+      secondBox = new BoundingBox2D(firstBox);
+      
+      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+      assertTrue(secondBox.geometricallyEquals(firstBox, epsilon));
+      assertTrue(firstBox.geometricallyEquals(firstBox, epsilon));
+      assertTrue(secondBox.geometricallyEquals(secondBox, epsilon));
       
       for (int i = 0; i < ITERATIONS; ++i) {
          firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
@@ -1380,9 +1391,6 @@ public class BoundingBox2DTest
          thirdPoint = new Point2D(firstPoint);
          
          firstBox = new BoundingBox2D(firstPoint, secondPoint);
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
          
          thirdPoint.setX(firstPoint.getX() + epsilon * 0.99);
          secondBox = new BoundingBox2D(thirdPoint, secondPoint);

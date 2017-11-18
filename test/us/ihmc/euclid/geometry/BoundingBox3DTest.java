@@ -1963,6 +1963,17 @@ public class BoundingBox3DTest
       BoundingBox3D firstBox, secondBox;
       Point3D firstPoint, secondPoint, thirdPoint;
       double epsilon = 1e-7;
+      
+      firstPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.1, 2.5);
+      secondPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 2.5, 5.0);
+
+      firstBox = new BoundingBox3D(firstPoint, secondPoint);
+      secondBox = new BoundingBox3D(firstBox);
+      
+      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+      assertTrue(secondBox.geometricallyEquals(firstBox, epsilon));
+      assertTrue(firstBox.geometricallyEquals(firstBox, epsilon));
+      assertTrue(secondBox.geometricallyEquals(secondBox, epsilon));
    
       for (int i = 0; i < ITERATIONS; ++i) {
          firstPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.1, 2.5);
@@ -1971,9 +1982,6 @@ public class BoundingBox3DTest
          thirdPoint = new Point3D(firstPoint);
    
          firstBox = new BoundingBox3D(firstPoint, secondPoint);
-         secondBox = new BoundingBox3D(thirdPoint, secondPoint);
-   
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
    
          thirdPoint.setX(firstPoint.getX() + epsilon * 0.99);
          secondBox = new BoundingBox3D(thirdPoint, secondPoint);

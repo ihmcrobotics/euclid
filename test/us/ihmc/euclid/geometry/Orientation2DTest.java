@@ -18,14 +18,17 @@ public class Orientation2DTest
       Orientation2D firstOrientation, secondOrientation;
       double epsilon = 1e-7;
       
+      firstOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+      secondOrientation = new Orientation2D(firstOrientation);
+
+      assertTrue(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
+      assertTrue(secondOrientation.geometricallyEquals(firstOrientation, epsilon));
+      assertTrue(firstOrientation.geometricallyEquals(firstOrientation, epsilon));
+      assertTrue(secondOrientation.geometricallyEquals(secondOrientation, epsilon));
+      
       for (int i = 0; i < ITERATIONS; ++i) {
          firstOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
          secondOrientation = new Orientation2D(firstOrientation);
-         
-         assertTrue(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
-         assertTrue(secondOrientation.geometricallyEquals(firstOrientation, epsilon));
-         assertTrue(firstOrientation.geometricallyEquals(firstOrientation, epsilon));
-         assertTrue(secondOrientation.geometricallyEquals(secondOrientation, epsilon));
          
          secondOrientation.setYaw(firstOrientation.getYaw() + 0.99 * epsilon);
          

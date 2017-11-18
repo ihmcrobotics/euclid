@@ -487,6 +487,18 @@ public class Torus3DTest
       RigidBodyTransform rbt;
       double radius, tubeRadius;
       double epsilon = 1e-7;
+
+      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      radius = 1.0 + random.nextDouble();
+      tubeRadius = random.nextDouble();
+
+      firstTorus = new Torus3D(rbt, radius, tubeRadius);
+      secondTorus = new Torus3D(rbt, radius, tubeRadius);
+      
+      assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));      
+      assertTrue(secondTorus.geometricallyEquals(firstTorus, epsilon));      
+      assertTrue(firstTorus.geometricallyEquals(firstTorus, epsilon));      
+      assertTrue(secondTorus.geometricallyEquals(secondTorus, epsilon));      
       
 	   for (int i = 0; i < iterations; ++i) {
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
@@ -495,8 +507,6 @@ public class Torus3DTest
 
          firstTorus = new Torus3D(rbt, radius, tubeRadius);
          secondTorus = new Torus3D(rbt, radius, tubeRadius);
-
-         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
          
          secondTorus.appendTransform(EuclidCoreRandomTools.generateRandomRigidBodyTransform(random));
          
@@ -562,8 +572,6 @@ public class Torus3DTest
 
          firstTorus = new Torus3D(rbt, radius, tubeRadius);
          secondTorus = new Torus3D(rbt, radius, tubeRadius);
-
-         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
          secondTorus.appendYawRotation(2.0 * Math.PI * random.nextDouble());
 

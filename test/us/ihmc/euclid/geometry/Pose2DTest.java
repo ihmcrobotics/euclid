@@ -17,16 +17,19 @@ public class Pose2DTest
       Random random = new Random(19732L);
       Pose2D firstPose, secondPose;
       double epsilon = 1e-7;
+      
+      firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
+      secondPose = new Pose2D(firstPose);
+
+      assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
+      assertTrue(secondPose.geometricallyEquals(firstPose, epsilon));
+      assertTrue(firstPose.geometricallyEquals(firstPose, epsilon));
+      assertTrue(secondPose.geometricallyEquals(secondPose, epsilon));
 
       // Orientation
       for (int i = 0; i < ITERATIONS; ++i) {
          firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
          secondPose = new Pose2D(firstPose);
-
-         assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
-         assertTrue(secondPose.geometricallyEquals(firstPose, epsilon));
-         assertTrue(firstPose.geometricallyEquals(firstPose, epsilon));
-         assertTrue(secondPose.geometricallyEquals(secondPose, epsilon));
 
          secondPose.setYaw(firstPose.getYaw() + 0.99 * epsilon);
 
@@ -49,11 +52,6 @@ public class Pose2DTest
       for (int i = 0; i < ITERATIONS; ++i) {
          firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
          secondPose = new Pose2D(firstPose);
-
-         assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
-         assertTrue(secondPose.geometricallyEquals(firstPose, epsilon));
-         assertTrue(firstPose.geometricallyEquals(firstPose, epsilon));
-         assertTrue(secondPose.geometricallyEquals(secondPose, epsilon));
 
          // True
          

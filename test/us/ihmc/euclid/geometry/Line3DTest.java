@@ -386,15 +386,18 @@ public class Line3DTest
       double scale;
       Vector3D orthogonal, direction = new Vector3D();
 
+      firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+      secondLine = new Line3D(firstLine);
+
+      assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+      
       for (int i = 0; i < ITERATIONS; ++i)
       {
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
-
-         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
-         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
-         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
-         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
 
          orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
          orthogonal.scale((0.99 * epsilon) / orthogonal.length());
@@ -414,11 +417,6 @@ public class Line3DTest
       {
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
-
-         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
-         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
-         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
-         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
          
          orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
          
@@ -442,11 +440,6 @@ public class Line3DTest
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
          scale = random.nextDouble() - random.nextDouble();
-
-         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
-         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
-         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
-         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
 
          secondLine.translate(secondLine.getDirectionX() * scale, secondLine.getDirectionY() * scale, secondLine.getDirectionZ() * scale);
 

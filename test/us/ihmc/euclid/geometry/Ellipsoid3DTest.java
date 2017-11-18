@@ -351,16 +351,24 @@ public class Ellipsoid3DTest
       double radiusX, radiusY, radiusZ;
       double epsilon = 1e-7;
 
+      radiusX = random.nextDouble();
+      radiusY = random.nextDouble();
+      radiusZ = random.nextDouble();
+
+      firstEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+      secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+
+      assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+      assertTrue(secondEllipsoid.geometricallyEquals(firstEllipsoid, epsilon));
+      assertTrue(firstEllipsoid.geometricallyEquals(firstEllipsoid, epsilon));
+      assertTrue(secondEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
+
       for (int i = 0; i < iterations; ++i) {
          radiusX = random.nextDouble();
          radiusY = random.nextDouble();
          radiusZ = random.nextDouble();
 
          firstEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
-
-         secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
-
-         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
 
          // SecondBox = (LX, HZ, WY)
          secondEllipsoid = new Ellipsoid3D(radiusX, radiusZ, radiusY);
@@ -414,8 +422,6 @@ public class Ellipsoid3DTest
 
       firstEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
       secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
-
-      assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
 
       secondEllipsoid.appendTransform(new RigidBodyTransform(1,0,0,0.99 * epsilon,0,1,0,0,0,0,1,0));
       assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));

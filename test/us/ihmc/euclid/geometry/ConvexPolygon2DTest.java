@@ -1490,17 +1490,22 @@ public class ConvexPolygon2DTest
       int numberOfVertices;
       double epsilon = 1e-6;
       
+      numberOfVertices = 3 + random.nextInt(10);
+
+      firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+      secondPolygon = new ConvexPolygon2D(firstPolygon);
+
+      assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
+      assertTrue(secondPolygon.geometricallyEquals(firstPolygon, epsilon));
+      assertTrue(firstPolygon.geometricallyEquals(firstPolygon, epsilon));
+      assertTrue(secondPolygon.geometricallyEquals(secondPolygon, epsilon));
+      
       for (int i = 0; i < iterations; ++i) {
          numberOfVertices = 3 + random.nextInt(10);
          
          firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
          firstPolygon.scale(10.0);
          secondPolygon = new ConvexPolygon2D(firstPolygon);
-         
-         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
-         assertTrue(secondPolygon.geometricallyEquals(firstPolygon, epsilon));
-         assertTrue(firstPolygon.geometricallyEquals(firstPolygon, epsilon));
-         assertTrue(secondPolygon.geometricallyEquals(secondPolygon, epsilon));
          
          secondPolygon.applyTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0.0, 0.0, 1.0), 0.1 * epsilon), new Vector3D()));
       
@@ -1518,11 +1523,6 @@ public class ConvexPolygon2DTest
          firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
          firstPolygon.scale(10.0);
          secondPolygon = new ConvexPolygon2D(firstPolygon);
-         
-         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
-         assertTrue(secondPolygon.geometricallyEquals(firstPolygon, epsilon));
-         assertTrue(firstPolygon.geometricallyEquals(firstPolygon, epsilon));
-         assertTrue(secondPolygon.geometricallyEquals(secondPolygon, epsilon));
          
          secondPolygon.translate(0.99 * epsilon, 0);
       
