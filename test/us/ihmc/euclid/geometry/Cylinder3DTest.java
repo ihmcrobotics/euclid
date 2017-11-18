@@ -377,6 +377,7 @@ public class Cylinder3DTest
       Cylinder3D firstCylinder, secondCylinder;
       RigidBodyTransform rbt;
       double height, radius;
+      Vector3D translation;
 
       height = random.nextDouble();
       radius = random.nextDouble();
@@ -390,7 +391,8 @@ public class Cylinder3DTest
       assertTrue(firstCylinder.geometricallyEquals(firstCylinder, epsilon));
       assertTrue(secondCylinder.geometricallyEquals(secondCylinder, epsilon));
       
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      { // Cylinders are equal if heights are equal within +- epsilon and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
@@ -407,7 +409,8 @@ public class Cylinder3DTest
          assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
       
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      { // Cylinders are equal if radii are equal within +- epsilon and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
@@ -424,18 +427,16 @@ public class Cylinder3DTest
          assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
       
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      {
          height = random.nextDouble();
          radius = random.nextDouble();
-         //rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-         rbt = new RigidBodyTransform();
+         rbt = new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), new Vector3D());
          
          firstCylinder = new Cylinder3D(rbt, height, radius);
          secondCylinder = new Cylinder3D(rbt, height, radius);
          
-         Vector3D firstCylinderAxis = new Vector3D();
-         firstCylinder.getOrientation().getColumn(2, firstCylinderAxis);
-         Vector3D orthogonalToAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstCylinderAxis, true);
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(0, 0, 1), true);
          
          secondCylinder.appendTransform(new RigidBodyTransform(new AxisAngle(orthogonalToAxis, Math.PI), new Vector3D()));
 
@@ -443,35 +444,32 @@ public class Cylinder3DTest
          
          secondCylinder = new Cylinder3D(rbt, height, radius);
 
-         secondCylinder.appendTransform(new RigidBodyTransform(new AxisAngle(firstCylinderAxis, EuclidCoreRandomTools.generateRandomDouble(random, Math.PI)), new Vector3D()));
+         secondCylinder.appendTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0, 0, 1), EuclidCoreRandomTools.generateRandomDouble(random, Math.PI)), new Vector3D()));
 
          assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
-
-      height = random.nextDouble();
-      radius = random.nextDouble();
-      rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-
-      firstCylinder = new Cylinder3D(rbt, height, radius);
-      secondCylinder = new Cylinder3D(rbt, height, radius);
       
-      secondCylinder.applyTransform(new RigidBodyTransform(1,0,0,0.5 * epsilon,0,1,0,0,0,0,1,0));
-      assertTrue(secondCylinder.geometricallyEquals(firstCylinder, epsilon));
-      secondCylinder = new Cylinder3D(rbt, height, radius);
-      secondCylinder.applyTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0.5 * epsilon,0,0,1,0));
-      assertTrue(secondCylinder.geometricallyEquals(firstCylinder, epsilon));
-      secondCylinder = new Cylinder3D(rbt, height, radius);
-      secondCylinder.applyTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0,0,0,1,0.5 * epsilon));
-      assertTrue(secondCylinder.geometricallyEquals(firstCylinder, epsilon));
-      
-      secondCylinder = new Cylinder3D(rbt, height, radius);
-      secondCylinder.applyTransform(new RigidBodyTransform(1,0,0,1.5 * epsilon,0,1,0,0,0,0,1,0));
-      assertFalse(secondCylinder.geometricallyEquals(firstCylinder, epsilon));
-      secondCylinder = new Cylinder3D(rbt, height, radius);
-      secondCylinder.applyTransform(new RigidBodyTransform(1,0,0,0,0,1,0,1.5 * epsilon,0,0,1,0));
-      assertFalse(secondCylinder.geometricallyEquals(firstCylinder, epsilon));
-      secondCylinder = new Cylinder3D(rbt, height, radius);
-      secondCylinder.applyTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0,0,0,1,1.5 * epsilon));
-      assertFalse(secondCylinder.geometricallyEquals(firstCylinder, epsilon));
+      for (int i = 0; i < iterations; ++i) {
+         height = random.nextDouble();
+         radius = random.nextDouble();
+         rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         
+         firstCylinder = new Cylinder3D(rbt, height, radius);
+         secondCylinder = new Cylinder3D(rbt, height, radius);
+         
+         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
+         
+         secondCylinder.appendTranslation(translation);
+         
+         assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
+         
+         secondCylinder = new Cylinder3D(rbt, height, radius);
+         
+         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
+         
+         secondCylinder.appendTranslation(translation);
+         
+         assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
+      }
    }
 }
