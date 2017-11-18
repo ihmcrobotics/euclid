@@ -1477,7 +1477,8 @@ public class Line2DTest
       Random random = new Random(56021L);
       Line2D firstLine, secondLine;
       double epsilon = 1e-6;
-      Vector2D orthogonal, direction;
+      double scale;
+      Vector2D orthogonal, direction = new Vector2D();
       
       for (int i = 0; i < ITERATIONS; ++i)
       {
@@ -1501,7 +1502,7 @@ public class Line2DTest
          
          secondLine.translate(orthogonal.getX(), orthogonal.getY());
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
-      }  
+      }
       
       for (int i = 0; i < ITERATIONS; ++i)
       {
@@ -1524,6 +1525,32 @@ public class Line2DTest
          secondLine.setDirection(direction);
          
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
-      }      
+      }
+      
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         secondLine = new Line2D(firstLine);
+         scale = random.nextDouble() - random.nextDouble();
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+         
+         secondLine.translate(secondLine.getDirectionX() * scale, secondLine.getDirectionY() * scale);
+         
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         firstLine.getDirection(direction);
+         direction.negate();
+         secondLine = new Line2D(firstLine.getPoint(), direction);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
    }
 }

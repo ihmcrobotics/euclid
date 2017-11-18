@@ -383,6 +383,7 @@ public class Line3DTest
       Random random = new Random(57021L);
       Line3D firstLine, secondLine;
       double epsilon = 1e-6;
+      double scale;
       Vector3D orthogonal, direction = new Vector3D();
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -434,6 +435,32 @@ public class Line3DTest
          secondLine.setDirection(direction);
          
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         secondLine = new Line3D(firstLine);
+         scale = random.nextDouble() - random.nextDouble();
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+         assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+
+         secondLine.translate(secondLine.getDirectionX() * scale, secondLine.getDirectionY() * scale, secondLine.getDirectionZ() * scale);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         firstLine.getDirection(direction);
+         direction.negate();
+         secondLine = new Line3D(firstLine.getPoint(), direction);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
       }
    }
 }
