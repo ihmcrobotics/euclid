@@ -46,5 +46,15 @@ public class Orientation2DTest
 
          assertFalse(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
       }
+      
+      for (int i = 0; i < ITERATIONS; ++i) {
+         firstOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         secondOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         
+         epsilon = 4.0 * Math.PI * random.nextDouble();
+         
+         if (epsilon > 2.0 * Math.PI)
+            assertTrue(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
+      }
    }
 }
