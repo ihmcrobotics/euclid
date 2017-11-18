@@ -1388,47 +1388,26 @@ public class BoundingBox2DTest
          firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
          secondPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
          
-         thirdPoint = new Point2D(firstPoint);
-         
          firstBox = new BoundingBox2D(firstPoint, secondPoint);
-         
-         thirdPoint.setX(firstPoint.getX() + epsilon * 0.99);
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-         
+
          thirdPoint = new Point2D(firstPoint);
-         thirdPoint.setY(firstPoint.getY() + epsilon * 0.99);
+         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon));
          secondBox = new BoundingBox2D(thirdPoint, secondPoint);
          assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
 
          thirdPoint = new Point2D(firstPoint);
-         thirdPoint.setX(firstPoint.getX() - epsilon * 0.99);
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-         
-         thirdPoint = new Point2D(firstPoint);
-         thirdPoint.setY(firstPoint.getY() - epsilon * 0.99);
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         thirdPoint = new Point2D(firstPoint);
-         thirdPoint.setX(firstPoint.getX() + epsilon * 1.01);
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-         
-         thirdPoint = new Point2D(firstPoint);
-         thirdPoint.setY(firstPoint.getY() + epsilon * 1.01);
+         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon));
          secondBox = new BoundingBox2D(thirdPoint, secondPoint);
          assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
 
-         thirdPoint = new Point2D(firstPoint);
-         thirdPoint.setX(firstPoint.getX() - epsilon * 1.01);
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-         
-         thirdPoint = new Point2D(firstPoint);
-         thirdPoint.setY(firstPoint.getY() - epsilon * 1.01);
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
+         thirdPoint = new Point2D(secondPoint);
+         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon));
+         secondBox = new BoundingBox2D(firstPoint, thirdPoint);
+         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+
+         thirdPoint = new Point2D(secondPoint);
+         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon));
+         secondBox = new BoundingBox2D(firstPoint, thirdPoint);
          assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
       }
    }
