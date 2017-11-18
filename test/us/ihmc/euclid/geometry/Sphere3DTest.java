@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
@@ -127,6 +128,18 @@ public class Sphere3DTest
          secondSphere = new Sphere3D(center, radius - epsilon * 1.01);
          
          assertFalse(firstSphere.geometricallyEquals(secondSphere, epsilon));
+      }
+      
+      for (int i = 0; i < iterations; ++i) {
+         center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         radius = random.nextDouble();
+         
+         firstSphere = new Sphere3D(center, radius);
+         secondSphere = new Sphere3D(firstSphere);
+
+         secondSphere.appendTransform(new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), new Vector3D()));
+         
+         assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
       
       center = EuclidCoreRandomTools.generateRandomPoint3D(random);
