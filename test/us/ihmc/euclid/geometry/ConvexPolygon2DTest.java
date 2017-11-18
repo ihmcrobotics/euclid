@@ -1489,6 +1489,7 @@ public class ConvexPolygon2DTest
       int iterations = 1000;
       int numberOfVertices;
       double epsilon = 1e-6;
+      Vector2D translation;
       
       numberOfVertices = 3 + random.nextInt(10);
 
@@ -1517,28 +1518,22 @@ public class ConvexPolygon2DTest
          
          assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
       }
+      
       for (int i = 0; i < iterations; ++i) {
          numberOfVertices = 3 + random.nextInt(10);
          
          firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
          firstPolygon.scale(10.0);
-         secondPolygon = new ConvexPolygon2D(firstPolygon);
          
-         secondPolygon.translate(0.99 * epsilon, 0);
+         secondPolygon = new ConvexPolygon2D(firstPolygon);
+         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon);
+         secondPolygon.translate(translation);
       
          assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
          
          secondPolygon = new ConvexPolygon2D(firstPolygon);
-         secondPolygon.translate(0, 0.99 * epsilon);
-
-         assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
-         
-         secondPolygon.translate(1.01 * epsilon, 0);
-      
-         assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
-         
-         secondPolygon = new ConvexPolygon2D(firstPolygon);
-         secondPolygon.translate(0, 1.01 * epsilon);
+         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon);
+         secondPolygon.translate(translation);
 
          assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
       }
