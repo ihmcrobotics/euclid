@@ -2,6 +2,8 @@ package us.ihmc.euclid.geometry;
 
 import org.junit.Test;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tuple2D.Vector2D;
 
 import java.util.Random;
 
@@ -17,6 +19,7 @@ public class Pose2DTest
       Random random = new Random(19732L);
       Pose2D firstPose, secondPose;
       double epsilon = 1e-7;
+      Vector2D perturb;
       
       firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
       secondPose = new Pose2D(firstPose);
@@ -53,48 +56,16 @@ public class Pose2DTest
          firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
          secondPose = new Pose2D(firstPose);
 
-         // True
-         
-         secondPose.setX(firstPose.getX() + 0.99 * epsilon);
+         perturb = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon);
+         perturb.add(secondPose.getPosition());
+         secondPose.setPosition(perturb);
 
          assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
 
-         secondPose.setX(firstPose.getX() - 0.99 * epsilon);
-
-         assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
-         
-         // reset
-         secondPose.set(firstPose);
-
-         secondPose.setY(firstPose.getY() + 0.99 * epsilon);
-
-         assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
-
-         secondPose.setY(firstPose.getY() - 0.99 * epsilon);
-
-         assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
-
-         // reset
-         secondPose.set(firstPose);
-         
-         // False
-
-         secondPose.setX(firstPose.getX() + 1.01 * epsilon);
-
-         assertFalse(firstPose.geometricallyEquals(secondPose, epsilon));
-
-         secondPose.setX(firstPose.getX() - 1.01 * epsilon);
-
-         assertFalse(firstPose.geometricallyEquals(secondPose, epsilon));
-
-         // reset
-         secondPose.set(firstPose);
-
-         secondPose.setY(firstPose.getY() + 1.01 * epsilon);
-
-         assertFalse(firstPose.geometricallyEquals(secondPose, epsilon));
-
-         secondPose.setY(firstPose.getY() - 1.01 * epsilon);
+         secondPose = new Pose2D(firstPose);
+         perturb = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon);
+         perturb.add(secondPose.getPosition());
+         secondPose.setPosition(perturb);
 
          assertFalse(firstPose.geometricallyEquals(secondPose, epsilon));
       }
