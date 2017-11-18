@@ -442,6 +442,7 @@ public class Ramp3DTest
       Vector3D translationVector;
       double lengthX, widthY, heightZ;
       double epsilon = 1e-7;
+      int iterations = 1000;
 
       lengthX = random.nextDouble();
       widthY = random.nextDouble();
@@ -481,35 +482,25 @@ public class Ramp3DTest
       secondRamp = new Ramp3D(lengthX, widthY, heightZ - epsilon * 1.01);
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       
-      translationVector = EuclidCoreRandomTools.generateRandomRotationVector(random);
-      firstRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), translationVector), lengthX, widthY, heightZ);
-
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX() + epsilon * 0.99, translationVector.getY(), translationVector.getZ())), lengthX, widthY, heightZ);
-      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY() + epsilon * 0.99, translationVector.getZ())), lengthX, widthY, heightZ);
-      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY(), translationVector.getZ() + epsilon * 0.99)), lengthX, widthY, heightZ);
-      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX() - epsilon * 0.99, translationVector.getY(), translationVector.getZ())), lengthX, widthY, heightZ);
-      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY() - epsilon * 0.99, translationVector.getZ())), lengthX, widthY, heightZ);
-      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY(), translationVector.getZ() - epsilon * 0.99)), lengthX, widthY, heightZ);
-      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
-
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX() + epsilon * 1.01, translationVector.getY(), translationVector.getZ())), lengthX, widthY, heightZ);
-      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY() + epsilon * 1.01, translationVector.getZ())), lengthX, widthY, heightZ);
-      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY(), translationVector.getZ() + epsilon * 1.01)), lengthX, widthY, heightZ);
-      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX() - epsilon * 1.01, translationVector.getY(), translationVector.getZ())), lengthX, widthY, heightZ);
-      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY() - epsilon * 1.01, translationVector.getZ())), lengthX, widthY, heightZ);
-      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), new Vector3D(translationVector.getX(), translationVector.getY(), translationVector.getZ() - epsilon * 1.01)), lengthX, widthY, heightZ);
-      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       
+      for (int i = 0; i < iterations; ++i)
+      {
+         translationVector = EuclidCoreRandomTools.generateRandomRotationVector(random);
+         firstRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), translationVector), lengthX, widthY, heightZ);
+         secondRamp = new Ramp3D(firstRamp);
+
+         translationVector = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
+         secondRamp.appendTranslation(translationVector);
+
+         assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+
+         secondRamp = new Ramp3D(firstRamp);
+
+         translationVector = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
+         secondRamp.appendTranslation(translationVector);
+
+         assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      }
    }
 
    private static Ramp3D createRandomRamp(Random random)
