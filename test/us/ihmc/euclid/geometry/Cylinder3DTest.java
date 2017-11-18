@@ -428,7 +428,7 @@ public class Cylinder3DTest
       }
       
       for (int i = 0; i < iterations; ++i)
-      {
+      { // Cylinders are equal if aligned opposite on the same axis and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
          rbt = new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), new Vector3D());
@@ -449,7 +449,8 @@ public class Cylinder3DTest
          assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
       
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      { // Cylinders are equal if translations are equal within +- epsilon and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);

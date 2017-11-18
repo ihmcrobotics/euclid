@@ -159,7 +159,8 @@ public class Plane3DTest
       assertTrue(firstPlane.geometricallyEquals(firstPlane, epsilon));
       assertTrue(secondPlane.geometricallyEquals(secondPlane, epsilon));
       
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Planes are equal if orientations equal within +- epsilon and are otherwise the same
          firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
          secondPlane = new Plane3D(firstPlane);
          
@@ -178,7 +179,8 @@ public class Plane3DTest
          assertFalse(firstPlane.geometricallyEquals(secondPlane, epsilon));
       }
       
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Planes are equal if locations equal within +- epsilon and are otherwise the same
          firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
          secondPlane = new Plane3D(firstPlane);
          
@@ -217,7 +219,8 @@ public class Plane3DTest
          assertFalse(firstPlane.geometricallyEquals(secondPlane, epsilon));
       }
       
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Planes are equal if rotated differently around normal and are otherwise the same
          firstPlane = new Plane3D(new Point3D(), EuclidCoreRandomTools.generateRandomVector3D(random));
          secondPlane = new Plane3D(firstPlane);
          

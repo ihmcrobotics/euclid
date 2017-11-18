@@ -500,7 +500,8 @@ public class Torus3DTest
       assertTrue(firstTorus.geometricallyEquals(firstTorus, epsilon));      
       assertTrue(secondTorus.geometricallyEquals(secondTorus, epsilon));      
       
-	   for (int i = 0; i < iterations; ++i) {
+	   for (int i = 0; i < iterations; ++i)
+	   { // Torii do not represent the same geometry object
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
@@ -513,7 +514,8 @@ public class Torus3DTest
          assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
       
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      { // Torii within +- epsilon are equal
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
@@ -529,7 +531,8 @@ public class Torus3DTest
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
       
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      { // Torii outside of +- epsilon are not equal
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
@@ -546,7 +549,7 @@ public class Torus3DTest
       }
       
       for (int i = 0; i < iterations; ++i)
-      {
+      { // Torii are equal if in the exact same position, but one is upside-down (w.r.t. reference frame)
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
@@ -565,7 +568,7 @@ public class Torus3DTest
       }
       
       for (int i = 0; i < iterations; ++i)
-      {
+      { // Torii are equal if yaw differs, but they otherwise represent the same geometry object
          rbt = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();

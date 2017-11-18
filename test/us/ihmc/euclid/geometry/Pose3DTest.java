@@ -32,7 +32,8 @@ public class Pose3DTest
       assertTrue(secondPose.geometricallyEquals(secondPose, epsilon));
       
       // Orientation
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Poses are equal if orientations are equal within +- epsilon and points are the same
          firstPose = EuclidGeometryRandomTools.generateRandomPose3D(random);
          secondPose = new Pose3D(firstPose);
          
@@ -45,7 +46,8 @@ public class Pose3DTest
       }
 
       // Point
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Poses are equal if points are equal within +- epsilon and orientations are the same
          firstPose = EuclidGeometryRandomTools.generateRandomPose3D(random);
          secondPose = new Pose3D(firstPose);
          

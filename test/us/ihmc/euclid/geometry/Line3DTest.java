@@ -395,7 +395,7 @@ public class Line3DTest
       assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
       
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      { // Lines are equal if translations are equal within +- epsilon and are otherwise the same
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
 
@@ -414,7 +414,7 @@ public class Line3DTest
       }
       
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      { // Lines are equal if directions are equal within +- epsilon and are otherwise the same
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
          
@@ -436,7 +436,7 @@ public class Line3DTest
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      { // Lines are equal if translations lie somewhere on the same direction
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
          scale = random.nextDouble() - random.nextDouble();
@@ -447,7 +447,7 @@ public class Line3DTest
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      { // Lines are equal if directions are equal but opposite and are otherwise the same
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          firstLine.getDirection(direction);
          direction.negate();

@@ -364,7 +364,8 @@ public class Ellipsoid3DTest
       assertTrue(firstEllipsoid.geometricallyEquals(firstEllipsoid, epsilon));
       assertTrue(secondEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
 
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      { // Ellipsoids are equal if dimensions are not identical, but oriented so that they align equally
          radiusX = random.nextDouble();
          radiusY = random.nextDouble();
          radiusZ = random.nextDouble();
@@ -417,7 +418,8 @@ public class Ellipsoid3DTest
          assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
       }
       
-      for (int i = 0; i < iterations; ++i) {
+      for (int i = 0; i < iterations; ++i)
+      { // Ellipsoids are equal if translations are equal within +- epsilon and are otherwise the same
          radiusX = random.nextDouble();
          radiusY = random.nextDouble();
          radiusZ = random.nextDouble();

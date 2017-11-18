@@ -26,7 +26,8 @@ public class Orientation2DTest
       assertTrue(firstOrientation.geometricallyEquals(firstOrientation, epsilon));
       assertTrue(secondOrientation.geometricallyEquals(secondOrientation, epsilon));
       
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Orientations are geometrically equal if yaw is similar within +- epsilon
          firstOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
          secondOrientation = new Orientation2D(firstOrientation);
          
@@ -47,7 +48,8 @@ public class Orientation2DTest
          assertFalse(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
       }
       
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // If epsilon > 2pi, orientations are automatically considered geometrically equal
          firstOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
          secondOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
          

@@ -449,7 +449,8 @@ public class Box3DTest
       assertTrue(firstBox.geometricallyEquals(firstBox, epsilon));
       assertTrue(secondBox.geometricallyEquals(secondBox, epsilon));
       
-      for (int i = 0; i < NUM_ITERATIONS; ++i) {
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Boxes are equal if dimensions are not identical, but oriented so that they align equally
          lengthX = random.nextDouble();
          widthY = random.nextDouble();
          heightZ = random.nextDouble();
@@ -506,7 +507,8 @@ public class Box3DTest
          assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i) {
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Boxes are equal if translations are equal within +- epsilon and are otherwise the same
          lengthX = random.nextDouble();
          widthY = random.nextDouble();
          heightZ = random.nextDouble();
