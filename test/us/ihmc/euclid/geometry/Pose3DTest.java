@@ -134,6 +134,7 @@ public class Pose3DTest
          
          assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
          
+         secondPose = new Pose3D(firstPose);
          perturb = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
          perturb.add(secondPose.getPosition());
          secondPose.setPosition(perturb);
