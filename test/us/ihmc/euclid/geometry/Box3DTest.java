@@ -435,6 +435,7 @@ public class Box3DTest
       Box3D firstBox, secondBox;
       double lengthX, widthY, heightZ;
       double epsilon = 1e-7;
+      Vector3D translation;
       
       lengthX = random.nextDouble();
       widthY = random.nextDouble();
@@ -504,6 +505,29 @@ public class Box3DTest
          
          assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
       }
+
+      for (int i = 0; i < NUM_ITERATIONS; ++i) {
+         lengthX = random.nextDouble();
+         widthY = random.nextDouble();
+         heightZ = random.nextDouble();
+
+         firstBox = new Box3D(lengthX, widthY, heightZ);
+         secondBox = new Box3D(lengthX, widthY, heightZ);
+
+         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
+
+         secondBox.appendTranslation(translation);
+
+         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+
+         secondBox = new Box3D(lengthX, widthY, heightZ);
+
+         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
+
+         secondBox.appendTranslation(translation);
+
+         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+      }
       
       lengthX = random.nextDouble();
       widthY = random.nextDouble();
@@ -537,31 +561,6 @@ public class Box3DTest
       secondBox.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 0.0, 1.0, Math.PI), new Vector3D()));
       
       assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-
-      lengthX = random.nextDouble();
-      widthY = random.nextDouble();
-      heightZ = random.nextDouble();
-
-      firstBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox = new Box3D(lengthX, widthY, heightZ);
-      
-      secondBox.appendTransform(new RigidBodyTransform(1,0,0,0.99 * epsilon,0,1,0,0,0,0,1,0));
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-      secondBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0.99 * epsilon,0,0,1,0));
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-      secondBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0,0,0,1,0.99 * epsilon));
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-      secondBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox.appendTransform(new RigidBodyTransform(1,0,0,1.01 * epsilon,0,1,0,0,0,0,1,0));
-      assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-      secondBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,1.01 * epsilon,0,0,1,0));
-      assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-      secondBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox.appendTransform(new RigidBodyTransform(1,0,0,0,0,1,0,0,0,0,1,1.01 * epsilon));
-      assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
    }
 
    private static Box3D createRandomBox(Random random)
