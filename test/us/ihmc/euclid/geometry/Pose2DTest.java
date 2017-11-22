@@ -8,7 +8,7 @@ import us.ihmc.euclid.tuple2D.Vector2D;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class Pose2DTest
 {
@@ -212,6 +212,134 @@ public class Pose2DTest
          orientation.add(angleDiff);
 
          assertEquals(Math.abs(angleDiff), firstPose.getOrientationDistance(orientation), epsilon);
+      }
+   }
+
+   @Test
+   public void testEquals()
+   {
+      Random random = new Random(9827L);
+      Pose2D firstPose, secondPose;
+      double x = random.nextDouble() - random.nextDouble();
+      double y = random.nextDouble() - random.nextDouble();
+      double yaw = random.nextDouble() - random.nextDouble();
+      double angleDiff;
+      Vector2D translation;
+
+      firstPose = new Pose2D(x, y, yaw);
+      secondPose = new Pose2D(x, y, yaw);
+      
+      // Sanity checks
+      assertTrue(firstPose.equals(secondPose));
+      assertTrue(secondPose.equals(secondPose));
+      assertTrue(firstPose.equals(firstPose));
+      assertTrue(secondPose.equals(secondPose));
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Poses are equal if and only if point components are exactly equal
+         x = random.nextDouble() - random.nextDouble();
+         y = random.nextDouble() - random.nextDouble();
+         yaw = random.nextDouble() - random.nextDouble();
+
+         firstPose = new Pose2D(x, y, yaw);
+         secondPose = new Pose2D(x, y, yaw);
+
+         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, epsilon);
+         secondPose.appendTranslation(translation);
+
+         assertFalse(firstPose.equals(secondPose));
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Poses are equal if and only if orientation angles are exactly equal
+         x = random.nextDouble() - random.nextDouble();
+         y = random.nextDouble() - random.nextDouble();
+         yaw = random.nextDouble() - random.nextDouble();
+
+         firstPose = new Pose2D(x, y, yaw);
+         secondPose = new Pose2D(x, y, yaw);
+
+         angleDiff = (random.nextBoolean() ? 1 : -1) * epsilon;
+
+         secondPose.appendRotation(angleDiff);
+
+         assertFalse(firstPose.equals(secondPose));
+      }
+   }
+
+   @Test
+   public void testEpsilonEquals()
+   {
+      Random random = new Random(9827L);
+      Pose2D firstPose, secondPose;
+      double x = random.nextDouble() - random.nextDouble();
+      double y = random.nextDouble() - random.nextDouble();
+      double yaw = random.nextDouble() - random.nextDouble();
+      double angleDiff;
+
+      firstPose = new Pose2D(x, y, yaw);
+      secondPose = new Pose2D(x, y, yaw);
+
+      // Sanity checks
+      assertTrue(firstPose.epsilonEquals(secondPose, epsilon));
+      assertTrue(secondPose.epsilonEquals(firstPose, epsilon));
+      assertTrue(firstPose.epsilonEquals(firstPose, epsilon));
+      assertTrue(secondPose.epsilonEquals(secondPose, epsilon));
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Poses are equal when distance between point components is <= epsilon
+         x = random.nextDouble() - random.nextDouble();
+         y = random.nextDouble() - random.nextDouble();
+         yaw = random.nextDouble() - random.nextDouble();
+
+         firstPose = new Pose2D(x, y, yaw);
+         secondPose = new Pose2D(x, y, yaw);
+
+         secondPose.setX(x + (random.nextBoolean() ? 1 : -1) * 0.99 * epsilon);
+
+         assertTrue(firstPose.epsilonEquals(secondPose, epsilon));
+
+         secondPose = new Pose2D(x, y, yaw);
+
+         secondPose.setY(y + (random.nextBoolean() ? 1 : -1) * 0.99 * epsilon);
+
+         assertTrue(firstPose.epsilonEquals(secondPose, epsilon));
+
+         secondPose = new Pose2D(x, y, yaw);
+
+         secondPose.setX(x + (random.nextBoolean() ? 1 : -1) * 1.01 * epsilon);
+
+         assertFalse(firstPose.epsilonEquals(secondPose, epsilon));
+
+         secondPose = new Pose2D(x, y, yaw);
+
+         secondPose.setY(y + (random.nextBoolean() ? 1 : -1) * 1.01 * epsilon);
+
+         assertFalse(firstPose.epsilonEquals(secondPose, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Poses are equal when angle between orientations is <= epsilon
+         x = random.nextDouble() - random.nextDouble();
+         y = random.nextDouble() - random.nextDouble();
+         yaw = random.nextDouble() - random.nextDouble();
+
+         firstPose = new Pose2D(x, y, yaw);
+         secondPose = new Pose2D(x, y, yaw);
+
+         angleDiff = (random.nextBoolean() ? 1 : -1) * 0.99 * epsilon;
+
+         secondPose.appendRotation(angleDiff);
+
+         assertTrue(firstPose.epsilonEquals(secondPose, epsilon));
+
+         secondPose = new Pose2D(x, y, yaw);
+
+         angleDiff = (random.nextBoolean() ? 1 : -1) * 1.01 * epsilon;
+
+         secondPose.appendRotation(angleDiff);
+
+         assertFalse(firstPose.epsilonEquals(secondPose, epsilon));
       }
    }
 }
