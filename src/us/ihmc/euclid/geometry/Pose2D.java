@@ -413,14 +413,14 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Computes the absolute angle difference between the orientation part of this pose 2D and the
-    * give {@code orientation}.
+    * give {@code other}.
     * 
-    * @param orientation the orientation used to compute the orientation distance. Not modified.
-    * @return the absolute angle difference between {@code this} and {@code orientation}.
+    * @param other the orientation used to compute the orientation distance. Not modified.
+    * @return the absolute angle difference between {@code this} and {@code other}.
     */
-   public double getOrientationDistance(Orientation2D orientation)
+   public double getOrientationDistance(Orientation2D other)
    {
-      return orientation.distance(orientation);
+      return orientation.distance(other);
    }
 
    /**
