@@ -23,7 +23,6 @@ public class ConvexPolygon2DTest
 {
    private static final boolean VERBOSE = false;
 
-   private Random random = new Random(1176L);
    private static final double epsilon = 1e-10;
 
    @Test
@@ -889,6 +888,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testOrthogonalProjectionPointConvexPolygon2d()
    {
+      Random random = new Random(32);
       ArrayList<Point2D> pointList = new ArrayList<>();
       ConvexPolygon2D convexPolygon;
       Point2D testPoint = new Point2D();
