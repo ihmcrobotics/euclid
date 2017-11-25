@@ -1090,60 +1090,70 @@ public class LineSegment2DTest
    public void testGeometricallyEquals()
    {
       Random random = new Random(19263L);
-      Vector2D translation;
 
       Point2D segment1Point1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
       Point2D segment1Point2 = EuclidCoreRandomTools.generateRandomPoint2D(random);
       Point2D segment2Point1 = new Point2D(segment1Point1);
       Point2D segment2Point2 = new Point2D(segment1Point2);
 
-      LineSegment2D testSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
-      LineSegment2D testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+      LineSegment2D lineSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
+      LineSegment2D lineSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
 
-      assertTrue(testSegment1.geometricallyEquals(testSegment1, EPSILON));
-      assertTrue(testSegment1.geometricallyEquals(testSegment2, EPSILON));
-      assertTrue(testSegment2.geometricallyEquals(testSegment1, EPSILON));
-      assertTrue(testSegment2.geometricallyEquals(testSegment2, EPSILON));
+      assertTrue(lineSegment1.geometricallyEquals(lineSegment1, EPSILON));
+      assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+      assertTrue(lineSegment2.geometricallyEquals(lineSegment1, EPSILON));
+      assertTrue(lineSegment2.geometricallyEquals(lineSegment2, EPSILON));
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
          segment1Point1 = EuclidCoreRandomTools.generateRandomPoint2D(random);
          segment1Point2 = EuclidCoreRandomTools.generateRandomPoint2D(random);
-         segment2Point1 = new Point2D(segment1Point1);
-         segment2Point2 = new Point2D(segment1Point2);
+         segment2Point1 = new Point2D();
+         segment2Point2 = new Point2D();
 
-         testSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
+         lineSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
 
-         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * EPSILON);
-         segment2Point2.add(translation);
+         segment2Point1.set(segment1Point1);
+         segment2Point2.add(segment1Point2, EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * EPSILON));
+         lineSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2 = new LineSegment2D(segment2Point2, segment2Point1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
-         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         segment2Point1.set(segment1Point1);
+         segment2Point2.add(segment1Point2, EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * EPSILON));
+         lineSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2 = new LineSegment2D(segment2Point2, segment2Point1);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
-         assertTrue(testSegment1.geometricallyEquals(testSegment2, EPSILON));
+         segment2Point1.add(segment1Point1, EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * EPSILON));
+         segment2Point2.set(segment1Point2);
+         lineSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2 = new LineSegment2D(segment2Point2, segment2Point1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
-         segment2Point2 = new Point2D(segment1Point2);
-         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * EPSILON);
-         segment2Point2.add(translation);
+         segment2Point1.add(segment1Point1, EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * EPSILON));
+         segment2Point2.set(segment1Point2);
+         lineSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2 = new LineSegment2D(segment2Point2, segment2Point1);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
-         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
+         lineSegment2.set(lineSegment1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2.translate(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * EPSILON));
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2.flipDirection();
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
-         assertFalse(testSegment1.geometricallyEquals(testSegment2, EPSILON));
-
-         segment2Point2 = new Point2D(segment1Point2);
-         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * EPSILON);
-         segment2Point1.add(translation);
-
-         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
-
-         assertTrue(testSegment1.geometricallyEquals(testSegment2, EPSILON));
-
-         segment2Point1 = new Point2D(segment1Point1);
-         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * EPSILON);
-         segment2Point1.add(translation);
-
-         testSegment2 = new LineSegment2D(segment2Point1, segment2Point2);
-
-         assertFalse(testSegment1.geometricallyEquals(testSegment2, EPSILON));
+         lineSegment2.set(lineSegment1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2.translate(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * EPSILON));
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         lineSegment2.flipDirection();
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
       }
    }
 }
