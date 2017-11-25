@@ -1,7 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.io.Serializable;
-
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -48,9 +46,8 @@ import us.ihmc.euclid.utils.NameBasedHashCodeTools;
  * express a geometry in a different frame.
  * </p>
  */
-public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeHolder
+public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 {
-   private static final long serialVersionUID = 9129810880579453658L;
    /** The name of this reference frame. The name should preferably be unique. */
    private final String frameName;
    /**
@@ -160,8 +157,6 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
    {
       ReferenceFrame ret = new ReferenceFrame(frameName)
       {
-         private static final long serialVersionUID = -8828178814213025690L;
-
          @Override
          protected void updateTransformToParent(RigidBodyTransform transformToParent)
          {
@@ -235,8 +230,6 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
 
       ReferenceFrame ret = new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
       {
-         private static final long serialVersionUID = 4694374344134623529L;
-
          @Override
          protected void updateTransformToParent(RigidBodyTransform transformToParent)
          {
@@ -858,12 +851,12 @@ public abstract class ReferenceFrame implements Serializable, NameBasedHashCodeH
 
          if (transformToParent != null)
          {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined. This is so RMI still works with frames since Transform3D is not serializable.");
+            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
          }
 
          if (transformToRoot != null)
          {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined. This is so RMI still works with frames since Transform3D is not serializable.");
+            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
          }
 
          if (transformToRootID != 0)

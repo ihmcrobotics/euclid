@@ -1,17 +1,13 @@
 package us.ihmc.euclid.geometry;
 
-import java.io.Serializable;
-
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * Extension of Vector3d where x, y, and z have aliases for length, width, and height, respectively.
  */
-class Size3D implements Vector3DBasics, Serializable
+class Size3D implements Vector3DBasics
 {
-   private static final long serialVersionUID = -6792410294569029172L;
-
    private double length;
    private double width;
    private double height;

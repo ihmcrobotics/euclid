@@ -34,8 +34,6 @@ public class Box3D extends Shape3D<Box3D>
     */
    private final Size3D size = new Size3D()
    {
-      private static final long serialVersionUID = 3115155959997000188L;
-
       @Override
       public final void setX(double x)
       {
