@@ -1,6 +1,13 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomQuaternion;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector3DWithFixedLength;
 
 import java.util.ArrayList;
 import java.util.Collections;

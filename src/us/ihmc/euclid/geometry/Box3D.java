@@ -1,8 +1,11 @@
 package us.ihmc.euclid.geometry;
 
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
+
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -11,10 +14,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
 /**
  * {@code Box3D} represents an axis-aligned box with a length, a width, and a height.

@@ -1,5 +1,9 @@
 package us.ihmc.euclid.geometry;
 
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
+
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
@@ -11,10 +15,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
 /**
  * {@code Ellipsoid3D} represents a 3D ellipsoid defined by its three main radii and with its origin

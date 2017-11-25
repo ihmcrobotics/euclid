@@ -1,7 +1,17 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getBoundingBox2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getBoundingBox3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLine2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLine3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment1DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getOrientation2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPlane3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPose2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPose3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;

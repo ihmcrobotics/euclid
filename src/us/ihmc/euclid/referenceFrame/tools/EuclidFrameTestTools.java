@@ -10,7 +10,11 @@ import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple3DEquals;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple4DEquals;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 
 public class EuclidFrameTestTools
 {

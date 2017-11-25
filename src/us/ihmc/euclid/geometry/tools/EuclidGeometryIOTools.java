@@ -1,6 +1,10 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringOf;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;

@@ -1,11 +1,10 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 

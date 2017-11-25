@@ -1,6 +1,6 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
