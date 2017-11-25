@@ -552,9 +552,28 @@ public class Box3DTest
          default:
             throw new RuntimeException("Unexpected axis value: " + axis);
          }
-         Box3D box2 = new Box3D(pose, lengthX, widthY, heightZ);
 
+         Box3D box2 = new Box3D(pose, lengthX, widthY, heightZ);
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+
+         double angle = EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI / 2.0);
+         switch (axis)
+         {
+         case 0:
+            pose.appendRollRotation(angle);
+            break;
+         case 1:
+            pose.appendPitchRotation(angle);
+            break;
+         case 2:
+            pose.appendYawRotation(angle);
+            break;
+         default:
+            throw new RuntimeException("Unexpected axis value: " + axis);
+         }
+
+         box2 = new Box3D(pose, lengthX, widthY, heightZ);
+         assertFalse("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
       }
 
       for (int i = 0; i < NUM_ITERATIONS; ++i)
