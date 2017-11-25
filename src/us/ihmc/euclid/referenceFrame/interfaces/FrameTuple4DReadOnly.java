@@ -7,9 +7,9 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 /**
  * Read-only interface for a 4D tuple expressed in a given reference frame.
  * <p>
- * In addition to representing a {@link Tuple4DReadOnly}, a {@link ReferenceFrame} is associated to a
- * {@code FrameTuple4DReadOnly}. This allows, for instance, to enforce, at runtime, that operations on
- * tuples occur in the same coordinate system.
+ * In addition to representing a {@link Tuple4DReadOnly}, a {@link ReferenceFrame} is associated to
+ * a {@code FrameTuple4DReadOnly}. This allows, for instance, to enforce, at runtime, that
+ * operations on tuples occur in the same coordinate system.
  * </p>
  * <p>
  * Because a {@code FrameTuple4DReadOnly} extends {@code Tuple4DReadOnly}, it is compatible with

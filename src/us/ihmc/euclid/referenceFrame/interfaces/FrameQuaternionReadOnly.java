@@ -24,8 +24,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param other the other quaternion to measure the distance. Not modified.
     * @return the angle representing the distance between the two quaternions. It is contained in
     *         [0, 2<i>pi</i>]
-    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code other} do not match.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other}
+    *            do not match.
     */
    default double distance(FrameQuaternionReadOnly other)
    {
@@ -825,20 +825,19 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
 
    /**
     * Compares {@code this} to {@code other} to determine if the two frame quaternions are
-    * geometrically similar, i.e. the magnitude of their difference is less than or equal
-    * to {@code epsilon}.
+    * geometrically similar, i.e. the magnitude of their difference is less than or equal to
+    * {@code epsilon}.
     *
     * @param other the frame quaternion to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame quaternions represent the same geometry, {@code false}
+    *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
-    * @return {@code true} if the two frame quaternions represent the same geometry,
-    *            {@code false} otherwise.
     */
    default boolean geometricallyEquals(FrameQuaternionReadOnly other, double epsilon)
    {
       checkReferenceFrameMatch(other);
-
       return QuaternionReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

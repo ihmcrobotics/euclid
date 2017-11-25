@@ -39,7 +39,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    /**
     * Creates a new frame vector and initializes it components to zero and its reference frame to
     * the {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame vector.
     */
    public FrameVector3D(ReferenceFrame referenceFrame)
@@ -50,7 +50,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    /**
     * Creates a new frame vector and initializes it with the given components and the given
     * reference frame.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame vector.
     * @param x the x-component.
     * @param y the y-component.
@@ -64,7 +64,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    /**
     * Creates a new frame vector and initializes its component {@code x}, {@code y}, {@code z} in
     * order from the given array and initializes its reference frame.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame vector.
     * @param vectorArray the array containing this vector's components. Not modified.
     */
@@ -242,16 +242,16 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two frame vectors
-    * are geometrically similar, i.e. the length of the distance between them is
-    * less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two frame vectors are geometrically
+    * similar, i.e. the length of the distance between them is less than or equal to
+    * {@code epsilon}.
     *
     * @param other the frame vector to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame vectors represent the same geometry, {@code false}
+    *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
     *            reference frame as {@code this}.
-    * @return {@code true} if the two frame vectors represent the same geometry,
-    *            {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(FrameVector3D other, double epsilon)
