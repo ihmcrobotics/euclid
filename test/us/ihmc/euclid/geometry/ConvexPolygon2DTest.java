@@ -326,7 +326,6 @@ public class ConvexPolygon2DTest
       Line2D line2d = new Line2D(pont2d, vector2d);
 
       convexPolygon2d.intersectionWithRay(line2d);
-      System.out.println("done");
    }
 
    @Test
@@ -543,7 +542,6 @@ public class ConvexPolygon2DTest
       ConvexPolygon2D polygon = new ConvexPolygon2D(polygonPoints);
 
       boolean isInside = polygon.isPointInside(testPoint);
-      System.out.println("isInside = " + isInside);
 
       assertTrue(isInside);
    }
