@@ -19,7 +19,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 public class Cylinder3DTest
 {
    private static final double EPSILON = 1e-14;
-   private static final int ITERATIONS = 100;
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void testCommonShape3dFunctionality()
