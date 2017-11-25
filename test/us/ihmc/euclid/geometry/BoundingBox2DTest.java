@@ -1371,46 +1371,46 @@ public class BoundingBox2DTest
    {
       Random random = new Random(987234L);
       BoundingBox2D firstBox, secondBox;
-      Point2D firstPoint, secondPoint, thirdPoint;
-      double epsilon = 1e-7;
 
-      firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
-      secondPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
+      {
+         Point2D firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
+         Point2D secondPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
 
-      firstBox = new BoundingBox2D(firstPoint, secondPoint);
-      secondBox = new BoundingBox2D(firstBox);
+         firstBox = new BoundingBox2D(firstPoint, secondPoint);
+         secondBox = new BoundingBox2D(firstBox);
 
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-      assertTrue(secondBox.geometricallyEquals(firstBox, epsilon));
-      assertTrue(firstBox.geometricallyEquals(firstBox, epsilon));
-      assertTrue(secondBox.geometricallyEquals(secondBox, epsilon));
+         assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
+         assertTrue(secondBox.geometricallyEquals(firstBox, EPSILON));
+         assertTrue(firstBox.geometricallyEquals(firstBox, EPSILON));
+         assertTrue(secondBox.geometricallyEquals(secondBox, EPSILON));
+      }
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
-         secondPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
+         Point2D min = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
+         Point2D max = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
 
-         firstBox = new BoundingBox2D(firstPoint, secondPoint);
+         firstBox = new BoundingBox2D(min, max);
 
-         thirdPoint = new Point2D(firstPoint);
-         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon));
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+         Point2D minCorrupted = new Point2D(min);
+         minCorrupted.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * EPSILON));
+         secondBox = new BoundingBox2D(minCorrupted, max);
+         assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
 
-         thirdPoint = new Point2D(firstPoint);
-         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon));
-         secondBox = new BoundingBox2D(thirdPoint, secondPoint);
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+         minCorrupted = new Point2D(min);
+         minCorrupted.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * EPSILON));
+         secondBox = new BoundingBox2D(minCorrupted, max);
+         assertFalse(firstBox.geometricallyEquals(secondBox, EPSILON));
 
-         thirdPoint = new Point2D(secondPoint);
-         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon));
-         secondBox = new BoundingBox2D(firstPoint, thirdPoint);
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+         Point2D maxCorrupted = new Point2D(max);
+         maxCorrupted.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * EPSILON));
+         secondBox = new BoundingBox2D(min, maxCorrupted);
+         assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
 
-         thirdPoint = new Point2D(secondPoint);
-         thirdPoint.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon));
-         secondBox = new BoundingBox2D(firstPoint, thirdPoint);
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+         maxCorrupted = new Point2D(max);
+         maxCorrupted.add(EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * EPSILON));
+         secondBox = new BoundingBox2D(min, maxCorrupted);
+         assertFalse(firstBox.geometricallyEquals(secondBox, EPSILON));
       }
    }
 }
