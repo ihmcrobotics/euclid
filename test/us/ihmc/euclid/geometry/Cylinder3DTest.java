@@ -18,8 +18,8 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Cylinder3DTest
 {
-   double eps = 1e-14;
-   int iterations = 100;
+   private static final double EPSILON = 1e-14;
+   private static final int ITERATIONS = 100;
 
    @Test
    public void testCommonShape3dFunctionality()
@@ -232,9 +232,9 @@ public class Cylinder3DTest
    {
       String failMessage = "Expected <(" + expectedPoint.getX() + "," + expectedPoint.getY() + "," + expectedPoint.getZ() + ")>, but was <("
             + actualPoint.getX() + "," + actualPoint.getY() + "," + actualPoint.getZ() + ")>";
-      assertEquals(failMessage, expectedPoint.getX(), actualPoint.getX(), eps);
-      assertEquals(failMessage, expectedPoint.getY(), actualPoint.getY(), eps);
-      assertEquals(failMessage, expectedPoint.getZ(), actualPoint.getZ(), eps);
+      assertEquals(failMessage, expectedPoint.getX(), actualPoint.getX(), EPSILON);
+      assertEquals(failMessage, expectedPoint.getY(), actualPoint.getY(), EPSILON);
+      assertEquals(failMessage, expectedPoint.getZ(), actualPoint.getZ(), EPSILON);
    }
 
    @Test
@@ -394,7 +394,7 @@ public class Cylinder3DTest
       assertTrue(firstCylinder.geometricallyEquals(firstCylinder, epsilon));
       assertTrue(secondCylinder.geometricallyEquals(secondCylinder, epsilon));
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Cylinders are equal if heights are equal within +- epsilon and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
@@ -412,7 +412,7 @@ public class Cylinder3DTest
          assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Cylinders are equal if radii are equal within +- epsilon and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
@@ -430,7 +430,7 @@ public class Cylinder3DTest
          assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Cylinders are equal if aligned opposite on the same axis and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
@@ -454,7 +454,7 @@ public class Cylinder3DTest
          assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Cylinders are equal if translations are equal within +- epsilon and are otherwise the same
          height = random.nextDouble();
          radius = random.nextDouble();
