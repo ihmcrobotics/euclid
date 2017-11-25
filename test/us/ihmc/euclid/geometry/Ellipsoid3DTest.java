@@ -17,8 +17,8 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class Ellipsoid3DTest
 {
-   private static final double epsilon = 1e-4; // This epsilon is meant small changes in coordinates. Use Ellipsoid3d's DEFAULT_EPSILON for error handling.
-   private static final int iterations = 100;
+   private static final double EPSILON = 1.0e-10; // This epsilon is meant small changes in coordinates. Use Ellipsoid3d's DEFAULT_EPSILON for error handling.
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void testCommonShape3dFunctionality()
@@ -48,25 +48,25 @@ public class Ellipsoid3DTest
       double zRadius = 3.0;
 
       Ellipsoid3D ellipsoid = new Ellipsoid3D(xRadius, yRadius, zRadius);
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xRadius - epsilon, 0.0, 0.0)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yRadius - epsilon, 0.0)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, zRadius - epsilon)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xRadius - EPSILON, 0.0, 0.0)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yRadius - EPSILON, 0.0)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, zRadius - EPSILON)));
 
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(-xRadius + epsilon, 0.0, 0.0)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -yRadius + epsilon, 0.0)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, -zRadius + epsilon)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(-xRadius + EPSILON, 0.0, 0.0)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -yRadius + EPSILON, 0.0)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, -zRadius + EPSILON)));
 
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xRadius + epsilon, 0.0, 0.0)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yRadius + epsilon, 0.0)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, zRadius + epsilon)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xRadius + EPSILON, 0.0, 0.0)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yRadius + EPSILON, 0.0)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, zRadius + EPSILON)));
 
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-xRadius - epsilon, 0.0, 0.0)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -yRadius - epsilon, 0.0)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, -zRadius - epsilon)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-xRadius - EPSILON, 0.0, 0.0)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -yRadius - EPSILON, 0.0)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, 0.0, -zRadius - EPSILON)));
 
       Point3D closestPointToPack = new Point3D();
       Vector3D normalToPack = new Vector3D();
-      boolean isInside = ellipsoid.checkIfInside(new Point3D(xRadius - epsilon, 0.0, 0.0), closestPointToPack, normalToPack);
+      boolean isInside = ellipsoid.checkIfInside(new Point3D(xRadius - EPSILON, 0.0, 0.0), closestPointToPack, normalToPack);
       assertTrue(isInside);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 0.0, 0.0), normalToPack, 1e-7);
       EuclidCoreTestTools.assertTuple3DEquals(new Point3D(xRadius, 0.0, 0.0), closestPointToPack, 1e-7);
@@ -95,21 +95,21 @@ public class Ellipsoid3DTest
       transform.setTranslation(new Vector3D(xTranslation, yTranslation, zTranslation));
 
       Ellipsoid3D ellipsoid = new Ellipsoid3D(transform, xRadius, yRadius, zRadius);
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation + xRadius - epsilon, yTranslation, zTranslation)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation + yRadius - epsilon, zTranslation)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation + zRadius - epsilon)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation + xRadius - EPSILON, yTranslation, zTranslation)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation + yRadius - EPSILON, zTranslation)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation + zRadius - EPSILON)));
 
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation - xRadius + epsilon, yTranslation, zTranslation)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation - yRadius + epsilon, zTranslation)));
-      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation - zRadius + epsilon)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation - xRadius + EPSILON, yTranslation, zTranslation)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation - yRadius + EPSILON, zTranslation)));
+      assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation - zRadius + EPSILON)));
 
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation + xRadius + epsilon, yTranslation, zTranslation)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation + yRadius + epsilon, zTranslation)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation + zRadius + epsilon)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation + xRadius + EPSILON, yTranslation, zTranslation)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation + yRadius + EPSILON, zTranslation)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation + zRadius + EPSILON)));
 
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation - xRadius - epsilon, yTranslation, zTranslation)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation - yRadius - epsilon, zTranslation)));
-      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation - zRadius - epsilon)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation - xRadius - EPSILON, yTranslation, zTranslation)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation - yRadius - EPSILON, zTranslation)));
+      assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation - zRadius - EPSILON)));
    }
 
    @Test
@@ -147,8 +147,8 @@ public class Ellipsoid3DTest
       double[] radii = new double[] {xRadius, yRadius, zRadius};
 
       assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, zeroes, zeroes, ellipsoid);
-      assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, zeroes, new double[] {-epsilon, -epsilon, -epsilon}, ellipsoid);
-      assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(true, radii, zeroes, new double[] {epsilon, epsilon, epsilon}, ellipsoid);
+      assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, zeroes, new double[] {-EPSILON, -EPSILON, -EPSILON}, ellipsoid);
+      assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(true, radii, zeroes, new double[] {EPSILON, EPSILON, EPSILON}, ellipsoid);
    }
 
    private void assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(boolean invertResult, double[] radii, double[] translations, double[] offsets,
@@ -167,7 +167,7 @@ public class Ellipsoid3DTest
    @Test
    public void testTranslation()
    {
-      for (int i = 0; i < iterations; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Random random = new Random(1776L);
 
@@ -194,15 +194,15 @@ public class Ellipsoid3DTest
          assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xTranslation, yTranslation, zTranslation)));
 
          assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, translations, zeroes, ellipsoid);
-         assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, translations, new double[] {-epsilon, -epsilon, -epsilon}, ellipsoid);
-         assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(true, radii, translations, new double[] {epsilon, epsilon, epsilon}, ellipsoid);
+         assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, translations, new double[] {-EPSILON, -EPSILON, -EPSILON}, ellipsoid);
+         assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(true, radii, translations, new double[] {EPSILON, EPSILON, EPSILON}, ellipsoid);
       }
    }
 
    @Test
    public void testSimpleRotations()
    {
-      for (int n = 0; n < iterations; n++)
+      for (int n = 0; n < ITERATIONS; n++)
       {
          Random random = new Random(1776L);
 
@@ -240,8 +240,8 @@ public class Ellipsoid3DTest
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yCoord, zCoord)));
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -yCoord, -zCoord)));
 
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yCoord + epsilon, zCoord + epsilon)));
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -(yCoord + epsilon), -(zCoord + epsilon))));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yCoord + EPSILON, zCoord + EPSILON)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -(yCoord + EPSILON), -(zCoord + EPSILON))));
 
                   yCoord = zRadius * Math.cos(angle + Math.PI / 2.0);
                   zCoord = zRadius * Math.sin(angle + Math.PI / 2.0);
@@ -249,8 +249,8 @@ public class Ellipsoid3DTest
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yCoord, zCoord)));
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -yCoord, -zCoord)));
 
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yCoord - epsilon, zCoord + epsilon)));
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -(yCoord - epsilon), -(zCoord + epsilon))));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, yCoord - EPSILON, zCoord + EPSILON)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(0.0, -(yCoord - EPSILON), -(zCoord + EPSILON))));
                }
 
                if (i == 1)
@@ -263,8 +263,8 @@ public class Ellipsoid3DTest
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord, 0.0, zCoord)));
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(-xCoord, 0.0, -zCoord)));
 
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord + epsilon, 0.0, zCoord - epsilon)));
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord + epsilon), 0.0, -(zCoord - epsilon))));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord + EPSILON, 0.0, zCoord - EPSILON)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord + EPSILON), 0.0, -(zCoord - EPSILON))));
 
                   xCoord = zRadius * Math.cos(angle + Math.PI / 2.0);
                   zCoord = -zRadius * Math.sin(angle + Math.PI / 2.0);
@@ -272,8 +272,8 @@ public class Ellipsoid3DTest
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord, 0.0, zCoord)));
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(-xCoord, 0.0, -zCoord)));
 
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord - epsilon, 0.0, zCoord - epsilon)));
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord - epsilon), 0.0, -(zCoord - epsilon))));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord - EPSILON, 0.0, zCoord - EPSILON)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord - EPSILON), 0.0, -(zCoord - EPSILON))));
                }
 
                if (i == 2)
@@ -286,8 +286,8 @@ public class Ellipsoid3DTest
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord, yCoord, 0.0)));
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(-xCoord, -yCoord, 0.0)));
 
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord + epsilon, yCoord + epsilon, 0.0)));
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord + epsilon), -(yCoord + epsilon), 0.0)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord + EPSILON, yCoord + EPSILON, 0.0)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord + EPSILON), -(yCoord + EPSILON), 0.0)));
 
                   xCoord = yRadius * Math.cos(angle + Math.PI / 2.0);
                   yCoord = yRadius * Math.sin(angle + Math.PI / 2.0);
@@ -295,8 +295,8 @@ public class Ellipsoid3DTest
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord, yCoord, 0.0)));
                   assertTrue(ellipsoid.isInsideOrOnSurface(new Point3D(-xCoord, -yCoord, 0.0)));
 
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord - epsilon, yCoord + epsilon, 0.0)));
-                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord - epsilon), -(yCoord + epsilon), 0.0)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(xCoord - EPSILON, yCoord + EPSILON, 0.0)));
+                  assertFalse(ellipsoid.isInsideOrOnSurface(new Point3D(-(xCoord - EPSILON), -(yCoord + EPSILON), 0.0)));
                }
             }
          }
@@ -311,7 +311,7 @@ public class Ellipsoid3DTest
       double xRad, yRad, zRad;
       RigidBodyTransform transform = randomTransform(random);
 
-      for (int n = 0; n < iterations; n++)
+      for (int n = 0; n < ITERATIONS; n++)
       {
          xRad = random.nextDouble();
          yRad = random.nextDouble();
@@ -359,7 +359,7 @@ public class Ellipsoid3DTest
       assertTrue(firstEllipsoid.geometricallyEquals(firstEllipsoid, epsilon));
       assertTrue(secondEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Ellipsoids are equal if dimensions are not identical, but oriented so that they align equally
          radiusX = random.nextDouble();
          radiusY = random.nextDouble();
@@ -413,7 +413,7 @@ public class Ellipsoid3DTest
          assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Ellipsoids are equal if translations are equal within +- epsilon and are otherwise the same
          radiusX = random.nextDouble();
          radiusY = random.nextDouble();
