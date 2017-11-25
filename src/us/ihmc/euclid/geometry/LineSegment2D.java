@@ -8,10 +8,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.*;
 
 /**
  * Represents a finite-length 2D line segment defined by its two 2D endpoints.
@@ -1256,6 +1253,20 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    {
       firstEndpoint.add(x, y);
       secondEndpoint.add(x, y);
+   }
+
+   /**
+    * Translates this line segment by the given (x, y) contained in {@code translation}.
+    * <p>
+    * Note that the length and direction of this line segment remains unchanged.
+    * </p>
+    *
+    * @param translation the translation to add to each endpoint of this line segment. Not modified.
+    */
+   public void translate(Tuple2DReadOnly translation)
+   {
+      firstEndpoint.add(translation);
+      secondEndpoint.add(translation);
    }
 
    /**
