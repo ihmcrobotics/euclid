@@ -10,7 +10,6 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -23,9 +22,8 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Box3DTest
 {
-
    private static final double EPSILON = 1.0e-12;
-   private static final int NUM_ITERATIONS = 100;
+   private static final int NUM_ITERATIONS = 1000;
 
    @Test
    public void testCommonShape3dFunctionality()
@@ -434,137 +432,210 @@ public class Box3DTest
    public void testGeometricallyEquals()
    {
       Random random = new Random(89725L);
-      Box3D firstBox, secondBox;
-      double lengthX, widthY, heightZ;
-      double epsilon = 1e-7;
-      Vector3D translation;
-
-      lengthX = random.nextDouble();
-      widthY = random.nextDouble();
-      heightZ = random.nextDouble();
-
-      firstBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox = new Box3D(lengthX, widthY, heightZ);
-
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-      assertTrue(secondBox.geometricallyEquals(firstBox, epsilon));
-      assertTrue(firstBox.geometricallyEquals(firstBox, epsilon));
-      assertTrue(secondBox.geometricallyEquals(secondBox, epsilon));
 
       for (int i = 0; i < NUM_ITERATIONS; ++i)
-      { // Boxes are equal if dimensions are not identical, but oriented so that they align equally
-         lengthX = random.nextDouble();
-         widthY = random.nextDouble();
-         heightZ = random.nextDouble();
+      { // Test with identical boxes
+         double lengthX = random.nextDouble();
+         double widthY = random.nextDouble();
+         double heightZ = random.nextDouble();
 
-         firstBox = new Box3D(lengthX, widthY, heightZ);
+         Box3D box1 = new Box3D(lengthX, widthY, heightZ);
+         Box3D box2 = new Box3D(lengthX, widthY, heightZ);
 
-         secondBox = new Box3D(lengthX, widthY, heightZ);
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+         assertTrue("Iteration: " + i, box2.geometricallyEquals(box1, EPSILON));
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box1, EPSILON));
+         assertTrue("Iteration: " + i, box2.geometricallyEquals(box2, EPSILON));
 
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         box1 = new Box3D(pose, lengthX, widthY, heightZ);
+         box2 = new Box3D(pose, lengthX, widthY, heightZ);
 
-         // SecondBox = (LX, HZ, WY)
-         secondBox = new Box3D(lengthX, heightZ, widthY);
-
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         secondBox.appendTransform(new RigidBodyTransform(new AxisAngle(1.0, 0.0, 0.0, Math.PI / 2.0), new Vector3D()));
-
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         // SecondBox = (WY, LX, HZ)
-         secondBox = new Box3D(widthY, lengthX, heightZ);
-
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         secondBox.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 0.0, 1.0, Math.PI / 2.0), new Vector3D()));
-
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         // SecondBox = (HZ, WY, LX)
-         secondBox = new Box3D(heightZ, widthY, lengthX);
-
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         secondBox.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 1.0, 0.0, Math.PI / 2.0), new Vector3D()));
-
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         // SecondBox = (HZ, LX, WY)
-         secondBox = new Box3D(heightZ, lengthX, widthY);
-
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         secondBox.appendTransform(new RigidBodyTransform(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0));
-
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         // SecondBox = (WY, HZ, LX)
-         secondBox = new Box3D(widthY, heightZ, lengthX);
-
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         secondBox.appendTransform(new RigidBodyTransform(0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0));
-
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+         assertTrue("Iteration: " + i, box2.geometricallyEquals(box1, EPSILON));
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box1, EPSILON));
+         assertTrue("Iteration: " + i, box2.geometricallyEquals(box2, EPSILON));
       }
 
       for (int i = 0; i < NUM_ITERATIONS; ++i)
-      { // Boxes are equal if translations are equal within +- epsilon and are otherwise the same
-         lengthX = random.nextDouble();
-         widthY = random.nextDouble();
-         heightZ = random.nextDouble();
+      { // Test 2 boxes with same pose and different size - Method 1
+         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         double length1 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+         double width1 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, length1);
+         double height1 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, width1);
+         double length2 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+         double width2 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, length2);
+         double height2 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, width2);
+         Vector3D size1 = new Vector3D(length1, width1, height1);
+         Vector3D size2 = new Vector3D(length2, width2, height2);
+         Box3D box1 = new Box3D(pose, length1, width1, height1);
+         Box3D box2 = new Box3D(pose, length2, width2, height2);
 
-         firstBox = new Box3D(lengthX, widthY, heightZ);
-         secondBox = new Box3D(lengthX, widthY, heightZ);
-
-         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
-
-         secondBox.appendTranslation(translation);
-
-         assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
-
-         secondBox = new Box3D(lengthX, widthY, heightZ);
-
-         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
-
-         secondBox.appendTranslation(translation);
-
-         assertFalse(firstBox.geometricallyEquals(secondBox, epsilon));
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON) == size1.geometricallyEquals(size2, EPSILON));
+         double epsilon = random.nextDouble();
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, epsilon) == size1.geometricallyEquals(size2, epsilon));
       }
 
-      lengthX = random.nextDouble();
-      widthY = random.nextDouble();
-      heightZ = random.nextDouble();
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Test 2 boxes with same pose and different size - Method 2
+         double epsilon = random.nextDouble();
+         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         Vector3D size1 = EuclidCoreRandomTools.generateRandomVector3D(random, 2.0 * epsilon, 10.0);
+         Box3D box1 = new Box3D(pose, size1.getX(), size1.getY(), size1.getZ());
 
-      firstBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox = new Box3D(lengthX, widthY, heightZ);
+         Vector3D size2 = new Vector3D();
+         size2.add(size1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon));
+         Box3D box2 = new Box3D(pose, size2.getX(), size2.getY(), size2.getZ());
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, epsilon) == size1.geometricallyEquals(size2, epsilon));
 
-      secondBox.appendTransform(new RigidBodyTransform(new AxisAngle(1.0, 0.0, 0.0, Math.PI), new Vector3D()));
+         size2.add(size1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon));
+         box2 = new Box3D(pose, size2.getX(), size2.getY(), size2.getZ());
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, epsilon) == size1.geometricallyEquals(size2, epsilon));
+      }
 
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Test 2 boxes with same orientation, same size, but different position
+         double epsilon = random.nextDouble();
+         Vector3D size = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
 
-      lengthX = random.nextDouble();
-      widthY = random.nextDouble();
-      heightZ = random.nextDouble();
+         Quaternion orientation = EuclidCoreRandomTools.generateRandomQuaternion(random);
+         Point3D position1 = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         RigidBodyTransform pose1 = new RigidBodyTransform(orientation, position1);
+         Box3D box1 = new Box3D(pose1, size.getX(), size.getY(), size.getZ());
 
-      firstBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox = new Box3D(lengthX, widthY, heightZ);
+         Point3D position2 = new Point3D();
+         position2.add(position1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon));
+         RigidBodyTransform pose2 = new RigidBodyTransform(orientation, position2);
+         Box3D box2 = new Box3D(pose2, size.getX(), size.getY(), size.getZ());
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, epsilon));
 
-      secondBox.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 1.0, 0.0, Math.PI), new Vector3D()));
+         position2.add(position1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon));
+         pose2 = new RigidBodyTransform(orientation, position2);
+         box2 = new Box3D(pose2, size.getX(), size.getY(), size.getZ());
+         assertFalse("Iteration: " + i, box1.geometricallyEquals(box2, epsilon));
+      }
 
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Test 2 boxes with same position, same size, but different orientation
+         Quaternion orientation1 = EuclidCoreRandomTools.generateRandomQuaternion(random);
+         Quaternion orientation2 = EuclidCoreRandomTools.generateRandomQuaternion(random);
+         Point3D position = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         RigidBodyTransform pose1 = new RigidBodyTransform(orientation1, position);
+         RigidBodyTransform pose2 = new RigidBodyTransform(orientation2, position);
+         Vector3D size = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Box3D box1 = new Box3D(pose1, size.getX(), size.getY(), size.getZ());
+         Box3D box2 = new Box3D(pose2, size.getX(), size.getY(), size.getZ());
 
-      lengthX = random.nextDouble();
-      widthY = random.nextDouble();
-      heightZ = random.nextDouble();
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON) == orientation1.geometricallyEquals(orientation2, EPSILON));
+      }
 
-      firstBox = new Box3D(lengthX, widthY, heightZ);
-      secondBox = new Box3D(lengthX, widthY, heightZ);
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Test 180 degree flips around the x, y, or z axis
+         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         double lengthX = random.nextDouble();
+         double widthY = random.nextDouble();
+         double heightZ = random.nextDouble();
+         Box3D box1 = new Box3D(pose, lengthX, widthY, heightZ);
 
-      secondBox.appendTransform(new RigidBodyTransform(new AxisAngle(0.0, 0.0, 1.0, Math.PI), new Vector3D()));
+         int axis = random.nextInt(3);
+         switch (axis)
+         {
+         case 0:
+            pose.appendRollRotation(Math.PI);
+            break;
+         case 1:
+            pose.appendPitchRotation(Math.PI);
+            break;
+         case 2:
+            pose.appendYawRotation(Math.PI);
+            break;
+         default:
+            throw new RuntimeException("Unexpected axis value: " + axis);
+         }
+         Box3D box2 = new Box3D(pose, lengthX, widthY, heightZ);
 
-      assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+      }
+
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Swapping two of the size components and adding a 90-degree rotation such that the two boxes should represent the same geometry
+        // Swapping X <-> Y and adding a 90-degree rotation around Z
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
+         pose2.appendYawRotation(Math.PI / 2.0);
+
+         double lengthX = random.nextDouble();
+         double widthY = random.nextDouble();
+         double heightZ = random.nextDouble();
+         Box3D box1 = new Box3D(pose1, lengthX, widthY, heightZ);
+         Box3D box2 = new Box3D(pose2, widthY, lengthX, heightZ);
+
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+      }
+
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Swapping two of the size components and adding a 90-degree rotation such that the two boxes should represent the same geometry
+        // Swapping X <-> Z and adding a 90-degree rotation around Y
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
+         pose2.appendPitchRotation(Math.PI / 2.0);
+
+         double lengthX = random.nextDouble();
+         double widthY = random.nextDouble();
+         double heightZ = random.nextDouble();
+         Box3D box1 = new Box3D(pose1, lengthX, widthY, heightZ);
+         Box3D box2 = new Box3D(pose2, heightZ, widthY, lengthX);
+
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+      }
+
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Swapping two of the size components and adding a 90-degree rotation such that the two boxes should represent the same geometry
+        // Swapping Y <-> Z and adding a 90-degree rotation around X
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
+         pose2.appendRollRotation(Math.PI / 2.0);
+
+         double lengthX = random.nextDouble();
+         double widthY = random.nextDouble();
+         double heightZ = random.nextDouble();
+         Box3D box1 = new Box3D(pose1, lengthX, widthY, heightZ);
+         Box3D box2 = new Box3D(pose2, lengthX, heightZ, widthY);
+
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+      }
+
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Permuting the three size components and adding a 90-degree rotations such that the two boxes should represent the same geometry
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
+         pose2.appendYawRotation(Math.PI / 2.0);
+         pose2.appendPitchRotation(Math.PI / 2.0);
+
+         double lengthX = random.nextDouble();
+         double widthY = random.nextDouble();
+         double heightZ = random.nextDouble();
+         Box3D box1 = new Box3D(pose1, lengthX, widthY, heightZ);
+         Box3D box2 = new Box3D(pose2, heightZ, lengthX, widthY);
+
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+      }
+
+      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      { // Permuting the three size components and adding a 90-degree rotations such that the two boxes should represent the same geometry
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
+         pose2.appendYawRotation(Math.PI / 2.0);
+         pose2.appendRollRotation(Math.PI / 2.0);
+
+         double lengthX = random.nextDouble();
+         double widthY = random.nextDouble();
+         double heightZ = random.nextDouble();
+         Box3D box1 = new Box3D(pose1, lengthX, widthY, heightZ);
+         Box3D box2 = new Box3D(pose2, widthY, heightZ, lengthX);
+
+         assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
+      }
    }
 
    private static Box3D createRandomBox(Random random)

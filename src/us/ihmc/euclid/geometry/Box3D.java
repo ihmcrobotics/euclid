@@ -5,7 +5,9 @@ import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -16,8 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
- * {@code Box3D} represents an axis-aligned box with a length, a width, and a
- * height.
+ * {@code Box3D} represents an axis-aligned box with a length, a width, and a height.
  * <p>
  * Its origin is located at its centroid.
  * </p>
@@ -28,13 +29,13 @@ public class Box3D extends Shape3D<Box3D>
    private final Point3D temporaryPoint = new Point3D();
 
    /**
-    * Represents half the length, width, and height of this box. Note that this
-    * field automatically updated from {@link #size}.
+    * Represents half the length, width, and height of this box. Note that this field automatically
+    * updated from {@link #size}.
     */
    private final Size3D halfSize = new Size3D();
    /**
-    * Represents the length, width, and height of this box. When changed, it
-    * automatically updates the field {@link #halfSize}.
+    * Represents the length, width, and height of this box. When changed, it automatically updates
+    * the field {@link #halfSize}.
     */
    private final Size3D size = new Size3D()
    {
@@ -84,8 +85,8 @@ public class Box3D extends Shape3D<Box3D>
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
     * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width},
-    *            or {@code height} is negative.
+    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    *            negative.
     */
    public Box3D(double length, double width, double height)
    {
@@ -100,8 +101,8 @@ public class Box3D extends Shape3D<Box3D>
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
     * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width},
-    *            or {@code height} is negative.
+    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    *            negative.
     */
    public Box3D(Point3DReadOnly position, QuaternionReadOnly orientation, double length, double width, double height)
    {
@@ -116,8 +117,8 @@ public class Box3D extends Shape3D<Box3D>
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
     * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width},
-    *            or {@code height} is negative.
+    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    *            negative.
     */
    public Box3D(Pose3D pose, double length, double width, double height)
    {
@@ -132,8 +133,8 @@ public class Box3D extends Shape3D<Box3D>
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
     * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width},
-    *            or {@code height} is negative.
+    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    *            negative.
     */
    public Box3D(RigidBodyTransform pose, double length, double width, double height)
    {
@@ -146,8 +147,7 @@ public class Box3D extends Shape3D<Box3D>
     * 
     * @param pose the position and orientation of this box. Not modified.
     * @param size the size of this box along in order the x, y, and z axes.
-    * @throws IllegalArgumentException if any of {@code size}'s elements is
-    *            negative.
+    * @throws IllegalArgumentException if any of {@code size}'s elements is negative.
     */
    public Box3D(RigidBodyTransform pose, double[] size)
    {
@@ -162,15 +162,13 @@ public class Box3D extends Shape3D<Box3D>
    }
 
    /**
-    * Tests separately and on a per component basis if the pose and the size of
-    * this box and {@code other}'s pose and size are equal to an
-    * {@code epsilon}.
+    * Tests separately and on a per component basis if the pose and the size of this box and
+    * {@code other}'s pose and size are equal to an {@code epsilon}.
     * 
-    * @param other the other box which pose and size is to be compared against
-    *           this box pose and size. Not modified.
+    * @param other the other box which pose and size is to be compared against this box pose and
+    *           size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two boxes are equal component-wise,
-    *         {@code false} otherwise.
+    * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(Box3D other, double epsilon)
@@ -263,10 +261,9 @@ public class Box3D extends Shape3D<Box3D>
    /**
     * Computes and packs the bounding box 3D that fully contains this box 3D.
     * <p>
-    * This method does not take the size of this box to convert it into a
-    * bounding box, it actually considers the pose of this box 3D such that if
-    * it has a non-zero orientation the bounding box will be bigger than this
-    * box.
+    * This method does not take the size of this box to convert it into a bounding box, it actually
+    * considers the pose of this box 3D such that if it has a non-zero orientation the bounding box
+    * will be bigger than this box.
     * </p>
     * 
     * @param boundingBoxToPack the bounding box to pack. Modified.
@@ -288,8 +285,8 @@ public class Box3D extends Shape3D<Box3D>
     * This method is equivalent to {@link #getPosition(Tuple3DBasics)}.
     * </p>
     * 
-    * @param centerToPack the point in which the coordinates of the center of
-    *           this box are stored. Modified.
+    * @param centerToPack the point in which the coordinates of the center of this box are stored.
+    *           Modified.
     */
    public void getCenter(Point3DBasics centerToPack)
    {
@@ -360,8 +357,7 @@ public class Box3D extends Shape3D<Box3D>
     * Packs the world coordinates of one of this box vertices.
     * 
     * @param vertexIndex the index in [0, 7] of the vertex to pack.
-    * @param vertexToPack point in which the coordinates of the vertex are
-    *           stored. Modified.
+    * @param vertexToPack point in which the coordinates of the vertex are stored. Modified.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 7].
     */
    public void getVertex(int vertexIndex, Point3DBasics vertexToPack)
@@ -393,15 +389,12 @@ public class Box3D extends Shape3D<Box3D>
    }
 
    /**
-    * Pack the coordinates in world of the 8 vertices of this box in the given
-    * array.
+    * Pack the coordinates in world of the 8 vertices of this box in the given array.
     * 
-    * @param verticesToPack the array in which the coordinates are stored.
-    *           Modified.
-    * @throws IllegalArgumentException if the length of the given array is
-    *            different than 8.
-    * @throws NullPointerException if any of the 8 first elements of the given
-    *            array is {@code null}.
+    * @param verticesToPack the array in which the coordinates are stored. Modified.
+    * @throws IllegalArgumentException if the length of the given array is different than 8.
+    * @throws NullPointerException if any of the 8 first elements of the given array is
+    *            {@code null}.
     */
    public void getVertices(Point3DBasics[] verticesToPack)
    {
@@ -413,22 +406,19 @@ public class Box3D extends Shape3D<Box3D>
    }
 
    /**
-    * Computes the coordinates of the possible intersections between a line and
-    * this box.
+    * Computes the coordinates of the possible intersections between a line and this box.
     * <p>
-    * In the case the line and this box do not intersect, this method returns
-    * {@code 0} and {@code firstIntersectionToPack} and
-    * {@code secondIntersectionToPack} remain unmodified.
+    * In the case the line and this box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     * 
-    * @param line the line expressed in world coordinates that may intersect
-    *           this box. Not modified.
-    * @param firstIntersectionToPack the coordinate in world of the first
-    *           intersection. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second
-    *           intersection. Can be {@code null}. Modified.
-    * @return the number of intersections between the line and this box. It is
-    *         either equal to 0, 1, or 2.
+    * @param line the line expressed in world coordinates that may intersect this box. Not modified.
+    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and this box. It is either equal to 0, 1,
+    *         or 2.
     */
    public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
@@ -436,24 +426,22 @@ public class Box3D extends Shape3D<Box3D>
    }
 
    /**
-    * Computes the coordinates of the possible intersections between a line and
-    * this box.
+    * Computes the coordinates of the possible intersections between a line and this box.
     * <p>
-    * In the case the line and this box do not intersect, this method returns
-    * {@code 0} and {@code firstIntersectionToPack} and
-    * {@code secondIntersectionToPack} are set to {@link Double#NaN}.
+    * In the case the line and this box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * 
-    * @param pointOnLine a point expressed in world located on the infinitely
-    *           long line. Not modified.
-    * @param lineDirection the direction expressed in world of the line. Not
+    * @param pointOnLine a point expressed in world located on the infinitely long line. Not
     *           modified.
-    * @param firstIntersectionToPack the coordinate in world of the first
-    *           intersection. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second
-    *           intersection. Can be {@code null}. Modified.
-    * @return the number of intersections between the line and this box. It is
-    *         either equal to 0, 1, or 2.
+    * @param lineDirection the direction expressed in world of the line. Not modified.
+    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and this box. It is either equal to 0, 1,
+    *         or 2.
     */
    public int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                Point3DBasics secondIntersectionToPack)
@@ -521,8 +509,7 @@ public class Box3D extends Shape3D<Box3D>
     * @param length the size of this box along the x-axis.
     * @param width the size of this box along the y-axis.
     * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of the three arguments is
-    *            negative.
+    * @throws IllegalArgumentException if any of the three arguments is negative.
     */
    public void setSize(double length, double width, double height)
    {
@@ -568,18 +555,17 @@ public class Box3D extends Shape3D<Box3D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two boxes are
-    * geometrically similar.
+    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically
+    * similar.
     * <p>
-    * This method accounts for the multiple combinations of sizes and rotations
-    * that generate identical boxes. For instance, two boxes that are identical
-    * but one is flipped by 180 degrees are considered geometrically equal.
+    * This method accounts for the multiple combinations of sizes and rotations that generate
+    * identical boxes. For instance, two boxes that are identical but one is flipped by 180 degrees
+    * are considered geometrically equal.
     * </p>
     * 
     * @param other the box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry,
-    *         {@code false} otherwise.
+    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(Box3D other, double epsilon)
@@ -587,24 +573,20 @@ public class Box3D extends Shape3D<Box3D>
       if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
          return false;
 
-      double thisSizeWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, size));
-      double otherSizeWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.size));
+      RotationMatrixReadOnly otherRotation = other.shapePose.getRotationMatrix();
+      double otherSizeWorldX = TransformationTools.computeTransformedX(otherRotation, false, other.size);
+      double otherSizeWorldY = TransformationTools.computeTransformedY(otherRotation, false, other.size);
+      double otherSizeWorldZ = TransformationTools.computeTransformedZ(otherRotation, false, other.size);
+      
+      RotationMatrixReadOnly thisRotation = shapePose.getRotationMatrix();
+      double otherSizeLocalX = Math.abs(TransformationTools.computeTransformedX(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
+      double otherSizeLocalY = Math.abs(TransformationTools.computeTransformedY(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
+      double otherSizeLocalZ = Math.abs(TransformationTools.computeTransformedZ(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
 
-      if (!EuclidCoreTools.epsilonEquals(thisSizeWorldX, otherSizeWorldX, epsilon))
-         return false;
+      double diffX = size.getX() - otherSizeLocalX;
+      double diffY = size.getY() - otherSizeLocalY;
+      double diffZ = size.getZ() - otherSizeLocalZ;
 
-      double thisSizeWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, size));
-      double otherSizeWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.size));
-
-      if (!EuclidCoreTools.epsilonEquals(thisSizeWorldY, otherSizeWorldY, epsilon))
-         return false;
-
-      double thisSizeWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, size));
-      double otherSizeWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.size));
-
-      if (!EuclidCoreTools.epsilonEquals(thisSizeWorldZ, otherSizeWorldZ, epsilon))
-         return false;
-
-      return true;
+      return EuclidCoreTools.normSquared(diffX, diffY, diffZ) <= epsilon * epsilon;
    }
 }
