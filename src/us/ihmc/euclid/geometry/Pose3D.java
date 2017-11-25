@@ -721,7 +721,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * 
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this} and {@code orientation}, it is contained in
-    *         [0, <i>pi</i>].
+    *         [0, 2<i>pi</i>].
     */
    public double getOrientationDistance(QuaternionReadOnly orientation)
    {
@@ -733,7 +733,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * 
     * @param other the other pose 3D used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this.orientation} and {@code other.orientation},
-    *         it is contained in [0, <i>pi</i>].
+    *         it is contained in [0, 2<i>pi</i>].
     */
    public double getOrientationDistance(Pose3D other)
    {
