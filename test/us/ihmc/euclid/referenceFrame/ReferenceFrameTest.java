@@ -90,8 +90,6 @@ public class ReferenceFrameTest
 
    private class RandomlyChangingFrame extends ReferenceFrame
    {
-      private static final long serialVersionUID = -476837045790926369L;
-
       public RandomlyChangingFrame(String frameName, ReferenceFrame parentFrame)
       {
          super(frameName, parentFrame);
