@@ -1,20 +1,12 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
-
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.*;
 
 /**
  * {@code Ellipsoid3D} represents a 3D ellipsoid defined by its three main radii and with its origin
@@ -420,24 +412,74 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
       if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
          return false;
 
-      double thisRadiiWorldX = Math.abs(computeTransformedX(shapePose.getRotationMatrix(), false, radii));
-      double otherRadiiWorldX = Math.abs(computeTransformedX(other.shapePose.getRotationMatrix(), false, other.radii));
+      boolean areThisRadiiXYEqual = EuclidCoreTools.epsilonEquals(radii.getX(), radii.getY(), epsilon);
+      boolean areThisRadiiXZEqual = EuclidCoreTools.epsilonEquals(radii.getX(), radii.getZ(), epsilon);
 
-      if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldX, otherRadiiWorldX, epsilon))
-         return false;
+      if (areThisRadiiXYEqual && areThisRadiiXZEqual)
+      { // This ellipsoid is a sphere.
+        // First - assert that the other ellipsoid is also a sphere.
+         if (!EuclidCoreTools.epsilonEquals(other.radii.getX(), other.radii.getY(), epsilon))
+            return false;
+         if (!EuclidCoreTools.epsilonEquals(other.radii.getX(), other.radii.getZ(), epsilon))
+            return false;
+         // Second - assert that the radii are the same between the two ellipsoids.
+         double thisRadiiSum = (radii.getX() + radii.getY() + radii.getZ());
+         double otherRadiiSum = (other.radii.getX() + other.radii.getY() + other.radii.getZ());
+         return Math.abs(thisRadiiSum - otherRadiiSum) <= 3.0 * epsilon; // Comparing the average of each ellipsoid's radii.
+      }
 
-      double thisRadiiWorldY = Math.abs(computeTransformedY(shapePose.getRotationMatrix(), false, radii));
-      double otherRadiiWorldY = Math.abs(computeTransformedY(other.shapePose.getRotationMatrix(), false, other.radii));
+      RotationMatrixReadOnly otherRotation = other.shapePose.getRotationMatrix();
+      double otherRadiusWorldX = TransformationTools.computeTransformedX(otherRotation, false, other.radii);
+      double otherRadiusWorldY = TransformationTools.computeTransformedY(otherRotation, false, other.radii);
+      double otherRadiusWorldZ = TransformationTools.computeTransformedZ(otherRotation, false, other.radii);
 
-      if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldY, otherRadiiWorldY, epsilon))
-         return false;
+      RotationMatrixReadOnly thisRotation = shapePose.getRotationMatrix();
+      double otherRadiusLocalX = Math.abs(TransformationTools.computeTransformedX(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));
+      double otherRadiusLocalY = Math.abs(TransformationTools.computeTransformedY(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));
+      double otherRadiusLocalZ = Math.abs(TransformationTools.computeTransformedZ(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));
 
-      double thisRadiiWorldZ = Math.abs(computeTransformedZ(shapePose.getRotationMatrix(), false, radii));
-      double otherRadiiWorldZ = Math.abs(computeTransformedZ(other.shapePose.getRotationMatrix(), false, other.radii));
+      if (areThisRadiiXYEqual)
+      {
+         if (!EuclidCoreTools.epsilonEquals(radii.getZ(), otherRadiusLocalZ, epsilon))
+            return false;
 
-      if (!EuclidCoreTools.epsilonEquals(thisRadiiWorldZ, otherRadiiWorldZ, epsilon))
-         return false;
+         double thisRadiiXY = EuclidCoreTools.normSquared(radii.getX(), radii.getY());
+         double otherRadiiXY = EuclidCoreTools.normSquared(otherRadiusLocalX, otherRadiusLocalY);
 
-      return true;
+         return EuclidCoreTools.epsilonEquals(thisRadiiXY, otherRadiiXY, epsilon);
+      }
+
+      if (areThisRadiiXZEqual)
+      {
+         if (!EuclidCoreTools.epsilonEquals(radii.getY(), otherRadiusLocalY, epsilon))
+            return false;
+
+         double thisRadiiXZ = EuclidCoreTools.normSquared(radii.getX(), radii.getZ());
+         double otherRadiiXZ = EuclidCoreTools.normSquared(otherRadiusLocalX, otherRadiusLocalZ);
+
+         return EuclidCoreTools.epsilonEquals(thisRadiiXZ, otherRadiiXZ, epsilon);
+      }
+
+      boolean areThisRadiiYZEqual = EuclidCoreTools.epsilonEquals(radii.getY(), radii.getZ(), epsilon);
+
+      if (areThisRadiiYZEqual)
+      {
+         if (!EuclidCoreTools.epsilonEquals(radii.getX(), otherRadiusLocalX, epsilon))
+            return false;
+
+         double thisRadiiYZ = EuclidCoreTools.normSquared(radii.getY(), radii.getZ());
+         double otherRadiiYZ = EuclidCoreTools.normSquared(otherRadiusLocalY, otherRadiusLocalZ);
+
+         return EuclidCoreTools.epsilonEquals(thisRadiiYZ, otherRadiiYZ, epsilon);
+      }
+
+      double diffX = radii.getX() - otherRadiusLocalX;
+      double diffY = radii.getY() - otherRadiusLocalY;
+      double diffZ = radii.getZ() - otherRadiusLocalZ;
+
+      if (EuclidCoreTools.normSquared(diffX, diffY, diffZ) <= epsilon * epsilon)
+         return true;
+
+      return false;
    }
 }
