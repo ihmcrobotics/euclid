@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,6 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
@@ -133,30 +134,36 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
    {
       super.testOverloading();
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[]{Vector3D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[]{Vector3D.class, Double.TYPE});
+      framelessMethodsToIgnore.put("set", new Class<?>[] {Vector3D.class});
+      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Vector3D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector3D.class, Vector3D.class, true, 1, framelessMethodsToIgnore);
    }
-   
+
    @Test
-   public void testGeometricallyEquals() {
+   public void testGeometricallyEquals()
+   {
       Random random = new Random(58722L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
          double epsilon = random.nextDouble();
 
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          FrameVector3D fv = EuclidFrameRandomTools.generateRandomFrameVector3D(random, referenceFrame);
          FrameVector3D fv0 = EuclidFrameRandomTools.generateRandomFrameVector3D(random, referenceFrame);
-         
-         if (fv.getVector().geometricallyEquals(fv0.getVector(), epsilon)) {
+
+         if (fv.getVector().geometricallyEquals(fv0.getVector(), epsilon))
+         {
             assertTrue(fv.geometricallyEquals(fv0, epsilon));
-         } else {
+         }
+         else
+         {
             assertFalse(fv.geometricallyEquals(fv0, epsilon));
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
          double epsilon = random.nextDouble();
 
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
@@ -165,10 +172,13 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
          FrameVector3D fv = EuclidFrameRandomTools.generateRandomFrameVector3D(random, referenceFrame);
          FrameVector3D fv0 = EuclidFrameRandomTools.generateRandomFrameVector3D(random, referenceFrame0);
 
-         try {
+         try
+         {
             fv.geometricallyEquals(fv0, epsilon);
             fail();
-         } catch (ReferenceFrameMismatchException ignored) {
+         }
+         catch (ReferenceFrameMismatchException ignored)
+         {
 
          }
       }

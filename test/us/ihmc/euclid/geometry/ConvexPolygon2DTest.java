@@ -1,6 +1,9 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,7 +12,6 @@ import org.junit.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -32,7 +34,7 @@ public class ConvexPolygon2DTest
       assertTrue(defaultConstructor.isUpToDate());
 
       int numberOfVertices = 4;
-      ArrayList<Point2D> verticesList = new ArrayList<Point2D>();
+      ArrayList<Point2D> verticesList = new ArrayList<>();
       verticesList.add(new Point2D(0.0, 0.0));
       verticesList.add(new Point2D(0.0, 1.0));
       verticesList.add(new Point2D(1.0, 0.0));
@@ -78,7 +80,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testClear()
    {
-      ArrayList<Point2D> verticesList = new ArrayList<Point2D>();
+      ArrayList<Point2D> verticesList = new ArrayList<>();
       verticesList.add(new Point2D(0.0, 0.0));
       verticesList.add(new Point2D(0.0, 1.0));
       verticesList.add(new Point2D(1.0, 0.0));
@@ -194,7 +196,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testConstructorWithRepeatedPoints()
    {
-      ArrayList<Point2D> listOfPoints = new ArrayList<Point2D>();
+      ArrayList<Point2D> listOfPoints = new ArrayList<>();
       listOfPoints.add(new Point2D(0.0, 0.0));
       listOfPoints.add(new Point2D(1.0, 1.0));
       listOfPoints.add(new Point2D(1.0, 1.0));
@@ -313,7 +315,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testNANRay()
    {
-      ArrayList<Point2D> listOfPoints = new ArrayList<Point2D>();
+      ArrayList<Point2D> listOfPoints = new ArrayList<>();
       listOfPoints.add(new Point2D(0.11429999999999998, 0.1397));
       listOfPoints.add(new Point2D(0.11429999999999998, 0.04444999999999999));
       listOfPoints.add(new Point2D(-0.047625, 0.04444999999999999));
@@ -678,7 +680,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testDistancePoint2dConvexPolygon2d()
    {
-      ArrayList<Point2D> points = new ArrayList<Point2D>();
+      ArrayList<Point2D> points = new ArrayList<>();
       points.add(new Point2D());
       points.add(new Point2D());
       points.add(new Point2D());
@@ -870,7 +872,7 @@ public class ConvexPolygon2DTest
 
    private boolean arePointsAtExactlyEqualPosition(Point2DReadOnly point1, Point2DReadOnly point2)
    {
-      return ((point1.getX() == point2.getX()) && (point1.getY() == point2.getY()));
+      return point1.getX() == point2.getX() && point1.getY() == point2.getY();
    }
 
    private ConvexPolygon2D createSomeValidPolygon()
@@ -887,7 +889,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testOrthogonalProjectionPointConvexPolygon2d()
    {
-      ArrayList<Point2D> pointList = new ArrayList<Point2D>();
+      ArrayList<Point2D> pointList = new ArrayList<>();
       ConvexPolygon2D convexPolygon;
       Point2D testPoint = new Point2D();
 
@@ -908,7 +910,7 @@ public class ConvexPolygon2DTest
 
             if (VERBOSE)
             {
-               if ((i == 9) && (k == 69))
+               if (i == 9 && k == 69)
                {
                   System.out.println("convexPolygon = " + convexPolygon);
                   System.out.println("testPoint = " + testPoint);
@@ -1478,7 +1480,7 @@ public class ConvexPolygon2DTest
       assertPointsEqual(expected9, polygon.intersectionWith(segment9), false);
       assertTrue(polygon.intersectionWith(segment9, result1, result2) == 2);
    }
-   
+
    @Test
    public void testGeometricallyEquals()
    {
@@ -1488,7 +1490,7 @@ public class ConvexPolygon2DTest
       int numberOfVertices;
       double epsilon = 1e-6;
       Vector2D translation;
-      
+
       numberOfVertices = 3 + random.nextInt(10);
 
       firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
@@ -1498,39 +1500,39 @@ public class ConvexPolygon2DTest
       assertTrue(secondPolygon.geometricallyEquals(firstPolygon, epsilon));
       assertTrue(firstPolygon.geometricallyEquals(firstPolygon, epsilon));
       assertTrue(secondPolygon.geometricallyEquals(secondPolygon, epsilon));
-      
+
       for (int i = 0; i < iterations; ++i)
       { // Convex polygons are only equal if all points lie within +- epsilon of each other
          numberOfVertices = 3 + random.nextInt(10);
-         
+
          firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
          firstPolygon.scale(10.0);
          secondPolygon = new ConvexPolygon2D(firstPolygon);
-         
+
          secondPolygon.applyTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0.0, 0.0, 1.0), 0.1 * epsilon), new Vector3D()));
-      
+
          assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
-         
+
          secondPolygon = new ConvexPolygon2D(firstPolygon);
-         
+
          secondPolygon.applyTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0.0, 0.0, 1.0), 10.0 * epsilon), new Vector3D()));
-         
+
          assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
       }
-      
+
       for (int i = 0; i < iterations; ++i)
       { // Convex polygons are equal if translations are equal within +- epsilon and are otherwise the same
          numberOfVertices = 3 + random.nextInt(10);
-         
+
          firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
          firstPolygon.scale(10.0);
-         
+
          secondPolygon = new ConvexPolygon2D(firstPolygon);
          translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon);
          secondPolygon.translate(translation);
-      
+
          assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
-         
+
          secondPolygon = new ConvexPolygon2D(firstPolygon);
          translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon);
          secondPolygon.translate(translation);

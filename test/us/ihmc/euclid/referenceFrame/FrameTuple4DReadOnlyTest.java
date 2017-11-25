@@ -1,16 +1,17 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Random;
+
 import org.junit.Test;
+
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple4D.Tuple4DReadOnlyTest;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
-
-import java.util.Random;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public abstract class FrameTuple4DReadOnlyTest<T extends FrameTuple4DReadOnly> extends Tuple4DReadOnlyTest<T>
 {
@@ -39,6 +40,7 @@ public abstract class FrameTuple4DReadOnlyTest<T extends FrameTuple4DReadOnly> e
 
    public abstract T createTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s);
 
+   @Override
    @Test
    public void testEpsilonEquals() throws Exception
    {
@@ -66,6 +68,7 @@ public abstract class FrameTuple4DReadOnlyTest<T extends FrameTuple4DReadOnly> e
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
    }
 
+   @Override
    @Test
    public void testEquals() throws Exception
    {

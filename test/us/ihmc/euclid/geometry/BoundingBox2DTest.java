@@ -1,6 +1,9 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Random;
 
@@ -1073,8 +1076,7 @@ public class BoundingBox2DTest
          Point2D actualFirstIntersection = new Point2D();
          Point2D actualSecondIntersection = new Point2D();
          expectedN = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), pointOnLine,
-                                                                                   lineDirection, expectedFirstIntersection,
-                                                                                   expectedSecondIntersection);
+                                                                                   lineDirection, expectedFirstIntersection, expectedSecondIntersection);
          actualN = boundingBox2D.intersectionWithLine2D(pointOnLine, lineDirection, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
@@ -1117,10 +1119,9 @@ public class BoundingBox2DTest
          Point2D actualFirstIntersection = new Point2D();
          Point2D actualSecondIntersection = new Point2D();
          expectedN = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(),
-                                                                                          lineSegmentStart, lineSegmentEnd,
-                                                                                          expectedFirstIntersection, expectedSecondIntersection);
-         actualN = boundingBox2D.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, actualFirstIntersection,
-                                                               actualSecondIntersection);
+                                                                                          lineSegmentStart, lineSegmentEnd, expectedFirstIntersection,
+                                                                                          expectedSecondIntersection);
+         actualN = boundingBox2D.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
          if (expectedN == 0)
@@ -1364,7 +1365,7 @@ public class BoundingBox2DTest
       assertFalse(boundingBox2D.equals(new BoundingBox2D(minX, minY, maxX - smallestEpsilon, maxY)));
       assertFalse(boundingBox2D.equals(new BoundingBox2D(minX, minY, maxX, maxY - smallestEpsilon)));
    }
-   
+
    @Test
    public void testGeometricallyEquals() throws Exception
    {
@@ -1375,19 +1376,20 @@ public class BoundingBox2DTest
 
       firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
       secondPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
-      
+
       firstBox = new BoundingBox2D(firstPoint, secondPoint);
       secondBox = new BoundingBox2D(firstBox);
-      
+
       assertTrue(firstBox.geometricallyEquals(secondBox, epsilon));
       assertTrue(secondBox.geometricallyEquals(firstBox, epsilon));
       assertTrue(firstBox.geometricallyEquals(firstBox, epsilon));
       assertTrue(secondBox.geometricallyEquals(secondBox, epsilon));
-      
-      for (int i = 0; i < ITERATIONS; ++i) {
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
          firstPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 0.1, 2.5);
          secondPoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 2.5, 5.0);
-         
+
          firstBox = new BoundingBox2D(firstPoint, secondPoint);
 
          thirdPoint = new Point2D(firstPoint);

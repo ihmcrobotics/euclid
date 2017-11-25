@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
@@ -42,7 +44,6 @@ public class Ramp3DTest
       }
    }
 
-   
    @Test
    public void testExampleUsage()
    {
@@ -57,7 +58,6 @@ public class Ramp3DTest
       assertEquals(Math.toRadians(45.0), ramp3d.getRampIncline(), 1e-7);
    }
 
-   
    @Test
    public void testGetAndSet()
    {
@@ -76,7 +76,6 @@ public class Ramp3DTest
       ramp1.epsilonEquals(ramp2, 1e-7);
    }
 
-   
    @Test
    public void testSurfaceNormal()
    {
@@ -88,7 +87,6 @@ public class Ramp3DTest
       assertEquals("not equal", surfaceNormal.getZ(), 1.0 / Math.sqrt(2.0), 1e-14);
    }
 
-   
    @Test
    public void testSimpleOrthogonalProjection()
    {
@@ -109,7 +107,6 @@ public class Ramp3DTest
       assertEquals(pointToProject.getZ(), 0.5, 1e-14);
    }
 
-   
    @Test
    public void testSimplePointOutside()
    {
@@ -118,7 +115,6 @@ public class Ramp3DTest
       assertTrue(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.5, 0.0, 0.1})));
    }
 
-   
    @Test
    public void testSimpleMethodCalls()
    {
@@ -139,7 +135,6 @@ public class Ramp3DTest
       assertFalse(ramp3d.isInsideOrOnSurface(p2));
    }
 
-   
    @Test
    public void testIsInsideOrOnSurface()
    {
@@ -161,7 +156,6 @@ public class Ramp3DTest
       transform.setTranslation(new Vector3D(1.0, -1.0, 2.0));
    }
 
-   
    @Test
    public void testProjectionPerpNormal()
    {
@@ -181,7 +175,7 @@ public class Ramp3DTest
          double minX = insideRamp;
          double maxX = ramp.getLength() - insideRamp;
          double minY = -(ramp.getWidth() / 2.0) + insideRamp;
-         double maxY = (ramp.getWidth() / 2.0) - insideRamp;
+         double maxY = ramp.getWidth() / 2.0 - insideRamp;
          double minZ = 0.0;
          double maxZ = 1.0;
 
@@ -293,7 +287,7 @@ public class Ramp3DTest
     * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
     * normal tests at the corners.
     */
-   
+
    @Test
    public void testDistance()
    {
@@ -396,7 +390,6 @@ public class Ramp3DTest
       }
    }
 
-   
    @Test
    public void testIndependenceOfCopiedTransforms()
    {
@@ -418,7 +411,6 @@ public class Ramp3DTest
       assertFalse(rampCopyBySet.equals(ramp));
    }
 
-   
    @Test
    public void testSetMethodSetsUpAllFieldsOfNewRampAccurately()
    {
@@ -433,7 +425,7 @@ public class Ramp3DTest
       rampCopyBySet.orthogonalProjection(pointProjectedOntoRampCopy);
       assertEquals(pointProjectedOntoRamp, pointProjectedOntoRampCopy);
    }
-   
+
    @Test
    public void testGeometricallyEquals()
    {
@@ -447,15 +439,15 @@ public class Ramp3DTest
       lengthX = random.nextDouble();
       widthY = random.nextDouble();
       heightZ = random.nextDouble();
-   
+
       firstRamp = new Ramp3D(lengthX, widthY, heightZ);
       secondRamp = new Ramp3D(lengthX, widthY, heightZ);
-   
+
       assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
       assertTrue(secondRamp.geometricallyEquals(firstRamp, epsilon));
       assertTrue(firstRamp.geometricallyEquals(firstRamp, epsilon));
       assertTrue(secondRamp.geometricallyEquals(secondRamp, epsilon));
-   
+
       secondRamp = new Ramp3D(lengthX + epsilon * 0.99, widthY, heightZ);
       assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
       secondRamp = new Ramp3D(lengthX, widthY + epsilon * 0.99, heightZ);
@@ -468,12 +460,12 @@ public class Ramp3DTest
       assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
       secondRamp = new Ramp3D(lengthX, widthY, heightZ - epsilon * 0.99);
       assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
-   
+
       secondRamp = new Ramp3D(lengthX + epsilon * 1.01, widthY, heightZ);
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       secondRamp = new Ramp3D(lengthX, widthY + epsilon * 1.01, heightZ);
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      secondRamp = new Ramp3D(lengthX, widthY, heightZ + epsilon *1.01);
+      secondRamp = new Ramp3D(lengthX, widthY, heightZ + epsilon * 1.01);
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       secondRamp = new Ramp3D(lengthX - epsilon * 1.01, widthY, heightZ);
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
@@ -481,8 +473,7 @@ public class Ramp3DTest
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       secondRamp = new Ramp3D(lengthX, widthY, heightZ - epsilon * 1.01);
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
-      
-      
+
       for (int i = 0; i < iterations; ++i)
       {
          translationVector = EuclidCoreRandomTools.generateRandomRotationVector(random);

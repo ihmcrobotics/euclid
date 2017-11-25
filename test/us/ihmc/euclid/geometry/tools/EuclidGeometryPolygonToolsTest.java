@@ -1,10 +1,48 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.EPSILON;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.canObserverSeeEdge;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestEdgeIndexToPoint2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToPoint2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.computeConvexPolyong2DArea;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.edgeNormal;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.grahamScanAngleCompare;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightEndIndex;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightStartIndex;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.nextEdgeIndexIntersectingWithLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.wrap;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.generateRandomPointCloud2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.averagePoint2Ds;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenTwoLine2Ds;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DInFrontOfRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnRightSideOfLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.perpendicularVector2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.triangleArea;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint2D;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2D;
@@ -259,14 +297,14 @@ public class EuclidGeometryPolygonToolsTest
          for (int index = 0; index < numberOfPoints; index++)
             assertTrue(listToProcess.get(index) == reprocessedList.get(index));
 
-         // Test that with numberOfPointsToProcess = 1, the algorithm does not do anything 
+         // Test that with numberOfPointsToProcess = 1, the algorithm does not do anything
          numberOfPointsToProcess = 1;
          listToProcess = new ArrayList<>(original);
          hullSize = algorithmToTest.process(listToProcess, numberOfPointsToProcess);
          assertEquals(numberOfPointsToProcess, hullSize);
          assertTrue(original.get(0) == listToProcess.get(0));
 
-         // Test that with numberOfPointsToProcess = 2, the algorithm just reorders the two vertices to start with minXMaxYVertex 
+         // Test that with numberOfPointsToProcess = 2, the algorithm just reorders the two vertices to start with minXMaxYVertex
          numberOfPointsToProcess = 2;
          listToProcess = new ArrayList<>(original);
          hullSize = algorithmToTest.process(listToProcess, numberOfPointsToProcess);
@@ -1246,15 +1284,17 @@ public class EuclidGeometryPolygonToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // (somewhat tricky) Setup: build a line that does NOT intersect with the polygon
-         /* 
-          * @formatter:off
-          * - The goal is to build the query line such that it does not intersect with the polygon.
-          * - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 = convexPolygon2D.get(i+1).
-          * - Draw 2 lines going from the centroid through each vertex, they are called extrapolation lines.
-          * - For the line going through v0, find the intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
-          *    The first point defining the query line should be between v0 and v0Max such that the line won't intersect with the edge (vn1, vn2).
-          * - For the line going through vn1, find the intersection vn1Max with the line going through v0 and vp1 = convexPolygon2D.get(i-1).
-          *    The second point defining the query line should be between vn1 and vn1Max such that the line won't intersect with the edge (v0, vp1).
+         /*
+          * @formatter:off - The goal is to build the query line such that it does not intersect
+          * with the polygon. - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 =
+          * convexPolygon2D.get(i+1). - Draw 2 lines going from the centroid through each vertex,
+          * they are called extrapolation lines. - For the line going through v0, find the
+          * intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
+          * The first point defining the query line should be between v0 and v0Max such that the
+          * line won't intersect with the edge (vn1, vn2). - For the line going through vn1, find
+          * the intersection vn1Max with the line going through v0 and vp1 =
+          * convexPolygon2D.get(i-1). The second point defining the query line should be between vn1
+          * and vn1Max such that the line won't intersect with the edge (v0, vp1).
           * @formatter:on
           */
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
@@ -2382,7 +2422,7 @@ public class EuclidGeometryPolygonToolsTest
    /**
     * Could not find a simpler to test this method with a thoroughly different piece of code. So in
     * addition to the usual random test, there's also a bunch of examples.
-    * 
+    *
     * @throws Exception
     */
    @Test
@@ -2571,15 +2611,17 @@ public class EuclidGeometryPolygonToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // (somewhat tricky) Setup: build a line that does NOT intersect with the polygon and put the ray origin somewhere on this line
-         /* 
-          * @formatter:off
-          * - The goal is to build the query line such that it does not intersect with the polygon.
-          * - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 = convexPolygon2D.get(i+1).
-          * - Draw 2 lines going from the centroid through each vertex, they are called extrapolation lines.
-          * - For the line going through v0, find the intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
-          *    The first point defining the query line should be between v0 and v0Max such that the line won't intersect with the edge (vn1, vn2).
-          * - For the line going through vn1, find the intersection vn1Max with the line going through v0 and vp1 = convexPolygon2D.get(i-1).
-          *    The second point defining the query line should be between vn1 and vn1Max such that the line won't intersect with the edge (v0, vp1).
+         /*
+          * @formatter:off - The goal is to build the query line such that it does not intersect
+          * with the polygon. - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 =
+          * convexPolygon2D.get(i+1). - Draw 2 lines going from the centroid through each vertex,
+          * they are called extrapolation lines. - For the line going through v0, find the
+          * intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
+          * The first point defining the query line should be between v0 and v0Max such that the
+          * line won't intersect with the edge (vn1, vn2). - For the line going through vn1, find
+          * the intersection vn1Max with the line going through v0 and vp1 =
+          * convexPolygon2D.get(i-1). The second point defining the query line should be between vn1
+          * and vn1Max such that the line won't intersect with the edge (v0, vp1).
           * @formatter:on
           */
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
@@ -3182,15 +3224,17 @@ public class EuclidGeometryPolygonToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // (somewhat tricky) Setup: build a line that does NOT intersect with the polygon
-         /* 
-          * @formatter:off
-          * - The goal is to build the query line such that it does not intersect with the polygon.
-          * - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 = convexPolygon2D.get(i+1).
-          * - Draw 2 lines going from the centroid through each vertex, they are called extrapolation lines.
-          * - For the line going through v0, find the intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
-          *    The first point defining the query line should be between v0 and v0Max such that the line won't intersect with the edge (vn1, vn2).
-          * - For the line going through vn1, find the intersection vn1Max with the line going through v0 and vp1 = convexPolygon2D.get(i-1).
-          *    The second point defining the query line should be between vn1 and vn1Max such that the line won't intersect with the edge (v0, vp1).
+         /*
+          * @formatter:off - The goal is to build the query line such that it does not intersect
+          * with the polygon. - Pick two successive vertices: v0 = convexPolygon2D.get(i) and vn1 =
+          * convexPolygon2D.get(i+1). - Draw 2 lines going from the centroid through each vertex,
+          * they are called extrapolation lines. - For the line going through v0, find the
+          * intersection v0Max with the line going through vn1 and vn2 = convexPolygon2D.get(i+2).
+          * The first point defining the query line should be between v0 and v0Max such that the
+          * line won't intersect with the edge (vn1, vn2). - For the line going through vn1, find
+          * the intersection vn1Max with the line going through v0 and vp1 =
+          * convexPolygon2D.get(i-1). The second point defining the query line should be between vn1
+          * and vn1Max such that the line won't intersect with the edge (v0, vp1).
           * @formatter:on
           */
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
@@ -3376,7 +3420,7 @@ public class EuclidGeometryPolygonToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test by shooting a ray from the middle of the edge to the observer,
-           // it should be intersecting the polygon either 0 or 1 time depending on whether the observer can see the edge.
+        // it should be intersecting the polygon either 0 or 1 time depending on whether the observer can see the edge.
          List<? extends Point2DReadOnly> convexPolygon2D = generateRandomPointCloud2D(random, 10.0, 10.0, 100);
          int hullSize = inPlaceGrahamScanConvexHull2D(convexPolygon2D);
          boolean clockwiseOrdered = random.nextBoolean();

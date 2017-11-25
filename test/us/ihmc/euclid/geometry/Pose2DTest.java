@@ -1,26 +1,28 @@
 package us.ihmc.euclid.geometry;
 
-import org.junit.Test;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.tuple2D.Vector2D;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tuple2D.Vector2D;
 
 public class Pose2DTest
 {
    private int ITERATIONS = 1000;
 
    @Test
-   public void testGeometricallyEquals() {
+   public void testGeometricallyEquals()
+   {
       Random random = new Random(19732L);
       Pose2D firstPose, secondPose;
       double epsilon = 1e-7;
       Vector2D perturb;
-      
+
       firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
       secondPose = new Pose2D(firstPose);
 
@@ -30,7 +32,7 @@ public class Pose2DTest
       assertTrue(secondPose.geometricallyEquals(secondPose, epsilon));
 
       // Orientation
-      for (int i = 0; i < ITERATIONS; ++i) 
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Poses are equal if orientations are equal within +- epsilon points are the same
          firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
          secondPose = new Pose2D(firstPose);

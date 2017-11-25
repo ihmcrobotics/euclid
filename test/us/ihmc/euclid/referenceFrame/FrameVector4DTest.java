@@ -130,24 +130,30 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
    }
 
    @Test
-   public void testGeometricallyEquals() {
+   public void testGeometricallyEquals()
+   {
       Random random = new Random(58722L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
          double epsilon = random.nextDouble();
 
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          FrameVector4D fv = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
          FrameVector4D fv0 = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
 
-         if (fv.getVector().geometricallyEquals(fv0.getVector(), epsilon)) {
+         if (fv.getVector().geometricallyEquals(fv0.getVector(), epsilon))
+         {
             assertTrue(fv.geometricallyEquals(fv0, epsilon));
-         } else {
+         }
+         else
+         {
             assertFalse(fv.geometricallyEquals(fv0, epsilon));
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
          double epsilon = random.nextDouble();
 
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
@@ -156,15 +162,19 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
          FrameVector4D fv = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
          FrameVector4D fv0 = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame0);
 
-         try {
+         try
+         {
             fv.geometricallyEquals(fv0, epsilon);
             fail();
-         } catch (ReferenceFrameMismatchException ignored) {
+         }
+         catch (ReferenceFrameMismatchException ignored)
+         {
 
          }
       }
    }
 
+   @Override
    @Test
    public void testFrameGeometryObjectFeatures() throws Throwable
    {

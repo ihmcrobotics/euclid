@@ -244,6 +244,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 
+   @Override
    @Test
    public void testOverloading() throws Exception
    {
@@ -268,84 +269,100 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          EuclidCoreTestTools.assertTuple4DEquals(frameQuaternion, actual, EPSILON);
       }
    }
-   
+
    @Test
-   public void testGeometricallyEquals() {
+   public void testGeometricallyEquals()
+   {
       Random random = new Random(58722L);
-      
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
          double epsilon = random.nextDouble();
-         
+
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          FrameQuaternion fq = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
-         
+
          double angleEps = epsilon * 0.99;
          AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), angleEps);
          Quaternion fqq = new Quaternion(aa);
          fqq.preMultiply(fq.getQuaternion());
-         
+
          FrameQuaternion fq0 = new FrameQuaternion(referenceFrame, fqq);
-         
+
          assertTrue(fq.geometricallyEquals(fq0, epsilon));
          assertTrue(fq.geometricallyEquals((FrameQuaternionReadOnly) fq0, epsilon));
          assertTrue(fq0.geometricallyEquals(fq, epsilon));
          assertTrue(fq0.geometricallyEquals((FrameQuaternionReadOnly) fq, epsilon));
       }
-      
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
          double epsilon = random.nextDouble();
-         
+
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          FrameQuaternion fq = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
-         
+
          double angleEps = epsilon * 1.01;
          AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), angleEps);
          Quaternion fqq = new Quaternion(aa);
          fqq.preMultiply(fq.getQuaternion());
-         
+
          FrameQuaternion fq0 = new FrameQuaternion(referenceFrame, fqq);
-         
+
          assertFalse(fq.geometricallyEquals(fq0, epsilon));
          assertFalse(fq.geometricallyEquals((FrameQuaternionReadOnly) fq0, epsilon));
          assertFalse(fq0.geometricallyEquals(fq, epsilon));
          assertFalse(fq0.geometricallyEquals((FrameQuaternionReadOnly) fq, epsilon));
       }
-      
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
          double epsilon = random.nextDouble();
-         
+
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          ReferenceFrame referenceFrame0 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         
+
          FrameQuaternion fq = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame);
          FrameQuaternion fq0 = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, referenceFrame0);
-         
-         try {
+
+         try
+         {
             fq.geometricallyEquals(fq0, epsilon);
             fail();
-         } catch (ReferenceFrameMismatchException ignored) {
-            
          }
-         
-         try {
+         catch (ReferenceFrameMismatchException ignored)
+         {
+
+         }
+
+         try
+         {
             fq.geometricallyEquals((FrameQuaternionReadOnly) fq0, epsilon);
             fail();
-         } catch (ReferenceFrameMismatchException ignored) {
-            
          }
-         
-         try {
+         catch (ReferenceFrameMismatchException ignored)
+         {
+
+         }
+
+         try
+         {
             fq0.geometricallyEquals(fq, epsilon);
             fail();
-         } catch (ReferenceFrameMismatchException ignored) {
-            
          }
-         
-         try {
+         catch (ReferenceFrameMismatchException ignored)
+         {
+
+         }
+
+         try
+         {
             fq0.geometricallyEquals((FrameQuaternionReadOnly) fq, epsilon);
             fail();
-         } catch (ReferenceFrameMismatchException ignored) {
-            
+         }
+         catch (ReferenceFrameMismatchException ignored)
+         {
+
          }
       }
    }

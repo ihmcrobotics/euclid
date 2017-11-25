@@ -635,7 +635,7 @@ public class LineSegment3DTest
 
          assertFalse(line1.equals((Line3D) null));
          assertFalse(line1.equals((Object) null));
-         assertFalse(line1.equals((Object) new double[3]));
+         assertFalse(line1.equals(new double[3]));
 
          for (int j = 0; j < 3; j++)
          {
@@ -662,7 +662,8 @@ public class LineSegment3DTest
    }
 
    @Test
-   public void testGeometricallyEquals() {
+   public void testGeometricallyEquals()
+   {
       Random random = new Random(19263L);
       double epsilon = 1e-7;
       Point3D segment1Point1, segment1Point2, segment2Point1, segment2Point2;
@@ -682,7 +683,8 @@ public class LineSegment3DTest
       assertTrue(testSegment2.geometricallyEquals(testSegment1, epsilon));
       assertTrue(testSegment2.geometricallyEquals(testSegment2, epsilon));
 
-      for (int i = 0; i < ITERATIONS; ++i) {
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
          segment1Point1 = EuclidCoreRandomTools.generateRandomPoint3D(random);
          segment1Point2 = EuclidCoreRandomTools.generateRandomPoint3D(random);
          segment2Point1 = new Point3D(segment1Point1);
@@ -692,33 +694,33 @@ public class LineSegment3DTest
 
          translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
          segment2Point2.add(translation);
-         
+
          testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
-         
+
          assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
-         
+
          segment2Point2 = new Point3D(segment1Point2);
          translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
          segment2Point2.add(translation);
-         
+
          testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
-         
+
          assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
 
          segment2Point2 = new Point3D(segment1Point2);
          translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
          segment2Point1.add(translation);
-         
+
          testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
-         
+
          assertTrue(testSegment1.geometricallyEquals(testSegment2, epsilon));
-         
+
          segment2Point1 = new Point3D(segment1Point1);
          translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
          segment2Point1.add(translation);
-         
+
          testSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
-         
+
          assertFalse(testSegment1.geometricallyEquals(testSegment2, epsilon));
       }
    }

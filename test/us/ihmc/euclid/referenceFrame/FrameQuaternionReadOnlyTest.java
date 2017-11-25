@@ -12,7 +12,6 @@ import java.util.function.Predicate;
 import org.junit.Test;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -78,8 +77,10 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
    {
       Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameQuaternion(random, frame), false, true, methodFilter);
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandom2DFrameQuaternion(random, frame), false, true, methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameQuaternion(random, frame), false, true,
+                                                                                     methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandom2DFrameQuaternion(random, frame), false, true,
+                                                                                     methodFilter);
    }
 
    @Test
@@ -109,8 +110,8 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
             continue;
          if (Modifier.isStatic(testMethod.getModifiers()))
             continue;
-//         if (testMethod.getName().equals("testGetGeometryObject"))
-//            continue;
+         //         if (testMethod.getName().equals("testGetGeometryObject"))
+         //            continue;
 
          try
          {
@@ -123,6 +124,7 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
       }
    }
 
+   @Override
    @Test
    public void testEpsilonEquals() throws Exception
    {
@@ -149,12 +151,13 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
       assertFalse(tuple3.epsilonEquals(tuple2, epsilon));
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
 
-      assertTrue(tuple1.epsilonEquals((FrameTuple4DReadOnly) tuple2, epsilon));
-      assertFalse(tuple1.epsilonEquals((FrameTuple4DReadOnly) tuple3, epsilon));
-      assertFalse(tuple3.epsilonEquals((FrameTuple4DReadOnly) tuple2, epsilon));
-      assertTrue(tuple3.epsilonEquals((FrameTuple4DReadOnly) tuple4, epsilon));
+      assertTrue(tuple1.epsilonEquals(tuple2, epsilon));
+      assertFalse(tuple1.epsilonEquals(tuple3, epsilon));
+      assertFalse(tuple3.epsilonEquals(tuple2, epsilon));
+      assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
    }
 
+   @Override
    @Test
    public void testEquals() throws Exception
    {
@@ -179,11 +182,11 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
       assertFalse(tuple1.equals(tuple3));
       assertFalse(tuple3.equals(tuple2));
       assertTrue(tuple3.equals(tuple4));
-      
-      assertTrue(tuple1.equals((FrameTuple4DReadOnly) tuple2));
-      assertFalse(tuple1.equals((FrameTuple4DReadOnly) tuple3));
-      assertFalse(tuple3.equals((FrameTuple4DReadOnly) tuple2));
-      assertTrue(tuple3.equals((FrameTuple4DReadOnly) tuple4));
+
+      assertTrue(tuple1.equals(tuple2));
+      assertFalse(tuple1.equals(tuple3));
+      assertFalse(tuple3.equals(tuple2));
+      assertTrue(tuple3.equals(tuple4));
    }
 
 }

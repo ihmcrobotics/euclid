@@ -1,6 +1,11 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -1137,7 +1142,7 @@ public class Line2DTest
          Point2D secondPointOnLine = randomPoint(random);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
 
-         ArrayList<Point2D> pointList = new ArrayList<Point2D>();
+         ArrayList<Point2D> pointList = new ArrayList<>();
          for (int j = 0; j < 25; j++)
          {
             pointList.add(randomPoint(random));
@@ -1146,8 +1151,8 @@ public class Line2DTest
          ConvexPolygon2D convexPolygon = new ConvexPolygon2D(pointList);
          Point2D[] intersectionList = line2d.intersectionWith(convexPolygon);
 
-         assertTrue((intersectionList == null) || (intersectionList.length % 2 == 0));
-         assertTrue((intersectionList == null) || (intersectionList.length <= 2));
+         assertTrue(intersectionList == null || intersectionList.length % 2 == 0);
+         assertTrue(intersectionList == null || intersectionList.length <= 2);
       }
 
       Point2D firstPointOnLine = new Point2D(0.0, 0.0);
@@ -1157,7 +1162,7 @@ public class Line2DTest
       Point2D firstPolygonPoint = new Point2D(0.0, 0.0);
       Point2D secondPolygonPoint = new Point2D(0.0, 1.0);
       Point2D thirdPolygonPoint = new Point2D(-1.0, 0.0);
-      ArrayList<Point2D> polygonPoints = new ArrayList<Point2D>();
+      ArrayList<Point2D> polygonPoints = new ArrayList<>();
       polygonPoints.add(firstPolygonPoint);
       polygonPoints.add(secondPolygonPoint);
       polygonPoints.add(thirdPolygonPoint);
@@ -1470,7 +1475,7 @@ public class Line2DTest
       delta = 1e-12;
       assertEquals("Distance to a horizontal line not calculated correctly", 3.0, distance, delta);
    }
-   
+
    @Test
    public void testGeometricallyEquals()
    {
@@ -1479,7 +1484,7 @@ public class Line2DTest
       double epsilon = 1e-6;
       double scale;
       Vector2D orthogonal, direction = new Vector2D();
-      
+
       firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
       secondLine = new Line2D(firstLine);
 
@@ -1487,52 +1492,52 @@ public class Line2DTest
       assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
       assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
       assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if translations are equal within +- epsilon and are otherwise the same
          firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
          secondLine = new Line2D(firstLine);
-         
+
          orthogonal = firstLine.perpendicularVector();
-         orthogonal.scale((0.99 * epsilon) / orthogonal.length());
-        
+         orthogonal.scale(0.99 * epsilon / orthogonal.length());
+
          secondLine.translate(orthogonal.getX(), orthogonal.getY());
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
-         
+
          secondLine.set(firstLine);
          orthogonal = firstLine.perpendicularVector();
-         orthogonal.scale((1.01 * epsilon) / orthogonal.length());
-         
+         orthogonal.scale(1.01 * epsilon / orthogonal.length());
+
          secondLine.translate(orthogonal.getX(), orthogonal.getY());
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
       }
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if directions are equal within +- epsilon and are otherwise the same
          firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
          secondLine = new Line2D(firstLine);
-         
+
          direction = new Vector2D(secondLine.getDirection());
          RotationMatrixTools.applyYawRotation(epsilon * 0.99, direction, direction);
          secondLine.setDirection(direction);
-         
+
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
-         
+
          direction = new Vector2D(secondLine.getDirection());
          RotationMatrixTools.applyYawRotation(epsilon * 1.01, direction, direction);
          secondLine.setDirection(direction);
-         
+
          assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
       }
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if translations lie somewhere on the same direction
          firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
          secondLine = new Line2D(firstLine);
          scale = random.nextDouble() - random.nextDouble();
-         
+
          secondLine.translate(secondLine.getDirectionX() * scale, secondLine.getDirectionY() * scale);
-         
+
          assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
       }
 

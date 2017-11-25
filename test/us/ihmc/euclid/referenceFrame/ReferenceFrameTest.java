@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,7 +28,7 @@ public class ReferenceFrameTest
    public void setUp()
    {
       random = new Random(23423L);
-      transformsForVerification = new LinkedHashMap<String, RigidBodyTransform>();
+      transformsForVerification = new LinkedHashMap<>();
 
       // The structure we'll test is as follows:
       // root                                                 root2
@@ -55,7 +56,7 @@ public class ReferenceFrameTest
       frames1 = new ReferenceFrame[] {root, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8};
       frames2 = new ReferenceFrame[] {root2, frame9, frame10, frame11};
 
-      allFramesTogether = new ArrayList<ReferenceFrame>();
+      allFramesTogether = new ArrayList<>();
       addAllFrames(allFramesTogether, frames1);
       addAllFrames(allFramesTogether, frames2);
    }
@@ -95,12 +96,13 @@ public class ReferenceFrameTest
          super(frameName, parentFrame);
       }
 
+      @Override
       protected void updateTransformToParent(RigidBodyTransform transformToParent)
       {
          RigidBodyTransform randomTransform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
          transformToParent.set(randomTransform);
 
-         transformsForVerification.put(this.getName(), new RigidBodyTransform(randomTransform));
+         transformsForVerification.put(getName(), new RigidBodyTransform(randomTransform));
       }
    }
 
@@ -368,7 +370,7 @@ public class ReferenceFrameTest
    {
       double maxDeltaPercent = getMaxDeltaPercent(transformOne, transformTwo);
 
-      return (maxDeltaPercent < epsilonPercent);
+      return maxDeltaPercent < epsilonPercent;
    }
 
    private double getMaxDeltaPercent(RigidBodyTransform t1, RigidBodyTransform t2)
@@ -391,7 +393,7 @@ public class ReferenceFrameTest
          double absolute1 = Math.abs(arg1[i]);
          double absolute2 = Math.abs(arg2[i]);
 
-         if ((absolute1 < 1e-7) && (absolute2 < 1e-7))
+         if (absolute1 < 1e-7 && absolute2 < 1e-7)
          {
             if (max < 0.0)
             {
