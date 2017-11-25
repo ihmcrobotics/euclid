@@ -22,6 +22,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 public class ConvexPolygon2DTest
 {
    private static final boolean VERBOSE = false;
+   private static final int ITERATIONS = 1000;
 
    private static final double epsilon = 1e-10;
 
@@ -1486,9 +1487,7 @@ public class ConvexPolygon2DTest
    {
       Random random = new Random(89762L);
       ConvexPolygon2D firstPolygon, secondPolygon;
-      int iterations = 1000;
       int numberOfVertices;
-      double epsilon = 1e-6;
       Vector2D translation;
 
       numberOfVertices = 3 + random.nextInt(10);
@@ -1501,7 +1500,7 @@ public class ConvexPolygon2DTest
       assertTrue(firstPolygon.geometricallyEquals(firstPolygon, epsilon));
       assertTrue(secondPolygon.geometricallyEquals(secondPolygon, epsilon));
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Convex polygons are only equal if all points lie within +- epsilon of each other
          numberOfVertices = 3 + random.nextInt(10);
 
@@ -1520,7 +1519,7 @@ public class ConvexPolygon2DTest
          assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Convex polygons are equal if translations are equal within +- epsilon and are otherwise the same
          numberOfVertices = 3 + random.nextInt(10);
 
