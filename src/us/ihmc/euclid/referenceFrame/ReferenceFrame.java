@@ -1,7 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.io.Serializable;
-
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -159,8 +157,6 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    {
       ReferenceFrame ret = new ReferenceFrame(frameName)
       {
-         private static final long serialVersionUID = -8828178814213025690L;
-
          @Override
          protected void updateTransformToParent(RigidBodyTransform transformToParent)
          {
@@ -234,8 +230,6 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
       ReferenceFrame ret = new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
       {
-         private static final long serialVersionUID = 4694374344134623529L;
-
          @Override
          protected void updateTransformToParent(RigidBodyTransform transformToParent)
          {
@@ -857,12 +851,12 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
          if (transformToParent != null)
          {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined. This is so RMI still works with frames since Transform3D is not serializable.");
+            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
          }
 
          if (transformToRoot != null)
          {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined. This is so RMI still works with frames since Transform3D is not serializable.");
+            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
          }
 
          if (transformToRootID != 0)

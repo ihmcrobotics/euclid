@@ -1,7 +1,5 @@
 package us.ihmc.euclid.geometry;
 
-import java.io.Serializable;
-
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
