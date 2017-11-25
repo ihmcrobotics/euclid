@@ -412,7 +412,8 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * {@code distance = this.yaw - other.yaw}
     * 
     * @param other the other orientation 2D. Not modified.
-    * @return the difference between {@code this} and {@code other} contained in [-<i>pi</i>, <i>pi</pi>].
+    * @return the difference between {@code this} and {@code other} contained in [-<i>pi</i>,
+    *         <i>pi</pi>].
     */
    public double difference(Orientation2D other)
    {
@@ -446,8 +447,8 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Transforms this orientation 2D by the inverse of the given {@code transform}.
     * <p>
-    * This is equivalent to extracting the yaw rotation part from the given transform and subtracting it
-    * to this.
+    * This is equivalent to extracting the yaw rotation part from the given transform and
+    * subtracting it to this.
     * </p>
     *
     * @param transform the geometric transform to apply on this orientation 2D. Not modified.
@@ -536,14 +537,14 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two orientations are
-    * geometrically similar, i.e. the difference in yaw of {@code this} and {@code other}
-    * is less than or equal to {@code epsilon}.
-    *
+    * Compares {@code this} to {@code other} to determine if the two orientations are geometrically
+    * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
+    * {@code epsilon}.
+    * 
     * @param other the orientation to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
-    *            otherwise.
+    *         otherwise.
     */
    @Override
    public boolean geometricallyEquals(Orientation2D other, double epsilon)

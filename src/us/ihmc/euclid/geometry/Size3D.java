@@ -4,7 +4,8 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 /**
- * Extension of Vector3d where x, y, and z have aliases for length, width, and height, respectively.
+ * Extension of a tuple 3D where x, y, and z have aliases for length, width, and height,
+ * respectively.
  */
 class Size3D implements Tuple3DBasics
 {

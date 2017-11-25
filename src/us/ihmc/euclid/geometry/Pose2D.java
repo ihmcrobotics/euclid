@@ -413,17 +413,10 @@ public class Pose2D implements GeometryObject<Pose2D>
 
    /**
     * Computes the absolute angle difference between the orientation part of this pose 2D and the
-<<<<<<< Upstream, based on origin/develop
-    * give {@code other}.
-    *
-    * @param other the orientation used to compute the orientation distance. Not modified.
-    * @return the absolute angle difference between {@code this} and {@code other}.
-=======
     * give {@code orientation}.
     * 
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
->>>>>>> 341fca5 Revert IntelliJ tampering of trailing spaces in JavaDoc
     */
    public double getOrientationDistance(Orientation2D other)
    {
@@ -607,15 +600,16 @@ public class Pose2D implements GeometryObject<Pose2D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are
-    * geometrically similar, i.e. the position of {@code this} falls within a distance
-    * less than or equal to {@code epsilon} of the position of {@code other} and the
-    * magnitude of the difference of the orientations is less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically
+    * equal.
+    * </p>
     * 
     * @param other the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false}
-    *            otherwise.
+    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(Pose2D other, double epsilon)

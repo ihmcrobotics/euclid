@@ -1373,7 +1373,8 @@ public class Line2D implements GeometryObject<Line2D>
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
-   public boolean isCollinear(Line2D other, double epsilon) {
+   public boolean isCollinear(Line2D other, double epsilon)
+   {
       return isCollinear(other, epsilon, epsilon);
    }
 
@@ -1385,7 +1386,8 @@ public class Line2D implements GeometryObject<Line2D>
     * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
-   public boolean isCollinear(Line2D other, double angleEpsilon, double distanceEpsilon) {
+   public boolean isCollinear(Line2D other, double angleEpsilon, double distanceEpsilon)
+   {
       return EuclidGeometryTools.areLine2DsCollinear(this.point, this.direction, other.point, other.direction, angleEpsilon, distanceEpsilon);
    }
 
@@ -1446,15 +1448,16 @@ public class Line2D implements GeometryObject<Line2D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are
-    * geometrically similar, i.e. the length of the distance between the direction of
-    * the two lines is less than or equal to {@code epsilon} and the distance between the
-    * closest points between the two lines is less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
     *
     * @param other the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false}
-    *            otherwise.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(Line2D other, double epsilon)

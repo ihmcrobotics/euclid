@@ -52,7 +52,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * {@link #numberOfVertices}[ in this list.
     * </p>
     */
-   private final List<Point2D> clockwiseOrderedVertices = new ArrayList<Point2D>();
+   private final List<Point2D> clockwiseOrderedVertices = new ArrayList<>();
    /**
     * The smallest axis-aligned bounding box that contains all this polygon's vertices.
     * <p>
@@ -143,7 +143,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the list. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
@@ -162,7 +162,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
     */
    public ConvexPolygon2D(List<? extends Point2DReadOnly> vertices)
@@ -177,7 +177,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
@@ -196,7 +196,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
     */
    public ConvexPolygon2D(Point2DReadOnly[] vertices)
@@ -211,7 +211,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
     *           contains one point whereas the (at least) two columns contains in order the
     *           coordinates x and y. Not modified.
@@ -234,7 +234,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
     *           contains one point whereas the (at least) two columns contains in order the
     *           coordinates x and y. Not modified.
@@ -246,7 +246,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Copy constructor.
-    * 
+    *
     * @param otherPolygon the other convex polygon to copy. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
     *            other polygon's vertices were edited.
@@ -277,7 +277,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    /**
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices
     * and the size of the point cloud from which it is generated.
-    * 
+    *
     * @param random the random generator to use.
     * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for
@@ -344,7 +344,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Tests if any of this polygon's vertices contains a {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if at least one vertex contains {@link Double#NaN}, {@code false}
     *         otherwise.
     */
@@ -370,7 +370,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
     * @param vertex the new vertex. Not modified.
     */
    public void addVertex(Point2DReadOnly vertex)
@@ -384,7 +384,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
     * @param x the x-coordinate of the new vertex.
     * @param y the y-coordinate of the new vertex.
     */
@@ -402,7 +402,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
     * @param vertices the list containing the vertices to add to this polygon. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the list. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
@@ -425,7 +425,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
     * @param vertices the array containing the vertices to add to this polygon. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
@@ -448,7 +448,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
     * @param vertices the array containing the vertices to add to this polygon. Each row contains
     *           one point whereas the (at least) two columns contains in order the coordinates x and
     *           y. Not modified.
@@ -472,7 +472,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
     * @param otherPolygon the other convex polygon that is used to add new vertices to this polygon.
     *           Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
@@ -490,7 +490,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
     * @param indexOfVertexToRemove the index of the vertex to remove.
     * @throws EmptyPolygonException if this polygon is empty before calling this method.
     * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal
@@ -517,7 +517,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Sets the {@code i}<sup>th</sup> point in {@link #clockwiseOrderedVertices} to the given point.
     * The list is extended if needed.
     * </p>
-    * 
+    *
     * @param x the x-coordinate of the point to copy. Not modified.
     * @param y the y-coordinate of the point to copy. Not modified.
     * @param i the position in the list {@link #clockwiseOrderedVertices} to copy the given point.
@@ -557,7 +557,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>{@link #addVertices(List, int)}.
     * <li>{@link #update()}.
     * </ol>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the list. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
@@ -578,7 +578,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>{@link #addVertices(Point2DReadOnly[], int)}.
     * <li>{@link #update()}.
     * </ol>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
@@ -599,7 +599,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>{@link #addVertices(double[][], int)}.
     * <li>{@link #update()}.
     * </ol>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
     *           contains one point whereas the (at least) two columns contains in order the
     *           coordinates x and y. Not modified.
@@ -622,7 +622,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>{@link #addVertices(ConvexPolygon2D)}.
     * <li>{@link #update()}.
     * </ol>
-    * 
+    *
     * @param otherPolygon the other convex polygon to copy. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
     *            other polygon's vertices were edited.
@@ -640,7 +640,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>{@link #addVertices(ConvexPolygon2D)}.
     * <li>{@link #update()}.
     * </ol>
-    * 
+    *
     * @param otherPolygon the other convex polygon to copy. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
     *            other polygon's vertices were edited.
@@ -660,7 +660,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
-    * 
+    *
     * @param firstPolygon the first convex polygon to combine. Not modified.
     * @param secondPolygon the second convex polygon to combine. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
@@ -751,7 +751,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Compute centroid and area of this polygon. Formula taken from
-    * <a href="http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
+    * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
     */
    private void updateCentroidAndArea()
    {
@@ -760,7 +760,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the value of this polygon area.
-    * 
+    *
     * @return the are of this polygon.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -780,7 +780,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * When viewing a polygon as a physical object with constant density and thickness, the centroid
     * is equivalent to the polygon's center of mass.
     * </p>
-    * 
+    *
     * @param centroidToPack the point in which the coordinates of the centroid are stored. Modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -788,7 +788,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    public void getCentroid(Point2DBasics centroidToPack)
    {
       checkIfUpToDate();
-      centroidToPack.set(this.centroid);
+      centroidToPack.set(centroid);
    }
 
    /**
@@ -800,7 +800,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * When viewing a polygon as a physical object with constant density and thickness, the centroid
     * is equivalent to the polygon's center of mass.
     * </p>
-    * 
+    *
     * @return the read-only reference to this polygon's centroid.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -813,7 +813,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the internal reference to this polygon's axis-aligned bounding box.
-    * 
+    *
     * @return this polygon's bounding box.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -826,7 +826,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the size along the x-axis of this polygon's bounding box.
-    * 
+    *
     * @return the range on the x-axis of the bounding box.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -839,7 +839,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the size along the y-axis of this polygon's bounding box.
-    * 
+    *
     * @return the range on the y-axis of the bounding box.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -855,7 +855,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the copy of this polygon's bounding box.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -870,7 +870,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Packs this polygon's axis-aligned bounding box in the given {@code boundingBoxToPack}.
-    * 
+    *
     * @param boundingBoxToPack the bounding box that is set to this polygon's bounding box.
     *           Modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -888,7 +888,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
     * lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the read-only reference to the vertex.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -920,7 +920,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
     * lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the read-only reference to the next vertex.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -941,7 +941,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
     * lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the read-only reference to the previous vertex.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -961,7 +961,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * This method calculates a new index to emulate a counter-clockwise ordering of this polygon's
     * vertices. The first vertex has the lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param index the index of the vertex in the counter-clockwise ordered list.
     * @return the read-only reference to the vertex.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -985,7 +985,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * This method calculates a new index to emulate a counter-clockwise ordering of this polygon's
     * vertices. The first vertex has the lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param index the index of the vertex in the counter-clockwise ordered list.
     * @return the read-only reference to the next vertex.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1006,7 +1006,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * This method calculates a new index to emulate a counter-clockwise ordering of this polygon's
     * vertices. The first vertex has the lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param index the index of the vertex in the counter-clockwise ordered list.
     * @return the read-only reference to the previous vertex.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1027,7 +1027,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
     * lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param currentVertexIndex the current vertex index.
     * @return the next vertex index.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1048,7 +1048,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * For internal use only.
     * </p>
-    * 
+    *
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    private int getNextVertexIndexUnsafe(int currentVertexIndex)
@@ -1068,7 +1068,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
     * lowest x-coordinate.
     * </p>
-    * 
+    *
     * @param currentVertexIndex the current vertex index.
     * @return the before vertex index.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1090,7 +1090,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * For internal use only.
     * </p>
-    * 
+    *
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    private int getPreviousVertexIndexUnsafe(int currentVertexIndex)
@@ -1105,7 +1105,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the number of vertices composing this convex polygon.
-    * 
+    *
     * @return this polygon's size.
     */
    public int getNumberOfVertices()
@@ -1118,7 +1118,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * The polygon centroid remains unchanged.
     * </p>
-    * 
+    *
     * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
     *           nothing.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1140,7 +1140,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this
     * vertex will remain unmodified.
     * </p>
-    * 
+    *
     * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
     *           nothing.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1165,7 +1165,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Translates this polygon.
-    * 
+    *
     * @param translation the translation to apply to this polygon's vertices. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1178,7 +1178,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Translated this polygon.
-    * 
+    *
     * @param x the translation along the x-axis to apply to each of this polygon's vertices.
     * @param y the translation along the y-axis to apply to each of this polygon's vertices.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1201,7 +1201,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Copies this polygon, translates the copy, and returns it.
-    * 
+    *
     * @param translation the translation to apply to the copy of this polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1233,7 +1233,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Transforms this convex polygon using the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1256,8 +1256,9 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    }
 
    /**
-    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
-    * 
+    * Transforms this convex polygon using the inverse of the given homogeneous transformation
+    * matrix.
+    *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1282,7 +1283,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    /**
     * Transforms this convex polygon using the given homogeneous transformation matrix and project
     * the result onto the XY-plane.
-    * 
+    *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1307,7 +1308,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param transform the transform to apply on the vertices of the copy of this convex polygon.
     *           Not modified.
     * @param the copy of this transformed.
@@ -1330,7 +1331,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param transform the transform to apply on the vertices of the copy of this convex polygon.
     *           Not modified.
     * @param the copy of this transformed.
@@ -1347,7 +1348,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the highest x-coordinate value of the vertices composing this polygon.
-    * 
+    *
     * @return the maximum x-coordinate.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1360,7 +1361,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the lowest x-coordinate value of the vertices composing this polygon.
-    * 
+    *
     * @return the minimum x-coordinate.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1373,7 +1374,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the highest y-coordinate value of the vertices composing this polygon.
-    * 
+    *
     * @return the maximum y-coordinate.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1386,7 +1387,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the lowest y-coordinate value of the vertices composing this polygon.
-    * 
+    *
     * @return the minimum y-coordinate.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1399,7 +1400,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the index of the vertex with the lowest x-coordinate.
-    * 
+    *
     * @return the index of the vertex located at the minimum x.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1414,7 +1415,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the index of the vertex with the highest x-coordinate.
-    * 
+    *
     * @return the index of the vertex located at the maximum x.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1429,7 +1430,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the index of the vertex with the lowest y-coordinate.
-    * 
+    *
     * @return the index of the vertex located at the minimum y.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1444,7 +1445,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Gets the index of the vertex with the highest y-coordinate.
-    * 
+    *
     * @return the index of the vertex located at the maximum y.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1461,7 +1462,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists
     * in more than one vertex in the list, it is the index of the vertex with the highest
     * y-coordinate out of the candidates.
-    * 
+    *
     * @return the index of the vertex located at the minimum x and maximum y.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1478,7 +1479,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists
     * in more than one vertex in the list, it is the index of the vertex with the lowest
     * y-coordinate out of the candidates.
-    * 
+    *
     * @return the index of the vertex located at the minimum x and minimum y.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1495,7 +1496,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists
     * in more than one vertex in the list, it is the index of the vertex with the highest
     * y-coordinate out of the candidates.
-    * 
+    *
     * @return the index of the vertex located at the maximum x and maximum y.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1512,7 +1513,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists
     * in more than one vertex in the list, it is the index of the vertex with the lowest
     * y-coordinate out of the candidates.
-    * 
+    *
     * @return the index of the vertex located at the maximum x and minimum y.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
@@ -1531,7 +1532,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * The subset consists of the vertices from the vertex at {@code startIndexInclusive} to the
     * vertex {@code endIndexInclusive} while going from start to end in a clockwise order.
     * </p>
-    * 
+    *
     * @param startIndexInclusive the index of the first vertex to add.
     * @param endIndexInclusive the index of the last vertex to add.
     * @param pointListToPack the list into which the vertices are to be added.
@@ -1560,7 +1561,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * The subset consists of the vertices from the vertex at {@code startIndexInclusive} to the
     * vertex {@code endIndexInclusive} while going from start to end in a clockwise order.
     * </p>
-    * 
+    *
     * @param startIndexInclusive the index of the first vertex to add.
     * @param endIndexInclusive the index of the last vertex to add.
     * @param polygonToPack the polygon into which the vertices are to be added.
@@ -1589,7 +1590,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * The method returns {@code false} if the two polygons have different size.
     * </p>
-    * 
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
@@ -1616,7 +1617,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Tests whether this polygon is empty, i.e. it has no vertices.
-    * 
+    *
     * @return {@code true} if this polygon is empty, {@code false} otherwise.
     */
    public boolean isEmpty()
@@ -1627,7 +1628,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    /**
     * Tests whether this polygon has been updated via {@link #update()} since last time its vertices
     * have been modified.
-    * 
+    *
     * @return {@code true} if this polygon is up-to-date and operations can be used, {@code false}
     *         otherwise.
     */
@@ -1639,7 +1640,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    /**
     * Checks if this polygon has been updated via {@link #update()} since last time its vertices
     * have been modified.
-    * 
+    *
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
@@ -1651,7 +1652,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Checks if this polygon is empty, i.e. it has no vertices.
-    * 
+    *
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    public void checkNonEmpty()
@@ -1662,7 +1663,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Checks if the given index is contained in the range [0, {@link #numberOfVertices}[.
-    * 
+    *
     * @param index the index to check.
     * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal
     *            than the polygon's number of vertices.
@@ -1686,7 +1687,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
     * polygons single edge.
     * </ul>
-    * 
+    *
     * @param x the x-coordinate of the query.
     * @param y the y-coordinate of the query.
     * @return {@code true} if the query is inside this polygon, {@code false} otherwise.
@@ -1716,8 +1717,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * or if the query is at a distance from the polygon's only edge that is greater than
     * {@code epsilon}, returns {@code true} otherwise.
     * </ul>
-    * 
-    * 
+    *
     * @param x the x-coordinate of the query.
     * @param y the y-coordinate of the query.
     * @param epsilon the tolerance to use during the test.
@@ -1743,7 +1743,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
     * polygons single edge.
     * </ul>
-    * 
+    *
     * @param point the query. Not modified.
     * @return {@code true} if the query is inside this polygon, {@code false} otherwise.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1772,8 +1772,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * or if the query is at a distance from the polygon's only edge that is greater than
     * {@code epsilon}, returns {@code true} otherwise.
     * </ul>
-    * 
-    * 
+    *
     * @param point the query. Not modified.
     * @param epsilon the tolerance to use during the test.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
@@ -1800,7 +1799,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the ray is parallel to the closest edge, the closest point to the ray origin is chosen.
     * </ul>
     * </p>
-    * 
+    *
     * @param ray the ray to find the closest point to. Not modified.
     * @param closestPointToPack the point in which the coordinates of the closest point are stored.
     *           Modified.
@@ -1828,7 +1827,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the ray is parallel to the closest edge, the closest point to the ray origin is chosen.
     * </ul>
     * </p>
-    * 
+    *
     * @param ray the ray to find the closest point to. Not modified.
     * @return the coordinates of the closest point if the method succeeds, {@code null} otherwise.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
@@ -1848,7 +1847,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <p>
     * Note that if the point is inside this polygon, this method returns 0.0.
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return the value of the distance between the point and this polygon.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -1874,7 +1873,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * the distance and the line segment defined by the polygon's two vertices.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return the distance between the query and the polygon, it is negative if the point is inside
     *         the polygon.
@@ -1977,7 +1976,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @return the index of the first vertex that is in the line-of-sight, {@code -1} if this method
     *         fails.
@@ -2007,7 +2006,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @return the index of the last vertex that is in the line-of-sight, {@code -1} if this method
     *         fails.
@@ -2037,7 +2036,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @return the indices in order of the first and last vertices that are in the line-of-sight,
     *         {@code null} if this method fails.
@@ -2067,7 +2066,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * observer is equal to the polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @param startVertexToPack point in which the coordinates of the first vertex in the
     *           line-of-sight are stored. Modified.
@@ -2104,7 +2103,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * observer is equal to the polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight
     *           are stored. Modified.
@@ -2142,7 +2141,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * the observer is equal to the polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates of the first vertex in the line-of-sight or {@code null} if this
     *         method failed. Modified.
@@ -2173,7 +2172,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * the observer is equal to the polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates of the last vertex in the line-of-sight or {@code null} if this method
     *         failed. Modified.
@@ -2204,7 +2203,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * the observer is equal to the polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates in order of the first and last vertices in the line-of-sight or
     *         {@code null} if this method failed. Modified.
@@ -2227,8 +2226,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * The edge is defined by its start {@code this.getVertex(edgeIndex)} and its end
     * {@code this.getNextVertex(edgeIndex)}.
     * </p>
-    * 
-    * 
+    *
     * @param edgeIndex the vertex index of the start of the edge.
     * @param observer the coordinates of the observer. Not modified.
     * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
@@ -2244,7 +2242,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Tests if the given point lies on an edge of this convex polygon.
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is considered to be on an edge of this polygon,
     *         {@code false} otherwise.
@@ -2270,7 +2268,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * {@code secondIntersectionToPack} remains unmodified.
     * </ul>
     * </p>
-    * 
+    *
     * @param line the line that may intersect this polygon. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection
     *           between the line and the convex polygon. Can be {@code null}. Modified.
@@ -2302,7 +2300,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If no intersections exist, this method returns {@code null}.
     * </ul>
     * </p>
-    * 
+    *
     * @param line the line that may intersect this polygon. Not modified.
     * @return the coordinates of the intersections between the line and the polygon, or {@code null}
     *         if they do not intersect.
@@ -2330,7 +2328,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * {@code secondIntersectionToPack} might be modified.
     * </ul>
     * </p>
-    * 
+    *
     * @param ray the ray that may intersect this polygon. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection
     *           between the ray and the convex polygon. Can be {@code null}. Modified.
@@ -2362,7 +2360,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If no intersections exist, this method returns {@code null}.
     * </ul>
     * </p>
-    * 
+    *
     * @param ray the ray that may intersect this polygon. Not modified.
     * @return the intersections between the ray and the polygon.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2399,7 +2397,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * </ul>
     * </ul>
     * </p>
-    * 
+    *
     * @param lineSegment the line segment that may intersect this polygon. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection
     *           between the line and the convex polygon. Can be {@code null}. Modified.
@@ -2441,7 +2439,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * </ul>
     * </ul>
     * </p>
-    * 
+    *
     * @param lineSegment the line segment that may intersect this polygon. Not modified.
     * @return the intersections between the line segment and the polygon.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2462,7 +2460,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has one or no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return the index of the closest edge to the query.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2482,7 +2480,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has one or no vertices, this method fails and returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @param closestEdgeToPack the line segment used to store the result. Not modified.
     * @return whether this method succeeded or not.
@@ -2509,7 +2507,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has one or no vertices, this method fails and returns {@code null}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return the line segment representing the closest edge or {@code null} if this method failed.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2532,7 +2530,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return the index of the closest vertex to the query.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2552,7 +2550,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has no vertices, this method fails and returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
@@ -2579,7 +2577,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has no vertices, this method fails and returns {@code null}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return the coordinates of the closest vertex, or {@code null} if this method failed.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2601,7 +2599,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param line the query. Not modified.
     * @return the index of the closest vertex to the query.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2621,7 +2619,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has no vertices, this method fails and returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param line the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
@@ -2648,7 +2646,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>If the polygon has no vertices, this method fails and returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param line the query. Not modified.
     * @return the coordinates of the closest vertex or {@code null} if this method failed.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2664,7 +2662,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
 
    /**
     * Packs the endpoints of an edge of this polygon into {@code edgeToPack}.
-    * 
+    *
     * @param edgeIndex index of the vertex that starts the edge.
     * @param edgeToPack line segment used to store the edge endpoints. Modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
@@ -2679,32 +2677,38 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons
-    * are geometrically similar, i.e. each point of {@code this} is within a distance
-    * {@code epsilon} of some point of {@code other} and none share the same point.
+    * Compares {@code this} and {@code other} to determine if the two convex polygons are
+    * geometrically similar.
+    * <p>
+    * This method performs the comparison on a per vertex basis while accounting for a possible
+    * shift in the polygon indexing. For instance, two polygons that have the same vertices in
+    * clockwise or counter-clockwise order, are considered geometrically equal even if they do not
+    * start with the same vertex.
+    * </p>
     *
     * @param other the convex polygon to compare to.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the convex polygons represent the same geometry, {@code false}
-    *            otherwise.
+    *         otherwise.
     */
    @Override
    public boolean geometricallyEquals(ConvexPolygon2D other, double epsilon)
    {
-      if (this.numberOfVertices != other.numberOfVertices)
+      if (numberOfVertices != other.numberOfVertices)
          return false;
-      
-      boolean sameClockwiseDirection = this.clockwiseOrdered == other.clockwiseOrdered;
+
+      boolean sameClockwiseDirection = clockwiseOrdered == other.clockwiseOrdered;
 
       int indexOfClosestOtherPoint = other.getClosestVertexIndex(clockwiseOrderedVertices.get(0));
 
-      for (int thisPointIndex = 0, otherPointIndex; thisPointIndex < numberOfVertices; ++thisPointIndex) {
+      for (int thisPointIndex = 0, otherPointIndex; thisPointIndex < numberOfVertices; ++thisPointIndex)
+      {
          if (sameClockwiseDirection)
             otherPointIndex = (indexOfClosestOtherPoint + thisPointIndex) % numberOfVertices;
          else
             otherPointIndex = (numberOfVertices + indexOfClosestOtherPoint - thisPointIndex) % numberOfVertices;
 
-         if (!this.clockwiseOrderedVertices.get(thisPointIndex).geometricallyEquals(other.clockwiseOrderedVertices.get(otherPointIndex), epsilon))
+         if (!clockwiseOrderedVertices.get(thisPointIndex).geometricallyEquals(other.clockwiseOrderedVertices.get(otherPointIndex), epsilon))
             return false;
       }
 

@@ -215,7 +215,8 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * Computes the coordinates of the possible intersections between a line and this ellipsoid.
     * <p>
     * In the case the line and this box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * 
     * @param pointOnLine a point expressed in world located on the infinitely long line. Not
@@ -401,10 +402,13 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two ellipsoids are
-    * geometrically similar.
+    * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
+    * similar.
     * <p>
-    * Equivalent to {@link #epsilonEquals(Ellipsoid3D, double)}
+    * This method accounts for the multiple combinations of radii and rotations that generate
+    * identical ellipsoids. For instance, two ellipsoids that are identical but one is flipped by
+    * 180 degrees are considered geometrically equal.
+    * </p>
     *
     * @param other the ellipsoid to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.

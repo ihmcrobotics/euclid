@@ -191,8 +191,8 @@ public class Line3D implements GeometryObject<Line3D>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code direction.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns the distance
-    * between {@code point} and the given {@code point}.
+    * <li>if {@code direction.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code point} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -797,15 +797,16 @@ public class Line3D implements GeometryObject<Line3D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are
-    * geometrically similar, i.e. the length of the distance between the direction of
-    * the two lines is less than or equal to {@code epsilon} and the distance between the
-    * closest points between the two lines is less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
     *
     * @param other the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two lines represent the same geometry, {@code false}
-    *            otherwise.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(Line3D other, double epsilon)

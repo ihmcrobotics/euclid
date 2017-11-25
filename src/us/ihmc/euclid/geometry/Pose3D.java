@@ -1052,15 +1052,16 @@ public class Pose3D implements GeometryObject<Pose3D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are
-    * geometrically similar, i.e. the position of {@code this} falls within a distance
-    * less than or equal to {@code epsilon} of the position of {@code other} and the
-    * magnitude of the difference of the orientations is less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically
+    * equal.
+    * </p>
     * 
     * @param other the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false}
-    *            otherwise.
+    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(Pose3D other, double epsilon)
