@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
+import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -15,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents a finite-length 1D line segment defined by its two 1D endpoints.
  */
-public class LineSegment1D implements Clearable, Settable<LineSegment1D>, EpsilonComparable<LineSegment1D>
+public class LineSegment1D implements Clearable, Settable<LineSegment1D>, EpsilonComparable<LineSegment1D>, GeometricallyComparable<LineSegment1D>
 {
    /** The first endpoint defining this line segment. */
    private double firstEndpoint = Double.NaN;
@@ -574,6 +575,31 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
       if (!EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
          return false;
       return true;
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
+    * similar.
+    * <p>
+    * The comparison is based on comparing the line segments' endpoints. Two line segments are
+    * considered geometrically equal even if they are defined with opposite direction.
+    * </p>
+    *
+    * @param other the line segment to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two line segments represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(LineSegment1D other, double epsilon)
+   {
+      if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.firstEndpoint, epsilon)
+            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.secondEndpoint, epsilon))
+         return true;
+      if (EuclidCoreTools.epsilonEquals(firstEndpoint, other.secondEndpoint, epsilon)
+            && EuclidCoreTools.epsilonEquals(secondEndpoint, other.firstEndpoint, epsilon))
+         return true;
+      return false;
    }
 
    /**

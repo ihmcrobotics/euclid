@@ -290,7 +290,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * moving with respect to the root frame. It is also not expected to have its z-axis aligned at
     * all time with the z-axis of the root frame.
     * </p>
-    * 
+    *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
     */
@@ -309,7 +309,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
     * it.
     * </p>
-    * 
+    *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
     * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the
@@ -345,7 +345,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * moving with respect to the root frame. It is also not expected to have its z-axis aligned at
     * all time with the z-axis of the root frame.
     * </p>
-    * 
+    *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
@@ -371,7 +371,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
     * it.
     * </p>
-    * 
+    *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
@@ -445,7 +445,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Tests if this reference frame is {@link #worldFrame}.
-    * 
+    *
     * @return {@code true} if this is {@link #worldFrame}, {@code false} otherwise.
     */
    public boolean isWorldFrame()
@@ -456,7 +456,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Tests if this reference frame is to be considered as stationary frame, i.e. not moving with
     * respect to its root frame.
-    * 
+    *
     * @return {@code true} if this is a stationary frame, {@code false} other.
     */
    public boolean isAStationaryFrame()
@@ -466,7 +466,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Tests if this reference frame is considered to have its z-axis aligned with the root frame.
-    * 
+    *
     * @return {@code true} if this is a z-up frame, {@code false} otherwise.
     */
    public boolean isZupFrame()
@@ -501,7 +501,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * The {@code transformFromParent} should describe the pose of this frame expressed in its parent
     * frame.
     * </p>
-    * 
+    *
     * @param transformToParent the transform to updated according to how this reference frame should
     *           now positioned with respect to its parent frame. Modified.
     */
@@ -523,7 +523,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Retrieves the root frame of the tree of reference frame that this frame belongs to.
-    * 
+    *
     * @return the root frame.
     */
    public ReferenceFrame getRootFrame()
@@ -570,7 +570,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Reference frames usually have a unique name among the reference frames in the same tree but
     * this is not guaranteed.
     * </p>
-    * 
+    *
     * @return this frame's name.
     */
    public String getName()
@@ -584,7 +584,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param desiredFrame the goal frame.
     * @return the transform from this frame to the {@code desiredFrame}.
     */
@@ -602,7 +602,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the transform from this frame to the {@link #worldFrame}.
     */
    public RigidBodyTransform getTransformToWorldFrame()
@@ -615,7 +615,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Packs the transform that can be used to transform a geometry object defined in this frame to
     * obtain its equivalent expressed in the {@code desiredFrame} into {@code transformToPack}.
-    * 
+    *
     * @param transformToPack the transform in which this frame's transform to the
     *           {@code desiredFrame} is stored. Modified.
     * @param desiredFrame the goal frame.
@@ -662,7 +662,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Test whether the given frame is the parent of this frame.
-    * 
+    *
     * @param frame the query.
     * @return {@code true} if the query is the parent of this frame, {@code false} otherwise.
     */
@@ -673,7 +673,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Test whether the given frame is a child of this frame.
-    * 
+    *
     * @param frame the query.
     * @return {@code true} if the query is a child of this frame, {@code false} otherwise.
     */
@@ -684,7 +684,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Asserts that this frame and {@code referenceFrame} share the same root frame.
-    * 
+    *
     * @param referenceFrame the query.
     * @throws RuntimeException if this frame and the query do not share the same root frame.
     */
@@ -702,7 +702,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * The transform can be used to transform a geometry object defined in this frame to obtain its
     * equivalent expressed in the root frame.
     * </p>
-    * 
+    *
     * @return the internal reference to the transform from this frame to the root frame.
     */
    public RigidBodyTransform getTransformToRoot()
@@ -757,7 +757,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Overrides the {@link Object#toString()} method to print this reference frame's name.
-    * 
+    *
     * @return this frame's name.
     */
    @Override
@@ -771,7 +771,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * <p>
     * This is usually used from verifying that a geometry is expressed in a specific frame.
     * </p>
-    * 
+    *
     * @param referenceFrameHolder the query holding a reference frame.
     * @throws ReferenceFrameMismatchException if the query holds onto a different frame than this.
     */
@@ -782,7 +782,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Check if this frame and the query are the same.
-    * 
+    *
     * @param referenceFrame the query.
     * @throws ReferenceFrameMismatchException if the query and this are two different frame.
     */
@@ -798,7 +798,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Checks if this frame is equal to {@link #worldFrame}.
-    * 
+    *
     * @throws RuntimeException if this is not {@link #worldFrame}.
     */
    public void checkIsWorldFrame() throws RuntimeException
@@ -811,7 +811,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Checks if this is a stationary frame, i.e. not moving with respect to the root frame.
-    * 
+    *
     * @throws RuntimeException if this is not a stationary frame.
     */
    public void checkIsAStationaryFrame() throws RuntimeException
@@ -824,7 +824,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * Checks if this is a z-up frame, i.e. its z-axis is aligned with the root frame's z-axis.
-    * 
+    *
     * @throws RuntimeException if this is not a z-up frame.
     */
    public void checkIsAZUpFrame() throws RuntimeException
@@ -911,7 +911,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * same tree of reference frames, such that it can be used to serialize and deserialize frame
     * information.
     * </p>
-    * 
+    *
     * @return this frame's name based hash code.
     */
    @Override
@@ -940,7 +940,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * different names to have the same hash code or to enforce a common frame to have a specific
     * hash code that can be known without holding on its actual instance.
     * </p>
-    * 
+    *
     * @param additionalNameBasedHashCode the new value of this frame's custom hash code.
     */
    public void setAdditionalNameBasedHashCode(long additionalNameBasedHashCode)

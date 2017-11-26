@@ -1,7 +1,11 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.referenceFrame.*;
+import us.ihmc.euclid.referenceFrame.FrameQuaternion;
+import us.ihmc.euclid.referenceFrame.FrameTuple2D;
+import us.ihmc.euclid.referenceFrame.FrameTuple3D;
+import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -20,13 +24,21 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param other the other quaternion to measure the distance. Not modified.
     * @return the angle representing the distance between the two quaternions. It is contained in
     *         [0, 2<i>pi</i>]
-    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code other} do not match.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other}
+    *            do not match.
     */
    default double distance(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
       return QuaternionReadOnly.super.distance(other);
+   }
+
+   /** {@inheritDoc} */
+   default double distancePrecise(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+
+      return QuaternionReadOnly.super.distancePrecise(other);
    }
 
    /**
@@ -809,5 +821,23 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       checkReferenceFrameMatch(vectorOriginal);
       vectorTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame quaternions are
+    * geometrically similar, i.e. the magnitude of their difference is less than or equal to
+    * {@code epsilon}.
+    *
+    * @param other the frame quaternion to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame quaternions represent the same geometry, {@code false}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   default boolean geometricallyEquals(FrameQuaternionReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+      return QuaternionReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

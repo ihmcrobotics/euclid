@@ -1,15 +1,19 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -349,7 +353,7 @@ public class Line3DTest
 
          assertFalse(line1.equals((Line3D) null));
          assertFalse(line1.equals((Object) null));
-         assertFalse(line1.equals((Object) new double[3]));
+         assertFalse(line1.equals(new double[3]));
 
          for (int j = 0; j < 3; j++)
          {
@@ -372,6 +376,86 @@ public class Line3DTest
             ((Tuple3DBasics) line2.getDirection()).setElement(j, element - epsilon);
             assertFalse(line1.equals(line2));
          }
+      }
+   }
+
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(57021L);
+      Line3D firstLine, secondLine;
+      double epsilon = 1e-6;
+      double scale;
+      Vector3D orthogonal, direction = new Vector3D();
+
+      firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+      secondLine = new Line3D(firstLine);
+
+      assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(firstLine.geometricallyEquals(firstLine, epsilon));
+      assertTrue(secondLine.geometricallyEquals(secondLine, epsilon));
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Lines are equal if translations are equal within +- epsilon and are otherwise the same
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         secondLine = new Line3D(firstLine);
+
+         orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
+         orthogonal.scale(0.99 * epsilon / orthogonal.length());
+
+         secondLine.translate(orthogonal.getX(), orthogonal.getY(), orthogonal.getZ());
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+
+         secondLine.set(firstLine);
+
+         orthogonal.scale(1.01 * epsilon / orthogonal.length());
+
+         secondLine.translate(orthogonal.getX(), orthogonal.getY(), orthogonal.getZ());
+         assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Lines are equal if directions are equal within +- epsilon and are otherwise the same
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         secondLine = new Line3D(firstLine);
+
+         orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
+
+         secondLine.getDirection(direction);
+         direction.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 0.99), new Vector3D()));
+         secondLine.setDirection(direction);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+
+         secondLine.set(firstLine);
+
+         secondLine.getDirection(direction);
+         direction.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 1.01), new Vector3D()));
+         secondLine.setDirection(direction);
+
+         assertFalse(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Lines are equal if translations lie somewhere on the same direction
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         secondLine = new Line3D(firstLine);
+         scale = random.nextDouble() - random.nextDouble();
+
+         secondLine.translate(secondLine.getDirectionX() * scale, secondLine.getDirectionY() * scale, secondLine.getDirectionZ() * scale);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Lines are equal if directions are equal but opposite and are otherwise the same
+         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         firstLine.getDirection(direction);
+         direction.negate();
+         secondLine = new Line3D(firstLine.getPoint(), direction);
+
+         assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
       }
    }
 }

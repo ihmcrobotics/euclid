@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -38,7 +39,7 @@ public class FramePoint3D extends FrameTuple3D<FramePoint3D, Point3D> implements
    /**
     * Creates a new frame point and initializes it coordinates to zero and its reference frame to
     * the {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame point.
     */
    public FramePoint3D(ReferenceFrame referenceFrame)
@@ -49,7 +50,7 @@ public class FramePoint3D extends FrameTuple3D<FramePoint3D, Point3D> implements
    /**
     * Creates a new frame point and initializes it with the given coordinates and the given
     * reference frame.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame point.
     * @param x the x-coordinate.
     * @param y the y-coordinate.
@@ -63,7 +64,7 @@ public class FramePoint3D extends FrameTuple3D<FramePoint3D, Point3D> implements
    /**
     * Creates a new frame point and initializes its coordinates {@code x}, {@code y}, {@code z} in
     * order from the given array and initializes its reference frame.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame point.
     * @param pointArray the array containing this point's coordinates. Not modified.
     */
@@ -126,5 +127,22 @@ public class FramePoint3D extends FrameTuple3D<FramePoint3D, Point3D> implements
    public Point3D getPoint()
    {
       return tuple;
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame points are geometrically
+    * similar, i.e. the distance between them is less than or equal to {@code epsilon}.
+    *
+    * @param other the frame point to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame points represent the same geometry, {@code false}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   @Override
+   public boolean geometricallyEquals(FramePoint3D other, double epsilon)
+   {
+      return FramePoint3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
@@ -126,6 +127,7 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector4D.class, Vector4D.class, true, 1, framelessMethodsToIgnore);
    }
 
+   @Override
    @Test
    public void testFrameGeometryObjectFeatures() throws Throwable
    {
@@ -222,6 +224,25 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
             continue;
 
          testMethod.invoke(vectorBasicsTest);
+      }
+   }
+
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(58722L);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         double epsilon = random.nextDouble();
+
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameVector4D frameVector1 = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
+         FrameVector4D frameVector2 = EuclidFrameRandomTools.generateRandomFrameVector4D(random, referenceFrame);
+
+         boolean expectedAnswer = frameVector1.getVector().geometricallyEquals(frameVector2, epsilon);
+         boolean actualAnswer = frameVector1.geometricallyEquals(frameVector2, epsilon);
+         assertEquals(expectedAnswer, actualAnswer);
       }
    }
 }

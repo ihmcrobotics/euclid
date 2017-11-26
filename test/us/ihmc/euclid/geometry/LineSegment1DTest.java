@@ -14,6 +14,8 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class LineSegment1DTest
 {
+   private static final double EPSILON = 1.0e-12;
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void lineBoundariesTest()
@@ -380,7 +382,7 @@ public class LineSegment1DTest
    }
 
    @Test
-   public void toUpperDImensionsTest()
+   public void toUpperDimensionsTest()
    {
       Point2D point2d = new Point2D(1, 1);
       Vector2D direction2d = new Vector2D(1, 2);
@@ -396,5 +398,105 @@ public class LineSegment1DTest
 
       assertEquals(line3d.getFirstEndpoint(), new Point3D(1, 1, 1));
       assertEquals(line3d.getSecondEndpoint(), new Point3D(11, 21, 31));
+   }
+
+   @Test
+   public void testGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(23525);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Endpoints are in the same order
+         double endpoint1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double endpoint2 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+
+         LineSegment1D lineSegment1 = new LineSegment1D(endpoint1, endpoint2);
+         LineSegment1D lineSegment2 = new LineSegment1D(endpoint1, endpoint2);
+
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1 + 0.99 * EPSILON, endpoint2);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1 - 0.99 * EPSILON, endpoint2);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1 + 1.01 * EPSILON, endpoint2);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 - 1.01 * EPSILON, endpoint2);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1, endpoint2 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1, endpoint2 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1, endpoint2 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1, endpoint2 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 + 0.99 * EPSILON, endpoint2 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 - 0.99 * EPSILON, endpoint2 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 + 1.01 * EPSILON, endpoint2 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 - 1.01 * EPSILON, endpoint2 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Endpoints are in opposite order
+         double endpoint2 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double endpoint1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+
+         LineSegment1D lineSegment1 = new LineSegment1D(endpoint1, endpoint2);
+         LineSegment1D lineSegment2 = new LineSegment1D(endpoint2, endpoint1);
+
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2 + 0.99 * EPSILON, endpoint1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2 - 0.99 * EPSILON, endpoint1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2 + 1.01 * EPSILON, endpoint1);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 - 1.01 * EPSILON, endpoint1);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2, endpoint1 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2, endpoint1 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2, endpoint1 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2, endpoint1 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 + 0.99 * EPSILON, endpoint1 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 - 0.99 * EPSILON, endpoint1 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 + 1.01 * EPSILON, endpoint1 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 - 1.01 * EPSILON, endpoint1 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+      }
    }
 }

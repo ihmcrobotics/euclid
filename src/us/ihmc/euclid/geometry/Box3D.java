@@ -1,6 +1,11 @@
 package us.ihmc.euclid.geometry;
 
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
+import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
+
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -424,7 +429,8 @@ public class Box3D extends Shape3D<Box3D>
     * Computes the coordinates of the possible intersections between a line and this box.
     * <p>
     * In the case the line and this box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * 
     * @param pointOnLine a point expressed in world located on the infinitely long line. Not
@@ -447,13 +453,13 @@ public class Box3D extends Shape3D<Box3D>
       double maxY = halfSize.getY();
       double maxZ = halfSize.getZ();
 
-      double xLocal = TransformationTools.computeTransformedX(shapePose, true, pointOnLine);
-      double yLocal = TransformationTools.computeTransformedY(shapePose, true, pointOnLine);
-      double zLocal = TransformationTools.computeTransformedZ(shapePose, true, pointOnLine);
+      double xLocal = computeTransformedX(shapePose, true, pointOnLine);
+      double yLocal = computeTransformedY(shapePose, true, pointOnLine);
+      double zLocal = computeTransformedZ(shapePose, true, pointOnLine);
 
-      double dxLocal = TransformationTools.computeTransformedX(shapePose, true, lineDirection);
-      double dyLocal = TransformationTools.computeTransformedY(shapePose, true, lineDirection);
-      double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
+      double dxLocal = computeTransformedX(shapePose, true, lineDirection);
+      double dyLocal = computeTransformedY(shapePose, true, lineDirection);
+      double dzLocal = computeTransformedZ(shapePose, true, lineDirection);
 
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ, xLocal, yLocal, zLocal,
                                                                                                 dxLocal, dyLocal, dzLocal, firstIntersectionToPack,
@@ -546,5 +552,41 @@ public class Box3D extends Shape3D<Box3D>
    public String toString()
    {
       return "Box 3D: size = " + size + ", pose =\n" + getPoseString();
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two boxes are geometrically
+    * similar.
+    * <p>
+    * This method accounts for the multiple combinations of sizes and rotations that generate
+    * identical boxes. For instance, two boxes that are identical but one is flipped by 180 degrees
+    * are considered geometrically equal.
+    * </p>
+    * 
+    * @param other the box to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Box3D other, double epsilon)
+   {
+      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
+
+      RotationMatrixReadOnly otherRotation = other.shapePose.getRotationMatrix();
+      double otherSizeWorldX = TransformationTools.computeTransformedX(otherRotation, false, other.size);
+      double otherSizeWorldY = TransformationTools.computeTransformedY(otherRotation, false, other.size);
+      double otherSizeWorldZ = TransformationTools.computeTransformedZ(otherRotation, false, other.size);
+      
+      RotationMatrixReadOnly thisRotation = shapePose.getRotationMatrix();
+      double otherSizeLocalX = Math.abs(TransformationTools.computeTransformedX(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
+      double otherSizeLocalY = Math.abs(TransformationTools.computeTransformedY(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
+      double otherSizeLocalZ = Math.abs(TransformationTools.computeTransformedZ(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
+
+      double diffX = size.getX() - otherSizeLocalX;
+      double diffY = size.getY() - otherSizeLocalY;
+      double diffZ = size.getZ() - otherSizeLocalZ;
+
+      return EuclidCoreTools.normSquared(diffX, diffY, diffZ) <= epsilon * epsilon;
    }
 }

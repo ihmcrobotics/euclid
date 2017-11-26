@@ -8,10 +8,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.*;
 
 /**
  * Represents a finite-length 2D line segment defined by its two 2D endpoints.
@@ -32,7 +29,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Initializes this line segment to have the given endpoints.
-    * 
+    *
     * @param firstEndpointX x-coordinate of the first endpoint of this line segment.
     * @param firstEndpointY y-coordinate of the first endpoint of this line segment.
     * @param secondEndpointX x-coordinate of the second endpoint of this line segment.
@@ -45,7 +42,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Creates a new line segment 2D and initializes it to {@code other}.
-    * 
+    *
     * @param other the other line segment used to initialize this line segment. Not modified.
     */
    public LineSegment2D(LineSegment2D other)
@@ -55,7 +52,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Initializes this line segment to have the given endpoints.
-    * 
+    *
     * @param firstEndpoint the first endpoint of this line segment. Not modified.
     * @param secondEndpoint the second endpoint of this line segment. Not modified.
     */
@@ -66,7 +63,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Initializes this line segment to have the given endpoints.
-    * 
+    *
     * @param endpoints a two-element array containing in order the first and second endpoints for
     *           this line segment. Not modified.
     * @throws IllegalArgumentException if the given array has a length different than 2.
@@ -78,7 +75,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Transforms this line segment using the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on the endpoints of this line segment. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY-plane.
@@ -92,7 +89,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on the endpoints of this line segment. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY-plane.
@@ -107,7 +104,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Transforms this line segment using the given homogeneous transformation matrix and project the
     * result onto the XY-plane.
-    * 
+    *
     * @param transform the transform to apply on this line segment's endpoints. Not modified.
     */
    public void applyTransformAndProjectToXYPlane(Transform transform)
@@ -122,7 +119,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param transform the transform to apply on this line segment's copy. Not modified.
     * @param the copy of this transformed.
     * @throws RuntimeException if this line has not been initialized yet.
@@ -140,7 +137,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param transform the transform to apply on this line segment's copy. Not modified.
     * @param the copy of this transformed.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
@@ -155,7 +152,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Tests if this line segment contains {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if {@link #firstEndpoint} and/or {@link #secondEndpoint} contains
     *         {@link Double#NaN}, {@code false} otherwise.
     */
@@ -170,7 +167,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param normalize whether the direction vector is to be normalized.
     * @return the direction of this line segment.
     */
@@ -183,7 +180,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Computes the vector going from the first to the second endpoint of this line segment.
-    * 
+    *
     * @param normalize whether the direction vector is to be normalized.
     * @param directionToPack vector in which the direction is stored. Modified.
     */
@@ -235,7 +232,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * {@code this }&middot;
     * {@code other = Math.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
     * where &alpha; is the angle from this to the other line segment.
-    * 
+    *
     * @param other the other line segment used to compute the dot product. Not modified.
     * @return the value of the dot product.
     */
@@ -247,7 +244,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Tests on a per-component basis on both endpoints if this line segment is equal to
     * {@code other} with the tolerance {@code epsilon}.
-    * 
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
@@ -295,7 +292,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Test if the first endpoint of this line segment contains {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if {@link #firstEndpoint} contains {@link Double#NaN}, {@code false}
     *         otherwise.
     */
@@ -327,7 +324,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
-    * 
+    *
     * @param firstEndpointToPack point in which the coordinates of this line segment's first
     *           endpoint are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
@@ -344,7 +341,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the two-element array containing in order this line segment first and second
     *         endpoints.
     */
@@ -355,7 +352,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
-    * 
+    *
     * @return the reference to the first endpoint of this line segment.
     */
    public Point2DReadOnly getFirstEndpoint()
@@ -366,7 +363,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Gets the first endpoint defining this line segment by storing its coordinates in the given
     * argument {@code firstEndpointToPack}.
-    * 
+    *
     * @param firstEndpointToPack point in which the coordinates of this line segment's first
     *           endpoint are stored. Modified.
     */
@@ -380,7 +377,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the copy of the first endpoint of this line segment.
     */
    public Point2D getFirstEndpointCopy()
@@ -390,7 +387,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Gets the x-coordinate of the first endpoint defining this line segment.
-    * 
+    *
     * @return the first endpoint x-coordinate.
     */
    public double getFirstEndpointX()
@@ -400,7 +397,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Gets the y-coordinate of the first endpoint defining this line segment.
-    * 
+    *
     * @return the first endpoint y-coordinate.
     */
    public double getFirstEndpointY()
@@ -410,7 +407,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Gets the read-only reference to the second endpoint of this line segment.
-    * 
+    *
     * @return the reference to the second endpoint of this line segment.
     */
    public Point2DReadOnly getSecondEndpoint()
@@ -421,7 +418,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Gets the second endpoint defining this line segment by storing its coordinates in the given
     * argument {@code secondEndpointToPack}.
-    * 
+    *
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
     */
@@ -435,7 +432,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the copy of the second endpoint of this line segment.
     */
    public Point2D getSecondEndpointCopy()
@@ -445,7 +442,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Gets the x-coordinate of the second endpoint defining this line segment.
-    * 
+    *
     * @return the first endpoint x-coordinate.
     */
    public double getSecondEndpointX()
@@ -455,7 +452,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Gets the y-coordinate of the second endpoint defining this line segment.
-    * 
+    *
     * @return the first endpoint y-coordinate.
     */
    public double getSecondEndpointY()
@@ -492,7 +489,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * </ul>
     * </ul>
     * </p>
-    * 
+    *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
     *           be {@code null}. Modified.
@@ -522,7 +519,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param line the line that may intersect this line segment. Not modified.
     * @return the coordinates of the intersection if the line intersects this line segment,
     *         {@code null} otherwise.
@@ -546,7 +543,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * {@code true} and the endpoint is the intersection.
     * </ul>
     * </p>
-    * 
+    *
     * @param line the line that may intersect this line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
@@ -576,14 +573,12 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param secondLineSegment the other line segment that may intersect this line segment. Not
-    *           modified.
+    * @param other the other line segment that may intersect this line segment. Not modified.
     * @return the intersection point if it exists, {@code null} otherwise.
     */
-   public Point2D intersectionWith(LineSegment2D secondLineSegment)
+   public Point2D intersectionWith(LineSegment2D other)
    {
-      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, secondLineSegment.firstEndpoint,
-                                                                      secondLineSegment.secondEndpoint);
+      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, other.firstEndpoint, other.secondEndpoint);
    }
 
    /**
@@ -600,15 +595,14 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * </ul>
     * </p>
     *
-    * @param secondLineSegment the other line segment that may intersect this line segment. Not
-    *           modified.
+    * @param other the other line segment that may intersect this line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
-   public boolean intersectionWith(LineSegment2D secondLineSegment, Point2D intersectionToPack)
+   public boolean intersectionWith(LineSegment2D other, Point2D intersectionToPack)
    {
-      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, secondLineSegment.firstEndpoint,
-                                                                      secondLineSegment.secondEndpoint, intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(firstEndpoint, secondEndpoint, other.firstEndpoint, other.secondEndpoint,
+                                                                      intersectionToPack);
    }
 
    /**
@@ -622,7 +616,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <li>if {@code epsilon = 0}, the point has to be between the endpoints or equal to one of the
     * endpoints.
     * </ul>
-    * 
+    *
     * @param x the x-coordinate of the query point.
     * @param y the y-coordinate of the query point.
     * @param z the z-coordinate of the query point.
@@ -645,7 +639,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Tests whether the projection of the given point onto this line segment is located between the
     * two endpoints or exactly on an endpoint.
-    * 
+    *
     * @param point the query. Not modified.
     * @return {@code true} if the projection of the point is between the endpoints of this line
     *         segment, {@code false} otherwise.
@@ -666,7 +660,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <li>if {@code epsilon = 0}, the point has to be between the endpoints or equal to one of the
     * endpoints.
     * </ul>
-    * 
+    *
     * @param point the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the projection of the point is between the endpoints of this line
@@ -705,7 +699,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * More precisely, the point is assumed to be on this line segment if it is located at a distance
     * less than {@code 1.0e-8} from it.
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is located on this line segment, {@code false} otherwise.
     */
@@ -720,7 +714,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * More precisely, the point is assumed to be on this line segment if it is located at a distance
     * less than {@code epsilon} from it.
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @param epsilon the tolerance used for this test.
     * @return {@code true} if the point is located on this line segment, {@code false} otherwise.
@@ -754,7 +748,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Computes the length of this line segment.
-    * 
+    *
     * @return the length of this line segment.
     */
    public double length()
@@ -764,7 +758,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Computes the squared value of the length of this line segment.
-    * 
+    *
     * @return the length squared of this line segment.
     */
    public double lengthSquared()
@@ -778,7 +772,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the mid-point of this line segment.
     */
    public Point2D midpoint()
@@ -790,7 +784,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Computes the coordinates of the point located exactly at the middle of this line segment.
-    * 
+    *
     * @param midpointToPack point in which the mid-point of this line segment is stored. Modified.
     */
    public void midpoint(Point2DBasics midpointToPack)
@@ -811,7 +805,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * endpoints.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointToProject the point to project on this line segment. Modified.
     * @return whether the method succeeded or not.
     */
@@ -833,7 +827,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * endpoints.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this line segment is
     *           stored. Modified.
@@ -857,7 +851,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * endpoints.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto this line segment or {@code null} if the method
     *         failed.
@@ -889,7 +883,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * and returns {@code 0.0}.
     * </ul>
     * </p>
-    * 
+    *
     * @param x the x-coordinate of the query point.
     * @param y the y-coordinate of the query point.
     * @param z the z-coordinate of the query point.
@@ -922,7 +916,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * and returns {@code 0.0}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the query point. Not modified.
     * @return the computed percentage along the line segment representing where the point projection
     *         is located.
@@ -934,7 +928,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Computes the vector perpendicular to the direction of this line segment.
-    * 
+    *
     * @param normalize whether the perpendicular vector is to be normalized.
     * @param perpendicularVectorToPack vector in which the perpendicular vector components are
     *           stored. Modified.
@@ -951,7 +945,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
     * @return the computed point.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
@@ -966,7 +960,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Computes the coordinates of the point located at a given percentage on this line segment: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
-    * 
+    *
     * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
@@ -985,7 +979,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param percentage the percentage along this line segment of the point.
     * @return the computed point.
     */
@@ -999,7 +993,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Computes the coordinates of the point located on the line this line segment is lying on: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
-    * 
+    *
     * @param percentage the percentage along this line segment of the point.
     * @param pointToPack where the result is stored. Modified.
     */
@@ -1010,7 +1004,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Test if the second endpoint of this line segment contains {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if {@link #secondEndpoint} contains {@link Double#NaN}, {@code false}
     *         otherwise.
     */
@@ -1021,7 +1015,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Redefines this line segments with new endpoints.
-    * 
+    *
     * @param firstEndpointX x-coordinate of the new first endpoint.
     * @param firstEndpointY y-coordinate of the new first endpoint.
     * @param secondEndpointX x-coordinate of the new second endpoint.
@@ -1035,7 +1029,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Sets this line segment to be same as the given line segment.
-    * 
+    *
     * @param other the other line segment to copy. Not modified.
     */
    @Override
@@ -1046,7 +1040,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Redefines this line segment with new endpoints.
-    * 
+    *
     * @param firstEndpoint new endpoint of this line segment. Not modified
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     */
@@ -1059,7 +1053,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
    /**
     * Redefines this line segment with a new first endpoint and a vector going from the first to the
     * second endpoint.
-    * 
+    *
     * @param firstEndpoint new first endpoint. Not modified.
     * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
     *           modified.
@@ -1072,7 +1066,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Redefines this line segment with new endpoints.
-    * 
+    *
     * @param endpoints a two-element array containing in order the first and second endpoints for
     *           this line segment. Not modified.
     * @throws IllegalArgumentException if the given array has a length different than 2.
@@ -1086,7 +1080,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Changes the first endpoint of this line segment.
-    * 
+    *
     * @param firstEndpointX x-coordinate of the new first endpoint.
     * @param firstEndpointY y-coordinate of the new first endpoint.
     */
@@ -1097,7 +1091,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Changes the first endpoint of this line segment.
-    * 
+    *
     * @param firstEndpoint new endpoint of this line segment. Not modified
     */
    public void setFirstEndpoint(Point2DReadOnly firstEndpoint)
@@ -1107,7 +1101,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Changes the second endpoint of this line segment.
-    * 
+    *
     * @param secondEndpointX x-coordinate of the new second endpoint.
     * @param secondEndpointY y-coordinate of the new second endpoint.
     */
@@ -1118,7 +1112,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
 
    /**
     * Changes the second endpoint of this line segment.
-    * 
+    *
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     */
    public void setSecondEndpoint(Point2DReadOnly secondEndpoint)
@@ -1182,7 +1176,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * Note that the length and direction of this line segment remains unchanged.
     * </p>
-    * 
+    *
     * @param distanceToShift the distance to shift this line segment.
     */
    public void shiftToLeft(double distanceToShift)
@@ -1196,7 +1190,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * Note that the length and direction of the copy are the same as this line segment.
     * </p>
-    * 
+    *
     * @param distanceToShift the distance to shift this line segment.
     * @return the shifted line segment.
     */
@@ -1211,7 +1205,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * Note that the length and direction of this line segment remains unchanged.
     * </p>
-    * 
+    *
     * @param distanceToShift the distance to shift this line segment.
     */
    public void shiftToRight(double distanceToShift)
@@ -1225,7 +1219,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * Note that the length and direction of the copy are the same as this line segment.
     * </p>
-    * 
+    *
     * @param distanceToShift the distance to shift this line segment.
     * @return the shifted line segment.
     */
@@ -1251,7 +1245,7 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
     * <p>
     * Note that the length and direction of this line segment remains unchanged.
     * </p>
-    * 
+    *
     * @param x the distance to translate this line along the x-axis.
     * @param y the distance to translate this line along the y-axis.
     */
@@ -1261,4 +1255,40 @@ public class LineSegment2D implements GeometryObject<LineSegment2D>
       secondEndpoint.add(x, y);
    }
 
+   /**
+    * Translates this line segment by the given (x, y) contained in {@code translation}.
+    * <p>
+    * Note that the length and direction of this line segment remains unchanged.
+    * </p>
+    *
+    * @param translation the translation to add to each endpoint of this line segment. Not modified.
+    */
+   public void translate(Tuple2DReadOnly translation)
+   {
+      firstEndpoint.add(translation);
+      secondEndpoint.add(translation);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
+    * similar.
+    * <p>
+    * The comparison is based on comparing the line segments' endpoints. Two line segments are
+    * considered geometrically equal even if they are defined with opposite direction.
+    * </p>
+    *
+    * @param other the line segment to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two line segments represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(LineSegment2D other, double epsilon)
+   {
+      if (firstEndpoint.geometricallyEquals(other.firstEndpoint, epsilon) && secondEndpoint.geometricallyEquals(other.secondEndpoint, epsilon))
+         return true;
+      if (firstEndpoint.geometricallyEquals(other.secondEndpoint, epsilon) && secondEndpoint.geometricallyEquals(other.firstEndpoint, epsilon))
+         return true;
+      return false;
+   }
 }

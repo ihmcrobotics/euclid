@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
+import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -21,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * A {@link BoundingBox3D} can be used to defines from a set of minimum and maximum coordinates an
  * axis-aligned bounding box.
  */
-public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable<BoundingBox3D>, Clearable
+public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable<BoundingBox3D>, Clearable, GeometricallyComparable<BoundingBox3D>
 {
    /** The minimum coordinates of this bounding box. */
    private final Point3D minPoint = new Point3D();
@@ -1300,5 +1301,21 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    public String toString()
    {
       return EuclidGeometryIOTools.getBoundingBox3DString(this);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two bounding boxes
+    * are geometrically similar, i.e. the distance between their min and max points
+    * is less than or equal to {@code epsilon}.
+    *
+    * @param other the bounding box to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two bounding boxes represent the same geometry,
+    *            {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(BoundingBox3D other, double epsilon)
+   {
+      return minPoint.geometricallyEquals(other.minPoint, epsilon) && maxPoint.geometricallyEquals(other.maxPoint, epsilon);
    }
 }

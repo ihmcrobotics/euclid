@@ -191,8 +191,8 @@ public class Line3D implements GeometryObject<Line3D>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code direction.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns the distance
-    * between {@code point} and the given {@code point}.
+    * <li>if {@code direction.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code point} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -743,6 +743,31 @@ public class Line3D implements GeometryObject<Line3D>
    }
 
    /**
+    * Compares {@code this} with {@code other} to determine if the two lines are collinear.
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    */
+   public boolean isCollinear(Line3D other, double epsilon)
+   {
+      return isCollinear(other, epsilon, epsilon);
+   }
+
+   /**
+    * Compares {@code this} with {@code other} to determine if the two lines are collinear.
+    *
+    * @param other the line to compare to. Not modified.
+    * @param angleEpsilon the tolerance of the comparison for angle.
+    * @param distanceEpsilon the tolerance of the comparison for distance.
+    * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    */
+   public boolean isCollinear(Line3D other, double angleEpsilon, double distanceEpsilon)
+   {
+      return EuclidGeometryTools.areLine3DsCollinear(this.point, this.direction, other.point, other.direction, angleEpsilon, distanceEpsilon);
+   }
+
+   /**
     * Provides a {@code String} representation of this line 3D as follows:<br>
     * Line 3D: point = (x, y, z), direction = (x, y, z)
     *
@@ -769,5 +794,23 @@ public class Line3D implements GeometryObject<Line3D>
    {
       checkHasBeenInitialized();
       point.add(x, y, z);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Line3D other, double epsilon)
+   {
+      return isCollinear(other, epsilon);
    }
 }

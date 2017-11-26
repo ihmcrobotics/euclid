@@ -1,10 +1,11 @@
 package us.ihmc.euclid.utils;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static us.ihmc.euclid.utils.NameBasedHashCodeTools.DEFAULT_HASHCODE;
 import static us.ihmc.euclid.utils.NameBasedHashCodeTools.NULL_HASHCODE;
 import static us.ihmc.euclid.utils.NameBasedHashCodeTools.PRIME;
+
+import org.junit.Test;
 
 public class NameBasedHashCodeToolsTest
 {
@@ -15,35 +16,35 @@ public class NameBasedHashCodeToolsTest
    private NameBasedHashCodeHolderImpl stringHolder = new NameBasedHashCodeHolderImpl(TEST_STRING);
    private NameBasedHashCodeHolderImpl gnirtsHolder = new NameBasedHashCodeHolderImpl(GNIRTS_TSET);
 
-   private class NameBasedHashCodeHolderImpl implements NameBasedHashCodeHolder {
+   private class NameBasedHashCodeHolderImpl implements NameBasedHashCodeHolder
+   {
       private long nameBasedHashCode;
 
-      NameBasedHashCodeHolderImpl(String str) {
-         nameBasedHashCode = (str == null ? NULL_HASHCODE : str.hashCode());
+      NameBasedHashCodeHolderImpl(String str)
+      {
+         nameBasedHashCode = str == null ? NULL_HASHCODE : str.hashCode();
       }
 
       @Override
-      public long getNameBasedHashCode() {
+      public long getNameBasedHashCode()
+      {
          return nameBasedHashCode;
       }
    }
 
-   private NameBasedHashCodeHolder[] nameBasedHashCodeHolders =
-         new NameBasedHashCodeHolder[]{
-            nullHolder,
-            stringHolder,
-            gnirtsHolder
-         };
+   private NameBasedHashCodeHolder[] nameBasedHashCodeHolders = new NameBasedHashCodeHolder[] {nullHolder, stringHolder, gnirtsHolder};
 
    @Test
-   public void testComputeNameBasedHashCode() {
+   public void testComputeNameBasedHashCode()
+   {
       assertEquals(TEST_STRING.hashCode(), NameBasedHashCodeTools.computeStringHashCode(TEST_STRING));
       assertEquals(GNIRTS_TSET.hashCode(), NameBasedHashCodeTools.computeStringHashCode(GNIRTS_TSET));
       assertEquals(NULL_HASHCODE, NameBasedHashCodeTools.computeStringHashCode(null));
    }
 
    @Test
-   public void testCombineNameBasedHashCodes() {
+   public void testCombineNameBasedHashCodes()
+   {
       assertEquals(PRIME * TEST_STRING.hashCode() + GNIRTS_TSET.hashCode(), NameBasedHashCodeTools.combineHashCodes(TEST_STRING, GNIRTS_TSET));
       assertEquals(PRIME * NULL_HASHCODE + GNIRTS_TSET.hashCode(), NameBasedHashCodeTools.combineHashCodes(null, GNIRTS_TSET));
       assertEquals(PRIME * GNIRTS_TSET.hashCode() + NULL_HASHCODE, NameBasedHashCodeTools.combineHashCodes(GNIRTS_TSET, nullHolder));
@@ -52,10 +53,12 @@ public class NameBasedHashCodeToolsTest
    }
 
    @Test
-   public void testCombineArrayHashCode() {
+   public void testCombineArrayHashCode()
+   {
       long hashCode = DEFAULT_HASHCODE;
 
-      for (int i = 0; i < nameBasedHashCodeHolders.length; ++i) {
+      for (int i = 0; i < nameBasedHashCodeHolders.length; ++i)
+      {
          hashCode = PRIME * hashCode + nameBasedHashCodeHolders[i].getNameBasedHashCode();
       }
 

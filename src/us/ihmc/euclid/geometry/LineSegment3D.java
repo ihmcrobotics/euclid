@@ -6,10 +6,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.*;
 
 /**
  * Represents a finite-length 3D line segment defined by its two 3D endpoints.
@@ -577,7 +574,7 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * <p>
     * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
     * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: <code>
+    * of the point can be computed from the {@code percentage} as follows: </br><code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
     * </code>
@@ -608,7 +605,7 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * <p>
     * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
     * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: <code>
+    * of the point can be computed from the {@code percentage} as follows: </br><code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
     * </code>
@@ -666,6 +663,36 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    public double dotProduct(LineSegment3D other)
    {
       return EuclidGeometryTools.dotProduct(firstEndpoint, secondEndpoint, other.firstEndpoint, other.secondEndpoint);
+   }
+
+   /**
+    * Translates this line segment by the given (x, y, z).
+    * <p>
+    * Note that the length and direction of this line segment remains unchanged.
+    * </p>
+    *
+    * @param x the distance to translate this line along the x-axis.
+    * @param y the distance to translate this line along the y-axis.
+    * @param z the distance to translate this line along the z-axis.
+    */
+   public void translate(double x, double y, double z)
+   {
+      firstEndpoint.add(x, y, z);
+      secondEndpoint.add(x, y, z);
+   }
+
+   /**
+    * Translates this line segment by the given (x, y, z) contained in {@code translation}.
+    * <p>
+    * Note that the length and direction of this line segment remains unchanged.
+    * </p>
+    *
+    * @param translation the translation to add to each endpoint of this line segment. Not modified.
+    */
+   public void translate(Tuple3DReadOnly translation)
+   {
+      firstEndpoint.add(translation);
+      secondEndpoint.add(translation);
    }
 
    /**
@@ -923,6 +950,29 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
          return false;
       else
          return firstEndpoint.equals(other.firstEndpoint) && secondEndpoint.equals(other.secondEndpoint);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two line segments are
+    * geometrically similar.
+    * <p>
+    * The comparison is based on comparing the line segments' endpoints. Two line segments are
+    * considered geometrically equal even if they are defined with opposite direction.
+    * </p>
+    *
+    * @param other the line segment to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two line segments represent the same geometry, {@code false}
+    *            otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(LineSegment3D other, double epsilon)
+   {
+      if (firstEndpoint.geometricallyEquals(other.firstEndpoint, epsilon) && secondEndpoint.geometricallyEquals(other.secondEndpoint, epsilon))
+         return true;
+      if (firstEndpoint.geometricallyEquals(other.secondEndpoint, epsilon) && secondEndpoint.geometricallyEquals(other.firstEndpoint, epsilon))
+         return true;
+      return false;
    }
 
    /**

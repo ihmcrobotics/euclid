@@ -1955,4 +1955,52 @@ public class BoundingBox3DTest
       assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY - smallestEpsilon, maxZ)));
       assertFalse(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ - smallestEpsilon)));
    }
+
+   @Test
+   public void testGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(987234L);
+      BoundingBox3D firstBox, secondBox;
+
+      {
+         Point3D firstPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.1, 2.5);
+         Point3D secondPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 2.5, 5.0);
+
+         firstBox = new BoundingBox3D(firstPoint, secondPoint);
+         secondBox = new BoundingBox3D(firstBox);
+
+         assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
+         assertTrue(secondBox.geometricallyEquals(firstBox, EPSILON));
+         assertTrue(firstBox.geometricallyEquals(firstBox, EPSILON));
+         assertTrue(secondBox.geometricallyEquals(secondBox, EPSILON));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Point3D min = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.1, 2.5);
+         Point3D max = EuclidCoreRandomTools.generateRandomPoint3D(random, 2.5, 5.0);
+
+         firstBox = new BoundingBox3D(min, max);
+
+         Point3D minCorrupted = new Point3D(min);
+         minCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON));
+         secondBox = new BoundingBox3D(minCorrupted, max);
+         assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
+
+         minCorrupted = new Point3D(min);
+         minCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON));
+         secondBox = new BoundingBox3D(minCorrupted, max);
+         assertFalse(firstBox.geometricallyEquals(secondBox, EPSILON));
+
+         Point3D maxCorrupted = new Point3D(max);
+         maxCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON));
+         secondBox = new BoundingBox3D(min, maxCorrupted);
+         assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
+
+         maxCorrupted = new Point3D(max);
+         maxCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON));
+         secondBox = new BoundingBox3D(min, maxCorrupted);
+         assertFalse(firstBox.geometricallyEquals(secondBox, EPSILON));
+      }
+   }
 }

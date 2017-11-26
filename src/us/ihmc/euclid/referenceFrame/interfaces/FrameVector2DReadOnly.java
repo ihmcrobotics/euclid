@@ -7,9 +7,9 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 /**
  * Read-only interface for a 2D vector expressed in a given reference frame.
  * <p>
- * In addition to representing a {@link Vector2DReadOnly}, a {@link ReferenceFrame} is associated to a
- * {@code FrameVector2DReadOnly}. This allows, for instance, to enforce, at runtime, that operations on
- * vectors occur in the same coordinate system.
+ * In addition to representing a {@link Vector2DReadOnly}, a {@link ReferenceFrame} is associated to
+ * a {@code FrameVector2DReadOnly}. This allows, for instance, to enforce, at runtime, that
+ * operations on vectors occur in the same coordinate system.
  * </p>
  * <p>
  * Because a {@code FrameVector2DReadOnly} extends {@code Vector2DReadOnly}, it is compatible with
@@ -29,7 +29,8 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     *
     * @param other the other frame vector used for the dot product. Not modified.
     * @return the value of the dot product.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
     */
    default double dot(FrameVector2DReadOnly other)
    {
@@ -45,7 +46,8 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     *
     * @param other the other frame vector used to compute the angle. Not modified.
     * @return the value of the angle from this frame vector to {@code other}.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
     */
    default double angle(FrameVector2DReadOnly other)
    {
@@ -63,5 +65,23 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
    {
       checkReferenceFrameMatch(tuple);
       return Vector2DReadOnly.super.cross(tuple);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame vectors are geometrically
+    * similar, i.e. the length of the distance between them is less than or equal to
+    * {@code epsilon}.
+    *
+    * @param other the frame vector to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame vectors represent the same geometry, {@code false}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   default boolean geometricallyEquals(FrameVector2DReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+      return Vector2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

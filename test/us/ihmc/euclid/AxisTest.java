@@ -1,14 +1,15 @@
 package us.ihmc.euclid;
 
-import org.junit.Test;
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
-import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class AxisTest
 {
@@ -18,15 +19,14 @@ public class AxisTest
    private Random random = new Random(12345);
    private Vector3D randomVector = new Vector3D(random.nextDouble(), random.nextDouble(), random.nextDouble());
 
-	@ContinuousIntegrationTest(estimatedDuration = 0.0)
-	@Test(timeout = 30000)
+   @ContinuousIntegrationTest(estimatedDuration = 0.0)
+   @Test(timeout = 30000)
    public void testOrdinals()
    {
       assertEquals(xAxis.ordinal(), 0, allowedDelta);
       assertEquals(yAxis.ordinal(), 1, allowedDelta);
       assertEquals(zAxis.ordinal(), 2, allowedDelta);
    }
-
 
    @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test(timeout = 30000)
@@ -42,17 +42,17 @@ public class AxisTest
       {
          switch (axis)
          {
-         case X :
+         case X:
             touchedX = true;
 
             break;
 
-         case Y :
+         case Y:
             touchedY = true;
 
             break;
 
-         case Z :
+         case Z:
             touchedZ = true;
 
             break;
@@ -78,17 +78,17 @@ public class AxisTest
       {
          switch (axis)
          {
-         case X :
+         case X:
             touchedX = true;
 
             break;
 
-         case Y :
+         case Y:
             touchedY = true;
 
             break;
 
-         case Z :
+         case Z:
             touchedZ = true;
 
             break;
@@ -147,14 +147,15 @@ public class AxisTest
       assertEquals(randomVector.getZ(), Axis.get(randomVector, Axis.Z), allowedDelta);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration =  0.0)
+   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test(timeout = 30000)
-   public void testClockwiseAxisGetters() {
-	   assertEquals(Axis.Z, Axis.X.getNextClockwiseAxis());
-	   assertEquals(Axis.X, Axis.Y.getNextClockwiseAxis());
-	   assertEquals(Axis.Y, Axis.Z.getNextClockwiseAxis());
-	   assertEquals(Axis.Y, Axis.X.getNextCounterClockwiseAxis());
-	   assertEquals(Axis.Z, Axis.Y.getNextCounterClockwiseAxis());
-	   assertEquals(Axis.X, Axis.Z.getNextCounterClockwiseAxis());
+   public void testClockwiseAxisGetters()
+   {
+      assertEquals(Axis.Z, Axis.X.getNextClockwiseAxis());
+      assertEquals(Axis.X, Axis.Y.getNextClockwiseAxis());
+      assertEquals(Axis.Y, Axis.Z.getNextClockwiseAxis());
+      assertEquals(Axis.Y, Axis.X.getNextCounterClockwiseAxis());
+      assertEquals(Axis.Z, Axis.Y.getNextCounterClockwiseAxis());
+      assertEquals(Axis.X, Axis.Z.getNextCounterClockwiseAxis());
    }
 }

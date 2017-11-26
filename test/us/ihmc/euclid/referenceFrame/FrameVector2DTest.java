@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -127,8 +128,27 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D, Vector2D>
    {
       super.testOverloading();
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[]{Vector2D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[]{Vector2D.class, Double.TYPE});
+      framelessMethodsToIgnore.put("set", new Class<?>[] {Vector2D.class});
+      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Vector2D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector2D.class, Vector2D.class, true, 1, framelessMethodsToIgnore);
+   }
+
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(58722L);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         double epsilon = random.nextDouble();
+
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         FrameVector2D frameVector1 = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame);
+         FrameVector2D frameVector2 = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame);
+
+         boolean expectedAnswer = frameVector1.getVector().geometricallyEquals(frameVector2, epsilon);
+         boolean actualAnswer = frameVector1.geometricallyEquals(frameVector2, epsilon);
+         assertEquals(expectedAnswer, actualAnswer);
+      }
    }
 }

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
@@ -39,6 +40,7 @@ public abstract class FrameTuple3DReadOnlyTest<T extends FrameTuple3DReadOnly> e
 
    public abstract T createTuple(ReferenceFrame referenceFrame, double x, double y, double z);
 
+   @Override
    @Test
    public void testEpsilonEquals() throws Exception
    {
@@ -65,6 +67,7 @@ public abstract class FrameTuple3DReadOnlyTest<T extends FrameTuple3DReadOnly> e
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
    }
 
+   @Override
    @Test
    public void testEquals() throws Exception
    {

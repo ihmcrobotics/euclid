@@ -1050,4 +1050,22 @@ public class Pose3D implements GeometryObject<Pose3D>
    {
       return EuclidGeometryIOTools.getPose3DString(this);
    }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically
+    * equal.
+    * </p>
+    * 
+    * @param other the pose to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Pose3D other, double epsilon)
+   {
+      return this.position.geometricallyEquals(other.position, epsilon) && this.orientation.geometricallyEquals(other.orientation, epsilon);
+   }
 }
