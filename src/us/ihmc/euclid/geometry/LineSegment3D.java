@@ -577,7 +577,7 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * <p>
     * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
     * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: <code>
+    * of the point can be computed from the {@code percentage} as follows: </br><code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
     * </code>
@@ -608,7 +608,7 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
     * <p>
     * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
     * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: <code>
+    * of the point can be computed from the {@code percentage} as follows: </br><code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
     * </code>
