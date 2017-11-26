@@ -552,7 +552,7 @@ public class Torus3DTest
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, Axis.Z.getAxisVector(), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, Axis.Z, true);
          secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(rotationAxis, Math.PI), new Vector3D()));
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
