@@ -44,6 +44,16 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    }
 
    /**
+    * Creates a new line segment 1D and initializes it to {@code other}.
+    *
+    * @param other the other line segment used to initialize this line segment. Not modified.
+    */
+   public LineSegment1D(LineSegment1D other)
+   {
+      set(other);
+   }
+
+   /**
     * Initializes this line segment to have the given endpoints.
     * 
     * @param endpoints a two-element array containing in order the first and second endpoints for
