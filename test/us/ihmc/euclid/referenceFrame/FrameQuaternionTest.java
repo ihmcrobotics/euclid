@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
@@ -178,6 +177,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
       framelessMethodsToIgnore.put("set", new Class<?>[] {Quaternion.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Quaternion.class, Double.TYPE});
+      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Quaternion.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternion.class, Quaternion.class, true, 1, framelessMethodsToIgnore);
    }
 
@@ -256,25 +256,6 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          {
             throw e.getCause();
          }
-      }
-   }
-
-   @Test
-   public void testGeometricallyEquals()
-   {
-      Random random = new Random(58722L);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         double epsilon = random.nextDouble();
-
-         ReferenceFrame referenceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         FrameQuaternion frameQuaternion1 = EuclidFrameRandomTools.nextFrameQuaternion(random, referenceFrame);
-         FrameQuaternion frameQuaternion2 = EuclidFrameRandomTools.nextFrameQuaternion(random, referenceFrame);
-
-         boolean expectedAnswer = frameQuaternion1.getQuaternion().geometricallyEquals(frameQuaternion2, epsilon);
-         boolean actualAnswer = frameQuaternion1.geometricallyEquals(frameQuaternion2, epsilon);
-         assertEquals(expectedAnswer, actualAnswer);
       }
    }
 

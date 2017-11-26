@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
@@ -124,6 +123,7 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
       framelessMethodsToIgnore.put("set", new Class<?>[] {Vector4D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Vector4D.class, Double.TYPE});
+      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Vector4D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector4D.class, Vector4D.class, true, 1, framelessMethodsToIgnore);
    }
 
@@ -224,25 +224,6 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
             continue;
 
          testMethod.invoke(vectorBasicsTest);
-      }
-   }
-
-   @Test
-   public void testGeometricallyEquals()
-   {
-      Random random = new Random(58722L);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         double epsilon = random.nextDouble();
-
-         ReferenceFrame referenceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         FrameVector4D frameVector1 = EuclidFrameRandomTools.nextFrameVector4D(random, referenceFrame);
-         FrameVector4D frameVector2 = EuclidFrameRandomTools.nextFrameVector4D(random, referenceFrame);
-
-         boolean expectedAnswer = frameVector1.getVector().geometricallyEquals(frameVector2, epsilon);
-         boolean actualAnswer = frameVector1.geometricallyEquals(frameVector2, epsilon);
-         assertEquals(expectedAnswer, actualAnswer);
       }
    }
 }
