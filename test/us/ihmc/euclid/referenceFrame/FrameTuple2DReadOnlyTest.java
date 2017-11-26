@@ -50,7 +50,7 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
       double epsilon = 0.0;
 
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
-      ReferenceFrame frame2 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+      ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 
       double x = random.nextDouble();
       double y = random.nextDouble();
@@ -75,7 +75,7 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
       Random random = new Random(621541L);
 
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
-      ReferenceFrame frame2 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+      ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 
       double x = random.nextDouble();
       double y = random.nextDouble();

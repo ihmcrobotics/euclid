@@ -38,7 +38,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          G expectedGeometryObject = createRandomGeometryObject(random);
          expectedGeometryObject.setToZero();
@@ -68,7 +68,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          F frameGeometryObject = createRandomFrameGeometryObject(random, initialFrame);
@@ -95,7 +95,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          F frameGeometryObject = createRandomFrameGeometryObject(random, initialFrame);
@@ -126,7 +126,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(G geometryObject)
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          G expectedGeometry = createRandomGeometryObject(random);
 
@@ -144,7 +144,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, G geometryObject)
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          G expectedGeometry = createRandomGeometryObject(random);
 
@@ -184,7 +184,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(F other)
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          int initialFrameIndex = random.nextInt(referenceFrames.length);
          ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
@@ -231,7 +231,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, G geometryObject)
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
@@ -250,7 +250,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(F other)
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
@@ -291,7 +291,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random, use2DTransforms);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random, use2DTransforms);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
@@ -326,7 +326,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random, use2DTransforms);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random, use2DTransforms);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
@@ -377,7 +377,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with a 3D transform, it might throw an exception
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
          G expectedGeometry = createRandomGeometryObject(random);
@@ -421,7 +421,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with a 2D transform, it should not throw an exception
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
          G expectedGeometry = createRandomGeometryObject(random);
@@ -444,7 +444,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with a 3D transform, it might throw an exception
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
          G expectedGeometry = createRandomGeometryObject(random);
@@ -488,7 +488,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with a 2D transform, it should not throw an exception
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.generateRandomReferenceFrameTree(random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
          G expectedGeometry = createRandomGeometryObject(random);
@@ -512,7 +512,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
       for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
-         ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
 
          G expectedGeometry = createRandomGeometryObject(random);
          F frameGeometry1 = createFrameGeometryObject(worldFrame, expectedGeometry);

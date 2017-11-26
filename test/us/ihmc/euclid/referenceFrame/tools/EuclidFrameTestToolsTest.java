@@ -31,8 +31,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertRotationFrameVectorGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertRotationFrameVectorGeometricallyEquals";
       Class<FrameVector3DReadOnly> argumentsClass = FrameVector3DReadOnly.class;
@@ -44,31 +44,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameVector3D expected = null;
-         FrameVector3D actual = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D actual = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
-         FrameVector3D actual = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
+         FrameVector3D actual = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = new FrameVector3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = new FrameVector3D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -78,8 +78,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFrameTuple2DEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFrameTuple2DEquals";
       Class<FrameTuple2DReadOnly> argumentsClass = FrameTuple2DReadOnly.class;
@@ -91,31 +91,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          FrameVector2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameVector2D expected = null;
-         FrameVector2D actual = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D actual = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
-         FrameVector2D actual = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
+         FrameVector2D actual = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          FrameVector2D actual = new FrameVector2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          FrameVector2D actual = new FrameVector2D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -125,8 +125,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFramePoint2DGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFramePoint2DGeometricallyEquals";
       Class<FramePoint2DReadOnly> argumentsClass = FramePoint2DReadOnly.class;
@@ -138,31 +138,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FramePoint2D expected = EuclidFrameRandomTools.generateRandomFramePoint2D(random, frameA);
+         FramePoint2D expected = EuclidFrameRandomTools.nextFramePoint2D(random, frameA);
          FramePoint2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FramePoint2D expected = null;
-         FramePoint2D actual = EuclidFrameRandomTools.generateRandomFramePoint2D(random, frameA);
+         FramePoint2D actual = EuclidFrameRandomTools.nextFramePoint2D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FramePoint2D expected = EuclidFrameRandomTools.generateRandomFramePoint2D(random, frameA);
-         FramePoint2D actual = EuclidFrameRandomTools.generateRandomFramePoint2D(random, frameA);
+         FramePoint2D expected = EuclidFrameRandomTools.nextFramePoint2D(random, frameA);
+         FramePoint2D actual = EuclidFrameRandomTools.nextFramePoint2D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FramePoint2D expected = EuclidFrameRandomTools.generateRandomFramePoint2D(random, frameA);
+         FramePoint2D expected = EuclidFrameRandomTools.nextFramePoint2D(random, frameA);
          FramePoint2D actual = new FramePoint2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FramePoint2D expected = EuclidFrameRandomTools.generateRandomFramePoint2D(random, frameA);
+         FramePoint2D expected = EuclidFrameRandomTools.nextFramePoint2D(random, frameA);
          FramePoint2D actual = new FramePoint2D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -172,8 +172,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFrameVector2DGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFrameVector2DGeometricallyEquals";
       Class<FrameVector2DReadOnly> argumentsClass = FrameVector2DReadOnly.class;
@@ -185,31 +185,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          FrameVector2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameVector2D expected = null;
-         FrameVector2D actual = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D actual = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
-         FrameVector2D actual = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
+         FrameVector2D actual = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          FrameVector2D actual = new FrameVector2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector2D expected = EuclidFrameRandomTools.generateRandomFrameVector2D(random, frameA);
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, frameA);
          FrameVector2D actual = new FrameVector2D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -219,8 +219,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFrameTuple3DEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFrameTuple3DEquals";
       Class<FrameTuple3DReadOnly> argumentsClass = FrameTuple3DReadOnly.class;
@@ -232,31 +232,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameVector3D expected = null;
-         FrameVector3D actual = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D actual = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
-         FrameVector3D actual = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
+         FrameVector3D actual = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = new FrameVector3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = new FrameVector3D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -266,8 +266,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFramePoint3DGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFramePoint3DGeometricallyEquals";
       Class<FramePoint3DReadOnly> argumentsClass = FramePoint3DReadOnly.class;
@@ -279,31 +279,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FramePoint3D expected = EuclidFrameRandomTools.generateRandomFramePoint3D(random, frameA);
+         FramePoint3D expected = EuclidFrameRandomTools.nextFramePoint3D(random, frameA);
          FramePoint3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FramePoint3D expected = null;
-         FramePoint3D actual = EuclidFrameRandomTools.generateRandomFramePoint3D(random, frameA);
+         FramePoint3D actual = EuclidFrameRandomTools.nextFramePoint3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FramePoint3D expected = EuclidFrameRandomTools.generateRandomFramePoint3D(random, frameA);
-         FramePoint3D actual = EuclidFrameRandomTools.generateRandomFramePoint3D(random, frameA);
+         FramePoint3D expected = EuclidFrameRandomTools.nextFramePoint3D(random, frameA);
+         FramePoint3D actual = EuclidFrameRandomTools.nextFramePoint3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FramePoint3D expected = EuclidFrameRandomTools.generateRandomFramePoint3D(random, frameA);
+         FramePoint3D expected = EuclidFrameRandomTools.nextFramePoint3D(random, frameA);
          FramePoint3D actual = new FramePoint3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FramePoint3D expected = EuclidFrameRandomTools.generateRandomFramePoint3D(random, frameA);
+         FramePoint3D expected = EuclidFrameRandomTools.nextFramePoint3D(random, frameA);
          FramePoint3D actual = new FramePoint3D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -313,8 +313,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFrameVector3DGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFrameVector3DGeometricallyEquals";
       Class<FrameVector3DReadOnly> argumentsClass = FrameVector3DReadOnly.class;
@@ -326,31 +326,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameVector3D expected = null;
-         FrameVector3D actual = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D actual = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
-         FrameVector3D actual = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
+         FrameVector3D actual = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = new FrameVector3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector3D expected = EuclidFrameRandomTools.generateRandomFrameVector3D(random, frameA);
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, frameA);
          FrameVector3D actual = new FrameVector3D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -360,8 +360,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFrameTuple4DEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFrameTuple4DEquals";
       Class<FrameTuple4DReadOnly> argumentsClass = FrameTuple4DReadOnly.class;
@@ -373,31 +373,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          FrameVector4D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameVector4D expected = null;
-         FrameVector4D actual = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D actual = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
-         FrameVector4D actual = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
+         FrameVector4D actual = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          FrameVector4D actual = new FrameVector4D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          FrameVector4D actual = new FrameVector4D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -407,8 +407,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFrameVector4DGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFrameVector4DGeometricallyEquals";
       Class<FrameVector4DReadOnly> argumentsClass = FrameVector4DReadOnly.class;
@@ -420,31 +420,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          FrameVector4D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameVector4D expected = null;
-         FrameVector4D actual = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D actual = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
-         FrameVector4D actual = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
+         FrameVector4D actual = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          FrameVector4D actual = new FrameVector4D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameVector4D expected = EuclidFrameRandomTools.generateRandomFrameVector4D(random, frameA);
+         FrameVector4D expected = EuclidFrameRandomTools.nextFrameVector4D(random, frameA);
          FrameVector4D actual = new FrameVector4D(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -454,8 +454,8 @@ public class EuclidFrameTestToolsTest
    public void testAssertFrameQuaternionGeometricallyEquals() throws Throwable
    {
       Random random = new Random(453453);
-      ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-      ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+      ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+      ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
       String methodName = "assertFrameQuaternionGeometricallyEquals";
       Class<FrameQuaternionReadOnly> argumentsClass = FrameQuaternionReadOnly.class;
@@ -467,31 +467,31 @@ public class EuclidFrameTestToolsTest
       }
 
       {
-         FrameQuaternion expected = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frameA);
+         FrameQuaternion expected = EuclidFrameRandomTools.nextFrameQuaternion(random, frameA);
          FrameQuaternion actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          FrameQuaternion expected = null;
-         FrameQuaternion actual = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frameA);
+         FrameQuaternion actual = EuclidFrameRandomTools.nextFrameQuaternion(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameQuaternion expected = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frameA);
-         FrameQuaternion actual = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frameA);
+         FrameQuaternion expected = EuclidFrameRandomTools.nextFrameQuaternion(random, frameA);
+         FrameQuaternion actual = EuclidFrameRandomTools.nextFrameQuaternion(random, frameA);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameQuaternion expected = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frameA);
+         FrameQuaternion expected = EuclidFrameRandomTools.nextFrameQuaternion(random, frameA);
          FrameQuaternion actual = new FrameQuaternion(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         FrameQuaternion expected = EuclidFrameRandomTools.generateRandomFrameQuaternion(random, frameA);
+         FrameQuaternion expected = EuclidFrameRandomTools.nextFrameQuaternion(random, frameA);
          FrameQuaternion actual = new FrameQuaternion(frameB, expected);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
