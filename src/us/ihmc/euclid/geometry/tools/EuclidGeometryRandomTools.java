@@ -216,6 +216,17 @@ public abstract class EuclidGeometryRandomTools
     * Generates a random bounding box from random center location and random size.
     * 
     * @param random the random generator to use.
+    * @return the random bounding box.
+    */
+   public static BoundingBox2D generateRandomBoundingBox2D(Random random)
+   {
+      return generateRandomBoundingBox2D(random, 1.0, 1.0);
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
     * @param sizeMax the maximum size along each axis for the bounding box.
     * @return the random bounding box.
@@ -226,6 +237,17 @@ public abstract class EuclidGeometryRandomTools
       Point2D center = generateRandomPoint2D(random, centerMinMax);
       Vector2D halfSize = generateRandomVector2D(random, 0.0, sizeMax / 2.0);
       return BoundingBox2D.createUsingCenterAndPlusMinusVector(center, halfSize);
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
+    * @return the random bounding box.
+    */
+   public static BoundingBox3D generateRandomBoundingBox3D(Random random)
+   {
+      return generateRandomBoundingBox3D(random, 1.0, 1.0);
    }
 
    /**
