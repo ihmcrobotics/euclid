@@ -16,7 +16,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class Sphere3DTest
 {
-   private int iterations = 100;
+   private static final int ITERATIONS = 100;
 
    @Test
    public void testCommonShape3dFunctionality()
@@ -101,7 +101,6 @@ public class Sphere3DTest
       Point3D center;
       double radius;
       double epsilon = 1e-7;
-      Vector3D translation;
 
       center = EuclidCoreRandomTools.generateRandomPoint3D(random);
       radius = random.nextDouble();
@@ -114,7 +113,7 @@ public class Sphere3DTest
       assertTrue(firstSphere.geometricallyEquals(firstSphere, epsilon));
       assertTrue(secondSphere.geometricallyEquals(secondSphere, epsilon));
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are equal if radii are equal within +- epsilon and are otherwise the same
          center = EuclidCoreRandomTools.generateRandomPoint3D(random);
          radius = random.nextDouble();
@@ -130,7 +129,7 @@ public class Sphere3DTest
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are not equal if radii outside of +- epsilon
          center = EuclidCoreRandomTools.generateRandomPoint3D(random);
          radius = random.nextDouble();
@@ -146,7 +145,7 @@ public class Sphere3DTest
          assertFalse(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are still equal if center, radius, and location are equal but orientations are different
          center = EuclidCoreRandomTools.generateRandomPoint3D(random);
          radius = random.nextDouble();
@@ -159,27 +158,43 @@ public class Sphere3DTest
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are equal only if translations equal within +- epsilon and otherwise the same
          center = EuclidCoreRandomTools.generateRandomPoint3D(random);
          radius = random.nextDouble();
 
-         firstSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
-         secondSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
+         firstSphere = new Sphere3D(center, radius);
+         secondSphere = new Sphere3D(center, radius);
 
-         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
+         Vector3D translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
 
          secondSphere.appendTranslation(translation);
 
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
 
-         secondSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
+         secondSphere = new Sphere3D(center, radius);
 
          translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
 
          secondSphere.appendTranslation(translation);
 
          assertFalse(firstSphere.geometricallyEquals(secondSphere, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      { // Rotations should not affect the assertion
+         center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         radius = random.nextDouble();
+
+         firstSphere = new Sphere3D(center, radius);
+         secondSphere = new Sphere3D(center, radius);
+
+         RigidBodyTransform rotationOnly = new RigidBodyTransform();
+         rotationOnly.setRotation(EuclidCoreRandomTools.generateRandomQuaternion(random));
+         
+         secondSphere.appendTransform(rotationOnly);
+
+         assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
    }
 }

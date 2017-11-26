@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class Pose3DTest
 {
-   private int ITERATIONS = 1000;
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void testGeometricallyEquals()

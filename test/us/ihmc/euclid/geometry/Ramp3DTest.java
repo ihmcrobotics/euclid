@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -15,10 +16,12 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Ramp3DTest
 {
    private static final boolean DEBUG = false;
+   private static final int ITERATIONS = 1000;
 
    /**
     * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
@@ -431,10 +434,8 @@ public class Ramp3DTest
    {
       Random random = new Random(34201L);
       Ramp3D firstRamp, secondRamp;
-      Vector3D translationVector;
       double lengthX, widthY, heightZ;
       double epsilon = 1e-7;
-      int iterations = 1000;
 
       lengthX = random.nextDouble();
       widthY = random.nextDouble();
@@ -474,9 +475,9 @@ public class Ramp3DTest
       secondRamp = new Ramp3D(lengthX, widthY, heightZ - epsilon * 1.01);
       assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
 
-      for (int i = 0; i < iterations; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
-         translationVector = EuclidCoreRandomTools.generateRandomRotationVector(random);
+         Vector3D translationVector = EuclidCoreRandomTools.generateRandomRotationVector(random);
          firstRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), translationVector), lengthX, widthY, heightZ);
          secondRamp = new Ramp3D(firstRamp);
 
@@ -490,6 +491,30 @@ public class Ramp3DTest
          translationVector = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
          secondRamp.appendTranslation(translationVector);
 
+         assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Quaternion rotation = EuclidCoreRandomTools.generateRandomQuaternion(random);
+         Point3D position = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Pose3D pose = new Pose3D(position, rotation);
+         firstRamp = new Ramp3D(pose, lengthX, widthY, heightZ);
+         secondRamp = new Ramp3D(firstRamp);
+
+         RigidBodyTransform transform = new RigidBodyTransform();
+         AxisAngle axisAngle = new AxisAngle();
+
+         axisAngle.set(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), 0.99 * epsilon);
+         transform.setRotation(axisAngle);
+         secondRamp.appendTransform(transform);
+         assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+
+         secondRamp = new Ramp3D(firstRamp);
+
+         axisAngle.set(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), 1.01 * epsilon);
+         transform.setRotation(axisAngle);
+         secondRamp.appendTransform(transform);
          assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       }
    }

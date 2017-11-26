@@ -13,7 +13,7 @@ import us.ihmc.euclid.tuple2D.Vector2D;
 
 public class Pose2DTest
 {
-   private int ITERATIONS = 1000;
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void testGeometricallyEquals()
