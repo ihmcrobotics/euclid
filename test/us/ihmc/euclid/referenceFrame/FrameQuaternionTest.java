@@ -16,8 +16,6 @@ import org.junit.Test;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
@@ -148,75 +146,6 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          EuclidCoreTestTools.assertTuple4DEquals(randomFrameQuaternion, frameQuaternion, EPSILON);
          EuclidFrameTestTools.assertFrameTuple4DEquals(randomFrameQuaternion, frameQuaternion, EPSILON);
       }
-   }
-
-   // TODO This test should become obsolete once FrameVector4D is implemented and added to EuclidFrameAPITestTools.
-   @Test
-   public void testSetAndNormalize() throws Exception
-   {
-      Random random = new Random(435345L);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         Tuple4DReadOnly randomTuple = EuclidCoreRandomTools.generateRandomVector4D(random);
-         FrameTuple4DReadOnly randomFrameTuple = createFrameTuple4DReadOnly(frameA, randomTuple);
-         Quaternion expectedQuaternion = new Quaternion();
-         FrameQuaternion frameQuaternion = new FrameQuaternion(frameA);
-
-         expectedQuaternion.setAndNormalize(randomTuple);
-         frameQuaternion.setAndNormalize(randomFrameTuple);
-
-         assertTrue(frameQuaternion.referenceFrame == frameA);
-         EuclidCoreTestTools.assertTuple4DEquals(expectedQuaternion, frameQuaternion, EPSILON);
-
-         try
-         {
-            frameQuaternion.setAndNormalize(createFrameTuple4DReadOnly(frameB, randomTuple));
-            throw new AssertionError("Should have thrown an exception.");
-         }
-         catch (ReferenceFrameMismatchException e)
-         {
-            // good
-         }
-      }
-   }
-
-   private FrameTuple4DReadOnly createFrameTuple4DReadOnly(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4D)
-   {
-      return new FrameTuple4DReadOnly()
-      {
-         @Override
-         public ReferenceFrame getReferenceFrame()
-         {
-            return referenceFrame;
-         }
-
-         @Override
-         public double getX()
-         {
-            return tuple4D.getX();
-         }
-
-         @Override
-         public double getY()
-         {
-            return tuple4D.getY();
-         }
-
-         @Override
-         public double getZ()
-         {
-            return tuple4D.getZ();
-         }
-
-         @Override
-         public double getS()
-         {
-            return tuple4D.getS();
-         }
-      };
    }
 
    @Override
