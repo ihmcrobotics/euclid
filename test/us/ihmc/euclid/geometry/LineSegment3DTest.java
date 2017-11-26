@@ -623,6 +623,7 @@ public class LineSegment3DTest
       }
    }
 
+   @SuppressWarnings("unlikely-arg-type")
    @Test
    public void testEquals() throws Exception
    {
@@ -636,7 +637,7 @@ public class LineSegment3DTest
          assertTrue(line1.equals(line2));
          assertTrue(line1.equals((Object) line2));
 
-         assertFalse(line1.equals((Line3D) null));
+         assertFalse(line1.equals((LineSegment3D) null));
          assertFalse(line1.equals((Object) null));
          assertFalse(line1.equals(new double[3]));
 

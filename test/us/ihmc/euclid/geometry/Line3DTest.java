@@ -338,6 +338,7 @@ public class Line3DTest
       }
    }
 
+   @SuppressWarnings("unlikely-arg-type")
    @Test
    public void testEquals() throws Exception
    {

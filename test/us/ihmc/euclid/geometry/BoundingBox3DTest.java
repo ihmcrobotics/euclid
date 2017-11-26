@@ -1923,6 +1923,7 @@ public class BoundingBox3DTest
       assertFalse(boundingBox3D.epsilonEquals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ - big), epsilon));
    }
 
+   @SuppressWarnings("unlikely-arg-type")
    @Test
    public void testEquals() throws Exception
    {

@@ -1339,6 +1339,7 @@ public class BoundingBox2DTest
       assertFalse(boundingBox2D.epsilonEquals(new BoundingBox2D(minX, minY, maxX, maxY - big), epsilon));
    }
 
+   @SuppressWarnings("unlikely-arg-type")
    @Test
    public void testEquals() throws Exception
    {
