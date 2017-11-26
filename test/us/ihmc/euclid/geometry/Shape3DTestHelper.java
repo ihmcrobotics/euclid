@@ -24,7 +24,7 @@ public class Shape3DTestHelper
    {
       for (int i = 0; i < numberOfPoints; i++)
       {
-         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 1.0, 1.0);
+         Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 1.0, 1.0);
 
          boolean pointIsInside = shape3d.isInsideEpsilon(point, -1e-5);
          boolean pointIsOutside = !shape3d.isInsideEpsilon(point, 1e-5);
@@ -51,7 +51,7 @@ public class Shape3DTestHelper
       Point3D pointToProject = new Point3D(pointLikelyOutside);
       shape3d.orthogonalProjection(pointToProject);
 
-      RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       RigidBodyTransform transformInverse = new RigidBodyTransform(transform);
       transformInverse.invert();
 

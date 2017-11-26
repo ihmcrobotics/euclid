@@ -23,7 +23,7 @@ public class Pose2DTest
       double epsilon = 1e-7;
       Vector2D perturb;
 
-      firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
+      firstPose = EuclidGeometryRandomTools.nextPose2D(random);
       secondPose = new Pose2D(firstPose);
 
       assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
@@ -34,7 +34,7 @@ public class Pose2DTest
       // Orientation
       for (int i = 0; i < ITERATIONS; ++i)
       { // Poses are equal if orientations are equal within +- epsilon points are the same
-         firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         firstPose = EuclidGeometryRandomTools.nextPose2D(random);
          secondPose = new Pose2D(firstPose);
 
          secondPose.setYaw(firstPose.getYaw() + 0.99 * epsilon);
@@ -57,17 +57,17 @@ public class Pose2DTest
       // Point
       for (int i = 0; i < ITERATIONS; ++i)
       { // Poses are equal if points are equal within +- epsilon and orientations are the same
-         firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         firstPose = EuclidGeometryRandomTools.nextPose2D(random);
          secondPose = new Pose2D(firstPose);
 
-         perturb = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon);
+         perturb = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 0.99 * epsilon);
          perturb.add(secondPose.getPosition());
          secondPose.setPosition(perturb);
 
          assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
 
          secondPose = new Pose2D(firstPose);
-         perturb = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon);
+         perturb = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.01 * epsilon);
          perturb.add(secondPose.getPosition());
          secondPose.setPosition(perturb);
 

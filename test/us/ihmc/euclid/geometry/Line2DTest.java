@@ -758,20 +758,20 @@ public class Line2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D pointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random, -10.0, 10.0);
-         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.0);
+         Point2D pointOnLine1 = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 10.0);
+         Vector2D lineDirection1 = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          Line2D line1 = new Line2D(pointOnLine1, lineDirection1);
 
          Point2D expectedIntersection = new Point2D();
-         expectedIntersection.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection1, pointOnLine1);
+         expectedIntersection.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection1, pointOnLine1);
 
-         Vector2D lineDirection2 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.0);
+         Vector2D lineDirection2 = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          Point2D pointOnLine2 = new Point2D(expectedIntersection);
 
          Point2D actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, pointOnLine2);
+         pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, pointOnLine2);
          actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       }
@@ -779,8 +779,8 @@ public class Line2DTest
       // Test when parallel but not collinear
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D pointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random, -10.0, 10.0);
-         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.0);
+         Point2D pointOnLine1 = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 10.0);
+         Vector2D lineDirection1 = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          Line2D line1 = new Line2D(pointOnLine1, lineDirection1);
 
          Vector2D lineDirection2 = new Vector2D(lineDirection1);
@@ -790,8 +790,8 @@ public class Line2DTest
 
          Vector2D orthogonal = new Vector2D(-lineDirection1.getY(), lineDirection1.getX());
 
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointOnLine2);
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, pointOnLine2);
+         pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOnLine2);
+         pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, pointOnLine2);
          Point2D actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
          assertNull(actualIntersection);
       }
@@ -799,8 +799,8 @@ public class Line2DTest
       // Test when collinear
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D pointOnLine1 = EuclidCoreRandomTools.generateRandomPoint2D(random, -10.0, 10.0);
-         Vector2D lineDirection1 = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.0);
+         Point2D pointOnLine1 = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 10.0);
+         Vector2D lineDirection1 = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          Line2D line1 = new Line2D(pointOnLine1, lineDirection1);
 
          Point2D expectedIntersection = new Point2D();
@@ -812,7 +812,7 @@ public class Line2DTest
          Point2D actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
 
-         pointOnLine2.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection2, pointOnLine2);
+         pointOnLine2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, pointOnLine2);
          actualIntersection = line1.intersectionWith(new Line2D(pointOnLine2, lineDirection2));
          EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
       }
@@ -850,17 +850,17 @@ public class Line2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point2D pointOnLine = EuclidCoreRandomTools.generateRandomPoint2D(random, -10.0, 10.0);
-         Vector2D lineDirection = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random,
-                                                                                              EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0));
+         Point2D pointOnLine = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 10.0);
+         Vector2D lineDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random,
+                                                                                              EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
          Line2D line = new Line2D(pointOnLine, lineDirection);
 
          Point2D randomPointOnLine = new Point2D();
-         randomPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), lineDirection, pointOnLine);
+         randomPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection, pointOnLine);
 
          Vector2D orthogonal = new Vector2D(-lineDirection.getY(), lineDirection.getX());
          orthogonal.normalize();
-         double expectedDistance = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
+         double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
 
          Point2D point = new Point2D();
          point.scaleAdd(expectedDistance, orthogonal, randomPointOnLine);
@@ -1485,7 +1485,7 @@ public class Line2DTest
       double scale;
       Vector2D orthogonal, direction = new Vector2D();
 
-      firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+      firstLine = EuclidGeometryRandomTools.nextLine2D(random);
       secondLine = new Line2D(firstLine);
 
       assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
@@ -1495,7 +1495,7 @@ public class Line2DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if translations are equal within +- epsilon and are otherwise the same
-         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine2D(random);
          secondLine = new Line2D(firstLine);
 
          orthogonal = firstLine.perpendicularVector();
@@ -1514,7 +1514,7 @@ public class Line2DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if directions are equal within +- epsilon and are otherwise the same
-         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine2D(random);
          secondLine = new Line2D(firstLine);
 
          direction = new Vector2D(secondLine.getDirection());
@@ -1532,7 +1532,7 @@ public class Line2DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if translations lie somewhere on the same direction
-         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine2D(random);
          secondLine = new Line2D(firstLine);
          scale = random.nextDouble() - random.nextDouble();
 
@@ -1543,7 +1543,7 @@ public class Line2DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if directions are equal but opposite and are otherwise the same
-         firstLine = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine2D(random);
          firstLine.getDirection(direction);
          direction.negate();
          secondLine = new Line2D(firstLine.getPoint(), direction);

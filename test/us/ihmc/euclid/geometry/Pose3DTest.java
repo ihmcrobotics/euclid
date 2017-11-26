@@ -25,7 +25,7 @@ public class Pose3DTest
       double epsilon = 1e-7;
       Vector3D perturb;
 
-      firstPose = EuclidGeometryRandomTools.generateRandomPose3D(random);
+      firstPose = EuclidGeometryRandomTools.nextPose3D(random);
       secondPose = new Pose3D(firstPose);
 
       assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
@@ -36,31 +36,31 @@ public class Pose3DTest
       // Orientation
       for (int i = 0; i < ITERATIONS; ++i)
       { // Poses are equal if orientations are equal within +- epsilon and points are the same
-         firstPose = EuclidGeometryRandomTools.generateRandomPose3D(random);
+         firstPose = EuclidGeometryRandomTools.nextPose3D(random);
          secondPose = new Pose3D(firstPose);
 
-         secondPose.appendRotation(new RotationMatrix(new AxisAngle(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), 0.99 * epsilon)));
+         secondPose.appendRotation(new RotationMatrix(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.99 * epsilon)));
          assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
 
          secondPose = new Pose3D(firstPose);
-         secondPose.appendRotation(new RotationMatrix(new AxisAngle(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0), 1.01 * epsilon)));
+         secondPose.appendRotation(new RotationMatrix(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 1.01 * epsilon)));
          assertFalse(firstPose.geometricallyEquals(secondPose, epsilon));
       }
 
       // Point
       for (int i = 0; i < ITERATIONS; ++i)
       { // Poses are equal if points are equal within +- epsilon and orientations are the same
-         firstPose = EuclidGeometryRandomTools.generateRandomPose3D(random);
+         firstPose = EuclidGeometryRandomTools.nextPose3D(random);
          secondPose = new Pose3D(firstPose);
 
-         perturb = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
+         perturb = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon);
          perturb.add(secondPose.getPosition());
          secondPose.setPosition(perturb);
 
          assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
 
          secondPose = new Pose3D(firstPose);
-         perturb = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
+         perturb = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon);
          perturb.add(secondPose.getPosition());
          secondPose.setPosition(perturb);
 

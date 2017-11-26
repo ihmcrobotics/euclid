@@ -29,8 +29,8 @@ public class Sphere3DTest
 
       for (int i = 0; i < numberOfShapes; i++)
       {
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 1.0, 1.0);
-         double radius = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 1.0, 1.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
          Sphere3D sphere3d = new Sphere3D(center, radius);
          testHelper.runSimpleTests(sphere3d, random, numberOfPoints);
       }
@@ -102,7 +102,7 @@ public class Sphere3DTest
       double radius;
       double epsilon = 1e-7;
 
-      center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+      center = EuclidCoreRandomTools.nextPoint3D(random);
       radius = random.nextDouble();
 
       firstSphere = new Sphere3D(center.getX(), center.getY(), center.getZ(), radius);
@@ -115,7 +115,7 @@ public class Sphere3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are equal if radii are equal within +- epsilon and are otherwise the same
-         center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         center = EuclidCoreRandomTools.nextPoint3D(random);
          radius = random.nextDouble();
 
          firstSphere = new Sphere3D(center, radius);
@@ -131,7 +131,7 @@ public class Sphere3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are not equal if radii outside of +- epsilon
-         center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         center = EuclidCoreRandomTools.nextPoint3D(random);
          radius = random.nextDouble();
 
          firstSphere = new Sphere3D(center, radius);
@@ -147,26 +147,26 @@ public class Sphere3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are still equal if center, radius, and location are equal but orientations are different
-         center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         center = EuclidCoreRandomTools.nextPoint3D(random);
          radius = random.nextDouble();
 
          firstSphere = new Sphere3D(center, radius);
          secondSphere = new Sphere3D(firstSphere);
 
-         secondSphere.appendTransform(new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), new Vector3D()));
+         secondSphere.appendTransform(new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), new Vector3D()));
 
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are equal only if translations equal within +- epsilon and otherwise the same
-         center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         center = EuclidCoreRandomTools.nextPoint3D(random);
          radius = random.nextDouble();
 
          firstSphere = new Sphere3D(center, radius);
          secondSphere = new Sphere3D(center, radius);
 
-         Vector3D translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon);
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon);
 
          secondSphere.appendTranslation(translation);
 
@@ -174,7 +174,7 @@ public class Sphere3DTest
 
          secondSphere = new Sphere3D(center, radius);
 
-         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon);
+         translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon);
 
          secondSphere.appendTranslation(translation);
 
@@ -183,14 +183,14 @@ public class Sphere3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Rotations should not affect the assertion
-         center = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         center = EuclidCoreRandomTools.nextPoint3D(random);
          radius = random.nextDouble();
 
          firstSphere = new Sphere3D(center, radius);
          secondSphere = new Sphere3D(center, radius);
 
          RigidBodyTransform rotationOnly = new RigidBodyTransform();
-         rotationOnly.setRotation(EuclidCoreRandomTools.generateRandomQuaternion(random));
+         rotationOnly.setRotation(EuclidCoreRandomTools.nextQuaternion(random));
          
          secondSphere.appendTransform(rotationOnly);
 

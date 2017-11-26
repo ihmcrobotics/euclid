@@ -37,14 +37,14 @@ public class LineSegment3DTest
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
-      expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       lineSegment3D = new LineSegment3D(expectedFirstEndpoint, expectedSecondEndpoint);
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
-      expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       lineSegment3D = new LineSegment3D(expectedFirstEndpoint.getX(), expectedFirstEndpoint.getY(), expectedFirstEndpoint.getZ(), expectedSecondEndpoint.getX(),
                                         expectedSecondEndpoint.getY(), expectedSecondEndpoint.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
@@ -60,13 +60,13 @@ public class LineSegment3DTest
    {
       Random random = new Random(324324L);
 
-      Point3D expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      Point3D expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
       LineSegment3D lineSegment3D = new LineSegment3D();
       lineSegment3D.setFirstEndpoint(expectedFirstEndpoint);
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
 
-      expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       lineSegment3D.setFirstEndpoint(expectedFirstEndpoint.getX(), expectedFirstEndpoint.getY(), expectedFirstEndpoint.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
    }
@@ -76,13 +76,13 @@ public class LineSegment3DTest
    {
       Random random = new Random(324324L);
 
-      Point3D expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      Point3D expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
       LineSegment3D lineSegment3D = new LineSegment3D();
       lineSegment3D.setSecondEndpoint(expectedSecondEndpoint);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
-      expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       lineSegment3D.setSecondEndpoint(expectedSecondEndpoint.getX(), expectedSecondEndpoint.getY(), expectedSecondEndpoint.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
    }
@@ -93,30 +93,30 @@ public class LineSegment3DTest
       Random random = new Random(324324L);
 
       LineSegment3D lineSegment3D = new LineSegment3D();
-      Point3D expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      Point3D expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      Point3D expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      Point3D expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
       lineSegment3D.set(expectedFirstEndpoint.getX(), expectedFirstEndpoint.getY(), expectedFirstEndpoint.getZ(), expectedSecondEndpoint.getX(),
                         expectedSecondEndpoint.getY(), expectedSecondEndpoint.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
-      expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       lineSegment3D.set(expectedFirstEndpoint, expectedSecondEndpoint);
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
-      expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       Vector3D fromFirstToSecondEndpoint = new Vector3D();
       fromFirstToSecondEndpoint.sub(expectedSecondEndpoint, expectedFirstEndpoint);
       lineSegment3D.set(expectedFirstEndpoint, fromFirstToSecondEndpoint);
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
-      expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+      expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       LineSegment3D other = new LineSegment3D(expectedFirstEndpoint, expectedSecondEndpoint);
       lineSegment3D.set(other);
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
@@ -128,7 +128,7 @@ public class LineSegment3DTest
    {
       Random random = new Random(32423L);
 
-      LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+      LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random);
       lineSegment3D.setToZero();
       EuclidCoreTestTools.assertTuple3DIsSetToZero(lineSegment3D.getFirstEndpoint());
       EuclidCoreTestTools.assertTuple3DIsSetToZero(lineSegment3D.getSecondEndpoint());
@@ -139,7 +139,7 @@ public class LineSegment3DTest
    {
       Random random = new Random(32423L);
 
-      LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+      LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random);
       lineSegment3D.setToNaN();
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(lineSegment3D.getFirstEndpoint());
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(lineSegment3D.getSecondEndpoint());
@@ -176,7 +176,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          double actualLength = lineSegment3D.length();
          double expectedLength = lineSegment3D.getFirstEndpoint().distance(lineSegment3D.getSecondEndpoint());
          assertEquals(expectedLength, actualLength, EPSILON);
@@ -190,8 +190,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // distanceSquared(Point3DReadOnly point)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         Point3D query = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          double expected = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(query, lineSegment3D.getFirstEndpoint(),
                                                                                          lineSegment3D.getSecondEndpoint());
          double actual = lineSegment3D.distanceSquared(query);
@@ -200,8 +200,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // distance(Point3DReadOnly point)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         Point3D query = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          double expected = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(query, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
          double actual = lineSegment3D.distance(query);
          assertEquals(expected, actual, EPSILON);
@@ -209,8 +209,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // distance(LineSegment3D otherLineSegment)
-         LineSegment3D lineSegment1 = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         LineSegment3D lineSegment2 = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment1 = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment2 = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          double expected = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegment1.getFirstEndpoint(), lineSegment1.getSecondEndpoint(),
                                                                                 lineSegment2.getFirstEndpoint(), lineSegment2.getSecondEndpoint());
          double actual = lineSegment1.distance(lineSegment2);
@@ -225,8 +225,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // orthogonalProjection(Point3DReadOnly pointToProject)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         Point3D query = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point3D expected = new Point3D();
          Point3D actual = new Point3D();
 
@@ -237,8 +237,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         Point3D query = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point3D expected = new Point3D();
          Point3D actual = new Point3D();
 
@@ -255,8 +255,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // pointBetweenEndPointsGivenPercentage(double percentage)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         double percentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         double percentage = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
 
          Point3D expected = new Point3D();
          expected.interpolate(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), percentage);
@@ -267,8 +267,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // pointBetweenEndPointsGivenPercentage(double percentage, Point3DBasics pointToPack)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         double percentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         double percentage = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
 
          Point3D expected = new Point3D();
          expected.interpolate(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), percentage);
@@ -325,8 +325,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         double percentage = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         double percentage = EuclidCoreRandomTools.nextDouble(random, 10.0);
 
          Point3D expected = new Point3D();
          expected.interpolate(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), percentage);
@@ -343,7 +343,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Point3D expected = new Point3D();
          expected = EuclidGeometryTools.averagePoint3Ds(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
          Point3D actual = new Point3D();
@@ -359,7 +359,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // getDirection(false, Vector3DBasics directionToPack)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Vector3D actualDirection = new Vector3D();
          lineSegment3D.getDirection(false, actualDirection);
 
@@ -373,7 +373,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // getDirection(true, Vector3DBasics directionToPack)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Vector3D actualDirection = new Vector3D();
          lineSegment3D.getDirection(true, actualDirection);
 
@@ -387,7 +387,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // getDirection(false)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Vector3D actualDirection = lineSegment3D.getDirection(false);
 
          Vector3D expectedDirection = new Vector3D();
@@ -398,7 +398,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // getDirection(true, Vector3DBasics directionToPack)
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Vector3D actualDirection = lineSegment3D.getDirection(true);
 
          assertEquals(1.0, actualDirection.length(), EPSILON);
@@ -416,12 +416,12 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         double percentage = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         double percentage = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          Point3D pointInside;
          pointInside = lineSegment3D.pointBetweenEndpointsGivenPercentage(percentage);
          assertTrue(lineSegment3D.isBetweenEndpoints(pointInside));
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          double epsilonLength = epsilon * lineSegment3D.length();
          double distanceInside = Math.min(lineSegment3D.getFirstEndpoint().distance(pointInside), lineSegment3D.getSecondEndpoint().distance(pointInside));
          if (distanceInside < epsilonLength)
@@ -444,8 +444,8 @@ public class LineSegment3DTest
          assertFalse(lineSegment3D.isBetweenEndpoints(lineSegment3D.getSecondEndpoint().getX(), lineSegment3D.getSecondEndpoint().getY(),
                                                       lineSegment3D.getSecondEndpoint().getZ(), 0.555555e-16));
 
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
-         pointInside.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointInside);
+         Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
+         pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointInside);
          assertTrue(lineSegment3D.isBetweenEndpoints(pointInside));
          if (distanceInside < epsilonLength)
          {
@@ -461,17 +461,17 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         double percentage = EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         double percentage = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
          Point3D pointBefore;
          pointBefore = lineSegment3D.pointOnLineGivenPercentage(percentage);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointBefore));
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointBefore, epsilon));
          assertFalse(lineSegment3D.isBetweenEndpoints(pointBefore.getX(), pointBefore.getY(), pointBefore.getZ(), epsilon));
 
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
-         pointBefore.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointBefore);
+         Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
+         pointBefore.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointBefore);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointBefore));
          assertFalse(lineSegment3D.isBetweenEndpoints(pointBefore, epsilon));
          assertFalse(lineSegment3D.isBetweenEndpoints(pointBefore.getX(), pointBefore.getY(), pointBefore.getZ(), epsilon));
@@ -479,17 +479,17 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         double percentage = EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         double percentage = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
          Point3D pointAfter;
          pointAfter = lineSegment3D.pointOnLineGivenPercentage(percentage);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointAfter));
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointAfter, epsilon));
          assertFalse(lineSegment3D.isBetweenEndpoints(pointAfter.getX(), pointAfter.getY(), pointAfter.getZ(), epsilon));
 
-         Vector3D orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
-         pointAfter.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 10.0), orthogonal, pointAfter);
+         Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
+         pointAfter.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointAfter);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointAfter));
          assertFalse(lineSegment3D.isBetweenEndpoints(pointAfter, epsilon));
          assertFalse(lineSegment3D.isBetweenEndpoints(pointAfter.getX(), pointAfter.getY(), pointAfter.getZ(), epsilon));
@@ -503,8 +503,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         Point3D query = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
          double expected = EuclidGeometryTools.percentageAlongLineSegment3D(query, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
          double actual = lineSegment3D.percentageAlongLineSegment(query);
@@ -521,16 +521,16 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test getters for the endpoints
-         Point3D expectedFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Point3D expectedSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          LineSegment3D lineSegment3D = new LineSegment3D(expectedFirstEndpoint, expectedSecondEndpoint);
          EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
          assertFalse(expectedFirstEndpoint == lineSegment3D.getFirstEndpoint());
          assertFalse(expectedSecondEndpoint == lineSegment3D.getSecondEndpoint());
 
-         Point3D actualFirstEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Point3D actualSecondEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D actualFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D actualSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          lineSegment3D.getFirstEndpoint(actualFirstEndpoint);
          EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, actualFirstEndpoint, EPSILON);
          lineSegment3D.getSecondEndpoint(actualSecondEndpoint);
@@ -539,7 +539,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Line getters
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Line3D actualLine = new Line3D();
 
          lineSegment3D.getLine(actualLine);
@@ -547,7 +547,7 @@ public class LineSegment3DTest
          Vector3D expectedDirection = lineSegment3D.getDirection(true);
          EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualLine.getDirection(), EPSILON);
 
-         lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          actualLine = lineSegment3D.getLine();
          EuclidCoreTestTools.assertTuple3DEquals(lineSegment3D.getFirstEndpoint(), actualLine.getPoint(), EPSILON);
          expectedDirection = lineSegment3D.getDirection(true);
@@ -562,8 +562,8 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3d = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, EPSILON);
-         Transform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         LineSegment3D lineSegment3d = EuclidGeometryRandomTools.nextLineSegment3D(random, EPSILON);
+         Transform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Point3D expectedFirstEndPoint = new Point3D();
          Point3D expectedSecondEndpoint = new Point3D();
@@ -586,9 +586,9 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D line1 = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, EPSILON);
+         LineSegment3D line1 = EuclidGeometryRandomTools.nextLineSegment3D(random, EPSILON);
          LineSegment3D line2 = new LineSegment3D(line1);
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          assertTrue(line1.epsilonEquals(line2, epsilon));
 
          for (int j = 0; j < 3; j++)
@@ -631,7 +631,7 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D line1 = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, EPSILON);
+         LineSegment3D line1 = EuclidGeometryRandomTools.nextLineSegment3D(random, EPSILON);
          LineSegment3D line2 = new LineSegment3D(line1);
          double epsilon = 1.0e-15;
          assertTrue(line1.equals(line2));
@@ -672,11 +672,11 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test translate(double x, double y)
-         LineSegment3D originalLineSegment = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D originalLineSegment = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          LineSegment3D translatedLineSegment = new LineSegment3D(originalLineSegment);
-         double x = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double y = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double z = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double x = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double y = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double z = EuclidCoreRandomTools.nextDouble(random, 10.0);
          translatedLineSegment.translate(x, y, z);
 
          assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
@@ -691,9 +691,9 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test translate(Tuple3DReadOnly translation)
-         LineSegment3D originalLineSegment = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D originalLineSegment = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          LineSegment3D translatedLineSegment = new LineSegment3D(originalLineSegment);
-         Tuple3DReadOnly translation = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Tuple3DReadOnly translation = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          translatedLineSegment.translate(translation);
 
          assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
@@ -714,8 +714,8 @@ public class LineSegment3DTest
       Point3D segment1Point1, segment1Point2, segment2Point1, segment2Point2;
       LineSegment3D lineSegment1, lineSegment2;
 
-      segment1Point1 = EuclidCoreRandomTools.generateRandomPoint3D(random);
-      segment1Point2 = EuclidCoreRandomTools.generateRandomPoint3D(random);
+      segment1Point1 = EuclidCoreRandomTools.nextPoint3D(random);
+      segment1Point2 = EuclidCoreRandomTools.nextPoint3D(random);
       segment2Point1 = new Point3D(segment1Point1);
       segment2Point2 = new Point3D(segment1Point2);
 
@@ -729,35 +729,35 @@ public class LineSegment3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         segment1Point1 = EuclidCoreRandomTools.generateRandomPoint3D(random);
-         segment1Point2 = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         segment1Point1 = EuclidCoreRandomTools.nextPoint3D(random);
+         segment1Point2 = EuclidCoreRandomTools.nextPoint3D(random);
          segment2Point1 = new Point3D();
          segment2Point2 = new Point3D();
 
          lineSegment1 = new LineSegment3D(segment1Point1, segment1Point2);
 
          segment2Point1.set(segment1Point1);
-         segment2Point2.add(segment1Point2, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON));
+         segment2Point2.add(segment1Point2, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON));
          lineSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
          lineSegment2 = new LineSegment3D(segment2Point2, segment2Point1);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
          segment2Point1.set(segment1Point1);
-         segment2Point2.add(segment1Point2, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON));
+         segment2Point2.add(segment1Point2, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON));
          lineSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
          lineSegment2 = new LineSegment3D(segment2Point2, segment2Point1);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
-         segment2Point1.add(segment1Point1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON));
+         segment2Point1.add(segment1Point1, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON));
          segment2Point2.set(segment1Point2);
          lineSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
          lineSegment2 = new LineSegment3D(segment2Point2, segment2Point1);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
-         segment2Point1.add(segment1Point1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON));
+         segment2Point1.add(segment1Point1, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON));
          segment2Point2.set(segment1Point2);
          lineSegment2 = new LineSegment3D(segment2Point1, segment2Point2);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
@@ -766,14 +766,14 @@ public class LineSegment3DTest
 
          lineSegment2.set(lineSegment1);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         lineSegment2.translate(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON));
+         lineSegment2.translate(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON));
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
          lineSegment2.flipDirection();
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
          lineSegment2.set(lineSegment1);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         lineSegment2.translate(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON));
+         lineSegment2.translate(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON));
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
          lineSegment2.flipDirection();
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));

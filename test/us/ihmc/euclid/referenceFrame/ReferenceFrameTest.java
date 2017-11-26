@@ -79,7 +79,7 @@ public class ReferenceFrameTest
 
    private ReferenceFrame constructRandomUnchangingFrame(String nameOfFrame, ReferenceFrame parentOfFrame)
    {
-      RigidBodyTransform randomTransformToParent = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      RigidBodyTransform randomTransformToParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       transformsForVerification.put(nameOfFrame, new RigidBodyTransform(randomTransformToParent));
       ReferenceFrame ret = ReferenceFrame.constructFrameWithUnchangingTransformToParent(nameOfFrame, parentOfFrame, randomTransformToParent);
 
@@ -97,7 +97,7 @@ public class ReferenceFrameTest
       @Override
       protected void updateTransformToParent(RigidBodyTransform transformToParent)
       {
-         RigidBodyTransform randomTransform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform randomTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          transformToParent.set(randomTransform);
 
          transformsForVerification.put(getName(), new RigidBodyTransform(randomTransform));

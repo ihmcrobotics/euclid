@@ -62,8 +62,8 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         ReferenceFrame initialFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame initialFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
 
          T tuple = createRandomTuple(random).getGeometryObject();
          F frameTuple = createTuple(initialFrame, tuple);
@@ -87,7 +87,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double x, double y)
          double x = random.nextDouble();
          double y = random.nextDouble();
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
@@ -99,8 +99,8 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
-         Tuple2DReadOnly input = EuclidCoreRandomTools.generateRandomPoint2D(random);
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         Tuple2DReadOnly input = EuclidCoreRandomTools.nextPoint2D(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
@@ -112,8 +112,8 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
-         Tuple3DReadOnly input = EuclidCoreRandomTools.generateRandomPoint3D(random);
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         Tuple3DReadOnly input = EuclidCoreRandomTools.nextPoint3D(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
@@ -128,7 +128,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          double[] input = new double[random.nextInt(20)];
          for (int j = 0; j < input.length; j++)
             input[j] = random.nextDouble();
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
 
          Tuple2DBasics tuple = new Vector2D();
@@ -167,7 +167,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          double[] input = new double[random.nextInt(20)];
          for (int j = 0; j < input.length; j++)
             input[j] = random.nextDouble();
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
 
          Tuple2DBasics tuple = new Vector2D();
@@ -203,7 +203,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
 
          Tuple2DBasics tuple = new Vector2D();
@@ -240,7 +240,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
          int startRow = random.nextInt(10);
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
 
          Tuple2DBasics tuple = new Vector2D();
@@ -278,7 +278,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
          int startRow = random.nextInt(10);
          int column = random.nextInt(10);
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
 
          Tuple2DBasics tuple = new Vector2D();
@@ -313,8 +313,8 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(FrameTuple2DReadOnly other)
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         FrameTuple2DReadOnly input = EuclidFrameRandomTools.generateRandomFramePoint2D(random, newFrame);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         FrameTuple2DReadOnly input = EuclidFrameRandomTools.nextFramePoint2D(random, newFrame);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
@@ -326,8 +326,8 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(FrameTuple3DReadOnly other)
-         ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         FrameTuple3DReadOnly input = EuclidFrameRandomTools.generateRandomFramePoint3D(random, newFrame);
+         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         FrameTuple3DReadOnly input = EuclidFrameRandomTools.nextFramePoint3D(random, newFrame);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
