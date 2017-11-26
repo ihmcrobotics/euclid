@@ -10,12 +10,15 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public class LineSegment3DTest
 {
@@ -658,6 +661,48 @@ public class LineSegment3DTest
             line2.getSecondEndpoint().setElement(j, element - epsilon);
             assertFalse(line1.equals(line2));
          }
+      }
+   }
+
+   @Test
+   public void testTranslate() throws Exception
+   {
+      Random random = new Random(3653);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test translate(double x, double y)
+         LineSegment3D originalLineSegment = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D translatedLineSegment = new LineSegment3D(originalLineSegment);
+         double x = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double y = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double z = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         translatedLineSegment.translate(x, y, z);
+
+         assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(originalLineSegment.getDirection(false), translatedLineSegment.getDirection(false), EPSILON);
+
+         LineSegment3D expectedLineSegment = new LineSegment3D(originalLineSegment);
+         RigidBodyTransform transform = new RigidBodyTransform();
+         transform.setTranslation(x, y, z);
+         expectedLineSegment.applyTransform(transform);
+         EuclidGeometryTestTools.assertLineSegment3DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test translate(Tuple3DReadOnly translation)
+         LineSegment3D originalLineSegment = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
+         LineSegment3D translatedLineSegment = new LineSegment3D(originalLineSegment);
+         Tuple3DReadOnly translation = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         translatedLineSegment.translate(translation);
+         
+         assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(originalLineSegment.getDirection(false), translatedLineSegment.getDirection(false), EPSILON);
+         
+         LineSegment3D expectedLineSegment = new LineSegment3D(originalLineSegment);
+         RigidBodyTransform transform = new RigidBodyTransform();
+         transform.setTranslation(translation);
+         expectedLineSegment.applyTransform(transform);
+         EuclidGeometryTestTools.assertLineSegment3DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
       }
    }
 

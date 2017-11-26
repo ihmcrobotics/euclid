@@ -6,10 +6,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.*;
 
 /**
  * Represents a finite-length 3D line segment defined by its two 3D endpoints.
@@ -666,6 +663,36 @@ public class LineSegment3D implements GeometryObject<LineSegment3D>
    public double dotProduct(LineSegment3D other)
    {
       return EuclidGeometryTools.dotProduct(firstEndpoint, secondEndpoint, other.firstEndpoint, other.secondEndpoint);
+   }
+
+   /**
+    * Translates this line segment by the given (x, y, z).
+    * <p>
+    * Note that the length and direction of this line segment remains unchanged.
+    * </p>
+    *
+    * @param x the distance to translate this line along the x-axis.
+    * @param y the distance to translate this line along the y-axis.
+    * @param z the distance to translate this line along the z-axis.
+    */
+   public void translate(double x, double y, double z)
+   {
+      firstEndpoint.add(x, y, z);
+      secondEndpoint.add(x, y, z);
+   }
+
+   /**
+    * Translates this line segment by the given (x, y, z) contained in {@code translation}.
+    * <p>
+    * Note that the length and direction of this line segment remains unchanged.
+    * </p>
+    *
+    * @param translation the translation to add to each endpoint of this line segment. Not modified.
+    */
+   public void translate(Tuple3DReadOnly translation)
+   {
+      firstEndpoint.add(translation);
+      secondEndpoint.add(translation);
    }
 
    /**
