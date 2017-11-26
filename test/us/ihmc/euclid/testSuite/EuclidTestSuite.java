@@ -31,6 +31,7 @@ import us.ihmc.euclid.geometry.Sphere3DTest;
 import us.ihmc.euclid.geometry.Torus3DTest;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxExceptionTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 import us.ihmc.euclid.referenceFrame.FramePoint2DTest;
 import us.ihmc.euclid.referenceFrame.FramePoint3DTest;
@@ -53,7 +54,7 @@ import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
       Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class,
       Sphere3DTest.class, Torus3DTest.class, Pose3DTest.class, Plane3DTest.class,
       // Tools tests
-      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class,
+      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class, EuclidGeometryTestToolsTest.class,
       // Reference frame framework tests
       ReferenceFrameTest.class,
       // 1D
