@@ -721,7 +721,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * 
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this} and {@code orientation}, it is contained in
-    *         [0, <i>pi</i>].
+    *         [0, 2<i>pi</i>].
     */
    public double getOrientationDistance(QuaternionReadOnly orientation)
    {
@@ -733,7 +733,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     * 
     * @param other the other pose 3D used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this.orientation} and {@code other.orientation},
-    *         it is contained in [0, <i>pi</i>].
+    *         it is contained in [0, 2<i>pi</i>].
     */
    public double getOrientationDistance(Pose3D other)
    {
@@ -1049,5 +1049,23 @@ public class Pose3D implements GeometryObject<Pose3D>
    public String toString()
    {
       return EuclidGeometryIOTools.getPose3DString(this);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically
+    * equal.
+    * </p>
+    * 
+    * @param other the pose to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Pose3D other, double epsilon)
+   {
+      return this.position.geometricallyEquals(other.position, epsilon) && this.orientation.geometricallyEquals(other.orientation, epsilon);
    }
 }

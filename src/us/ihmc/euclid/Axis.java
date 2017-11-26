@@ -7,7 +7,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * {@code Axis} can be used to provide a simple and readable way to refer the three main axes of a
  * coordinate system.
  */
-public enum Axis
+public enum Axis implements Vector3DReadOnly
 {
    /** The x-axis is usually associated with the forward direction. */
    X(1.0, 0.0, 0.0),
@@ -28,53 +28,46 @@ public enum Axis
     */
    public static final Axis[] values = values();
 
-   private final Vector3DReadOnly axisVector;
+   private final double x, y, z;
 
    Axis(double x, double y, double z)
    {
-      this.axisVector = new ImmutableVector3D(x, y, z);
+      this.x = x;
+      this.y = y;
+      this.z = z;
    }
 
    /**
-    * Gets the immutable reference to the unit-vector 3D representing this axis.
-    * 
-    * @return the vector representation of this axis.
+    * Returns the x-component of this axis.
+    *
+    * @return the x-component.
     */
-   public Vector3DReadOnly getAxisVector()
+   @Override
+   public double getX()
    {
-      return axisVector;
+      return x;
    }
 
-   private static class ImmutableVector3D implements Vector3DReadOnly
+   /**
+    * Returns the y-component of this axis.
+    *
+    * @return the y-component.
+    */
+   @Override
+   public double getY()
    {
-      private final double x;
-      private final double y;
-      private final double z;
+      return y;
+   }
 
-      public ImmutableVector3D(double x, double y, double z)
-      {
-         this.x = x;
-         this.y = y;
-         this.z = z;
-      }
-
-      @Override
-      public double getX()
-      {
-         return x;
-      }
-
-      @Override
-      public double getY()
-      {
-         return y;
-      }
-
-      @Override
-      public double getZ()
-      {
-         return z;
-      }
+   /**
+    * Returns the z-component of this axis.
+    *
+    * @return the z-component.
+    */
+   @Override
+   public double getZ()
+   {
+      return z;
    }
 
    /**
@@ -88,16 +81,16 @@ public enum Axis
    {
       switch (axis)
       {
-      case X :
+      case X:
          return tuple.getX();
 
-      case Y :
+      case Y:
          return tuple.getY();
 
-      case Z :
+      case Z:
          return tuple.getZ();
 
-      default :
+      default:
          throw new IndexOutOfBoundsException();
       }
    }
@@ -113,23 +106,56 @@ public enum Axis
    {
       switch (axis)
       {
-      case X :
+      case X:
          tupleToModify.setX(value);
-
          break;
 
-      case Y :
+      case Y:
          tupleToModify.setY(value);
-
          break;
 
-      case Z :
+      case Z:
          tupleToModify.setZ(value);
-
          break;
 
-      default :
+      default:
          throw new IndexOutOfBoundsException();
+      }
+   }
+
+   /**
+    * Obtains the next axis, in a clockwise fashion.
+    *
+    * @return next clockwise axis
+    */
+   public Axis getNextClockwiseAxis()
+   {
+      switch (this)
+      {
+      case X:
+         return Z;
+      case Y:
+         return X;
+      default:
+         return Y;
+      }
+   }
+
+   /**
+    * Obtains the next axis, in a counterclockwise fashion.
+    *
+    * @return next counterclockwise axis
+    */
+   public Axis getNextCounterClockwiseAxis()
+   {
+      switch (this)
+      {
+      case X:
+         return Y;
+      case Y:
+         return Z;
+      default:
+         return X;
       }
    }
 }

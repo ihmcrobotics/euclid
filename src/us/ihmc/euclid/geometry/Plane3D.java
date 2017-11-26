@@ -692,7 +692,6 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Tests if the two planes are parallel by testing if their normals are collinear. The latter is
     * done given a tolerance on the angle between the two normal axes in the range ]0; <i>pi</i>/2[.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -939,5 +938,23 @@ public class Plane3D implements GeometryObject<Plane3D>
    public String toString()
    {
       return EuclidGeometryIOTools.getPlane3DString(this);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two planes are geometrically
+    * similar.
+    * <p>
+    * Two planes are considered geometrically equal if they are coincident. Two planes that are
+    * geometrically equal can have normals pointing opposite direction.
+    * </p>
+    *
+    * @param other the plane to compare to.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the planes are coincident, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Plane3D other, double epsilon)
+   {
+      return isCoincident(other, epsilon, epsilon);
    }
 }

@@ -1,21 +1,27 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Ramp3DTest
 {
    private static final boolean DEBUG = false;
+   private static final int ITERATIONS = 1000;
 
    /**
     * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
@@ -32,16 +38,15 @@ public class Ramp3DTest
 
       for (int i = 0; i < numberOfShapes; i++)
       {
-         RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-         double length = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0);
-         double width = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0);
-         double height = EuclidCoreRandomTools.generateRandomDouble(random, 0.01, 10.0);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         double length = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         double width = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         double height = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
          Ramp3D box3d = new Ramp3D(transform, length, width, height);
          testHelper.runSimpleTests(box3d, random, numberOfPoints);
       }
    }
 
-   
    @Test
    public void testExampleUsage()
    {
@@ -56,7 +61,6 @@ public class Ramp3DTest
       assertEquals(Math.toRadians(45.0), ramp3d.getRampIncline(), 1e-7);
    }
 
-   
    @Test
    public void testGetAndSet()
    {
@@ -75,7 +79,6 @@ public class Ramp3DTest
       ramp1.epsilonEquals(ramp2, 1e-7);
    }
 
-   
    @Test
    public void testSurfaceNormal()
    {
@@ -87,7 +90,6 @@ public class Ramp3DTest
       assertEquals("not equal", surfaceNormal.getZ(), 1.0 / Math.sqrt(2.0), 1e-14);
    }
 
-   
    @Test
    public void testSimpleOrthogonalProjection()
    {
@@ -108,7 +110,6 @@ public class Ramp3DTest
       assertEquals(pointToProject.getZ(), 0.5, 1e-14);
    }
 
-   
    @Test
    public void testSimplePointOutside()
    {
@@ -117,7 +118,6 @@ public class Ramp3DTest
       assertTrue(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.5, 0.0, 0.1})));
    }
 
-   
    @Test
    public void testSimpleMethodCalls()
    {
@@ -138,7 +138,6 @@ public class Ramp3DTest
       assertFalse(ramp3d.isInsideOrOnSurface(p2));
    }
 
-   
    @Test
    public void testIsInsideOrOnSurface()
    {
@@ -160,7 +159,6 @@ public class Ramp3DTest
       transform.setTranslation(new Vector3D(1.0, -1.0, 2.0));
    }
 
-   
    @Test
    public void testProjectionPerpNormal()
    {
@@ -180,11 +178,11 @@ public class Ramp3DTest
          double minX = insideRamp;
          double maxX = ramp.getLength() - insideRamp;
          double minY = -(ramp.getWidth() / 2.0) + insideRamp;
-         double maxY = (ramp.getWidth() / 2.0) - insideRamp;
+         double maxY = ramp.getWidth() / 2.0 - insideRamp;
          double minZ = 0.0;
          double maxZ = 1.0;
 
-         Point3D pointToTestOnRamp = EuclidCoreRandomTools.generateRandomPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ);
+         Point3D pointToTestOnRamp = EuclidCoreRandomTools.nextPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ);
          pointToTestOnRamp = transformFromAngledToWorldFrame(ramp, pointToTestOnRamp);
          ramp.orthogonalProjection(pointToTestOnRamp);
 
@@ -292,7 +290,7 @@ public class Ramp3DTest
     * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
     * normal tests at the corners.
     */
-   
+
    @Test
    public void testDistance()
    {
@@ -305,9 +303,9 @@ public class Ramp3DTest
          Ramp3D ramp = createRandomRamp(random);
 
          double insideRamp = 0.02;
-         double x = EuclidCoreRandomTools.generateRandomDouble(random, insideRamp, ramp.getRampLength() - insideRamp);
-         double y = EuclidCoreRandomTools.generateRandomDouble(random, -ramp.getWidth() / 2.0 + insideRamp, ramp.getWidth() / 2.0 - insideRamp);
-         double z = EuclidCoreRandomTools.generateRandomDouble(random, insideRamp, 1.0);
+         double x = EuclidCoreRandomTools.nextDouble(random, insideRamp, ramp.getRampLength() - insideRamp);
+         double y = EuclidCoreRandomTools.nextDouble(random, -ramp.getWidth() / 2.0 + insideRamp, ramp.getWidth() / 2.0 - insideRamp);
+         double z = EuclidCoreRandomTools.nextDouble(random, insideRamp, 1.0);
          Point3D pointToTestAboveRamp = new Point3D(x, y, z);
          Point3D pointOnRampBelowTestPoint = new Point3D(pointToTestAboveRamp);
          pointOnRampBelowTestPoint.setZ(0.0);
@@ -353,9 +351,9 @@ public class Ramp3DTest
          printIfDebug("\nramp = " + ramp);
 
          double insideRamp = 0.02;
-         double x = EuclidCoreRandomTools.generateRandomDouble(random, insideRamp, ramp.getRampLength() - insideRamp);
-         double y = EuclidCoreRandomTools.generateRandomDouble(random, -ramp.getWidth() / 2.0 + insideRamp, ramp.getWidth() / 2.0 - insideRamp);
-         double z = EuclidCoreRandomTools.generateRandomDouble(random, insideRamp, 1.0);
+         double x = EuclidCoreRandomTools.nextDouble(random, insideRamp, ramp.getRampLength() - insideRamp);
+         double y = EuclidCoreRandomTools.nextDouble(random, -ramp.getWidth() / 2.0 + insideRamp, ramp.getWidth() / 2.0 - insideRamp);
+         double z = EuclidCoreRandomTools.nextDouble(random, insideRamp, 1.0);
          Point3D pointToTestAboveRamp = new Point3D(x, y, z);
          pointToTestAboveRamp = transformFromAngledToWorldFrame(ramp, pointToTestAboveRamp);
 
@@ -395,7 +393,6 @@ public class Ramp3DTest
       }
    }
 
-   
    @Test
    public void testIndependenceOfCopiedTransforms()
    {
@@ -417,7 +414,6 @@ public class Ramp3DTest
       assertFalse(rampCopyBySet.equals(ramp));
    }
 
-   
    @Test
    public void testSetMethodSetsUpAllFieldsOfNewRampAccurately()
    {
@@ -433,13 +429,103 @@ public class Ramp3DTest
       assertEquals(pointProjectedOntoRamp, pointProjectedOntoRampCopy);
    }
 
+   @Test
+   public void testGeometricallyEquals()
+   {
+      Random random = new Random(34201L);
+      Ramp3D firstRamp, secondRamp;
+      double lengthX, widthY, heightZ;
+      double epsilon = 1e-7;
+
+      lengthX = random.nextDouble();
+      widthY = random.nextDouble();
+      heightZ = random.nextDouble();
+
+      firstRamp = new Ramp3D(lengthX, widthY, heightZ);
+      secondRamp = new Ramp3D(lengthX, widthY, heightZ);
+
+      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      assertTrue(secondRamp.geometricallyEquals(firstRamp, epsilon));
+      assertTrue(firstRamp.geometricallyEquals(firstRamp, epsilon));
+      assertTrue(secondRamp.geometricallyEquals(secondRamp, epsilon));
+
+      secondRamp = new Ramp3D(lengthX + epsilon * 0.99, widthY, heightZ);
+      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY + epsilon * 0.99, heightZ);
+      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY, heightZ + epsilon * 0.99);
+      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX - epsilon * 0.99, widthY, heightZ);
+      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY - epsilon * 0.99, heightZ);
+      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY, heightZ - epsilon * 0.99);
+      assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+
+      secondRamp = new Ramp3D(lengthX + epsilon * 1.01, widthY, heightZ);
+      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY + epsilon * 1.01, heightZ);
+      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY, heightZ + epsilon * 1.01);
+      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX - epsilon * 1.01, widthY, heightZ);
+      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY - epsilon * 1.01, heightZ);
+      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      secondRamp = new Ramp3D(lengthX, widthY, heightZ - epsilon * 1.01);
+      assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Vector3D translationVector = EuclidCoreRandomTools.nextRotationVector(random);
+         firstRamp = new Ramp3D(new RigidBodyTransform(new RotationMatrix(), translationVector), lengthX, widthY, heightZ);
+         secondRamp = new Ramp3D(firstRamp);
+
+         translationVector = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon);
+         secondRamp.appendTranslation(translationVector);
+
+         assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+
+         secondRamp = new Ramp3D(firstRamp);
+
+         translationVector = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon);
+         secondRamp.appendTranslation(translationVector);
+
+         assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Quaternion rotation = EuclidCoreRandomTools.nextQuaternion(random);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Pose3D pose = new Pose3D(position, rotation);
+         firstRamp = new Ramp3D(pose, lengthX, widthY, heightZ);
+         secondRamp = new Ramp3D(firstRamp);
+
+         RigidBodyTransform transform = new RigidBodyTransform();
+         AxisAngle axisAngle = new AxisAngle();
+
+         axisAngle.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.99 * epsilon);
+         transform.setRotation(axisAngle);
+         secondRamp.appendTransform(transform);
+         assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
+
+         secondRamp = new Ramp3D(firstRamp);
+
+         axisAngle.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 1.01 * epsilon);
+         transform.setRotation(axisAngle);
+         secondRamp.appendTransform(transform);
+         assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
+      }
+   }
+
    private static Ramp3D createRandomRamp(Random random)
    {
       RigidBodyTransform configuration = createRandomTransform(random);
 
-      double width = EuclidCoreRandomTools.generateRandomDouble(random, 0.05, 1.0);
-      double length = EuclidCoreRandomTools.generateRandomDouble(random, 0.05, 1.0);
-      double height = EuclidCoreRandomTools.generateRandomDouble(random, 0.05, 1.0);
+      double width = EuclidCoreRandomTools.nextDouble(random, 0.05, 1.0);
+      double length = EuclidCoreRandomTools.nextDouble(random, 0.05, 1.0);
+      double height = EuclidCoreRandomTools.nextDouble(random, 0.05, 1.0);
 
       return new Ramp3D(configuration, width, length, height);
    }

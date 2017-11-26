@@ -1,6 +1,9 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Random;
 
@@ -21,10 +24,10 @@ public class Shape3DTestHelper
    {
       for (int i = 0; i < numberOfPoints; i++)
       {
-         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random, 1.0, 1.0, 1.0);
+         Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 1.0, 1.0);
 
          boolean pointIsInside = shape3d.isInsideEpsilon(point, -1e-5);
-         boolean pointIsOutside = !(shape3d.isInsideEpsilon(point, 1e-5));
+         boolean pointIsOutside = !shape3d.isInsideEpsilon(point, 1e-5);
 
          if (pointIsInside && pointIsOutside)
             fail();
@@ -48,7 +51,7 @@ public class Shape3DTestHelper
       Point3D pointToProject = new Point3D(pointLikelyOutside);
       shape3d.orthogonalProjection(pointToProject);
 
-      RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       RigidBodyTransform transformInverse = new RigidBodyTransform(transform);
       transformInverse.invert();
 
@@ -133,7 +136,7 @@ public class Shape3DTestHelper
       }
       EuclidCoreTestTools.assertTuple3DEquals(pointOnSurface, newProjection, 1e-7);
 
-      // Check that if you move a little in the direction of the normal you are outside and a little 
+      // Check that if you move a little in the direction of the normal you are outside and a little
       // opposite the normal, you are inside:
       Point3D pointALittleOutside = new Point3D(pointOnSurface);
       Point3D pointALittleInside = new Point3D(pointOnSurface);
@@ -157,7 +160,7 @@ public class Shape3DTestHelper
 
       if (!insideOrOnSurface)
       { // When dealing with sharp edges, the point can jump on the other side of the shape even when shifting only by a little.
-         // If that's the case, computing the normal for this point should reveal that by having the normal having a much different orientation.
+        // If that's the case, computing the normal for this point should reveal that by having the normal having a much different orientation.
          Vector3D problematicNormal = new Vector3D();
          shape3d.checkIfInside(pointALittleInside, null, problematicNormal);
          isNormalWayDifferent = problematicNormal.angle(surfaceNormal) > Math.toRadians(90.0);

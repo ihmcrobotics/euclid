@@ -14,6 +14,8 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class LineSegment1DTest
 {
+   private static final double EPSILON = 1.0e-12;
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void lineBoundariesTest()
@@ -97,14 +99,14 @@ public class LineSegment1DTest
       // lineSegment2 inside lineSegment1
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double boundaryOne = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
          double boundaryTwo = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          double expectedOverlapStart = lineSegmentStart2;
@@ -144,14 +146,14 @@ public class LineSegment1DTest
       // lineSegment2 partially overlapping lineSegment1 case 1
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double boundaryOne = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
          double boundaryTwo = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne - 10.0, boundaryOne);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne - 10.0, boundaryOne);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          double expectedOverlapStart = lineSegmentStart2;
@@ -191,14 +193,14 @@ public class LineSegment1DTest
       // lineSegment2 partially overlapping lineSegment1 case 2
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double boundaryOne = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
          double boundaryTwo = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryTwo, boundaryTwo + 10.0);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, boundaryTwo, boundaryTwo + 10.0);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          double expectedOverlapStart = lineSegmentStart2;
@@ -238,13 +240,13 @@ public class LineSegment1DTest
       // lineSegment2 not overlapping lineSegment1 case 1
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double max = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, max, max + 10.0);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, max, max + 10.0);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, max, max + 10.0);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, max, max + 10.0);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          LineSegment1D actualOverlap = new LineSegment1D();
@@ -259,13 +261,13 @@ public class LineSegment1DTest
       // lineSegment2 not overlapping lineSegment1 case 2
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double min = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, min - 10.0, min);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, min - 10.0, min);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, min - 10.0, min);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, min - 10.0, min);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          LineSegment1D actualOverlap = new LineSegment1D();
@@ -380,7 +382,7 @@ public class LineSegment1DTest
    }
 
    @Test
-   public void toUpperDImensionsTest()
+   public void toUpperDimensionsTest()
    {
       Point2D point2d = new Point2D(1, 1);
       Vector2D direction2d = new Vector2D(1, 2);
@@ -396,5 +398,105 @@ public class LineSegment1DTest
 
       assertEquals(line3d.getFirstEndpoint(), new Point3D(1, 1, 1));
       assertEquals(line3d.getSecondEndpoint(), new Point3D(11, 21, 31));
+   }
+
+   @Test
+   public void testGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(23525);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Endpoints are in the same order
+         double endpoint1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double endpoint2 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+
+         LineSegment1D lineSegment1 = new LineSegment1D(endpoint1, endpoint2);
+         LineSegment1D lineSegment2 = new LineSegment1D(endpoint1, endpoint2);
+
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1 + 0.99 * EPSILON, endpoint2);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1 - 0.99 * EPSILON, endpoint2);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1 + 1.01 * EPSILON, endpoint2);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 - 1.01 * EPSILON, endpoint2);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1, endpoint2 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1, endpoint2 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint1, endpoint2 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1, endpoint2 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 + 0.99 * EPSILON, endpoint2 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 - 0.99 * EPSILON, endpoint2 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 + 1.01 * EPSILON, endpoint2 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint1 - 1.01 * EPSILON, endpoint2 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Endpoints are in opposite order
+         double endpoint2 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double endpoint1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+
+         LineSegment1D lineSegment1 = new LineSegment1D(endpoint1, endpoint2);
+         LineSegment1D lineSegment2 = new LineSegment1D(endpoint2, endpoint1);
+
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2 + 0.99 * EPSILON, endpoint1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2 - 0.99 * EPSILON, endpoint1);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2 + 1.01 * EPSILON, endpoint1);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 - 1.01 * EPSILON, endpoint1);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2, endpoint1 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2, endpoint1 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+
+         lineSegment2.set(endpoint2, endpoint1 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2, endpoint1 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 + 0.99 * EPSILON, endpoint1 + 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 - 0.99 * EPSILON, endpoint1 - 0.99 * EPSILON);
+         assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 + 1.01 * EPSILON, endpoint1 + 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+         
+         lineSegment2.set(endpoint2 - 1.01 * EPSILON, endpoint1 - 1.01 * EPSILON);
+         assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
+      }
    }
 }

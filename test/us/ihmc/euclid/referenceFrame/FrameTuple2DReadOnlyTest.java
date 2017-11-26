@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
@@ -39,14 +40,17 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
 
    public abstract T createTuple(ReferenceFrame referenceFrame, double x, double y);
 
+   @Override
    @Test
    public void testEpsilonEquals() throws Exception
    {
+      super.testEpsilonEquals();
+
       Random random = new Random(621541L);
       double epsilon = 0.0;
 
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
-      ReferenceFrame frame2 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+      ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 
       double x = random.nextDouble();
       double y = random.nextDouble();
@@ -62,6 +66,7 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
    }
 
+   @Override
    @Test
    public void testEquals() throws Exception
    {
@@ -70,7 +75,7 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
       Random random = new Random(621541L);
 
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
-      ReferenceFrame frame2 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+      ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 
       double x = random.nextDouble();
       double y = random.nextDouble();

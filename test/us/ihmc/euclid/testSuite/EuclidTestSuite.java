@@ -22,17 +22,27 @@ import us.ihmc.euclid.geometry.Line3DTest;
 import us.ihmc.euclid.geometry.LineSegment1DTest;
 import us.ihmc.euclid.geometry.LineSegment2DTest;
 import us.ihmc.euclid.geometry.LineSegment3DTest;
+import us.ihmc.euclid.geometry.Orientation2DTest;
+import us.ihmc.euclid.geometry.Plane3DTest;
+import us.ihmc.euclid.geometry.Pose2DTest;
+import us.ihmc.euclid.geometry.Pose3DTest;
 import us.ihmc.euclid.geometry.Ramp3DTest;
 import us.ihmc.euclid.geometry.Sphere3DTest;
 import us.ihmc.euclid.geometry.Torus3DTest;
+import us.ihmc.euclid.geometry.exceptions.BoundingBoxExceptionTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 import us.ihmc.euclid.referenceFrame.FramePoint2DTest;
 import us.ihmc.euclid.referenceFrame.FramePoint3DTest;
+import us.ihmc.euclid.referenceFrame.FrameQuaternionTest;
 import us.ihmc.euclid.referenceFrame.FrameVector2DTest;
 import us.ihmc.euclid.referenceFrame.FrameVector3DTest;
+import us.ihmc.euclid.referenceFrame.FrameVector4DTest;
 import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestToolsTest;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
+import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -40,11 +50,12 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
       // 1D
       LineSegment1DTest.class,
       // 2D
-      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class,
+      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class, Orientation2DTest.class, Pose2DTest.class,
       // 3D
-      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class,
+      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class,
+      Sphere3DTest.class, Torus3DTest.class, Pose3DTest.class, Plane3DTest.class,
       // Tools tests
-      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class,
+      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class, EuclidGeometryTestToolsTest.class,
       // Reference frame framework tests
       ReferenceFrameTest.class,
       // 1D
@@ -52,11 +63,14 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
       FramePoint2DTest.class, FrameVector2DTest.class,
       // 3D
       FramePoint3DTest.class, FrameVector3DTest.class,
+      // 4D
+      FrameQuaternionTest.class, FrameVector4DTest.class,
       // Tools tests
-      EuclidFrameToolsTest.class,
+      EuclidFrameToolsTest.class, NameBasedHashCodeToolsTest.class, EuclidFrameTestToolsTest.class,
+      // Exceptions tests
+      BoundingBoxExceptionTest.class,
       // Axis test
-      AxisTest.class,
-      })
+      AxisTest.class})
 
 public class EuclidTestSuite
 {

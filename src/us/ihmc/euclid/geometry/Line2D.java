@@ -1367,6 +1367,31 @@ public class Line2D implements GeometryObject<Line2D>
    }
 
    /**
+    * Compares {@code this} with {@code other} to determine if the two lines are collinear.
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    */
+   public boolean isCollinear(Line2D other, double epsilon)
+   {
+      return isCollinear(other, epsilon, epsilon);
+   }
+
+   /**
+    * Compares {@code this} with {@code other} to determine if the two lines are collinear.
+    *
+    * @param other the line to compare to. Not modified.
+    * @param angleEpsilon the tolerance of the comparison for angle.
+    * @param distanceEpsilon the tolerance of the comparison for distance.
+    * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    */
+   public boolean isCollinear(Line2D other, double angleEpsilon, double distanceEpsilon)
+   {
+      return EuclidGeometryTools.areLine2DsCollinear(this.point, this.direction, other.point, other.direction, angleEpsilon, distanceEpsilon);
+   }
+
+   /**
     * Provides a {@code String} representation of this line 2D as follows:<br>
     * Line 2D: point = (x, y), direction = (x, y)
     *
@@ -1420,5 +1445,23 @@ public class Line2D implements GeometryObject<Line2D>
       checkHasBeenInitialized();
       double parameterAtIntercept = -point.getX() / direction.getX();
       return parameterAtIntercept * direction.getY() + point.getY();
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Line2D other, double epsilon)
+   {
+      return isCollinear(other, epsilon);
    }
 }

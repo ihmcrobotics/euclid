@@ -7,9 +7,9 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 /**
  * Read-only interface for a 2D point expressed in a given reference frame.
  * <p>
- * In addition to representing a {@link Point2DReadOnly}, a {@link ReferenceFrame} is associated to a
- * {@code FramePoint2DReadOnly}. This allows, for instance, to enforce, at runtime, that operations on
- * points occur in the same coordinate system.
+ * In addition to representing a {@link Point2DReadOnly}, a {@link ReferenceFrame} is associated to
+ * a {@code FramePoint2DReadOnly}. This allows, for instance, to enforce, at runtime, that
+ * operations on points occur in the same coordinate system.
  * </p>
  * <p>
  * Because a {@code FramePoint2DReadOnly} extends {@code Point2DReadOnly}, it is compatible with
@@ -96,5 +96,22 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
    {
       checkReferenceFrameMatch(framePoint3DReadOnly);
       return Point2DReadOnly.super.distanceXYSquared(framePoint3DReadOnly);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame points are geometrically
+    * similar, i.e. the distance between them is less than or equal to {@code epsilon}.
+    *
+    * @param other the frame point to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame points represent the same geometry, {@code false}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   default boolean geometricallyEquals(FramePoint2DReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+      return Point2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

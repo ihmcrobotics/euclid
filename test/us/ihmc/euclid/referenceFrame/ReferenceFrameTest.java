@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,8 +14,6 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 
 public class ReferenceFrameTest
 {
-   private static final boolean VERBOSE = false;
-
    private Random random;
    private ReferenceFrame root, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8;
    private ReferenceFrame root2, frame9, frame10, frame11;
@@ -27,7 +26,7 @@ public class ReferenceFrameTest
    public void setUp()
    {
       random = new Random(23423L);
-      transformsForVerification = new LinkedHashMap<String, RigidBodyTransform>();
+      transformsForVerification = new LinkedHashMap<>();
 
       // The structure we'll test is as follows:
       // root                                                 root2
@@ -55,7 +54,7 @@ public class ReferenceFrameTest
       frames1 = new ReferenceFrame[] {root, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8};
       frames2 = new ReferenceFrame[] {root2, frame9, frame10, frame11};
 
-      allFramesTogether = new ArrayList<ReferenceFrame>();
+      allFramesTogether = new ArrayList<>();
       addAllFrames(allFramesTogether, frames1);
       addAllFrames(allFramesTogether, frames2);
    }
@@ -80,7 +79,7 @@ public class ReferenceFrameTest
 
    private ReferenceFrame constructRandomUnchangingFrame(String nameOfFrame, ReferenceFrame parentOfFrame)
    {
-      RigidBodyTransform randomTransformToParent = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      RigidBodyTransform randomTransformToParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       transformsForVerification.put(nameOfFrame, new RigidBodyTransform(randomTransformToParent));
       ReferenceFrame ret = ReferenceFrame.constructFrameWithUnchangingTransformToParent(nameOfFrame, parentOfFrame, randomTransformToParent);
 
@@ -90,19 +89,18 @@ public class ReferenceFrameTest
 
    private class RandomlyChangingFrame extends ReferenceFrame
    {
-      private static final long serialVersionUID = -476837045790926369L;
-
       public RandomlyChangingFrame(String frameName, ReferenceFrame parentFrame)
       {
          super(frameName, parentFrame);
       }
 
+      @Override
       protected void updateTransformToParent(RigidBodyTransform transformToParent)
       {
-         RigidBodyTransform randomTransform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform randomTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          transformToParent.set(randomTransform);
 
-         transformsForVerification.put(this.getName(), new RigidBodyTransform(randomTransform));
+         transformsForVerification.put(getName(), new RigidBodyTransform(randomTransform));
       }
    }
 
@@ -187,7 +185,6 @@ public class ReferenceFrameTest
       updateAllFrames();
 
       int numberOfTests = 100000;
-      int numberTestsComplete = 0;
 
       for (int i = 0; i < numberOfTests; i++)
       {
@@ -207,14 +204,8 @@ public class ReferenceFrameTest
          transformTwo.invert();
 
          verifyTransformsAreEpsilonEqual(transformOne, transformTwo);
-         numberTestsComplete++;
       }
 
-      if (VERBOSE)
-      {
-         System.out.println("numberTestsComplete = " + numberTestsComplete);
-         System.out.println("nextTransformToRootID = " + ReferenceFrame.nextTransformToRootID);
-      }
       tearDown();
    }
 
@@ -226,7 +217,6 @@ public class ReferenceFrameTest
       updateAllFrames();
 
       int numberOfTests = 100000;
-      int numberTestsComplete = 0;
 
       for (int i = 0; i < numberOfTests; i++)
       {
@@ -244,14 +234,8 @@ public class ReferenceFrameTest
          RigidBodyTransform transformTwo = getTransformToDesiredFrameThroughVerificationTransforms(frame1, frame2);
 
          verifyTransformsAreEpsilonEqual(transformOne, transformTwo);
-         numberTestsComplete++;
       }
 
-      if (VERBOSE)
-      {
-         System.out.println("numberTestsComplete = " + numberTestsComplete);
-         System.out.println("nextTransformToRootID = " + ReferenceFrame.nextTransformToRootID);
-      }
       tearDown();
    }
 
@@ -370,7 +354,7 @@ public class ReferenceFrameTest
    {
       double maxDeltaPercent = getMaxDeltaPercent(transformOne, transformTwo);
 
-      return (maxDeltaPercent < epsilonPercent);
+      return maxDeltaPercent < epsilonPercent;
    }
 
    private double getMaxDeltaPercent(RigidBodyTransform t1, RigidBodyTransform t2)
@@ -393,7 +377,7 @@ public class ReferenceFrameTest
          double absolute1 = Math.abs(arg1[i]);
          double absolute2 = Math.abs(arg2[i]);
 
-         if ((absolute1 < 1e-7) && (absolute2 < 1e-7))
+         if (absolute1 < 1e-7 && absolute2 < 1e-7)
          {
             if (max < 0.0)
             {

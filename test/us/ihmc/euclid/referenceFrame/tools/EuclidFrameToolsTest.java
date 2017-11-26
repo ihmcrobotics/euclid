@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,8 +71,8 @@ public class EuclidFrameToolsTest
          {
             List<FramePoint2D> points = new ArrayList<>();
 
-            ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-            ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+            ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
+            ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
 
             while (points.size() < size)
             {
@@ -81,7 +82,7 @@ public class EuclidFrameToolsTest
                else
                   referenceFrame = frameB;
 
-               points.add(EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame));
+               points.add(EuclidFrameRandomTools.nextFramePoint2D(random, referenceFrame));
             }
 
             try
@@ -101,11 +102,11 @@ public class EuclidFrameToolsTest
          List<FramePoint2D> points = new ArrayList<>();
          int size = random.nextInt(50);
 
-         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
 
          while (points.size() < size)
          {
-            points.add(EuclidFrameRandomTools.generateRandomFramePoint2D(random, referenceFrame));
+            points.add(EuclidFrameRandomTools.nextFramePoint2D(random, referenceFrame));
          }
 
          FramePoint2D actual = EuclidFrameTools.averagePoint2Ds(points);
@@ -130,8 +131,8 @@ public class EuclidFrameToolsTest
          {
             List<FramePoint3D> points = new ArrayList<>();
 
-            ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-            ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+            ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
+            ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
 
             while (points.size() < size)
             {
@@ -141,7 +142,7 @@ public class EuclidFrameToolsTest
                else
                   referenceFrame = frameB;
 
-               points.add(EuclidFrameRandomTools.generateRandomFramePoint3D(random, referenceFrame));
+               points.add(EuclidFrameRandomTools.nextFramePoint3D(random, referenceFrame));
             }
 
             try
@@ -161,11 +162,11 @@ public class EuclidFrameToolsTest
          List<FramePoint3D> points = new ArrayList<>();
          int size = random.nextInt(50);
 
-         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
+         ReferenceFrame referenceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
 
          while (points.size() < size)
          {
-            points.add(EuclidFrameRandomTools.generateRandomFramePoint3D(random, referenceFrame));
+            points.add(EuclidFrameRandomTools.nextFramePoint3D(random, referenceFrame));
          }
 
          FramePoint3D actual = EuclidFrameTools.averagePoint3Ds(points);

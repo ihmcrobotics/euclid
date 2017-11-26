@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -13,9 +14,9 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * <p>
  * In addition to representing a {@link Point2DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FramePoint2D}. This allows, for instance, to enforce, at runtime, that operations on
- * vectors occur in the same coordinate system. Also, via the method
+ * points occur in the same coordinate system. Also, via the method
  * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a point in different
- * reference frame.
+ * reference frames.
  * </p>
  * <p>
  * Because a {@code FramePoint2D} extends {@code Point2DBasics}, it is compatible with methods only
@@ -38,7 +39,7 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
    /**
     * Creates a new frame point and initializes it coordinates to zero and its reference frame to
     * the {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame point.
     */
    public FramePoint2D(ReferenceFrame referenceFrame)
@@ -49,7 +50,7 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
    /**
     * Creates a new frame point and initializes it with the given coordinates and the given
     * reference frame.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame point.
     * @param x the x-coordinate.
     * @param y the y-coordinate.
@@ -62,7 +63,7 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
    /**
     * Creates a new frame point and initializes its coordinates {@code x}, {@code y} in order from
     * the given array and initializes its reference frame.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame point.
     * @param pointArray the array containing this point's coordinates. Not modified.
     */
@@ -125,5 +126,22 @@ public class FramePoint2D extends FrameTuple2D<FramePoint2D, Point2D> implements
    public final Point2D getPoint()
    {
       return tuple;
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame points are geometrically
+    * similar, i.e. the distance between them is less than or equal to {@code epsilon}.
+    *
+    * @param other the frame point to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame points represent the same geometry, {@code false}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   @Override
+   public boolean geometricallyEquals(FramePoint2D other, double epsilon)
+   {
+      return FramePoint2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }

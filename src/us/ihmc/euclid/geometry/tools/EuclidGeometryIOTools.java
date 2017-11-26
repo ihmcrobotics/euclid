@@ -1,6 +1,10 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringOf;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
@@ -353,7 +357,10 @@ public class EuclidGeometryIOTools
     */
    public static String getBoundingBox2DString(String format, BoundingBox2D boundingBox2D)
    {
-      return getBoundingBox2DString(format, boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint());
+      if (boundingBox2D == null)
+         return "null";
+      else
+         return getBoundingBox2DString(format, boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint());
    }
 
    /**
@@ -410,7 +417,10 @@ public class EuclidGeometryIOTools
     */
    public static String getBoundingBox3DString(String format, BoundingBox3D boundingBox3D)
    {
-      return getBoundingBox3DString(format, boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint());
+      if (boundingBox3D == null)
+         return "null";
+      else
+         return getBoundingBox3DString(format, boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint());
    }
 
    /**

@@ -21,26 +21,34 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.MatrixFeatures;
 import org.ejml.ops.RandomMatrices;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameTuple2D;
 import us.ihmc.euclid.referenceFrame.FrameTuple3D;
+import us.ihmc.euclid.referenceFrame.FrameTuple4D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -57,6 +65,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 public class EuclidFrameAPITestTools
 {
@@ -85,6 +99,13 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector3DReadOnly.class, FrameVector3DReadOnly.class);
       modifiableMap.put(Vector3DBasics.class, FrameVector3D.class);
 
+      modifiableMap.put(Tuple4DReadOnly.class, FrameTuple4DReadOnly.class);
+      modifiableMap.put(Tuple4DBasics.class, FrameTuple4D.class);
+      modifiableMap.put(Vector4DReadOnly.class, FrameVector4DReadOnly.class);
+      modifiableMap.put(Vector4DBasics.class, FrameVector4D.class);
+      modifiableMap.put(QuaternionReadOnly.class, FrameQuaternionReadOnly.class);
+      modifiableMap.put(QuaternionBasics.class, FrameQuaternion.class);
+
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
 
@@ -92,19 +113,26 @@ public class EuclidFrameAPITestTools
    static
    {
       HashMap<Class<?>, RandomFrameTypeBuilder<?>> modifiableMap = new HashMap<>();
-      modifiableMap.put(FrameTuple2DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint2D(random, frame));
-      modifiableMap.put(FrameTuple2D.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint2D(random, frame));
-      modifiableMap.put(FramePoint2DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint2D(random, frame));
-      modifiableMap.put(FramePoint2D.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint2D(random, frame));
-      modifiableMap.put(FrameVector2DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector2D(random, frame));
-      modifiableMap.put(FrameVector2D.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector2D(random, frame));
+      modifiableMap.put(FrameTuple2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FrameTuple2D.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FramePoint2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FramePoint2D.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FrameVector2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
+      modifiableMap.put(FrameVector2D.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
 
-      modifiableMap.put(FrameTuple3DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint3D(random, frame));
-      modifiableMap.put(FrameTuple3D.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint3D(random, frame));
-      modifiableMap.put(FramePoint3DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint3D(random, frame));
-      modifiableMap.put(FramePoint3D.class, frame -> EuclidFrameRandomTools.generateRandomFramePoint3D(random, frame));
-      modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector3D(random, frame));
-      modifiableMap.put(FrameVector3D.class, frame -> EuclidFrameRandomTools.generateRandomFrameVector3D(random, frame));
+      modifiableMap.put(FrameTuple3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FrameTuple3D.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FramePoint3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FramePoint3D.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
+      modifiableMap.put(FrameVector3D.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
+
+      modifiableMap.put(FrameTuple4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameTuple4D.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameVector4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
+      modifiableMap.put(FrameVector4D.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
+      modifiableMap.put(FrameQuaternionReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameQuaternion.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -113,21 +141,30 @@ public class EuclidFrameAPITestTools
    static
    {
       HashMap<Class<?>, GenericTypeBuilder> modifiableMap = new HashMap<>();
-      modifiableMap.put(Tuple2DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Tuple2DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Point2DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Point2DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Vector2DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector2D(random));
-      modifiableMap.put(Vector2DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector2D(random));
+      modifiableMap.put(Tuple2DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Tuple2DBasics.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Point2DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Point2DBasics.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Vector2DReadOnly.class, () -> EuclidCoreRandomTools.nextVector2D(random));
+      modifiableMap.put(Vector2DBasics.class, () -> EuclidCoreRandomTools.nextVector2D(random));
 
-      modifiableMap.put(Tuple3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Tuple3DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Point3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Point3DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Vector3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
-      modifiableMap.put(Vector3DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
+      modifiableMap.put(Tuple3DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Tuple3DBasics.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Point3DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Point3DBasics.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Vector3DReadOnly.class, () -> EuclidCoreRandomTools.nextVector3D(random));
+      modifiableMap.put(Vector3DBasics.class, () -> EuclidCoreRandomTools.nextVector3D(random));
 
-      modifiableMap.put(AxisAngleBasics.class, () -> EuclidCoreRandomTools.generateRandomAxisAngle(random));
+      modifiableMap.put(AxisAngleReadOnly.class, () -> EuclidCoreRandomTools.nextAxisAngle(random));
+
+      modifiableMap.put(Tuple4DReadOnly.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
+      modifiableMap.put(Tuple4DBasics.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
+      modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.nextVector4D(random));
+      modifiableMap.put(Vector4DBasics.class, () -> EuclidCoreRandomTools.nextVector4D(random));
+      modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.nextRotationMatrix(random));
+      modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.nextMatrix3D(random));
+      modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
+      modifiableMap.put(QuaternionBasics.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
 
       framelessTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -142,6 +179,9 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameTuple3DReadOnly.class);
       modifiableSet.add(FramePoint3DReadOnly.class);
       modifiableSet.add(FrameVector3DReadOnly.class);
+      modifiableSet.add(FrameTuple4DReadOnly.class);
+      modifiableSet.add(FrameVector4DReadOnly.class);
+      modifiableSet.add(FrameQuaternionReadOnly.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -156,6 +196,9 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameTuple3D.class);
       modifiableSet.add(FramePoint3D.class);
       modifiableSet.add(FrameVector3D.class);
+      modifiableSet.add(FrameTuple4D.class);
+      modifiableSet.add(FrameVector4D.class);
+      modifiableSet.add(FrameQuaternion.class);
 
       frameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -400,8 +443,8 @@ public class EuclidFrameAPITestTools
 
       for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
       {
-         ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-         ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
+         ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+         ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
          // First check that the method is fine with all the arguments in the same frame.
          for (Method frameMethod : frameMethods)
@@ -599,13 +642,13 @@ public class EuclidFrameAPITestTools
 
       for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
       {
-         ReferenceFrame frameA = EuclidFrameRandomTools.generateRandomReferenceFrame("frameA", random, worldFrame);
-         ReferenceFrame frameB = EuclidFrameRandomTools.generateRandomReferenceFrame("frameB", random, worldFrame);
-         ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
+         ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+         ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
          // First check that the method is fine with the holder and all the arguments in the same frame.
          for (Method frameMethod : frameMethods)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -629,6 +672,7 @@ public class EuclidFrameAPITestTools
          // Check that the method checks the reference frames.
          for (Method frameMethod : frameMethods)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
 
             int numberOfArgumentsToTest = 0;
@@ -683,7 +727,7 @@ public class EuclidFrameAPITestTools
                }
                catch (Throwable t)
                {
-                  if (!isExceptionAcceptable(t))
+                  if (!(t instanceof ReferenceFrameMismatchException))
                      throw t;
                }
             }
@@ -694,6 +738,7 @@ public class EuclidFrameAPITestTools
          {
             for (Method frameMethod : frameMethods)
             {
+               ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
                Class<?>[] parameterTypes = frameMethod.getParameterTypes();
                Object[] parameters = new Object[parameterTypes.length];
 
@@ -740,6 +785,7 @@ public class EuclidFrameAPITestTools
          // Check for methods returning a frame type that the reference frame is properly set.
          for (Method frameMethod : methodsWithReturnFrameType)
          {
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -1372,7 +1418,8 @@ public class EuclidFrameAPITestTools
       }
       catch (NoSuchMethodException e)
       {
-         throw new AssertionError("The original method:\n" + getMethodSimpleName(originalMethod) + "\nis not properly overloaded, expected to find:\n"
+         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + getMethodSimpleName(originalMethod)
+               + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n"
                + getMethodSimpleName(originalMethod.getReturnType(), originalMethod.getName(), overloadingSignature));
       }
    }
@@ -1707,13 +1754,13 @@ public class EuclidFrameAPITestTools
          else if (type.equals(Integer.TYPE) || type.equals(Character.TYPE) || type.equals(Long.TYPE))
             return random.nextInt(1000) - 500;
          else if (type.equals(Float.TYPE) || type.equals(Double.TYPE))
-            return EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+            return EuclidCoreRandomTools.nextDouble(random, 10.0);
          else
             return 0;
       }
 
       if (Transform.class.equals(type))
-         return EuclidCoreRandomTools.generateRandomAffineTransform(random);
+         return EuclidCoreRandomTools.nextAffineTransform(random);
 
       if (DenseMatrix64F.class.equals(type))
       {
@@ -1753,7 +1800,7 @@ public class EuclidFrameAPITestTools
       catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
             | SecurityException e)
       {
-         throw new RuntimeException("Could instantiate an object of the type: " + type.getSimpleName());
+         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName());
       }
    }
 

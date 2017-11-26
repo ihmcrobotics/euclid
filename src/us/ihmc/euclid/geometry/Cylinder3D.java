@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * Shape description:
  * <ul>
  * <li>The cylinder's axis is the z-axis.
- * <li>The cylinder's origin is at the center of the bottom face.
+ * <li>The cylinder's origin is its centroid.
  * </ul>
  * </p>
  */
@@ -36,7 +36,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D identical to {@code other}.
-    * 
+    *
     * @param other the other cylinder to copy. Not modified.
     */
    public Cylinder3D(Cylinder3D other)
@@ -46,7 +46,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D and initializes its height and radius.
-    * 
+    *
     * @param height the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
     * @throws IllegalArgumentException if either {@code height} or {@code radius} is negative.
@@ -59,7 +59,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D and initializes its pose, height, and radius.
-    * 
+    *
     * @param pose the position and orientation of this cylinder. Not modified.
     * @param height the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
@@ -74,7 +74,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Creates a new cylinder 3D and initializes its pose, height, and radius.
-    * 
+    *
     * @param pose the position and orientation of this cylinder. Not modified.
     * @param height the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
@@ -89,7 +89,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Copies the {@code other} cylinder data into {@code this}.
-    * 
+    *
     * @param other the other cylinder to copy. Not modified.
     */
    @Override
@@ -102,7 +102,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Sets the radius of this cylinder.
-    * 
+    *
     * @param radius the new radius for this cylinder.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
@@ -115,7 +115,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Sets the height of this cylinder.
-    * 
+    *
     * @param height the cylinder length along the z-axis.
     * @throws IllegalArgumentException if {@code height} is negative.
     */
@@ -128,7 +128,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Gets the radius of this cylinder.
-    * 
+    *
     * @return the value of the radius.
     */
    public double getRadius()
@@ -138,7 +138,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
    /**
     * Gets the height of this cylinder.
-    * 
+    *
     * @return the value of the height.
     */
    public double getHeight()
@@ -174,7 +174,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    /**
     * Tests separately and on a per component basis if the pose and the size of this cylinder and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
-    * 
+    *
     * @param other the other cylinder which pose and size is to be compared against this cylinder
     *           pose and size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -193,7 +193,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
-    * 
+    *
     * @param line the line expressed in world coordinates that may intersect this cylinder. Not
     *           modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
@@ -214,7 +214,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
-    * 
+    *
     * @param pointOnLine a point expressed in world located on the infinitely long line. Not
     *           modified.
     * @param lineDirection the direction expressed in world of the line. Not modified.
@@ -249,7 +249,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    @Override
    protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
    {
-      if (z < -epsilon || z > height + epsilon)
+      if (z < -(height / 2.0 + epsilon) || z > height / 2.0 + epsilon)
          return false;
 
       double radiusWithEpsilon = radius + epsilon;
@@ -273,46 +273,46 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 
       if (xyLengthSquared <= radius * radius)
       {
-         if (z < 0.0)
+         if (z < -(height / 2.0))
          { // The query is directly below the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, 0.0);
+               closestPointOnSurfaceToPack.set(x, y, -(height / 2.0));
             if (normalToPack != null)
                normalToPack.set(0.0, 0.0, -1.0);
-            return -z;
+            return -(z + height / 2.0);
          }
 
-         if (z > height)
+         if (z > height / 2.0)
          { // The query is directly above the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, height);
+               closestPointOnSurfaceToPack.set(x, y, height / 2.0);
             if (normalToPack != null)
                normalToPack.set(0.0, 0.0, 1.0);
-            return z - height;
+            return z - height / 2.0;
          }
 
          // The query is inside the cylinder
          double xyLength = Math.sqrt(xyLengthSquared);
-         double dz = Math.min(z, height - z);
+         double dz = Math.min(height / 2.0 - z, z + height / 2.0);
          double dr = radius - xyLength;
 
          if (dz < dr)
          {
-            if (z == dz)
+            if (z < 0)
             { // Closer to the bottom face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, 0.0);
+                  closestPointOnSurfaceToPack.set(x, y, -(height / 2.0));
                if (normalToPack != null)
                   normalToPack.set(0.0, 0.0, -1.0);
-               return -z;
+               return -(z + height / 2.0);
             }
             else
             { // Closer to the top face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, height);
+                  closestPointOnSurfaceToPack.set(x, y, height / 2.0);
                if (normalToPack != null)
                   normalToPack.set(0.0, 0.0, 1.0);
-               return z - height;
+               return z - height / 2.0;
             }
          }
          else
@@ -341,10 +341,10 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
          double yClosest = y * xyClosestScale;
          double zClosest = z;
 
-         if (z < 0.0)
-            zClosest = 0.0;
-         else if (z > height)
-            zClosest = height;
+         if (z < -(height / 2.0))
+            zClosest = -(height / 2.0);
+         else if (z > height / 2.0)
+            zClosest = height / 2.0;
 
          if (zClosest != z)
          { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
@@ -398,5 +398,46 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    public String toString()
    {
       return "Cylinder 3D: height = " + height + ", radius = " + radius + ", pose=\n" + getPoseString();
+   }
+
+   /**
+    * Compares {@code this} and {@code other} to determine if the two cylinders are
+    * geometrically similar.
+    * <p>
+    * This method accounts for the multiple combinations of radius/height and rotations
+    * that generate identical cylinder. For instance, two cylinders that are identical
+    * but one is rotated around its main axis are considered geometrically equal.
+    * </p>
+    *
+    * @param other the cylinder to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Cylinder3D other, double epsilon)
+   {
+      if (Math.abs(radius - other.radius) > epsilon || Math.abs(height - other.height) > epsilon)
+         return false;
+
+      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+         return false;
+
+      /*
+        Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
+        inherently lies on the XY plane) is the same axis that the other cylinder is aligned on
+        using EuclidGeometryTools#areVector3DsParallel().
+        
+        We could do this by transforming two (0, 0, 1) vectors by each shapePose, but for each:
+        
+        / r00 r01 r02 \   / 0 \   / r02 \
+        | r10 r11 r12 | * | 0 | = | r12 |
+        \ r20 r21 r22 /   \ 1 /   \ r22 /
+        
+        So rather than perform this transform, just check that the last column of the rotation
+        matrix of each cylinder (M02, M12, and M22 in shapePose) are aligned vectors.
+       */
+
+      return EuclidGeometryTools.areVector3DsParallel(shapePose.getM02(), shapePose.getM12(), shapePose.getM22(), other.shapePose.getM02(),
+                                                      other.shapePose.getM12(), other.shapePose.getM22(), epsilon);
    }
 }
