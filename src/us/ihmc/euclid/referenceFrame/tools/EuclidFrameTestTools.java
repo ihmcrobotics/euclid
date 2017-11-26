@@ -170,11 +170,17 @@ public class EuclidFrameTestTools
    public static void assertRotationFrameVectorGeometricallyEquals(String messagePrefix, FrameVector3DReadOnly expected, FrameVector3DReadOnly actual,
                                                                    double epsilon, String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertRotationVectorGeometricallyEquals(expected, actual, epsilon);
+      assertRotationVectorGeometricallyEquals(messagePrefix, expected, actual, epsilon);
    }
 
    /**
@@ -229,6 +235,12 @@ public class EuclidFrameTestTools
     */
    public static void assertFrameTuple2DEquals(String messagePrefix, FrameTuple2DReadOnly expected, FrameTuple2DReadOnly actual, double epsilon, String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -295,6 +307,12 @@ public class EuclidFrameTestTools
    public static void assertFramePoint2DGeometricallyEquals(String messagePrefix, FramePoint2DReadOnly expected, FramePoint2DReadOnly actual, double epsilon,
                                                             String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -361,6 +379,12 @@ public class EuclidFrameTestTools
    public static void assertFrameVector2DGeometricallyEquals(String messagePrefix, FrameVector2DReadOnly expected, FrameVector2DReadOnly actual, double epsilon,
                                                              String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -420,6 +444,12 @@ public class EuclidFrameTestTools
     */
    public static void assertFrameTuple3DEquals(String messagePrefix, FrameTuple3DReadOnly expected, FrameTuple3DReadOnly actual, double epsilon, String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -486,6 +516,12 @@ public class EuclidFrameTestTools
    public static void assertFramePoint3DGeometricallyEquals(String messagePrefix, FramePoint3DReadOnly expected, FramePoint3DReadOnly actual, double epsilon,
                                                             String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -552,6 +588,12 @@ public class EuclidFrameTestTools
    public static void assertFrameVector3DGeometricallyEquals(String messagePrefix, FrameVector3DReadOnly expected, FrameVector3DReadOnly actual, double epsilon,
                                                              String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -611,6 +653,12 @@ public class EuclidFrameTestTools
     */
    public static void assertFrameTuple4DEquals(String messagePrefix, FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual, double epsilon, String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -619,8 +667,8 @@ public class EuclidFrameTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two frame vectors represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two frame vectors represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -628,9 +676,8 @@ public class EuclidFrameTestTools
     * @param expected the expected frame tuple. Not modified.
     * @param actual the actual frame tuple. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two vectors do not represent the same geometry or not
-    *            expressed in the reference frame. If only one of the arguments is equal to
-    *            {@code null}.
+    * @throws AssertionError if the two vectors do not represent the same geometry or not expressed
+    *            in the reference frame. If only one of the arguments is equal to {@code null}.
     */
    public static void assertFrameVector4DGeometricallyEquals(FrameVector4DReadOnly expected, FrameVector4DReadOnly actual, double epsilon)
    {
@@ -638,8 +685,8 @@ public class EuclidFrameTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two frame vectors represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two frame vectors represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -648,19 +695,17 @@ public class EuclidFrameTestTools
     * @param expected the expected frame tuple. Not modified.
     * @param actual the actual frame tuple. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two vectors do not represent the same geometry or not
-    *            expressed in the reference frame. If only one of the arguments is equal to
-    *            {@code null}.
+    * @throws AssertionError if the two vectors do not represent the same geometry or not expressed
+    *            in the reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameVector4DGeometricallyEquals(String messagePrefix, FrameVector4DReadOnly expected, FrameVector4DReadOnly actual,
-                                                               double epsilon)
+   public static void assertFrameVector4DGeometricallyEquals(String messagePrefix, FrameVector4DReadOnly expected, FrameVector4DReadOnly actual, double epsilon)
    {
       assertFrameVector4DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
    /**
-    * Asserts on a per component basis that the two frame vectors represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two frame vectors represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -671,13 +716,18 @@ public class EuclidFrameTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two vectors do not represent the same geometry or not
-    *            expressed in the reference frame. If only one of the arguments is equal to
-    *            {@code null}.
+    * @throws AssertionError if the two vectors do not represent the same geometry or not expressed
+    *            in the reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameVector4DGeometricallyEquals(String messagePrefix, FrameVector4DReadOnly expected, FrameVector4DReadOnly actual,
-                                                               double epsilon, String format)
+   public static void assertFrameVector4DGeometricallyEquals(String messagePrefix, FrameVector4DReadOnly expected, FrameVector4DReadOnly actual, double epsilon,
+                                                             String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -745,6 +795,12 @@ public class EuclidFrameTestTools
    public static void assertFrameQuaternionGeometricallyEquals(String messagePrefix, FrameQuaternionReadOnly expected, FrameQuaternionReadOnly actual,
                                                                double epsilon, String format)
    {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
       if (expected.getReferenceFrame() != actual.getReferenceFrame())
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
@@ -780,7 +836,10 @@ public class EuclidFrameTestTools
 
    private static String appendFrameName(String string, ReferenceFrameHolder referenceFrameHolder)
    {
-      return appendFrameName(string, referenceFrameHolder.getReferenceFrame());
+      if (referenceFrameHolder != null)
+         return appendFrameName(string, referenceFrameHolder.getReferenceFrame());
+      else
+         return appendFrameName(string, (ReferenceFrame) null);
    }
 
    private static String appendFrameName(String string, ReferenceFrame referenceFrame)
