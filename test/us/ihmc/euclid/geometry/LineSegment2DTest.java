@@ -214,7 +214,7 @@ public class LineSegment2DTest
    public void testSetPoint2dPoint2d()
    {
       Random random = new Random(3453);
-      LineSegment2D testSegment1 = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
+      LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
 
       Point2D[] pointsCopy = testSegment1.getEndpointsCopy();
 
@@ -231,7 +231,7 @@ public class LineSegment2DTest
    public void testSetDoubleDoubleDoubleDouble()
    {
       Random random = new Random(3453);
-      LineSegment2D testSegment1 = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
+      LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
 
       Point2D[] pointsCopy = testSegment1.getEndpointsCopy();
 
@@ -248,7 +248,7 @@ public class LineSegment2DTest
    public void testSetPoint2dArray()
    {
       Random random = new Random(7653);
-      LineSegment2D testSegment1 = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
+      LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
       Point2D[] pointsCopy = testSegment1.getEndpointsCopy();
 
       pointsCopy[0].set(pointsCopy[0].getX() - 10.0, pointsCopy[0].getY() - 10.0);
@@ -264,8 +264,8 @@ public class LineSegment2DTest
    public void testSetLineSegment2d()
    {
       Random random = new Random(3453);
-      LineSegment2D testSegment1 = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
-      LineSegment2D testSegment2 = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
+      LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
+      LineSegment2D testSegment2 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
 
       testSegment1.set(testSegment2);
 
@@ -291,7 +291,7 @@ public class LineSegment2DTest
    public void testMidpoint()
    {
       Random random = new Random(3453);
-      LineSegment2D testSegment1 = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
+      LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
 
       Point2D midPoint = testSegment1.midpoint();
       assertEquals(midPoint.distance(testSegment1.getFirstEndpointCopy()), midPoint.distance(testSegment1.getSecondEndpointCopy()), 0.001);
@@ -318,7 +318,7 @@ public class LineSegment2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test translate(double x, double y)
-         LineSegment2D originalLineSegment = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
+         LineSegment2D originalLineSegment = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
          LineSegment2D translatedLineSegment = new LineSegment2D(originalLineSegment);
          double x = EuclidCoreRandomTools.nextDouble(random, 10.0);
          double y = EuclidCoreRandomTools.nextDouble(random, 10.0);
@@ -336,7 +336,7 @@ public class LineSegment2DTest
       
       for (int i = 0; i < ITERATIONS; i++)
       { // Test translate(Tuple2DReadOnly translation)
-         LineSegment2D originalLineSegment = EuclidGeometryRandomTools.generateRandomLineSegment2D(random, 10.0);
+         LineSegment2D originalLineSegment = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
          LineSegment2D translatedLineSegment = new LineSegment2D(originalLineSegment);
          Tuple2DReadOnly translation = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          translatedLineSegment.translate(translation);

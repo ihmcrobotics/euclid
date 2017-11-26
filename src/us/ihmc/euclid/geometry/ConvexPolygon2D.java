@@ -288,7 +288,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     */
    public static ConvexPolygon2D generateRandomConvexPolygon2d(Random random, double maxAbsoluteXY, int numberOfPossiblePoints)
    {
-      List<Point2D> vertices = EuclidGeometryRandomTools.generateRandomPointCloud2D(random, 0.0, maxAbsoluteXY, numberOfPossiblePoints);
+      List<Point2D> vertices = EuclidGeometryRandomTools.nextPointCloud2D(random, 0.0, maxAbsoluteXY, numberOfPossiblePoints);
       return new ConvexPolygon2D(vertices);
    }
 

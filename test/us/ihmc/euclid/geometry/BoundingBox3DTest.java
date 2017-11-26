@@ -183,8 +183,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox3D boundingBoxOne = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
-         BoundingBox3D boundingBoxTwo = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBoxTwo = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          BoundingBox3D expected = new BoundingBox3D();
          expected.combine(boundingBoxOne, boundingBoxTwo);
          BoundingBox3D actual = BoundingBox3D.union(boundingBoxOne, boundingBoxTwo);
@@ -589,8 +589,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox3D boundingBoxOne = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
-         BoundingBox3D boundingBoxTwo = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBoxTwo = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          BoundingBox3D combined = new BoundingBox3D();
          combined.combine(boundingBoxOne, boundingBoxTwo);
 
@@ -634,8 +634,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox3D boundingBoxOne = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
-         BoundingBox3D boundingBoxTwo = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBoxTwo = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          BoundingBox3D combined = new BoundingBox3D();
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
@@ -683,7 +683,7 @@ public class BoundingBox3DTest
    public void testSetToNaN() throws Exception
    {
       Random random = new Random(453453L);
-      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
       boundingBox3D.setToNaN();
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(boundingBox3D.getMinPoint());
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(boundingBox3D.getMaxPoint());
@@ -693,7 +693,7 @@ public class BoundingBox3DTest
    public void testSetToZero() throws Exception
    {
       Random random = new Random(453453L);
-      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
       boundingBox3D.setToZero();
       EuclidCoreTestTools.assertTuple3DIsSetToZero(boundingBox3D.getMinPoint());
       EuclidCoreTestTools.assertTuple3DIsSetToZero(boundingBox3D.getMaxPoint());
@@ -704,7 +704,7 @@ public class BoundingBox3DTest
    {
       Random random = new Random(23434L);
       for (int i = 0; i < ITERATIONS; i++)
-         assertFalse(EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0).containsNaN());
+         assertFalse(EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0).containsNaN());
 
       assertTrue(new BoundingBox3D(Double.NaN, 0, 0, 0, 0, 0).containsNaN());
       assertTrue(new BoundingBox3D(0, Double.NaN, 0, 0, 0, 0).containsNaN());
@@ -747,7 +747,7 @@ public class BoundingBox3DTest
       {
          Point3D expectedPoint = new Point3D();
          Point3D actualPoint = new Point3D();
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          double alpha = EuclidCoreRandomTools.nextDouble(random, 10.0);
 
          expectedPoint.interpolate(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(), alpha);
@@ -758,7 +758,7 @@ public class BoundingBox3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Point3D actualPoint = new Point3D();
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          Point3D alpha = new Point3D();
 
          for (int axisIndex = 0; axisIndex < 3; axisIndex++)
@@ -798,7 +798,7 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          Point3DReadOnly minPoint = boundingBox3D.getMinPoint();
          Point3DReadOnly maxPoint = boundingBox3D.getMaxPoint();
          assertFalse(boundingBox3D.isInsideExclusive(minPoint));
@@ -845,7 +845,7 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          Point3DReadOnly minPoint = boundingBox3D.getMinPoint();
          Point3DReadOnly maxPoint = boundingBox3D.getMaxPoint();
          assertTrue(boundingBox3D.isInsideInclusive(minPoint));
@@ -951,7 +951,7 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          Point3DReadOnly minPoint = boundingBox3D.getMinPoint();
          Point3DReadOnly maxPoint = boundingBox3D.getMaxPoint();
          assertFalse(boundingBox3D.isXYInsideExclusive(new Point2D(minPoint.getX(), minPoint.getY())));
@@ -1003,7 +1003,7 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          Point3DReadOnly minPoint = boundingBox3D.getMinPoint();
          Point3DReadOnly maxPoint = boundingBox3D.getMaxPoint();
          assertTrue(boundingBox3D.isXYInsideInclusive(new Point2D(minPoint.getX(), minPoint.getY())));
@@ -1533,8 +1533,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D line3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          boolean expected = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
                                                                                           line3D.getPoint(), line3D.getDirection(), null, null) != 0;
          boolean actual = boundingBox3D.doesIntersectWithLine3D(line3D);
@@ -1552,8 +1552,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
                                                                                                  lineSegment3D.getFirstEndpoint(),
                                                                                                  lineSegment3D.getSecondEndpoint(), null, null) != 0;
@@ -1572,8 +1572,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D ray3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         Line3D ray3D = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          boolean expected = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
                                                                                          ray3D.getPoint(), ray3D.getDirection(), null, null) != 0;
          boolean actual = boundingBox3D.doesIntersectWithRay3D(ray3D.getPoint(), ray3D.getDirection());
@@ -1588,8 +1588,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D line3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
 
          int expectedN, actualN;
          Point3D expectedFirstIntersection = new Point3D();
@@ -1657,8 +1657,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.generateRandomLineSegment3D(random, 10.0);
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
 
          int expectedN, actualN;
          Point3D expectedFirstIntersection = new Point3D();
@@ -1727,8 +1727,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D ray3D = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
-         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         Line3D ray3D = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
+         BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
 
          int expectedN, actualN;
          Point3D expectedFirstIntersection = new Point3D();
@@ -1769,7 +1769,7 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test updateToIncludePoint(Point3DReadOnly point)
-         BoundingBox3D original = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D original = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          BoundingBox3D extended = new BoundingBox3D(original);
 
          Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -1807,7 +1807,7 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test updateToIncludePoint(Point3DReadOnly point)
-         BoundingBox3D original = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+         BoundingBox3D original = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
          BoundingBox3D extended = new BoundingBox3D(original);
 
          Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -1849,7 +1849,7 @@ public class BoundingBox3DTest
    {
       Random random = new Random(3242L);
 
-      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
       Point3DReadOnly min = boundingBox3D.getMinPoint();
       Point3DReadOnly max = boundingBox3D.getMaxPoint();
 
@@ -1886,7 +1886,7 @@ public class BoundingBox3DTest
    {
       Random random = new Random(234234L);
       double epsilon = random.nextDouble();
-      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
       double minX = boundingBox3D.getMinX();
       double minY = boundingBox3D.getMinY();
       double minZ = boundingBox3D.getMinZ();
@@ -1928,7 +1928,7 @@ public class BoundingBox3DTest
    public void testEquals() throws Exception
    {
       Random random = new Random(234234L);
-      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
+      BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
       double minX = boundingBox3D.getMinX();
       double minY = boundingBox3D.getMinY();
       double minZ = boundingBox3D.getMinZ();

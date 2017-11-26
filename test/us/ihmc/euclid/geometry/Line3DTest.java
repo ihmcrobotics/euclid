@@ -68,7 +68,7 @@ public class Line3DTest
       EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
 
-      Line3D otherLine = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+      Line3D otherLine = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
       line3d = new Line3D(otherLine);
       EuclidCoreTestTools.assertTuple3DEquals(otherLine.getPoint(), line3d.getPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(otherLine.getDirection(), line3d.getDirection(), EPSILON);
@@ -143,7 +143,7 @@ public class Line3DTest
    {
       Random random = new Random(32423L);
 
-      Line3D line3D = EuclidGeometryRandomTools.generateRandomLine3D(random);
+      Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random);
       line3D.setToZero();
       try
       {
@@ -168,7 +168,7 @@ public class Line3DTest
    {
       Random random = new Random(32423L);
 
-      Line3D line3D = EuclidGeometryRandomTools.generateRandomLine3D(random);
+      Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random);
       line3D.setToNaN();
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(line3D.getPoint());
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(line3D.getDirection());
@@ -202,14 +202,14 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D line = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+         Line3D line = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
          Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
          double expectedDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, line.getPoint(), line.getDirection());
          double actualDistance = line.distance(query);
          assertEquals(expectedDistance, actualDistance, EPSILON);
 
-         Line3D otherLine = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+         Line3D otherLine = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
          expectedDistance = EuclidGeometryTools.distanceBetweenTwoLine3Ds(line.getPoint(), line.getDirection(), otherLine.getPoint(), otherLine.getDirection());
          actualDistance = line.distance(otherLine);
          assertEquals(expectedDistance, actualDistance, EPSILON);
@@ -223,8 +223,8 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D line = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
-         Line3D otherLine = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
+         Line3D line = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
+         Line3D otherLine = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
 
          Point3D expectedClosestPointOnLine = new Point3D();
          Point3D expectedClosestPointOnOtherLine = new Point3D();
@@ -268,7 +268,7 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D line3d = EuclidGeometryRandomTools.generateRandomLine3D(random, EPSILON);
+         Line3D line3d = EuclidGeometryRandomTools.nextLine3D(random, EPSILON);
          Transform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Point3D expectedPoint = new Point3D();
@@ -292,7 +292,7 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D line1 = EuclidGeometryRandomTools.generateRandomLine3D(random, EPSILON);
+         Line3D line1 = EuclidGeometryRandomTools.nextLine3D(random, EPSILON);
          Line3D line2 = new Line3D(line1);
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          assertTrue(line1.epsilonEquals(line2, epsilon));
@@ -346,7 +346,7 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Line3D line1 = EuclidGeometryRandomTools.generateRandomLine3D(random, EPSILON);
+         Line3D line1 = EuclidGeometryRandomTools.nextLine3D(random, EPSILON);
          Line3D line2 = new Line3D(line1);
          double epsilon = 1.0e-15;
          assertTrue(line1.equals(line2));
@@ -389,7 +389,7 @@ public class Line3DTest
       double scale;
       Vector3D orthogonal, direction = new Vector3D();
 
-      firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+      firstLine = EuclidGeometryRandomTools.nextLine3D(random);
       secondLine = new Line3D(firstLine);
 
       assertTrue(firstLine.geometricallyEquals(secondLine, epsilon));
@@ -399,7 +399,7 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if translations are equal within +- epsilon and are otherwise the same
-         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine3D(random);
          secondLine = new Line3D(firstLine);
 
          orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstLine.getDirection(), true);
@@ -418,7 +418,7 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if directions are equal within +- epsilon and are otherwise the same
-         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine3D(random);
          secondLine = new Line3D(firstLine);
 
          orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstLine.getDirection(), true);
@@ -440,7 +440,7 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if translations lie somewhere on the same direction
-         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine3D(random);
          secondLine = new Line3D(firstLine);
          scale = random.nextDouble() - random.nextDouble();
 
@@ -451,7 +451,7 @@ public class Line3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if directions are equal but opposite and are otherwise the same
-         firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         firstLine = EuclidGeometryRandomTools.nextLine3D(random);
          firstLine.getDirection(direction);
          direction.negate();
          secondLine = new Line3D(firstLine.getPoint(), direction);

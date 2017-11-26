@@ -43,8 +43,26 @@ public abstract class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random line 2D.
+    * @deprecated Use {@link #nextLine2D(Random)} instead
     */
    public static Line2D generateRandomLine2D(Random random)
+   {
+      return nextLine2D(random);
+   }
+
+   /**
+    * Generates a random line 2D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line 2D.
+    */
+   public static Line2D nextLine2D(Random random)
    {
       return new Line2D(nextPoint2D(random), nextVector2D(random));
    }
@@ -62,8 +80,28 @@ public abstract class EuclidGeometryRandomTools
     * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
     * @return the random line 2D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
+    * @deprecated Use {@link #nextLine2D(Random,double)} instead
     */
    public static Line2D generateRandomLine2D(Random random, double pointMinMax)
+   {
+      return nextLine2D(random, pointMinMax);
+   }
+
+   /**
+    * Generates a random line 2D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-pointMinMax; pointMinMax].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random line 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Line2D nextLine2D(Random random, double pointMinMax)
    {
       return new Line2D(nextPoint2D(random, pointMinMax), nextVector2D(random));
    }
@@ -79,8 +117,26 @@ public abstract class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random line 3D.
+    * @deprecated Use {@link #nextLine3D(Random)} instead
     */
    public static Line3D generateRandomLine3D(Random random)
+   {
+      return nextLine3D(random);
+   }
+
+   /**
+    * Generates a random line 3D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line 3D.
+    */
+   public static Line3D nextLine3D(Random random)
    {
       return new Line3D(nextPoint3D(random), nextVector3D(random));
    }
@@ -98,8 +154,28 @@ public abstract class EuclidGeometryRandomTools
     * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
     * @return the random line 3D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
+    * @deprecated Use {@link #nextLine3D(Random,double)} instead
     */
    public static Line3D generateRandomLine3D(Random random, double pointMinMax)
+   {
+      return nextLine3D(random, pointMinMax);
+   }
+
+   /**
+    * Generates a random line 3D.
+    * <p>
+    * <ul>
+    * <li>{@code point}<sub>i</sub> &in; [-pointMinMax; pointMinMax].
+    * <li>{@code direction}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random line 3D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Line3D nextLine3D(Random random, double pointMinMax)
    {
       return new Line3D(nextPoint3D(random, pointMinMax), nextVector3D(random));
    }
@@ -115,8 +191,26 @@ public abstract class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random line segment 1D.
+    * @deprecated Use {@link #nextLineSegment1D(Random)} instead
     */
    public static LineSegment1D generateRandomLineSegment1D(Random random)
+   {
+      return nextLineSegment1D(random);
+   }
+
+   /**
+    * Generates a random line segment 1D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint} &in; [-1.0; 1.0].
+    * <li>{@code secondEndpoint} &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line segment 1D.
+    */
+   public static LineSegment1D nextLineSegment1D(Random random)
    {
       return new LineSegment1D(nextDouble(random), nextDouble(random));
    }
@@ -134,8 +228,28 @@ public abstract class EuclidGeometryRandomTools
     * @param minMax the maximum absolute value for each line segment's endpoints.
     * @return the random line segment 1D.
     * @throws RuntimeException if {@code minMax < 0}.
+    * @deprecated Use {@link #nextLineSegment1D(Random,double)} instead
     */
    public static LineSegment1D generateRandomLineSegment1D(Random random, double minMax)
+   {
+      return nextLineSegment1D(random, minMax);
+   }
+
+   /**
+    * Generates a random line segment 1D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint} &in; [-minMax; minMax].
+    * <li>{@code secondEndpoint} &in; [-minMax; minMax].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each line segment's endpoints.
+    * @return the random line segment 1D.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static LineSegment1D nextLineSegment1D(Random random, double minMax)
    {
       return new LineSegment1D(nextDouble(random, minMax), nextDouble(random, minMax));
    }
@@ -151,8 +265,26 @@ public abstract class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random line segment 2D.
+    * @deprecated Use {@link #nextLineSegment2D(Random)} instead
     */
    public static LineSegment2D generateRandomLineSegment2D(Random random)
+   {
+      return nextLineSegment2D(random);
+   }
+
+   /**
+    * Generates a random line segment 2D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line segment 2D.
+    */
+   public static LineSegment2D nextLineSegment2D(Random random)
    {
       return new LineSegment2D(nextPoint2D(random), nextPoint2D(random));
    }
@@ -170,8 +302,28 @@ public abstract class EuclidGeometryRandomTools
     * @param minMax the maximum absolute value for each coordinate of the line segment's endpoints.
     * @return the random line segment 2D.
     * @throws RuntimeException if {@code minMax < 0}.
+    * @deprecated Use {@link #nextLineSegment2D(Random,double)} instead
     */
    public static LineSegment2D generateRandomLineSegment2D(Random random, double minMax)
+   {
+      return nextLineSegment2D(random, minMax);
+   }
+
+   /**
+    * Generates a random line segment 2D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each coordinate of the line segment's endpoints.
+    * @return the random line segment 2D.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static LineSegment2D nextLineSegment2D(Random random, double minMax)
    {
       return new LineSegment2D(nextPoint2D(random, minMax), nextPoint2D(random, minMax));
    }
@@ -187,8 +339,26 @@ public abstract class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random line segment 3D.
+    * @deprecated Use {@link #nextLineSegment3D(Random)} instead
     */
    public static LineSegment3D generateRandomLineSegment3D(Random random)
+   {
+      return nextLineSegment3D(random);
+   }
+
+   /**
+    * Generates a random line segment 3D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random line segment 3D.
+    */
+   public static LineSegment3D nextLineSegment3D(Random random)
    {
       return new LineSegment3D(nextPoint3D(random), nextPoint3D(random));
    }
@@ -206,8 +376,28 @@ public abstract class EuclidGeometryRandomTools
     * @param minMax the maximum absolute value for each coordinate of the line segment's endpoints.
     * @return the random line segment 3D.
     * @throws RuntimeException if {@code minMax < 0}.
+    * @deprecated Use {@link #nextLineSegment3D(Random,double)} instead
     */
    public static LineSegment3D generateRandomLineSegment3D(Random random, double minMax)
+   {
+      return nextLineSegment3D(random, minMax);
+   }
+
+   /**
+    * Generates a random line segment 3D.
+    * <p>
+    * <ul>
+    * <li>{@code firstEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * <li>{@code secondEndpoint}<sub>i</sub> &in; [-minMax; minMax].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each coordinate of the line segment's endpoints.
+    * @return the random line segment 3D.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static LineSegment3D nextLineSegment3D(Random random, double minMax)
    {
       return new LineSegment3D(nextPoint3D(random, minMax), nextPoint3D(random, minMax));
    }
@@ -217,10 +407,37 @@ public abstract class EuclidGeometryRandomTools
     * 
     * @param random the random generator to use.
     * @return the random bounding box.
+    * @deprecated Use {@link #nextBoundingBox2D(Random)} instead
     */
    public static BoundingBox2D generateRandomBoundingBox2D(Random random)
    {
-      return generateRandomBoundingBox2D(random, 1.0, 1.0);
+      return nextBoundingBox2D(random);
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
+    * @return the random bounding box.
+    */
+   public static BoundingBox2D nextBoundingBox2D(Random random)
+   {
+      return nextBoundingBox2D(random, 1.0, 1.0);
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    * @deprecated Use {@link #nextBoundingBox2D(Random,double,double)} instead
+    */
+   public static BoundingBox2D generateRandomBoundingBox2D(Random random, double centerMinMax, double sizeMax)
+   {
+      return nextBoundingBox2D(random, centerMinMax, sizeMax);
    }
 
    /**
@@ -232,7 +449,7 @@ public abstract class EuclidGeometryRandomTools
     * @return the random bounding box.
     * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
     */
-   public static BoundingBox2D generateRandomBoundingBox2D(Random random, double centerMinMax, double sizeMax)
+   public static BoundingBox2D nextBoundingBox2D(Random random, double centerMinMax, double sizeMax)
    {
       Point2D center = nextPoint2D(random, centerMinMax);
       Vector2D halfSize = nextVector2D(random, 0.0, sizeMax / 2.0);
@@ -244,10 +461,37 @@ public abstract class EuclidGeometryRandomTools
     * 
     * @param random the random generator to use.
     * @return the random bounding box.
+    * @deprecated Use {@link #nextBoundingBox3D(Random)} instead
     */
    public static BoundingBox3D generateRandomBoundingBox3D(Random random)
    {
-      return generateRandomBoundingBox3D(random, 1.0, 1.0);
+      return nextBoundingBox3D(random);
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
+    * @return the random bounding box.
+    */
+   public static BoundingBox3D nextBoundingBox3D(Random random)
+   {
+      return nextBoundingBox3D(random, 1.0, 1.0);
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    * @deprecated Use {@link #nextBoundingBox3D(Random,double,double)} instead
+    */
+   public static BoundingBox3D generateRandomBoundingBox3D(Random random, double centerMinMax, double sizeMax)
+   {
+      return nextBoundingBox3D(random, centerMinMax, sizeMax);
    }
 
    /**
@@ -259,7 +503,7 @@ public abstract class EuclidGeometryRandomTools
     * @return the random bounding box.
     * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
     */
-   public static BoundingBox3D generateRandomBoundingBox3D(Random random, double centerMinMax, double sizeMax)
+   public static BoundingBox3D nextBoundingBox3D(Random random, double centerMinMax, double sizeMax)
    {
       Point3D center = nextPoint3D(random, centerMinMax);
       Vector3D halfSize = nextVector3D(random, 0.0, sizeMax / 2.0);
@@ -276,8 +520,25 @@ public abstract class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random orientation 2D.
+    * @deprecated Use {@link #nextOrientation2D(Random)} instead
     */
    public static Orientation2D generateRandomOrientation2D(Random random)
+   {
+      return nextOrientation2D(random);
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random orientation 2D.
+    */
+   public static Orientation2D nextOrientation2D(Random random)
    {
       return new Orientation2D(nextDouble(random, Math.PI));
    }
@@ -294,8 +555,27 @@ public abstract class EuclidGeometryRandomTools
     * @param minMax the maximum absolute value orientation 2D's angle.
     * @return the random orientation 2D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
+    * @deprecated Use {@link #nextOrientation2D(Random,double)} instead
     */
    public static Orientation2D generateRandomOrientation2D(Random random, double minMax)
+   {
+      return nextOrientation2D(random, minMax);
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-{@code minMax}; {@code minMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value orientation 2D's angle.
+    * @return the random orientation 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Orientation2D nextOrientation2D(Random random, double minMax)
    {
       return new Orientation2D(nextDouble(random, minMax));
    }
@@ -308,10 +588,39 @@ public abstract class EuclidGeometryRandomTools
     * 
     * @param random the random generator to use.
     * @return the random plane 3D.
+    * @deprecated Use {@link #nextPlane3D(Random)} instead
     */
    public static Plane3D generateRandomPlane3D(Random random)
    {
-      return generateRandomPlane3D(random, 1.0);
+      return nextPlane3D(random);
+   }
+
+   /**
+    * Generates a random plane 3D from a random point and a random unit-vector.
+    * <p>
+    * Each coordinate of the random point are in [-1, 1].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random plane 3D.
+    */
+   public static Plane3D nextPlane3D(Random random)
+   {
+      return nextPlane3D(random, 1.0);
+   }
+
+   /**
+    * Generates a random plane 3D from a random point and a random unit-vector.
+    * 
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the random point.
+    * @return the random plane 3D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    * @deprecated Use {@link #nextPlane3D(Random,double)} instead
+    */
+   public static Plane3D generateRandomPlane3D(Random random, double pointMinMax)
+   {
+      return nextPlane3D(random, pointMinMax);
    }
 
    /**
@@ -322,7 +631,7 @@ public abstract class EuclidGeometryRandomTools
     * @return the random plane 3D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
     */
-   public static Plane3D generateRandomPlane3D(Random random, double pointMinMax)
+   public static Plane3D nextPlane3D(Random random, double pointMinMax)
    {
       Point3D pointOnPlane = nextPoint3D(random, pointMinMax);
       Vector3D planeNormal = nextVector3DWithFixedLength(random, 1.0);
@@ -340,10 +649,48 @@ public abstract class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random pose 2D.
+    * @deprecated Use {@link #nextPose2D(Random)} instead
     */
    public static Pose2D generateRandomPose2D(Random random)
    {
-      return new Pose2D(nextPoint2D(random), generateRandomOrientation2D(random));
+      return nextPose2D(random);
+   }
+
+   /**
+    * Generates a random pose 2D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code orientation} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random pose 2D.
+    */
+   public static Pose2D nextPose2D(Random random)
+   {
+      return new Pose2D(nextPoint2D(random), nextOrientation2D(random));
+   }
+
+   /**
+    * Generates a random pose 2D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
+    * <li>{@code orientation} &in; [-{@code orientationMinMax}; {@code orientationMinMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random pose 2D.
+    * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
+    * @deprecated Use {@link #nextLine2D(Random,double,double)} instead
+    */
+   public static Pose2D generateRandomLine2D(Random random, double positionMinMax, double orientationMinMax)
+   {
+      return nextLine2D(random, positionMinMax, orientationMinMax);
    }
 
    /**
@@ -360,9 +707,27 @@ public abstract class EuclidGeometryRandomTools
     * @return the random pose 2D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
     */
-   public static Pose2D generateRandomLine2D(Random random, double positionMinMax, double orientationMinMax)
+   public static Pose2D nextLine2D(Random random, double positionMinMax, double orientationMinMax)
    {
-      return new Pose2D(nextPoint2D(random, positionMinMax), generateRandomOrientation2D(random, orientationMinMax));
+      return new Pose2D(nextPoint2D(random, positionMinMax), nextOrientation2D(random, orientationMinMax));
+   }
+
+   /**
+    * Generates a random pose 3D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random pose 3D.
+    * @deprecated Use {@link #nextPose3D(Random)} instead
+    */
+   public static Pose3D generateRandomPose3D(Random random)
+   {
+      return nextPose3D(random);
    }
 
    /**
@@ -377,7 +742,7 @@ public abstract class EuclidGeometryRandomTools
     * @param random the random generator to use.
     * @return the random pose 3D.
     */
-   public static Pose3D generateRandomPose3D(Random random)
+   public static Pose3D nextPose3D(Random random)
    {
       return new Pose3D(nextPoint3D(random), nextQuaternion(random));
    }
@@ -396,8 +761,29 @@ public abstract class EuclidGeometryRandomTools
     * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
     * @return the random pose 3D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
+    * @deprecated Use {@link #nextLine3D(Random,double,double)} instead
     */
    public static Pose3D generateRandomLine3D(Random random, double positionMinMax, double orientationMinMax)
+   {
+      return nextLine3D(random, positionMinMax, orientationMinMax);
+   }
+
+   /**
+    * Generates a random pose 3D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
+    * <li>{@code orientation.getAngle()} &in; [-{@code orientationMinMax};
+    * {@code orientationMinMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @return the random pose 3D.
+    * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
+    */
+   public static Pose3D nextLine3D(Random random, double positionMinMax, double orientationMinMax)
    {
       return new Pose3D(nextPoint3D(random, positionMinMax), nextQuaternion(random, orientationMinMax));
    }
@@ -410,8 +796,23 @@ public abstract class EuclidGeometryRandomTools
     * @param minMax the range of the point cloud in the three directions.
     * @param numberOfPoints the size of the point cloud to generate.
     * @return the random 2D point cloud.
+    * @deprecated Use {@link #nextPointCloud2D(Random,double,double,int)} instead
     */
    public static List<Point2D> generateRandomPointCloud2D(Random random, double centerMinMax, double minMax, int numberOfPoints)
+   {
+      return nextPointCloud2D(random, centerMinMax, minMax, numberOfPoints);
+   }
+
+   /**
+    * Generates a random 2D point cloud given a random average, range, and size.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the random average.
+    * @param minMax the range of the point cloud in the three directions.
+    * @param numberOfPoints the size of the point cloud to generate.
+    * @return the random 2D point cloud.
+    */
+   public static List<Point2D> nextPointCloud2D(Random random, double centerMinMax, double minMax, int numberOfPoints)
    {
       List<Point2D> pointCloud2D = new ArrayList<>();
 
@@ -436,8 +837,25 @@ public abstract class EuclidGeometryRandomTools
     *           the random circle.
     * @param numberOfVertices the size of the convex polygon.
     * @return the random convex polygon 2D.
+    * @deprecated Use {@link #nextCircleBasedConvexPolygon2D(Random,double,double,int)} instead
     */
    public static List<Point2D> generateRandomCircleBasedConvexPolygon2D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices)
+   {
+      return nextCircleBasedConvexPolygon2D(random, centerMinMax, maxEdgeLength, numberOfVertices);
+   }
+
+   /**
+    * Generates a random convex polygon 2D which construction is based on the generation of a random
+    * circle onto which the vertices are generated.
+    * 
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
+    * @param maxEdgeLength maximum distance between two successive vertices constraining the size of
+    *           the random circle.
+    * @param numberOfVertices the size of the convex polygon.
+    * @return the random convex polygon 2D.
+    */
+   public static List<Point2D> nextCircleBasedConvexPolygon2D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices)
    {
       if (numberOfVertices == 0)
          return Collections.emptyList();

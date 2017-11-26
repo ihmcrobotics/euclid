@@ -34,25 +34,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Line2D expected = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D expected = EuclidGeometryRandomTools.nextLine2D(random);
          Line2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Line2D expected = null;
-         Line2D actual = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D actual = EuclidGeometryRandomTools.nextLine2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line2D expected = EuclidGeometryRandomTools.generateRandomLine2D(random);
-         Line2D actual = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D expected = EuclidGeometryRandomTools.nextLine2D(random);
+         Line2D actual = EuclidGeometryRandomTools.nextLine2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line2D expected = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D expected = EuclidGeometryRandomTools.nextLine2D(random);
          Line2D actual = new Line2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -72,25 +72,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Line2D expected = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D expected = EuclidGeometryRandomTools.nextLine2D(random);
          Line2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Line2D expected = null;
-         Line2D actual = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D actual = EuclidGeometryRandomTools.nextLine2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line2D expected = EuclidGeometryRandomTools.generateRandomLine2D(random);
-         Line2D actual = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D expected = EuclidGeometryRandomTools.nextLine2D(random);
+         Line2D actual = EuclidGeometryRandomTools.nextLine2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line2D expected = EuclidGeometryRandomTools.generateRandomLine2D(random);
+         Line2D expected = EuclidGeometryRandomTools.nextLine2D(random);
          Line2D actual = new Line2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -110,25 +110,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Line3D expected = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D expected = EuclidGeometryRandomTools.nextLine3D(random);
          Line3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Line3D expected = null;
-         Line3D actual = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D actual = EuclidGeometryRandomTools.nextLine3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line3D expected = EuclidGeometryRandomTools.generateRandomLine3D(random);
-         Line3D actual = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D expected = EuclidGeometryRandomTools.nextLine3D(random);
+         Line3D actual = EuclidGeometryRandomTools.nextLine3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line3D expected = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D expected = EuclidGeometryRandomTools.nextLine3D(random);
          Line3D actual = new Line3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -148,25 +148,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Line3D expected = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D expected = EuclidGeometryRandomTools.nextLine3D(random);
          Line3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Line3D expected = null;
-         Line3D actual = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D actual = EuclidGeometryRandomTools.nextLine3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line3D expected = EuclidGeometryRandomTools.generateRandomLine3D(random);
-         Line3D actual = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D expected = EuclidGeometryRandomTools.nextLine3D(random);
+         Line3D actual = EuclidGeometryRandomTools.nextLine3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Line3D expected = EuclidGeometryRandomTools.generateRandomLine3D(random);
+         Line3D expected = EuclidGeometryRandomTools.nextLine3D(random);
          Line3D actual = new Line3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -186,25 +186,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         LineSegment1D expected = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D expected = EuclidGeometryRandomTools.nextLineSegment1D(random);
          LineSegment1D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          LineSegment1D expected = null;
-         LineSegment1D actual = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D actual = EuclidGeometryRandomTools.nextLineSegment1D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment1D expected = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
-         LineSegment1D actual = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D expected = EuclidGeometryRandomTools.nextLineSegment1D(random);
+         LineSegment1D actual = EuclidGeometryRandomTools.nextLineSegment1D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment1D expected = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D expected = EuclidGeometryRandomTools.nextLineSegment1D(random);
          LineSegment1D actual = new LineSegment1D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -224,25 +224,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         LineSegment1D expected = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D expected = EuclidGeometryRandomTools.nextLineSegment1D(random);
          LineSegment1D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          LineSegment1D expected = null;
-         LineSegment1D actual = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D actual = EuclidGeometryRandomTools.nextLineSegment1D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment1D expected = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
-         LineSegment1D actual = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D expected = EuclidGeometryRandomTools.nextLineSegment1D(random);
+         LineSegment1D actual = EuclidGeometryRandomTools.nextLineSegment1D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment1D expected = EuclidGeometryRandomTools.generateRandomLineSegment1D(random);
+         LineSegment1D expected = EuclidGeometryRandomTools.nextLineSegment1D(random);
          LineSegment1D actual = new LineSegment1D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -262,25 +262,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         LineSegment2D expected = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D expected = EuclidGeometryRandomTools.nextLineSegment2D(random);
          LineSegment2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          LineSegment2D expected = null;
-         LineSegment2D actual = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D actual = EuclidGeometryRandomTools.nextLineSegment2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment2D expected = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
-         LineSegment2D actual = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D expected = EuclidGeometryRandomTools.nextLineSegment2D(random);
+         LineSegment2D actual = EuclidGeometryRandomTools.nextLineSegment2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment2D expected = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D expected = EuclidGeometryRandomTools.nextLineSegment2D(random);
          LineSegment2D actual = new LineSegment2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -300,25 +300,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         LineSegment2D expected = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D expected = EuclidGeometryRandomTools.nextLineSegment2D(random);
          LineSegment2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          LineSegment2D expected = null;
-         LineSegment2D actual = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D actual = EuclidGeometryRandomTools.nextLineSegment2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment2D expected = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
-         LineSegment2D actual = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D expected = EuclidGeometryRandomTools.nextLineSegment2D(random);
+         LineSegment2D actual = EuclidGeometryRandomTools.nextLineSegment2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment2D expected = EuclidGeometryRandomTools.generateRandomLineSegment2D(random);
+         LineSegment2D expected = EuclidGeometryRandomTools.nextLineSegment2D(random);
          LineSegment2D actual = new LineSegment2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -338,25 +338,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         LineSegment3D expected = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D expected = EuclidGeometryRandomTools.nextLineSegment3D(random);
          LineSegment3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          LineSegment3D expected = null;
-         LineSegment3D actual = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D actual = EuclidGeometryRandomTools.nextLineSegment3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment3D expected = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
-         LineSegment3D actual = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D expected = EuclidGeometryRandomTools.nextLineSegment3D(random);
+         LineSegment3D actual = EuclidGeometryRandomTools.nextLineSegment3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment3D expected = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D expected = EuclidGeometryRandomTools.nextLineSegment3D(random);
          LineSegment3D actual = new LineSegment3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -376,25 +376,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         LineSegment3D expected = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D expected = EuclidGeometryRandomTools.nextLineSegment3D(random);
          LineSegment3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          LineSegment3D expected = null;
-         LineSegment3D actual = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D actual = EuclidGeometryRandomTools.nextLineSegment3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment3D expected = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
-         LineSegment3D actual = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D expected = EuclidGeometryRandomTools.nextLineSegment3D(random);
+         LineSegment3D actual = EuclidGeometryRandomTools.nextLineSegment3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         LineSegment3D expected = EuclidGeometryRandomTools.generateRandomLineSegment3D(random);
+         LineSegment3D expected = EuclidGeometryRandomTools.nextLineSegment3D(random);
          LineSegment3D actual = new LineSegment3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -414,25 +414,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         BoundingBox2D expected = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D expected = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          BoundingBox2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          BoundingBox2D expected = null;
-         BoundingBox2D actual = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D actual = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox2D expected = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
-         BoundingBox2D actual = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D expected = EuclidGeometryRandomTools.nextBoundingBox2D(random);
+         BoundingBox2D actual = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox2D expected = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D expected = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          BoundingBox2D actual = new BoundingBox2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -452,25 +452,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         BoundingBox2D expected = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D expected = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          BoundingBox2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          BoundingBox2D expected = null;
-         BoundingBox2D actual = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D actual = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox2D expected = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
-         BoundingBox2D actual = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D expected = EuclidGeometryRandomTools.nextBoundingBox2D(random);
+         BoundingBox2D actual = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox2D expected = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random);
+         BoundingBox2D expected = EuclidGeometryRandomTools.nextBoundingBox2D(random);
          BoundingBox2D actual = new BoundingBox2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -490,25 +490,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         BoundingBox3D expected = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D expected = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          BoundingBox3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          BoundingBox3D expected = null;
-         BoundingBox3D actual = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D actual = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox3D expected = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
-         BoundingBox3D actual = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D expected = EuclidGeometryRandomTools.nextBoundingBox3D(random);
+         BoundingBox3D actual = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox3D expected = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D expected = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          BoundingBox3D actual = new BoundingBox3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -528,25 +528,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         BoundingBox3D expected = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D expected = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          BoundingBox3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          BoundingBox3D expected = null;
-         BoundingBox3D actual = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D actual = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox3D expected = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
-         BoundingBox3D actual = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D expected = EuclidGeometryRandomTools.nextBoundingBox3D(random);
+         BoundingBox3D actual = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         BoundingBox3D expected = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random);
+         BoundingBox3D expected = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          BoundingBox3D actual = new BoundingBox3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -566,25 +566,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Orientation2D expected = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
          Orientation2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Orientation2D expected = null;
-         Orientation2D actual = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Orientation2D expected = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
-         Orientation2D actual = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
+         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Orientation2D expected = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
          Orientation2D actual = new Orientation2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -604,25 +604,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Orientation2D expected = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
          Orientation2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Orientation2D expected = null;
-         Orientation2D actual = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Orientation2D expected = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
-         Orientation2D actual = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
+         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Orientation2D expected = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
+         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
          Orientation2D actual = new Orientation2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -642,25 +642,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Plane3D expected = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D expected = EuclidGeometryRandomTools.nextPlane3D(random);
          Plane3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Plane3D expected = null;
-         Plane3D actual = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D actual = EuclidGeometryRandomTools.nextPlane3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Plane3D expected = EuclidGeometryRandomTools.generateRandomPlane3D(random);
-         Plane3D actual = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D expected = EuclidGeometryRandomTools.nextPlane3D(random);
+         Plane3D actual = EuclidGeometryRandomTools.nextPlane3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Plane3D expected = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D expected = EuclidGeometryRandomTools.nextPlane3D(random);
          Plane3D actual = new Plane3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -680,25 +680,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Plane3D expected = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D expected = EuclidGeometryRandomTools.nextPlane3D(random);
          Plane3D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Plane3D expected = null;
-         Plane3D actual = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D actual = EuclidGeometryRandomTools.nextPlane3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Plane3D expected = EuclidGeometryRandomTools.generateRandomPlane3D(random);
-         Plane3D actual = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D expected = EuclidGeometryRandomTools.nextPlane3D(random);
+         Plane3D actual = EuclidGeometryRandomTools.nextPlane3D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Plane3D expected = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         Plane3D expected = EuclidGeometryRandomTools.nextPlane3D(random);
          Plane3D actual = new Plane3D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -718,25 +718,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Pose2D expected = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D expected = EuclidGeometryRandomTools.nextPose2D(random);
          Pose2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Pose2D expected = null;
-         Pose2D actual = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D actual = EuclidGeometryRandomTools.nextPose2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Pose2D expected = EuclidGeometryRandomTools.generateRandomPose2D(random);
-         Pose2D actual = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D expected = EuclidGeometryRandomTools.nextPose2D(random);
+         Pose2D actual = EuclidGeometryRandomTools.nextPose2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Pose2D expected = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D expected = EuclidGeometryRandomTools.nextPose2D(random);
          Pose2D actual = new Pose2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
@@ -756,25 +756,25 @@ public class EuclidGeometryTestToolsTest
       }
 
       {
-         Pose2D expected = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D expected = EuclidGeometryRandomTools.nextPose2D(random);
          Pose2D actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
          Pose2D expected = null;
-         Pose2D actual = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D actual = EuclidGeometryRandomTools.nextPose2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Pose2D expected = EuclidGeometryRandomTools.generateRandomPose2D(random);
-         Pose2D actual = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D expected = EuclidGeometryRandomTools.nextPose2D(random);
+         Pose2D actual = EuclidGeometryRandomTools.nextPose2D(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         Pose2D expected = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         Pose2D expected = EuclidGeometryRandomTools.nextPose2D(random);
          Pose2D actual = new Pose2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }

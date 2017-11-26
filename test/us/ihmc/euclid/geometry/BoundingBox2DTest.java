@@ -155,8 +155,8 @@ public class BoundingBox2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox2D boundingBoxOne = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
-         BoundingBox2D boundingBoxTwo = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBoxTwo = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          BoundingBox2D expected = new BoundingBox2D();
          expected.combine(boundingBoxOne, boundingBoxTwo);
          BoundingBox2D actual = BoundingBox2D.union(boundingBoxOne, boundingBoxTwo);
@@ -471,8 +471,8 @@ public class BoundingBox2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox2D boundingBoxOne = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
-         BoundingBox2D boundingBoxTwo = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBoxTwo = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          BoundingBox2D combined = new BoundingBox2D();
          combined.combine(boundingBoxOne, boundingBoxTwo);
 
@@ -516,8 +516,8 @@ public class BoundingBox2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox2D boundingBoxOne = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
-         BoundingBox2D boundingBoxTwo = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBoxTwo = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          BoundingBox2D combined = new BoundingBox2D();
          combined.set(boundingBoxOne);
          combined.combine(boundingBoxTwo);
@@ -565,7 +565,7 @@ public class BoundingBox2DTest
    public void testSetToNaN() throws Exception
    {
       Random random = new Random(453453L);
-      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
       boundingBox2D.setToNaN();
       EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(boundingBox2D.getMinPoint());
       EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(boundingBox2D.getMaxPoint());
@@ -575,7 +575,7 @@ public class BoundingBox2DTest
    public void testSetToZero() throws Exception
    {
       Random random = new Random(453453L);
-      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
       boundingBox2D.setToZero();
       EuclidCoreTestTools.assertTuple2DIsSetToZero(boundingBox2D.getMinPoint());
       EuclidCoreTestTools.assertTuple2DIsSetToZero(boundingBox2D.getMaxPoint());
@@ -586,7 +586,7 @@ public class BoundingBox2DTest
    {
       Random random = new Random(23434L);
       for (int i = 0; i < ITERATIONS; i++)
-         assertFalse(EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0).containsNaN());
+         assertFalse(EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0).containsNaN());
 
       assertTrue(new BoundingBox2D(Double.NaN, 0, 0, 0).containsNaN());
       assertTrue(new BoundingBox2D(0, Double.NaN, 0, 0).containsNaN());
@@ -627,7 +627,7 @@ public class BoundingBox2DTest
       {
          Point2D expectedPoint = new Point2D();
          Point2D actualPoint = new Point2D();
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          double alpha = EuclidCoreRandomTools.nextDouble(random, 10.0);
 
          expectedPoint.interpolate(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), alpha);
@@ -638,7 +638,7 @@ public class BoundingBox2DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Point2D actualPoint = new Point2D();
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          Point2D alpha = new Point2D();
 
          for (int axisIndex = 0; axisIndex < 2; axisIndex++)
@@ -678,7 +678,7 @@ public class BoundingBox2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          Point2DReadOnly minPoint = boundingBox2D.getMinPoint();
          Point2DReadOnly maxPoint = boundingBox2D.getMaxPoint();
          assertFalse(boundingBox2D.isInsideExclusive(minPoint));
@@ -725,7 +725,7 @@ public class BoundingBox2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          Point2DReadOnly minPoint = boundingBox2D.getMinPoint();
          Point2DReadOnly maxPoint = boundingBox2D.getMaxPoint();
          assertTrue(boundingBox2D.isInsideInclusive(minPoint));
@@ -1017,7 +1017,7 @@ public class BoundingBox2DTest
       {
          Point2DReadOnly pointOnLine = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Vector2DReadOnly lineDirection = EuclidCoreRandomTools.nextVector2D(random);
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          boolean expected = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), pointOnLine,
                                                                                           lineDirection, null, null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithLine2D(pointOnLine, lineDirection);
@@ -1034,7 +1034,7 @@ public class BoundingBox2DTest
       {
          Point2DReadOnly lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Point2DReadOnly lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(),
                                                                                                  lineSegmentStart, lineSegmentEnd, null, null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithLineSegment2D(lineSegmentStart, lineSegmentEnd);
@@ -1051,7 +1051,7 @@ public class BoundingBox2DTest
       {
          Point2DReadOnly rayOrigin = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Vector2DReadOnly rayDirection = EuclidCoreRandomTools.nextVector2D(random);
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          boolean expected = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), rayOrigin,
                                                                                          rayDirection, null, null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithRay2D(rayOrigin, rayDirection);
@@ -1068,7 +1068,7 @@ public class BoundingBox2DTest
       {
          Point2DReadOnly pointOnLine = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Vector2DReadOnly lineDirection = EuclidCoreRandomTools.nextVector2D(random);
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
 
          int expectedN, actualN;
          Point2D expectedFirstIntersection = new Point2D();
@@ -1111,7 +1111,7 @@ public class BoundingBox2DTest
       {
          Point2DReadOnly lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Point2DReadOnly lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
 
          int expectedN, actualN;
          Point2D expectedFirstIntersection = new Point2D();
@@ -1155,7 +1155,7 @@ public class BoundingBox2DTest
       {
          Point2DReadOnly rayOrigin = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Vector2DReadOnly rayDirection = EuclidCoreRandomTools.nextVector2D(random);
-         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
 
          int expectedN, actualN;
          Point2D expectedFirstIntersection = new Point2D();
@@ -1197,7 +1197,7 @@ public class BoundingBox2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test updateToIncludePoint(Point2DReadOnly point)
-         BoundingBox2D original = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D original = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          BoundingBox2D extended = new BoundingBox2D(original);
 
          Point2D point = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
@@ -1235,7 +1235,7 @@ public class BoundingBox2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test updateToIncludePoint(Point2DReadOnly point)
-         BoundingBox2D original = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D original = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
          BoundingBox2D extended = new BoundingBox2D(original);
 
          Point2D point = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
@@ -1277,7 +1277,7 @@ public class BoundingBox2DTest
    {
       Random random = new Random(3242L);
 
-      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
       Point2DReadOnly min = boundingBox2D.getMinPoint();
       Point2DReadOnly max = boundingBox2D.getMaxPoint();
 
@@ -1312,7 +1312,7 @@ public class BoundingBox2DTest
    {
       Random random = new Random(234234L);
       double epsilon = random.nextDouble();
-      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
       double minX = boundingBox2D.getMinX();
       double minY = boundingBox2D.getMinY();
       double maxX = boundingBox2D.getMaxX();
@@ -1344,7 +1344,7 @@ public class BoundingBox2DTest
    public void testEquals() throws Exception
    {
       Random random = new Random(234234L);
-      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.generateRandomBoundingBox2D(random, 10.0, 10.0);
+      BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
       double minX = boundingBox2D.getMinX();
       double minY = boundingBox2D.getMinY();
       double maxX = boundingBox2D.getMaxX();

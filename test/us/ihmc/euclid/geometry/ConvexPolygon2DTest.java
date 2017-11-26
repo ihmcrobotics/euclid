@@ -1492,7 +1492,7 @@ public class ConvexPolygon2DTest
 
       numberOfVertices = 3 + random.nextInt(10);
 
-      firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+      firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
       secondPolygon = new ConvexPolygon2D(firstPolygon);
 
       assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
@@ -1504,7 +1504,7 @@ public class ConvexPolygon2DTest
       { // Convex polygons are only equal if all points lie within +- epsilon of each other
          numberOfVertices = 3 + random.nextInt(10);
 
-         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
          firstPolygon.scale(10.0);
          secondPolygon = new ConvexPolygon2D(firstPolygon);
 
@@ -1523,7 +1523,7 @@ public class ConvexPolygon2DTest
       { // Convex polygons are equal if translations are equal within +- epsilon and are otherwise the same
          numberOfVertices = 3 + random.nextInt(10);
 
-         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.generateRandomCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
          firstPolygon.scale(10.0);
 
          secondPolygon = new ConvexPolygon2D(firstPolygon);

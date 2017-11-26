@@ -152,7 +152,7 @@ public class Plane3DTest
       Vector3D translation = new Vector3D();
       double epsilon = 1e-5;
 
-      firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+      firstPlane = EuclidGeometryRandomTools.nextPlane3D(random);
       secondPlane = new Plane3D(firstPlane);
 
       assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon));
@@ -162,7 +162,7 @@ public class Plane3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Planes are equal if orientations equal within +- epsilon and are otherwise the same
-         firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         firstPlane = EuclidGeometryRandomTools.nextPlane3D(random);
          secondPlane = new Plane3D(firstPlane);
 
          normal = firstPlane.getNormalCopy();
@@ -183,7 +183,7 @@ public class Plane3DTest
       { // Planes are equal if locations equal within +- epsilon and are otherwise the same
          AxisAngle zeroRotation = new AxisAngle();
 
-         firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         firstPlane = EuclidGeometryRandomTools.nextPlane3D(random);
 
          secondPlane = new Plane3D(firstPlane);
          translation.setAndScale(0.99 * epsilon, firstPlane.getNormal());
@@ -208,7 +208,7 @@ public class Plane3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Flip the second plane normal
-         firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         firstPlane = EuclidGeometryRandomTools.nextPlane3D(random);
          secondPlane = new Plane3D(firstPlane);
          normal = secondPlane.getNormalCopy();
          normal.negate();
@@ -219,7 +219,7 @@ public class Plane3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Translate the point of the second plane orthogonally to the normal
-         firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
+         firstPlane = EuclidGeometryRandomTools.nextPlane3D(random);
          secondPlane = new Plane3D(firstPlane);
 
          translation = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstPlane.getNormal(), true);
