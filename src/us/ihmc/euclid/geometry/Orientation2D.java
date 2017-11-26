@@ -34,7 +34,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
 
    /**
     * Creates a new orientation 2D and initializes its yaw angle to the given {@code yaw}.
-    * 
+    *
     * @param yaw the yaw angle used to initialize this.
     */
    public Orientation2D(double yaw)
@@ -44,7 +44,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
 
    /**
     * Creates a new orientation 2D and initializes it to {@code other}.
-    * 
+    *
     * @param other the other orientation 2D used to initialize this. Not modified.
     */
    public Orientation2D(Orientation2D other)
@@ -54,7 +54,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
 
    /**
     * Sets this orientation 2D to the {@code other} orientation 2D.
-    * 
+    *
     * @param other the other orientation 2D. Not modified.
     */
    @Override
@@ -91,7 +91,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that the argument is trimmed to be contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param yaw the new yaw angle value in radians.
     */
    public void setYaw(double yaw)
@@ -101,7 +101,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
 
    /**
     * Returns the current yaw angle of this orientation 2D.
-    * 
+    *
     * @return the angle value in radians.
     */
    public double getYaw()
@@ -115,7 +115,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param yaw the angle to add to this.
     */
    public void add(double yaw)
@@ -129,7 +129,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param other the other orientation 2D to add to this. Not modified.
     */
    public void add(Orientation2D other)
@@ -143,13 +143,13 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param yaw1 the first yaw angle.
     * @param yaw2 the second yaw angle.
     */
    public void add(double yaw1, double yaw2)
    {
-      this.yaw = EuclidCoreTools.trimAngleMinusPiToPi(yaw1 + yaw2);
+      yaw = EuclidCoreTools.trimAngleMinusPiToPi(yaw1 + yaw2);
    }
 
    /**
@@ -158,7 +158,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     */
@@ -170,7 +170,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Subtracts the given {@code yaw} angle from this orientation 2D:<br>
     * {@code this.yaw -= yaw}
-    * 
+    *
     * @param yaw the angle to subtract.
     */
    public void sub(double yaw)
@@ -184,7 +184,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param other the other orientation 2D to subtract. Not modified.
     */
    public void sub(Orientation2D other)
@@ -198,13 +198,13 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param yaw1 the first yaw angle.
     * @param yaw2 the second yaw angle.
     */
    public void sub(double yaw1, double yaw2)
    {
-      this.yaw = EuclidCoreTools.angleDifferenceMinusPiToPi(yaw1, yaw2);
+      yaw = EuclidCoreTools.angleDifferenceMinusPiToPi(yaw1, yaw2);
    }
 
    /**
@@ -213,7 +213,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     */
@@ -228,7 +228,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * <p>
     * this = (1.0 - alpha) * this + alpha * other
     * </p>
-    * 
+    *
     * @param other the other orientation 2D used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not
     *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
@@ -261,12 +261,12 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
     * this.
-    * 
+    *
     * <pre>
     * tupleToTransform = / cos(yaw) -sin(yaw) \ * tupleToTransform
     *                    \ sin(yaw)  cos(yaw) /
     * </pre>
-    * 
+    *
     * @param tupleToTransform the tuple to transform. Modified.
     */
    public void transform(Tuple2DBasics tupleToTransform)
@@ -277,12 +277,12 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
     * and stores the result in {@code tupleTransformed}.
-    * 
+    *
     * <pre>
     * tupleTransformed = / cos(yaw) -sin(yaw) \ * tupleOriginal
     *                    \ sin(yaw)  cos(yaw) /
     * </pre>
-    * 
+    *
     * @param tupleOriginal the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
@@ -294,13 +294,13 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
     * this.
-    * 
+    *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
     * tupleToTransform = | sin(yaw)  cos(yaw) 0 | * tupleToTransform
     *                    \    0         0     1 /
     * </pre>
-    * 
+    *
     * @param tupleToTransform the tuple to transform. Modified.
     */
    public void transform(Tuple3DBasics tupleToTransform)
@@ -311,13 +311,13 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
     * and stores the result in {@code tupleTransformed}.
-    * 
+    *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
     * tupleTransformed = | sin(yaw)  cos(yaw) 0 | * tupleOriginal
     *                    \    0         0     1 /
     * </pre>
-    * 
+    *
     * @param tupleOriginal the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
@@ -329,12 +329,12 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
     * about the z-axis described by this.
-    * 
+    *
     * <pre>
     * tupleToTransform = / cos(-yaw) -sin(-yaw) \ * tupleToTransform
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
-    * 
+    *
     * @param tupleToTransform the tuple to transform. Modified.
     */
    public void inverseTransform(Tuple2DBasics tupleToTransform)
@@ -345,12 +345,12 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Performs the inverse of the transform to the given {@code tupleOriginal} by the rotation about
     * the z-axis described by this and stores the result in {@code tupleTransformed}.
-    * 
+    *
     * <pre>
     * tupleTransformed = / cos(-yaw) -sin(-yaw) \ * tupleOriginal
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
-    * 
+    *
     * @param tupleOriginal the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
@@ -362,13 +362,13 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
     * about the z-axis described by this.
-    * 
+    *
     * <pre>
     *                    / cos(-yaw) -sin(-yaw) 0 \
     * tupleToTransform = | sin(-yaw)  cos(-yaw) 0 | * tupleToTransform
     *                    \     0          0     1 /
     * </pre>
-    * 
+    *
     * @param tupleToTransform the tuple to transform. Modified.
     */
    public void inverseTransform(Tuple3DBasics tupleToTransform)
@@ -379,13 +379,13 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Performs the inverse of the transform to the given {@code tupleOriginal} by the rotation about
     * the z-axis described by this and stores the result in {@code tupleTransformed}.
-    * 
+    *
     * <pre>
     *                    / cos(-yaw) -sin(-yaw) 0 \
     * tupleTransformed = | sin(-yaw)  cos(-yaw) 0 | * tupleOriginal
     *                    \     0          0     1 /
     * </pre>
-    * 
+    *
     * @param tupleOriginal the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
@@ -398,7 +398,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * Computes the distance between {@code this} and {@code other} as the absolute difference in
     * angle:<br>
     * {@code distance = Math.abs(this.yaw - other.yaw)}
-    * 
+    *
     * @param other the other orientation 2D. Not modified.
     * @return the distance between {@code this} and {@code other} contained in [0, <i>pi</pi>].
     */
@@ -410,7 +410,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    /**
     * Computes and returns the difference between {@code this} and {@code other}:<br>
     * {@code distance = this.yaw - other.yaw}
-    * 
+    *
     * @param other the other orientation 2D. Not modified.
     * @return the difference between {@code this} and {@code other} contained in [-<i>pi</i>,
     *         <i>pi</pi>].
@@ -475,7 +475,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * Note that this method performs number comparison and not an angle comparison, such that:
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
-    * 
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two orientations are equal, {@code false} otherwise.
@@ -540,7 +540,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     * Compares {@code this} to {@code other} to determine if the two orientations are geometrically
     * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
     * {@code epsilon}.
-    * 
+    *
     * @param other the orientation to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
@@ -549,6 +549,6 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    @Override
    public boolean geometricallyEquals(Orientation2D other, double epsilon)
    {
-      return Math.abs(EuclidCoreTools.angleDifferenceMinusPiToPi(this.yaw, other.yaw)) <= epsilon;
+      return Math.abs(EuclidCoreTools.angleDifferenceMinusPiToPi(yaw, other.yaw)) <= epsilon;
    }
 }

@@ -11,7 +11,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 
 public class Orientation2DTest
 {
-   private int ITERATIONS = 1000;
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void testGeometricallyEquals()
@@ -51,14 +51,15 @@ public class Orientation2DTest
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
-      { // If epsilon > 2pi, orientations are automatically considered geometrically equal
+      { // If epsilon > pi, orientations are automatically considered geometrically equal
          firstOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
          secondOrientation = EuclidGeometryRandomTools.generateRandomOrientation2D(random);
 
-         epsilon = 4.0 * Math.PI * random.nextDouble();
+         epsilon = Math.PI;
+         assertTrue(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
 
-         if (epsilon > 2.0 * Math.PI)
-            assertTrue(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
+         epsilon = Math.PI + Math.PI * random.nextDouble();
+         assertTrue(firstOrientation.geometricallyEquals(secondOrientation, epsilon));
       }
    }
 }
