@@ -357,7 +357,10 @@ public class EuclidGeometryIOTools
     */
    public static String getBoundingBox2DString(String format, BoundingBox2D boundingBox2D)
    {
-      return getBoundingBox2DString(format, boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint());
+      if (boundingBox2D == null)
+         return "null";
+      else
+         return getBoundingBox2DString(format, boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint());
    }
 
    /**
@@ -414,7 +417,10 @@ public class EuclidGeometryIOTools
     */
    public static String getBoundingBox3DString(String format, BoundingBox3D boundingBox3D)
    {
-      return getBoundingBox3DString(format, boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint());
+      if (boundingBox3D == null)
+         return "null";
+      else
+         return getBoundingBox3DString(format, boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint());
    }
 
    /**
