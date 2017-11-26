@@ -36,8 +36,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line 2D.
-    * @param actual the actual line 2D.
+    * @param expected the expected line 2D. Not modified.
+    * @param actual the actual line 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -54,8 +54,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 2D.
-    * @param actual the actual line 2D.
+    * @param expected the expected line 2D. Not modified.
+    * @param actual the actual line 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -72,8 +72,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 2D.
-    * @param actual the actual line 2D.
+    * @param expected the expected line 2D. Not modified.
+    * @param actual the actual line 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -100,8 +100,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line 2D.
-    * @param actual the actual line 2D.
+    * @param expected the expected line 2D. Not modified.
+    * @param actual the actual line 2D. Not modified.
     * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
     * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
     *           parallel lines.
@@ -120,8 +120,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 2D.
-    * @param actual the actual line 2D.
+    * @param expected the expected line 2D. Not modified.
+    * @param actual the actual line 2D. Not modified.
     * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
     * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
     *           parallel lines.
@@ -140,8 +140,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 2D.
-    * @param actual the actual line 2D.
+    * @param expected the expected line 2D. Not modified.
+    * @param actual the actual line 2D. Not modified.
     * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
     * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
     *           parallel lines.
@@ -172,8 +172,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line 3D.
-    * @param actual the actual line 3D.
+    * @param expected the expected line 3D. Not modified.
+    * @param actual the actual line 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -190,8 +190,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 3D.
-    * @param actual the actual line 3D.
+    * @param expected the expected line 3D. Not modified.
+    * @param actual the actual line 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -208,8 +208,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 3D.
-    * @param actual the actual line 3D.
+    * @param expected the expected line 3D. Not modified.
+    * @param actual the actual line 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -236,8 +236,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line 3D.
-    * @param actual the actual line 3D.
+    * @param expected the expected line 3D. Not modified.
+    * @param actual the actual line 3D. Not modified.
     * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
     * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
     *           parallel lines.
@@ -256,8 +256,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 3D.
-    * @param actual the actual line 3D.
+    * @param expected the expected line 3D. Not modified.
+    * @param actual the actual line 3D. Not modified.
     * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
     * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
     *           parallel lines.
@@ -276,8 +276,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line 3D.
-    * @param actual the actual line 3D.
+    * @param expected the expected line 3D. Not modified.
+    * @param actual the actual line 3D. Not modified.
     * @param angleEpsilon the tolerance to use for comparing the direction of the two lines.
     * @param distanceEpsilon the tolerance used for distinguishing two collinear lines from two
     *           parallel lines.
@@ -309,8 +309,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line segment 1D.
-    * @param actual the actual line segment 1D.
+    * @param expected the expected line segment 1D. Not modified.
+    * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -328,8 +328,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 1D.
-    * @param actual the actual line segment 1D.
+    * @param expected the expected line segment 1D. Not modified.
+    * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -347,8 +347,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 1D.
-    * @param actual the actual line segment 1D.
+    * @param expected the expected line segment 1D. Not modified.
+    * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -375,8 +375,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line segment 1D.
-    * @param actual the actual line segment 1D.
+    * @param expected the expected line segment 1D. Not modified.
+    * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -393,8 +393,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 1D.
-    * @param actual the actual line segment 1D.
+    * @param expected the expected line segment 1D. Not modified.
+    * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -411,8 +411,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 1D.
-    * @param actual the actual line segment 1D.
+    * @param expected the expected line segment 1D. Not modified.
+    * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -443,8 +443,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line segment 2D.
-    * @param actual the actual line segment 2D.
+    * @param expected the expected line segment 2D. Not modified.
+    * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -462,8 +462,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 2D.
-    * @param actual the actual line segment 2D.
+    * @param expected the expected line segment 2D. Not modified.
+    * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -481,8 +481,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 2D.
-    * @param actual the actual line segment 2D.
+    * @param expected the expected line segment 2D. Not modified.
+    * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -509,8 +509,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line segment 2D.
-    * @param actual the actual line segment 2D.
+    * @param expected the expected line segment 2D. Not modified.
+    * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -527,8 +527,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 2D.
-    * @param actual the actual line segment 2D.
+    * @param expected the expected line segment 2D. Not modified.
+    * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -545,8 +545,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 2D.
-    * @param actual the actual line segment 2D.
+    * @param expected the expected line segment 2D. Not modified.
+    * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -577,8 +577,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line segment 3D.
-    * @param actual the actual line segment 3D.
+    * @param expected the expected line segment 3D. Not modified.
+    * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -596,8 +596,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 3D.
-    * @param actual the actual line segment 3D.
+    * @param expected the expected line segment 3D. Not modified.
+    * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -615,8 +615,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 3D.
-    * @param actual the actual line segment 3D.
+    * @param expected the expected line segment 3D. Not modified.
+    * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -643,8 +643,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected line segment 3D.
-    * @param actual the actual line segment 3D.
+    * @param expected the expected line segment 3D. Not modified.
+    * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -661,8 +661,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 3D.
-    * @param actual the actual line segment 3D.
+    * @param expected the expected line segment 3D. Not modified.
+    * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -679,8 +679,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected line segment 3D.
-    * @param actual the actual line segment 3D.
+    * @param expected the expected line segment 3D. Not modified.
+    * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -711,8 +711,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected bounding box 2D.
-    * @param actual the actual bounding box 2D.
+    * @param expected the expected bounding box 2D. Not modified.
+    * @param actual the actual bounding box 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -730,8 +730,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected bounding box 2D.
-    * @param actual the actual bounding box 2D.
+    * @param expected the expected bounding box 2D. Not modified.
+    * @param actual the actual bounding box 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -749,8 +749,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected bounding box 2D.
-    * @param actual the actual bounding box 2D.
+    * @param expected the expected bounding box 2D. Not modified.
+    * @param actual the actual bounding box 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -778,8 +778,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected bounding box 3D.
-    * @param actual the actual bounding box 3D.
+    * @param expected the expected bounding box 3D. Not modified.
+    * @param actual the actual bounding box 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -797,8 +797,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected bounding box 3D.
-    * @param actual the actual bounding box 3D.
+    * @param expected the expected bounding box 3D. Not modified.
+    * @param actual the actual bounding box 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -816,8 +816,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected bounding box 3D.
-    * @param actual the actual bounding box 3D.
+    * @param expected the expected bounding box 3D. Not modified.
+    * @param actual the actual bounding box 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -844,8 +844,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected orientation 2D.
-    * @param actual the actual orientation 2D.
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -862,8 +862,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected orientation 2D.
-    * @param actual the actual orientation 2D.
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -880,8 +880,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected orientation 2D.
-    * @param actual the actual orientation 2D.
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -908,8 +908,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected orientation 2D.
-    * @param actual the actual orientation 2D.
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -926,8 +926,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected orientation 2D.
-    * @param actual the actual orientation 2D.
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
@@ -944,8 +944,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected orientation 2D.
-    * @param actual the actual orientation 2D.
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -972,8 +972,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected plane 3D.
-    * @param actual the actual plane 3D.
+    * @param expected the expected plane 3D. Not modified.
+    * @param actual the actual plane 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -990,8 +990,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected plane 3D.
-    * @param actual the actual plane 3D.
+    * @param expected the expected plane 3D. Not modified.
+    * @param actual the actual plane 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -1008,8 +1008,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected plane 3D.
-    * @param actual the actual plane 3D.
+    * @param expected the expected plane 3D. Not modified.
+    * @param actual the actual plane 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -1036,8 +1036,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected pose 2D.
-    * @param actual the actual pose 2D.
+    * @param expected the expected pose 2D. Not modified.
+    * @param actual the actual pose 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -1054,8 +1054,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 2D.
-    * @param actual the actual pose 2D.
+    * @param expected the expected pose 2D. Not modified.
+    * @param actual the actual pose 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -1072,8 +1072,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 2D.
-    * @param actual the actual pose 2D.
+    * @param expected the expected pose 2D. Not modified.
+    * @param actual the actual pose 2D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -1100,8 +1100,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected pose 2D.
-    * @param actual the actual pose 2D.
+    * @param expected the expected pose 2D. Not modified.
+    * @param actual the actual pose 2D. Not modified.
     * @param angleEpsilon the tolerance to use on the orientation part.
     * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
@@ -1119,8 +1119,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 2D.
-    * @param actual the actual pose 2D.
+    * @param expected the expected pose 2D. Not modified.
+    * @param actual the actual pose 2D. Not modified.
     * @param angleEpsilon the tolerance to use on the orientation part.
     * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
@@ -1138,8 +1138,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 2D.
-    * @param actual the actual pose 2D.
+    * @param expected the expected pose 2D. Not modified.
+    * @param actual the actual pose 2D. Not modified.
     * @param angleEpsilon the tolerance to use on the orientation part.
     * @param epsilon the tolerance to use on the position part.
     * @param format the format to use for printing each component when an {@code AssertionError} is
@@ -1169,8 +1169,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected pose 3D.
-    * @param actual the actual pose 3D.
+    * @param expected the expected pose 3D. Not modified.
+    * @param actual the actual pose 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -1187,8 +1187,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 3D.
-    * @param actual the actual pose 3D.
+    * @param expected the expected pose 3D. Not modified.
+    * @param actual the actual pose 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
     *            equal to {@code null}.
@@ -1205,8 +1205,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 3D.
-    * @param actual the actual pose 3D.
+    * @param expected the expected pose 3D. Not modified.
+    * @param actual the actual pose 3D. Not modified.
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
@@ -1233,8 +1233,8 @@ public class EuclidGeometryTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected the expected pose 3D.
-    * @param actual the actual pose 3D.
+    * @param expected the expected pose 3D. Not modified.
+    * @param actual the actual pose 3D. Not modified.
     * @param angleEpsilon the tolerance to use on the orientation part.
     * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
@@ -1252,8 +1252,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 3D.
-    * @param actual the actual pose 3D.
+    * @param expected the expected pose 3D. Not modified.
+    * @param actual the actual pose 3D. Not modified.
     * @param angleEpsilon the tolerance to use on the orientation part.
     * @param epsilon the tolerance to use on the position part.
     * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
@@ -1271,8 +1271,8 @@ public class EuclidGeometryTestTools
     * </p>
     *
     * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected pose 3D.
-    * @param actual the actual pose 3D.
+    * @param expected the expected pose 3D. Not modified.
+    * @param actual the actual pose 3D. Not modified.
     * @param angleEpsilon the tolerance to use on the orientation part.
     * @param epsilon the tolerance to use on the position part.
     * @param format the format to use for printing each component when an {@code AssertionError} is
