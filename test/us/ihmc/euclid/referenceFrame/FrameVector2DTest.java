@@ -1,8 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -145,38 +143,12 @@ public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D, Vector2D>
          double epsilon = random.nextDouble();
 
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         FrameVector2D fv = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame);
-         FrameVector2D fv0 = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame);
+         FrameVector2D frameVector1 = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame);
+         FrameVector2D frameVector2 = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame);
 
-         if (fv.getVector().geometricallyEquals(fv0.getVector(), epsilon))
-         {
-            assertTrue(fv.geometricallyEquals(fv0, epsilon));
-         }
-         else
-         {
-            assertFalse(fv.geometricallyEquals(fv0, epsilon));
-         }
-      }
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         double epsilon = random.nextDouble();
-
-         ReferenceFrame referenceFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         ReferenceFrame referenceFrame0 = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-
-         FrameVector2D fv = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame);
-         FrameVector2D fv0 = EuclidFrameRandomTools.generateRandomFrameVector2D(random, referenceFrame0);
-
-         try
-         {
-            fv.geometricallyEquals(fv0, epsilon);
-            fail();
-         }
-         catch (ReferenceFrameMismatchException ignored)
-         {
-
-         }
+         boolean expectedAnswer = frameVector1.getVector().geometricallyEquals(frameVector2, epsilon);
+         boolean actualAnswer = frameVector1.geometricallyEquals(frameVector2, epsilon);
+         assertEquals(expectedAnswer, actualAnswer);
       }
    }
 }
