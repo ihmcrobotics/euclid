@@ -55,7 +55,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, double x, double y, double z)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         Vector3D randomTuple = EuclidCoreRandomTools.generateRandomVector3D(random);
+         Vector3D randomTuple = EuclidCoreRandomTools.nextVector3D(random);
          FrameVector3D frameVector3D = new FrameVector3D(randomFrame, randomTuple.getX(), randomTuple.getY(), randomTuple.getZ());
          assertTrue(frameVector3D.referenceFrame == randomFrame);
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
@@ -64,7 +64,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, double[] pointArray)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         Vector3D randomTuple = EuclidCoreRandomTools.generateRandomVector3D(random);
+         Vector3D randomTuple = EuclidCoreRandomTools.nextVector3D(random);
          double[] array = new double[3];
          randomTuple.get(array);
          FrameVector3D frameVector3D = new FrameVector3D(randomFrame, array);
@@ -75,7 +75,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         Vector3D randomTuple = EuclidCoreRandomTools.generateRandomVector3D(random);
+         Vector3D randomTuple = EuclidCoreRandomTools.nextVector3D(random);
          FrameVector3D frameVector3D = new FrameVector3D(randomFrame, randomTuple);
          assertTrue(frameVector3D.referenceFrame == randomFrame);
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
@@ -84,7 +84,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
-         Vector2D randomTuple2D = EuclidCoreRandomTools.generateRandomVector2D(random);
+         Vector2D randomTuple2D = EuclidCoreRandomTools.nextVector2D(random);
          FrameVector3D frameVector3D = new FrameVector3D(randomFrame, randomTuple2D);
          assertTrue(frameVector3D.referenceFrame == randomFrame);
          EuclidCoreTestTools.assertTuple2DEquals(randomTuple2D, new Vector2D(frameVector3D), EPSILON);
@@ -119,7 +119,7 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D, Vector3D>
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         Vector3D expected = EuclidCoreRandomTools.generateRandomVector3D(random);
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          FrameVector3D frameVector = new FrameVector3D(worldFrame, expected);
          Vector3D actual = frameVector.getVector();
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);

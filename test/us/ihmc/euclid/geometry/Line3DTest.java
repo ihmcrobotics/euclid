@@ -50,8 +50,8 @@ public class Line3DTest
          // good
       }
 
-      expectedPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedDirection = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
+      expectedPoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedDirection = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
       expectedDirection.normalize();
 
       line3d = new Line3D(expectedPoint, expectedDirection);
@@ -62,7 +62,7 @@ public class Line3DTest
 
       Point3D firstPointOnLine = new Point3D(expectedPoint);
       Point3D secondPointOnLine = new Point3D();
-      secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), expectedDirection, firstPointOnLine);
+      secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), expectedDirection, firstPointOnLine);
 
       line3d = new Line3D(firstPointOnLine, secondPointOnLine);
       EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
@@ -83,10 +83,10 @@ public class Line3DTest
       Vector3D expectedDirection = new Vector3D();
       Vector3D direction = new Vector3D();
 
-      Line3D line3d = new Line3D(EuclidCoreRandomTools.generateRandomPoint3D(random), EuclidCoreRandomTools.generateRandomVector3D(random));
+      Line3D line3d = new Line3D(EuclidCoreRandomTools.nextPoint3D(random), EuclidCoreRandomTools.nextVector3D(random));
 
-      expectedPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedDirection = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
+      expectedPoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedDirection = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
       direction.set(expectedDirection);
       expectedDirection.normalize();
 
@@ -95,8 +95,8 @@ public class Line3DTest
       line3d.setDirection(direction);
       EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, line3d.getDirection(), EPSILON);
 
-      expectedPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedDirection = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
+      expectedPoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedDirection = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
       expectedDirection.normalize();
 
       line3d.set(expectedPoint, expectedDirection);
@@ -105,7 +105,7 @@ public class Line3DTest
 
       Point3D firstPointOnLine = new Point3D(expectedPoint);
       Point3D secondPointOnLine = new Point3D();
-      secondPointOnLine.scaleAdd(EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0), expectedDirection, firstPointOnLine);
+      secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), expectedDirection, firstPointOnLine);
 
       line3d.set(firstPointOnLine, secondPointOnLine);
       EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, line3d.getPoint(), EPSILON);
@@ -127,8 +127,8 @@ public class Line3DTest
       Point3D actualPoint = new Point3D();
       Vector3D actualDirection = new Vector3D();
 
-      expectedPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      expectedDirection = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
+      expectedPoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      expectedDirection = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
       expectedDirection.normalize();
       Line3D line3d = new Line3D(expectedPoint, expectedDirection);
 
@@ -203,7 +203,7 @@ public class Line3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Line3D line = EuclidGeometryRandomTools.generateRandomLine3D(random, 10.0);
-         Point3D query = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
          double expectedDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, line.getPoint(), line.getDirection());
          double actualDistance = line.distance(query);
@@ -250,8 +250,8 @@ public class Line3DTest
       {
          Line3D line = new Line3D();
 
-         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random);
-         Vector3D direction = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Point3D point = EuclidCoreRandomTools.nextPoint3D(random);
+         Vector3D direction = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          line.set(point, direction);
          assertFalse(direction.epsilonEquals(line.getDirection(), 1.0e-3));
 
@@ -269,7 +269,7 @@ public class Line3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Line3D line3d = EuclidGeometryRandomTools.generateRandomLine3D(random, EPSILON);
-         Transform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         Transform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Point3D expectedPoint = new Point3D();
          Vector3D expectedDirection = new Vector3D();
@@ -294,7 +294,7 @@ public class Line3DTest
       {
          Line3D line1 = EuclidGeometryRandomTools.generateRandomLine3D(random, EPSILON);
          Line3D line2 = new Line3D(line1);
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          assertTrue(line1.epsilonEquals(line2, epsilon));
 
          for (int j = 0; j < 3; j++)
@@ -402,7 +402,7 @@ public class Line3DTest
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
 
-         orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
+         orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstLine.getDirection(), true);
          orthogonal.scale(0.99 * epsilon / orthogonal.length());
 
          secondLine.translate(orthogonal.getX(), orthogonal.getY(), orthogonal.getZ());
@@ -421,7 +421,7 @@ public class Line3DTest
          firstLine = EuclidGeometryRandomTools.generateRandomLine3D(random);
          secondLine = new Line3D(firstLine);
 
-         orthogonal = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstLine.getDirection(), true);
+         orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstLine.getDirection(), true);
 
          secondLine.getDirection(direction);
          direction.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon * 0.99), new Vector3D()));

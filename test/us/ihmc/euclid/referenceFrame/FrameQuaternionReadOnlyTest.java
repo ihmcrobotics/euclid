@@ -50,13 +50,13 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
 
    public final T createRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame)
    {
-      return createFrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random));
+      return createFrameQuaternion(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random));
    }
 
    public final T createRandom2DFrameQuaternion(Random random, ReferenceFrame referenceFrame)
    {
       Quaternion quaternion = new Quaternion();
-      quaternion.setToYawQuaternion(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+      quaternion.setToYawQuaternion(EuclidCoreRandomTools.nextDouble(random, Math.PI));
       return createFrameQuaternion(referenceFrame, quaternion);
    }
 

@@ -78,7 +78,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly, double z)
-         Tuple2DReadOnly input = EuclidCoreRandomTools.generateRandomPoint2D(random);
+         Tuple2DReadOnly input = EuclidCoreRandomTools.nextPoint2D(random);
          double z = random.nextDouble();
          ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
@@ -92,7 +92,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
-         Tuple3DReadOnly input = EuclidCoreRandomTools.generateRandomPoint3D(random);
+         Tuple3DReadOnly input = EuclidCoreRandomTools.nextPoint3D(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple3DBasics tuple = new Vector3D();

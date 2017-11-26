@@ -166,7 +166,7 @@ public class Plane3DTest
          secondPlane = new Plane3D(firstPlane);
 
          normal = firstPlane.getNormalCopy();
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, normal, true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true);
          double rotationAngle = 0.99 * epsilon;
          normal.applyTransform(new RigidBodyTransform(new AxisAngle(rotationAxis, rotationAngle), new Vector3D()));
          secondPlane.setNormal(normal);
@@ -222,8 +222,8 @@ public class Plane3DTest
          firstPlane = EuclidGeometryRandomTools.generateRandomPlane3D(random);
          secondPlane = new Plane3D(firstPlane);
 
-         translation = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, firstPlane.getNormal(), true);
-         translation.scale(EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
+         translation = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstPlane.getNormal(), true);
+         translation.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
 
          assertTrue("Iteration: " + i, firstPlane.geometricallyEquals(secondPlane, epsilon));
 

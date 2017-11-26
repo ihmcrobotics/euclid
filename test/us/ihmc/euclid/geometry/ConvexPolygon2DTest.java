@@ -1527,13 +1527,13 @@ public class ConvexPolygon2DTest
          firstPolygon.scale(10.0);
 
          secondPolygon = new ConvexPolygon2D(firstPolygon);
-         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon);
+         translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 0.99 * epsilon);
          secondPolygon.translate(translation);
 
          assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
 
          secondPolygon = new ConvexPolygon2D(firstPolygon);
-         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon);
+         translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.01 * epsilon);
          secondPolygon.translate(translation);
 
          assertFalse(firstPolygon.geometricallyEquals(secondPolygon, epsilon));

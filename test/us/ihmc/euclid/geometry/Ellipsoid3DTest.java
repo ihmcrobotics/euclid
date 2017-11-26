@@ -31,10 +31,10 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < numberOfShapes; i++)
       {
-         RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
-         double xRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.02, 10.0);
-         double yRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.02, 10.0);
-         double zRadius = EuclidCoreRandomTools.generateRandomDouble(random, 0.02, 10.0);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         double xRadius = EuclidCoreRandomTools.nextDouble(random, 0.02, 10.0);
+         double yRadius = EuclidCoreRandomTools.nextDouble(random, 0.02, 10.0);
+         double zRadius = EuclidCoreRandomTools.nextDouble(random, 0.02, 10.0);
          Ellipsoid3D ellipsoid3d = new Ellipsoid3D(transform, xRadius, yRadius, zRadius);
          testHelper.runSimpleTests(ellipsoid3d, random, numberOfPoints);
       }
@@ -345,7 +345,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Test with identical ellipsoids
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          double radiusX = random.nextDouble();
          double radiusY = random.nextDouble();
          double radiusZ = random.nextDouble();
@@ -369,15 +369,15 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Test 2 ellipsoids with same pose and different radii - Method 1
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 0.1);
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 0.1);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          // Generating random radii while making sure we don't generate spheres
-         double radiusX1 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
-         double radiusY1 = EuclidCoreRandomTools.generateRandomDouble(random, radiusX1 + 2.0 * epsilon, radiusX1 + 1.0);
-         double radiusZ1 = EuclidCoreRandomTools.generateRandomDouble(random, radiusY1 + 2.0 * epsilon, radiusY1 + 1.0);
-         double radiusX2 = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 10.0);
-         double radiusY2 = EuclidCoreRandomTools.generateRandomDouble(random, radiusX2 + 2.0 * epsilon, radiusX2 + 1.0);
-         double radiusZ2 = EuclidCoreRandomTools.generateRandomDouble(random, radiusY2 + 2.0 * epsilon, radiusY2 + 1.0);
+         double radiusX1 = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         double radiusY1 = EuclidCoreRandomTools.nextDouble(random, radiusX1 + 2.0 * epsilon, radiusX1 + 1.0);
+         double radiusZ1 = EuclidCoreRandomTools.nextDouble(random, radiusY1 + 2.0 * epsilon, radiusY1 + 1.0);
+         double radiusX2 = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         double radiusY2 = EuclidCoreRandomTools.nextDouble(random, radiusX2 + 2.0 * epsilon, radiusX2 + 1.0);
+         double radiusZ2 = EuclidCoreRandomTools.nextDouble(random, radiusY2 + 2.0 * epsilon, radiusY2 + 1.0);
          Vector3D radii1 = new Vector3D(radiusX1, radiusY1, radiusZ1);
          Vector3D radii2 = new Vector3D(radiusX2, radiusY2, radiusZ2);
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX1, radiusY1, radiusZ1);
@@ -389,21 +389,21 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Test 2 ellipsoids with same pose and different radii - Method 2
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 0.1);
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 0.1);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          // Generating random radii while making sure we don't generate spheres
-         double radiusX1 = EuclidCoreRandomTools.generateRandomDouble(random, 2.0 * epsilon, 10.0);
-         double radiusY1 = EuclidCoreRandomTools.generateRandomDouble(random, radiusX1 + 2.0 * epsilon, radiusX1 + 1.0);
-         double radiusZ1 = EuclidCoreRandomTools.generateRandomDouble(random, radiusY1 + 2.0 * epsilon, radiusY1 + 1.0);
+         double radiusX1 = EuclidCoreRandomTools.nextDouble(random, 2.0 * epsilon, 10.0);
+         double radiusY1 = EuclidCoreRandomTools.nextDouble(random, radiusX1 + 2.0 * epsilon, radiusX1 + 1.0);
+         double radiusZ1 = EuclidCoreRandomTools.nextDouble(random, radiusY1 + 2.0 * epsilon, radiusY1 + 1.0);
          Vector3D radii1 = new Vector3D(radiusX1, radiusY1, radiusZ1);
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radii1.getX(), radii1.getY(), radii1.getZ());
 
          Vector3D radii2 = new Vector3D();
-         radii2.add(radii1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * epsilon));
+         radii2.add(radii1, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon));
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radii2.getX(), radii2.getY(), radii2.getZ());
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon));
 
-         radii2.add(radii1, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * epsilon));
+         radii2.add(radii1, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon));
          ellipsoid2 = new Ellipsoid3D(pose, radii2.getX(), radii2.getY(), radii2.getZ());
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon));
       }
@@ -417,13 +417,13 @@ public class Ellipsoid3DTest
          Ellipsoid3D firstEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
 
          Ellipsoid3D secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
-         Vector3D translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON);
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
          assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
 
          secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
-         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON);
+         translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
          assertFalse("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
@@ -431,7 +431,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Ellipsoids are equal if translations are equal within +- epsilon and are otherwise the same
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          double radiusX = random.nextDouble();
          double radiusY = random.nextDouble();
          double radiusZ = random.nextDouble();
@@ -439,13 +439,13 @@ public class Ellipsoid3DTest
          Ellipsoid3D firstEllipsoid = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
 
          Ellipsoid3D secondEllipsoid = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
-         Vector3D translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON);
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
          assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
 
          secondEllipsoid = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
-         translation = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON);
+         translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
          assertFalse("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
@@ -454,9 +454,9 @@ public class Ellipsoid3DTest
       for (int i = 0; i < ITERATIONS; ++i)
       { // Show that if the three radii are equal, the rotation does not matter as we are dealing with spheres.
          double radius = random.nextDouble();
-         Point3D position = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         RigidBodyTransform pose1 = new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), position);
-         RigidBodyTransform pose2 = new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), position);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         RigidBodyTransform pose1 = new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), position);
+         RigidBodyTransform pose2 = new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), position);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radius, radius, radius);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radius, radius, radius);
@@ -481,13 +481,13 @@ public class Ellipsoid3DTest
       for (int i = 0; i < ITERATIONS; ++i)
       { // The first ellipsoid is a sphere, ensuring that the second is tested before assuming it is also a sphere.
          double radius = random.nextDouble();
-         Point3D position = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         RigidBodyTransform pose1 = new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), position);
-         RigidBodyTransform pose2 = new RigidBodyTransform(EuclidCoreRandomTools.generateRandomAxisAngle(random), position);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         RigidBodyTransform pose1 = new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), position);
+         RigidBodyTransform pose2 = new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), position);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radius, radius, radius);
 
-         Vector3D radii = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0);
+         Vector3D radii = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
          radii.absolute();
          double average = (radii.getX() + radii.getY() + radii.getZ()) / 3.0;
          radii.scale(average / radii.length());
@@ -496,7 +496,7 @@ public class Ellipsoid3DTest
 
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         radii = EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.0);
+         radii = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
          radii.setX(radii.getY());
          radii.absolute();
          average = (radii.getX() + radii.getY() + radii.getZ()) / 3.0;
@@ -513,23 +513,23 @@ public class Ellipsoid3DTest
          double radiusXY = random.nextDouble();
          double radiusZ = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
 
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
       }
@@ -540,23 +540,23 @@ public class Ellipsoid3DTest
          double radiusXZ = random.nextDouble();
          double radiusY = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
 
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -568,23 +568,23 @@ public class Ellipsoid3DTest
          double radiusX = random.nextDouble();
          double radiusYZ = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
 
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendRollRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendRollRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -592,7 +592,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Test 180 degree flips around the x, y, or z axis
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          double radiusX = random.nextDouble();
          double radiusY = random.nextDouble();
          double radiusZ = random.nextDouble();
@@ -617,7 +617,7 @@ public class Ellipsoid3DTest
 
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         double angle = EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI / 2.0);
+         double angle = EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI / 2.0);
          switch (axis)
          {
          case 0:
@@ -639,7 +639,7 @@ public class Ellipsoid3DTest
       for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the radii components and adding a 90-degree rotation such that the two ellipsoids should represent the same geometry
         // Swapping X <-> Y and adding a 90-degree rotation around Z
-         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendYawRotation(Math.PI / 2.0);
 
@@ -655,7 +655,7 @@ public class Ellipsoid3DTest
       for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the radii components and adding a 90-degree rotation such that the two ellipsoids should represent the same geometry
         // Swapping X <-> Z and adding a 90-degree rotation around Y
-         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendPitchRotation(Math.PI / 2.0);
 
@@ -671,7 +671,7 @@ public class Ellipsoid3DTest
       for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the radii components and adding a 90-degree rotation such that the two ellipsoids should represent the same geometry
         // Swapping Y <-> Z and adding a 90-degree rotation around X
-         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendRollRotation(Math.PI / 2.0);
 
@@ -686,7 +686,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Permuting the three radii components and adding a 90-degree rotations such that the two ellipsoids should represent the same geometry
-         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendYawRotation(Math.PI / 2.0);
          pose2.appendPitchRotation(Math.PI / 2.0);
@@ -702,7 +702,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Permuting the three radii components and adding a 90-degree rotations such that the two ellipsoids should represent the same geometry
-         RigidBodyTransform pose1 = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
          pose2.appendYawRotation(Math.PI / 2.0);
          pose2.appendRollRotation(Math.PI / 2.0);
@@ -723,23 +723,23 @@ public class Ellipsoid3DTest
          double radiusXY = random.nextDouble();
          double radiusZ = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusZ, radiusXY, radiusXY);
          ellipsoid2.appendPitchRotation(Math.PI / 2.0);
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendRollRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendRollRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -752,23 +752,23 @@ public class Ellipsoid3DTest
          double radiusXY = random.nextDouble();
          double radiusZ = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXY, radiusZ, radiusXY);
          ellipsoid2.appendRollRotation(Math.PI / 2.0);
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -781,23 +781,23 @@ public class Ellipsoid3DTest
          double radiusXZ = random.nextDouble();
          double radiusY = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusY, radiusXZ, radiusXZ);
          ellipsoid2.appendYawRotation(Math.PI / 2.0);
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendRollRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendRollRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -810,23 +810,23 @@ public class Ellipsoid3DTest
          double radiusXZ = random.nextDouble();
          double radiusY = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXZ, radiusXZ, radiusY);
          ellipsoid2.appendRollRotation(Math.PI / 2.0);
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -839,23 +839,23 @@ public class Ellipsoid3DTest
          double radiusYZ = random.nextDouble();
          double radiusX = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusYZ, radiusX, radiusYZ);
          ellipsoid2.appendYawRotation(Math.PI / 2.0);
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -868,23 +868,23 @@ public class Ellipsoid3DTest
          double radiusYZ = random.nextDouble();
          double radiusX = random.nextDouble();
 
-         RigidBodyTransform pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusYZ, radiusYZ, radiusX);
          ellipsoid2.appendPitchRotation(Math.PI / 2.0);
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         ellipsoid2.appendYawRotation(EuclidCoreRandomTools.generateRandomDouble(random, Math.PI));
+         ellipsoid2.appendYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
 
-         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.1, Math.PI - 0.1));
+         axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));

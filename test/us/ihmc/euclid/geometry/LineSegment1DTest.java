@@ -99,14 +99,14 @@ public class LineSegment1DTest
       // lineSegment2 inside lineSegment1
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double boundaryOne = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
          double boundaryTwo = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          double expectedOverlapStart = lineSegmentStart2;
@@ -146,14 +146,14 @@ public class LineSegment1DTest
       // lineSegment2 partially overlapping lineSegment1 case 1
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double boundaryOne = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
          double boundaryTwo = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne - 10.0, boundaryOne);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne - 10.0, boundaryOne);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          double expectedOverlapStart = lineSegmentStart2;
@@ -193,14 +193,14 @@ public class LineSegment1DTest
       // lineSegment2 partially overlapping lineSegment1 case 2
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double boundaryOne = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
          double boundaryTwo = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryOne, boundaryTwo);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, boundaryTwo, boundaryTwo + 10.0);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, boundaryOne, boundaryTwo);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, boundaryTwo, boundaryTwo + 10.0);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          double expectedOverlapStart = lineSegmentStart2;
@@ -240,13 +240,13 @@ public class LineSegment1DTest
       // lineSegment2 not overlapping lineSegment1 case 1
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double max = lineSegmentStart1 > lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, max, max + 10.0);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, max, max + 10.0);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, max, max + 10.0);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, max, max + 10.0);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          LineSegment1D actualOverlap = new LineSegment1D();
@@ -261,13 +261,13 @@ public class LineSegment1DTest
       // lineSegment2 not overlapping lineSegment1 case 2
       for (int i = 0; i < 1000; i++)
       {
-         double lineSegmentStart1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double lineSegmentEnd1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double lineSegmentStart1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double lineSegmentEnd1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
          LineSegment1D lineSegment1 = new LineSegment1D(lineSegmentStart1, lineSegmentEnd1);
 
          double min = lineSegmentStart1 < lineSegmentEnd1 ? lineSegmentStart1 : lineSegmentEnd1;
-         double lineSegmentStart2 = EuclidCoreRandomTools.generateRandomDouble(random, min - 10.0, min);
-         double lineSegmentEnd2 = EuclidCoreRandomTools.generateRandomDouble(random, min - 10.0, min);
+         double lineSegmentStart2 = EuclidCoreRandomTools.nextDouble(random, min - 10.0, min);
+         double lineSegmentEnd2 = EuclidCoreRandomTools.nextDouble(random, min - 10.0, min);
          LineSegment1D lineSegment2 = new LineSegment1D(lineSegmentStart2, lineSegmentEnd2);
 
          LineSegment1D actualOverlap = new LineSegment1D();
@@ -407,8 +407,8 @@ public class LineSegment1DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Endpoints are in the same order
-         double endpoint1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double endpoint2 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double endpoint1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double endpoint2 = EuclidCoreRandomTools.nextDouble(random, 10.0);
 
          LineSegment1D lineSegment1 = new LineSegment1D(endpoint1, endpoint2);
          LineSegment1D lineSegment2 = new LineSegment1D(endpoint1, endpoint2);
@@ -454,8 +454,8 @@ public class LineSegment1DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Endpoints are in opposite order
-         double endpoint2 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
-         double endpoint1 = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double endpoint2 = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double endpoint1 = EuclidCoreRandomTools.nextDouble(random, 10.0);
 
          LineSegment1D lineSegment1 = new LineSegment1D(endpoint1, endpoint2);
          LineSegment1D lineSegment2 = new LineSegment1D(endpoint2, endpoint1);

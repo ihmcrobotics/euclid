@@ -481,7 +481,7 @@ public class Torus3DTest
       double radius, tubeRadius;
       double epsilon = 1e-7;
 
-      pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+      pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       radius = 1.0 + random.nextDouble();
       tubeRadius = random.nextDouble();
 
@@ -495,21 +495,21 @@ public class Torus3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii do not represent the same geometry object
-         pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
          firstTorus = new Torus3D(pose, radius, tubeRadius);
          secondTorus = new Torus3D(pose, radius, tubeRadius);
 
-         secondTorus.appendTransform(EuclidCoreRandomTools.generateRandomRigidBodyTransform(random));
+         secondTorus.appendTransform(EuclidCoreRandomTools.nextRigidBodyTransform(random));
 
          assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii within +- epsilon are equal
-         pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
@@ -526,7 +526,7 @@ public class Torus3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii outside of +- epsilon are not equal
-         pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
@@ -543,7 +543,7 @@ public class Torus3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii are equal if in the exact same position, but one is upside-down (w.r.t. reference frame)
-         pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
@@ -552,7 +552,7 @@ public class Torus3DTest
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, Axis.Z, true);
+         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, Axis.Z, true);
          secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(rotationAxis, Math.PI), new Vector3D()));
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
@@ -560,7 +560,7 @@ public class Torus3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii are equal if yaw differs, but they otherwise represent the same geometry object
-         pose = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 

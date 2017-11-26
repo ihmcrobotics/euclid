@@ -79,7 +79,7 @@ public abstract class FrameTuple4DTest<F extends FrameTuple4D<F, T>, T extends T
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
-         Tuple4DReadOnly input = EuclidCoreRandomTools.generateRandomQuaternion(random);
+         Tuple4DReadOnly input = EuclidCoreRandomTools.nextQuaternion(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.generateRandomReferenceFrame(random);
          F frameTuple = createRandomTuple(random, initialFrame);
          Tuple4DBasics tuple = new Vector4D();

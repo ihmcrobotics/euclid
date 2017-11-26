@@ -38,24 +38,24 @@ public class BoundingBox3DTest
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox3D(min, max);
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox3D(new BoundingBox3D(min, max));
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       double[] minArray = new double[3];
       double[] maxArray = new double[3];
@@ -66,8 +66,8 @@ public class BoundingBox3DTest
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Create the min and max coordinates such that they represent a proper bounding box
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox = new BoundingBox3D(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
@@ -168,8 +168,8 @@ public class BoundingBox3DTest
    {
       Random random = new Random(32443L);
 
-      Point3D min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      Point3D max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      Point3D min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      Point3D max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       Point3D center = new Point3D();
       center.add(min, max);
@@ -200,15 +200,15 @@ public class BoundingBox3DTest
       BoundingBox3D boundingBox = new BoundingBox3D();
       Point3D min = new Point3D();
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, -10.0, 0.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, -10.0, 0.0);
       boundingBox.setMin(min);
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, -10.0, 0.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, -10.0, 0.0);
       boundingBox.setMin(new double[] {min.getX(), min.getY(), min.getZ()});
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, -10.0, 0.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, -10.0, 0.0);
       boundingBox.setMin(min.getX(), min.getY(), min.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
 
@@ -309,15 +309,15 @@ public class BoundingBox3DTest
       BoundingBox3D boundingBox = new BoundingBox3D();
       Point3D max = new Point3D();
 
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       boundingBox.setMax(max);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       boundingBox.setMax(new double[] {max.getX(), max.getY(), max.getZ()});
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       boundingBox.setMax(max.getX(), max.getY(), max.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
@@ -419,15 +419,15 @@ public class BoundingBox3DTest
       Point3D min = new Point3D();
       Point3D max = new Point3D();
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       double[] minArray = new double[3];
       double[] maxArray = new double[3];
@@ -437,15 +437,15 @@ public class BoundingBox3DTest
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(min, max);
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       Point3D center = new Point3D();
       center.add(min, max);
@@ -457,8 +457,8 @@ public class BoundingBox3DTest
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
-      min = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-      max = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 10.0);
+      min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+      max = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0);
       max.add(min);
       boundingBox.set(new BoundingBox3D(min, max));
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
@@ -721,8 +721,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = new BoundingBox3D();
          boundingBox3D.set(center, halfSize);
          Point3D actualCenter = new Point3D();
@@ -748,7 +748,7 @@ public class BoundingBox3DTest
          Point3D expectedPoint = new Point3D();
          Point3D actualPoint = new Point3D();
          BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
-         double alpha = EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+         double alpha = EuclidCoreRandomTools.nextDouble(random, 10.0);
 
          expectedPoint.interpolate(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(), alpha);
          boundingBox3D.getPointGivenParameters(alpha, alpha, alpha, actualPoint);
@@ -763,12 +763,12 @@ public class BoundingBox3DTest
 
          for (int axisIndex = 0; axisIndex < 3; axisIndex++)
          {
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
             alpha.setElement(axisIndex, 0.0);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), actualPoint);
             assertEquals(boundingBox3D.getMinPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
 
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
             alpha.setElement(axisIndex, 1.0);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), actualPoint);
             assertEquals(boundingBox3D.getMaxPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
@@ -783,8 +783,8 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = new BoundingBox3D();
          boundingBox3D.set(center, halfSize);
          assertEquals(4.0 * halfSize.lengthSquared(), boundingBox3D.getDiagonalLengthSquared(), EPSILON);
@@ -806,7 +806,7 @@ public class BoundingBox3DTest
          assertFalse(boundingBox3D.isInsideExclusive(minPoint.getX(), minPoint.getY(), minPoint.getZ()));
          assertFalse(boundingBox3D.isInsideExclusive(maxPoint.getX(), maxPoint.getY(), maxPoint.getZ()));
 
-         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+         Point3D alpha = EuclidCoreRandomTools.nextPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
          Point3D query = new Point3D();
          boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
          assertTrue(boundingBox3D.isInsideExclusive(query));
@@ -814,18 +814,18 @@ public class BoundingBox3DTest
 
          for (int axisIndex = 0; axisIndex < 3; axisIndex++)
          {
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertFalse(boundingBox3D.isInsideExclusive(query));
             assertFalse(boundingBox3D.isInsideExclusive(query.getX(), query.getY(), query.getZ()));
 
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertFalse(boundingBox3D.isInsideExclusive(query));
             assertFalse(boundingBox3D.isInsideExclusive(query.getX(), query.getY(), query.getZ()));
 
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             query.setElement(axisIndex, minPoint.getElement(axisIndex));
             assertFalse(boundingBox3D.isInsideExclusive(query));
@@ -853,7 +853,7 @@ public class BoundingBox3DTest
          assertTrue(boundingBox3D.isInsideInclusive(minPoint.getX(), minPoint.getY(), minPoint.getZ()));
          assertTrue(boundingBox3D.isInsideInclusive(maxPoint.getX(), maxPoint.getY(), maxPoint.getZ()));
 
-         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+         Point3D alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
          Point3D query = new Point3D();
          boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
          assertTrue(boundingBox3D.isInsideInclusive(query));
@@ -861,18 +861,18 @@ public class BoundingBox3DTest
 
          for (int axisIndex = 0; axisIndex < 3; axisIndex++)
          {
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertFalse(boundingBox3D.isInsideInclusive(query));
             assertFalse(boundingBox3D.isInsideInclusive(query.getX(), query.getY(), query.getZ()));
 
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertFalse(boundingBox3D.isInsideInclusive(query));
             assertFalse(boundingBox3D.isInsideInclusive(query.getX(), query.getY(), query.getZ()));
 
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             query.setElement(axisIndex, minPoint.getElement(axisIndex));
             assertTrue(boundingBox3D.isInsideInclusive(query));
@@ -892,10 +892,10 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBoxEpsilon = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, -Math.min(halfSize.getX(), Math.min(halfSize.getY(), halfSize.getZ())), 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, -Math.min(halfSize.getX(), Math.min(halfSize.getY(), halfSize.getZ())), 1.0);
          halfSize.add(epsilon, epsilon, epsilon);
          BoundingBox3D boundingBoxExclusive = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
 
@@ -908,7 +908,7 @@ public class BoundingBox3DTest
          assertEquals(boundingBoxExclusive.isInsideExclusive(maxPoint),
                       boundingBoxEpsilon.isInsideEpsilon(maxPoint.getX(), maxPoint.getY(), maxPoint.getZ(), epsilon));
 
-         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+         Point3D alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
          Point3D query = new Point3D();
          boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
          assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
@@ -916,18 +916,18 @@ public class BoundingBox3DTest
 
          for (int axisIndex = 0; axisIndex < 3; axisIndex++)
          {
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
             assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), query.getZ(), epsilon));
 
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
             assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), query.getZ(), epsilon));
 
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             query.setElement(axisIndex, minPoint.getElement(axisIndex));
             assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
@@ -959,7 +959,7 @@ public class BoundingBox3DTest
          assertFalse(boundingBox3D.isXYInsideExclusive(minPoint.getX(), minPoint.getY()));
          assertFalse(boundingBox3D.isXYInsideExclusive(maxPoint.getX(), maxPoint.getY()));
 
-         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+         Point3D alpha = EuclidCoreRandomTools.nextPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
          Point2D query2D = new Point2D();
          Point3D query3D = new Point3D();
          boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), 0.0, query3D);
@@ -969,20 +969,20 @@ public class BoundingBox3DTest
 
          for (int axisIndex = 0; axisIndex < 2; axisIndex++)
          {
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query3D);
             query2D.set(query3D.getX(), query3D.getY());
             assertFalse(boundingBox3D.isXYInsideExclusive(query2D));
             assertFalse(boundingBox3D.isXYInsideExclusive(query2D.getX(), query2D.getY()));
 
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query3D);
             query2D.set(query3D.getX(), query3D.getY());
             assertFalse(boundingBox3D.isXYInsideExclusive(query2D));
             assertFalse(boundingBox3D.isXYInsideExclusive(query2D.getX(), query2D.getY()));
 
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, Double.MIN_VALUE, 1.0 - 1.0e-15);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query3D);
             query2D.set(query3D.getX(), query3D.getY());
             query2D.setElement(axisIndex, minPoint.getElement(axisIndex));
@@ -1011,7 +1011,7 @@ public class BoundingBox3DTest
          assertTrue(boundingBox3D.isXYInsideInclusive(minPoint.getX(), minPoint.getY()));
          assertTrue(boundingBox3D.isXYInsideInclusive(maxPoint.getX(), maxPoint.getY()));
 
-         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+         Point3D alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
          Point3D query = new Point3D();
          boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
          assertTrue(boundingBox3D.isInsideInclusive(query));
@@ -1019,18 +1019,18 @@ public class BoundingBox3DTest
 
          for (int axisIndex = 0; axisIndex < 2; axisIndex++)
          {
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertFalse(boundingBox3D.isXYInsideInclusive(new Point2D(query.getX(), query.getY())));
             assertFalse(boundingBox3D.isXYInsideInclusive(query.getX(), query.getY()));
 
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertFalse(boundingBox3D.isXYInsideInclusive(new Point2D(query.getX(), query.getY())));
             assertFalse(boundingBox3D.isXYInsideInclusive(query.getX(), query.getY()));
 
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             query.setElement(axisIndex, minPoint.getElement(axisIndex));
             assertTrue(boundingBox3D.isXYInsideInclusive(new Point2D(query.getX(), query.getY())));
@@ -1049,10 +1049,10 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBoxEpsilon = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, -Math.min(halfSize.getX(), Math.min(halfSize.getY(), halfSize.getZ())), 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, -Math.min(halfSize.getX(), Math.min(halfSize.getY(), halfSize.getZ())), 1.0);
          halfSize.add(epsilon, epsilon, epsilon);
          BoundingBox3D boundingBoxExclusive = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
 
@@ -1067,7 +1067,7 @@ public class BoundingBox3DTest
          assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(maxPoint.getX(), maxPoint.getY())),
                       boundingBoxEpsilon.isXYInsideEpsilon(maxPoint.getX(), maxPoint.getY(), epsilon));
 
-         Point3D alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+         Point3D alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
          Point3D query = new Point3D();
          boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
          assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
@@ -1077,22 +1077,22 @@ public class BoundingBox3DTest
 
          for (int axisIndex = 0; axisIndex < 2; axisIndex++)
          {
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0));
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
                          boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(query.getX(), query.getY()), epsilon));
             assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
                          boundingBoxEpsilon.isXYInsideEpsilon(query.getX(), query.getY(), epsilon));
 
-            alpha.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0));
+            alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
                          boundingBoxEpsilon.isXYInsideEpsilon(new Point2D(query.getX(), query.getY()), epsilon));
             assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
                          boundingBoxEpsilon.isXYInsideEpsilon(query.getX(), query.getY(), epsilon));
 
-            alpha = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.0, 1.0);
+            alpha = EuclidCoreRandomTools.nextPoint3D(random, 0.0, 1.0);
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), query);
             query.setElement(axisIndex, minPoint.getElement(axisIndex));
             assertEquals(boundingBoxExclusive.isXYInsideExclusive(new Point2D(query.getX(), query.getY())),
@@ -1116,17 +1116,17 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
 
          Point3D queryCenter = new Point3D();
-         Vector3D queryHalfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Vector3D queryHalfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D query = new BoundingBox3D();
 
-         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double zParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double xParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double zParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          boundingBox3D.getPointGivenParameters(xParameter, yParameter, zParameter, queryCenter);
          query.set(queryCenter, queryHalfSize);
          assertTrue(boundingBox3D.intersectsExclusive(query));
@@ -1189,17 +1189,17 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
 
          Point3D queryCenter = new Point3D();
-         Vector3D queryHalfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Vector3D queryHalfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D query = new BoundingBox3D();
 
-         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double zParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double xParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double zParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          boundingBox3D.getPointGivenParameters(xParameter, yParameter, zParameter, queryCenter);
          query.set(queryCenter, queryHalfSize);
          assertTrue(boundingBox3D.intersectsInclusive(query));
@@ -1262,19 +1262,19 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0);
 
-         Point3D center = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
-         Vector3D halfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
+         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
          BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
 
          Point3D queryCenter = new Point3D();
-         Vector3D queryHalfSize = EuclidCoreRandomTools.generateRandomVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
+         Vector3D queryHalfSize = EuclidCoreRandomTools.nextVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
          BoundingBox3D query = new BoundingBox3D();
 
-         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double zParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double xParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double zParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          boundingBox3D.getPointGivenParameters(xParameter, yParameter, zParameter, queryCenter);
          query.set(queryCenter, queryHalfSize);
          assertTrue(boundingBox3D.intersectsEpsilon(query, epsilon));
@@ -1338,18 +1338,18 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center3D = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D center3D = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point2D center2D = new Point2D(center3D.getX(), center3D.getY());
-         Vector3D halfSize3D = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Vector3D halfSize3D = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center3D, halfSize3D);
 
          Point2D queryCenter2D = new Point2D();
          Point3D queryCenter3D = new Point3D();
-         Vector2D queryHalfSize2D = EuclidCoreRandomTools.generateRandomVector2D(random, 0.0, 10.0);
+         Vector2D queryHalfSize2D = EuclidCoreRandomTools.nextVector2D(random, 0.0, 10.0);
          BoundingBox2D query2D = new BoundingBox2D();
 
-         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double xParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          boundingBox3D.getPointGivenParameters(xParameter, yParameter, 0.0, queryCenter3D);
          queryCenter2D.set(queryCenter3D.getX(), queryCenter3D.getY());
          query2D.set(queryCenter2D, queryHalfSize2D);
@@ -1402,18 +1402,18 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D center3D = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D center3D = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point2D center2D = new Point2D(center3D.getX(), center3D.getY());
-         Vector3D halfSize3D = EuclidCoreRandomTools.generateRandomVector3D(random, 0.0, 10.0);
+         Vector3D halfSize3D = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center3D, halfSize3D);
 
          Point2D queryCenter2D = new Point2D();
          Point3D queryCenter3D = new Point3D();
-         Vector2D queryHalfSize2D = EuclidCoreRandomTools.generateRandomVector2D(random, 0.0, 10.0);
+         Vector2D queryHalfSize2D = EuclidCoreRandomTools.nextVector2D(random, 0.0, 10.0);
          BoundingBox2D query2D = new BoundingBox2D();
 
-         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double xParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          boundingBox3D.getPointGivenParameters(xParameter, yParameter, 0.0, queryCenter3D);
          queryCenter2D.set(queryCenter3D.getX(), queryCenter3D.getY());
          query2D.set(queryCenter2D, queryHalfSize2D);
@@ -1466,20 +1466,20 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         double epsilon = EuclidCoreRandomTools.generateRandomDouble(random, 1.0);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0);
 
-         Point3D center3D = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D center3D = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point2D center2D = new Point2D(center3D.getX(), center3D.getY());
-         Vector3D halfSize3D = EuclidCoreRandomTools.generateRandomVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
+         Vector3D halfSize3D = EuclidCoreRandomTools.nextVector3D(random, 2.0 * Math.abs(epsilon), 10.0);
          BoundingBox3D boundingBox3D = BoundingBox3D.createUsingCenterAndPlusMinusVector(center3D, halfSize3D);
 
          Point2D queryCenter2D = new Point2D();
          Point3D queryCenter3D = new Point3D();
-         Vector2D queryHalfSize2D = EuclidCoreRandomTools.generateRandomVector2D(random, 2.0 * Math.abs(epsilon), 10.0);
+         Vector2D queryHalfSize2D = EuclidCoreRandomTools.nextVector2D(random, 2.0 * Math.abs(epsilon), 10.0);
          BoundingBox2D query2D = new BoundingBox2D();
 
-         double xParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         double yParameter = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
+         double xParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         double yParameter = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          boundingBox3D.getPointGivenParameters(xParameter, yParameter, 0.0, queryCenter3D);
          queryCenter2D.set(queryCenter3D.getX(), queryCenter3D.getY());
          query2D.set(queryCenter2D, queryHalfSize2D);
@@ -1772,7 +1772,7 @@ public class BoundingBox3DTest
          BoundingBox3D original = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
          BoundingBox3D extended = new BoundingBox3D(original);
 
-         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          extended.updateToIncludePoint(point);
 
          if (original.isInsideInclusive(point))
@@ -1810,7 +1810,7 @@ public class BoundingBox3DTest
          BoundingBox3D original = EuclidGeometryRandomTools.generateRandomBoundingBox3D(random, 10.0, 10.0);
          BoundingBox3D extended = new BoundingBox3D(original);
 
-         Point3D point = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
+         Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          extended.updateToIncludePoint(point.getX(), point.getY(), point.getZ());
 
          if (original.isInsideInclusive(point))
@@ -1964,8 +1964,8 @@ public class BoundingBox3DTest
       BoundingBox3D firstBox, secondBox;
 
       {
-         Point3D firstPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.1, 2.5);
-         Point3D secondPoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 2.5, 5.0);
+         Point3D firstPoint = EuclidCoreRandomTools.nextPoint3D(random, 0.1, 2.5);
+         Point3D secondPoint = EuclidCoreRandomTools.nextPoint3D(random, 2.5, 5.0);
 
          firstBox = new BoundingBox3D(firstPoint, secondPoint);
          secondBox = new BoundingBox3D(firstBox);
@@ -1978,28 +1978,28 @@ public class BoundingBox3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         Point3D min = EuclidCoreRandomTools.generateRandomPoint3D(random, 0.1, 2.5);
-         Point3D max = EuclidCoreRandomTools.generateRandomPoint3D(random, 2.5, 5.0);
+         Point3D min = EuclidCoreRandomTools.nextPoint3D(random, 0.1, 2.5);
+         Point3D max = EuclidCoreRandomTools.nextPoint3D(random, 2.5, 5.0);
 
          firstBox = new BoundingBox3D(min, max);
 
          Point3D minCorrupted = new Point3D(min);
-         minCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON));
+         minCorrupted.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON));
          secondBox = new BoundingBox3D(minCorrupted, max);
          assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
 
          minCorrupted = new Point3D(min);
-         minCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON));
+         minCorrupted.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON));
          secondBox = new BoundingBox3D(minCorrupted, max);
          assertFalse(firstBox.geometricallyEquals(secondBox, EPSILON));
 
          Point3D maxCorrupted = new Point3D(max);
-         maxCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 0.99 * EPSILON));
+         maxCorrupted.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON));
          secondBox = new BoundingBox3D(min, maxCorrupted);
          assertTrue(firstBox.geometricallyEquals(secondBox, EPSILON));
 
          maxCorrupted = new Point3D(max);
-         maxCorrupted.add(EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, 1.01 * EPSILON));
+         maxCorrupted.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON));
          secondBox = new BoundingBox3D(min, maxCorrupted);
          assertFalse(firstBox.geometricallyEquals(secondBox, EPSILON));
       }

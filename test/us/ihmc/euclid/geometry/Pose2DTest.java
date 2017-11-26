@@ -60,14 +60,14 @@ public class Pose2DTest
          firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
          secondPose = new Pose2D(firstPose);
 
-         perturb = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 0.99 * epsilon);
+         perturb = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 0.99 * epsilon);
          perturb.add(secondPose.getPosition());
          secondPose.setPosition(perturb);
 
          assertTrue(firstPose.geometricallyEquals(secondPose, epsilon));
 
          secondPose = new Pose2D(firstPose);
-         perturb = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, 1.01 * epsilon);
+         perturb = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.01 * epsilon);
          perturb.add(secondPose.getPosition());
          secondPose.setPosition(perturb);
 

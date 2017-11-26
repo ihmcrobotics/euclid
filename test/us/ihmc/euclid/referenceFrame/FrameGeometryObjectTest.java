@@ -384,7 +384,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
          F frameGeometry = createFrameGeometryObject(initialFrame, expectedGeometry);
 
-         RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          boolean shouldThrowAndException = false;
          Class<?> exceptionClass = null;
@@ -428,7 +428,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
          F frameGeometry = createFrameGeometryObject(initialFrame, expectedGeometry);
 
-         RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform2D(random);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform2D(random);
          expectedGeometry.applyTransform(transform);
 
          frameGeometry.applyTransform(transform);
@@ -451,7 +451,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
          F frameGeometry = createFrameGeometryObject(initialFrame, expectedGeometry);
 
-         RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
          boolean shouldThrowAndException = false;
          Class<?> exceptionClass = null;
@@ -495,7 +495,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
 
          F frameGeometry = createFrameGeometryObject(initialFrame, expectedGeometry);
 
-         RigidBodyTransform transform = EuclidCoreRandomTools.generateRandomRigidBodyTransform2D(random);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform2D(random);
          expectedGeometry.applyInverseTransform(transform);
 
          frameGeometry.applyInverseTransform(transform);
