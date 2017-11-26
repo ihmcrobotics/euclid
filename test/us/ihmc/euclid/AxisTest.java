@@ -104,9 +104,9 @@ public class AxisTest
    @Test(timeout = 30000)
    public void testAxisVectorsForCorrectValues()
    {
-      Vector3DReadOnly xAxisVector = xAxis.getAxisVector();
-      Vector3DReadOnly yAxisVector = yAxis.getAxisVector();
-      Vector3DReadOnly zAxisVector = zAxis.getAxisVector();
+      Vector3DReadOnly xAxisVector = xAxis;
+      Vector3DReadOnly yAxisVector = yAxis;
+      Vector3DReadOnly zAxisVector = zAxis;
 
       assertTrue(xAxisVector != null);
       assertTrue(yAxisVector != null);
