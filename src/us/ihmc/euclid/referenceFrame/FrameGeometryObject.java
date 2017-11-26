@@ -321,12 +321,16 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    }
 
    /**
+    * Tests on a per component basis if {@code this} and {@code other} are equal to an
+    * {@code epsilon}.
+    * <p>
     * First tests if {@code this} and {@code other} are currently expressed in the same reference
     * frame, if not, this returns {@code false}. Then, tests if {@code this.geometryObject} is equal
     * to {@code other.geometryObject} to an {@code epsilon}. The test is usually achieved on a per
     * component basis. Sometimes a failing test does not necessarily mean that the two objects are
     * different in a geometric way.
-    *
+    * </p>
+    * 
     * @param other the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
@@ -337,6 +341,34 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
       if (referenceFrame != other.referenceFrame)
          return false;
       return geometryObject.epsilonEquals(other.getGeometryObject(), epsilon);
+   }
+
+   /**
+    * Tests if {@code this} and {@code other} represent the same geometry to an {@code epsilon}.
+    * <p>
+    * This returns {@code false} if the two frame geometries are not expressed in the same reference
+    * frame.
+    * </p>
+    * <p>
+    * The implementation of this test depends on the type of geometry. For instance, two points will
+    * be considered geometrically equal if they are at a distance from each other that is less or
+    * equal than {@code epsilon}.
+    * </p>
+    * <p>
+    * Two frame geometries that are geometrically equal are not necessarily epsilon equals and vice
+    * versa.
+    * </p>
+    *
+    * @param other the other geometry object to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing the two objects, usually refers to a distance.
+    * @return {@code true} if the two objects represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(F other, double epsilon)
+   {
+      if (referenceFrame != other.referenceFrame)
+         return false;
+      return geometryObject.geometricallyEquals(other.getGeometryObject(), epsilon);
    }
 
    /**
