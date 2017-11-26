@@ -10,7 +10,6 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -2256,8 +2255,8 @@ public class EuclidGeometryTools
 
       if (intersectionToPack != null)
       {
-         intersectionToPack.setX(TupleTools.interpolate(lineSegmentStartX, lineSegmentEndX, percentage));
-         intersectionToPack.setY(TupleTools.interpolate(lineSegmentStartY, lineSegmentEndY, percentage));
+         intersectionToPack.setX(EuclidCoreTools.interpolate(lineSegmentStartX, lineSegmentEndX, percentage));
+         intersectionToPack.setY(EuclidCoreTools.interpolate(lineSegmentStartY, lineSegmentEndY, percentage));
       }
       return true;
    }
