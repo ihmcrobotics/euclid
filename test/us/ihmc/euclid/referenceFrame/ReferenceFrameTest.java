@@ -14,8 +14,6 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 
 public class ReferenceFrameTest
 {
-   private static final boolean VERBOSE = false;
-
    private Random random;
    private ReferenceFrame root, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8;
    private ReferenceFrame root2, frame9, frame10, frame11;
@@ -187,7 +185,6 @@ public class ReferenceFrameTest
       updateAllFrames();
 
       int numberOfTests = 100000;
-      int numberTestsComplete = 0;
 
       for (int i = 0; i < numberOfTests; i++)
       {
@@ -207,14 +204,8 @@ public class ReferenceFrameTest
          transformTwo.invert();
 
          verifyTransformsAreEpsilonEqual(transformOne, transformTwo);
-         numberTestsComplete++;
       }
 
-      if (VERBOSE)
-      {
-         System.out.println("numberTestsComplete = " + numberTestsComplete);
-         System.out.println("nextTransformToRootID = " + ReferenceFrame.nextTransformToRootID);
-      }
       tearDown();
    }
 
@@ -226,7 +217,6 @@ public class ReferenceFrameTest
       updateAllFrames();
 
       int numberOfTests = 100000;
-      int numberTestsComplete = 0;
 
       for (int i = 0; i < numberOfTests; i++)
       {
@@ -244,14 +234,8 @@ public class ReferenceFrameTest
          RigidBodyTransform transformTwo = getTransformToDesiredFrameThroughVerificationTransforms(frame1, frame2);
 
          verifyTransformsAreEpsilonEqual(transformOne, transformTwo);
-         numberTestsComplete++;
       }
 
-      if (VERBOSE)
-      {
-         System.out.println("numberTestsComplete = " + numberTestsComplete);
-         System.out.println("nextTransformToRootID = " + ReferenceFrame.nextTransformToRootID);
-      }
       tearDown();
    }
 

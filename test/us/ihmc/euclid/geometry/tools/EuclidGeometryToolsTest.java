@@ -24,7 +24,6 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -732,7 +731,7 @@ public class EuclidGeometryToolsTest
          }
 
          // Can not be as accurate as we get closer to pi
-         EuclidCoreTestTools.assertAxisAngleEqualsSmart(expectedAxisAngle, actualAxisAngle, 1.0e-10);
+         EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(expectedAxisAngle, actualAxisAngle, 1.0e-10);
       }
 
       // Test exactly at 0.0
@@ -2323,11 +2322,11 @@ public class EuclidGeometryToolsTest
                   alphaEnd.setElement(otherIndex, 0.0);
                }
 
-               firstPointOnLine.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
-               firstPointOnLine.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
+               firstPointOnLine.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
+               firstPointOnLine.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
 
-               secondPointOnLine.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
-               secondPointOnLine.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
+               secondPointOnLine.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
+               secondPointOnLine.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
 
                lineDirection.sub(secondPointOnLine, firstPointOnLine);
 
@@ -2368,16 +2367,16 @@ public class EuclidGeometryToolsTest
          boundingBoxMax.absolute();
          boundingBoxMax.add(boundingBoxMin);
          Point2D insidePoint = new Point2D();
-         insidePoint.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-         insidePoint.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
+         insidePoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
+         insidePoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
          Point2D outsidePoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
          int index = random.nextInt(2);
          if (random.nextBoolean())
-            outsidePoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsidePoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0)));
          else
-            outsidePoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsidePoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)));
 
          Vector2D lineDirection1 = new Vector2D();
@@ -2504,13 +2503,13 @@ public class EuclidGeometryToolsTest
 
          double alphaStartX = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          double alphaStartY = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         lineSegmentStart.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStartX));
-         lineSegmentStart.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStartY));
+         lineSegmentStart.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStartX));
+         lineSegmentStart.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStartY));
 
          double alphaEndX = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          double alphaEndY = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         lineSegmentEnd.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEndX));
-         lineSegmentEnd.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEndY));
+         lineSegmentEnd.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEndX));
+         lineSegmentEnd.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEndY));
 
          Point2D expectedFirstIntersection = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
          Point2D expectedSecondIntersection = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
@@ -2550,16 +2549,16 @@ public class EuclidGeometryToolsTest
                else
                   alphaStart.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)); // Make the line segment hover outside
 
-               lineSegmentStart.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
-               lineSegmentStart.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
+               lineSegmentStart.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
+               lineSegmentStart.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
 
                Point2D alphaEnd = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
                if (hoveringDirection > 0.0)
                   alphaEnd.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0)); // Make the line segment hover outside
                else
                   alphaEnd.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)); // Make the line segment hover outside
-               lineSegmentEnd.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
-               lineSegmentEnd.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
+               lineSegmentEnd.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
+               lineSegmentEnd.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
 
                Point2D expectedFirstIntersection = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
                Point2D expectedSecondIntersection = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
@@ -2633,18 +2632,18 @@ public class EuclidGeometryToolsTest
          boundingBoxMax.absolute();
          boundingBoxMax.add(boundingBoxMin);
          Point2D insideEndpoint = new Point2D();
-         insideEndpoint.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(),
+         insideEndpoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(),
                                                     EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-         insideEndpoint.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(),
+         insideEndpoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(),
                                                     EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
          Point2D outsideEndpoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
          int index = random.nextInt(2);
          if (random.nextBoolean())
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0)));
          else
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)));
 
          Point2D originalFirstIntersection = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
@@ -2687,21 +2686,21 @@ public class EuclidGeometryToolsTest
          boundingBoxMax.absolute();
          boundingBoxMax.add(boundingBoxMin);
          Point2D onFaceEndpoint = new Point2D();
-         onFaceEndpoint.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), generateRandomDouble(random, 0.0, 1.0)));
-         onFaceEndpoint.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), generateRandomDouble(random, 0.0, 1.0)));
+         onFaceEndpoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), generateRandomDouble(random, 0.0, 1.0)));
+         onFaceEndpoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), generateRandomDouble(random, 0.0, 1.0)));
 
          Point2D outsideEndpoint = EuclidCoreRandomTools.generateRandomPoint2D(random, 10.0);
          int index = random.nextInt(2);
          if (random.nextBoolean())
          {
             onFaceEndpoint.setElement(index, boundingBoxMax.getElement(index));
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      generateRandomDouble(random, 1.0, 10.0)));
          }
          else
          {
             onFaceEndpoint.setElement(index, boundingBoxMin.getElement(index));
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      generateRandomDouble(random, -10.0, 0.0)));
          }
 
@@ -3040,13 +3039,13 @@ public class EuclidGeometryToolsTest
                   alphaEnd.setElement(otherIndex, 0.0);
                }
 
-               firstPointOnLine.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
-               firstPointOnLine.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
-               firstPointOnLine.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStart.getZ()));
+               firstPointOnLine.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
+               firstPointOnLine.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
+               firstPointOnLine.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStart.getZ()));
 
-               secondPointOnLine.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
-               secondPointOnLine.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
-               secondPointOnLine.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEnd.getZ()));
+               secondPointOnLine.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
+               secondPointOnLine.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
+               secondPointOnLine.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEnd.getZ()));
 
                lineDirection.sub(secondPointOnLine, firstPointOnLine);
 
@@ -3087,17 +3086,17 @@ public class EuclidGeometryToolsTest
          boundingBoxMax.absolute();
          boundingBoxMax.add(boundingBoxMin);
          Point3D insidePoint = new Point3D();
-         insidePoint.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-         insidePoint.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-         insidePoint.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
+         insidePoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
+         insidePoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
+         insidePoint.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
          Point3D outsidePoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
          int index = random.nextInt(3);
          if (random.nextBoolean())
-            outsidePoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsidePoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0)));
          else
-            outsidePoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsidePoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)));
 
          Vector3D lineDirection1 = new Vector3D();
@@ -3787,16 +3786,16 @@ public class EuclidGeometryToolsTest
          double alphaStartX = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          double alphaStartY = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          double alphaStartZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         lineSegmentStart.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStartX));
-         lineSegmentStart.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStartY));
-         lineSegmentStart.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStartZ));
+         lineSegmentStart.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStartX));
+         lineSegmentStart.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStartY));
+         lineSegmentStart.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStartZ));
 
          double alphaEndX = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          double alphaEndY = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
          double alphaEndZ = EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0);
-         lineSegmentEnd.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEndX));
-         lineSegmentEnd.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEndY));
-         lineSegmentEnd.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEndZ));
+         lineSegmentEnd.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEndX));
+         lineSegmentEnd.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEndY));
+         lineSegmentEnd.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEndZ));
 
          Point3DBasics expectedFirstIntersection = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
          Point3DBasics expectedSecondIntersection = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
@@ -3836,18 +3835,18 @@ public class EuclidGeometryToolsTest
                else
                   alphaStart.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)); // Make the line segment hover outside
 
-               lineSegmentStart.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
-               lineSegmentStart.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
-               lineSegmentStart.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStart.getZ()));
+               lineSegmentStart.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
+               lineSegmentStart.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
+               lineSegmentStart.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStart.getZ()));
 
                Point3D alphaEnd = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
                if (hoveringDirection > 0.0)
                   alphaEnd.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0)); // Make the line segment hover outside
                else
                   alphaEnd.setElement(axisIndex, EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)); // Make the line segment hover outside
-               lineSegmentEnd.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
-               lineSegmentEnd.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
-               lineSegmentEnd.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEnd.getZ()));
+               lineSegmentEnd.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
+               lineSegmentEnd.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
+               lineSegmentEnd.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEnd.getZ()));
 
                Point3DBasics expectedFirstIntersection = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
                Point3DBasics expectedSecondIntersection = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
@@ -3921,20 +3920,20 @@ public class EuclidGeometryToolsTest
          boundingBoxMax.absolute();
          boundingBoxMax.add(boundingBoxMin);
          Point3D insideEndpoint = new Point3D();
-         insideEndpoint.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(),
+         insideEndpoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(),
                                                     EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-         insideEndpoint.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(),
+         insideEndpoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(),
                                                     EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-         insideEndpoint.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(),
+         insideEndpoint.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(),
                                                     EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
          Point3D outsideEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
          int index = random.nextInt(3);
          if (random.nextBoolean())
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      EuclidCoreRandomTools.generateRandomDouble(random, 1.0, 10.0)));
          else
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      EuclidCoreRandomTools.generateRandomDouble(random, -10.0, 0.0)));
 
          Point3D originalFirstIntersection = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
@@ -3977,22 +3976,22 @@ public class EuclidGeometryToolsTest
          boundingBoxMax.absolute();
          boundingBoxMax.add(boundingBoxMin);
          Point3D onFaceEndpoint = new Point3D();
-         onFaceEndpoint.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), generateRandomDouble(random, 0.0, 1.0)));
-         onFaceEndpoint.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), generateRandomDouble(random, 0.0, 1.0)));
-         onFaceEndpoint.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), generateRandomDouble(random, 0.0, 1.0)));
+         onFaceEndpoint.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), generateRandomDouble(random, 0.0, 1.0)));
+         onFaceEndpoint.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), generateRandomDouble(random, 0.0, 1.0)));
+         onFaceEndpoint.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), generateRandomDouble(random, 0.0, 1.0)));
 
          Point3D outsideEndpoint = EuclidCoreRandomTools.generateRandomPoint3D(random, 10.0);
          int index = random.nextInt(3);
          if (random.nextBoolean())
          {
             onFaceEndpoint.setElement(index, boundingBoxMax.getElement(index));
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      generateRandomDouble(random, 1.0, 10.0)));
          }
          else
          {
             onFaceEndpoint.setElement(index, boundingBoxMin.getElement(index));
-            outsideEndpoint.setElement(index, TupleTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
+            outsideEndpoint.setElement(index, EuclidCoreTools.interpolate(boundingBoxMin.getElement(index), boundingBoxMax.getElement(index),
                                                                      generateRandomDouble(random, -10.0, 0.0)));
          }
 
@@ -5134,11 +5133,11 @@ public class EuclidGeometryToolsTest
                   alphaEnd.setElement(otherIndex, 0.0);
                }
 
-               rayOrigin.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
-               rayOrigin.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
+               rayOrigin.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
+               rayOrigin.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
 
-               pointOnRay.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
-               pointOnRay.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
+               pointOnRay.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
+               pointOnRay.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
 
                rayDirection.sub(pointOnRay, rayOrigin);
 
@@ -5192,7 +5191,7 @@ public class EuclidGeometryToolsTest
                rayDirection.interpolate(axisDirection, orthogonalToAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
             }
 
-            rayOrigin.setElement(nextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
+            rayOrigin.setElement(nextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
             int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
@@ -5230,10 +5229,10 @@ public class EuclidGeometryToolsTest
                pointOnRay.setElement(axisIndex, boundingBoxMin.getElement(axisIndex));
             }
 
-            pointOnRay.setElement(nextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
+            pointOnRay.setElement(nextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
                                                                    EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
-            rayOrigin.setElement(nextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
+            rayOrigin.setElement(nextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
             rayDirection.sub(pointOnRay, rayOrigin);
@@ -5262,7 +5261,7 @@ public class EuclidGeometryToolsTest
 
          Point2D rayOrigin = new Point2D();
          for (int axis = 0; axis < 2; axis++)
-            rayOrigin.setElement(axis, TupleTools.interpolate(boundingBoxMin.getElement(axis), boundingBoxMax.getElement(axis),
+            rayOrigin.setElement(axis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(axis), boundingBoxMax.getElement(axis),
                                                               EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
          Vector2D rayDirection = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, EuclidCoreRandomTools.generateRandomDouble(random, 10.0));
@@ -5340,13 +5339,13 @@ public class EuclidGeometryToolsTest
                   alphaEnd.setElement(otherIndex, 0.0);
                }
 
-               rayOrigin.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
-               rayOrigin.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
-               rayOrigin.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStart.getZ()));
+               rayOrigin.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaStart.getX()));
+               rayOrigin.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaStart.getY()));
+               rayOrigin.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaStart.getZ()));
 
-               pointOnRay.setX(TupleTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
-               pointOnRay.setY(TupleTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
-               pointOnRay.setZ(TupleTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEnd.getZ()));
+               pointOnRay.setX(EuclidCoreTools.interpolate(boundingBoxMin.getX(), boundingBoxMax.getX(), alphaEnd.getX()));
+               pointOnRay.setY(EuclidCoreTools.interpolate(boundingBoxMin.getY(), boundingBoxMax.getY(), alphaEnd.getY()));
+               pointOnRay.setZ(EuclidCoreTools.interpolate(boundingBoxMin.getZ(), boundingBoxMax.getZ(), alphaEnd.getZ()));
 
                rayDirection.sub(pointOnRay, rayOrigin);
 
@@ -5401,9 +5400,9 @@ public class EuclidGeometryToolsTest
                rayDirection.interpolate(axisDirection, orthogonalToAxis, EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0));
             }
 
-            rayOrigin.setElement(nextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
+            rayOrigin.setElement(nextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-            rayOrigin.setElement(nextNextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextNextAxis), boundingBoxMax.getElement(nextNextAxis),
+            rayOrigin.setElement(nextNextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextNextAxis), boundingBoxMax.getElement(nextNextAxis),
                                                                       EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
             int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
@@ -5442,14 +5441,14 @@ public class EuclidGeometryToolsTest
                pointOnRay.setElement(axisIndex, boundingBoxMin.getElement(axisIndex));
             }
 
-            pointOnRay.setElement(nextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
+            pointOnRay.setElement(nextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
                                                                    EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-            pointOnRay.setElement(nextNextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextNextAxis), boundingBoxMax.getElement(nextNextAxis),
+            pointOnRay.setElement(nextNextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextNextAxis), boundingBoxMax.getElement(nextNextAxis),
                                                                        EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
-            rayOrigin.setElement(nextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
+            rayOrigin.setElement(nextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextAxis), boundingBoxMax.getElement(nextAxis),
                                                                   EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
-            rayOrigin.setElement(nextNextAxis, TupleTools.interpolate(boundingBoxMin.getElement(nextNextAxis), boundingBoxMax.getElement(nextNextAxis),
+            rayOrigin.setElement(nextNextAxis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(nextNextAxis), boundingBoxMax.getElement(nextNextAxis),
                                                                       EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
             rayDirection.sub(pointOnRay, rayOrigin);
@@ -5478,7 +5477,7 @@ public class EuclidGeometryToolsTest
 
          Point3D rayOrigin = new Point3D();
          for (int axis = 0; axis < 3; axis++)
-            rayOrigin.setElement(axis, TupleTools.interpolate(boundingBoxMin.getElement(axis), boundingBoxMax.getElement(axis),
+            rayOrigin.setElement(axis, EuclidCoreTools.interpolate(boundingBoxMin.getElement(axis), boundingBoxMax.getElement(axis),
                                                               EuclidCoreRandomTools.generateRandomDouble(random, 0.0, 1.0)));
 
          Vector3D rayDirection = EuclidCoreRandomTools.generateRandomVector3D(random, -10.0, 10.0);
