@@ -95,9 +95,9 @@ public class EuclidFrameRandomTools
    {
       RigidBodyTransform transformFromParent;
       if (use2DTransform)
-         transformFromParent = EuclidCoreRandomTools.generateRandomRigidBodyTransform2D(random);
+         transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform2D(random);
       else
-         transformFromParent = EuclidCoreRandomTools.generateRandomRigidBodyTransform(random);
+         transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
    }
 
@@ -204,7 +204,7 @@ public class EuclidFrameRandomTools
     */
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame)
    {
-      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint3D(random));
+      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random));
    }
 
    /**
@@ -223,7 +223,7 @@ public class EuclidFrameRandomTools
     */
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame, double minMax)
    {
-      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint3D(random, minMax));
+      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, minMax));
    }
 
    /**
@@ -243,7 +243,7 @@ public class EuclidFrameRandomTools
     */
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame, double min, double max)
    {
-      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint3D(random, min, max));
+      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, min, max));
    }
 
    /**
@@ -266,7 +266,7 @@ public class EuclidFrameRandomTools
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY,
                                                          double maxAbsoluteZ)
    {
-      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
+      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
    }
 
    /**
@@ -291,7 +291,7 @@ public class EuclidFrameRandomTools
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
                                                          double minZ, double maxZ)
    {
-      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
+      return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
 
    /**
@@ -306,7 +306,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame)
    {
-      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.generateRandomVector3D(random));
+      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random));
    }
 
    /**
@@ -325,7 +325,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame, Tuple3DReadOnly minMax)
    {
-      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.generateRandomVector3D(random, minMax));
+      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, minMax));
    }
 
    /**
@@ -345,7 +345,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame, Tuple3DReadOnly min, Tuple3DReadOnly max)
    {
-      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.generateRandomVector3D(random, min, max));
+      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, min, max));
    }
 
    /**
@@ -363,7 +363,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame, double min, double max)
    {
-      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.generateRandomVector3D(random, min, max));
+      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, min, max));
    }
 
    /**
@@ -388,7 +388,7 @@ public class EuclidFrameRandomTools
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
                                                            double minZ, double maxZ)
    {
-      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.generateRandomVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
+      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
 
    /**
@@ -401,7 +401,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector3D generateRandomFrameVector3DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
    {
-      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.generateRandomVector3DWithFixedLength(random, length));
+      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, length));
    }
 
    /**
@@ -429,7 +429,7 @@ public class EuclidFrameRandomTools
    public static FrameVector3D generateRandomOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
                                                                      boolean normalize)
    {
-      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.generateRandomOrthogonalVector3D(random, vectorToBeOrthogonalTo, normalize));
+      return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextOrthogonalVector3D(random, vectorToBeOrthogonalTo, normalize));
    }
 
    /**
@@ -444,7 +444,7 @@ public class EuclidFrameRandomTools
     */
    public static FramePoint2D generateRandomFramePoint2D(Random random, ReferenceFrame referenceFrame)
    {
-      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint2D(random));
+      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.nextPoint2D(random));
    }
 
    /**
@@ -460,7 +460,7 @@ public class EuclidFrameRandomTools
     */
    public static FramePoint2D generateRandomFramePoint2D(Random random, ReferenceFrame referenceFrame, double minMax)
    {
-      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint2D(random, minMax));
+      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.nextPoint2D(random, minMax));
    }
 
    /**
@@ -478,7 +478,7 @@ public class EuclidFrameRandomTools
     */
    public static FramePoint2D generateRandomFramePoint2D(Random random, ReferenceFrame referenceFrame, double min, double max)
    {
-      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint2D(random, min, max));
+      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.nextPoint2D(random, min, max));
    }
 
    /**
@@ -499,7 +499,7 @@ public class EuclidFrameRandomTools
     */
    public static FramePoint2D generateRandomFramePoint2D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY)
    {
-      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.generateRandomPoint2D(random, minX, maxX, minY, maxY));
+      return new FramePoint2D(referenceFrame, EuclidCoreRandomTools.nextPoint2D(random, minX, maxX, minY, maxY));
    }
 
    /**
@@ -514,7 +514,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector2D generateRandomFrameVector2D(Random random, ReferenceFrame referenceFrame)
    {
-      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.generateRandomVector2D(random));
+      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2D(random));
    }
 
    /**
@@ -532,7 +532,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector2D generateRandomFrameVector2D(Random random, ReferenceFrame referenceFrame, double min, double max)
    {
-      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.generateRandomVector2D(random, min, min));
+      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2D(random, min, min));
    }
 
    /**
@@ -545,7 +545,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector2D generateRandomFrameVector2DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
    {
-      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, length));
+      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2DWithFixedLength(random, length));
    }
 
    /**
@@ -564,7 +564,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector2D generateRandomFrameVector2D(Random random, ReferenceFrame referenceFrame, Tuple2DReadOnly minMax)
    {
-      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.generateRandomVector2D(random, minMax));
+      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2D(random, minMax));
    }
 
    /**
@@ -584,7 +584,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector2D generateRandomFrameVector2D(Random random, ReferenceFrame referenceFrame, Tuple2DReadOnly min, Tuple2DReadOnly max)
    {
-      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.generateRandomVector2D(random, min, max));
+      return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2D(random, min, max));
    }
 
    /**
@@ -599,7 +599,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameQuaternion generateRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame)
    {
-      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random));
+      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random));
    }
 
    /**
@@ -616,7 +616,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameQuaternion generateRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
    {
-      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.generateRandomQuaternion(random, minMaxAngle));
+      return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random, minMaxAngle));
    }
 
    /**
@@ -630,6 +630,6 @@ public class EuclidFrameRandomTools
     */
    public static FrameVector4D generateRandomFrameVector4D(Random random, ReferenceFrame referenceFrame)
    {
-      return new FrameVector4D(referenceFrame, EuclidCoreRandomTools.generateRandomVector4D(random));
+      return new FrameVector4D(referenceFrame, EuclidCoreRandomTools.nextVector4D(random));
    }
 }

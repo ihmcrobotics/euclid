@@ -141,30 +141,30 @@ public class EuclidFrameAPITestTools
    static
    {
       HashMap<Class<?>, GenericTypeBuilder> modifiableMap = new HashMap<>();
-      modifiableMap.put(Tuple2DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Tuple2DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Point2DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Point2DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint2D(random));
-      modifiableMap.put(Vector2DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector2D(random));
-      modifiableMap.put(Vector2DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector2D(random));
+      modifiableMap.put(Tuple2DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Tuple2DBasics.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Point2DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Point2DBasics.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
+      modifiableMap.put(Vector2DReadOnly.class, () -> EuclidCoreRandomTools.nextVector2D(random));
+      modifiableMap.put(Vector2DBasics.class, () -> EuclidCoreRandomTools.nextVector2D(random));
 
-      modifiableMap.put(Tuple3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Tuple3DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Point3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Point3DBasics.class, () -> EuclidCoreRandomTools.generateRandomPoint3D(random));
-      modifiableMap.put(Vector3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
-      modifiableMap.put(Vector3DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector3D(random));
+      modifiableMap.put(Tuple3DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Tuple3DBasics.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Point3DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Point3DBasics.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
+      modifiableMap.put(Vector3DReadOnly.class, () -> EuclidCoreRandomTools.nextVector3D(random));
+      modifiableMap.put(Vector3DBasics.class, () -> EuclidCoreRandomTools.nextVector3D(random));
 
-      modifiableMap.put(AxisAngleReadOnly.class, () -> EuclidCoreRandomTools.generateRandomAxisAngle(random));
+      modifiableMap.put(AxisAngleReadOnly.class, () -> EuclidCoreRandomTools.nextAxisAngle(random));
 
-      modifiableMap.put(Tuple4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
-      modifiableMap.put(Tuple4DBasics.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
-      modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomVector4D(random));
-      modifiableMap.put(Vector4DBasics.class, () -> EuclidCoreRandomTools.generateRandomVector4D(random));
-      modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.generateRandomRotationMatrix(random));
-      modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.generateRandomMatrix3D(random));
-      modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
-      modifiableMap.put(QuaternionBasics.class, () -> EuclidCoreRandomTools.generateRandomQuaternion(random));
+      modifiableMap.put(Tuple4DReadOnly.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
+      modifiableMap.put(Tuple4DBasics.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
+      modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.nextVector4D(random));
+      modifiableMap.put(Vector4DBasics.class, () -> EuclidCoreRandomTools.nextVector4D(random));
+      modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.nextRotationMatrix(random));
+      modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.nextMatrix3D(random));
+      modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
+      modifiableMap.put(QuaternionBasics.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
 
       framelessTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -1754,13 +1754,13 @@ public class EuclidFrameAPITestTools
          else if (type.equals(Integer.TYPE) || type.equals(Character.TYPE) || type.equals(Long.TYPE))
             return random.nextInt(1000) - 500;
          else if (type.equals(Float.TYPE) || type.equals(Double.TYPE))
-            return EuclidCoreRandomTools.generateRandomDouble(random, 10.0);
+            return EuclidCoreRandomTools.nextDouble(random, 10.0);
          else
             return 0;
       }
 
       if (Transform.class.equals(type))
-         return EuclidCoreRandomTools.generateRandomAffineTransform(random);
+         return EuclidCoreRandomTools.nextAffineTransform(random);
 
       if (DenseMatrix64F.class.equals(type))
       {

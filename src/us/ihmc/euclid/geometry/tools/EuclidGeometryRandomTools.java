@@ -1,13 +1,13 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomDouble;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomPoint3D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomQuaternion;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector2DWithFixedLength;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector3D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.generateRandomVector3DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextQuaternion;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3DWithFixedLength;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +46,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Line2D generateRandomLine2D(Random random)
    {
-      return new Line2D(generateRandomPoint2D(random), generateRandomVector2D(random));
+      return new Line2D(nextPoint2D(random), nextVector2D(random));
    }
 
    /**
@@ -65,7 +65,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Line2D generateRandomLine2D(Random random, double pointMinMax)
    {
-      return new Line2D(generateRandomPoint2D(random, pointMinMax), generateRandomVector2D(random));
+      return new Line2D(nextPoint2D(random, pointMinMax), nextVector2D(random));
    }
 
    /**
@@ -82,7 +82,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Line3D generateRandomLine3D(Random random)
    {
-      return new Line3D(generateRandomPoint3D(random), generateRandomVector3D(random));
+      return new Line3D(nextPoint3D(random), nextVector3D(random));
    }
 
    /**
@@ -101,7 +101,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Line3D generateRandomLine3D(Random random, double pointMinMax)
    {
-      return new Line3D(generateRandomPoint3D(random, pointMinMax), generateRandomVector3D(random));
+      return new Line3D(nextPoint3D(random, pointMinMax), nextVector3D(random));
    }
 
    /**
@@ -118,7 +118,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static LineSegment1D generateRandomLineSegment1D(Random random)
    {
-      return new LineSegment1D(generateRandomDouble(random), generateRandomDouble(random));
+      return new LineSegment1D(nextDouble(random), nextDouble(random));
    }
 
    /**
@@ -137,7 +137,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static LineSegment1D generateRandomLineSegment1D(Random random, double minMax)
    {
-      return new LineSegment1D(generateRandomDouble(random, minMax), generateRandomDouble(random, minMax));
+      return new LineSegment1D(nextDouble(random, minMax), nextDouble(random, minMax));
    }
 
    /**
@@ -154,7 +154,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static LineSegment2D generateRandomLineSegment2D(Random random)
    {
-      return new LineSegment2D(generateRandomPoint2D(random), generateRandomPoint2D(random));
+      return new LineSegment2D(nextPoint2D(random), nextPoint2D(random));
    }
 
    /**
@@ -173,7 +173,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static LineSegment2D generateRandomLineSegment2D(Random random, double minMax)
    {
-      return new LineSegment2D(generateRandomPoint2D(random, minMax), generateRandomPoint2D(random, minMax));
+      return new LineSegment2D(nextPoint2D(random, minMax), nextPoint2D(random, minMax));
    }
 
    /**
@@ -190,7 +190,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static LineSegment3D generateRandomLineSegment3D(Random random)
    {
-      return new LineSegment3D(generateRandomPoint3D(random), generateRandomPoint3D(random));
+      return new LineSegment3D(nextPoint3D(random), nextPoint3D(random));
    }
 
    /**
@@ -209,7 +209,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static LineSegment3D generateRandomLineSegment3D(Random random, double minMax)
    {
-      return new LineSegment3D(generateRandomPoint3D(random, minMax), generateRandomPoint3D(random, minMax));
+      return new LineSegment3D(nextPoint3D(random, minMax), nextPoint3D(random, minMax));
    }
 
    /**
@@ -234,8 +234,8 @@ public abstract class EuclidGeometryRandomTools
     */
    public static BoundingBox2D generateRandomBoundingBox2D(Random random, double centerMinMax, double sizeMax)
    {
-      Point2D center = generateRandomPoint2D(random, centerMinMax);
-      Vector2D halfSize = generateRandomVector2D(random, 0.0, sizeMax / 2.0);
+      Point2D center = nextPoint2D(random, centerMinMax);
+      Vector2D halfSize = nextVector2D(random, 0.0, sizeMax / 2.0);
       return BoundingBox2D.createUsingCenterAndPlusMinusVector(center, halfSize);
    }
 
@@ -261,8 +261,8 @@ public abstract class EuclidGeometryRandomTools
     */
    public static BoundingBox3D generateRandomBoundingBox3D(Random random, double centerMinMax, double sizeMax)
    {
-      Point3D center = generateRandomPoint3D(random, centerMinMax);
-      Vector3D halfSize = generateRandomVector3D(random, 0.0, sizeMax / 2.0);
+      Point3D center = nextPoint3D(random, centerMinMax);
+      Vector3D halfSize = nextVector3D(random, 0.0, sizeMax / 2.0);
       return BoundingBox3D.createUsingCenterAndPlusMinusVector(center, halfSize);
    }
 
@@ -279,7 +279,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Orientation2D generateRandomOrientation2D(Random random)
    {
-      return new Orientation2D(generateRandomDouble(random, Math.PI));
+      return new Orientation2D(nextDouble(random, Math.PI));
    }
 
    /**
@@ -297,7 +297,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Orientation2D generateRandomOrientation2D(Random random, double minMax)
    {
-      return new Orientation2D(generateRandomDouble(random, minMax));
+      return new Orientation2D(nextDouble(random, minMax));
    }
 
    /**
@@ -324,8 +324,8 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Plane3D generateRandomPlane3D(Random random, double pointMinMax)
    {
-      Point3D pointOnPlane = generateRandomPoint3D(random, pointMinMax);
-      Vector3D planeNormal = generateRandomVector3DWithFixedLength(random, 1.0);
+      Point3D pointOnPlane = nextPoint3D(random, pointMinMax);
+      Vector3D planeNormal = nextVector3DWithFixedLength(random, 1.0);
       return new Plane3D(pointOnPlane, planeNormal);
    }
 
@@ -343,7 +343,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Pose2D generateRandomPose2D(Random random)
    {
-      return new Pose2D(generateRandomPoint2D(random), generateRandomOrientation2D(random));
+      return new Pose2D(nextPoint2D(random), generateRandomOrientation2D(random));
    }
 
    /**
@@ -362,7 +362,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Pose2D generateRandomLine2D(Random random, double positionMinMax, double orientationMinMax)
    {
-      return new Pose2D(generateRandomPoint2D(random, positionMinMax), generateRandomOrientation2D(random, orientationMinMax));
+      return new Pose2D(nextPoint2D(random, positionMinMax), generateRandomOrientation2D(random, orientationMinMax));
    }
 
    /**
@@ -379,7 +379,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Pose3D generateRandomPose3D(Random random)
    {
-      return new Pose3D(generateRandomPoint3D(random), generateRandomQuaternion(random));
+      return new Pose3D(nextPoint3D(random), nextQuaternion(random));
    }
 
    /**
@@ -399,7 +399,7 @@ public abstract class EuclidGeometryRandomTools
     */
    public static Pose3D generateRandomLine3D(Random random, double positionMinMax, double orientationMinMax)
    {
-      return new Pose3D(generateRandomPoint3D(random, positionMinMax), generateRandomQuaternion(random, orientationMinMax));
+      return new Pose3D(nextPoint3D(random, positionMinMax), nextQuaternion(random, orientationMinMax));
    }
 
    /**
@@ -415,10 +415,10 @@ public abstract class EuclidGeometryRandomTools
    {
       List<Point2D> pointCloud2D = new ArrayList<>();
 
-      Point2D center = generateRandomPoint2D(random, centerMinMax);
+      Point2D center = nextPoint2D(random, centerMinMax);
       for (int i = 0; i < numberOfPoints; i++)
       {
-         Point2D point = generateRandomPoint2D(random, minMax);
+         Point2D point = nextPoint2D(random, minMax);
          point.add(center);
          pointCloud2D.add(point);
       }
@@ -442,11 +442,11 @@ public abstract class EuclidGeometryRandomTools
       if (numberOfVertices == 0)
          return Collections.emptyList();
       if (numberOfVertices == 1)
-         return Collections.singletonList(generateRandomPoint2D(random, centerMinMax));
+         return Collections.singletonList(nextPoint2D(random, centerMinMax));
       if (numberOfVertices == 2)
       {
-         Vector2D halfEdgeLentgh = generateRandomVector2DWithFixedLength(random, 0.5 * maxEdgeLength * random.nextDouble());
-         Point2D center = generateRandomPoint2D(random, centerMinMax);
+         Vector2D halfEdgeLentgh = nextVector2DWithFixedLength(random, 0.5 * maxEdgeLength * random.nextDouble());
+         Point2D center = nextPoint2D(random, centerMinMax);
          Point2D a = new Point2D();
          Point2D b = new Point2D();
          a.add(center, halfEdgeLentgh);
@@ -463,7 +463,7 @@ public abstract class EuclidGeometryRandomTools
 
       for (int i = 0; i < numberOfVertices; i++)
       {
-         dTheta[i] = generateRandomDouble(random, 0.001, 1.0);
+         dTheta[i] = nextDouble(random, 0.001, 1.0);
          sum += dTheta[i];
       }
       // Adding the angle for the last segment
@@ -479,7 +479,7 @@ public abstract class EuclidGeometryRandomTools
       List<Point2D> clockwiseVertices = new ArrayList<>();
       double theta = 0.0;
       // Add a random yaw angle on all the vertices
-      double yaw = generateRandomDouble(random, Math.PI);
+      double yaw = nextDouble(random, Math.PI);
       clockwiseVertices.add(new Point2D(Math.cos(yaw), Math.sin(yaw)));
 
       for (int i = 1; i < numberOfVertices; i++)
@@ -500,7 +500,7 @@ public abstract class EuclidGeometryRandomTools
       }
 
       // Limiting the min value from the random to prevent obtaining a polygon that is way too small
-      scale = generateRandomDouble(random, 0.1, 1.0) * maxEdgeLength / currentMaxEdgeLength;
+      scale = nextDouble(random, 0.1, 1.0) * maxEdgeLength / currentMaxEdgeLength;
       for (int i = 0; i < numberOfVertices; i++)
          clockwiseVertices.get(i).scale(scale);
 
@@ -525,7 +525,7 @@ public abstract class EuclidGeometryRandomTools
       }
 
       // Make a new list with the vertices properly ordered and shifted to be around a random center
-      Point2D center = generateRandomPoint2D(random, centerMinMax);
+      Point2D center = nextPoint2D(random, centerMinMax);
       List<Point2D> convexPolygon2D = new ArrayList<>();
 
       for (int i = 0; i < numberOfVertices; i++)
