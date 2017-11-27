@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -16,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * A {@code Orientation2D} represents an orientation in the XY-plane, i.e. the yaw angle about the
  * z-axis.
  */
-public class Orientation2D implements GeometryObject<Orientation2D>
+public class Orientation2D implements Orientation2DReadOnly, GeometryObject<Orientation2D>
 {
    /** The angle in radians about the z-axis. */
    private double yaw = 0.0;
@@ -29,7 +30,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     */
    public Orientation2D()
    {
-      yaw = 0.0;
+      setToZero();
    }
 
    /**
@@ -61,6 +62,10 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    public void set(Orientation2D other)
    {
       yaw = other.yaw;
+   }
+   
+   public void set(Orientation2DReadOnly other) {
+      yaw = other.getYaw();
    }
 
    /** {@inheritDoc} */
@@ -104,6 +109,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
     *
     * @return the angle value in radians.
     */
+   @Override
    public double getYaw()
    {
       return yaw;
@@ -395,32 +401,6 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    }
 
    /**
-    * Computes the distance between {@code this} and {@code other} as the absolute difference in
-    * angle:<br>
-    * {@code distance = Math.abs(this.yaw - other.yaw)}
-    *
-    * @param other the other orientation 2D. Not modified.
-    * @return the distance between {@code this} and {@code other} contained in [0, <i>pi</pi>].
-    */
-   public double distance(Orientation2D other)
-   {
-      return Math.abs(difference(other));
-   }
-
-   /**
-    * Computes and returns the difference between {@code this} and {@code other}:<br>
-    * {@code distance = this.yaw - other.yaw}
-    *
-    * @param other the other orientation 2D. Not modified.
-    * @return the difference between {@code this} and {@code other} contained in [-<i>pi</i>,
-    *         <i>pi</pi>].
-    */
-   public double difference(Orientation2D other)
-   {
-      return EuclidCoreTools.angleDifferenceMinusPiToPi(yaw, other.yaw);
-   }
-
-   /**
     * Transforms this orientation 2D by the given {@code transform}.
     * <p>
     * This is equivalent to extracting the yaw rotation part from the given transform and adding it
@@ -483,7 +463,7 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    @Override
    public boolean epsilonEquals(Orientation2D other, double epsilon)
    {
-      return EuclidCoreTools.epsilonEquals(yaw, other.yaw, epsilon);
+      return Orientation2DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -549,6 +529,6 @@ public class Orientation2D implements GeometryObject<Orientation2D>
    @Override
    public boolean geometricallyEquals(Orientation2D other, double epsilon)
    {
-      return Math.abs(EuclidCoreTools.angleDifferenceMinusPiToPi(yaw, other.yaw)) <= epsilon;
+      return Orientation2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
