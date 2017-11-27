@@ -236,7 +236,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       double dyLocal = TransformationTools.computeTransformedY(shapePose, true, lineDirection);
       double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(height, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal, dzLocal,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(0.0, height, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal, dzLocal,
                                                                                              firstIntersectionToPack, secondIntersectionToPack);
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);

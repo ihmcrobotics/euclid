@@ -1531,9 +1531,9 @@ public class EuclidFrameTools
                                                             FramePoint3D secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
-                                                                                             secondPointOnLine, firstIntersectionToPack,
-                                                                                             secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(0.0, cylinderHeight, cylinderRadius,
+                                                                                             firstPointOnLine, secondPointOnLine,
+                                                                                             firstIntersectionToPack, secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -1590,8 +1590,8 @@ public class EuclidFrameTools
                                                             FramePoint3D secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, pointOnLine, lineDirection,
-                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(0.0, cylinderHeight, cylinderRadius, pointOnLine,
+                                                                                             lineDirection, firstIntersectionToPack, secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -1937,9 +1937,9 @@ public class EuclidFrameTools
                                                                    FramePoint3D secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
-                                                                                                    lineSegmentEnd, firstIntersectionToPack,
-                                                                                                    secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(0.0, cylinderHeight, cylinderRadius,
+                                                                                                    lineSegmentStart, lineSegmentEnd,
+                                                                                                    firstIntersectionToPack, secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -2207,8 +2207,8 @@ public class EuclidFrameTools
                                                            FramePoint3D secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection,
-                                                                                            firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(0.0, cylinderHeight, cylinderRadius, rayOrigin,
+                                                                                            rayDirection, firstIntersectionToPack, secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
