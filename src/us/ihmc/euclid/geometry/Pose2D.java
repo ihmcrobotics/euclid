@@ -1,12 +1,15 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -14,6 +17,11 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  */
 public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
 {
+   /** The position part of this pose 2D. */
+   Point2D position = new Point2D();
+   /** The orientation part of this pose 2D. */
+   Orientation2D orientation = new Orientation2D();
+   
    /**
     * Creates a new pose 2D initialized with its position at (0, 0) and orientation at 0.
     */
@@ -77,6 +85,48 @@ public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
    {
       position.setToZero();
       orientation.setToZero();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getX()
+   {
+      return position.getX();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getY()
+   {
+      return position.getY();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getYaw()
+   {
+      return orientation.getYaw();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public Point2DReadOnly getPosition()
+   {
+      return position;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public Orientation2DReadOnly getOrientation()
+   {
+      return orientation;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getOrientation(Orientation2D orientationToPack)
+   {
+      orientationToPack.set(orientation);
    }
 
    /**

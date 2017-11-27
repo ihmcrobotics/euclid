@@ -11,8 +11,10 @@ import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
@@ -20,6 +22,11 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
 {
+   /** The position part of this pose 3D. */
+   Point3D position = new Point3D();
+   /** The orientation part of this pose 3D. */
+   Quaternion orientation = new Quaternion();
+   
    /**
     * Creates a new pose 3D initialized with its position at (0, 0, 0) and orientation set to the
     * neutral quaternion, i.e. zero rotation.
@@ -105,6 +112,62 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
    {
       orientation.setToZero();
       position.setToZero();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getX()
+   {
+      return position.getX();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getY()
+   {
+      return position.getY();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getZ()
+   {
+      return position.getZ();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getYaw()
+   {
+      return orientation.getYaw();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getPitch()
+   {
+      return orientation.getPitch();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getRoll()
+   {
+      return orientation.getRoll();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public Point3DReadOnly getPosition()
+   {
+      return position;
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public QuaternionReadOnly getOrientation()
+   {
+      return orientation;
    }
 
    /**

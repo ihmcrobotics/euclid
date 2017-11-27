@@ -4,117 +4,48 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public interface Pose3DReadOnly
 {
-   /** The position part of this pose 3D. */
-   Point3D position = new Point3D();
-   /** The orientation part of this pose 3D. */
-   Quaternion orientation = new Quaternion();
-   
-   /**
-    * Computes the distance between the position of this pose 3D and the given {@code point}.
-    *
-    * @param point the other point used to measure the distance. Not modified.
-    * @return the distance between this pose and the given {@code point}.
-    */
-   default double getPositionDistance(Point3DReadOnly point)
-   {
-      return position.distance(point);
-   }
-
-   /**
-    * Computes the distances between the position part of the two poses.
-    *
-    * @param other the other pose used to measure the distance. Not modified.
-    * @return the distance between the position part of the two poses.
-    */
-   default double getPositionDistance(Pose3DReadOnly other)
-   {
-      return position.distance(other.position);
-   }
-
-   /**
-    * Computes the smallest angle representing the difference between the orientation part of this
-    * pose 3D and the give {@code orientation}.
-    *
-    * @param orientation the orientation used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this} and {@code orientation}, it is contained in
-    *         [0, 2<i>pi</i>].
-    */
-   default double getOrientationDistance(QuaternionReadOnly orientation)
-   {
-      return this.orientation.distance(orientation);
-   }
-
-   /**
-    * Computes the absolute angle difference between this pose 3D and {@code other}.
-    *
-    * @param other the other pose 3D used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this.orientation} and {@code other.orientation},
-    *         it is contained in [0, 2<i>pi</i>].
-    */
-   default double getOrientationDistance(Pose3DReadOnly other)
-   {
-      return orientation.distance(other.orientation);
-   }
-
    /**
     * Gets the read-only reference of the position part of this pose 3D.
     *
     * @return the position part of this pose 3D.
     */
-   default Point3DReadOnly getPosition()
-   {
-      return position;
-   }
+   Point3DReadOnly getPosition();
 
    /**
     * Gets the read-only reference to the orientation part of this pose 3D.
     *
     * @return the orientation part of this pose 3D.
     */
-   default QuaternionReadOnly getOrientation()
-   {
-      return orientation;
-   }
+   QuaternionReadOnly getOrientation();
 
    /**
     * Gets the x-coordinate of the position part of this pose 3D.
     *
     * @return the x-coordinate of this pose 3D.
     */
-   default double getX()
-   {
-      return position.getX();
-   }
+   double getX();
 
    /**
     * Gets the y-coordinate of the position part of this pose 3D.
     *
     * @return the y-coordinate of this pose 3D.
     */
-   default double getY()
-   {
-      return position.getY();
-   }
+   double getY();
 
    /**
     * Gets the z-coordinate of the position part of this pose 3D.
     *
     * @return the z-coordinate of this pose 3D.
     */
-   default double getZ()
-   {
-      return position.getZ();
-   }
+   double getZ();
 
    /**
     * Computes and returns the yaw angle from the yaw-pitch-roll representation of the orientation
@@ -126,10 +57,7 @@ public interface Pose3DReadOnly
     *
     * @return the yaw angle around the z-axis.
     */
-   default double getYaw()
-   {
-      return orientation.getYaw();
-   }
+   double getYaw();
 
    /**
     * Computes and returns the pitch angle from the yaw-pitch-roll representation of the orientation
@@ -141,10 +69,7 @@ public interface Pose3DReadOnly
     *
     * @return the pitch angle around the y-axis.
     */
-   default double getPitch()
-   {
-      return orientation.getPitch();
-   }
+   double getPitch();
 
    /**
     * Computes and returns the roll angle from the yaw-pitch-roll representation of the orientation
@@ -156,10 +81,7 @@ public interface Pose3DReadOnly
     *
     * @return the roll angle around the x-axis.
     */
-   default double getRoll()
-   {
-      return orientation.getRoll();
-   }
+   double getRoll();
 
    /**
     * Packs the position part of this pose 3D into the given {@code positionToPack}.
@@ -168,7 +90,7 @@ public interface Pose3DReadOnly
     */
    default void getPosition(Tuple3DBasics positionToPack)
    {
-      positionToPack.set(position);
+      positionToPack.set(getPosition());
    }
 
    /**
@@ -178,7 +100,7 @@ public interface Pose3DReadOnly
     */
    default void getOrientation(RotationMatrix orientationToPack)
    {
-      orientationToPack.set(orientation);
+      orientationToPack.set(getOrientation());
    }
 
    /**
@@ -188,7 +110,7 @@ public interface Pose3DReadOnly
     */
    default void getOrientation(QuaternionBasics orientationToPack)
    {
-      orientationToPack.set(orientation);
+      orientationToPack.set(getOrientation());
    }
 
    /**
@@ -198,7 +120,7 @@ public interface Pose3DReadOnly
     */
    default void getOrientation(AxisAngleBasics orientationToPack)
    {
-      orientationToPack.set(orientation);
+      orientationToPack.set(getOrientation());
    }
 
    /**
@@ -213,7 +135,7 @@ public interface Pose3DReadOnly
     */
    default void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
    {
-      orientation.getYawPitchRoll(yawPitchRollToPack);
+      getOrientation().getYawPitchRoll(yawPitchRollToPack);
    }
 
    /**
@@ -229,7 +151,7 @@ public interface Pose3DReadOnly
     */
    default void getRotationVector(Vector3DBasics rotationVectorToPack)
    {
-      orientation.get(rotationVectorToPack);
+      getOrientation().get(rotationVectorToPack);
    }
 
    /**
@@ -240,7 +162,7 @@ public interface Pose3DReadOnly
     */
    default void get(RigidBodyTransform transformToPack)
    {
-      transformToPack.set(orientation, position);
+      transformToPack.set(getOrientation(), getPosition());
    }
 
    /**
@@ -251,7 +173,54 @@ public interface Pose3DReadOnly
     */
    default void get(QuaternionBasedTransform transformToPack)
    {
-      transformToPack.set(orientation, position);
+      transformToPack.set(getOrientation(), getPosition());
+   }
+   
+   /**
+    * Computes the distance between the position of this pose 3D and the given {@code point}.
+    *
+    * @param point the other point used to measure the distance. Not modified.
+    * @return the distance between this pose and the given {@code point}.
+    */
+   default double getPositionDistance(Point3DReadOnly point)
+   {
+      return getPosition().distance(point);
+   }
+
+   /**
+    * Computes the distances between the position part of the two poses.
+    *
+    * @param other the other pose used to measure the distance. Not modified.
+    * @return the distance between the position part of the two poses.
+    */
+   default double getPositionDistance(Pose3DReadOnly other)
+   {
+      return getPosition().distance(other.getPosition());
+   }
+
+   /**
+    * Computes the smallest angle representing the difference between the orientation part of this
+    * pose 3D and the give {@code orientation}.
+    *
+    * @param orientation the orientation used to compute the orientation distance. Not modified.
+    * @return the angle difference between {@code this} and {@code orientation}, it is contained in
+    *         [0, 2<i>pi</i>].
+    */
+   default double getOrientationDistance(QuaternionReadOnly orientation)
+   {
+      return getOrientation().distance(orientation);
+   }
+
+   /**
+    * Computes the absolute angle difference between this pose 3D and {@code other}.
+    *
+    * @param other the other pose 3D used to compute the orientation distance. Not modified.
+    * @return the angle difference between {@code this.orientation} and {@code other.orientation},
+    *         it is contained in [0, 2<i>pi</i>].
+    */
+   default double getOrientationDistance(Pose3DReadOnly other)
+   {
+      return getOrientation().distance(other.getOrientation());
    }
 
    /**
@@ -278,7 +247,7 @@ public interface Pose3DReadOnly
     */
    default boolean epsilonEquals(Pose3DReadOnly other, double positionEpsilon, double orientationEpsilon)
    {
-      return position.epsilonEquals(other.position, positionEpsilon) && orientation.epsilonEquals(other.orientation, orientationEpsilon);
+      return getPosition().epsilonEquals(other.getPosition(), positionEpsilon) && getOrientation().epsilonEquals(other.getOrientation(), orientationEpsilon);
    }
 
    /**
@@ -295,6 +264,6 @@ public interface Pose3DReadOnly
     */
    default boolean geometricallyEquals(Pose3DReadOnly other, double epsilon)
    {
-      return this.position.geometricallyEquals(other.position, epsilon) && this.orientation.geometricallyEquals(other.orientation, epsilon);
+      return this.getPosition().geometricallyEquals(other.getPosition(), epsilon) && this.getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 }
