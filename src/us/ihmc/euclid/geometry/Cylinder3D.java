@@ -23,7 +23,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 {
    /** Radius of the cylinder part. */
    private double radius;
-   /** Overall height of the cylinder, i.e. the top face is at {@code height / 2.0} and the bottom face at {@code - height / 2.0}. */
+   /** Overall height of the cylinder, i.e. the top face is at {@code 0.5 * height} and the bottom face at {@code - 0.5 * height}. */
    private double height;
 
    /**
@@ -250,7 +250,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    @Override
    protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
    {
-      if (z < -(height / 2.0 + epsilon) || z > height / 2.0 + epsilon)
+      double halfHeightPlusEpsilon = 0.5 * height + epsilon;
+      if (z < -halfHeightPlusEpsilon || z > halfHeightPlusEpsilon)
          return false;
 
       double radiusWithEpsilon = radius + epsilon;
@@ -271,30 +272,31 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       }
 
       double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
+      double halfHeight = 0.5 * height;
 
       if (xyLengthSquared <= radius * radius)
       {
-         if (z < -(height / 2.0))
+         if (z < -halfHeight)
          { // The query is directly below the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, -(height / 2.0));
+               closestPointOnSurfaceToPack.set(x, y, -halfHeight);
             if (normalToPack != null)
                normalToPack.set(0.0, 0.0, -1.0);
-            return -(z + height / 2.0);
+            return -(z + halfHeight);
          }
 
-         if (z > height / 2.0)
+         if (z > halfHeight)
          { // The query is directly above the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, height / 2.0);
+               closestPointOnSurfaceToPack.set(x, y, halfHeight);
             if (normalToPack != null)
                normalToPack.set(0.0, 0.0, 1.0);
-            return z - height / 2.0;
+            return z - halfHeight;
          }
 
          // The query is inside the cylinder
          double xyLength = Math.sqrt(xyLengthSquared);
-         double dz = Math.min(height / 2.0 - z, z + height / 2.0);
+         double dz = Math.min(halfHeight - z, z + halfHeight);
          double dr = radius - xyLength;
 
          if (dz < dr)
@@ -302,18 +304,18 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
             if (z < 0)
             { // Closer to the bottom face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, -(height / 2.0));
+                  closestPointOnSurfaceToPack.set(x, y, -halfHeight);
                if (normalToPack != null)
                   normalToPack.set(0.0, 0.0, -1.0);
-               return -(z + height / 2.0);
+               return -(z + halfHeight);
             }
             else
             { // Closer to the top face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, height / 2.0);
+                  closestPointOnSurfaceToPack.set(x, y, halfHeight);
                if (normalToPack != null)
                   normalToPack.set(0.0, 0.0, 1.0);
-               return z - height / 2.0;
+               return z - halfHeight;
             }
          }
          else
@@ -342,10 +344,10 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
          double yClosest = y * xyClosestScale;
          double zClosest = z;
 
-         if (z < -(height / 2.0))
-            zClosest = -(height / 2.0);
-         else if (z > height / 2.0)
-            zClosest = height / 2.0;
+         if (z < -halfHeight)
+            zClosest = -halfHeight;
+         else if (z > halfHeight)
+            zClosest = halfHeight;
 
          if (zClosest != z)
          { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
