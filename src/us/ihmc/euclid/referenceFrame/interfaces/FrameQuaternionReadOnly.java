@@ -50,8 +50,6 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
-    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code rotationVectorToPack} do not match.
     */
    default void get(FrameVector3D rotationVectorToPack)
    {

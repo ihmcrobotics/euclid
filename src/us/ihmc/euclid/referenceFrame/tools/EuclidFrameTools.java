@@ -1494,8 +1494,8 @@ public class EuclidFrameTools
     * The cylinder pose is as follows:
     * <ul>
     * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, 0).
-    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
+    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
     * </ul>
     * </p>
     * <p>
@@ -1506,12 +1506,13 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this
     * method fails and return {@code 0}.
     * </ul>
     * </p>
-    * 
-    * @param cylinderHeight length of the cylinder.
+    *
+    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
+    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
     * @param cylinderRadius radius of the cylinder.
     * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
     * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
@@ -1519,19 +1520,19 @@ public class EuclidFrameTools
     *           Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be
     *           {@code null}. Modified.
+    * 
     * @return the number of intersections between the line and the cylinder. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
-    *            negative.
+    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly firstPointOnLine,
-                                                            FramePoint3DReadOnly secondPointOnLine, FramePoint3D firstIntersectionToPack,
-                                                            FramePoint3D secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
+                                                            FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
+                                                            FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, firstPointOnLine,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, firstPointOnLine,
                                                                                              secondPointOnLine, firstIntersectionToPack,
                                                                                              secondIntersectionToPack);
 
@@ -1553,8 +1554,8 @@ public class EuclidFrameTools
     * The cylinder pose is as follows:
     * <ul>
     * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, 0).
-    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
+    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
     * </ul>
     * </p>
     * <p>
@@ -1565,12 +1566,13 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this
     * method fails and return {@code 0}.
     * </ul>
     * </p>
-    * 
-    * @param cylinderHeight length of the cylinder.
+    *
+    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
+    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
     * @param cylinderRadius radius of the cylinder.
     * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
@@ -1578,20 +1580,20 @@ public class EuclidFrameTools
     *           Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be
     *           {@code null}. Modified.
+    * 
     * @return the number of intersections between the line and the cylinder. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
-    *            negative.
+    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly pointOnLine,
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, FramePoint3DReadOnly pointOnLine,
                                                             FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack,
                                                             FramePoint3D secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderHeight, cylinderRadius, pointOnLine, lineDirection,
-                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, pointOnLine,
+                                                                                             lineDirection, firstIntersectionToPack, secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -1900,8 +1902,8 @@ public class EuclidFrameTools
     * The cylinder pose is as follows:
     * <ul>
     * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, 0).
-    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
+    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
     * </ul>
     * </p>
     * <p>
@@ -1912,12 +1914,13 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this
     * method fails and return {@code 0}.
     * </ul>
     * </p>
-    * 
-    * @param cylinderHeight length of the cylinder.
+    *
+    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
+    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
     * @param cylinderRadius radius of the cylinder.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
@@ -1925,20 +1928,20 @@ public class EuclidFrameTools
     *           Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be
     *           {@code null}. Modified.
+    * 
     * @return the number of intersections between the line segment and the cylinder. It is either
     *         equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
-    *            negative.
+    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly lineSegmentStart,
-                                                                   FramePoint3DReadOnly lineSegmentEnd, FramePoint3D firstIntersectionToPack,
-                                                                   FramePoint3D secondIntersectionToPack)
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
+                                                                   FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
+                                                                   FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderHeight, cylinderRadius, lineSegmentStart,
-                                                                                                    lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius,
+                                                                                                    lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
                                                                                                     secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -2170,8 +2173,8 @@ public class EuclidFrameTools
     * The cylinder pose is as follows:
     * <ul>
     * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, 0).
-    * <li>the top center is located at (0, 0, {@code cylinderHeight}).
+    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
+    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
     * </ul>
     * </p>
     * <p>
@@ -2182,12 +2185,13 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderHeight} or {@code cylinderRadius} is equal to {@code 0}, this
+    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this
     * method fails and return {@code 0}.
     * </ul>
     * </p>
-    * 
-    * @param cylinderHeight length of the cylinder.
+    *
+    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
+    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
     * @param cylinderRadius radius of the cylinder.
     * @param rayOrigin the coordinate of the ray origin. Not modified.
     * @param rayDirection the direction of the ray. Not modified.
@@ -2195,20 +2199,21 @@ public class EuclidFrameTools
     *           Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be
     *           {@code null}. Modified.
+    * 
     * @return the number of intersections between the ray and the bounding box. It is either equal
     *         to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderHeight} or {@code cylinderRadius} is
-    *            negative.
+    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderHeight, double cylinderRadius, FramePoint3DReadOnly rayOrigin,
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, FramePoint3DReadOnly rayOrigin,
                                                            FrameVector3DReadOnly rayDirection, FramePoint3D firstIntersectionToPack,
                                                            FramePoint3D secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderHeight, cylinderRadius, rayOrigin, rayDirection,
-                                                                                            firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, rayOrigin,
+                                                                                            rayDirection, firstIntersectionToPack, secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
