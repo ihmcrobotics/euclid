@@ -23,7 +23,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 {
    /** Radius of the cylinder part. */
    private double radius;
-   /** Z coordinate of the top face, the bottom face being at {@code 0.0}. */
+   /** Overall height of the cylinder, i.e. the top face is at {@code height / 2.0} and the bottom face at {@code - height / 2.0}. */
    private double height;
 
    /**
@@ -236,8 +236,9 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       double dyLocal = TransformationTools.computeTransformedY(shapePose, true, lineDirection);
       double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(0.0, height, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal, dzLocal,
-                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      double halfHeight = 0.5 * height;
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal,
+                                                                                             dzLocal, firstIntersectionToPack, secondIntersectionToPack);
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
       if (secondIntersectionToPack != null && numberOfIntersections == 2)
