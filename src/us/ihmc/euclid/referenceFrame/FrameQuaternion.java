@@ -159,6 +159,20 @@ public class FrameQuaternion extends FrameTuple4D<FrameQuaternion, Quaternion> i
    }
 
    /**
+    * Creates a new frame quaternion and initializes such that it represents the same orientation as
+    * the given yaw-pitch-roll {@code yaw}, {@code pitch}, and {@code roll}.
+    * 
+    * @param referenceFrame the initial frame for this frame quaternion.
+    * @param yaw the angle to rotate about the z-axis.
+    * @param pitch the angle to rotate about the y-axis.
+    * @param roll the angle to rotate about the x-axis.
+    */
+   public FrameQuaternion(ReferenceFrame referenceFrame, double yaw, double pitch, double roll)
+   {
+      super(referenceFrame, new Quaternion(yaw, pitch, roll));
+   }
+
+   /**
     * Creates a new frame quaternion and initializes it to {@code other}.
     *
     * @param other the frame quaternion to copy the components and reference frame from. Not

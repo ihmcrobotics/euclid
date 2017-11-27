@@ -142,6 +142,17 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       }
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test FrameQuaternion(ReferenceFrame referenceFrame, double yaw, double pitch, double roll)
+         ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         double pitch = EuclidCoreRandomTools.nextDouble(random, YawPitchRollConversion.MAX_SAFE_PITCH_ANGLE);
+         double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         Quaternion expectedQuaternion = new Quaternion(yaw, pitch, roll);
+         FrameQuaternion frameQuaternion = new FrameQuaternion(randomFrame, yaw, pitch, roll);
+         EuclidCoreTestTools.assertTuple4DEquals(expectedQuaternion, frameQuaternion, EPSILON);
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Test FrameQuaternion(FrameQuaternionReadOnly other)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameQuaternion randomFrameQuaternion = EuclidFrameRandomTools.nextFrameQuaternion(random, randomFrame);
