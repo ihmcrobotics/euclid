@@ -61,6 +61,6 @@ public interface Orientation2DReadOnly
     */
    default boolean geometricallyEquals(Orientation2DReadOnly other, double epsilon)
    {
-      return Math.abs(EuclidCoreTools.angleDifferenceMinusPiToPi(getYaw(), other.getYaw())) <= epsilon;
+      return difference(other) <= epsilon;
    }
 }
