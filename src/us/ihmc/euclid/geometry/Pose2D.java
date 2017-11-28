@@ -18,9 +18,9 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
 {
    /** The position part of this pose 2D. */
-   Point2D position = new Point2D();
+   private final Point2D position = new Point2D();
    /** The orientation part of this pose 2D. */
-   Orientation2D orientation = new Orientation2D();
+   private final Orientation2D orientation = new Orientation2D();
    
    /**
     * Creates a new pose 2D initialized with its position at (0, 0) and orientation at 0.
