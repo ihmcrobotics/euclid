@@ -61,6 +61,6 @@ public interface Orientation2DReadOnly
     */
    default boolean geometricallyEquals(Orientation2DReadOnly other, double epsilon)
    {
-      return difference(other) <= epsilon;
+      return Math.abs(difference(other)) <= epsilon;
    }
 }
