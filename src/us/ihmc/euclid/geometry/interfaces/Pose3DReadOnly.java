@@ -233,21 +233,7 @@ public interface Pose3DReadOnly
     */
    default boolean epsilonEquals(Pose3DReadOnly other, double epsilon)
    {
-      return epsilonEquals(other, epsilon, epsilon);
-   }
-
-   /**
-    * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
-    * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
-    *
-    * @param other the query. Not modified.
-    * @param positionEpsilon the tolerance to use for comparing the position part.
-    * @param orientationEpsilon the tolerance to use for comparing the orientation part.
-    * @return {@code true} if the two poses are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Pose3DReadOnly other, double positionEpsilon, double orientationEpsilon)
-   {
-      return getPosition().epsilonEquals(other.getPosition(), positionEpsilon) && getOrientation().epsilonEquals(other.getOrientation(), orientationEpsilon);
+      return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
    /**
