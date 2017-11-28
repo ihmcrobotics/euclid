@@ -142,7 +142,8 @@ public interface Pose2DReadOnly
     * @param orientationEpsilon the tolerance to use for comparing the orientation part.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Pose2DReadOnly other, double positionEpsilon, double orientationEpsilon) {
+   default boolean epsilonEquals(Pose2DReadOnly other, double positionEpsilon, double orientationEpsilon)
+   {
       return getPosition().epsilonEquals(other.getPosition(), positionEpsilon) && getOrientation().epsilonEquals(other.getOrientation(), orientationEpsilon);
    }
    
@@ -158,7 +159,8 @@ public interface Pose2DReadOnly
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Pose2DReadOnly other, double epsilon) {
+   default boolean geometricallyEquals(Pose2DReadOnly other, double epsilon)
+   {
       return getPosition().geometricallyEquals(other.getPosition(), epsilon) && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 }
