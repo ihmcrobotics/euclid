@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -8,19 +10,18 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
  * A {@code Pose2D} represents a position and orientation in the XY-plane.
  */
-public class Pose2D implements GeometryObject<Pose2D>
+public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
 {
    /** The position part of this pose 2D. */
    private final Point2D position = new Point2D();
    /** The orientation part of this pose 2D. */
    private final Orientation2D orientation = new Orientation2D();
-
+   
    /**
     * Creates a new pose 2D initialized with its position at (0, 0) and orientation at 0.
     */
@@ -84,6 +85,48 @@ public class Pose2D implements GeometryObject<Pose2D>
    {
       position.setToZero();
       orientation.setToZero();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getX()
+   {
+      return position.getX();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getY()
+   {
+      return position.getY();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getYaw()
+   {
+      return orientation.getYaw();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public Point2DReadOnly getPosition()
+   {
+      return position;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public Orientation2DReadOnly getOrientation()
+   {
+      return orientation;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getOrientation(Orientation2D orientationToPack)
+   {
+      orientationToPack.set(orientation);
    }
 
    /**
@@ -390,124 +433,6 @@ public class Pose2D implements GeometryObject<Pose2D>
    }
 
    /**
-    * Computes the distance between the position of this pose 2D and the given {@code point}.
-    *
-    * @param point the other point used to measure the distance. Not modified.
-    * @return the distance between this pose and the given {@code point}.
-    */
-   public double getPositionDistance(Point2DReadOnly point)
-   {
-      return position.distance(point);
-   }
-
-   /**
-    * Computes the distances between the position part of the two poses.
-    *
-    * @param other the other pose used to measure the distance. Not modified.
-    * @return the distance between the position part of the two poses.
-    */
-   public double getPositionDistance(Pose2D other)
-   {
-      return position.distance(other.position);
-   }
-
-   /**
-    * Computes the absolute angle difference between the orientation part of this pose 2D and the
-    * give {@code orientation}.
-    *
-    * @param orientation the orientation used to compute the orientation distance. Not modified.
-    * @return the absolute angle difference between {@code this} and {@code orientation}.
-    */
-   public double getOrientationDistance(Orientation2D other)
-   {
-      return orientation.distance(other);
-   }
-
-   /**
-    * Computes the absolute angle difference between this pose 2D and {@code other}.
-    *
-    * @param other the other pose 2D used to compute the orientation distance. Not modified.
-    * @return the absolute angle difference between {@code this.orientation} and
-    *         {@code other.orientation}.
-    */
-   public double getOrientationDistance(Pose2D other)
-   {
-      return orientation.distance(other.orientation);
-   }
-
-   /**
-    * Gets the x-coordinate of the position part of this pose 2D.
-    *
-    * @return the x-coordinate of this pose 2D.
-    */
-   public double getX()
-   {
-      return position.getX();
-   }
-
-   /**
-    * Gets the y-coordinate of the position part of this pose 2D.
-    *
-    * @return the y-coordinate of this pose 2D.
-    */
-   public double getY()
-   {
-      return position.getY();
-   }
-
-   /**
-    * Gets the yaw angle of the orientation part of this pose 2D.
-    *
-    * @return the yaw angle of this pose 2D.
-    */
-   public double getYaw()
-   {
-      return orientation.getYaw();
-   }
-
-   /**
-    * Gets the read-only reference of the position part of this pose 2D.
-    *
-    * @return the position part of this pose 2D.
-    */
-   public Point2DReadOnly getPosition()
-   {
-      return position;
-   }
-
-   /**
-    * Packs the position part of this pose 2D into the given {@code positionToPack}.
-    *
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    */
-   public void getPosition(Tuple2DBasics positionToPack)
-   {
-      positionToPack.set(position);
-   }
-
-   /**
-    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
-    */
-   public void getOrientation(Orientation2D orientationToPack)
-   {
-      orientationToPack.set(orientation);
-   }
-
-   /**
-    * Packs this pose 2D into the given {@code transformToPack}.
-    *
-    * @param transformToPack the rigid-body transform that is set to represent this pose 2D.
-    *           Modified.
-    */
-   public void get(RigidBodyTransform transformToPack)
-   {
-      transformToPack.setTranslation(position.getX(), position.getY(), 0.0);
-      transformToPack.setRotationYaw(orientation.getYaw());
-   }
-
-   /**
     * Transforms the position and orientation parts of this pose 2D by the given {@code transform}.
     *
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
@@ -582,21 +507,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    @Override
    public boolean epsilonEquals(Pose2D other, double epsilon)
    {
-      return epsilonEquals(other, epsilon, epsilon);
-   }
-
-   /**
-    * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
-    * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
-    *
-    * @param other the query. Not modified.
-    * @param positionEpsilon the tolerance to use for comparing the position part.
-    * @param orientationEpsilon the tolerance to use for comparing the orientation part.
-    * @return {@code true} if the two poses are equal, {@code false} otherwise.
-    */
-   public boolean epsilonEquals(Pose2D other, double positionEpsilon, double orientationEpsilon)
-   {
-      return position.epsilonEquals(other.position, positionEpsilon) && orientation.epsilonEquals(other.orientation, orientationEpsilon);
+      return Pose2DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -614,7 +525,7 @@ public class Pose2D implements GeometryObject<Pose2D>
    @Override
    public boolean geometricallyEquals(Pose2D other, double epsilon)
    {
-      return position.geometricallyEquals(other.position, epsilon) && orientation.geometricallyEquals(other.orientation, epsilon);
+      return Pose2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**

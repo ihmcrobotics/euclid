@@ -1,10 +1,9 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -14,23 +13,20 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.Quaternion;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * A {@code Pose3D} represents a position and orientation in 3 dimensions.
  */
-public class Pose3D implements GeometryObject<Pose3D>
+public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
 {
    /** The position part of this pose 3D. */
    private final Point3D position = new Point3D();
    /** The orientation part of this pose 3D. */
    private final Quaternion orientation = new Quaternion();
-
+   
    /**
     * Creates a new pose 3D initialized with its position at (0, 0, 0) and orientation set to the
     * neutral quaternion, i.e. zero rotation.
@@ -116,6 +112,62 @@ public class Pose3D implements GeometryObject<Pose3D>
    {
       orientation.setToZero();
       position.setToZero();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getX()
+   {
+      return position.getX();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getY()
+   {
+      return position.getY();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getZ()
+   {
+      return position.getZ();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getYaw()
+   {
+      return orientation.getYaw();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getPitch()
+   {
+      return orientation.getPitch();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public double getRoll()
+   {
+      return orientation.getRoll();
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public Point3DReadOnly getPosition()
+   {
+      return position;
+   }
+   
+   /** {@inheritDoc} */
+   @Override
+   public QuaternionReadOnly getOrientation()
+   {
+      return orientation;
    }
 
    /**
@@ -694,241 +746,6 @@ public class Pose3D implements GeometryObject<Pose3D>
    }
 
    /**
-    * Computes the distance between the position of this pose 3D and the given {@code point}.
-    * 
-    * @param point the other point used to measure the distance. Not modified.
-    * @return the distance between this pose and the given {@code point}.
-    */
-   public double getPositionDistance(Point3DReadOnly point)
-   {
-      return position.distance(point);
-   }
-
-   /**
-    * Computes the distances between the position part of the two poses.
-    * 
-    * @param other the other pose used to measure the distance. Not modified.
-    * @return the distance between the position part of the two poses.
-    */
-   public double getPositionDistance(Pose3D other)
-   {
-      return position.distance(other.position);
-   }
-
-   /**
-    * Computes the smallest angle representing the difference between the orientation part of this
-    * pose 3D and the give {@code orientation}.
-    * 
-    * @param orientation the orientation used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this} and {@code orientation}, it is contained in
-    *         [0, 2<i>pi</i>].
-    */
-   public double getOrientationDistance(QuaternionReadOnly orientation)
-   {
-      return this.orientation.distance(orientation);
-   }
-
-   /**
-    * Computes the absolute angle difference between this pose 3D and {@code other}.
-    * 
-    * @param other the other pose 3D used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this.orientation} and {@code other.orientation},
-    *         it is contained in [0, 2<i>pi</i>].
-    */
-   public double getOrientationDistance(Pose3D other)
-   {
-      return orientation.distance(other.orientation);
-   }
-
-   /**
-    * Gets the read-only reference of the position part of this pose 3D.
-    *
-    * @return the position part of this pose 3D.
-    */
-   public Point3DReadOnly getPosition()
-   {
-      return position;
-   }
-
-   /**
-    * Gets the read-only reference to the orientation part of this pose 3D.
-    *
-    * @return the orientation part of this pose 3D.
-    */
-   public QuaternionReadOnly getOrientation()
-   {
-      return orientation;
-   }
-
-   /**
-    * Gets the x-coordinate of the position part of this pose 3D.
-    * 
-    * @return the x-coordinate of this pose 3D.
-    */
-   public double getX()
-   {
-      return position.getX();
-   }
-
-   /**
-    * Gets the y-coordinate of the position part of this pose 3D.
-    * 
-    * @return the y-coordinate of this pose 3D.
-    */
-   public double getY()
-   {
-      return position.getY();
-   }
-
-   /**
-    * Gets the z-coordinate of the position part of this pose 3D.
-    * 
-    * @return the z-coordinate of this pose 3D.
-    */
-   public double getZ()
-   {
-      return position.getZ();
-   }
-
-   /**
-    * Computes and returns the yaw angle from the yaw-pitch-roll representation of the orientation
-    * part of this pose 3D.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the yaw angle around the z-axis.
-    */
-   public double getYaw()
-   {
-      return orientation.getYaw();
-   }
-
-   /**
-    * Computes and returns the pitch angle from the yaw-pitch-roll representation of the orientation
-    * part of this pose 3D.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the pitch angle around the y-axis.
-    */
-   public double getPitch()
-   {
-      return orientation.getPitch();
-   }
-
-   /**
-    * Computes and returns the roll angle from the yaw-pitch-roll representation of the orientation
-    * part of this pose 3D.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the roll angle around the x-axis.
-    */
-   public double getRoll()
-   {
-      return orientation.getRoll();
-   }
-
-   /**
-    * Packs the position part of this pose 3D into the given {@code positionToPack}.
-    * 
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    */
-   public void getPosition(Tuple3DBasics positionToPack)
-   {
-      positionToPack.set(position);
-   }
-
-   /**
-    * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    * 
-    * @param orientationToPack used to store the orientation of this pose 3D. Modified.
-    */
-   public void getOrientation(RotationMatrix orientationToPack)
-   {
-      orientationToPack.set(orientation);
-   }
-
-   /**
-    * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    * 
-    * @param orientationToPack used to store the orientation of this pose 3D. Modified.
-    */
-   public void getOrientation(QuaternionBasics orientationToPack)
-   {
-      orientationToPack.set(orientation);
-   }
-
-   /**
-    * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    * 
-    * @param orientationToPack used to store the orientation of this pose 3D. Modified.
-    */
-   public void getOrientation(AxisAngleBasics orientationToPack)
-   {
-      orientationToPack.set(orientation);
-   }
-
-   /**
-    * Computes and packs the orientation described by the orientation part of this pose 3D as the
-    * yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    */
-   public void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      orientation.getYawPitchRoll(yawPitchRollToPack);
-   }
-
-   /**
-    * Computes and packs the orientation described by the orientation part of this pose as a
-    * rotation vector.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
-    * </p>
-    *
-    * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
-    */
-   public void getRotationVector(Vector3DBasics rotationVectorToPack)
-   {
-      orientation.get(rotationVectorToPack);
-   }
-
-   /**
-    * Packs this pose 3D into the given {@code transformToPack}.
-    * 
-    * @param transformToPack the rigid-body transform that is set to represent this pose 3D.
-    *           Modified.
-    */
-   public void get(RigidBodyTransform transformToPack)
-   {
-      transformToPack.set(orientation, position);
-   }
-
-   /**
-    * Packs this pose 3D into the given {@code transformToPack}.
-    * 
-    * @param transformToPack the quaternion-based transform that is set to represent this pose 3D.
-    *           Modified.
-    */
-   public void get(QuaternionBasedTransform transformToPack)
-   {
-      transformToPack.set(orientation, position);
-   }
-
-   /**
     * Transforms the position and orientation parts of this pose 3D by the given {@code transform}.
     *
     * @param transform the geometric transform to apply on this pose 3D. Not modified.
@@ -999,21 +816,7 @@ public class Pose3D implements GeometryObject<Pose3D>
    @Override
    public boolean epsilonEquals(Pose3D other, double epsilon)
    {
-      return epsilonEquals(other, epsilon, epsilon);
-   }
-
-   /**
-    * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
-    * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
-    * 
-    * @param other the query. Not modified.
-    * @param positionEpsilon the tolerance to use for comparing the position part.
-    * @param orientationEpsilon the tolerance to use for comparing the orientation part.
-    * @return {@code true} if the two poses are equal, {@code false} otherwise.
-    */
-   public boolean epsilonEquals(Pose3D other, double positionEpsilon, double orientationEpsilon)
-   {
-      return position.epsilonEquals(other.position, positionEpsilon) && orientation.epsilonEquals(other.orientation, orientationEpsilon);
+      return Pose3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -1066,6 +869,6 @@ public class Pose3D implements GeometryObject<Pose3D>
    @Override
    public boolean geometricallyEquals(Pose3D other, double epsilon)
    {
-      return this.position.geometricallyEquals(other.position, epsilon) && this.orientation.geometricallyEquals(other.orientation, epsilon);
+      return Pose3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
