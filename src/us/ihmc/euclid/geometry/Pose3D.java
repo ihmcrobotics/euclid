@@ -23,9 +23,9 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
 {
    /** The position part of this pose 3D. */
-   Point3D position = new Point3D();
+   private final Point3D position = new Point3D();
    /** The orientation part of this pose 3D. */
-   Quaternion orientation = new Quaternion();
+   private final Quaternion orientation = new Quaternion();
    
    /**
     * Creates a new pose 3D initialized with its position at (0, 0, 0) and orientation set to the
