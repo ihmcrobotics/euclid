@@ -137,33 +137,21 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
       return orientation;
    }
 
-   /**
-    * Sets the x-coordinate of the position.
-    *
-    * @param x the x-coordinate of the position.
-    */
+   /** {@inheritDoc} */
    @Override
    public void setX(double x)
    {
       position.setX(x);
    }
 
-   /**
-    * Sets the y-coordinate of the position.
-    *
-    * @param y the y-coordinate of the position.
-    */
+   /** {@inheritDoc} */
    @Override
    public void setY(double y)
    {
       position.setY(y);
    }
 
-   /**
-    * Sets the z-coordinate of the position.
-    *
-    * @param z the z-coordinate of the position.
-    */
+   /** {@inheritDoc} */
    @Override
    public void setZ(double z)
    {
