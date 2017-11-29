@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
-import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -9,7 +8,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-public interface Pose3DBasics extends Pose3DReadOnly, Clearable
+public interface Pose3DBasics extends Pose3DReadOnly
 {
    /**
     * Sets the x-coordinate of the position.
@@ -31,26 +30,6 @@ public interface Pose3DBasics extends Pose3DReadOnly, Clearable
     * @param z the z-coordinate of the position.
     */
    void setZ(double z);
-
-   @Override
-   default boolean containsNaN()
-   {
-      return getPosition().containsNaN() || getOrientation().containsNaN();
-   }
-
-   @Override
-   default void setToNaN()
-   {
-      getPosition().setToNaN();
-      getOrientation().setToNaN();
-   }
-
-   @Override
-   default void setToZero()
-   {
-      getPosition().setToNaN();
-      getOrientation().setToNaN();
-   }
 
    /**
     * Sets the position coordinates.
