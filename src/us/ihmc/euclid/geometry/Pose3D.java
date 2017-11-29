@@ -1,19 +1,11 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.tools.QuaternionTools;
-import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
@@ -26,7 +18,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    private final Point3D position = new Point3D();
    /** The orientation part of this pose 3D. */
    private final Quaternion orientation = new Quaternion();
-   
+
    /**
     * Creates a new pose 3D initialized with its position at (0, 0, 0) and orientation set to the
     * neutral quaternion, i.e. zero rotation.
@@ -41,7 +33,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
     * </p>
-    * 
+    *
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param z the z-coordinate of the position.
@@ -59,7 +51,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /**
     * Creates a new pose 3D and initializes it to {@code other}.
-    * 
+    *
     * @param other the other pose 3D used to initialize this. Not modified.
     */
    public Pose3D(Pose3D other)
@@ -69,7 +61,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /**
     * Creates a new pose 3D and initializes it with the given rigid-body transform.
-    * 
+    *
     * @param rigidBodyTransform the transform used to initialize this. Not modified.
     */
    public Pose3D(RigidBodyTransform rigidBodyTransform)
@@ -79,7 +71,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /**
     * Creates a new pose 3D and initializes it with the given parameters.
-    * 
+    *
     * @param position tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
@@ -91,78 +83,53 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /** {@inheritDoc} */
    @Override
-   public boolean containsNaN()
-   {
-      return orientation.containsNaN() || position.containsNaN();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setToNaN()
-   {
-      orientation.setToNaN();
-      position.setToNaN();
-   }
-
-   /**
-    * Sets the position to (0, 0) and the orientation to the neutral quaternion, i.e. zero rotation.
-    */
-   @Override
-   public void setToZero()
-   {
-      orientation.setToZero();
-      position.setToZero();
-   }
-   
-   /** {@inheritDoc} */
-   @Override
    public double getX()
    {
       return position.getX();
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public double getY()
    {
       return position.getY();
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public double getZ()
    {
       return position.getZ();
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public double getYaw()
    {
       return orientation.getYaw();
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public double getPitch()
    {
       return orientation.getPitch();
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public double getRoll()
    {
       return orientation.getRoll();
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public Point3D getPosition()
    {
       return position;
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public Quaternion getOrientation()
@@ -172,7 +139,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /**
     * Sets the x-coordinate of the position.
-    * 
+    *
     * @param x the x-coordinate of the position.
     */
    @Override
@@ -183,7 +150,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /**
     * Sets the y-coordinate of the position.
-    * 
+    *
     * @param y the y-coordinate of the position.
     */
    @Override
@@ -194,7 +161,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /**
     * Sets the z-coordinate of the position.
-    * 
+    *
     * @param z the z-coordinate of the position.
     */
    @Override
@@ -205,386 +172,13 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /**
     * Sets this pose 3D to the {@code other} pose 3D.
-    * 
+    *
     * @param other the other pose 3D. Not modified.
     */
    @Override
    public void set(Pose3D other)
    {
       Pose3DBasics.super.set(other);
-   }
-
-   /**
-    * Normalizes the quaternion part of this pose to ensure it is a unit-quaternion describing a
-    * proper orientation.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
-    * </ul>
-    * </p>
-    */
-   public void normalizeQuaternion()
-   {
-      orientation.normalize();
-   }
-
-   /**
-    * Normalizes the quaternion part of this pose and then limits the angle of the rotation it
-    * represents to be &in; [-<i>pi</i>;<i>pi</i>].
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
-    * </ul>
-    * </p>
-    */
-   public void normalizeQuaternionAndLimitToPi()
-   {
-      orientation.normalizeAndLimitToPi();
-   }
-
-   /**
-    * Performs a linear interpolation from {@code this} to {@code other} given the percentage
-    * {@code alpha}.
-    * <p>
-    * this.position = (1.0 - alpha) * this.position + alpha * other.position<br>
-    * this.orientation = (1.0 - alpha) * this.orientation + alpha * other.orientation
-    * </p>
-    * 
-    * @param other the other pose 3D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
-    *           {@code other}.
-    */
-   public void interpolate(Pose3D other, double alpha)
-   {
-      position.interpolate(other.position, alpha);
-      orientation.interpolate(other.orientation, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code pose1} to {@code pose2} given the percentage
-    * {@code alpha}.
-    * <p>
-    * this.position = (1.0 - alpha) * pose1.position + alpha * pose2.position<br>
-    * this.orientation = (1.0 - alpha) * pose1.orientation + alpha * pose2.orientation
-    * </p>
-    * 
-    * @param pose1 the first pose 3D used in the interpolation. Not modified.
-    * @param pose2 the second pose 3D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code pose2}.
-    */
-   public void interpolate(Pose3D pose1, Pose3D pose2, double alpha)
-   {
-      position.interpolate(pose1.position, pose2.position, alpha);
-      orientation.interpolate(pose1.orientation, pose2.orientation, alpha);
-   }
-
-   /**
-    * Adds the translation (x, y, z) to this pose 3D assuming it is expressed in the coordinates in
-    * which this pose is expressed.
-    * <p>
-    * If the translation is expressed in the local coordinates described by this pose 3D, use
-    * {@link #appendTranslation(double, double, double)}.
-    * </p>
-    * 
-    * @param x the translation distance along the x-axis.
-    * @param y the translation distance along the y-axis.
-    * @param z the translation distance along the z-axis.
-    */
-   public void prependTranslation(double x, double y, double z)
-   {
-      position.add(x, y, z);
-   }
-
-   /**
-    * Adds the given {@code translation} to this pose 3D assuming it is expressed in the coordinates
-    * in which this pose is expressed.
-    * <p>
-    * If the {@code translation} is expressed in the local coordinates described by this pose 3D,
-    * use {@link #appendTranslation(Tuple3DReadOnly)}.
-    * </p>
-    * 
-    * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
-    */
-   public void prependTranslation(Tuple3DReadOnly translation)
-   {
-      prependTranslation(translation.getX(), translation.getY(), translation.getZ());
-   }
-
-   /**
-    * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
-    * orientation part.
-    * 
-    * @param rotation the rotation to prepend to this pose 3D. Not modified.
-    */
-   public void prependRotation(QuaternionReadOnly rotation)
-   {
-      rotation.transform(position);
-      rotation.transform(orientation);
-   }
-
-   /**
-    * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
-    * orientation part.
-    * 
-    * @param rotation the rotation to prepend to this pose 3D. Not modified.
-    */
-   public void prependRotation(RotationMatrixReadOnly rotation)
-   {
-      rotation.transform(position);
-      rotation.transform(orientation);
-   }
-
-   /**
-    * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
-    * orientation part.
-    * 
-    * @param rotation the rotation to prepend to this pose 3D. Not modified.
-    */
-   public void prependRotation(AxisAngleReadOnly rotation)
-   {
-      rotation.transform(position);
-      rotation.transform(orientation);
-   }
-
-   /**
-    * Prepends a rotation about the z-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
-    * 
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   public void prependYawRotation(double yaw)
-   {
-      RotationMatrixTools.applyYawRotation(yaw, position, position);
-      orientation.prependYawRotation(yaw);
-   }
-
-   /**
-    * Prepends a rotation about the y-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
-    * 
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   public void prependPitchRotation(double pitch)
-   {
-      RotationMatrixTools.applyPitchRotation(pitch, position, position);
-      orientation.prependPitchRotation(pitch);
-   }
-
-   /**
-    * Prepends a rotation about the x-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
-    * 
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void prependRollRotation(double roll)
-   {
-      RotationMatrixTools.applyRollRotation(roll, position, position);
-      orientation.prependRollRotation(roll);
-   }
-
-   /**
-    * Prepends the given transform to this pose 3D.
-    * <p>
-    * This is the same as {@link #applyTransform(Transform)}.
-    * </p>
-    * 
-    * @param transform the transform to prepend to this pose 3D. Not modified.
-    */
-   public void prependTransform(RigidBodyTransform transform)
-   {
-      applyTransform(transform);
-   }
-
-   /**
-    * Prepends the given transform to this pose 3D.
-    * <p>
-    * This is the same as {@link #applyTransform(Transform)}.
-    * </p>
-    * 
-    * @param transform the transform to prepend to this pose 3D. Not modified.
-    */
-   public void prependTransform(QuaternionBasedTransform transform)
-   {
-      applyTransform(transform);
-   }
-
-   /**
-    * Rotates, then adds the translation (x, y, z) to this pose 3D.
-    * <p>
-    * Use this method if the translation (x, y, z) is expressed in the local coordinates described
-    * by this pose 3D. Otherwise, use {@link #prependTranslation(double, double, double)}.
-    * </p>
-    * 
-    * @param x the translation distance along the x-axis.
-    * @param y the translation distance along the y-axis.
-    * @param z the translation distance along the z-axis.
-    */
-   public void appendTranslation(double x, double y, double z)
-   {
-      double thisX = position.getX();
-      double thisY = position.getY();
-      double thisZ = position.getZ();
-
-      position.set(x, y, z);
-      orientation.transform(position);
-      position.add(thisX, thisY, thisZ);
-   }
-
-   /**
-    * Rotates, then adds the given {@code translation} to this pose 3D.
-    * <p>
-    * Use this method if the {@code translation} is expressed in the local coordinates described by
-    * this pose 3D. Otherwise, use {@link #prependTranslation(Tuple2DReadOnly)}.
-    * </p>
-    * 
-    * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
-    */
-   public void appendTranslation(Tuple3DReadOnly translation)
-   {
-      appendTranslation(translation.getX(), translation.getY(), translation.getZ());
-   }
-
-   /**
-    * Appends the given rotation to this pose 3D.
-    * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * {@code this.orientation = this.orientation * rotation}
-    * </p>
-    * 
-    * @param rotation the rotation to append to this pose 3D. Not modified.
-    */
-   public void appendRotation(QuaternionReadOnly rotation)
-   {
-      orientation.multiply(rotation);
-   }
-
-   /**
-    * Appends the given rotation to this pose 3D.
-    * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * {@code this.orientation = this.orientation * rotation}
-    * </p>
-    * 
-    * @param rotation the rotation to append to this pose 3D. Not modified.
-    */
-   public void appendRotation(RotationMatrixReadOnly rotation)
-   {
-      orientation.multiply(rotation);
-   }
-
-   /**
-    * Appends a rotation about the z-axis to this pose 3D.
-    * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * 
-    * <pre>
-    *                                       / cos(yaw) -sin(yaw) 0 \
-    * this.orientation = this.orientation * | sin(yaw)  cos(yaw) 0 |
-    *                                       \    0         0     1 /
-    * </pre>
-    * </p>
-    * 
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   public void appendYawRotation(double yaw)
-   {
-      orientation.appendYawRotation(yaw);
-   }
-
-   /**
-    * Appends a rotation about the y-axis to this pose 3D.
-    * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * 
-    * <pre>
-    *                                       /  cos(pitch) 0 sin(pitch) \
-    * this.orientation = this.orientation * |      0      1     0      |
-    *                                       \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    * </p>
-    * 
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   public void appendPitchRotation(double pitch)
-   {
-      orientation.appendPitchRotation(pitch);
-   }
-
-   /**
-    * Appends a rotation about the x-axis to this pose 3D.
-    * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * 
-    * <pre>
-    *                                       / 1     0          0     \
-    * this.orientation = this.orientation * | 0 cos(roll) -sin(roll) |
-    *                                       \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * </p>
-    * 
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void appendRollRotation(double roll)
-   {
-      RotationMatrixTools.applyRollRotation(roll, position, position);
-      orientation.appendRollRotation(roll);
-   }
-
-   /**
-    * Appends the given {@code transform} to this pose 3D.
-    * 
-    * @param transform the rigid-body transform to append to this pose 3D. Not modified.
-    */
-   public void appendTransform(RigidBodyTransform transform)
-   {
-      QuaternionTools.addTransform(orientation, transform.getTranslationVector(), position);
-      orientation.multiply(transform.getRotationMatrix());
-   }
-
-   /**
-    * Appends the given {@code transform} to this pose 3D.
-    * 
-    * @param transform the quaternion-based transform to append to this pose 3D. Not modified.
-    */
-   public void appendTransform(QuaternionBasedTransform transform)
-   {
-      QuaternionTools.addTransform(orientation, transform.getTranslationVector(), position);
-      orientation.multiply(transform.getQuaternion());
-   }
-
-   /**
-    * Transforms the position and orientation parts of this pose 3D by the given {@code transform}.
-    *
-    * @param transform the geometric transform to apply on this pose 3D. Not modified.
-    */
-   @Override
-   public void applyTransform(Transform transform)
-   {
-      transform.transform(position);
-      transform.transform(orientation);
-   }
-
-   /**
-    * Transforms the position and orientation parts of this pose 3D by the inverse of the given
-    * {@code transform}.
-    *
-    * @param transform the geometric transform to apply on this pose 3D. Not modified.
-    */
-   @Override
-   public void applyInverseTransform(Transform transform)
-   {
-      transform.inverseTransform(position);
-      transform.inverseTransform(orientation);
    }
 
    /**
@@ -625,7 +219,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
-    * 
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
@@ -657,7 +251,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    /**
     * Provides a {@code String} representation of the position part of this pose 3D as follows:<br>
     * (x, y, z)
-    * 
+    *
     * @return the {@code String} representing the position part of this pose 3D.
     */
    public String printOutPosition()
@@ -669,7 +263,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * Provides a {@code String} representation of the orientation part of this pose 3D as
     * follows:<br>
     * (qx, qy, qz, qs)
-    * 
+    *
     * @return the {@code String} representing the orientation part of this pose 3D.
     */
    public String printOutOrientation()
