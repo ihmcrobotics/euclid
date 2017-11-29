@@ -94,11 +94,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
       this.yaw = EuclidCoreTools.trimAngleMinusPiToPi(yaw);
    }
 
-   /**
-    * Returns the current yaw angle of this orientation 2D.
-    *
-    * @return the angle value in radians.
-    */
+   /** {@inheritDoc} */
    @Override
    public double getYaw()
    {

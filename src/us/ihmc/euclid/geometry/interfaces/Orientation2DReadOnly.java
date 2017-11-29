@@ -4,6 +4,11 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 
 public interface Orientation2DReadOnly
 {
+   /**
+    * Returns the current yaw angle of this orientation 2D.
+    *
+    * @return the angle value in radians.
+    */
    double getYaw();
 
    /**
