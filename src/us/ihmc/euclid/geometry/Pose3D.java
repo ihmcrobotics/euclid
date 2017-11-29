@@ -194,7 +194,7 @@ public class Pose3D implements GeometryObject<Pose3D>
     */
    public void setOrientation(double qx, double qy, double qz, double qs)
    {
-      orientation.set(qx, qy, qy, qs);
+      orientation.set(qx, qy, qz, qs);
    }
 
    /**
