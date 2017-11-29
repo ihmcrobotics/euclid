@@ -4,6 +4,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -14,17 +15,21 @@ public interface Pose3DReadOnly
 {
    /**
     * Gets the read-only reference of the position part of this pose 3D.
+    * 
+    * TODO: This method breaks from tradition. ReadOnly returns should be ReadOnly.
     *
     * @return the position part of this pose 3D.
     */
-   Point3DReadOnly getPosition();
+   Point3DBasics getPosition();
 
    /**
     * Gets the read-only reference to the orientation part of this pose 3D.
     *
+    * TODO: This method breaks from tradition. ReadOnly returns should be ReadOnly.
+    *
     * @return the orientation part of this pose 3D.
     */
-   QuaternionReadOnly getOrientation();
+   QuaternionBasics getOrientation();
 
    /**
     * Gets the x-coordinate of the position part of this pose 3D.
@@ -82,6 +87,16 @@ public interface Pose3DReadOnly
     * @return the roll angle around the x-axis.
     */
    double getRoll();
+
+   /**
+    * Tests if this pose contains a {@link Double#NaN}.
+    *
+    * @return {@code true} if this pose contains a {@link Double#NaN}, {@code false} otherwise.
+    */
+   default boolean containsNaN()
+   {
+      return getOrientation().containsNaN() || getPosition().containsNaN();
+   }
 
    /**
     * Packs the position part of this pose 3D into the given {@code positionToPack}.

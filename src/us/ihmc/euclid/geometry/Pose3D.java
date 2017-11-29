@@ -1,7 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -20,7 +20,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 /**
  * A {@code Pose3D} represents a position and orientation in 3 dimensions.
  */
-public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
+public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 {
    /** The position part of this pose 3D. */
    private final Point3D position = new Point3D();
@@ -158,14 +158,14 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
    
    /** {@inheritDoc} */
    @Override
-   public Point3DReadOnly getPosition()
+   public Point3D getPosition()
    {
       return position;
    }
    
    /** {@inheritDoc} */
    @Override
-   public QuaternionReadOnly getOrientation()
+   public Quaternion getOrientation()
    {
       return orientation;
    }
@@ -175,6 +175,7 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
     * 
     * @param x the x-coordinate of the position.
     */
+   @Override
    public void setX(double x)
    {
       position.setX(x);
@@ -185,6 +186,7 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
     * 
     * @param y the y-coordinate of the position.
     */
+   @Override
    public void setY(double y)
    {
       position.setY(y);
@@ -195,6 +197,7 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
     * 
     * @param z the z-coordinate of the position.
     */
+   @Override
    public void setZ(double z)
    {
       position.setZ(z);
@@ -246,7 +249,7 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
     */
    public void setOrientation(double qx, double qy, double qz, double qs)
    {
-      orientation.set(qx, qy, qz, qs);
+      orientation.set(qx, qy, qy, qs);
    }
 
    /**
@@ -337,64 +340,7 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
    @Override
    public void set(Pose3D other)
    {
-      orientation.set(other.getOrientation());
-      position.set(other.getPosition());
-   }
-
-   /**
-    * Sets this pose 3D to match the given rigid-body transform.
-    * 
-    * @param rigidBodyTransform the transform use to set this pose 3D. Not modified.
-    */
-   public void set(RigidBodyTransform rigidBodyTransform)
-   {
-      rigidBodyTransform.get(orientation, position);
-   }
-
-   /**
-    * Sets this pose 3D to match the given quaternion-based transform.
-    * 
-    * @param quaternionBasedTransform the transform use to set this pose 3D. Not modified.
-    */
-   public void set(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      quaternionBasedTransform.get(orientation, position);
-   }
-
-   /**
-    * Sets both position and orientation.
-    * 
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the quaternion with the new orientation. Not modified.
-    */
-   public void set(Tuple3DReadOnly position, QuaternionReadOnly orientation)
-   {
-      this.orientation.set(orientation);
-      this.position.set(position);
-   }
-
-   /**
-    * Sets both position and orientation.
-    * 
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the rotation matrix with the new orientation. Not modified.
-    */
-   public void set(Tuple3DReadOnly position, RotationMatrixReadOnly orientation)
-   {
-      this.orientation.set(orientation);
-      this.position.set(position);
-   }
-
-   /**
-    * Sets both position and orientation.
-    * 
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the axis-angle with the new orientation. Not modified.
-    */
-   public void set(Tuple3DReadOnly position, AxisAngleReadOnly orientation)
-   {
-      this.orientation.set(orientation);
-      this.position.set(position);
+      Pose3DBasics.super.set(other);
    }
 
    /**
@@ -816,7 +762,25 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
    @Override
    public boolean epsilonEquals(Pose3D other, double epsilon)
    {
-      return Pose3DReadOnly.super.epsilonEquals(other, epsilon);
+      return Pose3DBasics.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically
+    * equal.
+    * </p>
+    *
+    * @param other the pose to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(Pose3D other, double epsilon)
+   {
+      return Pose3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -852,23 +816,5 @@ public class Pose3D implements Pose3DReadOnly, GeometryObject<Pose3D>
    public String toString()
    {
       return EuclidGeometryIOTools.getPose3DString(this);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
-    * </p>
-    * 
-    * @param other the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Pose3D other, double epsilon)
-   {
-      return Pose3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
