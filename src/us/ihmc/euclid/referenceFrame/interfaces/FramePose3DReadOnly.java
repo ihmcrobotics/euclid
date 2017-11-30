@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolder
 {
@@ -56,7 +57,8 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    
    default void getRotationVector(FrameVector3D frameVectorToPack)
    {
-      
+      frameVectorToPack.setToZero(getReferenceFrame());
+      getRotationVector((Vector3DBasics) frameVectorToPack);
    }
    
    default double getPositionDistance(FramePoint3DReadOnly point)
