@@ -15,21 +15,17 @@ public interface Pose3DReadOnly
 {
    /**
     * Gets the read-only reference of the position part of this pose 3D.
-    * 
-    * TODO: This method breaks from tradition. ReadOnly returns should be ReadOnly.
     *
-    * @return the position part of this pose 3D.
+    * @return the read-only position part of this pose 3D.
     */
-   Point3DBasics getPosition();
+   Point3DReadOnly getPosition();
 
    /**
     * Gets the read-only reference to the orientation part of this pose 3D.
     *
-    * TODO: This method breaks from tradition. ReadOnly returns should be ReadOnly.
-    *
-    * @return the orientation part of this pose 3D.
+    * @return the read-only orientation part of this pose 3D.
     */
-   QuaternionBasics getOrientation();
+   QuaternionReadOnly getOrientation();
 
    /**
     * Gets the x-coordinate of the position part of this pose 3D.

@@ -11,7 +11,9 @@ import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
@@ -21,22 +23,45 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param x the x-coordinate of the position.
     */
-   void setX(double x);
+   default void setX(double x)
+   {
+      getPosition().setX(x);
+   }
 
    /**
     * Sets the y-coordinate of the position.
     *
     * @param y the y-coordinate of the position.
     */
-   void setY(double y);
+   default void setY(double y)
+   {
+      getPosition().setY(y);
+   }
 
    /**
     * Sets the z-coordinate of the position.
     *
     * @param z the z-coordinate of the position.
     */
-   void setZ(double z);
+   default void setZ(double z)
+   {
+      getPosition().setZ(z);
+   }
 
+   /**
+    * Gets the reference of the position part of this pose 3D.
+    *
+    * @return the position part of this pose 3D.
+    */
+   Point3DBasics getPosition();
+
+   /**
+    * Gets the reference to the orientation part of this pose 3D.
+    *
+    * @return the orientation part of this pose 3D.
+    */
+   QuaternionBasics getOrientation();
+   
    /**
     * Sets the position coordinates.
     *
@@ -46,9 +71,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void setPosition(double x, double y, double z)
    {
-      setX(x);
-      setY(y);
-      setZ(z);
+      getPosition().set(x, y, z);
    }
 
    /**
@@ -66,10 +89,20 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
     */
-   default void setPositionXY(Tuple2DReadOnly position2D)
+   default void setPosition(Tuple2DReadOnly position2D)
    {
-      setX(position2D.getX());
-      setY(position2D.getY());
+      getPosition().set(position2D);
+   }
+
+   /**
+    * Sets the position from the given tuple 2D and z coordinate.
+    *
+    * @param position2D the tuple with the new x and y coordinates. Not modified.
+    * @param z the new z value.
+    */
+   default void setPosition(Tuple2DReadOnly position2D, double z)
+   {
+      getPosition().set(position2D, z);
    }
 
    /**
