@@ -20,7 +20,6 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
       return new FramePose3D(referenceFrame, pose);
    }
    
-   /* TODO: ripped from FrameQuaternionTest - does not work; calls Pose3D#epsilonEquals attempting to cast FramePose3D to Pose3D
    @Test
    public void testConsistencyWithPose3D()
    {
@@ -33,7 +32,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 
       EuclidFrameAPITestTools.GenericTypeBuilder frameless2DTypeBuilder = () -> createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()).getGeometryObject();
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
-   }*/
+   }
 
    @Override
    @Test
