@@ -2,13 +2,8 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.Random;
 
-import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FramePoint3D;
-import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
-import us.ihmc.euclid.referenceFrame.FrameVector4D;
-import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -1206,6 +1201,21 @@ public class EuclidFrameRandomTools
    public static FrameQuaternion nextFrameQuaternion(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random));
+   }
+
+   /**
+    * Generates a random 3D frame pose with a quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame quaternion's reference frame.
+    * @return the random 3D frame pose.
+    */
+   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random));
    }
 
    /**
