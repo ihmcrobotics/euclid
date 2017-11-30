@@ -1,21 +1,20 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
  * A {@code Pose2D} represents a position and orientation in the XY-plane.
  */
-public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
+public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
 {
    /** The position part of this pose 2D. */
    private final Point2D position = new Point2D();
@@ -110,14 +109,14 @@ public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
    
    /** {@inheritDoc} */
    @Override
-   public Point2DReadOnly getPosition()
+   public Point2DBasics getPosition()
    {
       return position;
    }
 
    /** {@inheritDoc} */
    @Override
-   public Orientation2DReadOnly getOrientation()
+   public Orientation2DBasics getOrientation()
    {
       return orientation;
    }
@@ -129,100 +128,25 @@ public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
       orientationToPack.set(orientation);
    }
 
-   /**
-    * Sets the x-coordinate of the position.
-    *
-    * @param x the x-coordinate of the position.
-    */
+   /** {@inheritDoc} */
+   @Override
    public void setX(double x)
    {
       position.setX(x);
    }
 
-   /**
-    * Sets the y-coordinate of the position.
-    *
-    * @param y the y-coordinate of the position.
-    */
+   /** {@inheritDoc} */
+   @Override
    public void setY(double y)
    {
       position.setY(y);
    }
 
-   /**
-    * Sets the orientation yaw angle value.
-    *
-    * @param yaw the orientation angle value.
-    */
+   /** {@inheritDoc} */
+   @Override
    public void setYaw(double yaw)
    {
       orientation.setYaw(yaw);
-   }
-
-   /**
-    * Sets the position coordinates.
-    *
-    * @param x the x-coordinate of the position.
-    * @param y the y-coordinate of the position.
-    */
-   public void setPosition(double x, double y)
-   {
-      position.set(x, y);
-   }
-
-   /**
-    * Sets the position to the given tuple.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    */
-   public void setPosition(Tuple2DReadOnly position)
-   {
-      this.position.set(position);
-   }
-
-   /**
-    * Sets the orientation angle value.
-    *
-    * @param yaw the orientation angle value.
-    */
-   public void setOrientation(double yaw)
-   {
-      orientation.setYaw(yaw);
-   }
-
-   /**
-    * Sets the orientation from the given orientation 2D.
-    *
-    * @param orientation the orientation with the new angle value for this. Not modified.
-    */
-   public void setOrientation(Orientation2D orientation)
-   {
-      this.orientation.set(orientation);
-   }
-
-   /**
-    * Sets all the components of this pose 2D.
-    *
-    * @param x the x-coordinate of the position.
-    * @param y the y-coordinate of the position.
-    * @param yaw the orientation angle value.
-    */
-   public void set(double x, double y, double yaw)
-   {
-      setPosition(x, y);
-      setOrientation(yaw);
-   }
-
-   /**
-    * Sets both position and orientation.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the orientation with the new angle value for this. Not modified.
-    */
-   public void set(Tuple2DReadOnly position, Orientation2D orientation)
-   {
-      setPosition(position);
-      setOrientation(orientation);
    }
 
    /**
@@ -233,41 +157,7 @@ public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
    @Override
    public void set(Pose2D other)
    {
-      setPosition(other.position);
-      setOrientation(other.orientation);
-   }
-
-   /**
-    * Sets this pose 2D to match the given rigid-body transform.
-    * <p>
-    * The given transform has to represent a 2D transformation.
-    * </p>
-    *
-    * @param rigidBodyTransform the transform use to set this pose 2D. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of the transform does not represent a 2D
-    *            transformation.
-    */
-   public void set(RigidBodyTransform rigidBodyTransform)
-   {
-      set(rigidBodyTransform, true);
-   }
-
-   /**
-    * Sets this pose 2D to match the given rigid-body transform.
-    *
-    * @param rigidBodyTransform the transform use to set this pose 2D. Not modified.
-    * @param checkIsTransform2D indicates whether or not the method should check that the rotation
-    *           part of the given transform represents a 2D rotation in the XY-plane.
-    * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the
-    *            rotation part of the transform does not represent a 2D transformation.
-    */
-   public void set(RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
-   {
-      if (checkIsTransform2D)
-         rigidBodyTransform.checkIfRotation2D();
-
-      setPosition(rigidBodyTransform.getTranslationX(), rigidBodyTransform.getTranslationY());
-      setOrientation(rigidBodyTransform.getRotationMatrix().getYaw());
+      Pose2DBasics.super.set(other);
    }
 
    /**
@@ -507,7 +397,7 @@ public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
    @Override
    public boolean epsilonEquals(Pose2D other, double epsilon)
    {
-      return Pose2DReadOnly.super.epsilonEquals(other, epsilon);
+      return Pose2DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -525,7 +415,7 @@ public class Pose2D implements Pose2DReadOnly, GeometryObject<Pose2D>
    @Override
    public boolean geometricallyEquals(Pose2D other, double epsilon)
    {
-      return Pose2DReadOnly.super.geometricallyEquals(other, epsilon);
+      return Pose2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
