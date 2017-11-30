@@ -508,7 +508,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Rotates, then adds the given {@code translation} to this pose 3D.
     * <p>
     * Use this method if the {@code translation} is expressed in the local coordinates described by
-    * this pose 3D. Otherwise, use {@link #prependTranslation(Tuple2DReadOnly)}.
+    * this pose 3D. Otherwise, use {@link #prependTranslation(Tuple3DReadOnly)}.
     * </p>
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
