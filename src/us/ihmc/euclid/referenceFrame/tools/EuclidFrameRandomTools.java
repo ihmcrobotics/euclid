@@ -1204,6 +1204,18 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates a random 2D frame pose with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame quaternion's reference frame.
+    * @return the random 2D frame pose.
+    */
+   public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FramePose2D(referenceFrame, EuclidGeometryRandomTools.nextPose2D(random));
+   }
+
+   /**
     * Generates a random 3D frame pose with a quaternion uniformly distributed on the unit-sphere.
     * <p>
     * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
