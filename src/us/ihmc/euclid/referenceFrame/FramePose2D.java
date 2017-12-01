@@ -162,10 +162,10 @@ public class FramePose2D extends FrameGeometryObject<FramePose2D, Pose2D> implem
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not
     *          expressed in the same reference frame.
     */
-   public void interpolate(FramePose2D other, double alpha)
+   public void interpolate(FramePose2DReadOnly other, double alpha)
    {
       checkReferenceFrameMatch(other);
-      Pose2DBasics.super.interpolate(other.pose, alpha);
+      Pose2DBasics.super.interpolate(other, alpha);
    }
 
    /**
@@ -184,10 +184,10 @@ public class FramePose2D extends FrameGeometryObject<FramePose2D, Pose2D> implem
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pose1} are not
     *          expressed in the same reference frame.
     */
-   public void interpolate(FramePose2D pose1, Pose2D pose2, double alpha)
+   public void interpolate(FramePose2DReadOnly pose1, Pose2DReadOnly pose2, double alpha)
    {
       checkReferenceFrameMatch(pose1);
-      Pose2DBasics.super.interpolate(pose1.pose, pose2, alpha);
+      Pose2DBasics.super.interpolate(pose1, pose2, alpha);
    }
 
    /**
@@ -206,10 +206,10 @@ public class FramePose2D extends FrameGeometryObject<FramePose2D, Pose2D> implem
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pose2} are not
     *          expressed in the same reference frame.
     */
-   public void interpolate(Pose2D pose1, FramePose2D pose2, double alpha)
+   public void interpolate(Pose2DReadOnly pose1, FramePose2DReadOnly pose2, double alpha)
    {
       checkReferenceFrameMatch(pose2);
-      Pose2DBasics.super.interpolate(pose1, pose2.pose, alpha);
+      Pose2DBasics.super.interpolate(pose1, pose2, alpha);
    }
 
    /**
@@ -228,10 +228,10 @@ public class FramePose2D extends FrameGeometryObject<FramePose2D, Pose2D> implem
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pose1} and
     *          {@code pose2} are not expressed in the same reference frame.
     */
-   public void interpolate(FramePose2D pose1, FramePose2D pose2, double alpha)
+   public void interpolate(FramePose2DReadOnly pose1, FramePose2DReadOnly pose2, double alpha)
    {
       checkReferenceFrameMatch(pose1);
       checkReferenceFrameMatch(pose2);
-      Pose2DBasics.super.interpolate(pose1.pose, pose2.pose, alpha);
+      Pose2DBasics.super.interpolate(pose1, pose2, alpha);
    }
 }
