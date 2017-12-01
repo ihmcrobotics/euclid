@@ -43,7 +43,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     *
     * @param other the other pose 2D used to initialize this. Not modified.
     */
-   public Pose2D(Pose2D other)
+   public Pose2D(Pose2DReadOnly other)
    {
       set(other);
    }
