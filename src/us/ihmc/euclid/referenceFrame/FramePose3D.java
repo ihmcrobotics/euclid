@@ -106,6 +106,12 @@ public class FramePose3D extends FrameGeometryObject<FramePose3D, Pose3D> implem
       return pose.getRoll();
    }
    
+   public void set(FramePose3DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Pose3DBasics.super.set(other);
+   }
+   
    /**
     * Sets both position and orientation.
     *
@@ -281,5 +287,30 @@ public class FramePose3D extends FrameGeometryObject<FramePose3D, Pose3D> implem
    {
       checkReferenceFrameMatch(rotation);
       Pose3DBasics.super.appendRotation(rotation);
+   }
+   
+   public void interpolate(FramePose3D other, double alpha)
+   {
+      checkReferenceFrameMatch(other);
+      Pose3DBasics.super.interpolate(other.pose, alpha);
+   }
+   
+   public void interpolate(FramePose3D pose1, Pose3D pose2, double alpha)
+   {
+      checkReferenceFrameMatch(pose1);
+      Pose3DBasics.super.interpolate(pose1.pose, pose2, alpha);
+   }
+   
+   public void interpolate(Pose3D pose1, FramePose3D pose2, double alpha)
+   {
+      checkReferenceFrameMatch(pose2);
+      Pose3DBasics.super.interpolate(pose1, pose2.pose, alpha);
+   }
+   
+   public void interpolate(FramePose3D pose1, FramePose3D pose2, double alpha)
+   {
+      checkReferenceFrameMatch(pose1);
+      checkReferenceFrameMatch(pose2);
+      Pose3DBasics.super.interpolate(pose1.pose, pose2.pose, alpha);
    }
 }

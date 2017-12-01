@@ -8,6 +8,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolder
 {
+   default boolean geometricallyEquals(FramePose3DReadOnly other, double epsilon)
+   {
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      
+      return Pose3DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+   
    /**
     * Tests if this pose is equal to the given {@code other} to an {@code epsilon}.
     * <p>
@@ -67,9 +75,22 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
       return Pose3DReadOnly.super.getPositionDistance(point);
    }
    
+   default double getPositionDistance(FramePose3DReadOnly point)
+   {
+      checkReferenceFrameMatch(point);
+      return Pose3DReadOnly.super.getPositionDistance(point);
+   }
+   
    default double getOrientationDistance(FrameQuaternionReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
       return Pose3DReadOnly.super.getOrientationDistance(orientation);
    }
+
+   default double getOrientationDistance(FramePose3DReadOnly point)
+   {
+      checkReferenceFrameMatch(point);
+      return Pose3DReadOnly.super.getPositionDistance(point);
+   }
+
 }

@@ -41,6 +41,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
       super.testOverloading();
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
       framelessMethodsToIgnore.put("set", new Class<?>[] {Pose3D.class});
+      framelessMethodsToIgnore.put("equals", new Class<?>[] {Pose3D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Pose3D.class, Double.TYPE});
       framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Pose3D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FramePose3D.class, Pose3D.class, true, 1, framelessMethodsToIgnore);
