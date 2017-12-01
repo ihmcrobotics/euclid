@@ -90,7 +90,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    default double getOrientationDistance(FramePose3DReadOnly point)
    {
       checkReferenceFrameMatch(point);
-      return Pose3DReadOnly.super.getPositionDistance(point);
+      return Pose3DReadOnly.super.getOrientationDistance(point);
    }
 
 }
