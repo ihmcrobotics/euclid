@@ -1204,6 +1204,18 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates a random 2D frame orientation with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame orientation's reference frame.
+    * @return the random 2D frame orientation.
+    */
+   public static FrameOrientation2D nextFrameOrientation2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameOrientation2D(referenceFrame, EuclidGeometryRandomTools.nextOrientation2D(random));
+   }
+
+   /**
     * Generates a random 2D frame pose with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
     *
     * @param random the random generator to use.

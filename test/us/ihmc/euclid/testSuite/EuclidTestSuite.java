@@ -54,7 +54,7 @@ import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
       ReferenceFrameTest.class,
       // 1D
       // 2D
-      FramePoint2DTest.class, FrameVector2DTest.class, FramePose2DTest.class,
+      FramePoint2DTest.class, FrameVector2DTest.class, FramePose2DTest.class, FrameOrientation2DTest.class,
       // 3D
       FramePoint3DTest.class, FrameVector3DTest.class, FramePose3DTest.class,
       // 4D
