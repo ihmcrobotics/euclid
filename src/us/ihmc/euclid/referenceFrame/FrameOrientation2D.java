@@ -9,25 +9,40 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, Orientation2D> implements FrameOrientation2DReadOnly, Orientation2DBasics
 {
    private final Orientation2D orientation;
-
+   
+   /**
+    * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D} and
+    * its reference frame to {@link ReferenceFrame#getWorldFrame()}.
+    * 
+    * @param orientation the orientation this frame orientation will represent. Modified.
+    */
    public FrameOrientation2D(Orientation2D orientation)
    {
       super(orientation);
       this.orientation = getGeometryObject();
    }
-
+   
+   /**
+    * Creates a new frame vector and initializes its orientation components to the given
+    * {@link Orientation2DReadOnly} and its reference frame to the given {@link ReferenceFrame}.
+    * 
+    * @param referenceFrame the initial frame for this orientation.
+    * @param orientation the orientation this frame orientation will represent. Not modified.
+    */
    public FrameOrientation2D(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation)
    {
       super(referenceFrame, new Orientation2D(orientation));
       this.orientation = getGeometryObject();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setYaw(double yaw)
    {
       orientation.setYaw(yaw);
    }
 
+   /** {@inheritDoc} */
    @Override
    public double getYaw()
    {
@@ -56,6 +71,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     * </p>
     *
     * @param other the other orientation 2D to add to this. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void add(FrameOrientation2DReadOnly other)
    {
@@ -73,6 +90,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void add(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2)
    {
@@ -90,6 +109,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void add(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -107,6 +128,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and {@code orientation2}
+    *            are not expressed in the same reference frame.
     */
    public void add(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -124,6 +147,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     * </p>
     *
     * @param other the other orientation 2D to add to this. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void sub(FrameOrientation2DReadOnly other)
    {
@@ -141,6 +166,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void sub(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2)
    {
@@ -158,6 +185,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void sub(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -175,6 +204,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     *
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and {@code orientation2}
+    *            are not expressed in the same reference frame.
     */
    public void sub(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -195,6 +226,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not
     *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void interpolate(FrameOrientation2DReadOnly other, double alpha)
    {
@@ -215,6 +248,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
     *           {@code this} to {@code orientation2}.
+    * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void interpolate(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2, double alpha)
    {
@@ -235,6 +270,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
     *           {@code this} to {@code orientation2}.
+    * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same frame as
+    *            {@code this}.
     */
    public void interpolate(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2, double alpha)
    {
@@ -255,6 +292,8 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
     *           {@code this} to {@code orientation2}.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and {@code orientation2}
+    *            are not expressed in the same reference frame.
     */
    public void interpolate(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2, double alpha)
    {

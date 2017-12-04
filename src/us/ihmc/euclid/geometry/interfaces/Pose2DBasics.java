@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -285,12 +284,12 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * to the orientation part.
     * <p>
     * If the rotation should not affect this pose's position, use
-    * {@link #appendRotation(Orientation2D)}.
+    * {@link #appendRotation(Orientation2DReadOnly)}.
     * </p>
     *
     * @param orientation the orientation to prepend to this pose 2D. Not modified.
     */
-   default void prependRotation(Orientation2D orientation)
+   default void prependRotation(Orientation2DReadOnly orientation)
    {
       prependRotation(orientation.getYaw());
    }
@@ -347,12 +346,12 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Adds the given {@code orientation} to the orientation of this pose 2D.
     * <p>
     * If the position part of this pose 2D is to be rotated by the given {@code orientation}, use
-    * {@link #prependRotation(Orientation2D)}.
+    * {@link #prependRotation(Orientation2DReadOnly)}.
     * </p>
     *
     * @param orientation the orientation to append to this pose 2D. Not modified.
     */
-   default void appendRotation(Orientation2D orientation)
+   default void appendRotation(Orientation2DReadOnly orientation)
    {
       appendRotation(orientation.getYaw());
    }

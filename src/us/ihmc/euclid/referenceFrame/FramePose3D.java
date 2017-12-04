@@ -106,6 +106,13 @@ public class FramePose3D extends FrameGeometryObject<FramePose3D, Pose3D> implem
       return pose.getRoll();
    }
    
+   /**
+    * Sets this frame pose 3D to the {@code other} frame pose 3D.
+    *
+    * @param other the other frame pose 3D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not
+    *          expressed in the same reference frame.
+    */
    public void set(FramePose3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
@@ -289,24 +296,87 @@ public class FramePose3D extends FrameGeometryObject<FramePose3D, Pose3D> implem
       Pose3DBasics.super.appendRotation(rotation);
    }
    
+   /**
+    * Performs a linear interpolation from {@code this} to {@code other} given the percentage
+    * {@code alpha}.
+    * <p>
+    * this.position = (1.0 - alpha) * this.position + alpha * other.position<br>
+    * this.orientation = (1.0 - alpha) * this.orientation + alpha * other.orientation
+    * </p>
+    *
+    * @param other the other pose 3D used for the interpolation. Not modified.
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
+    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    *           {@code other}.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not
+    *          expressed in the same reference frame.
+    */
    public void interpolate(FramePose3D other, double alpha)
    {
       checkReferenceFrameMatch(other);
       Pose3DBasics.super.interpolate(other.pose, alpha);
    }
-   
+
+   /**
+    * Performs a linear interpolation from {@code pose1} to {@code pose2} given the percentage
+    * {@code alpha}.
+    * <p>
+    * this.position = (1.0 - alpha) * pose1.position + alpha * pose2.position<br>
+    * this.orientation = (1.0 - alpha) * pose1.orientation + alpha * pose2.orientation
+    * </p>
+    *
+    * @param pose1 the first pose 3D used in the interpolation. Not modified.
+    * @param pose2 the second pose 3D used in the interpolation. Not modified.
+    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
+    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
+    *           {@code this} to {@code pose2}.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pose1} are not
+    *          expressed in the same reference frame.
+    */
    public void interpolate(FramePose3D pose1, Pose3D pose2, double alpha)
    {
       checkReferenceFrameMatch(pose1);
       Pose3DBasics.super.interpolate(pose1.pose, pose2, alpha);
    }
-   
+
+   /**
+    * Performs a linear interpolation from {@code pose1} to {@code pose2} given the percentage
+    * {@code alpha}.
+    * <p>
+    * this.position = (1.0 - alpha) * pose1.position + alpha * pose2.position<br>
+    * this.orientation = (1.0 - alpha) * pose1.orientation + alpha * pose2.orientation
+    * </p>
+    *
+    * @param pose1 the first pose 3D used in the interpolation. Not modified.
+    * @param pose2 the second pose 3D used in the interpolation. Not modified.
+    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
+    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
+    *           {@code this} to {@code pose2}.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pose2} are not
+    *          expressed in the same reference frame.
+    */
    public void interpolate(Pose3D pose1, FramePose3D pose2, double alpha)
    {
       checkReferenceFrameMatch(pose2);
       Pose3DBasics.super.interpolate(pose1, pose2.pose, alpha);
    }
-   
+
+   /**
+    * Performs a linear interpolation from {@code pose1} to {@code pose2} given the percentage
+    * {@code alpha}.
+    * <p>
+    * this.position = (1.0 - alpha) * pose1.position + alpha * pose2.position<br>
+    * this.orientation = (1.0 - alpha) * pose1.orientation + alpha * pose2.orientation
+    * </p>
+    *
+    * @param pose1 the first pose 3D used in the interpolation. Not modified.
+    * @param pose2 the second pose 3D used in the interpolation. Not modified.
+    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
+    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
+    *           {@code this} to {@code pose2}.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code pose1}, and {@code pose2}
+    *          are not expressed in the same reference frame.
+    */
    public void interpolate(FramePose3D pose1, FramePose3D pose2, double alpha)
    {
       checkReferenceFrameMatch(pose1);
