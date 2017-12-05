@@ -8,6 +8,8 @@ import java.util.Random;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -2278,7 +2280,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int intersectionWith(Line2D line, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   public int intersectionWith(Line2DReadOnly line, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), clockwiseOrderedVertices,
@@ -2307,7 +2309,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D[] intersectionWith(Line2D line)
+   public Point2D[] intersectionWith(Line2DReadOnly line)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), clockwiseOrderedVertices,
@@ -2338,7 +2340,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int intersectionWithRay(Line2D ray, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   public int intersectionWithRay(Line2DReadOnly ray, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), clockwiseOrderedVertices,
@@ -2366,7 +2368,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D[] intersectionWithRay(Line2D ray)
+   public Point2D[] intersectionWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), clockwiseOrderedVertices,
@@ -2407,7 +2409,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int intersectionWith(LineSegment2D lineSegment2d, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   public int intersectionWith(LineSegment2DReadOnly lineSegment2d, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2d.getFirstEndpoint(), lineSegment2d.getSecondEndpoint(),
@@ -2445,7 +2447,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D[] intersectionWith(LineSegment2D lineSegment2d)
+   public Point2D[] intersectionWith(LineSegment2DReadOnly lineSegment2d)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2d.getFirstEndpoint(), lineSegment2d.getSecondEndpoint(),
