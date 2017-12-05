@@ -18,6 +18,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public class LineSegment3DTest
@@ -152,7 +153,11 @@ public class LineSegment3DTest
       {
          LineSegment3D lineSegment3D = new LineSegment3D();
          assertFalse(lineSegment3D.containsNaN());
-         lineSegment3D.getFirstEndpoint().setElement(i, Double.NaN);
+         
+         Point3D firstEndpoint = new Point3D();
+         firstEndpoint.setElement(i, Double.NaN);
+         lineSegment3D.setFirstEndpoint(firstEndpoint);
+         
          assertTrue(lineSegment3D.containsNaN());
          assertTrue(lineSegment3D.firstEndpointContainsNaN());
          assertFalse(lineSegment3D.secondEndpointContainsNaN());
@@ -162,7 +167,11 @@ public class LineSegment3DTest
       {
          LineSegment3D lineSegment3D = new LineSegment3D();
          assertFalse(lineSegment3D.containsNaN());
-         lineSegment3D.getSecondEndpoint().setElement(i, Double.NaN);
+         
+         Point3D secondEndpoint = new Point3D();
+         secondEndpoint.setElement(i, Double.NaN);
+         lineSegment3D.setSecondEndpoint(secondEndpoint);
+         
          assertTrue(lineSegment3D.containsNaN());
          assertFalse(lineSegment3D.firstEndpointContainsNaN());
          assertTrue(lineSegment3D.secondEndpointContainsNaN());
@@ -363,8 +372,8 @@ public class LineSegment3DTest
          Vector3D actualDirection = new Vector3D();
          lineSegment3D.getDirection(false, actualDirection);
 
-         Point3D firstEndpoint = lineSegment3D.getFirstEndpoint();
-         Point3D secondEndpoint = lineSegment3D.getSecondEndpoint();
+         Point3DReadOnly firstEndpoint = lineSegment3D.getFirstEndpoint();
+         Point3DReadOnly secondEndpoint = lineSegment3D.getSecondEndpoint();
          Vector3D expectedDirection = new Vector3D();
          expectedDirection.sub(secondEndpoint, firstEndpoint);
          EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualDirection, EPSILON);
@@ -596,13 +605,26 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getFirstEndpoint().getElement(j);
-            line2.getFirstEndpoint().setElement(j, element + 0.999 * epsilon);
+
+            Point3D firstEndpoint = line2.getFirstEndpointCopy();
+            firstEndpoint.setElement(j, element + 0.999 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getFirstEndpoint().setElement(j, element - 0.999 * epsilon);
+
+            firstEndpoint.setElement(j, element - 0.999 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getFirstEndpoint().setElement(j, element + 1.001 * epsilon);
+
+            firstEndpoint.setElement(j, element + 1.001 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
-            line2.getFirstEndpoint().setElement(j, element - 1.001 * epsilon);
+
+            firstEndpoint.setElement(j, element - 1.001 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
 
@@ -611,13 +633,26 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getSecondEndpoint().getElement(j);
-            line2.getSecondEndpoint().setElement(j, element + 0.999 * epsilon);
+            
+            Point3D secondEndpoint = line2.getSecondEndpointCopy();
+            secondEndpoint.setElement(j, element + 0.999 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getSecondEndpoint().setElement(j, element - 0.999 * epsilon);
+
+            secondEndpoint.setElement(j, element - 0.999 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getSecondEndpoint().setElement(j, element + 1.001 * epsilon);
+
+            secondEndpoint.setElement(j, element + 1.001 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
-            line2.getSecondEndpoint().setElement(j, element - 1.001 * epsilon);
+
+            secondEndpoint.setElement(j, element - 1.001 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
       }
@@ -646,9 +681,16 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.equals(line2));
             double element = line1.getFirstEndpoint().getElement(j);
-            line2.getFirstEndpoint().setElement(j, element + epsilon);
+            
+            Point3D firstEndpoint = line2.getFirstEndpointCopy();
+            firstEndpoint.setElement(j, element + epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.equals(line2));
-            line2.getFirstEndpoint().setElement(j, element - epsilon);
+
+            firstEndpoint.setElement(j, element - epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.equals(line2));
          }
 
@@ -657,9 +699,16 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.equals(line2));
             double element = line1.getSecondEndpoint().getElement(j);
-            line2.getSecondEndpoint().setElement(j, element + epsilon);
+
+            Point3D secondEndpoint = line2.getSecondEndpointCopy();
+            secondEndpoint.setElement(j, element + epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.equals(line2));
-            line2.getSecondEndpoint().setElement(j, element - epsilon);
+
+            secondEndpoint.setElement(j, element - epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.equals(line2));
          }
       }
