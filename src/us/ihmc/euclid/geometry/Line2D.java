@@ -276,10 +276,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    @Override
    public void set(Line2D other)
    {
-      point.set(other.getPoint());
-      direction.set(other.getDirection());
-      pointHasBeenSet = true;
-      directionHasBeenSet = true;
+      Line2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
