@@ -48,7 +48,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
     *
     * @param other the other line segment to copy. Not modified.
     */
-   default void set(LineSegment3DBasics other)
+   default void set(LineSegment3DReadOnly other)
    {
       set(other.getFirstEndpoint(), other.getSecondEndpoint());
    }

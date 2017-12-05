@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -32,6 +33,16 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
     * @param other the other line segment used to initialize this line segment. Not modified.
     */
    public LineSegment3D(LineSegment3D other)
+   {
+      set(other);
+   }
+
+   /**
+    * Creates a new line segment 3D and initializes it to {@code other}.
+    * 
+    * @param other the other line segment used to initialize this line segment. Not modified.
+    */
+   public LineSegment3D(LineSegment3DReadOnly other)
    {
       set(other);
    }
