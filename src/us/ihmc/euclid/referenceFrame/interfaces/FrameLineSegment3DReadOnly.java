@@ -1,5 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-public interface FrameLineSegment3DReadOnly
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+
+public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, ReferenceFrameHolder
 {
 }
