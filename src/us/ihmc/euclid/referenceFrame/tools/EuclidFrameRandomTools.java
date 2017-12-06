@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.Random;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameOrientation2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -1343,5 +1344,17 @@ public class EuclidFrameRandomTools
    public static FrameVector4D nextFrameVector4D(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameVector4D(referenceFrame, EuclidCoreRandomTools.nextVector4D(random));
+   }
+   
+   /**
+    * Generates a random 2D frame line segment.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame line segment's reference frame.
+    * @return the random frame line segment.
+    */
+   public static FrameLineSegment2D nextFrameLineSegment2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameLineSegment2D(referenceFrame, EuclidGeometryRandomTools.nextLineSegment2D(random));
    }
 }
