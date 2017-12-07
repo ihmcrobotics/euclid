@@ -3,7 +3,6 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line2D;
-import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -16,12 +15,36 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public interface Line2DReadOnly
 {
+   /**
+    * Gets the read-only reference to the point through which this line is going.
+    *
+    * @return the reference to the point.
+    * @throws RuntimeException if this line has not been initialized yet.
+    */
    Point2DReadOnly getPoint();
 
+   /**
+    * Gets the read-only reference to the direction of this line.
+    *
+    * @return the reference to the direction.
+    * @throws RuntimeException if this line has not been initialized yet.
+    */
    Vector2DReadOnly getDirection();
-   
+
+   /**
+    * Whether or not this line's point has been initialized and not
+    * set to zero or NaN.
+    *
+    * @return whether or not this line's direction is set.
+    */
    boolean hasPointBeenSet();
-   
+
+   /** 
+    * Whether or not this line's direction has been initialized and not
+    * set to zero or NaN.
+    * 
+    * @return whether or not this line's direction is set.
+    */
    boolean hasDirectionBeenSet();
    
    default void checkHasBeenInitialized()
@@ -74,7 +97,7 @@ public interface Line2DReadOnly
     * Gets the point defining this line by storing its coordinates in the given argument
     * {@code pointToPack}.
     *
-    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param pointOnLineToPack point in which the coordinates of this line's point are stored. Modified.
     * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getPoint(Point2DBasics pointOnLineToPack)
@@ -130,7 +153,6 @@ public interface Line2DReadOnly
     * </p>
     *
     * @param transform the transform to apply on this line's copy. Not modified.
-    * @param the copy of this transformed.
     * @throws RuntimeException if this line has not been initialized yet.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY-plane.
@@ -148,7 +170,6 @@ public interface Line2DReadOnly
     * project the result onto the XY-plane, and returns the result.
     *
     * @param transform the transform to apply on this line's copy. Not modified.
-    * @param the copy of this transformed.
     * @throws RuntimeException if this line has not been initialized yet.
     */
    default Line2D applyTransformAndProjectToXYPlaneCopy(Transform transform)
@@ -547,7 +568,7 @@ public interface Line2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -567,7 +588,7 @@ public interface Line2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -589,7 +610,7 @@ public interface Line2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>

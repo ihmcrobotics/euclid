@@ -27,7 +27,9 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    /** Normalized direction of this line. */
    private final Vector2D direction = new Vector2D();
 
+   /** Whether or not this line's point is set. */
    private boolean pointHasBeenSet = false;
+   /** Whether or not this line's direction is set. */
    private boolean directionHasBeenSet = false;
 
    /**

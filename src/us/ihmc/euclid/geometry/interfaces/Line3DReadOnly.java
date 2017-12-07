@@ -25,9 +25,21 @@ public interface Line3DReadOnly
     * @throws RuntimeException if this line has not been initialized yet.
     */
    Vector3DReadOnly getDirection();
-   
+
+   /**
+    * Whether or not this line's point has been initialized and not
+    * set to zero or NaN.
+    *
+    * @return whether or not this line's direction is set.
+    */
    boolean hasPointBeenSet();
-   
+
+   /**
+    * Whether or not this line's direction has been initialized and not
+    * set to zero or NaN.
+    *
+    * @return whether or not this line's direction is set.
+    */
    boolean hasDirectionBeenSet();
 
    default void checkHasBeenInitialized()
@@ -206,7 +218,7 @@ public interface Line3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -228,7 +240,7 @@ public interface Line3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>

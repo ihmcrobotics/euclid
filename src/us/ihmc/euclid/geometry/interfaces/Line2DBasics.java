@@ -1,12 +1,19 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.geometry.Line2D;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public interface Line2DBasics extends Line2DReadOnly
 {
+   /**
+    * Changes the point through which this line has to go.
+    *
+    * @param pointOnLineX the new x-coordinate of the point on this line.
+    * @param pointOnLineY the new y-coordinate of the point on this line.
+    */
+   void setPoint(double pointOnLineX, double pointOnLineY);
+   
    /**
     * Changes the direction of this line by setting it to the normalized values provided.
     *
@@ -15,14 +22,6 @@ public interface Line2DBasics extends Line2DReadOnly
     * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirection(double lineDirectionX, double lineDirectionY);
-   
-   /**
-    * Changes the point through which this line has to go.
-    *
-    * @param pointOnLineX the new x-coordinate of the point on this line.
-    * @param pointOnLineY the new y-coordinate of the point on this line.
-    */
-   void setPoint(double pointOnLineX, double pointOnLineY);
 
    /**
     * Changes the direction of this line by setting it to the raw values provided.

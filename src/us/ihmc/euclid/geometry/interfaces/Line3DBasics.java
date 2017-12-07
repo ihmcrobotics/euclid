@@ -8,18 +8,18 @@ public interface Line3DBasics extends Line3DReadOnly
    /**
     * Changes the point through which this line has to go.
     *
-    * @param pointX the new x-coordinate of the point on this line.
-    * @param pointY the new y-coordinate of the point on this line.
-    * @param pointZ the new z-coordinate of the point on this line.
+    * @param pointOnLineX the new x-coordinate of the point on this line.
+    * @param pointOnLineY the new y-coordinate of the point on this line.
+    * @param pointOnLineZ the new z-coordinate of the point on this line.
     */
    void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ);
    
    /**
     * Changes the direction of this line by setting it to the normalized values provided.
     *
-    * @param directionX the new x-component of the direction of this line.
-    * @param directionY the new y-component of the direction of this line.
-    * @param directionZ the new z-component of the direction of this line.
+    * @param lineDirectionX the new x-component of the direction of this line.
+    * @param lineDirectionY the new y-component of the direction of this line.
+    * @param lineDirectionZ the new z-component of the direction of this line.
     * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ);
@@ -27,9 +27,9 @@ public interface Line3DBasics extends Line3DReadOnly
    /**
     * Changes the direction of this line by setting it to the raw values provided.
     *
-    * @param directionX the new x-component of the direction of this line.
-    * @param directionY the new y-component of the direction of this line.
-    * @param directionZ the new z-component of the direction of this line.
+    * @param lineDirectionX the new x-component of the direction of this line.
+    * @param lineDirectionY the new y-component of the direction of this line.
+    * @param lineDirectionZ the new z-component of the direction of this line.
     * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirectionUnsafe(double lineDirectionX, double lineDirectionY, double lineDirectionZ);

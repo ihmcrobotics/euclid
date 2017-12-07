@@ -10,6 +10,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FrameLine2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -18,8 +19,10 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolder
 {
+   /** {@inheritDoc} */
    FramePoint2DReadOnly getPoint();
-   
+
+   /** {@inheritDoc} */
    FrameVector2DReadOnly getDirection();
    
    /**
@@ -40,7 +43,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Gets the point defining this line by storing its coordinates in the given argument
     * {@code pointToPack}.
     *
-    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param pointOnLineToPack point in which the coordinates of this line's point are stored. Modified.
     * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getPoint(FramePoint2D pointOnLineToPack)
@@ -111,6 +114,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return {@code true} if the point is on the left side of this line, {@code false} if the point
     *         is on the right side or exactly on this line.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointOnLeftSideOfLine(FramePoint2DReadOnly point)
    {
@@ -131,6 +136,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param point 2D point to compute the distance from the line. Not modified.
     * @return the minimum distance between the 2D point and this 2D line.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default double distance(FramePoint2DReadOnly point)
    {
@@ -148,6 +155,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is located on this line, {@code false} otherwise.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointOnLine(FramePoint2DReadOnly point)
    {
@@ -166,6 +175,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param epsilon the tolerance used for this test.
     * @return {@code true} if the point is located on this line, {@code false} otherwise.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointOnLine(FramePoint2DReadOnly point, double epsilon)
    {
@@ -190,6 +201,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return {@code true} if the point is on the right side of this line, {@code false} if the
     *         point is on the left side or exactly on this line.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointOnRightSideOfLine(FramePoint2DReadOnly point)
    {
@@ -216,6 +229,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return {@code true} if the point is on the query side of this line, {@code false} if the
     *         point is on the opposite side or exactly on this line.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointOnSideOfLine(FramePoint2DReadOnly point, boolean testLeftSide)
    {
@@ -244,6 +259,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *         otherwise.
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *          in the same reference frame.
     */
    default Point2D intersectionWith(FrameLine2DReadOnly secondLine)
    {
@@ -269,6 +286,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *          in the same reference frame.
     */
    default boolean intersectionWith(FrameLine2DReadOnly secondLine, Point2DBasics intersectionToPack)
    {
@@ -294,6 +313,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *          in the same reference frame.
     */
    default boolean intersectionWith(FrameLine2DReadOnly secondLine, FramePoint2D intersectionToPack)
    {
@@ -372,6 +393,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not expressed
+    *          in the same reference frame.
     */
    default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, FramePoint2D intersectionToPack)
    {
@@ -487,6 +510,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not expressed
+    *          in the same reference frame.
     */
    default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, Point2DBasics intersectionToPack)
    {
@@ -515,6 +540,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return the coordinates of the intersection if the line intersects the line segment,
     *         {@code null} otherwise.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not expressed
+    *          in the same reference frame.
     */
    default Point2D intersectionWith(FrameLineSegment2DReadOnly lineSegment)
    {
@@ -533,6 +560,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *         front the line.
     * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointBehindLine(FramePoint2DReadOnly point)
    {
@@ -554,6 +583,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *         behind the line.
     * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code frontDirection} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointInFrontOfLine(FrameVector2DReadOnly frontDirection, Point2DReadOnly point)
    {
@@ -575,6 +606,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *         behind the line.
     * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointInFrontOfLine(Vector2DReadOnly frontDirection, FramePoint2DReadOnly point)
    {
@@ -593,6 +626,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *         behind the line.
     * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default boolean isPointInFrontOfLine(FramePoint2DReadOnly point)
    {
@@ -614,6 +649,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *         behind the line.
     * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code point}, and {@code frontDirection}
+    *          are not expressed in the same reference frame.
     */
    default boolean isPointInFrontOfLine(FrameVector2DReadOnly frontDirection, FramePoint2DReadOnly point)
    {
@@ -628,7 +665,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -636,6 +673,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to project on this line. Modified.
     * @return whether the method succeeded or not.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
+    *          in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint2D pointToProject)
    {
@@ -650,7 +689,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -659,6 +698,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
+    *          in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, Point2DBasics projectionToPack)
    {
@@ -672,7 +713,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -694,7 +735,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -703,6 +744,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
+    *          in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FramePoint2D projectionToPack)
    {
@@ -717,7 +760,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
     * returns {@code false}.
     * </ul>
     * </p>
@@ -728,6 +771,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto the line or {@code null} if the method failed.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
+    *          in the same reference frame.
     */
    default Point2D orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
    {
@@ -763,6 +808,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return the interior bisector if this method succeeded, {@code null} otherwise.
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *          in the same reference frame.
     */
    default Line2D interiorBisector(FrameLine2DReadOnly secondLine)
    {
@@ -776,6 +823,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param other the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
+    *          in the same reference frame.
     */
    default boolean isCollinear(FrameLine2DReadOnly other, double epsilon)
    {
@@ -790,6 +839,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param angleEpsilon the tolerance of the comparison for angle.
     * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
+    *          in the same reference frame.
     */
    default boolean isCollinear(FrameLine2DReadOnly other, double angleEpsilon, double distanceEpsilon)
    {
@@ -817,6 +868,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located at a distance greater than
     *            {@code epsilon} from this line.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *          in the same reference frame.
     */
    default double parameterGivenPointOnLine(FramePoint2DReadOnly pointOnLine, double epsilon)
    {
@@ -834,6 +887,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param point the point the line has to go through. Not modified.
     * @return the line perpendicular to {@code this} and going through {@code point}.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default Line2D perpendicularLineThroughPoint(FramePoint2DReadOnly point)
    {
@@ -849,6 +904,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
     *           {@code point}. Modified.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default void perpendicularLineThroughPoint(FramePoint2DReadOnly point, Line2DBasics perpendicularLineToPack)
    {
@@ -864,6 +921,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
     *           {@code point}. Modified.
     * @throws RuntimeException if this line has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
+    *          in the same reference frame.
     */
    default void perpendicularLineThroughPoint(FramePoint2DReadOnly point, FrameLine2D perpendicularLineToPack)
    {
@@ -936,6 +995,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param other the query. Not modified.
     * @return {@code true} if the two lines are perpendicular, {@code false} otherwise.
     * @throws RuntimeException if either this line or {@code other} has not been initialized yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
+    *          in the same reference frame.
     */
    default boolean areLinesPerpendicular(FrameLine2DReadOnly other)
    {
@@ -1004,6 +1065,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return {@code true} if this method succeeded, {@code false} otherwise.
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *          in the same reference frame.
     */
    default boolean interiorBisector(FrameLine2DReadOnly secondLine, Line2DBasics interiorBisectorToPack)
    {
@@ -1074,6 +1137,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return {@code true} if this method succeeded, {@code false} otherwise.
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *          in the same reference frame.
     */
    default boolean interiorBisector(FrameLine2DReadOnly secondLine, FrameLine2D interiorBisectorToPack)
    {

@@ -3,11 +3,10 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameLine3D extends FrameGeometryObject<FrameLine3D, Line3D> implements FrameLine3DReadOnly, Line3DBasics
 {
@@ -25,42 +24,49 @@ public class FrameLine3D extends FrameGeometryObject<FrameLine3D, Line3D> implem
       line = getGeometryObject();
    }
 
+   /** {@inheritDoc} */
    @Override
    public FramePoint3DReadOnly getPoint()
    {
       return new FramePoint3D(getReferenceFrame(), line.getPoint());
    }
 
+   /** {@inheritDoc} */
    @Override
    public FrameVector3DReadOnly getDirection()
    {
       return new FrameVector3D(getReferenceFrame(), line.getDirection());
    }
 
+   /** {@inheritDoc} */
    @Override
    public boolean hasPointBeenSet()
    {
       return line.hasPointBeenSet();
    }
 
+   /** {@inheritDoc} */
    @Override
    public boolean hasDirectionBeenSet()
    {
       return line.hasDirectionBeenSet();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ)
    {
       line.setPoint(pointOnLineX, pointOnLineY, pointOnLineZ);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
       line.setDirection(lineDirectionX, lineDirectionY, lineDirectionZ);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
@@ -71,6 +77,8 @@ public class FrameLine3D extends FrameGeometryObject<FrameLine3D, Line3D> implem
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *          in the same reference frame.
     */
    public void setPoint(FramePoint3DReadOnly pointOnLine)
    {
@@ -83,6 +91,8 @@ public class FrameLine3D extends FrameGeometryObject<FrameLine3D, Line3D> implem
     *
     * @param lineDirection new direction of this line. Not modified.
     * @throws RuntimeException if the new direction is unreasonably small.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not expressed
+    *          in the same reference frame.
     */
    public void setDirection(FrameVector3DReadOnly lineDirection)
    {
