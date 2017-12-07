@@ -140,6 +140,73 @@ public class Line2DTest
    }
 
    @Test
+   public void testSetToZero() throws Exception
+   {
+      Random random = new Random(32423L);
+
+      Line2D line2D = EuclidGeometryRandomTools.nextLine2D(random);
+      line2D.setToZero();
+      try
+      {
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getPoint());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
+      try
+      {
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getDirection());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
+   }
+
+   @Test
+   public void testSetToNaN() throws Exception
+   {
+      Random random = new Random(32423L);
+
+      Line2D line2D = EuclidGeometryRandomTools.nextLine2D(random);
+      line2D.setToNaN();
+      try
+      {
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getPoint());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
+      try
+      {
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getDirection());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
+   }
+
+   @Test
+   public void testContainsNaN() throws Exception
+   {
+      Line2D line2D = new Line2D();
+      assertFalse(line2D.containsNaN());
+      line2D.set(0.0, 0.0, 0.0, 1.0);
+      assertFalse(line2D.containsNaN());
+      line2D.set(Double.NaN, 0.0, 0.0, 1.0);
+      assertTrue(line2D.containsNaN());
+      line2D.set(0.0, Double.NaN, 0.0, 1.0);
+      assertTrue(line2D.containsNaN());
+      line2D.set(0.0, 0.0, Double.NaN, 1.0);
+      assertTrue(line2D.containsNaN());
+      line2D.set(0.0, 0.0, 1.0, Double.NaN);
+      assertTrue(line2D.containsNaN());
+   }
+
+   @Test
    public void testGetNormalizedVector()
    {
       double delta = 1.0e-5;
