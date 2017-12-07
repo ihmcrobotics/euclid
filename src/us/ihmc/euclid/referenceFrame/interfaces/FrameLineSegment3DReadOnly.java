@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.referenceFrame.FrameLine3D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -10,6 +11,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, ReferenceFrameHolder
 {
+   default void getLine(FrameLine3D other)
+   {
+      other.setIncludingFrame(getReferenceFrame(), getLine());
+   }
+   
    /**
     * Gets the first endpoint defining this line segment by storing its coordinates in the given
     * argument {@code firstEndpointToPack}.
@@ -79,6 +85,18 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
       firstEndpointToPack.setToZero(getReferenceFrame());
       secondEndpointToPack.setToZero(getReferenceFrame());
       LineSegment3DReadOnly.super.getEndpoints(firstEndpointToPack, secondEndpointToPack);
+   }
+
+   /**
+    * Computes the vector going from the first to the second endpoint of this line segment.
+    *
+    * @param normalize whether the direction vector is to be normalized.
+    * @param directionToPack vector in which the direction is stored. Modified.
+    */
+   default void getDirection(boolean normalize, FrameVector3D directionToPack)
+   {
+      directionToPack.setToZero(getReferenceFrame());
+      LineSegment3DReadOnly.super.getDirection(normalize, directionToPack);
    }
 
    /**
@@ -378,17 +396,5 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    {
       midpointToPack.setToZero(getReferenceFrame());
       LineSegment3DReadOnly.super.midpoint(midpointToPack);
-   }
-
-   /**
-    * Computes the vector going from the first to the second endpoint of this line segment.
-    *
-    * @param normalize whether the direction vector is to be normalized.
-    * @param directionToPack vector in which the direction is stored. Modified.
-    */
-   default void getDirection(boolean normalize, FrameVector3D directionToPack)
-   {
-      directionToPack.setToZero(getReferenceFrame());
-      LineSegment3DReadOnly.super.getDirection(normalize, directionToPack);
    }
 }

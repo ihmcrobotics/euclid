@@ -34,6 +34,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
 import us.ihmc.euclid.referenceFrame.FrameLine2DTest;
+import us.ihmc.euclid.referenceFrame.FrameLine3DTest;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2DTest;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3DTest;
 import us.ihmc.euclid.referenceFrame.FrameOrientation2DTest;
@@ -68,7 +69,7 @@ import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
       // 2D
       FramePoint2DTest.class, FrameVector2DTest.class, FramePose2DTest.class, FrameOrientation2DTest.class, FrameLineSegment2DTest.class, FrameLine2DTest.class,
       // 3D
-      FramePoint3DTest.class, FrameVector3DTest.class, FramePose3DTest.class, FrameLineSegment3DTest.class,
+      FramePoint3DTest.class, FrameVector3DTest.class, FramePose3DTest.class, FrameLineSegment3DTest.class, FrameLine3DTest.class,
       // 4D
       FrameQuaternionTest.class, FrameVector4DTest.class,
       // Tools tests

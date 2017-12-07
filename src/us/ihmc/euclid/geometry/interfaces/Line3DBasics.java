@@ -15,7 +15,7 @@ public interface Line3DBasics extends Line3DReadOnly
    void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ);
    
    /**
-    * Changes the direction of this line by setting it to the normalized value of the given vector.
+    * Changes the direction of this line by setting it to the normalized values provided.
     *
     * @param directionX the new x-component of the direction of this line.
     * @param directionY the new y-component of the direction of this line.
@@ -23,6 +23,16 @@ public interface Line3DBasics extends Line3DReadOnly
     * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ);
+   
+   /**
+    * Changes the direction of this line by setting it to the raw values provided.
+    *
+    * @param directionX the new x-component of the direction of this line.
+    * @param directionY the new y-component of the direction of this line.
+    * @param directionZ the new z-component of the direction of this line.
+    * @throws RuntimeException if the new direction is unreasonably small.
+    */
+   void setDirectionUnsafe(double lineDirectionX, double lineDirectionY, double lineDirectionZ);
 
    /**
     * Changes the point through which this line has to go.
@@ -47,7 +57,8 @@ public interface Line3DBasics extends Line3DReadOnly
    
    default void set(Line3DReadOnly other)
    {
-      set(other.getPoint(), other.getDirection());
+      setPoint(other.getPoint());
+      setDirectionUnsafe(other.getDirectionX(), other.getDirectionY(), other.getDirectionZ());
    }
 
    /**

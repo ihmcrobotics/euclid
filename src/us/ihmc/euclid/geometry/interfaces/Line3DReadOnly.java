@@ -369,7 +369,7 @@ public interface Line3DReadOnly
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
-   default boolean isCollinear(Line3D other, double epsilon)
+   default boolean isCollinear(Line3DReadOnly other, double epsilon)
    {
       return isCollinear(other, epsilon, epsilon);
    }
@@ -382,7 +382,7 @@ public interface Line3DReadOnly
     * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
-   default boolean isCollinear(Line3D other, double angleEpsilon, double distanceEpsilon)
+   default boolean isCollinear(Line3DReadOnly other, double angleEpsilon, double distanceEpsilon)
    {
       return EuclidGeometryTools.areLine3DsCollinear(getPoint(), getDirection(), other.getPoint(), other.getDirection(), angleEpsilon, distanceEpsilon);
    }
@@ -400,7 +400,7 @@ public interface Line3DReadOnly
     * @return the minimum distance between the two lines.
     * @throws RuntimeException if this line has not been initialized yet.
     */
-   default double closestPointsWith(Line3D otherLine, Point3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
+   default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
       checkHasBeenInitialized();
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(getPoint(), getDirection(), otherLine.getPoint(), otherLine.getDirection(), closestPointOnThisLineToPack,

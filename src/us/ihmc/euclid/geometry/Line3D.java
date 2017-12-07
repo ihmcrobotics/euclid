@@ -238,8 +238,15 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
+      setDirectionUnsafe(lineDirectionX, lineDirectionY, lineDirectionZ);
+      direction.normalize();
+   }
+
+   /** {@inheritDoc} */
+   public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
+   {
       direction.set(lineDirectionX, lineDirectionY, lineDirectionZ);
-      
+
       // checkReasonableVector
       if (Math.abs(direction.getX()) < minAllowableVectorPart && Math.abs(direction.getY()) < minAllowableVectorPart
             && Math.abs(direction.getZ()) < minAllowableVectorPart)
@@ -247,7 +254,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
          throw new RuntimeException("Line length must be greater than zero");
       }
       
-      direction.normalize();
       directionHasBeenSet = true;
    }
 
