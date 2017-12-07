@@ -4,6 +4,7 @@ import java.util.Random;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
+import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
 import us.ihmc.euclid.referenceFrame.FrameOrientation2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -1280,6 +1281,18 @@ public class EuclidFrameRandomTools
    public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
    {
       return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, positionMinMax, orientationMinMax));
+   }
+
+   /**
+    * Generates a random 3D frame line segment.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame line segment's reference frame.
+    * @return the random frame line segment.
+    */
+   public static FrameLineSegment3D nextFrameLineSegment3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameLineSegment3D(referenceFrame, EuclidGeometryRandomTools.nextLineSegment3D(random));
    }
 
    /**

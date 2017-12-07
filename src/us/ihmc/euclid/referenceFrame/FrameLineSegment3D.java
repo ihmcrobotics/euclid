@@ -4,7 +4,8 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 
 public class FrameLineSegment3D extends FrameGeometryObject<FrameLineSegment3D, LineSegment3D> implements FrameLineSegment3DReadOnly, LineSegment3DBasics
 {
@@ -23,15 +24,15 @@ public class FrameLineSegment3D extends FrameGeometryObject<FrameLineSegment3D, 
    }
 
    @Override
-   public Point3DReadOnly getFirstEndpoint()
+   public FramePoint3DReadOnly getFirstEndpoint()
    {
-      return lineSegment.getFirstEndpoint();
+      return new FramePoint3D(getReferenceFrame(), lineSegment.getFirstEndpoint());
    }
 
    @Override
-   public Point3DReadOnly getSecondEndpoint()
+   public FramePoint3DReadOnly getSecondEndpoint()
    {
-      return lineSegment.getSecondEndpoint();
+      return new FramePoint3D(getReferenceFrame(), lineSegment.getSecondEndpoint());
    }
 
    @Override
@@ -44,5 +45,19 @@ public class FrameLineSegment3D extends FrameGeometryObject<FrameLineSegment3D, 
    public void setSecondEndpoint(double secondEndpointX, double secondEndpointY, double secondEndpointZ)
    {
       lineSegment.setSecondEndpoint(secondEndpointX, secondEndpointY, secondEndpointZ);
+   }
+   
+   /**
+    * Translates this line segment by the given (x, y, z) contained in {@code translation}.
+    * <p>
+    * Note that the length and direction of this line segment remains unchanged.
+    * </p>
+    *
+    * @param translation the translation to add to each endpoint of this line segment. Not modified.
+    */
+   public void translate(FrameTuple3DReadOnly translation)
+   {
+      checkReferenceFrameMatch(translation);
+      LineSegment3DBasics.super.translate(translation);
    }
 }
