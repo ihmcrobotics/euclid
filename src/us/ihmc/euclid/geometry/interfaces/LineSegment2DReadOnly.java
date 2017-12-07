@@ -528,7 +528,7 @@ public interface LineSegment2DReadOnly
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
-   default boolean intersectionWith(LineSegment2DReadOnly other, Point2D intersectionToPack)
+   default boolean intersectionWith(LineSegment2DReadOnly other, Point2DBasics intersectionToPack)
    {
       return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(), other.getSecondEndpoint(),
                                                                       intersectionToPack);
