@@ -159,7 +159,26 @@ public interface Line2DBasics extends Line2DReadOnly
       set(twoPointsOnLine[0], twoPointsOnLine[1]);
    }
 
-   void shift(boolean shiftToLeft, double distanceToShift);
+   default void shift(boolean shiftToLeft, double distanceToShift)
+   {
+      checkHasBeenInitialized();
+      double vectorX = getDirectionX();
+      double vectorY = getDirectionY();
+
+      double orthogonalVectorX = -vectorY;
+      double orthogonalVectorY = vectorX;
+
+      if (!shiftToLeft)
+      {
+         orthogonalVectorX = -orthogonalVectorX;
+         orthogonalVectorY = -orthogonalVectorY;
+      }
+
+      orthogonalVectorX = distanceToShift * orthogonalVectorX;
+      orthogonalVectorY = distanceToShift * orthogonalVectorY;
+
+      translate(orthogonalVectorX, orthogonalVectorY);
+   }
 
    /**
     * Translates this line by {@code distanceToShift} along the vector perpendicular to this line's

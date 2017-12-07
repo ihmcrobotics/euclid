@@ -79,6 +79,7 @@ public interface Line2DReadOnly
     */
    default void getPoint(Point2DBasics pointOnLineToPack)
    {
+      checkHasBeenInitialized();
       pointOnLineToPack.set(getPoint());
    }
 
@@ -255,7 +256,7 @@ public interface Line2DReadOnly
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
     */
-   default Point2D intersectionWith(Line2D secondLine)
+   default Point2D intersectionWith(Line2DReadOnly secondLine)
    {
       checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection());
@@ -280,7 +281,7 @@ public interface Line2DReadOnly
     * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
     *            yet.
     */
-   default boolean intersectionWith(Line2D secondLine, Point2DBasics intersectionToPack)
+   default boolean intersectionWith(Line2DReadOnly secondLine, Point2DBasics intersectionToPack)
    {
       checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection(), intersectionToPack);
@@ -308,7 +309,7 @@ public interface Line2DReadOnly
     *         {@code null} otherwise.
     * @throws RuntimeException if this line has not been initialized yet.
     */
-   default Point2D intersectionWith(LineSegment2D lineSegment)
+   default Point2D intersectionWith(LineSegment2DReadOnly lineSegment)
    {
       checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(), lineSegment.getSecondEndpoint());
@@ -334,7 +335,7 @@ public interface Line2DReadOnly
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     * @throws RuntimeException if this line has not been initialized yet.
     */
-   default boolean intersectionWith(LineSegment2D lineSegment, Point2DBasics intersectionToPack)
+   default boolean intersectionWith(LineSegment2DReadOnly lineSegment, Point2DBasics intersectionToPack)
    {
       checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(), lineSegment.getSecondEndpoint(),
@@ -669,7 +670,7 @@ public interface Line2DReadOnly
     *           {@code point}. Modified.
     * @throws RuntimeException if this line has not been initialized yet.
     */
-   default void perpendicularLineThroughPoint(Point2DReadOnly point, Line2D perpendicularLineToPack)
+   default void perpendicularLineThroughPoint(Point2DReadOnly point, Line2DBasics perpendicularLineToPack)
    {
       checkHasBeenInitialized();
       perpendicularLineToPack.set(point.getX(), point.getY(), -getDirection().getY(), getDirection().getX());
@@ -918,7 +919,7 @@ public interface Line2DReadOnly
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
-   default boolean isCollinear(Line2D other, double epsilon)
+   default boolean isCollinear(Line2DReadOnly other, double epsilon)
    {
       return isCollinear(other, epsilon, epsilon);
    }
@@ -931,7 +932,7 @@ public interface Line2DReadOnly
     * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
-   default boolean isCollinear(Line2D other, double angleEpsilon, double distanceEpsilon)
+   default boolean isCollinear(Line2DReadOnly other, double angleEpsilon, double distanceEpsilon)
    {
       return EuclidGeometryTools.areLine2DsCollinear(getPoint(), getDirection(), other.getPoint(), other.getDirection(), angleEpsilon, distanceEpsilon);
    }
@@ -943,7 +944,7 @@ public interface Line2DReadOnly
     * @return {@code true} if the two lines are perpendicular, {@code false} otherwise.
     * @throws RuntimeException if either this line or {@code other} has not been initialized yet.
     */
-   default boolean areLinesPerpendicular(Line2D other)
+   default boolean areLinesPerpendicular(Line2DReadOnly other)
    {
       checkHasBeenInitialized();
       // Dot product of two vectors is zero if the vectors are perpendicular

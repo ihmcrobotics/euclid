@@ -22,6 +22,7 @@ import org.ejml.ops.MatrixFeatures;
 import org.ejml.ops.RandomMatrices;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
@@ -90,6 +91,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -156,6 +158,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(LineSegment2DBasics.class, FrameLineSegment2D.class);
       modifiableMap.put(LineSegment3DReadOnly.class, FrameLineSegment3DReadOnly.class);
       modifiableMap.put(LineSegment3DBasics.class, FrameLineSegment3D.class);
+      
+      modifiableMap.put(Line2DReadOnly.class, FrameLine2DReadOnly.class);
+      modifiableMap.put(Line2DBasics.class, FrameLine2D.class);
 
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
@@ -198,6 +203,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameLineSegment2D.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment2D(random, frame));
       modifiableMap.put(FrameLineSegment3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment3D(random, frame));
       modifiableMap.put(FrameLineSegment3D.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment3D(random, frame));
+      
+      modifiableMap.put(FrameLine2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
+      modifiableMap.put(FrameLine2D.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -271,6 +279,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FramePose3DReadOnly.class);
       modifiableSet.add(FrameLineSegment2DReadOnly.class);
       modifiableSet.add(FrameLineSegment3DReadOnly.class);
+      modifiableSet.add(FrameLine2DReadOnly.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -313,6 +322,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FramePose3DBasics.class);
       modifiableSet.add(FrameLineSegment2D.class);
       modifiableSet.add(FrameLineSegment3D.class);
+      modifiableSet.add(FrameLine2D.class);
 
       mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }

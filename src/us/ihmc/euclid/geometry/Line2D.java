@@ -313,6 +313,8 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    {
       point.setToNaN();
       direction.setToNaN();
+      pointHasBeenSet = false;
+      directionHasBeenSet = false;
    }
 
    /**
@@ -326,29 +328,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
       direction.setToZero();
       pointHasBeenSet = false;
       directionHasBeenSet = false;
-   }
-
-   @Override
-   public void shift(boolean shiftToLeft, double distanceToShift)
-   {
-      checkHasBeenInitialized();
-      double vectorX = direction.getX();
-      double vectorY = direction.getY();
-
-      double orthogonalVectorX = -vectorY;
-      double orthogonalVectorY = vectorX;
-
-      if (!shiftToLeft)
-      {
-         orthogonalVectorX = -orthogonalVectorX;
-         orthogonalVectorY = -orthogonalVectorY;
-      }
-
-      orthogonalVectorX = distanceToShift * orthogonalVectorX;
-      orthogonalVectorY = distanceToShift * orthogonalVectorY;
-
-      translate(orthogonalVectorX, orthogonalVectorY);
-   }
+   }   
 
    /**
     * Provides a {@code String} representation of this line 2D as follows:<br>
