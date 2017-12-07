@@ -4,7 +4,8 @@ import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 
 public class FrameLineSegment2D extends FrameGeometryObject<FrameLineSegment2D, LineSegment2D> implements FrameLineSegment2DReadOnly, LineSegment2DBasics
 {
@@ -23,15 +24,15 @@ public class FrameLineSegment2D extends FrameGeometryObject<FrameLineSegment2D, 
    }
 
    @Override
-   public Point2DReadOnly getFirstEndpoint()
+   public FramePoint2DReadOnly getFirstEndpoint()
    {
-      return lineSegment.getFirstEndpoint();
+      return new FramePoint2D(getReferenceFrame(), lineSegment.getFirstEndpoint());
    }
 
    @Override
-   public Point2DReadOnly getSecondEndpoint()
+   public FramePoint2DReadOnly getSecondEndpoint()
    {
-      return lineSegment.getSecondEndpoint();
+      return new FramePoint2D(getReferenceFrame(), lineSegment.getSecondEndpoint());
    }
 
    @Override
@@ -50,5 +51,11 @@ public class FrameLineSegment2D extends FrameGeometryObject<FrameLineSegment2D, 
    public void shift(boolean shiftToLeft, double distanceToShift)
    {
       lineSegment.shift(shiftToLeft, distanceToShift);
+   }
+   
+   public void translate(FrameTuple2DReadOnly translation)
+   {
+      checkReferenceFrameMatch(translation);
+      LineSegment2DBasics.super.translate(translation);
    }
 }
