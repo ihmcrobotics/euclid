@@ -46,6 +46,18 @@ public class FrameLineSegment2D extends FrameGeometryObject<FrameLineSegment2D, 
    {
       lineSegment.setSecondEndpoint(secondEndpointX, secondEndpointY);
    }
+   
+   public void setFirstEndpoint(FramePoint2DReadOnly firstEndpoint)
+   {
+      checkReferenceFrameMatch(firstEndpoint);
+      LineSegment2DBasics.super.setFirstEndpoint(firstEndpoint);
+   }
+   
+   public void setSecondEndpoint(FramePoint2DReadOnly secondEndpoint)
+   {
+      checkReferenceFrameMatch(secondEndpoint);
+      LineSegment2DBasics.super.setSecondEndpoint(secondEndpoint);
+   }
 
    @Override
    public void shift(boolean shiftToLeft, double distanceToShift)

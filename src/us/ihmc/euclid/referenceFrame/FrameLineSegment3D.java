@@ -47,6 +47,18 @@ public class FrameLineSegment3D extends FrameGeometryObject<FrameLineSegment3D, 
       lineSegment.setSecondEndpoint(secondEndpointX, secondEndpointY, secondEndpointZ);
    }
    
+   public void setFirstEndpoint(FramePoint3DReadOnly firstEndpoint)
+   {
+      checkReferenceFrameMatch(firstEndpoint);
+      LineSegment3DBasics.super.setFirstEndpoint(firstEndpoint);
+   }
+   
+   public void setSecondEndpoint(FramePoint3DReadOnly secondEndpoint)
+   {
+      checkReferenceFrameMatch(secondEndpoint);
+      LineSegment3DBasics.super.setSecondEndpoint(secondEndpoint);
+   }
+   
    /**
     * Translates this line segment by the given (x, y, z) contained in {@code translation}.
     * <p>

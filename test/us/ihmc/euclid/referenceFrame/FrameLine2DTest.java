@@ -39,8 +39,6 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
    {
       super.testOverloading();
       Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set")
-            && !m.getName().equals("setPoint")
-            && !m.getName().equals("setDirection")
             && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("geometricallyEquals");

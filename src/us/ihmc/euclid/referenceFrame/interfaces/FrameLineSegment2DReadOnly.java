@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
@@ -496,6 +497,110 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    {
       intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line segment and the given line
+    * and stores the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line segment and the line are parallel but not collinear, they do not intersect.
+    * <li>When this line segment and the line are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the line intersects this line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param line the line that may intersect this line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    */
+   default boolean intersectionWith(FrameLine2DReadOnly line, Point2DBasics intersectionToPack)
+   {
+      checkReferenceFrameMatch(line);
+      return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line segment and the given line
+    * and stores the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line segment and the line are parallel but not collinear, they do not intersect.
+    * <li>When this line segment and the line are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the line intersects this line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param line the line that may intersect this line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    */
+   default boolean intersectionWith(Line2DReadOnly line, FramePoint2D intersectionToPack)
+   {
+      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line segment and the given line
+    * and stores the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line segment and the line are parallel but not collinear, they do not intersect.
+    * <li>When this line segment and the line are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the line intersects this line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param line the line that may intersect this line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    */
+   default boolean intersectionWith(FrameLine2DReadOnly line, FramePoint2D intersectionToPack)
+   {
+      checkReferenceFrameMatch(line);
+      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line segment and the given line
+    * and returns the result.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line segment and the line are parallel but not collinear, they do not intersect.
+    * <li>When this line segment and the line are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the line intersects this line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param line the line that may intersect this line segment. Not modified.
+    * @return the coordinates of the intersection if the line intersects this line segment,
+    *         {@code null} otherwise.
+    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    */
+   default Point2D intersectionWith(FrameLine2DReadOnly line)
+   {
+      checkReferenceFrameMatch(line);
+      return LineSegment2DReadOnly.super.intersectionWith(line);
    }
 
    /**

@@ -39,8 +39,6 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
    {
       super.testOverloading();
       Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set")
-            && !m.getName().equals("setFirstEndpoint")
-            && !m.getName().equals("setSecondEndpoint")
             && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("geometricallyEquals");

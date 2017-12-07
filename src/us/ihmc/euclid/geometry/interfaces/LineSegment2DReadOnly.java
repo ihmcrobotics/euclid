@@ -478,7 +478,7 @@ public interface LineSegment2DReadOnly
     *           Modified.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
     */
-   default boolean intersectionWith(Line2D line, Point2DBasics intersectionToPack)
+   default boolean intersectionWith(Line2DReadOnly line, Point2DBasics intersectionToPack)
    {
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(line.getPoint(), line.getDirection(), getFirstEndpoint(), getSecondEndpoint(),
                                                                            intersectionToPack);

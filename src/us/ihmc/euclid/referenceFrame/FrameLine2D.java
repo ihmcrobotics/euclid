@@ -35,6 +35,18 @@ public class FrameLine2D extends FrameGeometryObject<FrameLine2D, Line2D> implem
       line.setPoint(pointOnLineX, pointOnLineY);
    }
 
+   public void setPoint(FramePoint2DReadOnly point)
+   {
+      checkReferenceFrameMatch(point);
+      Line2DBasics.super.setPoint(point);
+   }
+
+   public void setDirection(FrameVector2DReadOnly direction)
+   {
+      checkReferenceFrameMatch(direction);
+      Line2DBasics.super.setDirection(direction);
+   }
+
    @Override
    public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY)
    {

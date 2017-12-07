@@ -38,9 +38,7 @@ public class FrameLineSegment2DTest extends FrameLineSegment2DReadOnlyTest<Frame
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set") 
-            && !m.getName().equals("setFirstEndpoint")
-            && !m.getName().equals("setSecondEndpoint")
+      Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set")
             && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("geometricallyEquals");
