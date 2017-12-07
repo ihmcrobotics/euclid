@@ -6,8 +6,6 @@ import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public class FrameLine2D extends FrameGeometryObject<FrameLine2D, Line2D> implements FrameLine2DReadOnly, Line2DBasics
 {
@@ -35,6 +33,12 @@ public class FrameLine2D extends FrameGeometryObject<FrameLine2D, Line2D> implem
    public void setPoint(double pointOnLineX, double pointOnLineY)
    {
       line.setPoint(pointOnLineX, pointOnLineY);
+   }
+
+   @Override
+   public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY)
+   {
+      line.setDirectionUnsafe(lineDirectionX, lineDirectionY);
    }
 
    @Override

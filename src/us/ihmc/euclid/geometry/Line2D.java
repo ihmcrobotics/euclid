@@ -283,15 +283,22 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    @Override
    public void setDirection(double lineDirectionX, double lineDirectionY)
    {
+      setDirectionUnsafe(lineDirectionX, lineDirectionY);      
+      direction.normalize();
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY)
+   {
       direction.set(lineDirectionX, lineDirectionY);
-      
+
       // checkReasonableVector
       if (Math.abs(direction.getX()) < minAllowableVectorPart && Math.abs(direction.getY()) < minAllowableVectorPart)
       {
          throw new RuntimeException("Line length must be greater than zero.");
       }
       
-      direction.normalize();
       directionHasBeenSet = true;
    }
 

@@ -8,7 +8,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 public interface Line2DBasics extends Line2DReadOnly
 {
    /**
-    * Changes the direction of this line by setting it to the normalized value of the given vector.
+    * Changes the direction of this line by setting it to the normalized values provided.
     *
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
@@ -23,7 +23,15 @@ public interface Line2DBasics extends Line2DReadOnly
     * @param pointOnLineY the new y-coordinate of the point on this line.
     */
    void setPoint(double pointOnLineX, double pointOnLineY);
-   
+
+   /**
+    * Changes the direction of this line by setting it to the raw values provided.
+    * 
+    * @param lineDirectionX the new x-component of the direction of this line.
+    * @param lineDirectionY the new y-component of the direction of this line.
+    */
+   void setDirectionUnsafe(double lineDirectionX, double lineDirectionY);
+
    /**
     * Copies this line and then flips the direction of the copy before returning it.
     * <p>
@@ -92,7 +100,8 @@ public interface Line2DBasics extends Line2DReadOnly
     */
    default void set(Line2DReadOnly other)
    {
-      set(other.getPoint(), other.getDirection());
+      setPoint(other.getPoint());
+      setDirectionUnsafe(other.getDirectionX(), other.getDirectionY());
    }
 
    /**
