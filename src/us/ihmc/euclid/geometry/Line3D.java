@@ -274,6 +274,8 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    {
       point.setToNaN();
       direction.setToNaN();
+      pointHasBeenSet = false;
+      directionHasBeenSet = false;
    }
 
    /**
