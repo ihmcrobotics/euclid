@@ -171,8 +171,22 @@ public class Line3DTest
 
       Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random);
       line3D.setToNaN();
-      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(line3D.getPoint());
-      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(line3D.getDirection());
+      try
+      {
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getPoint());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
+      try
+      {
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getDirection());
+      }
+      catch (RuntimeException e)
+      {
+         // Good
+      }
    }
 
    @Test
