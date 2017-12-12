@@ -5515,9 +5515,9 @@ public class EuclidGeometryTools
    {
       //      We solve for x the problem of the form: A * x = b
       //            A      *     x     =      b
-      //      / lineDirection2x -lineDirection1x \   / alpha \   / pointOnLine2x - pointOnLine1x \
+      //      / lineDirection1x -lineDirection2x \   / alpha \   / pointOnLine2x - pointOnLine1x \
       //      |                                  | * |       | = |                               |
-      //      \ lineDirection2y -lineDirection1y /   \ beta  /   \ pointOnLine2y - pointOnLine1y /
+      //      \ lineDirection1y -lineDirection2y /   \ beta  /   \ pointOnLine2y - pointOnLine1y /
       // Here, only alpha or beta is needed.
 
       double determinant = -lineDirection1x * lineDirection2y + lineDirection1y * lineDirection2x;
