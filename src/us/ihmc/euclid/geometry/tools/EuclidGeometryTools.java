@@ -1842,72 +1842,8 @@ public class EuclidGeometryTools
    public static boolean doLineSegment2DsIntersect(double lineSegmentStart1x, double lineSegmentStart1y, double lineSegmentEnd1x, double lineSegmentEnd1y,
                                                    double lineSegmentStart2x, double lineSegmentStart2y, double lineSegmentEnd2x, double lineSegmentEnd2y)
    {
-      double eps = ONE_TEN_MILLIONTH;
-      double r1numerator, r1denominator, r2numerator, r2denominator;
-
-      double deltax1 = lineSegmentEnd1x - lineSegmentStart1x;
-      double deltay1 = lineSegmentEnd1y - lineSegmentStart1y;
-
-      double deltax2 = lineSegmentEnd2x - lineSegmentStart2x;
-      double deltay2 = lineSegmentEnd2y - lineSegmentStart2y;
-
-      double startDx = lineSegmentStart1x - lineSegmentStart2x;
-      double startDy = lineSegmentStart1y - lineSegmentStart2y;
-
-      r1numerator = deltax2 * startDy - deltay2 * startDx;
-      r1denominator = deltay2 * deltax1 - deltax2 * deltay1;
-
-      r2numerator = deltax1 * startDy - deltay1 * startDx;
-      r2denominator = r1denominator;
-
-      // denominator == 0 => the line segments are parallel.
-      if (Math.abs(r1denominator) < eps)
-      {
-         // If both numerators and the denominator are zero, the lines are collinear.
-         // We must project the lines onto the X- or Y-axis check if the segments overlap.
-         if (Math.abs(r1numerator) < eps && Math.abs(r2numerator) < eps)
-         {
-            double ls1, le1, ls2, le2;
-            if (Math.abs(lineSegmentStart1x - lineSegmentEnd1x) > eps)
-            {
-               ls1 = lineSegmentStart1x;
-               le1 = lineSegmentEnd1x;
-               ls2 = lineSegmentStart2x;
-               le2 = lineSegmentEnd2x;
-            }
-            else
-            {
-               ls1 = lineSegmentStart1y;
-               le1 = lineSegmentEnd1y;
-               ls2 = lineSegmentStart2y;
-               le2 = lineSegmentEnd2y;
-            }
-
-            // If both first points are less than both second points, the line
-            // segments do not intersect.
-            if (ls1 < ls2 && le1 < ls2 && ls1 < le2 && le1 < le2)
-               return false;
-
-            // If both first points are greater than both second points, the line
-            // segments do not intersect.
-            if (ls1 > ls2 && le1 > ls2 && ls1 > le2 && le1 > le2)
-               return false;
-
-            // Otherwise, the line segments must overlap. So we return true.
-            return true;
-         }
-         // The line segments are parallel but are not collinear, they do not intersect
-         else
-         {
-            return false;
-         }
-      }
-
-      double r1 = r1numerator / r1denominator;
-      double r2 = r2numerator / r2denominator;
-
-      // If both r1 and r2 are between zero and one, the line segments intersect.
-      return 0.0 - eps < r1 && r1 < 1.0 + eps && 0.0 - eps < r2 && r2 < 1.0 + eps;
+      return intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1x, lineSegmentStart1y, lineSegmentEnd1x, lineSegmentEnd1y, lineSegmentStart2x,
+                                                  lineSegmentStart2y, lineSegmentEnd2x, lineSegmentEnd2y, null);
    }
 
    /**
@@ -4123,99 +4059,114 @@ public class EuclidGeometryTools
     * @param lineSegmentStart2y y-coordinate of the first endpoint of the second line segment.
     * @param lineSegmentEnd2x x-coordinate of the second endpoint of the second line segment.
     * @param lineSegmentEnd2y y-coordinate of the second endpoint of the second line segment.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}. Modified.
     * @return {@code true} if the two line segments intersect, {@code false} otherwise.
     */
    public static boolean intersectionBetweenTwoLineSegment2Ds(double lineSegmentStart1x, double lineSegmentStart1y, double lineSegmentEnd1x,
                                                               double lineSegmentEnd1y, double lineSegmentStart2x, double lineSegmentStart2y,
                                                               double lineSegmentEnd2x, double lineSegmentEnd2y, Point2DBasics intersectionToPack)
    {
-      if (!doLineSegment2DsIntersect(lineSegmentStart1x, lineSegmentStart1y, lineSegmentEnd1x, lineSegmentEnd1y, lineSegmentStart2x, lineSegmentStart2y,
-                                     lineSegmentEnd2x, lineSegmentEnd2y))
-      {
-         if (intersectionToPack != null)
-            intersectionToPack.setToNaN();
-         return false;
-      }
+      double epsilon = ONE_TEN_MILLIONTH;
 
       double lineDirection1x = lineSegmentEnd1x - lineSegmentStart1x;
       double lineDirection1y = lineSegmentEnd1y - lineSegmentStart1y;
       double lineDirection2x = lineSegmentEnd2x - lineSegmentStart2x;
       double lineDirection2y = lineSegmentEnd2y - lineSegmentStart2y;
 
-      if (Math.abs(-lineDirection1x * lineDirection2y + lineDirection1y * lineDirection2x) > ONE_TEN_MILLIONTH)
-      { // The line segments are not parallel and are intersecting, same as finding the intersection of two lines.
-         double pointOnLine1x = lineSegmentStart1x;
-         double pointOnLine1y = lineSegmentStart1y;
-         double pointOnLine2x = lineSegmentStart2x;
-         double pointOnLine2y = lineSegmentStart2y;
-         return intersectionBetweenTwoLine2Ds(pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y, pointOnLine2x, pointOnLine2y, lineDirection2x,
-                                              lineDirection2y, intersectionToPack);
+      double determinant = -lineDirection1x * lineDirection2y + lineDirection1y * lineDirection2x;
+
+      if (Math.abs(determinant) < epsilon)
+      { // The ray and line segment are parallel
+        // Check if they are collinear
+         double dx = lineSegmentStart2x - lineSegmentStart1x;
+         double dy = lineSegmentStart2y - lineSegmentStart1y;
+         double cross = dx * lineDirection1y - dy * lineDirection1x;
+         if (Math.abs(cross) < epsilon)
+         {
+            // Let's find the first endpoint that is inside the other line segment and return it.
+            double lineSegment1LengthSquare = EuclidCoreTools.normSquared(lineDirection1x, lineDirection1y);
+            double dot;
+
+            // Check if lineSegmentStart2 is inside lineSegment1
+            dx = lineSegmentStart2x - lineSegmentStart1x;
+            dy = lineSegmentStart2y - lineSegmentStart1y;
+            dot = dx * lineDirection1x + dy * lineDirection1y;
+
+            if (0.0 - epsilon < dot && dot < lineSegment1LengthSquare + epsilon)
+            {
+               if (intersectionToPack != null)
+                  intersectionToPack.set(lineSegmentStart2x, lineSegmentStart2y);
+               return true;
+            }
+
+            // Check if lineSegmentEnd2 is inside lineSegment1
+            dx = lineSegmentEnd2x - lineSegmentStart1x;
+            dy = lineSegmentEnd2y - lineSegmentStart1y;
+            dot = dx * lineDirection1x + dy * lineDirection1y;
+
+            if (0.0 - epsilon < dot && dot < lineSegment1LengthSquare + epsilon)
+            {
+               if (intersectionToPack != null)
+                  intersectionToPack.set(lineSegmentEnd2x, lineSegmentEnd2y);
+               return true;
+            }
+
+            double lineSegment2LengthSquare = EuclidCoreTools.normSquared(lineDirection2x, lineDirection2y);
+
+            // Check if lineSegmentStart1 is inside lineSegment2
+            dx = lineSegmentStart1x - lineSegmentStart2x;
+            dy = lineSegmentStart1y - lineSegmentStart2y;
+            dot = dx * lineDirection2x + dy * lineDirection2y;
+
+            if (0.0 - epsilon < dot && dot < lineSegment2LengthSquare + epsilon)
+            {
+               if (intersectionToPack != null)
+                  intersectionToPack.set(lineSegmentStart1x, lineSegmentStart1y);
+               return true;
+            }
+
+            // Check if lineSegmentEnd1 is inside lineSegment2
+            dx = lineSegmentEnd1x - lineSegmentStart2x;
+            dy = lineSegmentEnd1y - lineSegmentStart2y;
+            dot = dx * lineDirection2x + dy * lineDirection2y;
+
+            if (0.0 - epsilon < dot && dot < lineSegment2LengthSquare + epsilon)
+            {
+               if (intersectionToPack != null)
+                  intersectionToPack.set(lineSegmentEnd1x, lineSegmentEnd1y);
+               return true;
+            }
+
+            return false;
+         }
+         // The ray and line segment are parallel but are not collinear, they do not intersect
+         else
+         {
+            return false;
+         }
       }
-      else
-      { // The line segments are parallel and intersecting, they must be overlapping.
-           // Let's first check for a common endpoint
-         double epsilon = ONE_TEN_MILLIONTH;
 
-         // Let's find the first endpoint that is inside the other line segment and return it.
-         double lineSegment1LengthSquare = EuclidCoreTools.normSquared(lineDirection1x, lineDirection1y);
-         double dx, dy, dot;
+      double dx = lineSegmentStart2x - lineSegmentStart1x;
+      double dy = lineSegmentStart2y - lineSegmentStart1y;
 
-         // Check if lineSegmentStart2 is inside lineSegment1
-         dx = lineSegmentStart2x - lineSegmentStart1x;
-         dy = lineSegmentStart2y - lineSegmentStart1y;
-         dot = dx * lineDirection1x + dy * lineDirection1y;
+      double oneOverDeterminant = 1.0 / determinant;
+      double AInverse00 = -lineDirection2y;
+      double AInverse01 = lineDirection2x;
+      double AInverse10 = -lineDirection1y;
+      double AInverse11 = lineDirection1x;
 
-         if (0.0 - epsilon < dot && dot < lineSegment1LengthSquare + epsilon)
-         {
-            intersectionToPack.set(lineSegmentStart2x, lineSegmentStart2y);
-            return true;
-         }
+      double alpha = oneOverDeterminant * (AInverse00 * dx + AInverse01 * dy);
+      double beta = oneOverDeterminant * (AInverse10 * dx + AInverse11 * dy);
 
-         // Check if lineSegmentEnd2 is inside lineSegment1
-         dx = lineSegmentEnd2x - lineSegmentStart1x;
-         dy = lineSegmentEnd2y - lineSegmentStart1y;
-         dot = dx * lineDirection1x + dy * lineDirection1y;
+      boolean areIntersecting = 0.0 - epsilon < alpha && alpha < 1.0 + epsilon && 0.0 - epsilon < beta && beta < 1.0 + epsilon;
 
-         if (0.0 - epsilon < dot && dot < lineSegment1LengthSquare + epsilon)
-         {
-            intersectionToPack.set(lineSegmentEnd2x, lineSegmentEnd2y);
-            return true;
-         }
-
-         double lineSegment2LengthSquare = EuclidCoreTools.normSquared(lineDirection2x, lineDirection2y);
-
-         // Check if lineSegmentStart1 is inside lineSegment2
-         dx = lineSegmentStart1x - lineSegmentStart2x;
-         dy = lineSegmentStart1y - lineSegmentStart2y;
-         dot = dx * lineDirection2x + dy * lineDirection2y;
-
-         if (0.0 - epsilon < dot && dot < lineSegment2LengthSquare + epsilon)
-         {
-            intersectionToPack.set(lineSegmentStart1x, lineSegmentStart1y);
-            return true;
-         }
-
-         /*
-          * The following is unreachable code. The last condition is staying in case numerical
-          * errors could cause the previous checks to fail. Worst case scenario, if the method has
-          * an unexpected behavior, it will throw a RuntimeException.
-          */
-
-         // Check if lineSegmentEnd1 is inside lineSegment2
-         dx = lineSegmentEnd1x - lineSegmentStart2x;
-         dy = lineSegmentEnd1y - lineSegmentStart2y;
-         dot = dx * lineDirection2x + dy * lineDirection2y;
-
-         if (0.0 - epsilon < dot && dot < lineSegment2LengthSquare + epsilon)
-         {
-            intersectionToPack.set(lineSegmentEnd1x, lineSegmentEnd1y);
-            return true;
-         }
-
-         // There is some inconsistency between doLineSegmentsIntersect and this method, crashing.
-         throw new RuntimeException("Unexpected state.");
+      if (areIntersecting && intersectionToPack != null)
+      {
+         intersectionToPack.setX(lineSegmentStart1x + alpha * lineDirection1x);
+         intersectionToPack.setY(lineSegmentStart1y + alpha * lineDirection1y);
       }
+
+      return areIntersecting;
    }
 
    /**
