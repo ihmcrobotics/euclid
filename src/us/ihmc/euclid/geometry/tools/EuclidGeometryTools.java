@@ -2303,11 +2303,15 @@ public class EuclidGeometryTools
             }
 
             // (start1, end1) and (start2, end2) represent ray and/or line segment and they are collinear but do not overlap.
+            if (intersectionToPack != null)
+               intersectionToPack.setToNaN();
             return false;
          }
          // The lines are parallel but are not collinear, they do not intersect.
          else
          {
+            if (intersectionToPack != null)
+               intersectionToPack.setToNaN();
             return false;
          }
       }
@@ -2330,10 +2334,17 @@ public class EuclidGeometryTools
       if (areIntersecting)
          areIntersecting = (canIntersectionOccurBeforeStart2 || zeroish < beta) && (canIntersectionOccurBeforeEnd2 || beta < oneish);
 
-      if (areIntersecting && intersectionToPack != null)
+      if (intersectionToPack != null)
       {
-         intersectionToPack.setX(start1x + alpha * direction1x);
-         intersectionToPack.setY(start1y + alpha * direction1y);
+         if (areIntersecting)
+         {
+            intersectionToPack.setX(start1x + alpha * direction1x);
+            intersectionToPack.setY(start1y + alpha * direction1y);
+         }
+         else
+         {
+            intersectionToPack.setToNaN();
+         }
       }
 
       return areIntersecting;

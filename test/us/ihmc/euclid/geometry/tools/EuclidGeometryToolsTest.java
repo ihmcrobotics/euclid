@@ -2862,11 +2862,15 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
 
          lineLineIntersection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -1.0, 0.0));
@@ -2874,11 +2878,15 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
       }
 
@@ -2949,6 +2957,8 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
       }
 
@@ -5799,15 +5809,28 @@ public class EuclidGeometryToolsTest
                                                                                              Point2D lineSegmentEnd)
    {
       boolean success;
-      Point2D actualIntersection = new Point2D();
+      Point2D intersectionThatMayContainOnlyNaNs = new Point2D();
+      Point2D actualIntersection;
 
-      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd,
+                                                                             intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
       assertTrue(actualIntersection != null == intersectionExist);
 
-      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart,
+                                                                             intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart);
       assertTrue(actualIntersection != null == intersectionExist);
    }
@@ -5842,7 +5865,7 @@ public class EuclidGeometryToolsTest
       actualIntersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lse2, lss2);
       EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
    }
-   
+
    @Test
    public void testIntersectionBetweenRay3DAndBoundingBox3D() throws Exception
    {
@@ -7020,44 +7043,85 @@ public class EuclidGeometryToolsTest
                                                                                 Point2D lineSegmentStart2, Point2D lineSegmentEnd2)
    {
       boolean success;
-      Point2D actualIntersection = new Point2D();
+      Point2D intersectionThatMayContainOnlyNaNs = new Point2D();
+      Point2D actualIntersection;
 
       Point2D lss1 = lineSegmentStart1;
       Point2D lse1 = lineSegmentEnd1;
       Point2D lss2 = lineSegmentStart2;
       Point2D lse = lineSegmentEnd2;
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse);
       assertTrue(actualIntersection != null == intersectionExist);
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2);
       assertTrue(actualIntersection != null == intersectionExist);
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1);
       assertTrue(actualIntersection != null == intersectionExist);
    }
