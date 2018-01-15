@@ -29,12 +29,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
-import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameTuple4D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -42,16 +37,19 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -104,7 +102,7 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector3DBasics.class, FrameVector3DBasics.class);
 
       modifiableMap.put(Tuple4DReadOnly.class, FrameTuple4DReadOnly.class);
-      modifiableMap.put(Tuple4DBasics.class, FrameTuple4D.class);
+      modifiableMap.put(Tuple4DBasics.class, FrameTuple4DBasics.class);
       modifiableMap.put(Vector4DReadOnly.class, FrameVector4DReadOnly.class);
       modifiableMap.put(Vector4DBasics.class, FrameVector4D.class);
       modifiableMap.put(QuaternionReadOnly.class, FrameQuaternionReadOnly.class);
@@ -120,23 +118,23 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameTuple2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FrameTuple2DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FramePoint2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
-      modifiableMap.put(FramePoint2D.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FramePoint2DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FrameVector2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
-      modifiableMap.put(FrameVector2D.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
+      modifiableMap.put(FrameVector2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
 
       modifiableMap.put(FrameTuple3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FrameTuple3DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FramePoint3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
-      modifiableMap.put(FramePoint3D.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FramePoint3DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
-      modifiableMap.put(FrameVector3D.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
+      modifiableMap.put(FrameVector3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
 
       modifiableMap.put(FrameTuple4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-      modifiableMap.put(FrameTuple4D.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameTuple4DBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
       modifiableMap.put(FrameVector4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
-      modifiableMap.put(FrameVector4D.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
+      modifiableMap.put(FrameVector4DBasics.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
       modifiableMap.put(FrameQuaternionReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-      modifiableMap.put(FrameQuaternion.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameQuaternionBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -195,14 +193,14 @@ public class EuclidFrameAPITestTools
    {
       Set<Class<?>> modifiableSet = new HashSet<>();
       modifiableSet.add(FrameTuple2DBasics.class);
-      modifiableSet.add(FramePoint2D.class);
-      modifiableSet.add(FrameVector2D.class);
+      modifiableSet.add(FramePoint2DBasics.class);
+      modifiableSet.add(FrameVector2DBasics.class);
       modifiableSet.add(FrameTuple3DBasics.class);
-      modifiableSet.add(FramePoint3D.class);
-      modifiableSet.add(FrameVector3D.class);
-      modifiableSet.add(FrameTuple4D.class);
-      modifiableSet.add(FrameVector4D.class);
-      modifiableSet.add(FrameQuaternion.class);
+      modifiableSet.add(FramePoint3DBasics.class);
+      modifiableSet.add(FrameVector3DBasics.class);
+      modifiableSet.add(FrameTuple4DBasics.class);
+      modifiableSet.add(FrameVector4DBasics.class);
+      modifiableSet.add(FrameQuaternionBasics.class);
 
       frameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }

@@ -90,15 +90,9 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
       {
 
          @Override
-         public FrameQuaternionReadOnly createTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s)
+         public FrameQuaternionReadOnly createFrameTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s)
          {
             return createFrameQuaternion(referenceFrame, x, y, z, s);
-         }
-
-         @Override
-         public double getEpsilon()
-         {
-            return FrameQuaternionReadOnlyTest.this.getEpsilon();
          }
       };
 
@@ -110,8 +104,6 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
             continue;
          if (Modifier.isStatic(testMethod.getModifiers()))
             continue;
-         //         if (testMethod.getName().equals("testGetGeometryObject"))
-         //            continue;
 
          try
          {

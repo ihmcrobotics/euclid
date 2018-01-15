@@ -1,8 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -18,22 +19,23 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.Vector4DBasicsTest;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
-public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
+public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D>
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
 
    @Override
-   public FrameVector4D createTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s)
+   public Tuple4DBasics createRandomFramelessTuple(Random random)
    {
-      return new FrameVector4D(referenceFrame, x, y, z, s);
+      return EuclidCoreRandomTools.nextVector4D(random);
    }
 
    @Override
-   public double getEpsilon()
+   public FrameVector4D createFrameTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s)
    {
-      return 1.0e-12;
+      return new FrameVector4D(referenceFrame, x, y, z, s);
    }
 
    @Test
@@ -43,7 +45,7 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
 
       { // Test FrameVector4D()
          FrameVector4D frameVector4D = new FrameVector4D();
-         assertTrue(frameVector4D.referenceFrame == worldFrame);
+         assertTrue(frameVector4D.getReferenceFrame() == worldFrame);
          assertTrue(frameVector4D.getX() == 0.0);
          assertTrue(frameVector4D.getY() == 0.0);
          assertTrue(frameVector4D.getZ() == 0.0);
@@ -54,7 +56,7 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
       { // Test FrameVector4D(ReferenceFrame referenceFrame)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame);
-         assertTrue(frameVector4D.referenceFrame == randomFrame);
+         assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
          assertTrue(frameVector4D.getX() == 0.0);
          assertTrue(frameVector4D.getY() == 0.0);
          assertTrue(frameVector4D.getZ() == 0.0);
@@ -66,7 +68,7 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector4D randomTuple = EuclidCoreRandomTools.nextVector4D(random);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame, randomTuple.getX(), randomTuple.getY(), randomTuple.getZ(), randomTuple.getS());
-         assertTrue(frameVector4D.referenceFrame == randomFrame);
+         assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
       }
 
@@ -77,7 +79,7 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
          double[] array = new double[4];
          randomTuple.get(array);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame, array);
-         assertTrue(frameVector4D.referenceFrame == randomFrame);
+         assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
       }
 
@@ -86,7 +88,7 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector4D randomTuple = EuclidCoreRandomTools.nextVector4D(random);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame, randomTuple);
-         assertTrue(frameVector4D.referenceFrame == randomFrame);
+         assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
       }
 
@@ -95,9 +97,48 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector4D randomTuple = EuclidFrameRandomTools.nextFrameVector4D(random, randomFrame);
          FrameVector4D frameVector4D = new FrameVector4D(randomTuple);
-         assertTrue(frameVector4D.referenceFrame == randomFrame);
+         assertTrue(frameVector4D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
          EuclidFrameTestTools.assertFrameTuple4DEquals(randomTuple, frameVector4D, EPSILON);
+      }
+   }
+
+   @Test
+   public void testGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(32120);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         FrameVector4D frameVector1 = EuclidFrameRandomTools.nextFrameVector4D(random, worldFrame);
+         FrameVector4D frameVector2 = new FrameVector4D(worldFrame);
+         double epsilon = random.nextDouble();
+         Vector4D difference;
+
+         difference = EuclidCoreRandomTools.nextVector4D(random);
+         difference.scale(0.99 * epsilon / difference.norm());
+         frameVector2.add(frameVector1, difference);
+         assertTrue(frameVector1.geometricallyEquals(frameVector2, epsilon));
+
+         difference = EuclidCoreRandomTools.nextVector4D(random);
+         difference.scale(1.01 * epsilon / difference.norm());
+         frameVector2.add(frameVector1, difference);
+         assertFalse(frameVector1.geometricallyEquals(frameVector2, epsilon));
+      }
+   }
+
+   @Test
+   public void testHashCode() throws Exception
+   {
+      Random random = new Random(763);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         Vector4D expected = EuclidCoreRandomTools.nextVector4D(random);
+         expected.scale(1.0e15);
+         FrameVector4D actual = new FrameVector4D(worldFrame, expected);
+
+         assertEquals(expected.hashCode(), actual.hashCode());
       }
    }
 
@@ -127,63 +168,6 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector4D.class, Vector4D.class, true, 1, framelessMethodsToIgnore);
    }
 
-   @Override
-   @Test
-   public void testFrameGeometryObjectFeatures() throws Throwable
-   {
-      FrameGeometryObjectTest<FrameVector4D, Vector4D> frameGeometryObjectTest = new FrameGeometryObjectTest<FrameVector4D, Vector4D>()
-      {
-         @Override
-         public Vector4D createEmptyGeometryObject()
-         {
-            return createEmptyTuple().getGeometryObject();
-         }
-
-         @Override
-         public Vector4D createRandomGeometryObject(Random random)
-         {
-            return createRandomTuple(random).getGeometryObject();
-         }
-
-         @Override
-         public FrameVector4D createEmptyFrameGeometryObject(ReferenceFrame referenceFrame)
-         {
-            return createEmptyTuple(referenceFrame);
-         }
-
-         @Override
-         public FrameVector4D createFrameGeometryObject(ReferenceFrame referenceFrame, Vector4D geometryObject)
-         {
-            return createTuple(referenceFrame, geometryObject);
-         }
-
-         @Override
-         public FrameVector4D createRandomFrameGeometryObject(Random random, ReferenceFrame referenceFrame)
-         {
-            return createRandomTuple(random, referenceFrame);
-         }
-      };
-
-      for (Method testMethod : frameGeometryObjectTest.getClass().getMethods())
-      {
-         if (!testMethod.getName().startsWith("test"))
-            continue;
-         if (!Modifier.isPublic(testMethod.getModifiers()))
-            continue;
-         if (Modifier.isStatic(testMethod.getModifiers()))
-            continue;
-
-         try
-         {
-            testMethod.invoke(frameGeometryObjectTest);
-         }
-         catch (InvocationTargetException e)
-         {
-            throw e.getCause();
-         }
-      }
-   }
-
    @Test
    public void testVectorBasicsFeatures() throws Exception
    {
@@ -192,25 +176,25 @@ public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D, Vector4D>
          @Override
          public FrameVector4D createEmptyTuple()
          {
-            return FrameVector4DTest.this.createEmptyTuple();
+            return FrameVector4DTest.this.createEmptyFrameTuple();
          }
 
          @Override
          public FrameVector4D createRandomTuple(Random random)
          {
-            return FrameVector4DTest.this.createRandomTuple(random);
+            return FrameVector4DTest.this.createRandomFrameTuple(random);
          }
 
          @Override
          public FrameVector4D createTuple(double x, double y, double z, double s)
          {
-            return FrameVector4DTest.this.createTuple(x, y, z, s);
+            return FrameVector4DTest.this.createFrameTuple(x, y, z, s);
          }
 
          @Override
          public double getEpsilon()
          {
-            return FrameVector4DTest.this.getEpsilon();
+            return EPSILON;
          }
       };
 

@@ -3,6 +3,9 @@ package us.ihmc.euclid.referenceFrame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Random;
 
 import org.junit.Test;
@@ -13,39 +16,86 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple4D.Tuple4DReadOnlyTest;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
-public abstract class FrameTuple4DReadOnlyTest<T extends FrameTuple4DReadOnly> extends Tuple4DReadOnlyTest<T>
+public abstract class FrameTuple4DReadOnlyTest<F extends FrameTuple4DReadOnly>
 {
-   @Override
-   public final T createEmptyTuple()
+   public static final int NUMBER_OF_ITERATIONS = Tuple4DReadOnlyTest.NUMBER_OF_ITERATIONS;
+   public static final double EPSILON = 1.0e-15;
+
+   public final F createEmptyFrameTuple()
    {
-      return createTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0, 0.0);
+      return createFrameTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0, 0.0);
    }
 
-   public final T createEmptyTuple(ReferenceFrame referenceFrame)
+   public final F createEmptyFrameTuple(ReferenceFrame referenceFrame)
    {
-      return createTuple(referenceFrame, 0.0, 0.0, 0.0, 0.0);
+      return createFrameTuple(referenceFrame, 0.0, 0.0, 0.0, 0.0);
    }
 
-   @Override
-   public final T createRandomTuple(Random random)
+   public final F createRandomFrameTuple(Random random)
    {
-      return createTuple(ReferenceFrame.getWorldFrame(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
+      return createFrameTuple(ReferenceFrame.getWorldFrame(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
    }
 
-   @Override
-   public final T createTuple(double x, double y, double z, double s)
+   public final F createFrameTuple(double x, double y, double z, double s)
    {
-      return createTuple(ReferenceFrame.getWorldFrame(), x, y, z, s);
+      return createFrameTuple(ReferenceFrame.getWorldFrame(), x, y, z, s);
    }
 
-   public abstract T createTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s);
+   public abstract F createFrameTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s);
 
-   @Override
+   @Test
+   public void testTuple3DReadOnlyFeatures() throws Throwable
+   {
+      Tuple4DReadOnlyTest<F> test = new Tuple4DReadOnlyTest<F>()
+      {
+         @Override
+         public F createEmptyTuple()
+         {
+            return createEmptyFrameTuple();
+         }
+
+         @Override
+         public F createRandomTuple(Random random)
+         {
+            return createRandomFrameTuple(random);
+         }
+
+         @Override
+         public F createTuple(double x, double y, double z, double s)
+         {
+            return createFrameTuple(x, y, z, s);
+         }
+
+         @Override
+         public double getEpsilon()
+         {
+            return EPSILON;
+         }
+      };
+
+      for (Method testMethod : test.getClass().getMethods())
+      {
+         if (!testMethod.getName().startsWith("test"))
+            continue;
+         if (!Modifier.isPublic(testMethod.getModifiers()))
+            continue;
+         if (Modifier.isStatic(testMethod.getModifiers()))
+            continue;
+
+         try
+         {
+            testMethod.invoke(test);
+         }
+         catch (InvocationTargetException e)
+         {
+            throw e.getTargetException();
+         }
+      }
+   }
+
    @Test
    public void testEpsilonEquals() throws Exception
    {
-      super.testEpsilonEquals();
-
       Random random = new Random(621541L);
       double epsilon = 0.0;
 
@@ -57,10 +107,10 @@ public abstract class FrameTuple4DReadOnlyTest<T extends FrameTuple4DReadOnly> e
       double z = random.nextDouble();
       double s = random.nextDouble();
 
-      T tuple1 = createTuple(frame1, x, y, z, s);
-      T tuple2 = createTuple(frame1, x, y, z, s);
-      T tuple3 = createTuple(frame2, x, y, z, s);
-      T tuple4 = createTuple(frame2, x, y, z, s);
+      F tuple1 = createFrameTuple(frame1, x, y, z, s);
+      F tuple2 = createFrameTuple(frame1, x, y, z, s);
+      F tuple3 = createFrameTuple(frame2, x, y, z, s);
+      F tuple4 = createFrameTuple(frame2, x, y, z, s);
 
       assertTrue(tuple1.epsilonEquals(tuple2, epsilon));
       assertFalse(tuple1.epsilonEquals(tuple3, epsilon));
@@ -68,12 +118,9 @@ public abstract class FrameTuple4DReadOnlyTest<T extends FrameTuple4DReadOnly> e
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
    }
 
-   @Override
    @Test
    public void testEquals() throws Exception
    {
-      super.testEquals();
-
       Random random = new Random(621541L);
 
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
@@ -84,15 +131,20 @@ public abstract class FrameTuple4DReadOnlyTest<T extends FrameTuple4DReadOnly> e
       double z = random.nextDouble();
       double s = random.nextDouble();
 
-      T tuple1 = createTuple(frame1, x, y, z, s);
-      T tuple2 = createTuple(frame1, x, y, z, s);
-      T tuple3 = createTuple(frame2, x, y, z, s);
-      T tuple4 = createTuple(frame2, x, y, z, s);
+      F tuple1 = createFrameTuple(frame1, x, y, z, s);
+      F tuple2 = createFrameTuple(frame1, x, y, z, s);
+      F tuple3 = createFrameTuple(frame2, x, y, z, s);
+      F tuple4 = createFrameTuple(frame2, x, y, z, s);
 
       assertTrue(tuple1.equals(tuple2));
       assertFalse(tuple1.equals(tuple3));
       assertFalse(tuple3.equals(tuple2));
       assertTrue(tuple3.equals(tuple4));
+
+      assertTrue(tuple1.equals((Object) tuple2));
+      assertFalse(tuple1.equals((Object) tuple3));
+      assertFalse(tuple3.equals((Object) tuple2));
+      assertTrue(tuple3.equals((Object) tuple4));
    }
 
    @Test
