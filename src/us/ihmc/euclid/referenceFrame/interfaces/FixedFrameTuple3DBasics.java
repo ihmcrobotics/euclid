@@ -5,7 +5,25 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-// TODO Add doc
+/**
+ * {@code FixedFrameTuple3DBasics} is the base implementation for {@link FramePoint3D} and
+ * {@link FrameVector3D}.
+ * <p>
+ * In addition to representing a {@link Tuple3DBasics}, a constant {@link ReferenceFrame} is
+ * associated to a {@code FixedFrameTuple3DBasics}. This allows, for instance, to enforce, at
+ * runtime, that operations on tuples occur in the same coordinate system.
+ * </p>
+ * <p>
+ * When using this interface, the reference frame of this tuple is assumed to be immutable, i.e. the
+ * tuple is always expressed in the same reference frame.
+ * </p>
+ * <p>
+ * Because a {@code FixedFrameTuple3DBasics} extends {@code Tuple3DBasics}, it is compatible with
+ * methods only requiring {@code Tuple3DBasics}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FixedFrameTuple3DBasics}.
+ * </p>
+ */
 public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBasics
 {
    /**

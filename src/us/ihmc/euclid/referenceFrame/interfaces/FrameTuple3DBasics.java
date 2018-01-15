@@ -6,7 +6,24 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-// TODO Add doc
+/**
+ * {@code FrameTuple3DBasics} is the base implementation for {@link FramePoint3D} and
+ * {@link FrameVector3D}.
+ * <p>
+ * In addition to representing a {@link Tuple3DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameTuple3DBasics}. This allows, for instance, to enforce, at runtime, that operations on
+ * tuples occur in the same coordinate system.
+ * </p>
+ * <p>
+ * This interface allows for changing the reference frame in which this tuple is expressed.
+ * </p>
+ * <p>
+ * Because a {@code FrameTuple3DBasics} extends {@code Tuple3DBasics}, it is compatible with methods
+ * only requiring {@code Tuple3DBasics}. However, these methods do NOT assert that the operation
+ * occur in the proper coordinate system. Use this feature carefully and always prefer using methods
+ * requiring {@code FrameTuple3DBasics}.
+ * </p>
+ */
 public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
 {
    /**
