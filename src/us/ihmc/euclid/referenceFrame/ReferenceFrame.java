@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -693,6 +694,40 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
       if (getRootFrame() != referenceFrame.getRootFrame())
       {
          throw new RuntimeException("Frames do not have same roots. this = " + this + ", referenceFrame = " + referenceFrame);
+      }
+   }
+
+   /**
+    * Transforms the given {@code objectToTransform} by the transform from this reference frame to
+    * the given {@code desiredFrame}.
+    * <p>
+    * This method can be used to change the reference frame in which {@code objectToTransform} is
+    * expressed from {@code this} to {@code desiredFrame}.
+    * </P>
+    * 
+    * @param desiredFrame the target frame for the transformation.
+    * @param objectToTransform the object to apply the transformation on. Modified.
+    */
+   public void transformFromThisToDesiredFrame(ReferenceFrame desiredFrame, Transformable objectToTransform)
+   {
+      // Check for the trivial case: the geometry is already expressed in the desired frame.
+      if (desiredFrame == this)
+         return;
+
+      verifySameRoots(desiredFrame);
+
+      RigidBodyTransform thisTransformToRoot = getTransformToRoot();
+
+      if (thisTransformToRoot != null)
+      {
+         objectToTransform.applyTransform(thisTransformToRoot);
+      }
+
+      RigidBodyTransform desiredFrameTransformToRoot = desiredFrame.getTransformToRoot();
+
+      if (desiredFrameTransformToRoot != null)
+      {
+         objectToTransform.applyInverseTransform(desiredFrameTransformToRoot);
       }
    }
 

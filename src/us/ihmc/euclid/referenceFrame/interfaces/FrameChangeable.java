@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 
 public interface FrameChangeable extends ReferenceFrameHolder, Transformable
 {
@@ -25,24 +24,7 @@ public interface FrameChangeable extends ReferenceFrameHolder, Transformable
     */
    default void changeFrame(ReferenceFrame desiredFrame)
    {
-      // Check for the trivial case: the geometry is already expressed in the desired frame.
-      if (desiredFrame == getReferenceFrame())
-         return;
-
-      getReferenceFrame().verifySameRoots(desiredFrame);
-
-      RigidBodyTransform referenceFrameTransformToRoot, desiredFrameTransformToRoot;
-
-      if ((referenceFrameTransformToRoot = getReferenceFrame().getTransformToRoot()) != null)
-      {
-         applyTransform(referenceFrameTransformToRoot);
-      }
-
-      if ((desiredFrameTransformToRoot = desiredFrame.getTransformToRoot()) != null)
-      {
-         applyInverseTransform(desiredFrameTransformToRoot);
-      }
-
+      getReferenceFrame().transformFromThisToDesiredFrame(desiredFrame, this);
       setReferenceFrame(desiredFrame);
    }
 }
