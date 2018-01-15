@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,9 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
@@ -28,15 +30,9 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D>
    }
 
    @Override
-   public FrameVector3D createTuple(ReferenceFrame referenceFrame, double x, double y, double z)
+   public FrameVector3D createFrameTuple(ReferenceFrame referenceFrame, double x, double y, double z)
    {
       return new FrameVector3D(referenceFrame, x, y, z);
-   }
-
-   @Override
-   public double getEpsilon()
-   {
-      return 1.0e-15;
    }
 
    @Test
@@ -115,6 +111,76 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D>
          assertTrue(frameVector3D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
          EuclidFrameTestTools.assertFrameTuple3DEquals(randomTuple, frameVector3D, EPSILON);
+      }
+   }
+
+   @Test
+   public void testChangeFrame() throws Exception
+   {
+      Random random = new Random(43563);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         Point3D expectedVector = EuclidCoreRandomTools.nextPoint3D(random);
+         FramePoint3D frameVector = new FramePoint3D(initialFrame, expectedVector);
+
+         RigidBodyTransform transform = initialFrame.getTransformToDesiredFrame(anotherFrame);
+         expectedVector.applyTransform(transform);
+
+         frameVector.changeFrame(anotherFrame);
+         assertTrue(anotherFrame == frameVector.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple3DEquals(expectedVector, frameVector, EPSILON);
+
+         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         try
+         {
+            frameVector.changeFrame(differentRootFrame);
+            fail("Should have thrown a RuntimeException");
+         }
+         catch (RuntimeException e)
+         {
+            // good
+         }
+      }
+   }
+
+   @Test
+   public void testGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(32120);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         FrameVector3D frameVector1 = EuclidFrameRandomTools.nextFrameVector3D(random, worldFrame);
+         FrameVector3D frameVector2 = new FrameVector3D(worldFrame);
+         double epsilon = random.nextDouble();
+         Vector3D difference;
+
+         difference = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon);
+         frameVector2.add(frameVector1, difference);
+         assertTrue(frameVector1.geometricallyEquals(frameVector2, epsilon));
+
+         difference = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon);
+         frameVector2.add(frameVector1, difference);
+         assertFalse(frameVector1.geometricallyEquals(frameVector2, epsilon));
+      }
+   }
+
+   @Test
+   public void testHashCode() throws Exception
+   {
+      Random random = new Random(763);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random, -1.0e15, 1.0e15);
+         FrameVector3D actual = new FrameVector3D(worldFrame, expected);
+
+         assertEquals(expected.hashCode(), actual.hashCode());
       }
    }
 
