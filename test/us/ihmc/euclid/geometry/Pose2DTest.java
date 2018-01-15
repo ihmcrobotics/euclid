@@ -60,7 +60,7 @@ public class Pose2DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.setToNaN();
 
@@ -78,7 +78,7 @@ public class Pose2DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.setToZero();
 
@@ -103,7 +103,7 @@ public class Pose2DTest
          y = random.nextDouble() - random.nextDouble();
          yaw = random.nextDouble() - random.nextDouble();
 
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.setX(x);
          toSet.setY(y);
@@ -113,7 +113,7 @@ public class Pose2DTest
          assertEquals(y, toSet.getY(), epsilon);
          assertEquals(yaw, toSet.getYaw(), epsilon);
 
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.setPosition(x, y);
          toSet.setYaw(yaw);
@@ -122,7 +122,7 @@ public class Pose2DTest
          assertEquals(y, toSet.getY(), epsilon);
          assertEquals(yaw, toSet.getYaw(), epsilon);
 
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.set(x, y, yaw);
 
@@ -130,7 +130,7 @@ public class Pose2DTest
          assertEquals(y, toSet.getY(), epsilon);
          assertEquals(yaw, toSet.getYaw(), epsilon);
 
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          tuple = new Vector2D(x, y);
          orientation = new Orientation2D(yaw);
@@ -140,7 +140,7 @@ public class Pose2DTest
          assertEquals(y, toSet.getY(), epsilon);
          assertEquals(yaw, toSet.getYaw(), epsilon);
 
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.setPosition(tuple);
          toSet.setOrientation(orientation);
@@ -149,7 +149,7 @@ public class Pose2DTest
          assertEquals(y, toSet.getY(), epsilon);
          assertEquals(yaw, toSet.getYaw(), epsilon);
 
-         toSet = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toCopy = new Pose2D(x, y, yaw);
 
@@ -172,10 +172,10 @@ public class Pose2DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         firstPose = EuclidGeometryRandomTools.nextPose2D(random);
          secondPose = new Pose2D(firstPose);
 
-         translation = EuclidCoreRandomTools.generateRandomVector2D(random);
+         translation = EuclidCoreRandomTools.nextVector2D(random);
          length = translation.length();
 
          secondPose.appendTranslation(translation);
@@ -201,7 +201,7 @@ public class Pose2DTest
       {
          angleDiff = Math.PI - (2.0 * Math.PI * random.nextDouble());
 
-         firstPose = EuclidGeometryRandomTools.generateRandomPose2D(random);
+         firstPose = EuclidGeometryRandomTools.nextPose2D(random);
          secondPose = new Pose2D(firstPose);
 
          secondPose.appendRotation(angleDiff);
@@ -244,7 +244,7 @@ public class Pose2DTest
          firstPose = new Pose2D(x, y, yaw);
          secondPose = new Pose2D(x, y, yaw);
 
-         translation = EuclidCoreRandomTools.generateRandomVector2DWithFixedLength(random, epsilon);
+         translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, epsilon);
          secondPose.appendTranslation(translation);
 
          assertFalse(firstPose.equals(secondPose));
