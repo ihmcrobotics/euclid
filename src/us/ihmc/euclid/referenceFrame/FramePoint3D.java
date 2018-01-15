@@ -126,6 +126,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
       setIncludingFrame(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(FramePoint3D other)
    {

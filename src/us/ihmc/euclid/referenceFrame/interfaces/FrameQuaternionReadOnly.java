@@ -2,8 +2,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -50,7 +48,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
     */
-   default void get(FrameVector3D rotationVectorToPack)
+   default void get(FrameVector3DBasics rotationVectorToPack)
    {
       rotationVectorToPack.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.get(rotationVectorToPack);
@@ -65,7 +63,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param eulerAnglesToPack the vector in which the Euler angles are stored. Modified.
     */
-   default void getEuler(FrameVector3D eulerAnglesToPack)
+   default void getEuler(FrameVector3DBasics eulerAnglesToPack)
    {
       eulerAnglesToPack.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.getEuler(eulerAnglesToPack);
@@ -152,7 +150,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void transform(FrameTuple2D<?, ?> tupleToTransform)
+   default void transform(FrameTuple2DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.transform(tupleToTransform);
@@ -190,7 +188,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
     *            plane.
     */
-   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
@@ -210,7 +208,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -231,7 +229,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void transform(FrameTuple2D<?, ?> tupleToTransform, boolean checkIfTransformInXYPlane)
+   default void transform(FrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.transform(tupleToTransform, checkIfTransformInXYPlane);
@@ -275,7 +273,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
@@ -297,7 +295,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -527,7 +525,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void inverseTransform(FrameTuple2D<?, ?> tupleToTransform)
+   default void inverseTransform(FrameTuple2DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.inverseTransform(tupleToTransform, tupleToTransform);
@@ -567,7 +565,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -586,7 +584,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
     *            plane.
     */
-   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
@@ -606,7 +604,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void inverseTransform(FrameTuple2D<?, ?> tupleToTransform, boolean checkIfTransformInXYPlane)
+   default void inverseTransform(FrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.inverseTransform(tupleToTransform, tupleToTransform, checkIfTransformInXYPlane);
@@ -626,7 +624,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this quaternion
     *            does not represent a transformation in the XY plane.
     */
-   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
@@ -648,7 +646,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());

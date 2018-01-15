@@ -1,6 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +18,6 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
@@ -125,20 +127,20 @@ public class FrameVector3DTest extends FrameTuple3DTest<FrameVector3D>
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
 
-         Point3D expectedVector = EuclidCoreRandomTools.nextPoint3D(random);
-         FramePoint3D frameVector = new FramePoint3D(initialFrame, expectedVector);
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
+         FrameVector3D actual = new FrameVector3D(initialFrame, expected);
 
          RigidBodyTransform transform = initialFrame.getTransformToDesiredFrame(anotherFrame);
-         expectedVector.applyTransform(transform);
+         expected.applyTransform(transform);
 
-         frameVector.changeFrame(anotherFrame);
-         assertTrue(anotherFrame == frameVector.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple3DEquals(expectedVector, frameVector, EPSILON);
+         actual.changeFrame(anotherFrame);
+         assertTrue(anotherFrame == actual.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
 
          ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
          try
          {
-            frameVector.changeFrame(differentRootFrame);
+            actual.changeFrame(differentRootFrame);
             fail("Should have thrown a RuntimeException");
          }
          catch (RuntimeException e)

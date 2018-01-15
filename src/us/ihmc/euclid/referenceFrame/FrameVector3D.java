@@ -126,6 +126,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
       setIncludingFrame(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(FrameVector3D other)
    {

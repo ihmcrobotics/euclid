@@ -32,21 +32,25 @@ import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
 import us.ihmc.euclid.referenceFrame.FrameTuple4D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -86,18 +90,18 @@ public class EuclidFrameAPITestTools
    {
       HashMap<Class<?>, Class<?>> modifiableMap = new HashMap<>();
       modifiableMap.put(Tuple2DReadOnly.class, FrameTuple2DReadOnly.class);
-      modifiableMap.put(Tuple2DBasics.class, FrameTuple2D.class);
+      modifiableMap.put(Tuple2DBasics.class, FrameTuple2DBasics.class);
       modifiableMap.put(Point2DReadOnly.class, FramePoint2DReadOnly.class);
-      modifiableMap.put(Point2DBasics.class, FramePoint2D.class);
+      modifiableMap.put(Point2DBasics.class, FramePoint2DBasics.class);
       modifiableMap.put(Vector2DReadOnly.class, FrameVector2DReadOnly.class);
-      modifiableMap.put(Vector2DBasics.class, FrameVector2D.class);
+      modifiableMap.put(Vector2DBasics.class, FrameVector2DBasics.class);
 
       modifiableMap.put(Tuple3DReadOnly.class, FrameTuple3DReadOnly.class);
       modifiableMap.put(Tuple3DBasics.class, FrameTuple3DBasics.class);
       modifiableMap.put(Point3DReadOnly.class, FramePoint3DReadOnly.class);
-      modifiableMap.put(Point3DBasics.class, FramePoint3D.class);
+      modifiableMap.put(Point3DBasics.class, FramePoint3DBasics.class);
       modifiableMap.put(Vector3DReadOnly.class, FrameVector3DReadOnly.class);
-      modifiableMap.put(Vector3DBasics.class, FrameVector3D.class);
+      modifiableMap.put(Vector3DBasics.class, FrameVector3DBasics.class);
 
       modifiableMap.put(Tuple4DReadOnly.class, FrameTuple4DReadOnly.class);
       modifiableMap.put(Tuple4DBasics.class, FrameTuple4D.class);
@@ -114,7 +118,7 @@ public class EuclidFrameAPITestTools
    {
       HashMap<Class<?>, RandomFrameTypeBuilder<?>> modifiableMap = new HashMap<>();
       modifiableMap.put(FrameTuple2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
-      modifiableMap.put(FrameTuple2D.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FrameTuple2DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FramePoint2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FramePoint2D.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FrameVector2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
@@ -190,7 +194,7 @@ public class EuclidFrameAPITestTools
    static
    {
       Set<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(FrameTuple2D.class);
+      modifiableSet.add(FrameTuple2DBasics.class);
       modifiableSet.add(FramePoint2D.class);
       modifiableSet.add(FrameVector2D.class);
       modifiableSet.add(FrameTuple3DBasics.class);
