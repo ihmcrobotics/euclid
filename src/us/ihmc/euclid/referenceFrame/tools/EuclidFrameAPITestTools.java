@@ -33,7 +33,6 @@ import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.FrameTuple4D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
@@ -44,6 +43,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
@@ -93,7 +93,7 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vector2DBasics.class, FrameVector2D.class);
 
       modifiableMap.put(Tuple3DReadOnly.class, FrameTuple3DReadOnly.class);
-      modifiableMap.put(Tuple3DBasics.class, FrameTuple3D.class);
+      modifiableMap.put(Tuple3DBasics.class, FrameTuple3DBasics.class);
       modifiableMap.put(Point3DReadOnly.class, FramePoint3DReadOnly.class);
       modifiableMap.put(Point3DBasics.class, FramePoint3D.class);
       modifiableMap.put(Vector3DReadOnly.class, FrameVector3DReadOnly.class);
@@ -121,7 +121,7 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameVector2D.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
 
       modifiableMap.put(FrameTuple3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
-      modifiableMap.put(FrameTuple3D.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FrameTuple3DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FramePoint3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FramePoint3D.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
@@ -193,7 +193,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameTuple2D.class);
       modifiableSet.add(FramePoint2D.class);
       modifiableSet.add(FrameVector2D.class);
-      modifiableSet.add(FrameTuple3D.class);
+      modifiableSet.add(FrameTuple3DBasics.class);
       modifiableSet.add(FramePoint3D.class);
       modifiableSet.add(FrameVector3D.class);
       modifiableSet.add(FrameTuple4D.class);
@@ -1191,9 +1191,42 @@ public class EuclidFrameAPITestTools
             throw new RuntimeException("Reached unexpected state.");
 
          if (isFrameObject(frameParameter))
-            return ((EpsilonComparable<T>) framelessParameter).epsilonEquals(((FrameGeometryObject<?, T>) frameParameter).getGeometryObject(), epsilon);
+         {
+            Method epsilonEqualsMethod;
+            try
+            {
+               epsilonEqualsMethod = Arrays.stream(frameParameter.getClass().getMethods()).filter(m -> m.getName().equals("epsilonEquals"))
+                                           .filter(m -> m.getParameterTypes()[0] != Object.class) // Filters the method from FrameGeometryObject.
+                                           .filter(m -> m.getParameterTypes()[0].isAssignableFrom(framelessParameter.getClass())).findFirst().orElse(null);
+            }
+            catch (SecurityException e)
+            {
+               throw new AssertionError(e);
+            }
+
+            boolean epsilonEqualsResult = false;
+
+            try
+            {
+               epsilonEqualsResult = (boolean) epsilonEqualsMethod.invoke(frameParameter, framelessParameter, epsilon);
+            }
+            catch (IllegalAccessException | IllegalArgumentException e)
+            {
+               System.err.println("Something went wrong when invoking the epsilonEquals method for " + frameParameter.getClass().getSimpleName());
+               System.err.println("Objects used as parameters: " + getArgumentTypeString(framelessParameter, epsilon));
+               e.printStackTrace();
+               throw new AssertionError(e);
+            }
+            catch (InvocationTargetException e)
+            {
+               throw new AssertionError(e.getCause());
+            }
+            return epsilonEqualsResult;
+         }
          else
+         {
             return ((EpsilonComparable<T>) framelessParameter).epsilonEquals((T) frameParameter, epsilon);
+         }
       }
 
       if (isFrameObject(framelessParameter))
@@ -1375,7 +1408,7 @@ public class EuclidFrameAPITestTools
       return acceptableExceptions.stream().filter(c -> c.isAssignableFrom(t.getClass())).findAny().isPresent();
    }
 
-   private static String getArgumentTypeString(Object[] arguments)
+   private static String getArgumentTypeString(Object... arguments)
    {
       String string = "";
       for (int i = 0; i < arguments.length; i++)

@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -14,8 +13,8 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.junit.Test;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
@@ -30,9 +29,11 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends Tuple3DBasics & GeometryObject<T>> extends FrameTuple3DReadOnlyTest<F>
+public abstract class FrameTuple3DTest<F extends FrameTuple3DBasics> extends FrameTuple3DReadOnlyTest<F>
 {
    public static final double EPSILON = 1e-10;
+
+   public abstract Tuple3DBasics createRandomFramelessTuple(Random random);
 
    public final F createTuple(ReferenceFrame referenceFrame)
    {
@@ -332,7 +333,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    {
       Random random = new Random(3422);
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple3DReadOnly) tuple);
-      GenericTypeBuilder framelessTypeBuilber = () -> createRandomTuple(random).getGeometryObject();
+      GenericTypeBuilder framelessTypeBuilber = () -> createRandomFramelessTuple(random);
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
    }
@@ -342,63 +343,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    {
       super.testOverloading();
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple3D.class, Tuple3DBasics.class, true, 1, framelessMethodsToIgnore);
-   }
-
-   @Test
-   public void testFrameGeometryObjectFeatures() throws Throwable
-   {
-      FrameGeometryObjectTest<F, T> frameGeometryObjectTest = new FrameGeometryObjectTest<F, T>()
-      {
-         @Override
-         public T createEmptyGeometryObject()
-         {
-            return createEmptyTuple().getGeometryObject();
-         }
-
-         @Override
-         public T createRandomGeometryObject(Random random)
-         {
-            return createRandomTuple(random).getGeometryObject();
-         }
-
-         @Override
-         public F createEmptyFrameGeometryObject(ReferenceFrame referenceFrame)
-         {
-            return createEmptyTuple(referenceFrame);
-         }
-
-         @Override
-         public F createFrameGeometryObject(ReferenceFrame referenceFrame, T geometryObject)
-         {
-            return createTuple(referenceFrame, geometryObject);
-         }
-
-         @Override
-         public F createRandomFrameGeometryObject(Random random, ReferenceFrame referenceFrame)
-         {
-            return createRandomTuple(random, referenceFrame);
-         }
-      };
-
-      for (Method testMethod : frameGeometryObjectTest.getClass().getMethods())
-      {
-         if (!testMethod.getName().startsWith("test"))
-            continue;
-         if (!Modifier.isPublic(testMethod.getModifiers()))
-            continue;
-         if (Modifier.isStatic(testMethod.getModifiers()))
-            continue;
-
-         try
-         {
-            testMethod.invoke(frameGeometryObjectTest);
-         }
-         catch (InvocationTargetException e)
-         {
-            throw e.getCause();
-         }
-      }
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple3DBasics.class, Tuple3DBasics.class, true, 1, framelessMethodsToIgnore);
    }
 
    @Test

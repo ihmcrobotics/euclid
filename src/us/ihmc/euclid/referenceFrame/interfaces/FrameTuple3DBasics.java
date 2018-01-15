@@ -18,6 +18,30 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
+    * Sets all the components of this frame tuple to zero and sets the current reference frame to
+    * {@code referenceFrame}.
+    * 
+    * @param referenceFrame the new reference frame to be associated with this tuple.
+    */
+   default void setToZero(ReferenceFrame referenceFrame)
+   {
+      setReferenceFrame(referenceFrame);
+      setToZero();
+   }
+
+   /**
+    * Sets all the components of this tuple to {@link Double#NaN} and sets the current reference
+    * frame to {@code referenceFrame}.
+    * 
+    * @param referenceFrame the new reference frame to be associated with this tuple.
+    */
+   default void setToNaN(ReferenceFrame referenceFrame)
+   {
+      setReferenceFrame(referenceFrame);
+      setToNaN();
+   }
+
+   /**
     * Sets this frame tuple's components to {@code x}, {@code y}, and {@code z} and sets its
     * reference frame to {@code referenceFrame}.
     *

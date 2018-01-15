@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -82,7 +81,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void transform(FrameTuple3D<?, ?> tupleToTransform)
+   default void transform(FrameTuple3DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.transform(tupleToTransform);
@@ -116,7 +115,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param tupleOriginal the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     */
-   default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
@@ -134,7 +133,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -457,7 +456,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void inverseTransform(FrameTuple3D<?, ?> tupleToTransform)
+   default void inverseTransform(FrameTuple3DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.inverseTransform(tupleToTransform, tupleToTransform);
@@ -491,7 +490,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param tupleOriginal the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     */
-   default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
@@ -509,7 +508,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());

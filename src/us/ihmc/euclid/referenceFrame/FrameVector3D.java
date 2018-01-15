@@ -1,9 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -25,15 +27,20 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * requiring {@code FrameVector3D}.
  * </p>
  */
-public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> implements FrameVector3DReadOnly, Vector3DBasics
+public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameVector3D>
 {
+   /** The reference frame is which this vector is currently expressed. */
+   private ReferenceFrame referenceFrame;
+   /** The vector holding the current components of this frame vector. */
+   private final Vector3D vector = new Vector3D();
+
    /**
     * Creates a new frame vector and initializes it components to zero and its reference frame to
     * {@link ReferenceFrame#getWorldFrame()}.
     */
    public FrameVector3D()
    {
-      this(ReferenceFrame.getWorldFrame());
+      setToZero(ReferenceFrame.getWorldFrame());
    }
 
    /**
@@ -44,7 +51,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public FrameVector3D(ReferenceFrame referenceFrame)
    {
-      super(referenceFrame, new Vector3D());
+      setToZero(referenceFrame);
    }
 
    /**
@@ -58,7 +65,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public FrameVector3D(ReferenceFrame referenceFrame, double x, double y, double z)
    {
-      super(referenceFrame, new Vector3D(x, y, z));
+      setIncludingFrame(referenceFrame, x, y, z);
    }
 
    /**
@@ -70,7 +77,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public FrameVector3D(ReferenceFrame referenceFrame, double[] vectorArray)
    {
-      super(referenceFrame, new Vector3D(vectorArray));
+      setIncludingFrame(referenceFrame, vectorArray);
    }
 
    /**
@@ -82,7 +89,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public FrameVector3D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
    {
-      super(referenceFrame, new Vector3D(tuple3DReadOnly));
+      setIncludingFrame(referenceFrame, tuple3DReadOnly);
    }
 
    /**
@@ -94,7 +101,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public FrameVector3D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
    {
-      super(referenceFrame, new Vector3D(tuple2DReadOnly));
+      setIncludingFrame(referenceFrame, tuple2DReadOnly, 0.0);
    }
 
    /**
@@ -106,7 +113,7 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public FrameVector3D(FrameTuple2DReadOnly frameTuple2DReadOnly)
    {
-      super(frameTuple2DReadOnly.getReferenceFrame(), new Vector3D(frameTuple2DReadOnly));
+      setIncludingFrame(frameTuple2DReadOnly, 0.0);
    }
 
    /**
@@ -116,119 +123,100 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public FrameVector3D(FrameTuple3DReadOnly other)
    {
-      super(other.getReferenceFrame(), new Vector3D(other));
+      setIncludingFrame(other);
+   }
+
+   @Override
+   public void set(FrameVector3D other)
+   {
+      FrameVector3DBasics.super.set(other);
    }
 
    /**
-    * Sets this frame vector to {@code other} and then calls {@link #normalize()}.
-    *
-    * @param other the other frame vector to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * Sets the reference frame of this vector without updating or modifying its x, y, and z
+    * components.
+    * 
+    * @param referenceFrame the new reference frame for this frame vector.
     */
-   public final void setAndNormalize(FrameTuple3DReadOnly other)
+   @Override
+   public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
-      checkReferenceFrameMatch(other);
-      tuple.setAndNormalize(other);
+      this.referenceFrame = referenceFrame;
    }
 
    /**
-    * Sets this frame vector to the cross product of {@code this} and {@code other}.
-    * <p>
-    * this = this &times; other
-    * </p>
+    * Sets the x-component of this vector.
     *
-    * @param other the second frame vector in the cross product. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @param x the x-component.
     */
-   public final void cross(FrameVector3DReadOnly other)
+   @Override
+   public void setX(double x)
    {
-      cross((FrameTuple3DReadOnly) other);
+      vector.setX(x);
    }
 
    /**
-    * Sets this frame vector to the cross product of {@code this} and {@code frameTuple3DReadOnly}.
-    * <p>
-    * this = this &times; frameTuple3DReadOnly
-    * </p>
+    * Sets the y-component of this vector.
     *
-    * @param frameTuple3DReadOnly the second frame tuple in the cross product. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple3DReadOnly} is not expressed in
-    *            the same reference frame as {@code this}.
+    * @param y the y-component.
     */
-   public final void cross(FrameTuple3DReadOnly frameTuple3DReadOnly)
+   @Override
+   public void setY(double y)
    {
-      checkReferenceFrameMatch(frameTuple3DReadOnly);
-      tuple.cross(frameTuple3DReadOnly);
+      vector.setY(y);
    }
 
    /**
-    * Sets this frame vector to the cross product of {@code frameVector1} and {@code frameVector2}.
-    * <p>
-    * this = frameVector1 &times; frameVector2
-    * </p>
+    * Sets the z-component of this vector.
     *
-    * @param frameVector1 the first frame vector in the cross product. Not modified.
-    * @param frameVector2 the second frame vector in the cross product. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameVector1} or {@code frameVector2}
-    *            is not expressed in the same reference frame as {@code this}.
+    * @param z the z-component.
     */
-   public final void cross(FrameVector3DReadOnly frameVector1, FrameVector3DReadOnly frameVector2)
+   @Override
+   public void setZ(double z)
    {
-      cross((FrameTuple3DReadOnly) frameVector1, (FrameTuple3DReadOnly) frameVector2);
+      vector.setZ(z);
    }
 
    /**
-    * Sets this frame vector to the cross product of {@code frameTuple1} and {@code frameTuple2}.
-    * <p>
-    * this = frameTuple1 &times; frameTuple2
-    * </p>
-    *
-    * @param frameTuple1 the first frame tuple in the cross product. Not modified.
-    * @param frameTuple2 the second frame tuple in the cross product. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same reference frame as {@code this}.
+    * Gets the reference frame in which this vector is currently expressed.
     */
-   public final void cross(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   @Override
+   public ReferenceFrame getReferenceFrame()
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.cross(frameTuple1, frameTuple2);
+      return referenceFrame;
    }
 
    /**
-    * Sets this frame vector to the cross product of {@code frameTuple1} and {@code tuple2}.
-    * <p>
-    * this = frameTuple1 &times; tuple2
-    * </p>
+    * Returns the value of the x-component of this vector.
     *
-    * @param frameTuple1 the first frame tuple in the cross product. Not modified.
-    * @param tuple2 the second tuple in the cross product. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @return the x-component's value.
     */
-   public final void cross(FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
+   @Override
+   public double getX()
    {
-      checkReferenceFrameMatch(frameTuple1);
-      tuple.cross(frameTuple1, tuple2);
+      return vector.getX();
    }
 
    /**
-    * Sets this frame vector to the cross product of {@code tuple1} and {@code frameTuple2}.
-    * <p>
-    * this = tuple1 &times; frameTuple2
-    * </p>
+    * Returns the value of the y-component of this vector.
     *
-    * @param tuple1 the first tuple in the cross product. Not modified.
-    * @param frameTuple2 the second frame tuple in the cross product. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @return the y-component's value.
     */
-   public final void cross(Tuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   @Override
+   public double getY()
    {
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.cross(frameTuple1, frameTuple2);
+      return vector.getY();
+   }
+
+   /**
+    * Returns the value of the z-component of this vector.
+    *
+    * @return the z-component's value.
+    */
+   @Override
+   public double getZ()
+   {
+      return vector.getZ();
    }
 
    /**
@@ -238,6 +226,94 @@ public class FrameVector3D extends FrameTuple3D<FrameVector3D, Vector3D> impleme
     */
    public final Vector3D getVector()
    {
-      return tuple;
+      return vector;
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two vectors have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if the two vectors are exactly equal component-wise and are expressed in
+    *         the same reference frame, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      try
+      {
+         return equals((FrameTuple3DReadOnly) object);
+      }
+      catch (ClassCastException e)
+      {
+         return false;
+      }
+   }
+
+   /**
+    * Tests on a per component basis if this vector is equal to the given {@code other} to an
+    * {@code epsilon}.
+    * <p>
+    * If the two vectors have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the other vector to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two vectors are equal and are expressed in the same reference
+    *         frame, {@code false} otherwise.
+    */
+   @Override
+   public boolean epsilonEquals(FrameVector3D other, double epsilon)
+   {
+      return FrameVector3DBasics.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Tests if {@code this} and {@code other} represent the same vector 3D to an {@code epsilon}.
+    * <p>
+    * Two vectors are considered geometrically equal if they are at a distance of less than or equal
+    * to {@code epsilon}.
+    * </p>
+    * <p>
+    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
+    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
+    * </p>
+    *
+    * @param other the other vector 3D to compare against this. Not modified.
+    * @param epsilon the maximum distance that the two vectors can be spaced and still considered
+    *           equal.
+    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   @Override
+   public boolean geometricallyEquals(FrameVector3D other, double epsilon)
+   {
+      return FrameVector3DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Provides a {@code String} representation of this frame vector 3D as follows: (x, y, z)-worldFrame.
+    *
+    * @return the {@code String} representing this frame vector 3D.
+    */
+   @Override
+   public String toString()
+   {
+      return EuclidCoreIOTools.getTuple3DString(this) + "-" + referenceFrame;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this frame vector 3D.
+    *
+    * @return the hash code value for this frame vector 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      return vector.hashCode();
    }
 }

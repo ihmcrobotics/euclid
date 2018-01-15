@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -7,6 +8,21 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 // TODO Add doc
 public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBasics
 {
+   /**
+    * Sets this frame tuple to {@code tuple3DReadOnly} and checks that its current frame equal
+    * {@code referenceFrame}. .
+    * 
+    * @param referenceFrame the coordinate system in which {@code geometryObject} is expressed.
+    * @param tuple3dReadOnly the geometry object used to update the geometry object in {@code this}.
+    *           Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3dReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(tuple3dReadOnly);
+   }
+
    /**
     * Sets the x and y components of this frame tuple with the x and y components of the given
     * {@code frameTuple2DReadOnly}.
