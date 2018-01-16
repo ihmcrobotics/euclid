@@ -1,10 +1,28 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBasics
 {
+   /**
+    * Sets this frame tuple to {@code tuple4DReadOnly} and checks that its current frame equal
+    * {@code referenceFrame}.
+    * 
+    * @param referenceFrame the coordinate system in which the given {@code tuple4DReadOnly} is
+    *           expressed.
+    * @param tuple4DReadOnly the geometry object used to update the geometry object in {@code this}.
+    *           Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(tuple4DReadOnly);
+   }
+
    /**
     * Sets this frame tuple to {@code other}.
     *

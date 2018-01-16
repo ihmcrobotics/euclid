@@ -11,15 +11,16 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * Sets this frame tuple to {@code tuple2DReadOnly} and checks that its current frame equal
     * {@code referenceFrame}.
     * 
-    * @param referenceFrame the coordinate system in which {@code geometryObject} is expressed.
-    * @param tuple2dReadOnly the geometry object used to update the geometry object in {@code this}.
+    * @param referenceFrame the coordinate system in which the given {@code tuple2DReadOnly} is
+    *           expressed.
+    * @param tuple2DReadOnly the geometry object used to update the geometry object in {@code this}.
     *           Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
-   default void set(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2dReadOnly)
+   default void set(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
-      set(tuple2dReadOnly);
+      set(tuple2DReadOnly);
    }
 
    /**

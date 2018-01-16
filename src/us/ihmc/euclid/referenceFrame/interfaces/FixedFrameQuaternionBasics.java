@@ -1,11 +1,28 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, FixedFrameTuple4DBasics, QuaternionBasics
 {
+   /**
+    * Sets this frame quaternion to {@code quaternionReadOnly} and checks that its current frame
+    * equal {@code referenceFrame}.
+    * 
+    * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
+    *           expressed.
+    * @param quaternionReadOnly the geometry object used to update the geometry object in
+    *           {@code this}. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(quaternionReadOnly);
+   }
+
    /**
     * Sets this frame quaternion to the same orientation described by the given rotation vector
     * {@code rotationVector}.
