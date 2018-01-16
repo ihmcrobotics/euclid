@@ -24,6 +24,21 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    }
 
    /**
+    * Sets this frame tuple components to {@code x}, and {@code y} and checks that its current frame
+    * equal {@code referenceFrame}.
+    * 
+    * @param referenceFrame the coordinate system in which the given components are expressed.
+    * @param x the new x component.
+    * @param y the new y component.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, double x, double y)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(x, y);
+   }
+
+   /**
     * Sets this frame tuple to {@code other}.
     * 
     * @param other the other frame tuple to set this to. Not modified.

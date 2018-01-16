@@ -24,6 +24,23 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
    }
 
    /**
+    * Sets this frame tuple components to {@code x}, {@code y}, {@code z}, and {@code s} and checks
+    * that its current frame equal {@code referenceFrame}.
+    * 
+    * @param referenceFrame the coordinate system in which the given components ares expressed.
+    * @param x the new x component.
+    * @param y the new y component.
+    * @param z the new z component.
+    * @param s the new s component.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, double x, double y, double z, double s)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(x, y, z, s);
+   }
+
+   /**
     * Sets this frame tuple to {@code other}.
     *
     * @param other the other frame tuple to set this to. Not modified.

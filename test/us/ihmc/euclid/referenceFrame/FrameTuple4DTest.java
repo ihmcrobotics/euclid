@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -15,6 +16,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.junit.Test;
 
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -62,27 +64,81 @@ public abstract class FrameTuple4DTest<F extends FrameTuple4DBasics> extends Fra
       Random random = new Random(234234L);
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
+      { // Tests set(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
-         Tuple4DBasics expectedGeometryObject = createRandomFramelessTuple(random);
-         expectedGeometryObject.setToZero();
+         Tuple4DBasics expected = createRandomFramelessTuple(random);
 
-         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
-         F frameGeometryObject = createRandomFrameTuple(random, initialFrame);
-         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
-         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
-         frameGeometryObject.setToZero();
-         EuclidCoreTestTools.assertTuple4DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+         int initialFrameIndex = random.nextInt(referenceFrames.length);
+         ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
+         F actual = createRandomFrameTuple(random, initialFrame);
 
-         frameGeometryObject = createRandomFrameTuple(random, initialFrame);
-         ReferenceFrame newFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
 
-         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
-         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
-         frameGeometryObject.setToZero(newFrame);
-         assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple4DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+         actual.set(initialFrame, expected);
+
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         assertEquals(initialFrame, actual.getReferenceFrame());
+
+         actual.set(createRandomFramelessTuple(random));
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         expected.set(actual);
+
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
+         differenceFrameIndex %= referenceFrames.length;
+         ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
+
+         try
+         {
+            actual.set(differentFrame, createRandomFramelessTuple(random));
+            fail("Should have thrown a ReferenceFrameMismatchException");
+         }
+         catch (ReferenceFrameMismatchException e)
+         {
+            // good
+            EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         }
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests set(ReferenceFrame referenceFrame, double x, double y, double z)
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         Tuple4DBasics expected = createRandomFramelessTuple(random);
+
+         int initialFrameIndex = random.nextInt(referenceFrames.length);
+         ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
+         F actual = createRandomFrameTuple(random, initialFrame);
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         actual.set(initialFrame, expected.getX(), expected.getY(), expected.getZ(), expected.getS());
+
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         assertEquals(initialFrame, actual.getReferenceFrame());
+
+         actual.set(createRandomFramelessTuple(random));
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         expected.set(actual);
+
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
+         differenceFrameIndex %= referenceFrames.length;
+         ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
+
+         try
+         {
+            actual.set(differentFrame, random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
+            fail("Should have thrown a ReferenceFrameMismatchException");
+         }
+         catch (ReferenceFrameMismatchException e)
+         {
+            // good
+            EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         }
       }
    }
 

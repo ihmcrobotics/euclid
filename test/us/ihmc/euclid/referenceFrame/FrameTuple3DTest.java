@@ -42,27 +42,27 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3DBasics> extends Fra
       Random random = new Random(5472);
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      { // Tests set(ReferenceFrame referenceFrame, G geometryObject)
+      { // Tests set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
-         Tuple3DBasics expectedGeometry = createRandomFramelessTuple(random);
+         Tuple3DBasics expected = createRandomFramelessTuple(random);
 
          int initialFrameIndex = random.nextInt(referenceFrames.length);
          ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
-         F frameGeometry = createRandomFrameTuple(random, initialFrame);
+         F actual = createRandomFrameTuple(random, initialFrame);
 
-         assertFalse(expectedGeometry.epsilonEquals(frameGeometry, EPSILON));
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
 
-         frameGeometry.set(initialFrame, expectedGeometry);
+         actual.set(initialFrame, expected);
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedGeometry, frameGeometry, EPSILON);
-         assertEquals(initialFrame, frameGeometry.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         assertEquals(initialFrame, actual.getReferenceFrame());
 
-         frameGeometry.set(createRandomFramelessTuple(random));
+         actual.set(createRandomFramelessTuple(random));
 
-         assertFalse(expectedGeometry.epsilonEquals(frameGeometry, EPSILON));
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
 
-         expectedGeometry.set(frameGeometry);
+         expected.set(actual);
 
          int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
          differenceFrameIndex %= referenceFrames.length;
@@ -70,13 +70,52 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3DBasics> extends Fra
 
          try
          {
-            frameGeometry.set(differentFrame, createRandomFramelessTuple(random));
+            actual.set(differentFrame, createRandomFramelessTuple(random));
             fail("Should have thrown a ReferenceFrameMismatchException");
          }
          catch (ReferenceFrameMismatchException e)
          {
             // good
-            EuclidCoreTestTools.assertTuple3DEquals(expectedGeometry, frameGeometry, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         }
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests set(ReferenceFrame referenceFrame, double x, double y, double z)
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         Tuple3DBasics expected = createRandomFramelessTuple(random);
+
+         int initialFrameIndex = random.nextInt(referenceFrames.length);
+         ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
+         F actual = createRandomFrameTuple(random, initialFrame);
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         actual.set(initialFrame, expected.getX(), expected.getY(), expected.getZ());
+
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+         assertEquals(initialFrame, actual.getReferenceFrame());
+
+         actual.set(createRandomFramelessTuple(random));
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         expected.set(actual);
+
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
+         differenceFrameIndex %= referenceFrames.length;
+         ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
+
+         try
+         {
+            actual.set(differentFrame, random.nextDouble(), random.nextDouble(), random.nextDouble());
+            fail("Should have thrown a ReferenceFrameMismatchException");
+         }
+         catch (ReferenceFrameMismatchException e)
+         {
+            // good
+            EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
          }
       }
    }

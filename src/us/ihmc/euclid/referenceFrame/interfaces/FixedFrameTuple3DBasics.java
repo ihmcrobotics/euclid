@@ -32,7 +32,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * Sets this frame tuple to {@code tuple3DReadOnly} and checks that its current frame equal
     * {@code referenceFrame}.
     * 
-    * @param referenceFrame the coordinate system in which the given {@code tuple3DReadOnly} is expressed.
+    * @param referenceFrame the coordinate system in which the given {@code tuple3DReadOnly} is
+    *           expressed.
     * @param tuple3DReadOnly the geometry object used to update the geometry object in {@code this}.
     *           Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
@@ -41,6 +42,22 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    {
       checkReferenceFrameMatch(referenceFrame);
       set(tuple3DReadOnly);
+   }
+
+   /**
+    * Sets this frame tuple components to {@code x}, {@code y}, and {@code z} and checks that its
+    * current frame equal {@code referenceFrame}.
+    * 
+    * @param referenceFrame the coordinate system in which the given components ares expressed.
+    * @param x the new x component.
+    * @param y the new y component.
+    * @param z the new z component.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, double x, double y, double z)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(x, y, z);
    }
 
    /**
