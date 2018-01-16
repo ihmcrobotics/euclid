@@ -1,6 +1,11 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public interface Orientation2DReadOnly
 {
@@ -10,6 +15,17 @@ public interface Orientation2DReadOnly
     * @return the angle value in radians.
     */
    double getYaw();
+
+   /**
+    * Tests if this orientation 2D contains {@link Double#NaN}.
+    * 
+    * @return {@code true} if this orientation 2D contains a {@link Double#NaN}, {@code false}
+    *         otherwise.
+    */
+   default boolean containsNaN()
+   {
+      return Double.isNaN(getYaw());
+   }
 
    /**
     * Computes and returns the difference between {@code this} and {@code other}:<br>
@@ -35,6 +51,142 @@ public interface Orientation2DReadOnly
    default double distance(Orientation2DReadOnly other)
    {
       return Math.abs(difference(other));
+   }
+
+   /**
+    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
+    * this.
+    *
+    * <pre>
+    * tupleToTransform = / cos(yaw) -sin(yaw) \ * tupleToTransform
+    *                    \ sin(yaw)  cos(yaw) /
+    * </pre>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void transform(Tuple2DBasics tupleToTransform)
+   {
+      transform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
+    * and stores the result in {@code tupleTransformed}.
+    *
+    * <pre>
+    * tupleTransformed = / cos(yaw) -sin(yaw) \ * tupleOriginal
+    *                    \ sin(yaw)  cos(yaw) /
+    * </pre>
+    *
+    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    */
+   default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
+   {
+      RotationMatrixTools.applyYawRotation(getYaw(), tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
+    * this.
+    *
+    * <pre>
+    *                    / cos(yaw) -sin(yaw) 0 \
+    * tupleToTransform = | sin(yaw)  cos(yaw) 0 | * tupleToTransform
+    *                    \    0         0     1 /
+    * </pre>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void transform(Tuple3DBasics tupleToTransform)
+   {
+      transform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
+    * and stores the result in {@code tupleTransformed}.
+    *
+    * <pre>
+    *                    / cos(yaw) -sin(yaw) 0 \
+    * tupleTransformed = | sin(yaw)  cos(yaw) 0 | * tupleOriginal
+    *                    \    0         0     1 /
+    * </pre>
+    *
+    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    */
+   default void transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      RotationMatrixTools.applyYawRotation(getYaw(), tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
+    * about the z-axis described by this.
+    *
+    * <pre>
+    * tupleToTransform = / cos(-yaw) -sin(-yaw) \ * tupleToTransform
+    *                    \ sin(-yaw)  cos(-yaw) /
+    * </pre>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void inverseTransform(Tuple2DBasics tupleToTransform)
+   {
+      inverseTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given {@code tupleOriginal} by the rotation about
+    * the z-axis described by this and stores the result in {@code tupleTransformed}.
+    *
+    * <pre>
+    * tupleTransformed = / cos(-yaw) -sin(-yaw) \ * tupleOriginal
+    *                    \ sin(-yaw)  cos(-yaw) /
+    * </pre>
+    *
+    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    */
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
+   {
+      RotationMatrixTools.applyYawRotation(-getYaw(), tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
+    * about the z-axis described by this.
+    *
+    * <pre>
+    *                    / cos(-yaw) -sin(-yaw) 0 \
+    * tupleToTransform = | sin(-yaw)  cos(-yaw) 0 | * tupleToTransform
+    *                    \     0          0     1 /
+    * </pre>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void inverseTransform(Tuple3DBasics tupleToTransform)
+   {
+      transform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given {@code tupleOriginal} by the rotation about
+    * the z-axis described by this and stores the result in {@code tupleTransformed}.
+    *
+    * <pre>
+    *                    / cos(-yaw) -sin(-yaw) 0 \
+    * tupleTransformed = | sin(-yaw)  cos(-yaw) 0 | * tupleOriginal
+    *                    \     0          0     1 /
+    * </pre>
+    *
+    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    */
+   default void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      RotationMatrixTools.applyYawRotation(-getYaw(), tupleOriginal, tupleTransformed);
    }
 
    /**
@@ -67,5 +219,23 @@ public interface Orientation2DReadOnly
    default boolean geometricallyEquals(Orientation2DReadOnly other, double epsilon)
    {
       return Math.abs(difference(other)) <= epsilon;
+   }
+
+   /**
+    * Tests if this orientation 2D is exactly equal to {@code other}.
+    * <p>
+    * Note that this method performs number comparison and not an angle comparison, such that:
+    * -<i>pi</i> &ne; <i>pi</i>.
+    * </p>
+    *
+    * @param other the other orientation 2D to compare against this. Not modified.
+    * @return {@code true} if the two orientations are exactly equal, {@code false} otherwise.
+    */
+   default boolean equals(Orientation2DReadOnly other)
+   {
+      if (other == null)
+         return false;
+      else
+         return getYaw() == other.getYaw();
    }
 }
