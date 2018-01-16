@@ -494,4 +494,18 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
       checkReferenceFrameMatch(frameTuple1);
       Tuple2DBasics.super.interpolate(frameTuple1, tuple2, alpha);
    }
+
+   /**
+    * Packs the coordinates of this frame tuple 2D into the given {@code tuple2DToPack}.
+    * 
+    * @param tuple2DToPack the tuple 2D in which the coordinates are stored. Modified.
+    * @deprecated this method will be removed in a future release, use
+    *             {@link Tuple2DBasics#set(Tuple2DReadOnly)} on the given {@code tuple2DToPack}
+    *             instead.
+    */
+   @Deprecated
+   default void get(Tuple2DBasics tuple2DToPack)
+   {
+      tuple2DToPack.set(this);
+   }
 }
