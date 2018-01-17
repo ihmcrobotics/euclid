@@ -1860,8 +1860,8 @@ public class EuclidGeometryTools
     *
     * @param lineSegmentStart1 first endpoint of the first line segment. Not modified.
     * @param lineSegmentEnd1 second endpoint of the first line segment. Not modified.
-    * @param lineSegmentStart1 first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd1 second endpoint of the second line segment. Not modified.
+    * @param lineSegmentStart2 first endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2 second endpoint of the second line segment. Not modified.
     * @return {@code true} if the two line segments intersect, {@code false} otherwise.
     */
    public static boolean doLineSegment2DsIntersect(Point2DReadOnly lineSegmentStart1, Point2DReadOnly lineSegmentEnd1, Point2DReadOnly lineSegmentStart2,
@@ -1871,6 +1871,28 @@ public class EuclidGeometryTools
                                        lineSegmentStart2.getX(), lineSegmentStart2.getY(), lineSegmentEnd2.getX(), lineSegmentEnd2.getY());
    }
 
+   /**
+    * Tests if an intersection exists between a 2D ray and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param rayOriginX the x-coordinate of a point located on the ray. Not modified.
+    * @param rayOriginY the y-coordinate of a point located on the ray. Not modified.
+    * @param rayDirectionX the x-component of the direction of the ray. Not modified.
+    * @param rayDirectionY the y-component of the direction of the ray. Not modified.
+    * @param lineSegmentStartX the x-coordinate of the first endpoint of the line segment.
+    * @param lineSegmentStartY the y-coordinate of the first endpoint of the line segment.
+    * @param lineSegmentEndX the x-coordinate of the second endpoint of the line segment.
+    * @param lineSegmentEndY the y-coordinate of the second endpoint of the line segment.
+    * @return {@code true} if the ray and line segment intersect, {@code false} otherwise.
+    */
    public static boolean doRay2DAndLineSegment2DIntersect(double rayOriginX, double rayOriginY, double rayDirectionX, double rayDirectionY,
                                                           double lineSegmentStartX, double lineSegmentStartY, double lineSegmentEndX, double lineSegmentEndY)
    {
@@ -1878,6 +1900,24 @@ public class EuclidGeometryTools
                                                       lineSegmentEndX, lineSegmentEndY, null);
    }
 
+   /**
+    * Tests if an intersection exists between a 2D ray and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin a point located on the ray. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param lineSegmentStart first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @return {@code true} if the ray and line segment intersect, {@code false} otherwise.
+    */
    public static boolean doRay2DAndLineSegment2DIntersect(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DReadOnly lineSegmentStart,
                                                           Point2DReadOnly lineSegmentEnd)
    {
@@ -2202,6 +2242,34 @@ public class EuclidGeometryTools
       return intersectionBetweenTwoLine2DsImpl(start1x, start1y, true, end1x, end1y, true, start2x, start2y, false, end2x, end2y, false, intersectionToPack);
    }
 
+   /**
+    * Flexible implementation for computing the intersection between a ray/line/line-segment and
+    * ray/line/line-segment.
+    * <p>
+    * Switching between line/line-segment/ray can be done using the arguments
+    * {@code canIntersectionOccurBeforeStart1}, {@code canIntersectionOccurBeforeEnd1},
+    * {@code canIntersectionOccurBeforeStart2}, and {@code canIntersectionOccurBeforeEnd2}.
+    * <ul>
+    * 
+    * @param start1x the x-coordinate of a point located on the first line/line-segment/ray.
+    * @param start1y the y-coordinate of a point located on the first line/line-segment/ray.
+    * @param canIntersectionOccurBeforeStart1 specifies whether an intersection can exist before
+    *           {@code start}.
+    * @param end1x the x-coordinate of a point located on the first line/line-segment/ray.
+    * @param end1y the y-coordinate of a point located on the first line/line-segment/ray.
+    * @param canIntersectionOccurBeforeEnd1 specifies whether an intersection can exist after
+    *           {@code end}.
+    * @param start2x the x-coordinate of a point located on the second line/line-segment/ray.
+    * @param start2y the y-coordinate of a point located on the second line/line-segment/ray.
+    * @param canIntersectionOccurBeforeStart2 specifies whether an intersection can exist before
+    *           {@code start}.
+    * @param end2x the x-coordinate of a point located on the second line/line-segment/ray.
+    * @param end2y the y-coordinate of a point located on the second line/line-segment/ray.
+    * @param canIntersectionOccurBeforeEnd2 specifies whether an intersection can exist after
+    *           {@code end}.
+    * @param intersectionToPack the coordinate of the intersection. Can be {@code null}. Modified.
+    * @return whether there is an intersection or not.
+    */
    private static boolean intersectionBetweenTwoLine2DsImpl(double start1x, double start1y, boolean canIntersectionOccurBeforeStart1, double end1x,
                                                             double end1y, boolean canIntersectionOccurBeforeEnd1, double start2x, double start2y,
                                                             boolean canIntersectionOccurBeforeStart2, double end2x, double end2y,
@@ -3901,6 +3969,33 @@ public class EuclidGeometryTools
                                                            secondPointOnLineY, true, firstIntersectionToPack, secondIntersectionToPack);
    }
 
+   /**
+    * Computes the intersection between a 2D ray and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOriginX the x-coordinate of a point located on the ray. Not modified.
+    * @param rayOriginY the y-coordinate of a point located on the ray. Not modified.
+    * @param rayDirectionX the x-component of the direction of the ray. Not modified.
+    * @param rayDirectionY the y-component of the direction of the ray. Not modified.
+    * @param lineSegmentStartX x-coordinate of the first endpoint of the line segment.
+    * @param lineSegmentStartY y-coordinate of the first endpoint of the line segment.
+    * @param lineSegmentEndX x-coordinate of the second endpoint of the line segment.
+    * @param lineSegmentEndY y-coordinate of the second endpoint of the line segment.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the ray intersects the line segment, {@code false} otherwise.
+    */
    public static boolean intersectionBetweenRay2DAndLineSegment2D(double rayOriginX, double rayOriginY, double rayDirectionX, double rayDirectionY,
                                                                   double lineSegmentStartX, double lineSegmentStartY, double lineSegmentEndX,
                                                                   double lineSegmentEndY, Point2DBasics intersectionToPack)
@@ -3917,7 +4012,31 @@ public class EuclidGeometryTools
 
    }
 
-   public static Point2D intersectionBetweenRay2DAndLineSegment2D(Point2DReadOnly rayOrigin, Vector2D rayDirection, Point2DReadOnly lineSegmentStart,
+   /**
+    * Computes the intersection between a 2D and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect,
+    * this method returns {@code null}.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns that
+    * same endpoint.
+    * </ul>
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param rayOrigin a point located on the ray. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @return the 2D point of intersection if it exist, {@code null} otherwise.
+    */
+   public static Point2D intersectionBetweenRay2DAndLineSegment2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DReadOnly lineSegmentStart,
                                                                   Point2DReadOnly lineSegmentEnd)
    {
       Point2D intersection = new Point2D();
@@ -3930,6 +4049,29 @@ public class EuclidGeometryTools
          return null;
    }
 
+   /**
+    * Computes the intersection between a 2D ray and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin a point located on the ray. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the ray intersects the line segment, {@code false} otherwise.
+    */
    public static boolean intersectionBetweenRay2DAndLineSegment2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DReadOnly lineSegmentStart,
                                                                   Point2DReadOnly lineSegmentEnd, Point2DBasics intersectionToPack)
    {
