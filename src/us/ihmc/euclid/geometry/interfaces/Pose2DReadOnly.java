@@ -12,21 +12,41 @@ public interface Pose2DReadOnly
     *
     * @return the x-coordinate of this pose 2D.
     */
-   double getX();
+   default double getX()
+   {
+      return getPosition().getX();
+   }
 
    /**
     * Gets the y-coordinate of the position part of this pose 2D.
     *
     * @return the y-coordinate of this pose 2D.
     */
-   double getY();
+   default double getY()
+   {
+      return getPosition().getY();
+   }
 
    /**
     * Gets the yaw angle of the orientation part of this pose 2D.
     *
     * @return the yaw angle of this pose 2D.
     */
-   double getYaw();
+   default double getYaw()
+   {
+      return getOrientation().getYaw();
+   }
+
+   /**
+    * Tests if this pose 2D contains a {@link Double#NaN}.
+    * 
+    * @return {@code true} if either the position or orientation part of this pose 2D contains
+    *         {@link Double#NaN}, {@code false} otherwise.
+    */
+   default boolean containsNaN()
+   {
+      return getPosition().containsNaN() || getOrientation().containsNaN();
+   }
 
    /**
     * Gets the read-only reference of the position part of this pose 2D.
@@ -34,7 +54,7 @@ public interface Pose2DReadOnly
     * @return the position part of this pose 2D.
     */
    Point2DReadOnly getPosition();
-   
+
    /**
     * Gets the read-only reference of the orientation part of this pose 2D.
     *
@@ -121,6 +141,21 @@ public interface Pose2DReadOnly
    }
 
    /**
+    * Tests on a per component basis, if this pose 2D is exactly equal to {@code other}.
+    *
+    * @param other the other pose 2D to compare against this. Not modified.
+    * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(Pose2DReadOnly other)
+   {
+      if (other == null)
+         return false;
+      else
+         return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
+   }
+
+   /**
     * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
     *
@@ -129,10 +164,11 @@ public interface Pose2DReadOnly
     * @param orientationEpsilon the tolerance to use for comparing the orientation part.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Pose2DReadOnly other, double epsilon) {
+   default boolean epsilonEquals(Pose2DReadOnly other, double epsilon)
+   {
       return epsilonEquals(other, epsilon, epsilon);
    }
-   
+
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
@@ -146,7 +182,7 @@ public interface Pose2DReadOnly
    {
       return getPosition().epsilonEquals(other.getPosition(), positionEpsilon) && getOrientation().epsilonEquals(other.getOrientation(), orientationEpsilon);
    }
-   
+
    /**
     * Compares {@code this} to {@code other} to determine if the two poses are geometrically
     * similar.
