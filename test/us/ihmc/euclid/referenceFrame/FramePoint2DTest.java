@@ -171,6 +171,27 @@ public class FramePoint2DTest extends FrameTuple2DTest<FramePoint2D>
    }
 
    @Test
+   public void testSetFromReferenceFrame() throws Exception
+   {
+      Random random = new Random(6572);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random, true);
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         FramePoint2D expected = createEmptyFrameTuple(anotherFrame);
+         expected.changeFrame(initialFrame);
+
+         FramePoint2D actual = createRandomFrameTuple(random, initialFrame);
+         actual.setFromReferenceFrame(anotherFrame);
+         assertTrue(initialFrame == actual.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
    public void testGeometricallyEquals() throws Exception
    {
       Random random = new Random(32120);
