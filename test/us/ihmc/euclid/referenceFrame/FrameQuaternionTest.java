@@ -332,6 +332,40 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    }
 
    @Test
+   public void testChangeFrame() throws Exception
+   {
+      Random random = new Random(43563);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
+         FrameQuaternion quaternion = new FrameQuaternion(initialFrame, expected);
+
+         RigidBodyTransform transform = initialFrame.getTransformToDesiredFrame(anotherFrame);
+         expected.applyTransform(transform);
+
+         quaternion.changeFrame(anotherFrame);
+         assertTrue(anotherFrame == quaternion.getReferenceFrame());
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, quaternion, EPSILON);
+
+         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         try
+         {
+            quaternion.changeFrame(differentRootFrame);
+            fail("Should have thrown a RuntimeException");
+         }
+         catch (RuntimeException e)
+         {
+            // good
+         }
+      }
+   }
+
+   @Test
    public void testSetFromReferenceFrame() throws Exception
    {
       Random random = new Random(6572);
