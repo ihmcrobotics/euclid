@@ -327,6 +327,27 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    }
 
    @Test
+   public void testSetFromReferenceFrame() throws Exception
+   {
+      Random random = new Random(6572);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         FrameQuaternion expected = createEmptyFrameQuaternion(anotherFrame);
+         expected.changeFrame(initialFrame);
+
+         FrameQuaternion actual = createRandomFrameQuaternion(random, initialFrame);
+         actual.setFromReferenceFrame(anotherFrame);
+         assertTrue(initialFrame == actual.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
    public void testGeometricallyEquals() throws Exception
    {
       Random random = new Random(32120);
