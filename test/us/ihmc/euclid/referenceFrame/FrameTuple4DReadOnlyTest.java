@@ -23,17 +23,27 @@ public abstract class FrameTuple4DReadOnlyTest<F extends FrameTuple4DReadOnly>
 
    public final F createEmptyFrameTuple()
    {
-      return createFrameTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0, 0.0, 0.0);
+      return createEmptyFrameTuple(ReferenceFrame.getWorldFrame());
    }
 
-   public final F createEmptyFrameTuple(ReferenceFrame referenceFrame)
+   public F createEmptyFrameTuple(ReferenceFrame referenceFrame)
    {
       return createFrameTuple(referenceFrame, 0.0, 0.0, 0.0, 0.0);
    }
 
+   public F createFrameTuple(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4dReadOnly)
+   {
+      return createFrameTuple(referenceFrame, tuple4dReadOnly.getX(), tuple4dReadOnly.getY(), tuple4dReadOnly.getZ(), tuple4dReadOnly.getS());
+   }
+
    public final F createRandomFrameTuple(Random random)
    {
-      return createFrameTuple(ReferenceFrame.getWorldFrame(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
+      return createRandomFrameTuple(random, ReferenceFrame.getWorldFrame());
+   }
+
+   public F createRandomFrameTuple(Random random, ReferenceFrame referenceFrame)
+   {
+      return createFrameTuple(referenceFrame, random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
    }
 
    public final F createFrameTuple(double x, double y, double z, double s)

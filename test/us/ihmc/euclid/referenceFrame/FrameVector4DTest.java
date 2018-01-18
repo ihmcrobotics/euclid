@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -17,6 +18,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.Vector4DBasicsTest;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
