@@ -3,9 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -16,59 +14,34 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple4D.Quaternion;
-import us.ihmc.euclid.tuple4D.Tuple4DReadOnlyTest;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadOnly> extends Tuple4DReadOnlyTest<T>
+public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadOnly> extends FrameTuple4DReadOnlyTest<F>
 {
-   public abstract T createFrameQuaternion(ReferenceFrame referenceFrame, QuaternionReadOnly quaternion);
-
-   public abstract T createFrameQuaternion(ReferenceFrame referenceFrame, double x, double y, double z, double s);
-
-   @Override
-   public final T createEmptyTuple()
-   {
-      return createEmptyFrameQuaternion(ReferenceFrame.getWorldFrame());
-   }
-
-   @Override
-   public final T createRandomTuple(Random random)
-   {
-      return createRandomFrameQuaternion(random, ReferenceFrame.getWorldFrame());
-   }
-
-   @Override
-   public final T createTuple(double x, double y, double z, double s)
-   {
-      return createFrameQuaternion(ReferenceFrame.getWorldFrame(), x, y, z, s);
-   }
-
-   public final T createEmptyFrameQuaternion(ReferenceFrame referenceFrame)
-   {
-      return createFrameQuaternion(referenceFrame, new Quaternion());
-   }
-
-   public final T createRandomFrameQuaternion(Random random, ReferenceFrame referenceFrame)
-   {
-      return createFrameQuaternion(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random));
-   }
-
-   public final T createRandom2DFrameQuaternion(Random random, ReferenceFrame referenceFrame)
+   public final F createRandom2DFrameTuple(Random random, ReferenceFrame referenceFrame)
    {
       Quaternion quaternion = new Quaternion();
       quaternion.setToYawQuaternion(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-      return createFrameQuaternion(referenceFrame, quaternion);
+      return createFrameTuple(referenceFrame, quaternion);
    }
 
    @Override
-   public double getEpsilon()
+   public F createEmptyFrameTuple(ReferenceFrame referenceFrame)
    {
-      return 1e-10;
+      return createFrameTuple(referenceFrame, new Quaternion());
    }
 
+   @Override
+   public final F createRandomFrameTuple(Random random, ReferenceFrame referenceFrame)
+   {
+      return createFrameTuple(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random));
+   }
+
+   @Override
    @Test
    public void testOverloading() throws Exception
    {
+      super.testOverloading();
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternionReadOnly.class, QuaternionReadOnly.class, true);
    }
 
@@ -77,51 +50,9 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
    {
       Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameQuaternion(random, frame), false, true,
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), false, true, methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandom2DFrameTuple(random, frame), false, true,
                                                                                      methodFilter);
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandom2DFrameQuaternion(random, frame), false, true,
-                                                                                     methodFilter);
-   }
-
-   @Test
-   public void testFrameTuple4DReadOnlyFeatures() throws Throwable
-   {
-      FrameTuple4DReadOnlyTest<FrameQuaternionReadOnly> frameTuple4DReadOnlyTest = new FrameTuple4DReadOnlyTest<FrameQuaternionReadOnly>()
-      {
-
-         @Override
-         public FrameQuaternionReadOnly createTuple(ReferenceFrame referenceFrame, double x, double y, double z, double s)
-         {
-            return createFrameQuaternion(referenceFrame, x, y, z, s);
-         }
-
-         @Override
-         public double getEpsilon()
-         {
-            return FrameQuaternionReadOnlyTest.this.getEpsilon();
-         }
-      };
-
-      for (Method testMethod : frameTuple4DReadOnlyTest.getClass().getMethods())
-      {
-         if (!testMethod.getName().startsWith("test"))
-            continue;
-         if (!Modifier.isPublic(testMethod.getModifiers()))
-            continue;
-         if (Modifier.isStatic(testMethod.getModifiers()))
-            continue;
-         //         if (testMethod.getName().equals("testGetGeometryObject"))
-         //            continue;
-
-         try
-         {
-            testMethod.invoke(frameTuple4DReadOnlyTest);
-         }
-         catch (InvocationTargetException e)
-         {
-            throw e.getCause();
-         }
-      }
    }
 
    @Override
@@ -141,10 +72,10 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
       double z = random.nextDouble();
       double s = random.nextDouble();
 
-      T tuple1 = createFrameQuaternion(frame1, x, y, z, s);
-      T tuple2 = createFrameQuaternion(frame1, x, y, z, s);
-      T tuple3 = createFrameQuaternion(frame2, x, y, z, s);
-      T tuple4 = createFrameQuaternion(frame2, x, y, z, s);
+      F tuple1 = createFrameTuple(frame1, x, y, z, s);
+      F tuple2 = createFrameTuple(frame1, x, y, z, s);
+      F tuple3 = createFrameTuple(frame2, x, y, z, s);
+      F tuple4 = createFrameTuple(frame2, x, y, z, s);
 
       assertTrue(tuple1.epsilonEquals(tuple2, epsilon));
       assertFalse(tuple1.epsilonEquals(tuple3, epsilon));
@@ -173,10 +104,10 @@ public abstract class FrameQuaternionReadOnlyTest<T extends FrameQuaternionReadO
       double z = random.nextDouble();
       double s = random.nextDouble();
 
-      T tuple1 = createFrameQuaternion(frame1, x, y, z, s);
-      T tuple2 = createFrameQuaternion(frame1, x, y, z, s);
-      T tuple3 = createFrameQuaternion(frame2, x, y, z, s);
-      T tuple4 = createFrameQuaternion(frame2, x, y, z, s);
+      F tuple1 = createFrameTuple(frame1, x, y, z, s);
+      F tuple2 = createFrameTuple(frame1, x, y, z, s);
+      F tuple3 = createFrameTuple(frame2, x, y, z, s);
+      F tuple4 = createFrameTuple(frame2, x, y, z, s);
 
       assertTrue(tuple1.equals(tuple2));
       assertFalse(tuple1.equals(tuple3));

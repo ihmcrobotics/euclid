@@ -1,10 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
@@ -26,15 +26,20 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * requiring {@code FrameVector4D}.
  * </p>
  */
-public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> implements FrameVector4DReadOnly, Vector4DBasics
+public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameVector4D>
 {
+   /** The reference frame is which this vector is currently expressed. */
+   private ReferenceFrame referenceFrame;
+   /** The vector holding the current components of this frame vector. */
+   private final Vector4D vector = new Vector4D();
+
    /**
     * Creates a new frame vector and initializes it components to zero and its reference frame to
     * {@link ReferenceFrame#getWorldFrame()}.
     */
    public FrameVector4D()
    {
-      this(ReferenceFrame.getWorldFrame());
+      setToZero(ReferenceFrame.getWorldFrame());
    }
 
    /**
@@ -45,7 +50,7 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     */
    public FrameVector4D(ReferenceFrame referenceFrame)
    {
-      super(referenceFrame, new Vector4D());
+      setToZero(referenceFrame);
    }
 
    /**
@@ -60,7 +65,7 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     */
    public FrameVector4D(ReferenceFrame referenceFrame, double x, double y, double z, double s)
    {
-      super(referenceFrame, new Vector4D(x, y, z, s));
+      setIncludingFrame(referenceFrame, x, y, z, s);
    }
 
    /**
@@ -72,7 +77,7 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     */
    public FrameVector4D(ReferenceFrame referenceFrame, double[] vectorArray)
    {
-      super(referenceFrame, new Vector4D(vectorArray));
+      setIncludingFrame(referenceFrame, vectorArray);
    }
 
    /**
@@ -84,7 +89,7 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     */
    public FrameVector4D(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
    {
-      super(referenceFrame, new Vector4D(tuple4DReadOnly));
+      setIncludingFrame(referenceFrame, tuple4DReadOnly);
    }
 
    /**
@@ -94,495 +99,122 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     */
    public FrameVector4D(FrameTuple4DReadOnly other)
    {
-      super(other.getReferenceFrame(), new Vector4D(other));
+      setIncludingFrame(other);
    }
 
    /** {@inheritDoc} */
+   @Override
+   public void set(FrameVector4D other)
+   {
+      FrameVector4DBasics.super.set(other);
+   }
+
+   /**
+    * Sets the reference frame of this vector without updating or modifying its x, y, z, and s
+    *
+    * @param referenceFrame the new reference frame for this frame vector.
+    */
+   @Override
+   public void setReferenceFrame(ReferenceFrame referenceFrame)
+   {
+      this.referenceFrame = referenceFrame;
+   }
+
+   /**
+    * Sets the x-component of this vector.
+    *
+    * @param x the x-component.
+    */
    @Override
    public void setX(double x)
    {
-      tuple.setX(x);
+      vector.setX(x);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets the y-component of this vector.
+    *
+    * @param y the y-component.
+    */
    @Override
    public void setY(double y)
    {
-      tuple.setY(y);
+      vector.setY(y);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets the z-component of this vector.
+    *
+    * @param z the z-component.
+    */
    @Override
    public void setZ(double z)
    {
-      tuple.setZ(z);
+      vector.setZ(z);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets the s-component of this vector.
+    *
+    * @param s the s-component.
+    */
    @Override
    public void setS(double s)
    {
-      tuple.setS(s);
+      vector.setS(s);
    }
 
    /**
-    * Sets this 4D frame vector to represent the given 3D frame vector
-    * <p>
-    * this.xyz = frameVector3D<br>
-    * this.s = 0.0
-    * </p>
-    *
-    * @param frameVector3D the 3D frame vector used to set this 4D frame vector. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameVector3D} is not expressed in the same
-    *            frame as {@code this}.
+    * Gets the reference frame in which this vector is currently expressed.
     */
-   public final void set(FrameVector3DReadOnly frameVector3D)
+   @Override
+   public ReferenceFrame getReferenceFrame()
    {
-      checkReferenceFrameMatch(frameVector3D);
-      tuple.set(frameVector3D);
+      return referenceFrame;
    }
 
    /**
-    * Sets this 4D frame vector to represent the given 3D frame point
-    * <p>
-    * this.xyz = framePoint3D<br>
-    * this.s = 1.0
-    * </p>
+    * Returns the value of the x-component of this vector.
     *
-    * @param framePoint3D the 3D frame point used to set this 4D frame vector. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code framePoint3D} is not expressed in the same
-    *            frame as {@code this}.
+    * @return the x-component's value.
     */
-   public final void set(FramePoint3DReadOnly framePoint3D)
+   @Override
+   public double getX()
    {
-      checkReferenceFrameMatch(framePoint3D);
-      tuple.set(framePoint3D);
+      return vector.getX();
    }
 
    /**
-    * Sets this frame vector to {@code frameTuple4DReadOnly} and then scales it
-    * {@link #scale(double)}.
+    * Returns the value of the y-component of this vector.
     *
-    * @param scalar the scale factor to use on this tuple.
-    * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    * @return the y-component's value.
     */
-   public final void setAndScale(double scalar, FrameTuple4DReadOnly frameTuple4DReadOnly)
+   @Override
+   public double getY()
    {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.setAndScale(scalar, frameTuple4DReadOnly);
+      return vector.getY();
    }
 
    /**
-    * Sets this frame vector to {@code frameTuple4DReadOnly} and then calls
-    * {@link #clipToMax(double)}.
+    * Returns the value of the z-component of this vector.
     *
-    * @param max the maximum value for each component of this tuple.
-    * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    * @return the z-component's value.
     */
-   public final void setAndClipToMax(double max, FrameTuple4DReadOnly frameTuple4DReadOnly)
+   @Override
+   public double getZ()
    {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.setAndClipToMax(max, frameTuple4DReadOnly);
+      return vector.getZ();
    }
 
    /**
-    * Sets this frame vector to {@code frameTuple4DReadOnly} and then calls
-    * {@link #clipToMin(double)}.
+    * Returns the value of the s-component of this vector.
     *
-    * @param min the minimum value for each component of this tuple.
-    * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    * @return the s-component's value.
     */
-   public final void setAndClipToMin(double min, FrameTuple4DReadOnly frameTuple4DReadOnly)
+   @Override
+   public double getS()
    {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.setAndClipToMin(min, frameTuple4DReadOnly);
-   }
-
-   /**
-    * Sets this vector to {@code frameTuple4DReadOnly} and then calls
-    * {@link #clipToMinMax(double, double)}.
-    *
-    * @param min the minimum value for each component of this tuple.
-    * @param max the maximum value for each component of this tuple.
-    * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
-    */
-   public final void setAndClipToMinMax(double min, double max, FrameTuple4DReadOnly frameTuple4DReadOnly)
-   {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.setAndClipToMinMax(min, max, frameTuple4DReadOnly);
-   }
-
-   /**
-    * Adds the given tuple to this vector.
-    * <p>
-    * this = this + frameTuple4DReadOnly
-    * </p>
-    *
-    * @param frameTuple4DReadOnly the tuple to add to this vector.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
-    */
-   public final void add(FrameTuple4DReadOnly frameTuple4DReadOnly)
-   {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.add(frameTuple4DReadOnly);
-   }
-
-   /**
-    * Sets this vector to the sum of the two given tuples.
-    * <p>
-    * this = frameTuple1 + tuple2
-    * </p>
-    *
-    * @param frameTuple1 the first tuple to sum. Not modified.
-    * @param tuple2 the second tuple to sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void add(FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      tuple.add(frameTuple1, tuple2);
-   }
-
-   /**
-    * Sets this vector to the sum of the two given tuples.
-    * <p>
-    * this = tuple1 + frameTuple2
-    * </p>
-    *
-    * @param tuple1 the first tuple to sum. Not modified.
-    * @param frameTuple2 the second tuple to sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void add(Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.add(tuple1, frameTuple2);
-   }
-
-   /**
-    * Sets this vector to the sum of the two given tuples.
-    * <p>
-    * this = frameTuple1 + frameTuple2
-    * </p>
-    *
-    * @param frameTuple1 the first tuple to sum. Not modified.
-    * @param frameTuple2 the second tuple to sum. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
-    */
-   public final void add(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.add(frameTuple1, frameTuple2);
-   }
-
-   /**
-    * Subtracts the given frame tuple from this frame vector.
-    * <p>
-    * this = this - frameTuple4DReadOnly
-    * </p>
-    *
-    * @param frameTuple4DReadOnly the frame tuple to subtract from this frame vector.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
-    */
-   public final void sub(FrameTuple4DReadOnly frameTuple4DReadOnly)
-   {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.sub(frameTuple4DReadOnly);
-   }
-
-   /**
-    * Sets this frame vector to the difference of the two given tuples.
-    * <p>
-    * this = frameTuple1 - tuple2
-    * </p>
-    *
-    * @param frameTuple1 the first frame tuple. Not modified.
-    * @param tuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void sub(FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      tuple.sub(frameTuple1, tuple2);
-   }
-
-   /**
-    * Sets this frame vector to the difference of the two given tuples.
-    * <p>
-    * this = tuple1 - frameTuple2
-    * </p>
-    *
-    * @param tuple1 the first tuple. Not modified.
-    * @param frameTuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void sub(Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.sub(tuple1, frameTuple2);
-   }
-
-   /**
-    * Sets this frame vector to the difference of the two given frame tuples.
-    * <p>
-    * this = frameTuple1 - frameTuple2
-    * </p>
-    *
-    * @param frameTuple1 the first frame tuple. Not modified.
-    * @param frameTuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
-    */
-   public final void sub(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.sub(frameTuple1, frameTuple2);
-   }
-
-   /**
-    * Scales this frame vector and adds {@code frameTuple4DReadOnly}.
-    * <p>
-    * this = scalar * this + frameTuple4DReadOnly
-    * </p>
-    *
-    * @param scalar the scale factor to use.
-    * @param frameTuple4DReadOnly the frame tuple to add to this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
-    */
-   public final void scaleAdd(double scalar, FrameTuple4DReadOnly frameTuple4DReadOnly)
-   {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.scaleAdd(scalar, frameTuple4DReadOnly);
-   }
-
-   /**
-    * Sets this frame vector to the sum of {@code frameTuple1} scaled and {@code tuple2}.
-    * <p>
-    * this = scalar * frameTuple1 + tuple2
-    * </p>
-    *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
-    * @param frameTuple1 the first frame tuple of the sum. Not modified.
-    * @param tuple2 the second tuple of the sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void scaleAdd(double scalar, FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      tuple.scaleAdd(scalar, frameTuple1, tuple2);
-   }
-
-   /**
-    * Sets this frame vector to the sum of {@code tuple1} scaled and {@code frameTuple2}.
-    * <p>
-    * this = scalar * tuple1 + frameTuple2
-    * </p>
-    *
-    * @param scalar the scale factor to use on {@code tuple1}.
-    * @param tuple1 the first tuple of the sum. Not modified.
-    * @param frameTuple2 the second frame tuple of the sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void scaleAdd(double scalar, Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.scaleAdd(scalar, tuple1, frameTuple2);
-   }
-
-   /**
-    * Sets this frame vector to the sum of {@code frameTuple1} scaled and {@code frameTuple2}.
-    * <p>
-    * this = scalar * frameTuple1 + frameTuple2
-    * </p>
-    *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
-    * @param frameTuple1 the first frame tuple of the sum. Not modified.
-    * @param frameTuple2 the second frame tuple of the sum. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
-    */
-   public final void scaleAdd(double scalar, FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.scaleAdd(scalar, frameTuple1, frameTuple2);
-   }
-
-   /**
-    * Scales this frame vector and subtracts {@code frameTuple4DReadOnly}.
-    * <p>
-    * this = scalar * this - frameTuple4DReadOnly
-    * </p>
-    *
-    * @param scalar the scale factor to use.
-    * @param frameTuple4DReadOnly the frame tuple to subtract to this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
-    */
-   public final void scaleSub(double scalar, FrameTuple4DReadOnly frameTuple4DReadOnly)
-   {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.scaleSub(scalar, frameTuple4DReadOnly);
-   }
-
-   /**
-    * Sets this frame vector to the difference of {@code frameTuple1} scaled and {@code tuple2}.
-    * <p>
-    * this = scalar * frameTuple1 - tuple2
-    * </p>
-    *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
-    * @param frameTuple1 the first frame tuple of the difference. Not modified.
-    * @param tuple2 the second tuple of the difference. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void scaleSub(double scalar, FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      tuple.scaleSub(scalar, frameTuple1, tuple2);
-   }
-
-   /**
-    * Sets this frame vector to the difference of {@code tuple1} scaled and {@code frameTuple2}.
-    * <p>
-    * this = scalar * tuple1 - frameTuple2
-    * </p>
-    *
-    * @param scalar the scale factor to use on {@code tuple1}.
-    * @param tuple1 the first tuple of the difference. Not modified.
-    * @param frameTuple2 the second frame tuple of the difference. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void scaleSub(double scalar, Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.scaleSub(scalar, tuple1, frameTuple2);
-   }
-
-   /**
-    * Sets this frame vector to the difference of {@code frameTuple1} scaled and
-    * {@code frameTuple2}.
-    * <p>
-    * this = scalar * frameTuple1 - frameTuple2
-    * </p>
-    *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
-    * @param frameTuple1 the first frame tuple of the difference. Not modified.
-    * @param frameTuple2 the second frame tuple of the difference. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
-    */
-   public final void scaleSub(double scalar, FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.scaleSub(scalar, frameTuple1, frameTuple2);
-   }
-
-   /**
-    * Performs a linear interpolation from this frame vector to {@code frameTuple4DReadOnly} given
-    * the percentage {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * this + alpha * frameTuple4DReadOnly
-    * </p>
-    *
-    * @param frameTuple4DReadOnly the frame tuple used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying this vector, while a value of 1 is equivalent to setting this vector to
-    *           {@code frameTuple4DReadOnly}.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
-    */
-   public final void interpolate(FrameTuple4DReadOnly frameTuple4DReadOnly, double alpha)
-   {
-      checkReferenceFrameMatch(frameTuple4DReadOnly);
-      tuple.interpolate(frameTuple4DReadOnly, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code frameTuple1} to {@code tuple2} given the
-    * percentage {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * frameTuple1 + alpha * tuple2
-    * </p>
-    *
-    * @param frameTuple1 the first tuple used in the interpolation. Not modified.
-    * @param tuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame vector to {@code frameTuple1}, while a value of 1 is equivalent to
-    *           setting this frame vector to {@code tuple2}.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void interpolate(FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2, double alpha)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      tuple.interpolate(frameTuple1, tuple2, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code tuple1} to {@code frameTuple2} given the
-    * percentage {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * tuple1 + alpha * frameTuple2
-    * </p>
-    *
-    * @param tuple1 the first tuple used in the interpolation. Not modified.
-    * @param frameTuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame vector to {@code tuple1}, while a value of 1 is equivalent to setting
-    *           this frame vector to {@code frameTuple2}.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public final void interpolate(Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2, double alpha)
-   {
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.interpolate(tuple1, frameTuple2, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code frameTuple1} to {@code frameTuple2} given the
-    * percentage {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * frameTuple1 + alpha * frameTuple2
-    * </p>
-    *
-    * @param frameTuple1 the first tuple used in the interpolation. Not modified.
-    * @param frameTuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame vector to {@code frameTuple1}, while a value of 1 is equivalent to
-    *           setting this frame vector to {@code frameTuple2}.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
-    */
-   public final void interpolate(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2, double alpha)
-   {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
-      tuple.interpolate(frameTuple1, frameTuple2, alpha);
+      return vector.getS();
    }
 
    /**
@@ -592,6 +224,96 @@ public class FrameVector4D extends FrameTuple4D<FrameVector4D, Vector4D> impleme
     */
    public final Vector4DReadOnly getVector()
    {
-      return tuple;
+      return vector;
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(FrameTuple4DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two vectors have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if the two vectors are exactly equal component-wise and are expressed in
+    *         the same reference frame, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      try
+      {
+         return equals((FrameTuple4DReadOnly) object);
+      }
+      catch (ClassCastException e)
+      {
+         return false;
+      }
+   }
+
+   /**
+    * Tests on a per component basis if this vector is equal to the given {@code other} to an
+    * {@code epsilon}.
+    * <p>
+    * If the two vectors have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the other vector to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two vectors are equal and are expressed in the same reference
+    *         frame, {@code false} otherwise.
+    */
+   @Override
+   public boolean epsilonEquals(FrameVector4D other, double epsilon)
+   {
+      return FrameVector4DBasics.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Tests if {@code this} and {@code other} represent the same vector 4D to an {@code epsilon}.
+    * <p>
+    * Two vectors are considered geometrically equal if they are at a distance of less than or equal
+    * to {@code epsilon}.
+    * </p>
+    * <p>
+    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
+    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
+    * </p>
+    *
+    * @param other the other vector 4D to compare against this. Not modified.
+    * @param epsilon the maximum distance that the two vectors can be spaced and still considered
+    *           equal.
+    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   @Override
+   public boolean geometricallyEquals(FrameVector4D other, double epsilon)
+   {
+      return FrameVector4DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Provides a {@code String} representation of this frame vector 4D as follows: (x, y, z,
+    * s)-worldFrame.
+    *
+    * @return the {@code String} representing this frame vector 4D.
+    */
+   @Override
+   public String toString()
+   {
+      return EuclidCoreIOTools.getTuple4DString(this) + "-" + referenceFrame;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this frame vector
+    * 4D.
+    *
+    * @return the hash code value for this frame vector 4D.
+    */
+   @Override
+   public int hashCode()
+   {
+      return vector.hashCode();
    }
 }

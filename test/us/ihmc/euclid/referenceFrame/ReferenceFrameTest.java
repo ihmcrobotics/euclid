@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -9,11 +8,18 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.Point3D;
 
 public class ReferenceFrameTest
 {
+   private static final int ITERATIONS = 1000;
+
+   private static final double EPSILON = 1.0e-12;
+
    private Random random;
    private ReferenceFrame root, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8;
    private ReferenceFrame root2, frame9, frame10, frame11;
@@ -409,4 +415,41 @@ public class ReferenceFrameTest
       }
    }
 
+   @Test
+   public void testTransformFromHereToDesiredFrame() throws Exception
+   {
+      Random random = new Random(9825);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D original = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D expected = new Point3D(original);
+         Point3D actual = new Point3D(expected);
+
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         ReferenceFrame desiredFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         RigidBodyTransform transform = initialFrame.getTransformToDesiredFrame(desiredFrame);
+         transform.transform(expected);
+         initialFrame.transformFromThisToDesiredFrame(desiredFrame, actual);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+
+         desiredFrame.transformFromThisToDesiredFrame(initialFrame, actual);
+         EuclidCoreTestTools.assertTuple3DEquals(original, actual, EPSILON);
+
+         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         try
+         {
+            initialFrame.transformFromThisToDesiredFrame(differentRootFrame, actual);
+            fail("Should have thrown a RuntimeException");
+         }
+         catch (RuntimeException e)
+         {
+            // good
+         }
+      }
+   }
 }

@@ -1,8 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -14,7 +15,8 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.junit.Test;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -24,34 +26,98 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBu
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple2D.Tuple2DBasicsTest;
+import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple3D.Tuple3DBasicsTest;
-import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends Tuple3DBasics & GeometryObject<T>> extends FrameTuple3DReadOnlyTest<F>
+public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> extends FrameTuple2DReadOnlyTest<F>
 {
-   public static final double EPSILON = 1e-10;
+   public abstract Tuple2DBasics createRandomFramelessTuple(Random random);
 
-   public final F createTuple(ReferenceFrame referenceFrame)
+   @Test
+   public void testSet() throws Exception
    {
-      return createTuple(referenceFrame, 0.0, 0.0, 0.0);
-   }
+      Random random = new Random(5472);
 
-   public final F createTuple(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple)
-   {
-      return createTuple(referenceFrame, tuple.getX(), tuple.getY(), tuple.getZ());
-   }
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests set(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
-   public final F createTuple(F frameTuple)
-   {
-      return createTuple(frameTuple.getReferenceFrame(), frameTuple);
-   }
+         Tuple2DBasics expected = createRandomFramelessTuple(random);
 
-   public final F createRandomTuple(Random random, ReferenceFrame referenceFrame)
-   {
-      return createTuple(referenceFrame, random.nextDouble(), random.nextDouble(), random.nextDouble());
+         int initialFrameIndex = random.nextInt(referenceFrames.length);
+         ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
+         F actual = createRandomFrameTuple(random, initialFrame);
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         actual.set(initialFrame, expected);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         assertEquals(initialFrame, actual.getReferenceFrame());
+
+         actual.set(createRandomFramelessTuple(random));
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         expected.set(actual);
+
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
+         differenceFrameIndex %= referenceFrames.length;
+         ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
+
+         try
+         {
+            actual.set(differentFrame, createRandomFramelessTuple(random));
+            fail("Should have thrown a ReferenceFrameMismatchException");
+         }
+         catch (ReferenceFrameMismatchException e)
+         {
+            // good
+            EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         }
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests set(ReferenceFrame referenceFrame, double x, double y)
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         Tuple2DBasics expected = createRandomFramelessTuple(random);
+
+         int initialFrameIndex = random.nextInt(referenceFrames.length);
+         ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
+         F actual = createRandomFrameTuple(random, initialFrame);
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         actual.set(initialFrame, expected.getX(), expected.getY());
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         assertEquals(initialFrame, actual.getReferenceFrame());
+
+         actual.set(createRandomFramelessTuple(random));
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         expected.set(actual);
+
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
+         differenceFrameIndex %= referenceFrames.length;
+         ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
+
+         try
+         {
+            actual.set(differentFrame, random.nextDouble(), random.nextDouble());
+            fail("Should have thrown a ReferenceFrameMismatchException");
+         }
+         catch (ReferenceFrameMismatchException e)
+         {
+            // good
+            EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
+         }
+      }
    }
 
    @Test
@@ -62,45 +128,43 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       ReferenceFrame initialFrame = ReferenceFrame.getWorldFrame();
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double x, double y, double z)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double x, double y)
          double x = random.nextDouble();
          double y = random.nextDouble();
-         double z = random.nextDouble();
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
-         Tuple3DBasics tuple = new Vector3D();
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
-         frameTuple.setIncludingFrame(newFrame, x, y, z);
-         tuple.set(x, y, z);
+         frameTuple.setIncludingFrame(newFrame, x, y);
+         tuple.set(x, y);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly, double z)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
          Tuple2DReadOnly input = EuclidCoreRandomTools.nextPoint2D(random);
-         double z = random.nextDouble();
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
-         Tuple3DBasics tuple = new Vector3D();
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
-         frameTuple.setIncludingFrame(newFrame, input, z);
-         tuple.set(input, z);
+         frameTuple.setIncludingFrame(newFrame, input);
+         tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          Tuple3DReadOnly input = EuclidCoreRandomTools.nextPoint3D(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
-         Tuple3DBasics tuple = new Vector3D();
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
          frameTuple.setIncludingFrame(newFrame, input);
          tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
@@ -109,9 +173,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
          for (int j = 0; j < input.length; j++)
             input[j] = random.nextDouble();
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
 
-         Tuple3DBasics tuple = new Vector3D();
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
          Exception expectedException = null;
 
@@ -130,7 +194,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -148,9 +212,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
          for (int j = 0; j < input.length; j++)
             input[j] = random.nextDouble();
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
 
-         Tuple3DBasics tuple = new Vector3D();
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
          Exception expectedException = null;
 
@@ -169,7 +233,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -184,9 +248,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
 
-         Tuple3DBasics tuple = new Vector3D();
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
          Exception expectedException = null;
 
@@ -205,7 +269,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -221,9 +285,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
          int startRow = random.nextInt(10);
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
 
-         Tuple3DBasics tuple = new Vector3D();
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
          Exception expectedException = null;
 
@@ -242,7 +306,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -259,9 +323,9 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
          int column = random.nextInt(10);
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         F frameTuple = createRandomTuple(random, initialFrame);
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
 
-         Tuple3DBasics tuple = new Vector3D();
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
          Exception expectedException = null;
 
@@ -280,7 +344,7 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
                throw new AssertionError("Should have thrown an exception.");
 
             assertEquals(newFrame, frameTuple.getReferenceFrame());
-            EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+            EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
          }
          catch (Exception e)
          {
@@ -290,51 +354,89 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
+
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      { // Tests setIncludingFrame(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)
+      { // Tests setIncludingFrame(FrameTuple2DReadOnly other)
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameTuple2DReadOnly input = EuclidFrameRandomTools.nextFramePoint2D(random, newFrame);
-         double z = random.nextDouble();
-         F frameTuple = createRandomTuple(random, initialFrame);
-         Tuple3DBasics tuple = new Vector3D();
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
-         frameTuple.setIncludingFrame(input, z);
-         tuple.set(input, z);
+         frameTuple.setIncludingFrame(input);
+         tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
       }
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests setIncludingFrame(FrameTuple3DReadOnly other)
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameTuple3DReadOnly input = EuclidFrameRandomTools.nextFramePoint3D(random, newFrame);
-         F frameTuple = createRandomTuple(random, initialFrame);
-         Tuple3DBasics tuple = new Vector3D();
+         F frameTuple = createRandomFrameTuple(random, initialFrame);
+         Tuple2DBasics tuple = new Vector2D();
          assertEquals(initialFrame, frameTuple.getReferenceFrame());
          frameTuple.setIncludingFrame(input);
          tuple.set(input);
          assertEquals(newFrame, frameTuple.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(tuple, frameTuple, EPSILON);
       }
    }
 
    @Test
-   public void testReferenceFrameChecks() throws Throwable
+   public void testSetToZero() throws Exception
    {
-      Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
-            && !m.getName().equals("geometricallyEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomTuple(random, frame), false, true, methodFilter);
+      Random random = new Random(234234L);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         Tuple2DBasics expectedGeometryObject = createRandomFramelessTuple(random);
+         expectedGeometryObject.setToZero();
+
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         F frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
+         frameGeometryObject.setToZero();
+         EuclidCoreTestTools.assertTuple2DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+
+         frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         ReferenceFrame newFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
+         frameGeometryObject.setToZero(newFrame);
+         assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+      }
    }
 
    @Test
-   public void testConsistencyWithTuple3D() throws Exception
+   public void testSetToNaN() throws Exception
    {
-      Random random = new Random(3422);
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple3DReadOnly) tuple);
-      GenericTypeBuilder framelessTypeBuilber = () -> createRandomTuple(random).getGeometryObject();
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
+      Random random = new Random(574);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         F frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(frameGeometryObject.containsNaN());
+         frameGeometryObject.setToNaN();
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(frameGeometryObject);
+
+         frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         ReferenceFrame newFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(frameGeometryObject.containsNaN());
+         frameGeometryObject.setToNaN(newFrame);
+         assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(frameGeometryObject);
+      }
    }
 
    @Override
@@ -342,92 +444,54 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3D<F, T>, T extends T
    {
       super.testOverloading();
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple3D.class, Tuple3DBasics.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple2DBasics.class, Tuple2DBasics.class, true, 1, framelessMethodsToIgnore);
    }
 
    @Test
-   public void testFrameGeometryObjectFeatures() throws Throwable
+   public void testReferenceFrameChecks() throws Throwable
    {
-      FrameGeometryObjectTest<F, T> frameGeometryObjectTest = new FrameGeometryObjectTest<F, T>()
-      {
-         @Override
-         public T createEmptyGeometryObject()
-         {
-            return createEmptyTuple().getGeometryObject();
-         }
-
-         @Override
-         public T createRandomGeometryObject(Random random)
-         {
-            return createRandomTuple(random).getGeometryObject();
-         }
-
-         @Override
-         public F createEmptyFrameGeometryObject(ReferenceFrame referenceFrame)
-         {
-            return createEmptyTuple(referenceFrame);
-         }
-
-         @Override
-         public F createFrameGeometryObject(ReferenceFrame referenceFrame, T geometryObject)
-         {
-            return createTuple(referenceFrame, geometryObject);
-         }
-
-         @Override
-         public F createRandomFrameGeometryObject(Random random, ReferenceFrame referenceFrame)
-         {
-            return createRandomTuple(random, referenceFrame);
-         }
-      };
-
-      for (Method testMethod : frameGeometryObjectTest.getClass().getMethods())
-      {
-         if (!testMethod.getName().startsWith("test"))
-            continue;
-         if (!Modifier.isPublic(testMethod.getModifiers()))
-            continue;
-         if (Modifier.isStatic(testMethod.getModifiers()))
-            continue;
-
-         try
-         {
-            testMethod.invoke(frameGeometryObjectTest);
-         }
-         catch (InvocationTargetException e)
-         {
-            throw e.getCause();
-         }
-      }
+      Random random = new Random(234);
+      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), false, true, methodFilter);
    }
 
    @Test
-   public void testTuple3DBasicsFeatures() throws Exception
+   public void testConsistencyWithTuple2D() throws Exception
    {
-      Tuple3DBasicsTest<F> tuple3dBasicsTest = new Tuple3DBasicsTest<F>()
+      Random random = new Random(3422);
+      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createFrameTuple(frame, (Tuple2DReadOnly) tuple);
+      GenericTypeBuilder framelessTypeBuilber = () -> createRandomFramelessTuple(random);
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
+      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
+   }
+
+   @Test
+   public void testTuple2DBasicsFeatures() throws Exception
+   {
+      Tuple2DBasicsTest<F> tuple3dBasicsTest = new Tuple2DBasicsTest<F>()
       {
          @Override
          public F createEmptyTuple()
          {
-            return FrameTuple3DTest.this.createEmptyTuple();
+            return FrameTuple2DBasicsTest.this.createEmptyFrameTuple();
          }
 
          @Override
-         public F createTuple(double x, double y, double z)
+         public F createTuple(double x, double y)
          {
-            return FrameTuple3DTest.this.createTuple(x, y, z);
+            return FrameTuple2DBasicsTest.this.createFrameTuple(x, y);
          }
 
          @Override
          public F createRandomTuple(Random random)
          {
-            return FrameTuple3DTest.this.createRandomTuple(random);
+            return FrameTuple2DBasicsTest.this.createRandomFrameTuple(random);
          }
 
          @Override
          public double getEpsilon()
          {
-            return FrameTuple3DTest.this.getEpsilon();
+            return EPSILON;
          }
       };
 
