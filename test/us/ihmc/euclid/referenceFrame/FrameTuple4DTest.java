@@ -59,7 +59,7 @@ public abstract class FrameTuple4DTest<F extends FrameTuple4DBasics> extends Fra
    }
 
    @Test
-   public void testSetToZero() throws Exception
+   public void testSet() throws Exception
    {
       Random random = new Random(234234L);
 
@@ -139,6 +139,36 @@ public abstract class FrameTuple4DTest<F extends FrameTuple4DBasics> extends Fra
             // good
             EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
          }
+      }
+   }
+
+   @Test
+   public void testSetToZero() throws Exception
+   {
+      Random random = new Random(234234L);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         Tuple4DBasics expectedGeometryObject = createRandomFramelessTuple(random);
+         expectedGeometryObject.setToZero();
+
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         F frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
+         frameGeometryObject.setToZero();
+         EuclidCoreTestTools.assertTuple4DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+
+         frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         ReferenceFrame newFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
+         frameGeometryObject.setToZero(newFrame);
+         assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple4DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
       }
    }
 

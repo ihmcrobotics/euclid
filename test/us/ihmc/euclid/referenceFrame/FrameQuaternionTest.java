@@ -18,6 +18,7 @@ import org.junit.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -35,6 +36,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.QuaternionBasicsTest;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
@@ -185,6 +187,63 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          assertTrue(frameQuaternion.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple4DEquals(randomFrameQuaternion, frameQuaternion, EPSILON);
          EuclidFrameTestTools.assertFrameTuple4DEquals(randomFrameQuaternion, frameQuaternion, EPSILON);
+      }
+   }
+
+   @Test
+   public void testSetToZero() throws Exception
+   {
+      Random random = new Random(234234L);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         Quaternion expectedGeometryObject = EuclidCoreRandomTools.nextQuaternion(random);
+         expectedGeometryObject.setToZero();
+
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         FrameQuaternion frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
+         frameGeometryObject.setToZero();
+         EuclidCoreTestTools.assertTuple4DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+
+         frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         ReferenceFrame newFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(expectedGeometryObject.epsilonEquals(frameGeometryObject, EPSILON));
+         frameGeometryObject.setToZero(newFrame);
+         assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple4DEquals(expectedGeometryObject, frameGeometryObject, EPSILON);
+      }
+   }
+
+   @Test
+   public void testSetToNaN() throws Exception
+   {
+      Random random = new Random(574);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+         FrameQuaternion frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(frameGeometryObject.containsNaN());
+         frameGeometryObject.setToNaN();
+         EuclidCoreTestTools.assertTuple4DContainsOnlyNaN(frameGeometryObject);
+
+         frameGeometryObject = createRandomFrameTuple(random, initialFrame);
+         ReferenceFrame newFrame = referenceFrames[random.nextInt(referenceFrames.length)];
+
+         assertEquals(initialFrame, frameGeometryObject.getReferenceFrame());
+         assertFalse(frameGeometryObject.containsNaN());
+         frameGeometryObject.setToNaN(newFrame);
+         assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
+         EuclidCoreTestTools.assertTuple4DContainsOnlyNaN(frameGeometryObject);
       }
    }
 
@@ -361,6 +420,51 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          catch (RuntimeException e)
          {
             // good
+         }
+      }
+   }
+
+   @Test
+   public void testSet() throws Exception
+   {
+      Random random = new Random(3452);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Tests set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+         QuaternionBasics expected = EuclidCoreRandomTools.nextQuaternion(random);
+
+         int initialFrameIndex = random.nextInt(referenceFrames.length);
+         ReferenceFrame initialFrame = referenceFrames[initialFrameIndex];
+         FrameQuaternion actual = createRandomFrameTuple(random, initialFrame);
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         actual.set(initialFrame, expected);
+
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
+         assertEquals(initialFrame, actual.getReferenceFrame());
+
+         actual.set(EuclidCoreRandomTools.nextQuaternion(random));
+
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+
+         expected.set(actual);
+
+         int differenceFrameIndex = initialFrameIndex + random.nextInt(referenceFrames.length - 1) + 1;
+         differenceFrameIndex %= referenceFrames.length;
+         ReferenceFrame differentFrame = referenceFrames[differenceFrameIndex];
+
+         try
+         {
+            actual.set(differentFrame, EuclidCoreRandomTools.nextQuaternion(random));
+            fail("Should have thrown a ReferenceFrameMismatchException");
+         }
+         catch (ReferenceFrameMismatchException e)
+         {
+            // good
+            EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
          }
       }
    }
