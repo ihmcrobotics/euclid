@@ -1106,6 +1106,35 @@ public class EuclidFrameTools
    }
 
    /**
+    * Tests if an intersection exists between a 2D ray and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin a point located on the ray. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param lineSegmentStart first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @return {@code true} if the ray and line segment intersect, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
+    *            the same reference frame.
+    */
+   public static boolean doRay2DAndLineSegment2DIntersect(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
+                                                          FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+   {
+      rayOrigin.checkReferenceFrameMatch(rayDirection);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentStart);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentEnd);
+      return EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+   }
+
+   /**
     * Computes the dot product between two vectors each defined by two points:
     * <ul>
     * <li>{@code vector1 = end1 - start1}
@@ -1523,7 +1552,8 @@ public class EuclidFrameTools
     * 
     * @return the number of intersections between the line and the cylinder. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
@@ -1583,13 +1613,14 @@ public class EuclidFrameTools
     * 
     * @return the number of intersections between the line and the cylinder. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, FramePoint3DReadOnly pointOnLine,
-                                                            FrameVector3DReadOnly lineDirection, FramePoint3D firstIntersectionToPack,
-                                                            FramePoint3D secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
+                                                            FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
+                                                            FramePoint3D firstIntersectionToPack, FramePoint3D secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, pointOnLine,
@@ -1931,7 +1962,8 @@ public class EuclidFrameTools
     * 
     * @return the number of intersections between the line segment and the cylinder. It is either
     *         equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
@@ -2105,6 +2137,88 @@ public class EuclidFrameTools
          secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
+   }
+
+   /**
+    * Computes the intersection between a 2D and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect,
+    * this method returns {@code null}.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns that
+    * same endpoint.
+    * </ul>
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param rayOrigin a point located on the ray. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @return the 2D point of intersection if it exist, {@code null} otherwise.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
+    *            the same reference frame.
+    */
+   public static FramePoint2D intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
+                                                                       FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+   {
+      rayOrigin.checkReferenceFrameMatch(rayDirection);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentStart);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentEnd);
+
+      Point2D intersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      if (intersection == null)
+         return null;
+      else
+         return new FramePoint2D(rayOrigin.getReferenceFrame(), intersection);
+   }
+
+   /**
+    * Computes the intersection between a 2D ray and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin a point located on the ray. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the ray intersects the line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
+    *            the same reference frame.
+    */
+   public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
+                                                                  FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+                                                                  FramePoint2D intersectionToPack)
+   {
+      rayOrigin.checkReferenceFrameMatch(rayDirection);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentStart);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentEnd);
+
+      boolean success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd,
+                                                                                     intersectionToPack);
+
+      if (intersectionToPack != null)
+         intersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), intersectionToPack);
+
+      return success;
    }
 
    /**

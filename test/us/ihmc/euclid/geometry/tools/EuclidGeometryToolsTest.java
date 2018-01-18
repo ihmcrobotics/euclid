@@ -1205,6 +1205,32 @@ public class EuclidGeometryToolsTest
          double expectedDistance = firstPoint.distance(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(), secondPoint.getY());
          assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+   }
+
+   @Test
+   public void testDistanceSquaredBetweenPoint2Ds() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D firstPoint = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D secondPoint = EuclidCoreRandomTools.nextPoint2D(random);
+
+         firstPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         secondPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         double expectedDistance = firstPoint.distanceSquared(secondPoint);
+         double actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(),
+                                                                                    secondPoint.getY());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1224,6 +1250,32 @@ public class EuclidGeometryToolsTest
          double expectedDistance = firstPoint.distance(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(),
                                                                              secondPoint.getY(), secondPoint.getZ());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+   }
+
+   @Test
+   public void testDistanceSquaredBetweenPoint3Ds() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D firstPoint = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D secondPoint = EuclidCoreRandomTools.nextPoint3D(random);
+
+         firstPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         secondPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         double expectedDistance = firstPoint.distanceSquared(secondPoint);
+         double actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(),
+                                                                                    secondPoint.getY(), secondPoint.getZ());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint);
          assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
@@ -1769,6 +1821,9 @@ public class EuclidGeometryToolsTest
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -1823,6 +1878,9 @@ public class EuclidGeometryToolsTest
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
+                                                                                               lineSegmentEnd);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1833,6 +1891,10 @@ public class EuclidGeometryToolsTest
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         expectedSquaredDistance = projection.distanceSquared(testPoint);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
+                                                                                               lineSegmentEnd);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
@@ -1842,6 +1904,9 @@ public class EuclidGeometryToolsTest
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart.getX(),
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
+                                                                                               lineSegmentEnd);
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
@@ -1982,6 +2047,9 @@ public class EuclidGeometryToolsTest
 
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1998,6 +2066,9 @@ public class EuclidGeometryToolsTest
 
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2018,6 +2089,9 @@ public class EuclidGeometryToolsTest
 
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2036,6 +2110,9 @@ public class EuclidGeometryToolsTest
 
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
    }
 
@@ -2248,7 +2325,7 @@ public class EuclidGeometryToolsTest
       Random random = new Random(32424L);
 
       for (int i = 0; i < ITERATIONS; i++)
-      {
+      { // Test dotProduct(Point2DReadOnly start1, Point2DReadOnly end1, Point2DReadOnly start2, Point2DReadOnly end2)
          Point2D start1 = EuclidCoreRandomTools.nextPoint2D(random);
          start1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
          Point2D end1 = EuclidCoreRandomTools.nextPoint2D(random);
@@ -2261,6 +2338,27 @@ public class EuclidGeometryToolsTest
          Vector2D vector1 = new Vector2D();
          vector1.sub(end1, start1);
          Vector2D vector2 = new Vector2D();
+         vector2.sub(end2, start2);
+
+         double expectedDotProduct = vector1.dot(vector2);
+         double actualDotProduct = EuclidGeometryTools.dotProduct(start1, end1, start2, end2);
+         assertEquals(expectedDotProduct, actualDotProduct, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test dotProduct(Point3DReadOnly start1, Point3DReadOnly end1, Point3DReadOnly start2, Point3DReadOnly end2)
+         Point3D start1 = EuclidCoreRandomTools.nextPoint3D(random);
+         start1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point3D end1 = EuclidCoreRandomTools.nextPoint3D(random);
+         end1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point3D start2 = EuclidCoreRandomTools.nextPoint3D(random);
+         start2.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point3D end2 = EuclidCoreRandomTools.nextPoint3D(random);
+         end2.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Vector3D vector1 = new Vector3D();
+         vector1.sub(end1, start1);
+         Vector3D vector2 = new Vector3D();
          vector2.sub(end2, start2);
 
          double expectedDotProduct = vector1.dot(vector2);
@@ -2796,7 +2894,7 @@ public class EuclidGeometryToolsTest
    @Test
    public void testIntersectionBetweenLine2DAndLineSegment2D() throws Exception
    {
-      double epsilon = EPSILON;
+      double epsilon = 10.0 * EPSILON;
       Random random = new Random(23423L);
       Point2D actualIntersection = new Point2D();
       boolean success;
@@ -2862,11 +2960,15 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
 
          lineLineIntersection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -1.0, 0.0));
@@ -2874,11 +2976,15 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
 
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
       }
 
@@ -2949,6 +3055,8 @@ public class EuclidGeometryToolsTest
          success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                  actualIntersection);
          assertFalse(success);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(actualIntersection);
+         actualIntersection.setToZero();
          assertNull(EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
       }
 
@@ -5299,6 +5407,564 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testDoRay2DAndLineSegment2DIntersect() throws Exception
+   {
+      Random random = new Random(116L);
+
+      // Trivial test by positioning the intersection on the ray
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D rayOrigin = EuclidCoreRandomTools.nextPoint2D(random);
+         rayOrigin.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Point2D pointOnRay = new Point2D();
+         pointOnRay.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), rayDirection, rayOrigin);
+
+         Vector2D lineSegmentDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alphaStart, alphaEnd;
+
+         // Expecting intersection
+         alphaStart = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         alphaEnd = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
+         lineSegmentStart.scaleAdd(alphaStart, lineSegmentDirection, pointOnRay);
+         lineSegmentEnd.scaleAdd(alphaEnd, lineSegmentDirection, pointOnRay);
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+
+         // Not expecting intersection
+         alphaStart = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         alphaEnd = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         lineSegmentStart.scaleAdd(alphaStart, lineSegmentDirection, pointOnRay);
+         lineSegmentEnd.scaleAdd(alphaEnd, lineSegmentDirection, pointOnRay);
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+      }
+
+      // Trivial test by positioning the intersection on the line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random);
+
+         Point2D intersection = new Point2D();
+         intersection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D rayOrigin = new Point2D();
+
+         // Expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), rayDirection, intersection);
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+
+         // Not expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), rayDirection, intersection);
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+      }
+
+      // Test intersection at the ray origin
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D rayOrigin = EuclidCoreRandomTools.nextPoint2D(random);
+         rayOrigin.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Vector2D lineSegmentDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         // Expecting intersection
+         lineSegmentStart.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineSegmentDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), lineSegmentDirection, rayOrigin);
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+      }
+
+      // Test intersection at an endpoint of the line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random);
+
+         Point2D intersection = new Point2D(lineSegmentStart);
+
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D rayOrigin = new Point2D();
+
+         // Expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), rayDirection, intersection);
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+
+         // Not expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0), rayDirection, intersection);
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+      }
+
+      // Test with parallel/collinear ray and line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D rayOrigin = EuclidCoreRandomTools.nextPoint2D(random);
+         rayOrigin.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+         // Make the second line segment collinear to the ray
+         lineSegmentStart.scaleAdd(alpha1, rayDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(alpha2, rayDirection, rayOrigin);
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+
+         if (0.0 < alpha1 || 0.0 < alpha2 || alpha1 * alpha2 < 0.0)
+         {
+            assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+            assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+         }
+         else
+         {
+            assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+            assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the ray.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(rayDirection, rayOrigin);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart.scaleAdd(distance, orthogonal, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(distance, orthogonal, lineSegmentEnd);
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+      }
+
+      // Test with vertical parallel/collinear ray and line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double x = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         Point2D rayOrigin = new Point2D(x, EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = new Vector2D(x, EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+         // Make the second line segment collinear to the ray
+         lineSegmentStart.scaleAdd(alpha1, rayDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(alpha2, rayDirection, rayOrigin);
+
+         if (0.0 < alpha1 || 0.0 < alpha2 || alpha1 * alpha2 < 0.0)
+         {
+            assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+            assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+         }
+         else
+         {
+            assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+            assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the ray.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(rayDirection, rayOrigin);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart.scaleAdd(distance, orthogonal, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(distance, orthogonal, lineSegmentEnd);
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+      }
+
+      // Test with horizontal parallel/collinear line segments
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double y = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         Point2D rayOrigin = new Point2D(EuclidCoreRandomTools.nextDouble(random, 10.0), y);
+         Vector2D rayDirection = new Vector2D(EuclidCoreRandomTools.nextDouble(random, 10.0), y);
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+         // Make the second line segment collinear to the ray
+         lineSegmentStart.scaleAdd(alpha1, rayDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(alpha2, rayDirection, rayOrigin);
+
+         if (0.0 < alpha1 || 0.0 < alpha2 || alpha1 * alpha2 < 0.0)
+         {
+            assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+            assertTrue("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+         }
+         else
+         {
+            assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+            assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the ray.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(rayDirection, rayOrigin);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart.scaleAdd(distance, orthogonal, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(distance, orthogonal, lineSegmentEnd);
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd));
+         assertFalse("Iteration: " + i, EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart));
+      }
+   }
+
+   @Test
+   public void testIntersectionBetweenRay2DAndLineSegment2D() throws Exception
+   {
+      Random random = new Random(3242L);
+
+      // Trivial test by positioning the intersection on the ray
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D rayOrigin = EuclidCoreRandomTools.nextPoint2D(random);
+         rayOrigin.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Point2D expectedIntersection = new Point2D();
+         expectedIntersection.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), rayDirection, rayOrigin);
+
+         Vector2D lineSegmentDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alphaStart, alphaEnd;
+
+         // Expecting intersection
+         alphaStart = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         alphaEnd = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
+         lineSegmentStart.scaleAdd(alphaStart, lineSegmentDirection, expectedIntersection);
+         lineSegmentEnd.scaleAdd(alphaEnd, lineSegmentDirection, expectedIntersection);
+         assertAllCombinationsOfTwoLineSegmentsIntersection(expectedIntersection, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+
+         // Not expecting intersection
+         alphaStart = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         alphaEnd = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         lineSegmentStart.scaleAdd(alphaStart, lineSegmentDirection, expectedIntersection);
+         lineSegmentEnd.scaleAdd(alphaEnd, lineSegmentDirection, expectedIntersection);
+         assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      }
+
+      // Trivial test by positioning the intersection on the line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random);
+
+         Point2D expectedIntersection = new Point2D();
+         expectedIntersection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D rayOrigin = new Point2D();
+
+         // Expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), rayDirection, expectedIntersection);
+         assertAllCombinationsOfTwoLineSegmentsIntersection(expectedIntersection, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+
+         // Not expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), rayDirection, expectedIntersection);
+         assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      }
+
+      // Test intersection at the ray origin
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D rayOrigin = EuclidCoreRandomTools.nextPoint2D(random);
+         rayOrigin.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Vector2D lineSegmentDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         // Expecting intersection
+         lineSegmentStart.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineSegmentDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), lineSegmentDirection, rayOrigin);
+         assertAllCombinationsOfTwoLineSegmentsIntersection(rayOrigin, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      }
+
+      // Test intersection at an endpoint of the line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random);
+
+         Point2D expectedIntersection = new Point2D(lineSegmentStart);
+
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D rayOrigin = new Point2D();
+
+         // Expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), rayDirection, expectedIntersection);
+         assertAllCombinationsOfTwoLineSegmentsIntersection(expectedIntersection, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+
+         // Not expecting intersection
+         rayOrigin.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0), rayDirection, expectedIntersection);
+         assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      }
+
+      // Test with parallel/collinear ray and line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D rayOrigin = EuclidCoreRandomTools.nextPoint2D(random);
+         rayOrigin.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2D(random);
+         rayDirection.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+         // Make the second line segment collinear to the ray
+         lineSegmentStart.scaleAdd(alpha1, rayDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(alpha2, rayDirection, rayOrigin);
+         Vector2D lineSegmentDirection = new Vector2D();
+         lineSegmentDirection.sub(lineSegmentEnd, lineSegmentStart);
+
+         if (0.0 < alpha1 || 0.0 < alpha2 || alpha1 * alpha2 < 0.0)
+         {
+            assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(true, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+         }
+         else
+         {
+            assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the ray.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(rayDirection, rayOrigin);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart.scaleAdd(distance, orthogonal, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(distance, orthogonal, lineSegmentEnd);
+         assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      }
+
+      // Test with vertical parallel/collinear ray and line segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double x = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         Point2D rayOrigin = new Point2D(x, EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Vector2D rayDirection = new Vector2D(x, EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+         // Make the second line segment collinear to the ray
+         lineSegmentStart.scaleAdd(alpha1, rayDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(alpha2, rayDirection, rayOrigin);
+
+         if (0.0 < alpha1 || 0.0 < alpha2 || alpha1 * alpha2 < 0.0)
+         {
+            assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(true, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+         }
+         else
+         {
+            assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the ray.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(rayDirection, rayOrigin);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart.scaleAdd(distance, orthogonal, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(distance, orthogonal, lineSegmentEnd);
+         assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      }
+
+      // Test with horizontal parallel/collinear line segments
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double y = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         Point2D rayOrigin = new Point2D(EuclidCoreRandomTools.nextDouble(random, 10.0), y);
+         Vector2D rayDirection = new Vector2D(EuclidCoreRandomTools.nextDouble(random, 10.0), y);
+
+         Point2D lineSegmentStart = new Point2D();
+         Point2D lineSegmentEnd = new Point2D();
+
+         double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+         double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+         // Make the second line segment collinear to the ray
+         lineSegmentStart.scaleAdd(alpha1, rayDirection, rayOrigin);
+         lineSegmentEnd.scaleAdd(alpha2, rayDirection, rayOrigin);
+
+         if (0.0 < alpha1 || 0.0 < alpha2 || alpha1 * alpha2 < 0.0)
+         {
+            assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(true, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+         }
+         else
+         {
+            assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+         }
+
+         // Shift the second line segment such that it becomes only parallel to the ray.
+         Vector2D orthogonal = new Vector2D();
+         orthogonal.sub(rayDirection, rayOrigin);
+         orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+         orthogonal.normalize();
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+         lineSegmentStart.scaleAdd(distance, orthogonal, lineSegmentStart);
+         lineSegmentEnd.scaleAdd(distance, orthogonal, lineSegmentEnd);
+         assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(false, rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      }
+
+      // Test with various overlapping with collinear line segments
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D rayOrigin = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         Vector2D rayDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
+
+         // Making four points ordered on the line
+         Point2D front1 = new Point2D();
+         Point2D front2 = new Point2D();
+         Point2D back1 = new Point2D();
+         Point2D back2 = new Point2D();
+
+         front1.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), rayDirection, rayOrigin);
+         front2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), rayDirection, rayOrigin);
+         back1.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), rayDirection, rayOrigin);
+         back2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), rayDirection, rayOrigin);
+
+         boolean success;
+         Point2D expectedIntersection = new Point2D();
+         Point2D actualIntersection = new Point2D();
+
+         // Line segment fully in front of ray
+         expectedIntersection.set(front1);
+         success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, front1, front2, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(front2);
+         success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, front2, front1, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         // Line segment partially in front of ray
+         expectedIntersection.set(front1);
+         success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, back1, front1, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+
+         expectedIntersection.set(front2);
+         success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, front2, back1, actualIntersection);
+         assertTrue(success);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, EPSILON);
+      }
+   }
+
+   private void assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(boolean intersectionExist, Point2D rayOrigin,
+                                                                                             Vector2D rayDirection, Point2D lineSegmentStart,
+                                                                                             Point2D lineSegmentEnd)
+   {
+      boolean success;
+      Point2D intersectionThatMayContainOnlyNaNs = new Point2D();
+      Point2D actualIntersection;
+
+      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd,
+                                                                             intersectionThatMayContainOnlyNaNs);
+      assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
+      actualIntersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
+      assertTrue(actualIntersection != null == intersectionExist);
+
+      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart,
+                                                                             intersectionThatMayContainOnlyNaNs);
+      assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
+      actualIntersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentEnd, lineSegmentStart);
+      assertTrue(actualIntersection != null == intersectionExist);
+   }
+
+   private void assertAllCombinationsOfTwoLineSegmentsIntersection(Point2D expectedIntersection, Point2D rayOrigin, Vector2D rayDirection,
+                                                                   Point2D lineSegmentStart, Point2D lineSegmentEnd)
+   {
+      double epsilon = EuclidGeometryTools.ONE_TRILLIONTH;
+
+      Vector2D direction1 = new Vector2D();
+      direction1.sub(rayDirection, rayOrigin);
+      Vector2D direction2 = new Vector2D();
+      Point2D lss2 = lineSegmentStart;
+      Point2D lse2 = lineSegmentEnd;
+      direction2.sub(lse2, lss2);
+
+      if (Math.abs(rayDirection.dot(direction2)) > 1.0 - 0.0001)
+         epsilon = 1.0e-10;
+
+      boolean success;
+      Point2D actualIntersection = new Point2D();
+
+      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lss2, lse2, actualIntersection);
+      assertTrue(success);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lse2, lss2, actualIntersection);
+      assertTrue(success);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+
+      actualIntersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lss2, lse2);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+      actualIntersection = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lse2, lss2);
+      EuclidCoreTestTools.assertTuple2DEquals(expectedIntersection, actualIntersection, epsilon);
+   }
+
+   @Test
    public void testIntersectionBetweenRay3DAndBoundingBox3D() throws Exception
    {
       Random random = new Random(4353435L);
@@ -6475,44 +7141,85 @@ public class EuclidGeometryToolsTest
                                                                                 Point2D lineSegmentStart2, Point2D lineSegmentEnd2)
    {
       boolean success;
-      Point2D actualIntersection = new Point2D();
+      Point2D intersectionThatMayContainOnlyNaNs = new Point2D();
+      Point2D actualIntersection;
 
       Point2D lss1 = lineSegmentStart1;
       Point2D lse1 = lineSegmentEnd1;
       Point2D lss2 = lineSegmentStart2;
       Point2D lse = lineSegmentEnd2;
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lss2, lse);
       assertTrue(actualIntersection != null == intersectionExist);
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss1, lse1, lse, lss2);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lss2, lse);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse1, lss1, lse, lss2);
       assertTrue(actualIntersection != null == intersectionExist);
 
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lss1, lse1);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lss2, lse, lse1, lss1);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lss1, lse1);
       assertTrue(actualIntersection != null == intersectionExist);
-      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1, new Point2D());
+      success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1, intersectionThatMayContainOnlyNaNs);
       assertTrue(success == intersectionExist);
+      if (!intersectionExist)
+      {
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(intersectionThatMayContainOnlyNaNs);
+         intersectionThatMayContainOnlyNaNs.setToZero();
+      }
       actualIntersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lse, lss2, lse1, lss1);
       assertTrue(actualIntersection != null == intersectionExist);
    }
