@@ -551,18 +551,4 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
       checkReferenceFrameMatch(frameTuple1);
       Tuple3DBasics.super.interpolate(frameTuple1, tuple2, alpha);
    }
-
-   /**
-    * Packs the coordinates of this frame tuple 3D into the given {@code tuple3DToPack}.
-    * 
-    * @param tuple2DToPack the tuple 3D in which the coordinates are stored. Modified.
-    * @deprecated this method will be removed in a future release, use
-    *             {@link Tuple3DBasics#set(Tuple3DReadOnly)} on the given {@code tuple3DToPack}
-    *             instead.
-    */
-   @Deprecated
-   default void get(Tuple3DBasics tuple3DToPack)
-   {
-      tuple3DToPack.set(this);
-   }
 }
