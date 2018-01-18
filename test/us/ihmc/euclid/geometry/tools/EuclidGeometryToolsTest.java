@@ -1205,6 +1205,32 @@ public class EuclidGeometryToolsTest
          double expectedDistance = firstPoint.distance(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(), secondPoint.getY());
          assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+   }
+
+   @Test
+   public void testDistanceSquaredBetweenPoint2Ds() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D firstPoint = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D secondPoint = EuclidCoreRandomTools.nextPoint2D(random);
+
+         firstPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         secondPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         double expectedDistance = firstPoint.distanceSquared(secondPoint);
+         double actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(),
+                                                                                    secondPoint.getY());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1224,6 +1250,32 @@ public class EuclidGeometryToolsTest
          double expectedDistance = firstPoint.distance(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(),
                                                                              secondPoint.getY(), secondPoint.getZ());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+   }
+
+   @Test
+   public void testDistanceSquaredBetweenPoint3Ds() throws Exception
+   {
+      Random random = new Random(23423L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D firstPoint = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D secondPoint = EuclidCoreRandomTools.nextPoint3D(random);
+
+         firstPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         secondPoint.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         double expectedDistance = firstPoint.distanceSquared(secondPoint);
+         double actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(),
+                                                                                    secondPoint.getY(), secondPoint.getZ());
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+
+         actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint);
          assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
@@ -1769,6 +1821,9 @@ public class EuclidGeometryToolsTest
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -1823,6 +1878,9 @@ public class EuclidGeometryToolsTest
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
+                                                                                               lineSegmentEnd);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1833,6 +1891,10 @@ public class EuclidGeometryToolsTest
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         expectedSquaredDistance = projection.distanceSquared(testPoint);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
+                                                                                               lineSegmentEnd);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
@@ -1842,6 +1904,9 @@ public class EuclidGeometryToolsTest
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart.getX(),
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
+                                                                                               lineSegmentEnd);
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
@@ -1982,6 +2047,9 @@ public class EuclidGeometryToolsTest
 
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1998,6 +2066,9 @@ public class EuclidGeometryToolsTest
 
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2018,6 +2089,9 @@ public class EuclidGeometryToolsTest
 
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2036,6 +2110,9 @@ public class EuclidGeometryToolsTest
 
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
+
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
       }
    }
 
@@ -2248,7 +2325,7 @@ public class EuclidGeometryToolsTest
       Random random = new Random(32424L);
 
       for (int i = 0; i < ITERATIONS; i++)
-      {
+      { // Test dotProduct(Point2DReadOnly start1, Point2DReadOnly end1, Point2DReadOnly start2, Point2DReadOnly end2)
          Point2D start1 = EuclidCoreRandomTools.nextPoint2D(random);
          start1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
          Point2D end1 = EuclidCoreRandomTools.nextPoint2D(random);
@@ -2261,6 +2338,27 @@ public class EuclidGeometryToolsTest
          Vector2D vector1 = new Vector2D();
          vector1.sub(end1, start1);
          Vector2D vector2 = new Vector2D();
+         vector2.sub(end2, start2);
+
+         double expectedDotProduct = vector1.dot(vector2);
+         double actualDotProduct = EuclidGeometryTools.dotProduct(start1, end1, start2, end2);
+         assertEquals(expectedDotProduct, actualDotProduct, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test dotProduct(Point3DReadOnly start1, Point3DReadOnly end1, Point3DReadOnly start2, Point3DReadOnly end2)
+         Point3D start1 = EuclidCoreRandomTools.nextPoint3D(random);
+         start1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point3D end1 = EuclidCoreRandomTools.nextPoint3D(random);
+         end1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point3D start2 = EuclidCoreRandomTools.nextPoint3D(random);
+         start2.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point3D end2 = EuclidCoreRandomTools.nextPoint3D(random);
+         end2.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Vector3D vector1 = new Vector3D();
+         vector1.sub(end1, start1);
+         Vector3D vector2 = new Vector3D();
          vector2.sub(end2, start2);
 
          double expectedDotProduct = vector1.dot(vector2);
