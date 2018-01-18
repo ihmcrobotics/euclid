@@ -753,7 +753,7 @@ public class Line2DTest
    @Test
    public void testIntersectionWithLine2d()
    {
-      double epsilon = EuclidGeometryTools.ONE_TRILLIONTH;
+      double epsilon = 1.0e-11;
       Random random = new Random(23423L);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1441,17 +1441,18 @@ public class Line2DTest
 
       assertEquals(null, line1.intersectionWith(line11));
 
-      assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line5));
-      assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line6));
-      assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line2));
-      assertEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line10));
+      double epsilon = 1.0e-12;
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line5), epsilon);
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line6), epsilon);
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line2) , epsilon);
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(10.0, 0.0), line1.intersectionWith(line10), epsilon);
 
-      assertEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line3));
-      assertEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line4));
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line3), epsilon);
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(0.0, 0.0), line1.intersectionWith(line4), epsilon);
 
-      assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line7));
-      assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line8));
-      assertEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line9));
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line7), epsilon);
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line8), epsilon);
+      EuclidCoreTestTools.assertTuple2DEquals(new Point2D(-10.0, 0.0), line1.intersectionWith(line9), epsilon);
    }
 
    @Test
