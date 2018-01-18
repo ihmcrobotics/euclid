@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
 /**
@@ -243,24 +242,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     */
    public void changeFrame(ReferenceFrame desiredFrame)
    {
-      // Check for the trivial case: the geometry is already expressed in the desired frame.
-      if (desiredFrame == referenceFrame)
-         return;
-
-      referenceFrame.verifySameRoots(desiredFrame);
-
-      RigidBodyTransform referenceFrameTransformToRoot, desiredFrameTransformToRoot;
-
-      if ((referenceFrameTransformToRoot = referenceFrame.getTransformToRoot()) != null)
-      {
-         geometryObject.applyTransform(referenceFrameTransformToRoot);
-      }
-
-      if ((desiredFrameTransformToRoot = desiredFrame.getTransformToRoot()) != null)
-      {
-         geometryObject.applyInverseTransform(desiredFrameTransformToRoot);
-      }
-
+      referenceFrame.transformFromThisToDesiredFrame(desiredFrame, this);
       referenceFrame = desiredFrame;
    }
 

@@ -1,11 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
-import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -37,7 +32,6 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default double distancePrecise(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
-
       return QuaternionReadOnly.super.distancePrecise(other);
    }
 
@@ -50,8 +44,26 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code rotationVectorToPack} do not match.
     */
-   default void get(FrameVector3D rotationVectorToPack)
+   default void get(FixedFrameVector3DBasics rotationVectorToPack)
+   {
+      checkReferenceFrameMatch(rotationVectorToPack);
+      QuaternionReadOnly.super.get(rotationVectorToPack);
+   }
+
+   /**
+    * Computes and packs the orientation described by this quaternion as a rotation vector.
+    * <p>
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
+    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
+    * of the same axis-angle.
+    * </p>
+    *
+    * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
+    */
+   default void get(FrameVector3DBasics rotationVectorToPack)
    {
       rotationVectorToPack.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.get(rotationVectorToPack);
@@ -65,8 +77,25 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * </p>
     *
     * @param eulerAnglesToPack the vector in which the Euler angles are stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code eulerAnglesToPack} do not match.
     */
-   default void getEuler(FrameVector3D eulerAnglesToPack)
+   default void getEuler(FixedFrameVector3DBasics eulerAnglesToPack)
+   {
+      checkReferenceFrameMatch(eulerAnglesToPack);
+      QuaternionReadOnly.super.getEuler(eulerAnglesToPack);
+   }
+
+   /**
+    * Computes and packs the orientation described by this quaternion as the Euler angles.
+    * <p>
+    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
+    * sometimes undefined.
+    * </p>
+    *
+    * @param eulerAnglesToPack the vector in which the Euler angles are stored. Modified.
+    */
+   default void getEuler(FrameVector3DBasics eulerAnglesToPack)
    {
       eulerAnglesToPack.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.getEuler(eulerAnglesToPack);
@@ -82,7 +111,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void transform(FrameTuple3D<?, ?> tupleToTransform)
+   default void transform(FixedFrameTuple3DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.transform(tupleToTransform);
@@ -115,10 +144,47 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param tupleOriginal the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
     */
-   default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void transform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this quaternion and stores the result in
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    */
+   default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this quaternion and stores the result in
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    */
+   default void transform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
       QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
    }
 
@@ -134,7 +200,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -153,7 +219,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void transform(FrameTuple2D<?, ?> tupleToTransform)
+   default void transform(FixedFrameTuple2DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.transform(tupleToTransform);
@@ -190,10 +256,51 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
     *            plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
     */
-   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this quaternion and stores the result in
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
+    *            plane.
+    */
+   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this quaternion and stores the result in
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
+    *            plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, {@code tupleTransformed} do not match.
+    */
+   default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
       QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
    }
 
@@ -211,7 +318,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -232,7 +339,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void transform(FrameTuple2D<?, ?> tupleToTransform, boolean checkIfTransformInXYPlane)
+   default void transform(FixedFrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.transform(tupleToTransform, checkIfTransformInXYPlane);
@@ -273,12 +380,12 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *           represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this quaternion
     *            does not represent a transformation in the XY plane.
-    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
     */
-   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
-      tupleTransformed.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(tupleTransformed);
       QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
@@ -298,7 +405,52 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
+   {
+      tupleTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this quaternion and stores the result in
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this quaternion
+    *           represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this quaternion
+    *            does not represent a transformation in the XY plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, {@code tupleTransformed} do not match.
+    */
+   default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this quaternion and stores the result in
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this quaternion
+    *           represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this quaternion
+    *            does not represent a transformation in the XY plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleOriginal} do not match.
+    */
+   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -315,7 +467,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code quaternionToTransform} do not match.
     */
-   default void transform(FrameQuaternion quaternionToTransform)
+   default void transform(FixedFrameQuaternionBasics quaternionToTransform)
    {
       checkReferenceFrameMatch(quaternionToTransform);
       QuaternionReadOnly.super.transform(quaternionToTransform, quaternionToTransform);
@@ -348,11 +500,48 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param quaternionOriginal the quaternion to transform. Not modified.
     * @param quaternionTransformed the quaternion in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code quaternionTransformed} do not match.
     */
-   default void transform(QuaternionReadOnly tupleOriginal, FrameQuaternion tupleTransformed)
+   default void transform(QuaternionReadOnly quaternionOriginal, FixedFrameQuaternionBasics quaternionTransformed)
    {
-      tupleTransformed.setToZero(getReferenceFrame());
-      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
+      checkReferenceFrameMatch(quaternionTransformed);
+      QuaternionReadOnly.super.transform(quaternionOriginal, quaternionTransformed);
+   }
+
+   /**
+    * Transforms the given quaternion {@code quaternionOriginal} and stores the result into
+    * {@code quaternionTransformed}.
+    * <p>
+    * quaternionTransformed = this * quaternionOriginal <br>
+    * </p>
+    *
+    * @param quaternionOriginal the quaternion to transform. Not modified.
+    * @param quaternionTransformed the quaternion in which the result is stored. Modified.
+    */
+   default void transform(QuaternionReadOnly quaternionOriginal, FrameQuaternionBasics quaternionTransformed)
+   {
+      quaternionTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(quaternionOriginal, quaternionTransformed);
+   }
+
+   /**
+    * Transforms the given quaternion {@code quaternionOriginal} and stores the result into
+    * {@code quaternionTransformed}.
+    * <p>
+    * quaternionTransformed = this * quaternionOriginal <br>
+    * </p>
+    *
+    * @param quaternionOriginal the quaternion to transform. Not modified.
+    * @param quaternionTransformed the quaternion in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code quaternionOriginal}, and {@code quaternionTransformed} do not match.
+    */
+   default void transform(FrameQuaternionReadOnly quaternionOriginal, FixedFrameQuaternionBasics quaternionTransformed)
+   {
+      checkReferenceFrameMatch(quaternionOriginal);
+      checkReferenceFrameMatch(quaternionTransformed);
+      QuaternionReadOnly.super.transform(quaternionOriginal, quaternionTransformed);
    }
 
    /**
@@ -367,7 +556,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code quaternionOriginal} do not match.
     */
-   default void transform(FrameQuaternionReadOnly tupleOriginal, FrameQuaternion tupleTransformed)
+   default void transform(FrameQuaternionReadOnly tupleOriginal, FrameQuaternionBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -385,7 +574,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code vectorToTransform} do not match.
     */
-   default void transform(FrameVector4D vectorToTransform)
+   default void transform(FixedFrameVector4DBasics vectorToTransform)
    {
       checkReferenceFrameMatch(vectorToTransform);
       QuaternionReadOnly.super.transform(vectorToTransform);
@@ -420,10 +609,49 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param vectorOriginal the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorTransformed} do not match.
     */
-   default void transform(Vector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   default void transform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorTransformed);
+      QuaternionReadOnly.super.transform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Transforms the vector part of the given 4D vector {@code vectorOriginal} and stores the result
+    * into {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this * vectorOriginal.xyz * this<sup>-1</sup>
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    */
+   default void transform(Vector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
       vectorTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Transforms the vector part of the given 4D vector {@code vectorOriginal} and stores the result
+    * into {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this * vectorOriginal.xyz * this<sup>-1</sup>
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code vectorOriginal}, and {@code vectorTransformed} do not match.
+    */
+   default void transform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorOriginal);
+      checkReferenceFrameMatch(vectorTransformed);
       QuaternionReadOnly.super.transform(vectorOriginal, vectorTransformed);
    }
 
@@ -440,7 +668,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code vectorOriginal} do not match.
     */
-   default void transform(FrameVector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   default void transform(FrameVector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
       checkReferenceFrameMatch(vectorOriginal);
       vectorTransformed.setToZero(getReferenceFrame());
@@ -457,7 +685,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void inverseTransform(FrameTuple3D<?, ?> tupleToTransform)
+   default void inverseTransform(FixedFrameTuple3DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.inverseTransform(tupleToTransform, tupleToTransform);
@@ -490,10 +718,47 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param tupleOriginal the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
     */
-   default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void inverseTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this
+    * quaternion and stores the result in {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    */
+   default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} and stores the
+    * result in {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    */
+   default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
       QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
    }
 
@@ -509,7 +774,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3D<?, ?> tupleTransformed)
+   default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -528,7 +793,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void inverseTransform(FrameTuple2D<?, ?> tupleToTransform)
+   default void inverseTransform(FixedFrameTuple2DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.inverseTransform(tupleToTransform, tupleToTransform);
@@ -565,10 +830,31 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
     *            plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    */
+   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} and stores the
+    * result in {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
+    *            plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -586,8 +872,28 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
     *            plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
     */
-   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed)
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} and stores the
+    * result in {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @throws NotAMatrix2DException if this quaternion does not represent a transformation in the XY
+    *            plane.
+    */
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
@@ -607,7 +913,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleToTransform} do not match.
     */
-   default void inverseTransform(FrameTuple2D<?, ?> tupleToTransform, boolean checkIfTransformInXYPlane)
+   default void inverseTransform(FixedFrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleToTransform);
       QuaternionReadOnly.super.inverseTransform(tupleToTransform, tupleToTransform, checkIfTransformInXYPlane);
@@ -626,10 +932,55 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *           represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this quaternion
     *            does not represent a transformation in the XY plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
     */
-   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} and stores the
+    * result in {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this quaternion
+    *           represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this quaternion
+    *            does not represent a transformation in the XY plane.
+    */
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       tupleTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} and stores the
+    * result in {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this quaternion
+    *           represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this quaternion
+    *            does not represent a transformation in the XY plane.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    */
+   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
       QuaternionReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
@@ -649,7 +1000,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
-   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D<?, ?> tupleTransformed, boolean checkIfTransformInXYPlane)
+   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
@@ -688,7 +1039,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code quaternionToTransform} do not match.
     */
-   default void inverseTransform(FrameQuaternion quaternionToTransform)
+   default void inverseTransform(FixedFrameQuaternionBasics quaternionToTransform)
    {
       checkReferenceFrameMatch(quaternionToTransform);
       QuaternionReadOnly.super.inverseTransform(quaternionToTransform, quaternionToTransform);
@@ -721,10 +1072,47 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param quaternionOriginal the quaternion to transform. Not modified.
     * @param quaternionTransformed the quaternion to store the result. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code quaternionTransformed} do not match.
     */
-   default void inverseTransform(QuaternionReadOnly quaternionOriginal, FrameQuaternion quaternionTransformed)
+   default void inverseTransform(QuaternionReadOnly quaternionOriginal, FixedFrameQuaternionBasics quaternionTransformed)
+   {
+      checkReferenceFrameMatch(quaternionTransformed);
+      QuaternionReadOnly.super.inverseTransform(quaternionOriginal, quaternionTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by
+    * this quaternion and stores the result in {@code quaternionTransformed}.
+    * <p>
+    * quaternionTransformed = this<sup>-1</sup> * quaternionOriginal * this
+    * </p>
+    *
+    * @param quaternionOriginal the quaternion to transform. Not modified.
+    * @param quaternionTransformed the quaternion to store the result. Modified.
+    */
+   default void inverseTransform(QuaternionReadOnly quaternionOriginal, FrameQuaternionBasics quaternionTransformed)
    {
       quaternionTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.inverseTransform(quaternionOriginal, quaternionTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by
+    * this quaternion and stores the result in {@code quaternionTransformed}.
+    * <p>
+    * quaternionTransformed = this<sup>-1</sup> * quaternionOriginal * this
+    * </p>
+    *
+    * @param quaternionOriginal the quaternion to transform. Not modified.
+    * @param quaternionTransformed the quaternion to store the result. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code quaternionOriginal}, and {@code quaternionTransformed} do not match.
+    */
+   default void inverseTransform(FrameQuaternionReadOnly quaternionOriginal, FixedFrameQuaternionBasics quaternionTransformed)
+   {
+      checkReferenceFrameMatch(quaternionOriginal);
+      checkReferenceFrameMatch(quaternionTransformed);
       QuaternionReadOnly.super.inverseTransform(quaternionOriginal, quaternionTransformed);
    }
 
@@ -740,7 +1128,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code quaternionOriginal} do not match.
     */
-   default void inverseTransform(FrameQuaternionReadOnly quaternionOriginal, FrameQuaternion quaternionTransformed)
+   default void inverseTransform(FrameQuaternionReadOnly quaternionOriginal, FrameQuaternionBasics quaternionTransformed)
    {
       checkReferenceFrameMatch(quaternionOriginal);
       quaternionTransformed.setToZero(getReferenceFrame());
@@ -759,7 +1147,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code vectorToTransform} do not match.
     */
-   default void inverseTransform(FrameVector4D vectorToTransform)
+   default void inverseTransform(FixedFrameVector4DBasics vectorToTransform)
    {
       checkReferenceFrameMatch(vectorToTransform);
       QuaternionReadOnly.super.inverseTransform(vectorToTransform);
@@ -794,10 +1182,49 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param vectorOriginal the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code vectorTransformed} do not match.
     */
-   default void inverseTransform(Vector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   default void inverseTransform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorTransformed);
+      QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the vector part the given 4D vector
+    * {@code vectorOriginal} by this quaternion and stores the result in {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz * this
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    */
+   default void inverseTransform(Vector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
       vectorTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the vector part the given 4D vector
+    * {@code vectorOriginal} by this quaternion and stores the result in {@code vectorTransformed}.
+    * <p>
+    * vectorTransformed.s = vectorOriginal.s <br>
+    * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz * this
+    * </p>
+    *
+    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code vectorOriginal}, and {@code vectorTransformed} do not match.
+    */
+   default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
+   {
+      checkReferenceFrameMatch(vectorOriginal);
+      checkReferenceFrameMatch(vectorTransformed);
       QuaternionReadOnly.super.inverseTransform(vectorOriginal, vectorTransformed);
    }
 
@@ -814,7 +1241,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code vectorOriginal} do not match.
     */
-   default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FrameVector4D vectorTransformed)
+   default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
       checkReferenceFrameMatch(vectorOriginal);
       vectorTransformed.setToZero(getReferenceFrame());

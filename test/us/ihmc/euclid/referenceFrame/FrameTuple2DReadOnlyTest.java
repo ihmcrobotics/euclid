@@ -13,39 +13,51 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple2D.Tuple2DReadOnlyTest;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
-public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> extends Tuple2DReadOnlyTest<T>
+public abstract class FrameTuple2DReadOnlyTest<F extends FrameTuple2DReadOnly>
 {
-   @Override
-   public T createEmptyTuple()
+   public static final int NUMBER_OF_ITERATIONS = Tuple2DReadOnlyTest.NUMBER_OF_ITERATIONS;
+   public static final double EPSILON = 1.0e-15;
+
+   public F createEmptyFrameTuple()
    {
-      return createTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0);
+      return createFrameTuple(ReferenceFrame.getWorldFrame(), 0.0, 0.0);
    }
 
-   public T createEmptyTuple(ReferenceFrame referenceFrame)
+   public final F createEmptyFrameTuple(ReferenceFrame referenceFrame)
    {
-      return createTuple(referenceFrame, 0.0, 0.0);
+      return createFrameTuple(referenceFrame, 0.0, 0.0);
+   }
+   
+   public F createRandomFrameTuple(Random random)
+   {
+      return createFrameTuple(ReferenceFrame.getWorldFrame(), random.nextDouble(), random.nextDouble());
    }
 
-   @Override
-   public T createRandomTuple(Random random)
+   public final F createRandomFrameTuple(Random random, ReferenceFrame referenceFrame)
    {
-      return createTuple(ReferenceFrame.getWorldFrame(), random.nextDouble(), random.nextDouble());
+      return createFrameTuple(referenceFrame, random.nextDouble(), random.nextDouble());
    }
 
-   @Override
-   public T createTuple(double x, double y)
+   public final F createFrameTuple(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple)
    {
-      return createTuple(ReferenceFrame.getWorldFrame(), x, y);
+      return createFrameTuple(referenceFrame, tuple.getX(), tuple.getY());
    }
 
-   public abstract T createTuple(ReferenceFrame referenceFrame, double x, double y);
+   public final F createFrameTuple(F frameTuple)
+   {
+      return createFrameTuple(frameTuple.getReferenceFrame(), frameTuple);
+   }
 
-   @Override
+   public F createFrameTuple(double x, double y)
+   {
+      return createFrameTuple(ReferenceFrame.getWorldFrame(), x, y);
+   }
+
+   public abstract F createFrameTuple(ReferenceFrame referenceFrame, double x, double y);
+
    @Test
    public void testEpsilonEquals() throws Exception
    {
-      super.testEpsilonEquals();
-
       Random random = new Random(621541L);
       double epsilon = 0.0;
 
@@ -55,10 +67,10 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
       double x = random.nextDouble();
       double y = random.nextDouble();
 
-      T tuple1 = createTuple(frame1, x, y);
-      T tuple2 = createTuple(frame1, x, y);
-      T tuple3 = createTuple(frame2, x, y);
-      T tuple4 = createTuple(frame2, x, y);
+      F tuple1 = createFrameTuple(frame1, x, y);
+      F tuple2 = createFrameTuple(frame1, x, y);
+      F tuple3 = createFrameTuple(frame2, x, y);
+      F tuple4 = createFrameTuple(frame2, x, y);
 
       assertTrue(tuple1.epsilonEquals(tuple2, epsilon));
       assertFalse(tuple1.epsilonEquals(tuple3, epsilon));
@@ -66,12 +78,9 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
    }
 
-   @Override
    @Test
    public void testEquals() throws Exception
    {
-      super.testEquals();
-
       Random random = new Random(621541L);
 
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
@@ -80,15 +89,20 @@ public abstract class FrameTuple2DReadOnlyTest<T extends FrameTuple2DReadOnly> e
       double x = random.nextDouble();
       double y = random.nextDouble();
 
-      T tuple1 = createTuple(frame1, x, y);
-      T tuple2 = createTuple(frame1, x, y);
-      T tuple3 = createTuple(frame2, x, y);
-      T tuple4 = createTuple(frame2, x, y);
+      F tuple1 = createFrameTuple(frame1, x, y);
+      F tuple2 = createFrameTuple(frame1, x, y);
+      F tuple3 = createFrameTuple(frame2, x, y);
+      F tuple4 = createFrameTuple(frame2, x, y);
 
       assertTrue(tuple1.equals(tuple2));
       assertFalse(tuple1.equals(tuple3));
       assertFalse(tuple3.equals(tuple2));
       assertTrue(tuple3.equals(tuple4));
+
+      assertTrue (tuple1.equals((Object) tuple2));
+      assertFalse(tuple1.equals((Object) tuple3));
+      assertFalse(tuple3.equals((Object) tuple2));
+      assertTrue (tuple3.equals((Object) tuple4));
    }
 
    @Test

@@ -29,25 +29,34 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
-import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FramePoint3D;
-import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
-import us.ihmc.euclid.referenceFrame.FrameTuple4D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
-import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple4DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector4DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -86,25 +95,25 @@ public class EuclidFrameAPITestTools
    {
       HashMap<Class<?>, Class<?>> modifiableMap = new HashMap<>();
       modifiableMap.put(Tuple2DReadOnly.class, FrameTuple2DReadOnly.class);
-      modifiableMap.put(Tuple2DBasics.class, FrameTuple2D.class);
+      modifiableMap.put(Tuple2DBasics.class, FixedFrameTuple2DBasics.class);
       modifiableMap.put(Point2DReadOnly.class, FramePoint2DReadOnly.class);
-      modifiableMap.put(Point2DBasics.class, FramePoint2D.class);
+      modifiableMap.put(Point2DBasics.class, FixedFramePoint2DBasics.class);
       modifiableMap.put(Vector2DReadOnly.class, FrameVector2DReadOnly.class);
-      modifiableMap.put(Vector2DBasics.class, FrameVector2D.class);
+      modifiableMap.put(Vector2DBasics.class, FixedFrameVector2DBasics.class);
 
       modifiableMap.put(Tuple3DReadOnly.class, FrameTuple3DReadOnly.class);
-      modifiableMap.put(Tuple3DBasics.class, FrameTuple3D.class);
+      modifiableMap.put(Tuple3DBasics.class, FixedFrameTuple3DBasics.class);
       modifiableMap.put(Point3DReadOnly.class, FramePoint3DReadOnly.class);
-      modifiableMap.put(Point3DBasics.class, FramePoint3D.class);
+      modifiableMap.put(Point3DBasics.class, FixedFramePoint3DBasics.class);
       modifiableMap.put(Vector3DReadOnly.class, FrameVector3DReadOnly.class);
-      modifiableMap.put(Vector3DBasics.class, FrameVector3D.class);
+      modifiableMap.put(Vector3DBasics.class, FixedFrameVector3DBasics.class);
 
       modifiableMap.put(Tuple4DReadOnly.class, FrameTuple4DReadOnly.class);
-      modifiableMap.put(Tuple4DBasics.class, FrameTuple4D.class);
+      modifiableMap.put(Tuple4DBasics.class, FixedFrameTuple4DBasics.class);
       modifiableMap.put(Vector4DReadOnly.class, FrameVector4DReadOnly.class);
-      modifiableMap.put(Vector4DBasics.class, FrameVector4D.class);
+      modifiableMap.put(Vector4DBasics.class, FixedFrameVector4DBasics.class);
       modifiableMap.put(QuaternionReadOnly.class, FrameQuaternionReadOnly.class);
-      modifiableMap.put(QuaternionBasics.class, FrameQuaternion.class);
+      modifiableMap.put(QuaternionBasics.class, FixedFrameQuaternionBasics.class);
 
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
@@ -114,25 +123,25 @@ public class EuclidFrameAPITestTools
    {
       HashMap<Class<?>, RandomFrameTypeBuilder<?>> modifiableMap = new HashMap<>();
       modifiableMap.put(FrameTuple2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
-      modifiableMap.put(FrameTuple2D.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FrameTuple2DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FramePoint2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
-      modifiableMap.put(FramePoint2D.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
+      modifiableMap.put(FramePoint2DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
       modifiableMap.put(FrameVector2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
-      modifiableMap.put(FrameVector2D.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
+      modifiableMap.put(FrameVector2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
 
       modifiableMap.put(FrameTuple3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
-      modifiableMap.put(FrameTuple3D.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FrameTuple3DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FramePoint3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
-      modifiableMap.put(FramePoint3D.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
+      modifiableMap.put(FramePoint3DBasics.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
       modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
-      modifiableMap.put(FrameVector3D.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
+      modifiableMap.put(FrameVector3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
 
       modifiableMap.put(FrameTuple4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-      modifiableMap.put(FrameTuple4D.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameTuple4DBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
       modifiableMap.put(FrameVector4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
-      modifiableMap.put(FrameVector4D.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
+      modifiableMap.put(FrameVector4DBasics.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
       modifiableMap.put(FrameQuaternionReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-      modifiableMap.put(FrameQuaternion.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameQuaternionBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -186,21 +195,38 @@ public class EuclidFrameAPITestTools
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
 
-   private final static Set<Class<?>> frameMutableTypes;
+   private final static Set<Class<?>> fixedFrameMutableTypes;
    static
    {
       Set<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(FrameTuple2D.class);
-      modifiableSet.add(FramePoint2D.class);
-      modifiableSet.add(FrameVector2D.class);
-      modifiableSet.add(FrameTuple3D.class);
-      modifiableSet.add(FramePoint3D.class);
-      modifiableSet.add(FrameVector3D.class);
-      modifiableSet.add(FrameTuple4D.class);
-      modifiableSet.add(FrameVector4D.class);
-      modifiableSet.add(FrameQuaternion.class);
+      modifiableSet.add(FixedFrameTuple2DBasics.class);
+      modifiableSet.add(FixedFramePoint2DBasics.class);
+      modifiableSet.add(FixedFrameVector2DBasics.class);
+      modifiableSet.add(FixedFrameTuple3DBasics.class);
+      modifiableSet.add(FixedFramePoint3DBasics.class);
+      modifiableSet.add(FixedFrameVector3DBasics.class);
+      modifiableSet.add(FixedFrameTuple4DBasics.class);
+      modifiableSet.add(FixedFrameVector4DBasics.class);
+      modifiableSet.add(FixedFrameQuaternionBasics.class);
 
-      frameMutableTypes = Collections.unmodifiableSet(modifiableSet);
+      fixedFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
+   }
+
+   private final static Set<Class<?>> mutableFrameMutableTypes;
+   static
+   {
+      Set<Class<?>> modifiableSet = new HashSet<>();
+      modifiableSet.add(FrameTuple2DBasics.class);
+      modifiableSet.add(FramePoint2DBasics.class);
+      modifiableSet.add(FrameVector2DBasics.class);
+      modifiableSet.add(FrameTuple3DBasics.class);
+      modifiableSet.add(FramePoint3DBasics.class);
+      modifiableSet.add(FrameVector3DBasics.class);
+      modifiableSet.add(FrameTuple4DBasics.class);
+      modifiableSet.add(FrameVector4DBasics.class);
+      modifiableSet.add(FrameQuaternionBasics.class);
+
+      mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
 
    private final static Set<Class<?>> acceptableExceptions;
@@ -477,9 +503,9 @@ public class EuclidFrameAPITestTools
             int numberOfArgumentsToTest = 0;
             for (Class<?> parameterType : parameterTypes)
             {
-               if (isFrameTypeReadOnly(parameterType))
+               if (!isFrameOfFrameTypeMutable(parameterType))
                   numberOfArgumentsToTest++;
-               if (shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType))
+               if (shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType))
                   numberOfArgumentsToTest++;
             }
             int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToTest);
@@ -492,8 +518,8 @@ public class EuclidFrameAPITestTools
                for (int j = 0; j < parameterTypes.length; j++)
                {
                   Class<?> parameterType = parameterTypes[j];
-                  boolean mutateFrame = isFrameTypeReadOnly(parameterType);
-                  mutateFrame |= shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType);
+                  boolean mutateFrame = !isFrameOfFrameTypeMutable(parameterType);
+                  mutateFrame |= shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType);
 
                   if (!mutateFrame)
                   {
@@ -543,7 +569,7 @@ public class EuclidFrameAPITestTools
                for (int i = 0; i < parameterTypes.length; i++)
                {
                   Class<?> parameterType = parameterTypes[i];
-                  if (isFrameTypeMutable(parameterType))
+                  if (isMutableFrameMutableType(parameterType))
                      parameters[i] = instantiateParameterType(frameB, parameterType);
                   else
                      parameters[i] = instantiateParameterType(frameA, parameterType);
@@ -564,7 +590,7 @@ public class EuclidFrameAPITestTools
                for (int i = 0; i < parameterTypes.length; i++)
                {
                   Class<?> parameterType = parameterTypes[i];
-                  if (isFrameTypeMutable(parameterType))
+                  if (isMutableFrameMutableType(parameterType))
                   {
                      ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
                      if (newFrame != frameA)
@@ -678,9 +704,9 @@ public class EuclidFrameAPITestTools
             int numberOfArgumentsToTest = 0;
             for (Class<?> parameterType : parameterTypes)
             {
-               if (isFrameTypeReadOnly(parameterType))
+               if (!isFrameOfFrameTypeMutable(parameterType))
                   numberOfArgumentsToTest++;
-               if (shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType))
+               if (shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType))
                   numberOfArgumentsToTest++;
             }
             int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToTest);
@@ -693,8 +719,8 @@ public class EuclidFrameAPITestTools
                for (int j = 0; j < parameterTypes.length; j++)
                {
                   Class<?> parameterType = parameterTypes[j];
-                  boolean mutateFrame = isFrameTypeReadOnly(parameterType);
-                  mutateFrame |= shouldThrowExceptionForMutables && isFrameTypeMutable(parameterType);
+                  boolean mutateFrame = !isFrameOfFrameTypeMutable(parameterType);
+                  mutateFrame |= shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType);
 
                   if (!mutateFrame)
                   {
@@ -745,7 +771,7 @@ public class EuclidFrameAPITestTools
                for (int i = 0; i < parameterTypes.length; i++)
                {
                   Class<?> parameterType = parameterTypes[i];
-                  if (isFrameTypeMutable(parameterType))
+                  if (isMutableFrameMutableType(parameterType))
                      parameters[i] = instantiateParameterType(frameB, parameterType);
                   else
                      parameters[i] = instantiateParameterType(frameA, parameterType);
@@ -766,7 +792,7 @@ public class EuclidFrameAPITestTools
                for (int i = 0; i < parameterTypes.length; i++)
                {
                   Class<?> parameterType = parameterTypes[i];
-                  if (isFrameTypeMutable(parameterType))
+                  if (isMutableFrameMutableType(parameterType))
                   {
                      ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
                      if (newFrame != frameA)
@@ -1191,9 +1217,42 @@ public class EuclidFrameAPITestTools
             throw new RuntimeException("Reached unexpected state.");
 
          if (isFrameObject(frameParameter))
-            return ((EpsilonComparable<T>) framelessParameter).epsilonEquals(((FrameGeometryObject<?, T>) frameParameter).getGeometryObject(), epsilon);
+         {
+            Method epsilonEqualsMethod;
+            try
+            {
+               epsilonEqualsMethod = Arrays.stream(frameParameter.getClass().getMethods()).filter(m -> m.getName().equals("epsilonEquals"))
+                                           .filter(m -> m.getParameterTypes()[0] != Object.class) // Filters the method from FrameGeometryObject.
+                                           .filter(m -> m.getParameterTypes()[0].isAssignableFrom(framelessParameter.getClass())).findFirst().orElse(null);
+            }
+            catch (SecurityException e)
+            {
+               throw new AssertionError(e);
+            }
+
+            boolean epsilonEqualsResult = false;
+
+            try
+            {
+               epsilonEqualsResult = (boolean) epsilonEqualsMethod.invoke(frameParameter, framelessParameter, epsilon);
+            }
+            catch (IllegalAccessException | IllegalArgumentException e)
+            {
+               System.err.println("Something went wrong when invoking the epsilonEquals method for " + frameParameter.getClass().getSimpleName());
+               System.err.println("Objects used as parameters: " + getArgumentTypeString(framelessParameter, epsilon));
+               e.printStackTrace();
+               throw new AssertionError(e);
+            }
+            catch (InvocationTargetException e)
+            {
+               throw new AssertionError(e.getCause());
+            }
+            return epsilonEqualsResult;
+         }
          else
+         {
             return ((EpsilonComparable<T>) framelessParameter).epsilonEquals((T) frameParameter, epsilon);
+         }
       }
 
       if (isFrameObject(framelessParameter))
@@ -1322,14 +1381,14 @@ public class EuclidFrameAPITestTools
             + frameParameter.getClass().getSimpleName());
    }
 
-   private static boolean isFrameTypeReadOnly(Class<?> frameType)
+   private static boolean isMutableFrameMutableType(Class<?> frameType)
    {
-      return frameReadOnlyTypes.contains(frameType) && !frameMutableTypes.contains(frameType);
+      return mutableFrameMutableTypes.contains(frameType) && !fixedFrameMutableTypes.contains(frameType);
    }
 
-   private static boolean isFrameTypeMutable(Class<?> frameType)
+   private static boolean isFrameOfFrameTypeMutable(Class<?> frameType)
    {
-      return frameMutableTypes.contains(frameType);
+      return !fixedFrameMutableTypes.contains(frameType) && !frameReadOnlyTypes.contains(frameType);
    }
 
    private static Object invokeStaticMethod(Method frameMethod, Object[] parameters) throws Throwable
@@ -1375,7 +1434,7 @@ public class EuclidFrameAPITestTools
       return acceptableExceptions.stream().filter(c -> c.isAssignableFrom(t.getClass())).findAny().isPresent();
    }
 
-   private static String getArgumentTypeString(Object[] arguments)
+   private static String getArgumentTypeString(Object... arguments)
    {
       String string = "";
       for (int i = 0; i < arguments.length; i++)
@@ -1411,7 +1470,7 @@ public class EuclidFrameAPITestTools
             if (overloadingReturnType.equals(originalReturnType))
                return;
 
-            if (overloadingReturnType != findCorrespondingFrameType(originalReturnType))
+            if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
                throw new AssertionError("Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName() + ", actual: "
                      + overloadingReturnType.getSimpleName());
          }
