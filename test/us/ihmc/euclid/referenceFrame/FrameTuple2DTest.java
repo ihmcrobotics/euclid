@@ -451,8 +451,7 @@ public abstract class FrameTuple2DTest<F extends FrameTuple2DBasics> extends Fra
    public void testReferenceFrameChecks() throws Throwable
    {
       Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
-            && !m.getName().equals("geometricallyEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), false, true, methodFilter);
    }
 
