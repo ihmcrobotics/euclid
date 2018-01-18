@@ -3117,12 +3117,54 @@ public class EuclidFrameTools
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the ray intersects the line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
+                                                                  FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+                                                                  FixedFramePoint2DBasics intersectionToPack)
+   {
+      rayOrigin.checkReferenceFrameMatch(rayDirection);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentStart);
+      rayOrigin.checkReferenceFrameMatch(lineSegmentEnd);
+
+      boolean success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd,
+                                                                                     intersectionToPack);
+
+      if (intersectionToPack != null)
+         intersectionToPack.set(rayOrigin.getReferenceFrame(), intersectionToPack);
+
+      return success;
+   }
+
+   /**
+    * Computes the intersection between a 2D ray and a 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the ray and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When the ray and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the ray intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param rayOrigin a point located on the ray. Not modified.
+    * @param rayDirection the direction of the ray. Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the ray intersects the line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in
     *            the same reference frame.
     */
    public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
                                                                   FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                                  FramePoint2D intersectionToPack)
+                                                                  FramePoint2DBasics intersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
       rayOrigin.checkReferenceFrameMatch(lineSegmentStart);
