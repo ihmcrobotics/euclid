@@ -20,7 +20,7 @@ import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
-public class FrameVector2DTest extends FrameTuple2DTest<FrameVector2D>
+public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
 

@@ -19,7 +19,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
-public class FramePoint3DTest extends FrameTuple3DTest<FramePoint3D>
+public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
 {
    public static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
 

@@ -32,7 +32,7 @@ import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
-public abstract class FrameTuple4DTest<F extends FrameTuple4DBasics> extends FrameTuple4DReadOnlyTest<F>
+public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> extends FrameTuple4DReadOnlyTest<F>
 {
    public static final double EPSILON = 1e-10;
 
@@ -488,19 +488,19 @@ public abstract class FrameTuple4DTest<F extends FrameTuple4DBasics> extends Fra
          @Override
          public F createEmptyTuple()
          {
-            return FrameTuple4DTest.this.createEmptyFrameTuple();
+            return FrameTuple4DBasicsTest.this.createEmptyFrameTuple();
          }
 
          @Override
          public F createTuple(double x, double y, double z, double s)
          {
-            return FrameTuple4DTest.this.createFrameTuple(x, y, z, s);
+            return FrameTuple4DBasicsTest.this.createFrameTuple(x, y, z, s);
          }
 
          @Override
          public F createRandomTuple(Random random)
          {
-            return FrameTuple4DTest.this.createRandomFrameTuple(random);
+            return FrameTuple4DBasicsTest.this.createRandomFrameTuple(random);
          }
 
          @Override

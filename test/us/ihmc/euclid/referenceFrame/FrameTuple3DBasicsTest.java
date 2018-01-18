@@ -32,7 +32,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-public abstract class FrameTuple3DTest<F extends FrameTuple3DBasics> extends FrameTuple3DReadOnlyTest<F>
+public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> extends FrameTuple3DReadOnlyTest<F>
 {
    public abstract Tuple3DBasics createRandomFramelessTuple(Random random);
 
@@ -475,19 +475,19 @@ public abstract class FrameTuple3DTest<F extends FrameTuple3DBasics> extends Fra
          @Override
          public F createEmptyTuple()
          {
-            return FrameTuple3DTest.this.createEmptyFrameTuple();
+            return FrameTuple3DBasicsTest.this.createEmptyFrameTuple();
          }
 
          @Override
          public F createTuple(double x, double y, double z)
          {
-            return FrameTuple3DTest.this.createFrameTuple(x, y, z);
+            return FrameTuple3DBasicsTest.this.createFrameTuple(x, y, z);
          }
 
          @Override
          public F createRandomTuple(Random random)
          {
-            return FrameTuple3DTest.this.createRandomFrameTuple(random);
+            return FrameTuple3DBasicsTest.this.createRandomFrameTuple(random);
          }
 
          @Override

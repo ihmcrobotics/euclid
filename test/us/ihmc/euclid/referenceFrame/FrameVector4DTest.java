@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple4D.Vector4DBasicsTest;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
-public class FrameVector4DTest extends FrameTuple4DTest<FrameVector4D>
+public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
 
