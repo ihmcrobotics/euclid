@@ -5,6 +5,12 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
 public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolder
 {
+   @Override
+   FrameOrientation2DReadOnly getOrientation();
+
+   @Override
+   FramePoint2DReadOnly getPosition();
+
    /**
     * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
     *

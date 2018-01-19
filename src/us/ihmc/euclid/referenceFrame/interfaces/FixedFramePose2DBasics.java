@@ -10,6 +10,12 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasics
 {
+   @Override
+   FixedFrameOrientation2DBasics getOrientation();
+
+   @Override
+   FixedFramePoint2DBasics getPosition();
+
    /**
     * Sets this orientation 2D to represent the orientation 2D from {@code this.getReferenceFrame()}
     * to the given {@code referenceFrame}.
