@@ -2231,15 +2231,24 @@ public class EuclidGeometryTools
                                                                    double lineSegmentStartX, double lineSegmentStartY, double lineSegmentEndX,
                                                                    double lineSegmentEndY, Point2DBasics intersectionToPack)
    {
-      double start1x = pointOnLineX;
-      double start1y = pointOnLineY;
-      double end1x = pointOnLineX + lineDirectionX;
-      double end1y = pointOnLineY + lineDirectionY;
-      double start2x = lineSegmentStartX;
-      double start2y = lineSegmentStartY;
-      double end2x = lineSegmentEndX;
-      double end2y = lineSegmentEndY;
-      return intersectionBetweenTwoLine2DsImpl(start1x, start1y, true, end1x, end1y, true, start2x, start2y, false, end2x, end2y, false, intersectionToPack);
+      double lineSegmentDirectionX = lineSegmentEndX - lineSegmentStartX;
+      double lineSegmentDirectionY = lineSegmentEndY - lineSegmentStartY;
+
+      double percentage = percentageOfIntersectionBetweenTwoLine2Ds(lineSegmentStartX, lineSegmentStartY, lineSegmentDirectionX, lineSegmentDirectionY,
+                                                                    pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY);
+      if (Double.isNaN(percentage) || percentage < 0.0 - ONE_TEN_MILLIONTH || percentage > 1.0 + ONE_TEN_MILLIONTH)
+      {
+         if (intersectionToPack != null)
+            intersectionToPack.setToNaN();
+         return false;
+      }
+
+      if (intersectionToPack != null)
+      {
+         intersectionToPack.setX(EuclidCoreTools.interpolate(lineSegmentStartX, lineSegmentEndX, percentage));
+         intersectionToPack.setY(EuclidCoreTools.interpolate(lineSegmentStartY, lineSegmentEndY, percentage));
+      }
+      return true;
    }
 
    /**
@@ -4260,16 +4269,21 @@ public class EuclidGeometryTools
                                                        double pointOnLine2x, double pointOnLine2y, double lineDirection2x, double lineDirection2y,
                                                        Point2DBasics intersectionToPack)
    {
-      double start1x = pointOnLine1x;
-      double start1y = pointOnLine1y;
-      double end1x = pointOnLine1x + lineDirection1x;
-      double end1y = pointOnLine1y + lineDirection1y;
-      double start2x = pointOnLine2x;
-      double start2y = pointOnLine2y;
-      double end2x = pointOnLine2x + lineDirection2x;
-      double end2y = pointOnLine2y + lineDirection2y;
-      return intersectionBetweenTwoLine2DsImpl(start1x, start1y, true, end1x, end1y, true, start2x, start2y, true, end2x, end2y, true, intersectionToPack);
+      double alpha = percentageOfIntersectionBetweenTwoLine2Ds(pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y, pointOnLine2x, pointOnLine2y,
+                                                               lineDirection2x, lineDirection2y);
+      if (Double.isNaN(alpha))
+      {
+         if (intersectionToPack != null)
+            intersectionToPack.setToNaN();
+         return false;
+      }
 
+      if (intersectionToPack != null)
+      {
+         intersectionToPack.setX(pointOnLine1x + alpha * lineDirection1x);
+         intersectionToPack.setY(pointOnLine1y + alpha * lineDirection1y);
+      }
+      return true;
    }
 
    /**
