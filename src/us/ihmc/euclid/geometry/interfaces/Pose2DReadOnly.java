@@ -1,6 +1,5 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -77,7 +76,7 @@ public interface Pose2DReadOnly
     *
     * @param orientationToPack used to store the orientation of this pose 2D. Modified.
     */
-   default void getOrientation(Orientation2D orientationToPack)
+   default void getOrientation(Orientation2DBasics orientationToPack)
    {
       orientationToPack.set(getOrientation());
    }
@@ -123,7 +122,7 @@ public interface Pose2DReadOnly
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
     */
-   default double getOrientationDistance(Orientation2D other)
+   default double getOrientationDistance(Orientation2DReadOnly other)
    {
       return getOrientation().distance(other);
    }
