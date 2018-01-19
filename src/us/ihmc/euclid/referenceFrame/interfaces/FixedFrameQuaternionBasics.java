@@ -8,8 +8,8 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, FixedFrameTuple4DBasics, QuaternionBasics
 {
    /**
-    * Sets this point coordinate to the given {@code referenceFrame}'s origin coordinate in this
-    * frame tuple current frame.
+    * Sets this quaternion to represent the orientation from {@code this.getReferenceFrame()} to the
+    * given {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame of interest.
     */
