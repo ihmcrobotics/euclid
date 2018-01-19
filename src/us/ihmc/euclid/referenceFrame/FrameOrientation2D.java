@@ -2,16 +2,28 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
-public class FrameOrientation2D implements FrameOrientation2DBasics
+// TODO
+public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObject<FrameOrientation2D>
 {
    /** The reference frame is which this orientation is currently expressed. */
    private ReferenceFrame referenceFrame;
    /** The orientation holding the current coordinates of this frame orientation. */
    private final Orientation2D orientation = new Orientation2D();
+
+   /**
+    * Creates a new orientation 2D initialized with its yaw angle to zero and its reference frame to
+    * {@link ReferenceFrame#getWorldFrame()}.
+    */
+   public FrameOrientation2D()
+   {
+      setToZero(ReferenceFrame.getWorldFrame());
+   }
 
    /**
     * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D}
@@ -45,6 +57,13 @@ public class FrameOrientation2D implements FrameOrientation2DBasics
    public FrameOrientation2D(FrameOrientation2DReadOnly other)
    {
       setIncludingFrame(referenceFrame, other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void set(FrameOrientation2D other)
+   {
+      FrameOrientation2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -87,6 +106,64 @@ public class FrameOrientation2D implements FrameOrientation2DBasics
    public void applyInverseTransform(Transform transform)
    {
       orientation.applyInverseTransform(transform);
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(FrameOrientation2DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object obj)
+   {
+      try
+      {
+         return equals((FrameOrientation2DReadOnly) obj);
+      }
+      catch (ClassCastException e)
+      {
+         return false;
+      }
+   }
+
+   /**
+    * Tests if the yaw angle of this orientation is equal to an {@code epsilon} to the yaw of
+    * {@code other}.
+    * <p>
+    * Note that this method performs number comparison and not an angle comparison, such that:
+    * -<i>pi</i> &ne; <i>pi</i>.
+    * </p>
+    *
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two orientations are equal, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
+    */
+   @Override
+   public boolean epsilonEquals(FrameOrientation2D other, double epsilon)
+   {
+      return FrameOrientation2DBasics.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two orientations are geometrically
+    * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
+    * {@code epsilon}.
+    *
+    * @param other the orientation to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two orientations represent the same geometry, {@code false}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
+    */
+   @Override
+   public boolean geometricallyEquals(FrameOrientation2D other, double epsilon)
+   {
+      return FrameOrientation2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
