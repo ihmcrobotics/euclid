@@ -36,13 +36,13 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
-import us.ihmc.euclid.referenceFrame.FramePose2D;
 import us.ihmc.euclid.referenceFrame.FramePose3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple3DBasics;
@@ -56,6 +56,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
@@ -129,20 +130,11 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(QuaternionReadOnly.class, FrameQuaternionReadOnly.class);
       modifiableMap.put(QuaternionBasics.class, FixedFrameQuaternionBasics.class);
 
-      modifiableMap.put(Pose3DReadOnly.class, FramePose3DReadOnly.class);
-      modifiableMap.put(Pose3DBasics.class, FramePose3D.class);
-
-      modifiableMap.put(Pose2DReadOnly.class, FramePose2DReadOnly.class);
-      modifiableMap.put(Pose2DBasics.class, FramePose2D.class);
-
-      modifiableMap.put(Pose3DReadOnly.class, FramePose3DReadOnly.class);
-      modifiableMap.put(Pose3DBasics.class, FramePose3D.class);
-
       modifiableMap.put(Orientation2DReadOnly.class, FrameOrientation2DReadOnly.class);
       modifiableMap.put(Orientation2DBasics.class, FixedFrameOrientation2DBasics.class);
 
       modifiableMap.put(Pose2DReadOnly.class, FramePose2DReadOnly.class);
-      modifiableMap.put(Pose2DBasics.class, FramePose2D.class);
+      modifiableMap.put(Pose2DBasics.class, FixedFramePose2DBasics.class);
 
       modifiableMap.put(Pose3DReadOnly.class, FramePose3DReadOnly.class);
       modifiableMap.put(Pose3DBasics.class, FramePose3D.class);
@@ -182,7 +174,7 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FramePose3D.class, frame -> EuclidFrameRandomTools.nextFramePose3D(random, frame));
 
       modifiableMap.put(FramePose2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePose2D(random, frame));
-      modifiableMap.put(FramePose2D.class, frame -> EuclidFrameRandomTools.nextFramePose2D(random, frame));
+      modifiableMap.put(FramePose2DBasics.class, frame -> EuclidFrameRandomTools.nextFramePose2D(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -262,6 +254,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FixedFrameVector4DBasics.class);
       modifiableSet.add(FixedFrameQuaternionBasics.class);
       modifiableSet.add(FixedFrameOrientation2DBasics.class);
+      modifiableSet.add(FixedFramePose2DBasics.class);
 
       fixedFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -280,7 +273,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameVector4DBasics.class);
       modifiableSet.add(FrameQuaternionBasics.class);
       modifiableSet.add(FrameOrientation2DBasics.class);
-      modifiableSet.add(FramePose2D.class);
+      modifiableSet.add(FramePose2DBasics.class);
       modifiableSet.add(FramePose3D.class);
 
       mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);

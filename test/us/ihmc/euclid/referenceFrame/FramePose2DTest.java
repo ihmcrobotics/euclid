@@ -1,16 +1,18 @@
 package us.ihmc.euclid.referenceFrame;
 
-import org.junit.Test;
-import us.ihmc.euclid.geometry.Pose2D;
-import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
+
+import org.junit.Test;
+
+import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 
 public class FramePose2DTest extends FramePose2DReadOnlyTest<FramePose2D>
 {
@@ -26,12 +28,9 @@ public class FramePose2DTest extends FramePose2DReadOnlyTest<FramePose2D>
       Random random = new Random(234235L);
 
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFramePose(frame, (Pose2DReadOnly) pose);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> createRandomPose(random).getGeometryObject();
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextPose2D(random);
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
-
-      EuclidFrameAPITestTools.GenericTypeBuilder frameless2DTypeBuilder = () -> createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()).getGeometryObject();
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 
    @Override

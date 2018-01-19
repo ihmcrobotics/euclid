@@ -3,7 +3,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 
-//TODO
+// TODO
 public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics
 {
    /**
@@ -74,7 +74,6 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics
     */
    default void setIncludingFrame(FrameOrientation2DReadOnly other)
    {
-      setReferenceFrame(other.getReferenceFrame());
-      set((Orientation2DReadOnly) other);
+      setIncludingFrame(other.getReferenceFrame(), other);
    }
 }
