@@ -1,8 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -97,7 +95,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void transform(FrameTuple2D tupleToTransform)
+   default void transform(FrameTuple2DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       
@@ -118,7 +116,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed)
+   default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       
@@ -139,7 +137,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void transform(FrameTuple3D tupleToTransform)
+   default void transform(FrameTuple3DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       
@@ -161,7 +159,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3D tupleTransformed)
+   default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       
@@ -183,7 +181,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3D tupleTransformed)
+   default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       
@@ -227,7 +225,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void inverseTransform(FrameTuple2D tupleToTransform)
+   default void inverseTransform(FrameTuple2DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       
@@ -267,7 +265,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @param tupleOriginal the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
-   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed)
+   default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
 
@@ -307,7 +305,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @param tupleOriginal the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
-   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed)
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       
@@ -328,7 +326,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2D tupleTransformed)
+   default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       
@@ -351,7 +349,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void inverseTransform(FrameTuple3D tupleToTransform)
+   default void inverseTransform(FrameTuple3DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);
       
@@ -393,7 +391,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @param tupleOriginal the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
-   default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3D tupleTransformed)
+   default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setToZero(getReferenceFrame());
       
@@ -415,7 +413,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3D tupleTransformed)
+   default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       

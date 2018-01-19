@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
-import us.ihmc.euclid.referenceFrame.FrameTuple3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -53,7 +52,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
       return Pose3DReadOnly.super.equals(other);
    }
 
-   default void getPosition(FrameTuple3D frameTupleToPack)
+   default void getPosition(FrameTuple3DBasics frameTupleToPack)
    {
       frameTupleToPack.setIncludingFrame(getReferenceFrame(), getPosition());
    }

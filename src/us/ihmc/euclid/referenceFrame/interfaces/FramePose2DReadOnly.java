@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
-import us.ihmc.euclid.referenceFrame.FrameTuple2D;
 
 public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolder
 {
@@ -50,7 +49,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
       return Pose2DReadOnly.super.equals(other);
    }
    
-   default void getPosition(FrameTuple2D frameTupleToPack)
+   default void getPosition(FrameTuple2DBasics frameTupleToPack)
    {
       frameTupleToPack.setIncludingFrame(getReferenceFrame(), getPosition());
    }
