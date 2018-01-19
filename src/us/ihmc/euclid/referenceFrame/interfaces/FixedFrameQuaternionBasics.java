@@ -21,12 +21,11 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
 
    /**
     * Sets this frame quaternion to {@code quaternionReadOnly} and checks that its current frame
-    * equal {@code referenceFrame}.
+    * equals {@code referenceFrame}.
     * 
     * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
     *           expressed.
-    * @param quaternionReadOnly the geometry object used to update the geometry object in
-    *           {@code this}. Not modified.
+    * @param quaternionReadOnly the quaternion to copy the values from.Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)

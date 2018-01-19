@@ -1,25 +1,27 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 
-public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, Orientation2D> implements FrameOrientation2DReadOnly, Orientation2DBasics
+public class FrameOrientation2D implements FrameOrientation2DBasics
 {
-   private final Orientation2D orientation;
+   /** The reference frame is which this orientation is currently expressed. */
+   private ReferenceFrame referenceFrame;
+   /** The orientation holding the current coordinates of this frame orientation. */
+   private final Orientation2D orientation = new Orientation2D();
 
    /**
     * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D}
     * and its reference frame to {@link ReferenceFrame#getWorldFrame()}.
     * 
-    * @param orientation the orientation this frame orientation will represent. Modified.
+    * @param orientation2DReadOnly the orientation this frame orientation will represent. Modified.
     */
-   public FrameOrientation2D(Orientation2D orientation)
+   public FrameOrientation2D(Orientation2DReadOnly orientation2DReadOnly)
    {
-      super(orientation);
-      this.orientation = getGeometryObject();
+      this(ReferenceFrame.getWorldFrame(), orientation2DReadOnly);
    }
 
    /**
@@ -27,12 +29,29 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
     * {@link Orientation2DReadOnly} and its reference frame to the given {@link ReferenceFrame}.
     * 
     * @param referenceFrame the initial frame for this orientation.
-    * @param orientation the orientation this frame orientation will represent. Not modified.
+    * @param orientation2DReadOnly the orientation this frame orientation will represent. Not
+    *           modified.
     */
-   public FrameOrientation2D(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation)
+   public FrameOrientation2D(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation2DReadOnly)
    {
-      super(referenceFrame, new Orientation2D(orientation));
-      this.orientation = getGeometryObject();
+      setIncludingFrame(referenceFrame, orientation2DReadOnly);
+   }
+
+   /**
+    * Creates a new frame orientation 2D and initializes it to {@code other}.
+    *
+    * @param other the tuple to copy the orientation and reference frame from. Not modified.
+    */
+   public FrameOrientation2D(FrameOrientation2DReadOnly other)
+   {
+      setIncludingFrame(referenceFrame, other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void setReferenceFrame(ReferenceFrame referenceFrame)
+   {
+      this.referenceFrame = referenceFrame;
    }
 
    /** {@inheritDoc} */
@@ -44,268 +63,53 @@ public class FrameOrientation2D extends FrameGeometryObject<FrameOrientation2D, 
 
    /** {@inheritDoc} */
    @Override
+   public ReferenceFrame getReferenceFrame()
+   {
+      return referenceFrame;
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public double getYaw()
    {
       return orientation.getYaw();
    }
 
-   public void setIncludingFrame(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation)
+   /** {@inheritDoc} */
+   @Override
+   public void applyTransform(Transform transform)
    {
-      setToZero(referenceFrame);
-      this.orientation.set(orientation);
+      orientation.applyTransform(transform);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      orientation.applyInverseTransform(transform);
    }
 
    /**
-    * Sets this orientation 2D to the {@code other} orientation 2D.
+    * Provides a {@code String} representation of this frame orientation 2D as follows:<br>
+    * (0.123 )-worldFrame
     *
-    * @param other the other orientation 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    * @return the {@code String} representing this frame orientation 2D.
     */
-   public void set(FrameOrientation2DReadOnly other)
+   @Override
+   public String toString()
    {
-      checkReferenceFrameMatch(other);
-
-      Orientation2DBasics.super.set(other);
+      return orientation.toString() + "-" + referenceFrame;
    }
 
    /**
-    * Adds the other orientation 2D to this:<br>
-    * {@code this += other}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
+    * Calculates and returns a hash code value from the value of the angle of this frame orientation
+    * 2D.
     *
-    * @param other the other orientation 2D to add to this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    * @return the hash code value for this frame orientation 2D.
     */
-   public void add(FrameOrientation2DReadOnly other)
+   @Override
+   public int hashCode()
    {
-      checkReferenceFrameMatch(other);
-
-      Orientation2DBasics.super.add(other);
-   }
-
-   /**
-    * Sets this orientation 2D to the sum of the two given orientation 2Ds:<br>
-    * {@code this = orientation1 + orientation2}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D. Not modified.
-    * @param orientation2 the second orientation 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public void add(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2)
-   {
-      checkReferenceFrameMatch(orientation1);
-
-      Orientation2DBasics.super.add(orientation1, orientation2);
-   }
-
-   /**
-    * Sets this orientation 2D to the sum of the two given orientation 2Ds:<br>
-    * {@code this = orientation1 + orientation2}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D. Not modified.
-    * @param orientation2 the second orientation 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public void add(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
-   {
-      checkReferenceFrameMatch(orientation2);
-
-      Orientation2DBasics.super.add(orientation1, orientation2);
-   }
-
-   /**
-    * Sets this orientation 2D to the sum of the two given orientation 2Ds:<br>
-    * {@code this = orientation1 + orientation2}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D. Not modified.
-    * @param orientation2 the second orientation 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and
-    *            {@code orientation2} are not expressed in the same reference frame.
-    */
-   public void add(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
-   {
-      checkReferenceFrameMatch(orientation1);
-      checkReferenceFrameMatch(orientation2);
-
-      Orientation2DBasics.super.add(orientation1, orientation2);
-   }
-
-   /**
-    * Subtracts the other orientation 2D to this:<br>
-    * {@code this -= other}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
-    *
-    * @param other the other orientation 2D to add to this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
-    */
-   public void sub(FrameOrientation2DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-
-      Orientation2DBasics.super.sub(other);
-   }
-
-   /**
-    * Sets this orientation 2D to the difference of the two given orientation 2Ds:<br>
-    * {@code this = orientation1 - orientation2}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D. Not modified.
-    * @param orientation2 the second orientation 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public void sub(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2)
-   {
-      checkReferenceFrameMatch(orientation1);
-
-      Orientation2DBasics.super.sub(orientation1, orientation2);
-   }
-
-   /**
-    * Sets this orientation 2D to the difference of the two given orientation 2Ds:<br>
-    * {@code this = orientation1 - orientation2}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D. Not modified.
-    * @param orientation2 the second orientation 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public void sub(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
-   {
-      checkReferenceFrameMatch(orientation2);
-
-      Orientation2DBasics.super.sub(orientation1, orientation2);
-   }
-
-   /**
-    * Sets this orientation 2D to the difference of the two given orientation 2Ds:<br>
-    * {@code this = orientation1 - orientation2}
-    * <p>
-    * Note that resulting angle is computed such that it is contained in [-<i>pi</i>, <i>pi</pi>].
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D. Not modified.
-    * @param orientation2 the second orientation 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and
-    *            {@code orientation2} are not expressed in the same reference frame.
-    */
-   public void sub(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
-   {
-      checkReferenceFrameMatch(orientation1);
-      checkReferenceFrameMatch(orientation2);
-
-      Orientation2DBasics.super.sub(orientation1, orientation2);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code this} to {@code other} given the percentage
-    * {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * this + alpha * other
-    * </p>
-    *
-    * @param other the other orientation 2D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
-    *           {@code other}.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
-    */
-   public void interpolate(FrameOrientation2DReadOnly other, double alpha)
-   {
-      checkReferenceFrameMatch(other);
-
-      Orientation2DBasics.super.interpolate(other, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code orientation1} to {@code orientation2} given the
-    * percentage {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * orientation1 + alpha * orientation2
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D used in the interpolation. Not modified.
-    * @param orientation2 the second orientation 2D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code orientation2}.
-    * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public void interpolate(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2, double alpha)
-   {
-      checkReferenceFrameMatch(orientation1);
-
-      Orientation2DBasics.super.interpolate(orientation1, orientation2, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code orientation1} to {@code orientation2} given the
-    * percentage {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * orientation1 + alpha * orientation2
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D used in the interpolation. Not modified.
-    * @param orientation2 the second orientation 2D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code orientation2}.
-    * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same
-    *            frame as {@code this}.
-    */
-   public void interpolate(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2, double alpha)
-   {
-      checkReferenceFrameMatch(orientation2);
-
-      Orientation2DBasics.super.interpolate(orientation1, orientation2, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation from {@code orientation1} to {@code orientation2} given the
-    * percentage {@code alpha}.
-    * <p>
-    * this = (1.0 - alpha) * orientation1 + alpha * orientation2
-    * </p>
-    *
-    * @param orientation1 the first orientation 2D used in the interpolation. Not modified.
-    * @param orientation2 the second orientation 2D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code orientation2}.
-    * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and
-    *            {@code orientation2} are not expressed in the same reference frame.
-    */
-   public void interpolate(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2, double alpha)
-   {
-      checkReferenceFrameMatch(orientation1);
-      checkReferenceFrameMatch(orientation2);
-
-      Orientation2DBasics.super.interpolate(orientation1, orientation2, alpha);
+      return orientation.hashCode();
    }
 }

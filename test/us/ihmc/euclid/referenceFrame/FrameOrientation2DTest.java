@@ -1,16 +1,19 @@
 package us.ihmc.euclid.referenceFrame;
 
-import org.junit.Test;
-import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
+
+import org.junit.Test;
+
+import us.ihmc.euclid.geometry.Orientation2D;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
 
 public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<FrameOrientation2D>
 {
@@ -25,9 +28,8 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
    {
       Random random = new Random(234235L);
 
-      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFrameOrientation(frame,
-                                                                                                                                          (Orientation2DReadOnly) pose);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> createRandomOrientation(random).getGeometryObject();
+      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFrameOrientation(frame, (Orientation2DReadOnly) pose);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextOrientation2D(random);
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

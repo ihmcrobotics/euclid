@@ -177,6 +177,11 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
       return EuclidGeometryIOTools.getOrientation2DString(this);
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of the angle of this orientation 2D.
+    *
+    * @return the hash code value for this orientation 2D.
+    */
    @Override
    public int hashCode()
    {

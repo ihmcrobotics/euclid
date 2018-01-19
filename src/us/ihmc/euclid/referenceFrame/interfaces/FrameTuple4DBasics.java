@@ -155,5 +155,4 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
       setReferenceFrame(other.getReferenceFrame());
       set((Tuple4DReadOnly) other);
    }
-
 }
