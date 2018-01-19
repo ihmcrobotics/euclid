@@ -194,16 +194,6 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
       return point.getY();
    }
 
-   /**
-    * Gets the read-only reference to the point used in {@code this}.
-    *
-    * @return the point of {@code this}.
-    */
-   public final Point2D getPoint()
-   {
-      return point;
-   }
-
    /** {@inheritDoc} */
    @Override
    public void changeFrame(ReferenceFrame desiredFrame)

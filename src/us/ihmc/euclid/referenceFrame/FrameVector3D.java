@@ -221,16 +221,6 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Gets the read-only reference to the vector used in {@code this}.
-    *
-    * @return the vector of {@code this}.
-    */
-   public final Vector3D getVector()
-   {
-      return vector;
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
     * <p>

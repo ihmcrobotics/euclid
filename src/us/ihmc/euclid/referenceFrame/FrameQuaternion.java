@@ -281,16 +281,6 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    }
 
    /**
-    * Gets the read-only reference to the quaternion used in {@code this}.
-    *
-    * @return the quaternion of {@code this}.
-    */
-   public final QuaternionReadOnly getQuaternion()
-   {
-      return quaternion;
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(FrameTuple4DReadOnly)}, it returns {@code false} otherwise.
     * <p>

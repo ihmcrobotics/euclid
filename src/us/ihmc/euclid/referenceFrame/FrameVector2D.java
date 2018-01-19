@@ -199,16 +199,6 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
       return vector.getY();
    }
 
-   /**
-    * Gets the read-only reference to the vector used in {@code this}.
-    *
-    * @return the vector of {@code this}.
-    */
-   public final Vector2D getVector()
-   {
-      return vector;
-   }
-
    /** {@inheritDoc} */
    @Override
    public void changeFrame(ReferenceFrame desiredFrame)

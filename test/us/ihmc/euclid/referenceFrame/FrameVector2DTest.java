@@ -203,21 +203,6 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
       }
    }
 
-   @Test
-   public void testGetVector()
-   {
-      Random random = new Random(43535);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
-         FrameVector2D frameVector = new FrameVector2D(worldFrame, expected);
-         Vector2D actual = frameVector.getVector();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(frameVector, actual, EPSILON);
-      }
-   }
-
    @Override
    public void testOverloading() throws Exception
    {

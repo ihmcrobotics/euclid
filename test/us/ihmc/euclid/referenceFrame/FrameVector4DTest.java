@@ -22,7 +22,6 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.Vector4DBasicsTest;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
 {
@@ -176,21 +175,6 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          FrameVector4D actual = new FrameVector4D(worldFrame, expected);
 
          assertEquals(expected.hashCode(), actual.hashCode());
-      }
-   }
-
-   @Test
-   public void testGetVector()
-   {
-      Random random = new Random(43535);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         Vector4D expected = EuclidCoreRandomTools.nextVector4D(random);
-         FrameVector4D frameVector = new FrameVector4D(worldFrame, expected);
-         Vector4DReadOnly actual = frameVector.getVector();
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
-         EuclidCoreTestTools.assertTuple4DEquals(frameVector, actual, EPSILON);
       }
    }
 

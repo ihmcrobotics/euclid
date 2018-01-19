@@ -221,16 +221,6 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    }
 
    /**
-    * Gets the read-only reference to the point used in {@code this}.
-    *
-    * @return the point of {@code this}.
-    */
-   public Point3D getPoint()
-   {
-      return point;
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
     * <p>

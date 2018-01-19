@@ -186,21 +186,6 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
       }
    }
 
-   @Test
-   public void testGetVector()
-   {
-      Random random = new Random(43535);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
-         FrameVector3D frameVector = new FrameVector3D(worldFrame, expected);
-         Vector3D actual = frameVector.getVector();
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(frameVector, actual, EPSILON);
-      }
-   }
-
    @Override
    public void testOverloading() throws Exception
    {
