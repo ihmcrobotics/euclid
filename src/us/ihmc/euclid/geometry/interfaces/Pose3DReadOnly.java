@@ -31,21 +31,30 @@ public interface Pose3DReadOnly
     *
     * @return the x-coordinate of this pose 3D.
     */
-   double getX();
+   default double getX()
+   {
+      return getPosition().getX();
+   }
 
    /**
     * Gets the y-coordinate of the position part of this pose 3D.
     *
     * @return the y-coordinate of this pose 3D.
     */
-   double getY();
+   default double getY()
+   {
+      return getPosition().getY();
+   }
 
    /**
     * Gets the z-coordinate of the position part of this pose 3D.
     *
     * @return the z-coordinate of this pose 3D.
     */
-   double getZ();
+   default double getZ()
+   {
+      return getPosition().getZ();
+   }
 
    /**
     * Computes and returns the yaw angle from the yaw-pitch-roll representation of the orientation
@@ -57,7 +66,10 @@ public interface Pose3DReadOnly
     *
     * @return the yaw angle around the z-axis.
     */
-   double getYaw();
+   default double getYaw()
+   {
+      return getOrientation().getYaw();
+   }
 
    /**
     * Computes and returns the pitch angle from the yaw-pitch-roll representation of the orientation
@@ -69,7 +81,10 @@ public interface Pose3DReadOnly
     *
     * @return the pitch angle around the y-axis.
     */
-   double getPitch();
+   default double getPitch()
+   {
+      return getOrientation().getPitch();
+   }
 
    /**
     * Computes and returns the roll angle from the yaw-pitch-roll representation of the orientation
@@ -81,7 +96,10 @@ public interface Pose3DReadOnly
     *
     * @return the roll angle around the x-axis.
     */
-   double getRoll();
+   default double getRoll()
+   {
+      return getOrientation().getRoll();
+   }
 
    /**
     * Tests if this pose contains a {@link Double#NaN}.
@@ -185,7 +203,7 @@ public interface Pose3DReadOnly
    {
       transformToPack.set(getOrientation(), getPosition());
    }
-   
+
    /**
     * Computes the distance between the position of this pose 3D and the given {@code point}.
     *
@@ -261,5 +279,20 @@ public interface Pose3DReadOnly
    default boolean geometricallyEquals(Pose3DReadOnly other, double epsilon)
    {
       return this.getPosition().geometricallyEquals(other.getPosition(), epsilon) && this.getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
+    *
+    * @param other the other pose 3D to compare against this. Not modified.
+    * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(Pose3DReadOnly other)
+   {
+      if (other == null)
+         return false;
+      else
+         return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
 }
