@@ -43,6 +43,19 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
    }
 
    /**
+    * Sets the position from the given frame tuple 3D.
+    *
+    * @param position the tuple with the new position coordinates. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed
+    *            in the same reference frame.
+    */
+   default void setPosition(FrameTuple3DReadOnly position)
+   {
+      checkReferenceFrameMatch(position);
+      Pose2DBasics.super.setPosition(position);
+   }
+
+   /**
     * Sets the orientation from the given frame orientation 2D.
     *
     * @param orientation the orientation with the new angle value for this. Not modified.
@@ -50,6 +63,12 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     *            expressed in the same reference frame.
     */
    default void setOrientation(FrameOrientation2DReadOnly orientation)
+   {
+      checkReferenceFrameMatch(orientation);
+      Pose2DBasics.super.setOrientation(orientation);
+   }
+
+   default void setOrientation(FrameQuaternionReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
       Pose2DBasics.super.setOrientation(orientation);

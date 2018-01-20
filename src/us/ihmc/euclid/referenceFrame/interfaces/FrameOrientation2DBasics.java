@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 // TODO
 public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics
@@ -67,6 +68,19 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics
    }
 
    /**
+    * Sets this frame orientation 2D to {@code quaternionReadOnly} and sets its current frame to
+    * {@code referenceFrame}.
+    *
+    * @param referenceFrame the new reference frame for this frame orientation 2D.
+    * @param quaternionReadOnly the quaternion to get the yaw angle from. Not modified.
+    */
+   default void setIncludingFrame(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(quaternionReadOnly);
+   }
+
+   /**
     * Sets this frame orientation 2D to {@code other}.
     *
     * @param other the other frame orientation 2D to copy the values and reference frame from. Not
@@ -75,5 +89,16 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics
    default void setIncludingFrame(FrameOrientation2DReadOnly other)
    {
       setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this frame orientation 2D to {@code frameQuaternionReadOnly}.
+    *
+    * @param frameQuaternionReadOnly the other frame orientation 2D to copy the values and reference frame from. Not
+    *           modified.
+    */
+   default void setIncludingFrame(FrameQuaternionReadOnly frameQuaternionReadOnly)
+   {
+      setIncludingFrame(frameQuaternionReadOnly.getReferenceFrame(), frameQuaternionReadOnly);
    }
 }
