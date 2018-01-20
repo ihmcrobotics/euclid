@@ -3,9 +3,17 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Read-only interface for pose 3D.
+ * <p>
+ * A pose 3D represents a position and orientation in 3 dimensions.
+ * </p>
+ */
 public interface Pose3DReadOnly
 {
    /**
@@ -183,6 +191,18 @@ public interface Pose3DReadOnly
    default double getOrientationDistance(Pose3DReadOnly other)
    {
       return getOrientation().distance(other.getOrientation());
+   }
+
+   /**
+    * Gets the position and orientation parts of this pose 3D.
+    * 
+    * @param positionToPack tuple in which the position is stored. Modified.
+    * @param orientationToPack quaternion in which the orientation is stored. Modified.
+    */
+   default void get(Tuple3DBasics positionToPack, QuaternionBasics orientationToPack)
+   {
+      positionToPack.set(getPosition());
+      orientationToPack.set(getOrientation());
    }
 
    /**

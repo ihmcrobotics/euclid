@@ -52,16 +52,22 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    }
 
    /**
+    * Creates a new pose 3D and initializes to represent the same pose as the given
+    * {@code pose2DReadOnly}.
+    * 
+    * @param pose2DReadOnly the pose 2D used to initialize this pose 3D. Not modified.
+    */
+   public Pose3D(Pose2DReadOnly pose2DReadOnly)
+   {
+      set(pose2DReadOnly);
+   }
+
+   /**
     * Creates a new pose 3D and initializes it to {@code other}.
     *
     * @param other the other pose 3D used to initialize this. Not modified.
     */
    public Pose3D(Pose3DReadOnly other)
-   {
-      set(other);
-   }
-
-   public Pose3D(Pose2DReadOnly other)
    {
       set(other);
    }

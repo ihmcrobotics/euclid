@@ -15,6 +15,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Write and read interface for pose 3D.
+ * <p>
+ * A pose 3D represents a position and orientation in 3 dimensions.
+ * </p>
+ */
 public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
 {
    /**
@@ -100,7 +106,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the position from the given tuple 2D and z coordinate.
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
-    * @param z the new z value.
+    * @param z the new z value for this pose's position z-coordinate.
     */
    default void setPosition(Tuple2DReadOnly position2D, double z)
    {
