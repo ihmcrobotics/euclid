@@ -113,6 +113,12 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
       Pose2DBasics.super.set(framePose3DReadOnly);
    }
 
+   default void set(FrameTuple2DReadOnly position, double yaw)
+   {
+      checkReferenceFrameMatch(position);
+      Pose2DBasics.super.set(position, yaw);
+   }
+
    /**
     * Sets both position and orientation.
     *
