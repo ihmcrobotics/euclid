@@ -6,6 +6,8 @@ import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -341,7 +343,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * 
     * @param pose pose holding the new position and orientation for this shape. Not modified.
     */
-   public final void setPose(Pose3D pose)
+   public final void setPose(Pose3DReadOnly pose)
    {
       pose.get(shapePose);
    }
@@ -592,7 +594,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * @param poseToPack the pose in which the position and orientation of this shape are stored.
     *           Modified.
     */
-   public final void getPose(Pose3D poseToPack)
+   public final void getPose(Pose3DBasics poseToPack)
    {
       poseToPack.set(shapePose);
    }
