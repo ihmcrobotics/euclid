@@ -3,6 +3,12 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
+/**
+ * Read-only interface for a pose 2D.
+ * <p>
+ * A pose 2D represents a position and orientation in the XY-plane.
+ * </p>
+ */
 public interface Pose2DReadOnly
 {
    /**

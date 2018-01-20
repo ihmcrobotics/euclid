@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
- * Write and read interface for pose 2D.
+ * Write and read interface for a pose 2D.
  * <p>
  * A pose 2D represents a position and orientation in the XY-plane.
  * </p>
