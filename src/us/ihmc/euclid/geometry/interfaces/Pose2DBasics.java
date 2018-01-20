@@ -11,6 +11,12 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Write and read interface for pose 2D.
+ * <p>
+ * A pose 2D represents a position and orientation in the XY-plane.
+ * </p>
+ */
 public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
 {
    /**
@@ -100,7 +106,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    /**
     * Sets this pose 3D to the {@code other} pose 3D.
     *
-    * @param pose3DReadOnly the other pose 3D. Not modified.
+    * @param pose3DReadOnly the pose 3D. Not modified.
     */
    default void set(Pose3DReadOnly pose3DReadOnly)
    {
@@ -182,6 +188,12 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
       setOrientation(yaw);
    }
 
+   /**
+    * Sets this pose 2D from the given {@code position} and {@code yaw} angle.
+    * 
+    * @param position the tuple used to initialize this pose's position. Not modified.
+    * @param yaw the angle used to initialize the pose's orientation.
+    */
    default void set(Tuple2DReadOnly position, double yaw)
    {
       setPosition(position);
