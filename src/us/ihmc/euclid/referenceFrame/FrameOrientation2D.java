@@ -6,6 +6,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
 // TODO
@@ -72,6 +73,11 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    public FrameOrientation2D(FrameOrientation2DReadOnly other)
    {
       setIncludingFrame(referenceFrame, other);
+   }
+
+   public FrameOrientation2D(FrameQuaternionReadOnly frameQuaternionReadOnly)
+   {
+      setIncludingFrame(frameQuaternionReadOnly);
    }
 
    /** {@inheritDoc} */

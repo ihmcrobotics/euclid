@@ -2,7 +2,6 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 
 public interface Pose2DReadOnly
 {
@@ -60,26 +59,6 @@ public interface Pose2DReadOnly
     * @return the orientation part of this pose 2D.
     */
    Orientation2DReadOnly getOrientation();
-
-   /**
-    * Packs the position part of this pose 2D into the given {@code positionToPack}.
-    *
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    */
-   default void getPosition(Tuple2DBasics positionToPack)
-   {
-      positionToPack.set(getPosition());
-   }
-
-   /**
-    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
-    */
-   default void getOrientation(Orientation2DBasics orientationToPack)
-   {
-      orientationToPack.set(getOrientation());
-   }
 
    /**
     * Packs this pose 2D into the given {@code transformToPack}.

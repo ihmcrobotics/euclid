@@ -3,7 +3,16 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.Random;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.referenceFrame.*;
+import us.ihmc.euclid.referenceFrame.FrameOrientation2D;
+import us.ihmc.euclid.referenceFrame.FramePoint2D;
+import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.FramePose2D;
+import us.ihmc.euclid.referenceFrame.FramePose3D;
+import us.ihmc.euclid.referenceFrame.FrameQuaternion;
+import us.ihmc.euclid.referenceFrame.FrameVector2D;
+import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.FrameVector4D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -324,7 +333,8 @@ public class EuclidFrameRandomTools
     *           random frames.
     * @return the array containing the random reference frame and {@code rootFrame} at the first
     *         index.
-    * @deprecated Use {@link #nextReferenceFrameTree(String,Random,ReferenceFrame,int,boolean)} instead
+    * @deprecated Use {@link #nextReferenceFrameTree(String,Random,ReferenceFrame,int,boolean)}
+    *             instead
     */
    public static ReferenceFrame[] generateRandomReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames,
                                                                    boolean use2DTransforms)
@@ -345,7 +355,7 @@ public class EuclidFrameRandomTools
     *         index.
     */
    public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames,
-                                                                   boolean use2DTransforms)
+                                                         boolean use2DTransforms)
    {
       ReferenceFrame[] referenceFrames = new ReferenceFrame[numberOfReferenceFrames + 1];
       referenceFrames[0] = rootFrame;
@@ -512,8 +522,7 @@ public class EuclidFrameRandomTools
     * @throws RuntimeException if {@code maxAbsoluteX < 0}, {@code maxAbsoluteY < 0},
     *            {@code maxAbsoluteZ < 0}.
     */
-   public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY,
-                                                         double maxAbsoluteZ)
+   public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
       return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
    }
@@ -536,7 +545,9 @@ public class EuclidFrameRandomTools
     * @param maxZ the maximum value for the z-coordinate.
     * @return the random frame point.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
-    * @deprecated Use {@link #nextFramePoint3D(Random,ReferenceFrame,double,double,double,double,double,double)} instead
+    * @deprecated Use
+    *             {@link #nextFramePoint3D(Random,ReferenceFrame,double,double,double,double,double,double)}
+    *             instead
     */
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
                                                          double minZ, double maxZ)
@@ -563,8 +574,8 @@ public class EuclidFrameRandomTools
     * @return the random frame point.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
-   public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
-                                                         double minZ, double maxZ)
+   public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
+                                               double maxZ)
    {
       return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
@@ -653,7 +664,9 @@ public class EuclidFrameRandomTools
     *           modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
-    * @deprecated Use {@link #nextFrameVector3D(Random,ReferenceFrame,Tuple3DReadOnly,Tuple3DReadOnly)} instead
+    * @deprecated Use
+    *             {@link #nextFrameVector3D(Random,ReferenceFrame,Tuple3DReadOnly,Tuple3DReadOnly)}
+    *             instead
     */
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame, Tuple3DReadOnly min, Tuple3DReadOnly max)
    {
@@ -735,7 +748,9 @@ public class EuclidFrameRandomTools
     * @param maxZ the maximum value for the z-component.
     * @return the random vector.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
-    * @deprecated Use {@link #nextFrameVector3D(Random,ReferenceFrame,double,double,double,double,double,double)} instead
+    * @deprecated Use
+    *             {@link #nextFrameVector3D(Random,ReferenceFrame,double,double,double,double,double,double)}
+    *             instead
     */
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
                                                            double minZ, double maxZ)
@@ -762,8 +777,8 @@ public class EuclidFrameRandomTools
     * @return the random vector.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
-   public static FrameVector3D nextFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
-                                                           double minZ, double maxZ)
+   public static FrameVector3D nextFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
+                                                 double maxZ)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
@@ -775,7 +790,8 @@ public class EuclidFrameRandomTools
     * @param referenceFrame the random frame vector's reference frame.
     * @param length the length of the generated frame vector.
     * @return the random frame vector.
-    * @deprecated Use {@link #nextFrameVector3DWithFixedLength(Random,ReferenceFrame,double)} instead
+    * @deprecated Use {@link #nextFrameVector3DWithFixedLength(Random,ReferenceFrame,double)}
+    *             instead
     */
    public static FrameVector3D generateRandomFrameVector3DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
    {
@@ -802,7 +818,8 @@ public class EuclidFrameRandomTools
     * @param vectorToBeOrthogonalTo the frame vector to be orthogonal to. Not modified.
     * @param normalize whether to normalize the generated frame vector or not.
     * @return the random frame vector.
-    * @deprecated Use {@link #nextOrthogonalFrameVector3D(Random,FrameVector3DReadOnly,boolean)} instead
+    * @deprecated Use {@link #nextOrthogonalFrameVector3D(Random,FrameVector3DReadOnly,boolean)}
+    *             instead
     */
    public static FrameVector3D generateRandomOrthogonalFrameVector3D(Random random, FrameVector3DReadOnly vectorToBeOrthogonalTo, boolean normalize)
    {
@@ -830,7 +847,9 @@ public class EuclidFrameRandomTools
     * @param vectorToBeOrthogonalTo the vector to be orthogonal to. Not modified.
     * @param normalize whether to normalize the generated frame vector or not.
     * @return the random frame vector.
-    * @deprecated Use {@link #nextOrthogonalFrameVector3D(Random,ReferenceFrame,Vector3DReadOnly,boolean)} instead
+    * @deprecated Use
+    *             {@link #nextOrthogonalFrameVector3D(Random,ReferenceFrame,Vector3DReadOnly,boolean)}
+    *             instead
     */
    public static FrameVector3D generateRandomOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
                                                                      boolean normalize)
@@ -848,7 +867,7 @@ public class EuclidFrameRandomTools
     * @return the random frame vector.
     */
    public static FrameVector3D nextOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
-                                                                     boolean normalize)
+                                                           boolean normalize)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextOrthogonalVector3D(random, vectorToBeOrthogonalTo, normalize));
    }
@@ -969,7 +988,8 @@ public class EuclidFrameRandomTools
     * @param maxY the maximum value for the y-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code minX > maxX} or {@code minY > maxY}.
-    * @deprecated Use {@link #nextFramePoint2D(Random,ReferenceFrame,double,double,double,double)} instead
+    * @deprecated Use {@link #nextFramePoint2D(Random,ReferenceFrame,double,double,double,double)}
+    *             instead
     */
    public static FramePoint2D generateRandomFramePoint2D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY)
    {
@@ -1072,7 +1092,8 @@ public class EuclidFrameRandomTools
     * @param referenceFrame the random frame point's reference frame.
     * @param length the length of the generated frame vector.
     * @return the random frame vector.
-    * @deprecated Use {@link #nextFrameVector2DWithFixedLength(Random,ReferenceFrame,double)} instead
+    * @deprecated Use {@link #nextFrameVector2DWithFixedLength(Random,ReferenceFrame,double)}
+    *             instead
     */
    public static FrameVector2D generateRandomFrameVector2DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
    {
@@ -1145,7 +1166,9 @@ public class EuclidFrameRandomTools
     *           modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
-    * @deprecated Use {@link #nextFrameVector2D(Random,ReferenceFrame,Tuple2DReadOnly,Tuple2DReadOnly)} instead
+    * @deprecated Use
+    *             {@link #nextFrameVector2D(Random,ReferenceFrame,Tuple2DReadOnly,Tuple2DReadOnly)}
+    *             instead
     */
    public static FrameVector2D generateRandomFrameVector2D(Random random, ReferenceFrame referenceFrame, Tuple2DReadOnly min, Tuple2DReadOnly max)
    {
@@ -1204,7 +1227,8 @@ public class EuclidFrameRandomTools
    }
 
    /**
-    * Generates a random 2D frame orientation with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
+    * Generates a random 2D frame orientation with a yaw uniformly distributed in [-<i>pi</i>;
+    * <i>pi</i>].
     *
     * @param random the random generator to use.
     * @param referenceFrame the random frame orientation's reference frame.
@@ -1227,6 +1251,11 @@ public class EuclidFrameRandomTools
       return new FramePose2D(referenceFrame, EuclidGeometryRandomTools.nextPose2D(random));
    }
 
+   public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
+   {
+      return new FramePose2D(referenceFrame, EuclidGeometryRandomTools.nextPose2D(random, positionMinMax, orientationMinMax));
+   }
+
    /**
     * Generates a random 3D frame pose with a quaternion uniformly distributed on the unit-sphere.
     * <p>
@@ -1240,6 +1269,16 @@ public class EuclidFrameRandomTools
    public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame)
    {
       return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random));
+   }
+
+   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
+   {
+      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
+   }
+
+   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
+   {
+      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, positionMinMax, orientationMinMax));
    }
 
    /**

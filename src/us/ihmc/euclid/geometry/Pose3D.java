@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
@@ -56,6 +57,11 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * @param other the other pose 3D used to initialize this. Not modified.
     */
    public Pose3D(Pose3DReadOnly other)
+   {
+      set(other);
+   }
+
+   public Pose3D(Pose2DReadOnly other)
    {
       set(other);
    }

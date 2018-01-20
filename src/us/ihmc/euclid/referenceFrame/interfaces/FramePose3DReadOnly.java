@@ -11,70 +11,6 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    @Override
    FrameQuaternionReadOnly getOrientation();
 
-   default void getPosition(FixedFrameTuple2DBasics positionToPack)
-   {
-      positionToPack.set(getPosition());
-   }
-
-   default void getPosition(FrameTuple2DBasics positionToPack)
-   {
-      positionToPack.setIncludingFrame(getPosition());
-   }
-
-   /**
-    * Packs the position part of this pose 3D into the given {@code positionToPack}.
-    *
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    * @throws ReferenceFrameMismatchException if {@code positionToPack} is not expressed in the same
-    *            reference frame as {@code this}.
-    */
-   default void getPosition(FixedFrameTuple3DBasics positionToPack)
-   {
-      positionToPack.set(getPosition());
-   }
-
-   /**
-    * Packs the position part of this pose 3D into the given {@code positionToPack}.
-    *
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    */
-   default void getPosition(FrameTuple3DBasics positionToPack)
-   {
-      positionToPack.setIncludingFrame(getPosition());
-   }
-
-   default void getOrientation(FixedFrameOrientation2DBasics orientationToPack)
-   {
-      orientationToPack.set(getOrientation());
-   }
-
-   default void getOrientation(FrameOrientation2DBasics orientationToPack)
-   {
-      orientationToPack.setIncludingFrame(getOrientation());
-   }
-
-   /**
-    * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 3D. Modified.
-    * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the
-    *            same reference frame as {@code this}.
-    */
-   default void getOrientation(FixedFrameQuaternionBasics orientationToPack)
-   {
-      orientationToPack.set(getOrientation());
-   }
-
-   /**
-    * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 3D. Modified.
-    */
-   default void getOrientation(FrameQuaternionBasics orientationToPack)
-   {
-      orientationToPack.setIncludingFrame(getOrientation());
-   }
-
    /**
     * Computes and packs the orientation described by the orientation part of this pose as a
     * rotation vector.
@@ -162,16 +98,6 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    default double getOrientationDistance(FramePose3DReadOnly other)
    {
       return getOrientationDistance(other.getOrientation());
-   }
-
-   default void get(FixedFramePose2DBasics pose2DToPack)
-   {
-      pose2DToPack.set(this);
-   }
-   
-   default void get(FramePose2DBasics pose2DToPack)
-   {
-      pose2DToPack.setIncludingFrame(this);
    }
 
    /**

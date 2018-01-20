@@ -1,8 +1,10 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -48,6 +50,11 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
       set(other);
    }
 
+   public Pose2D(Pose3DReadOnly other)
+   {
+      set(other);
+   }
+
    public Pose2D(Tuple2DReadOnly position, double yaw)
    {
       set(position, yaw);
@@ -59,7 +66,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     * @param position tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
-   public Pose2D(Tuple2DReadOnly position, Orientation2D orientation)
+   public Pose2D(Tuple2DReadOnly position, Orientation2DReadOnly orientation)
    {
       set(position, orientation);
    }

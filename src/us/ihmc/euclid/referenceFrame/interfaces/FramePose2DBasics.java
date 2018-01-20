@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeable
@@ -62,6 +63,17 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
    {
       setReferenceFrame(referenceFrame);
       set(position, orientation);
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform)
+   {
+      setIncludingFrame(referenceFrame, rigidBodyTransform, true);
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
+   {
+      setReferenceFrame(referenceFrame);
+      set(rigidBodyTransform, checkIsTransform2D);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, FrameTuple2DReadOnly position, double yaw)

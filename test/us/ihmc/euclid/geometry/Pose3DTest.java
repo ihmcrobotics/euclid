@@ -248,7 +248,7 @@ public class Pose3DTest
 
          assertEquals(length, firstPose.getPositionDistance(secondPose), epsilon);
 
-         firstPose.getPosition(point);
+         point.set(firstPose.getPosition());
          point.add(translation);
 
          assertEquals(length, firstPose.getPositionDistance(point), epsilon);

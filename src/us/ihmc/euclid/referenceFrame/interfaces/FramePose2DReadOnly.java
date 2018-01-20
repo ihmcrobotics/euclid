@@ -12,50 +12,6 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
    FrameOrientation2DReadOnly getOrientation();
 
    /**
-    * Packs the position part of this pose 2D into the given {@code positionToPack}.
-    *
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    * @throws ReferenceFrameMismatchException if {@code positionToPack} is not expressed in the same
-    *            reference frame as {@code this}.
-    */
-   default void getPosition(FixedFrameTuple2DBasics positionToPack)
-   {
-      positionToPack.set(getPosition());
-   }
-
-   /**
-    * Packs the position part of this pose 2D into the given {@code positionToPack}.
-    *
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    */
-   default void getPosition(FrameTuple2DBasics positionToPack)
-   {
-      positionToPack.setIncludingFrame(getPosition());
-   }
-
-   /**
-    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
-    * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the
-    *            same reference frame as {@code this}.
-    */
-   default void getOrientation(FixedFrameOrientation2DBasics orientationToPack)
-   {
-      orientationToPack.set(getOrientation());
-   }
-
-   /**
-    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
-    */
-   default void getOrientation(FrameOrientation2DBasics orientationToPack)
-   {
-      orientationToPack.setIncludingFrame(getOrientation());
-   }
-
-   /**
     * Computes the distances between the position part of the two poses.
     *
     * @param other the other pose used to measure the distance. Not modified.

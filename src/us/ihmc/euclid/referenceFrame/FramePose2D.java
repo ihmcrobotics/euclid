@@ -8,6 +8,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -18,39 +19,6 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    private ReferenceFrame referenceFrame;
    /** Pose used to perform the operations. */
    private final Pose2D pose = new Pose2D();
-
-   private final FixedFrameOrientation2DBasics orientationPart = new FixedFrameOrientation2DBasics()
-   {
-      @Override
-      public void setYaw(double yaw)
-      {
-         pose.setYaw(yaw);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getYaw()
-      {
-         return pose.getYaw();
-      }
-
-      @Override
-      public void applyTransform(Transform transform)
-      {
-         pose.getOrientation().applyTransform(transform);
-      }
-
-      @Override
-      public void applyInverseTransform(Transform transform)
-      {
-         pose.getOrientation().applyInverseTransform(transform);
-      }
-   };
 
    private final FixedFramePoint2DBasics positionPart = new FixedFramePoint2DBasics()
    {
@@ -97,6 +65,39 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
       }
    };
 
+   private final FixedFrameOrientation2DBasics orientationPart = new FixedFrameOrientation2DBasics()
+   {
+      @Override
+      public void setYaw(double yaw)
+      {
+         pose.setYaw(yaw);
+      }
+
+      @Override
+      public ReferenceFrame getReferenceFrame()
+      {
+         return referenceFrame;
+      }
+
+      @Override
+      public double getYaw()
+      {
+         return pose.getYaw();
+      }
+
+      @Override
+      public void applyTransform(Transform transform)
+      {
+         pose.getOrientation().applyTransform(transform);
+      }
+
+      @Override
+      public void applyInverseTransform(Transform transform)
+      {
+         pose.getOrientation().applyInverseTransform(transform);
+      }
+   };
+
    public FramePose2D()
    {
       this(ReferenceFrame.getWorldFrame());
@@ -124,7 +125,12 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
     */
    public FramePose2D(FramePose2DReadOnly pose)
    {
-      this(ReferenceFrame.getWorldFrame(), pose);
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), pose);
+   }
+
+   public FramePose2D(FramePose3DReadOnly pose)
+   {
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), pose);
    }
 
    /**
