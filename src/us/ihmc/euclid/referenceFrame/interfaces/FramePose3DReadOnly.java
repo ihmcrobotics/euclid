@@ -11,6 +11,16 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    @Override
    FrameQuaternionReadOnly getOrientation();
 
+   default void getPosition(FixedFrameTuple2DBasics positionToPack)
+   {
+      positionToPack.set(getPosition());
+   }
+
+   default void getPosition(FrameTuple2DBasics positionToPack)
+   {
+      positionToPack.setIncludingFrame(getPosition());
+   }
+
    /**
     * Packs the position part of this pose 3D into the given {@code positionToPack}.
     *
@@ -31,6 +41,16 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    default void getPosition(FrameTuple3DBasics positionToPack)
    {
       positionToPack.setIncludingFrame(getPosition());
+   }
+
+   default void getOrientation(FixedFrameOrientation2DBasics orientationToPack)
+   {
+      orientationToPack.set(getOrientation());
+   }
+
+   default void getOrientation(FrameOrientation2DBasics orientationToPack)
+   {
+      orientationToPack.setIncludingFrame(getOrientation());
    }
 
    /**
@@ -142,6 +162,16 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    default double getOrientationDistance(FramePose3DReadOnly other)
    {
       return getOrientationDistance(other.getOrientation());
+   }
+
+   default void get(FixedFramePose2DBasics pose2DToPack)
+   {
+      pose2DToPack.set(this);
+   }
+   
+   default void get(FramePose2DBasics pose2DToPack)
+   {
+      pose2DToPack.setIncludingFrame(this);
    }
 
    /**

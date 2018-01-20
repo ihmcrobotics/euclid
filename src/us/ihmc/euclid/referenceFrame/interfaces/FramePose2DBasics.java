@@ -2,10 +2,11 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
-public interface FramePose2DBasics extends FixedFramePose2DBasics
+public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeable
 {
    /**
     * Sets the reference frame of this orientation 2D without updating or modifying its position or
@@ -45,6 +46,12 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics
       set(x, y, yaw);
    }
 
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(pose3DReadOnly);
+   }
+
    default void setIncludingFrame(ReferenceFrame referenceFrame, Pose2DReadOnly pose2DReadOnly)
    {
       setReferenceFrame(referenceFrame);
@@ -57,6 +64,18 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics
       set(position, orientation);
    }
 
+   default void setIncludingFrame(ReferenceFrame referenceFrame, FrameTuple2DReadOnly position, double yaw)
+   {
+      position.checkReferenceFrameMatch(referenceFrame);
+      setIncludingFrame(referenceFrame, (Tuple2DReadOnly) position, yaw);
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly position, double yaw)
+   {
+      setReferenceFrame(referenceFrame);
+      set(position, yaw);
+   }
+
    default void setIncludingFrame(FrameTuple2DReadOnly position, FrameOrientation2DReadOnly orientation)
    {
       position.checkReferenceFrameMatch(orientation);
@@ -64,6 +83,11 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics
    }
 
    default void setIncludingFrame(FramePose2DReadOnly other)
+   {
+      setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
+   default void setIncludingFrame(FramePose3DReadOnly other)
    {
       setIncludingFrame(other.getReferenceFrame(), other);
    }

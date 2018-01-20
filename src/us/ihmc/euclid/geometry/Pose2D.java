@@ -48,6 +48,11 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
       set(other);
    }
 
+   public Pose2D(Tuple2DReadOnly position, double yaw)
+   {
+      set(position, yaw);
+   }
+
    /**
     * Creates a new pose 2D and initializes it with the given parameters.
     *

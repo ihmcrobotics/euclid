@@ -5,9 +5,12 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2D>
 {
@@ -104,6 +107,11 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
       setToZero(referenceFrame);
    }
 
+   public FramePose2D(FrameTuple2DReadOnly position, FrameOrientation2DReadOnly orientation)
+   {
+      setIncludingFrame(position, orientation);
+   }
+
    /**
     * Creates a new frame pose and initializes its current reference frame to
     * {@link ReferenceFrame#getWorldFrame()} and pose to {@code pose}.
@@ -132,6 +140,16 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    public FramePose2D(ReferenceFrame referenceFrame, Pose2DReadOnly pose)
    {
       setIncludingFrame(referenceFrame, pose);
+   }
+
+   public FramePose2D(ReferenceFrame referenceFrame, FrameTuple2DReadOnly position, double yaw)
+   {
+      setIncludingFrame(referenceFrame, position, yaw);
+   }
+   
+   public FramePose2D(ReferenceFrame referenceFrame, Tuple2DReadOnly position, double yaw)
+   {
+      setIncludingFrame(referenceFrame, position, yaw);
    }
 
    @Override

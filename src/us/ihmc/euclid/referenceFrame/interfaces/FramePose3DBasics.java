@@ -1,9 +1,13 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-public interface FramePose3DBasics extends FixedFramePose3DBasics
+public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeable
 {
    /**
     * Sets the reference frame of this orientation 3D without updating or modifying its position or
@@ -41,6 +45,31 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics
    {
       setReferenceFrame(referenceFrame);
       set(pose3DReadOnly);
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform)
+   {
+      setReferenceFrame(referenceFrame);
+      set(rigidBodyTransform);
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly position, QuaternionReadOnly orientation)
+   {
+      setReferenceFrame(referenceFrame);
+      set(position, orientation);
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly position, AxisAngleReadOnly orientation)
+   {
+      setReferenceFrame(referenceFrame);
+      set(position, orientation);
+   }
+
+   default void setIncludingFrame(FrameTuple3DReadOnly position, FrameQuaternionReadOnly orientation)
+   {
+      position.checkReferenceFrameMatch(orientation);
+      setReferenceFrame(position.getReferenceFrame());
+      set((Tuple3DReadOnly) position, (QuaternionReadOnly) orientation);
    }
 
    default void setIncludingFrame(FramePose3DReadOnly other)

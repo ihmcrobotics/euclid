@@ -25,6 +25,21 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   public FrameOrientation2D(ReferenceFrame referenceFrame)
+   {
+      setToZero(referenceFrame);
+   }
+
+   public FrameOrientation2D(double yaw)
+   {
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), yaw);
+   }
+
+   public FrameOrientation2D(ReferenceFrame referenceFrame, double yaw)
+   {
+      setIncludingFrame(referenceFrame, yaw);
+   }
+
    /**
     * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D}
     * and its reference frame to {@link ReferenceFrame#getWorldFrame()}.

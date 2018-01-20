@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -7,6 +8,11 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3D>
 {
@@ -119,6 +125,11 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
       setIncludingFrame(ReferenceFrame.getWorldFrame(), pose);
    }
 
+   public FramePose3D(ReferenceFrame referenceFrame)
+   {
+      setToZero(referenceFrame);
+   }
+
    /**
     * Creates a new frame pose and initializes its current reference frame and pose.
     * <p>
@@ -132,6 +143,26 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    public FramePose3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose)
    {
       setIncludingFrame(referenceFrame, pose);
+   }
+
+   public FramePose3D(ReferenceFrame referenceFrame, RigidBodyTransform pose)
+   {
+      setIncludingFrame(referenceFrame, pose);
+   }
+
+   public FramePose3D(ReferenceFrame referenceFrame, Tuple3DReadOnly position, QuaternionReadOnly orientation)
+   {
+      setIncludingFrame(referenceFrame, position, orientation);
+   }
+
+   public FramePose3D(ReferenceFrame referenceFrame, Tuple3DReadOnly position, AxisAngleReadOnly orientation)
+   {
+      setIncludingFrame(referenceFrame, position, orientation);
+   }
+   
+   public FramePose3D(FrameTuple3DReadOnly position, FrameQuaternionReadOnly orientation)
+   {
+      setIncludingFrame(position, orientation);
    }
 
    public FramePose3D(FramePose3DReadOnly other)

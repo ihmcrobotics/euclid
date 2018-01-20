@@ -4,6 +4,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -114,11 +115,26 @@ public interface Pose3DReadOnly
    /**
     * Packs the position part of this pose 3D into the given {@code positionToPack}.
     *
+    * @param positionToPack tuple used to store the position x and y coordinates. Modified.
+    */
+   default void getPosition(Tuple2DBasics positionToPack)
+   {
+      positionToPack.set(getPosition());
+   }
+
+   /**
+    * Packs the position part of this pose 3D into the given {@code positionToPack}.
+    *
     * @param positionToPack tuple used to store the position coordinates. Modified.
     */
    default void getPosition(Tuple3DBasics positionToPack)
    {
       positionToPack.set(getPosition());
+   }
+
+   default void getOrientation(Orientation2DBasics orientation2DToPack)
+   {
+      orientation2DToPack.set(getOrientation());
    }
 
    /**

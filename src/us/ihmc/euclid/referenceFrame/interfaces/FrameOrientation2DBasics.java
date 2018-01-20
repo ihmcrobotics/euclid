@@ -5,7 +5,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 // TODO
-public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics
+public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics, FrameChangeable
 {
    /**
     * Sets the reference frame of this orientation 2D without updating or modifying its yaw angle.

@@ -182,6 +182,12 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
       setOrientation(yaw);
    }
 
+   default void set(Tuple2DReadOnly position, double yaw)
+   {
+      setPosition(position);
+      setOrientation(yaw);
+   }
+
    /**
     * Sets both position and orientation.
     *
