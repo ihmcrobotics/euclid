@@ -5,6 +5,24 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
 public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolder
 {
+   @Override
+   FramePoint3DReadOnly getPosition();
+
+   @Override
+   FrameQuaternionReadOnly getOrientation();
+
+   /**
+    * Packs the position part of this pose 3D into the given {@code positionToPack}.
+    *
+    * @param positionToPack tuple used to store the position coordinates. Modified.
+    * @throws ReferenceFrameMismatchException if {@code positionToPack} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   default void getPosition(FixedFrameTuple3DBasics positionToPack)
+   {
+      positionToPack.set(getPosition());
+   }
+
    /**
     * Packs the position part of this pose 3D into the given {@code positionToPack}.
     *
@@ -12,7 +30,19 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default void getPosition(FrameTuple3DBasics positionToPack)
    {
-      positionToPack.setIncludingFrame(getReferenceFrame(), getPosition());
+      positionToPack.setIncludingFrame(getPosition());
+   }
+
+   /**
+    * Packs the orientation part of this pose 3D into the given {@code orientationToPack}.
+    *
+    * @param orientationToPack used to store the orientation of this pose 3D. Modified.
+    * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the
+    *            same reference frame as {@code this}.
+    */
+   default void getOrientation(FixedFrameQuaternionBasics orientationToPack)
+   {
+      orientationToPack.set(getOrientation());
    }
 
    /**
@@ -22,7 +52,25 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default void getOrientation(FrameQuaternionBasics orientationToPack)
    {
-      orientationToPack.setIncludingFrame(getReferenceFrame(), getOrientation());
+      orientationToPack.setIncludingFrame(getOrientation());
+   }
+
+   /**
+    * Computes and packs the orientation described by the orientation part of this pose as a
+    * rotation vector.
+    * <p>
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
+    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
+    * of the same axis-angle.
+    * </p>
+    *
+    * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code rotationVectorToPack} is not expressed in
+    *            the same reference frame as {@code this}.
+    */
+   default void getRotationVector(FixedFrameVector3DBasics rotationVectorToPack)
+   {
+      getOrientation().get(rotationVectorToPack);
    }
 
    /**
@@ -38,8 +86,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default void getRotationVector(FrameVector3DBasics rotationVectorToPack)
    {
-      rotationVectorToPack.setToZero(getReferenceFrame());
-      Pose3DReadOnly.super.getRotationVector(rotationVectorToPack);
+      getOrientation().get(rotationVectorToPack);
    }
 
    /**
@@ -52,8 +99,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default double getPositionDistance(FramePoint3DReadOnly point)
    {
-      checkReferenceFrameMatch(point);
-      return Pose3DReadOnly.super.getPositionDistance(point);
+      return getPosition().distance(point);
    }
 
    /**
@@ -66,8 +112,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default double getPositionDistance(FramePose3DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      return Pose3DReadOnly.super.getPositionDistance(other);
+      return getPositionDistance(other.getPosition());
    }
 
    /**
@@ -82,8 +127,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default double getOrientationDistance(FrameQuaternionReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      return Pose3DReadOnly.super.getOrientationDistance(orientation);
+      return getOrientation().distance(orientation);
    }
 
    /**
@@ -97,8 +141,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default double getOrientationDistance(FramePose3DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      return Pose3DReadOnly.super.getOrientationDistance(other);
+      return getOrientationDistance(other.getOrientation());
    }
 
    /**

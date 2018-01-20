@@ -8,6 +8,8 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
 {
@@ -96,6 +98,17 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
+    * Sets this pose 3D to the {@code other} pose 3D.
+    *
+    * @param pose3DReadOnly the other pose 3D. Not modified.
+    */
+   default void set(Pose3DReadOnly pose3DReadOnly)
+   {
+      setPosition(pose3DReadOnly.getPosition());
+      setOrientation(pose3DReadOnly.getOrientation());
+   }
+
+   /**
     * Sets the position coordinates.
     *
     * @param x the x-coordinate of the position.
@@ -117,6 +130,16 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
+    * Sets the position to the given tuple.
+    *
+    * @param position the tuple with the new position coordinates. Not modified.
+    */
+   default void setPosition(Tuple3DReadOnly position)
+   {
+      getPosition().set(position);
+   }
+
+   /**
     * Sets the orientation angle value.
     *
     * @param yaw the orientation angle value.
@@ -132,6 +155,16 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param orientation the orientation with the new angle value for this. Not modified.
     */
    default void setOrientation(Orientation2DReadOnly orientation)
+   {
+      getOrientation().set(orientation);
+   }
+
+   /**
+    * Sets the orientation from the yaw angle of the given quaternion.
+    *
+    * @param orientation the orientation with the new angle value for this. Not modified.
+    */
+   default void setOrientation(QuaternionReadOnly orientation)
    {
       getOrientation().set(orientation);
    }

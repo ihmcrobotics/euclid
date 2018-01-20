@@ -1,16 +1,18 @@
 package us.ihmc.euclid.referenceFrame;
 
-import org.junit.Test;
-import us.ihmc.euclid.geometry.Pose3D;
-import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
+
+import org.junit.Test;
+
+import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 {
@@ -19,18 +21,19 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
    {
       return new FramePose3D(referenceFrame, pose);
    }
-   
+
    @Test
    public void testConsistencyWithPose3D()
    {
       Random random = new Random(234235L);
 
-      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFramePose(frame, (Pose3DReadOnly) pose);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> createRandomPose(random).getGeometryObject();
+      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFramePose(frame,
+                                                                                                                                   (Pose3DReadOnly) pose);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextPose3D(random);
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
 
-      EuclidFrameAPITestTools.GenericTypeBuilder frameless2DTypeBuilder = () -> createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()).getGeometryObject();
+      EuclidFrameAPITestTools.GenericTypeBuilder frameless2DTypeBuilder = () -> new Pose3D(createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()));
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 

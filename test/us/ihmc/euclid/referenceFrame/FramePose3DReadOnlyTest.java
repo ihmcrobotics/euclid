@@ -8,7 +8,9 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 
+import java.lang.reflect.Method;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
 {
@@ -18,7 +20,7 @@ public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
    {
       return createFramePose(referenceFrame, new Pose3D());
    }
-   
+
    public final T createRandomPose(Random random)
    {
       return createRandomFramePose(random, ReferenceFrame.getWorldFrame());
@@ -36,7 +38,15 @@ public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
       pose.setPosition(EuclidCoreRandomTools.nextPoint2D(random));
       return createFramePose(referenceFrame, pose);
    }
-   
+
+   @Test
+   public void testReferenceFrameChecks() throws Throwable
+   {
+      Random random = new Random(234);
+      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFramePose(random, frame), false, true, methodFilter);
+   }
+
    @Test
    public void testOverloading() throws Exception
    {

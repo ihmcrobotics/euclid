@@ -5,8 +5,9 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-//TODO
+// TODO
 public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, Transformable
 {
    /**
@@ -50,6 +51,16 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
    default void set(Orientation2DReadOnly other)
    {
       setYaw(other.getYaw());
+   }
+
+   /**
+    * Sets this orientation 2D to the yaw angle of the given {@code quaternion}.
+    *
+    * @param quaternionReadOnly the quaternion to get the yaw angle from. Not modified.
+    */
+   default void set(QuaternionReadOnly quaternionReadOnly)
+   {
+      setYaw(quaternionReadOnly.getYaw());
    }
 
    /**

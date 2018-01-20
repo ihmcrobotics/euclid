@@ -183,28 +183,6 @@ public interface Pose3DReadOnly
    }
 
    /**
-    * Packs this pose 3D into the given {@code transformToPack}.
-    *
-    * @param transformToPack the rigid-body transform that is set to represent this pose 3D.
-    *           Modified.
-    */
-   default void get(RigidBodyTransform transformToPack)
-   {
-      transformToPack.set(getOrientation(), getPosition());
-   }
-
-   /**
-    * Packs this pose 3D into the given {@code transformToPack}.
-    *
-    * @param transformToPack the quaternion-based transform that is set to represent this pose 3D.
-    *           Modified.
-    */
-   default void get(QuaternionBasedTransform transformToPack)
-   {
-      transformToPack.set(getOrientation(), getPosition());
-   }
-
-   /**
     * Computes the distance between the position of this pose 3D and the given {@code point}.
     *
     * @param point the other point used to measure the distance. Not modified.
@@ -249,6 +227,28 @@ public interface Pose3DReadOnly
    default double getOrientationDistance(Pose3DReadOnly other)
    {
       return getOrientation().distance(other.getOrientation());
+   }
+
+   /**
+    * Packs this pose 3D into the given {@code transformToPack}.
+    *
+    * @param transformToPack the rigid-body transform that is set to represent this pose 3D.
+    *           Modified.
+    */
+   default void get(RigidBodyTransform transformToPack)
+   {
+      transformToPack.set(getOrientation(), getPosition());
+   }
+
+   /**
+    * Packs this pose 3D into the given {@code transformToPack}.
+    *
+    * @param transformToPack the quaternion-based transform that is set to represent this pose 3D.
+    *           Modified.
+    */
+   default void get(QuaternionBasedTransform transformToPack)
+   {
+      transformToPack.set(getOrientation(), getPosition());
    }
 
    /**

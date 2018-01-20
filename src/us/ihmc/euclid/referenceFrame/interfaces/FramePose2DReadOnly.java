@@ -6,32 +6,10 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolder
 {
    @Override
-   FrameOrientation2DReadOnly getOrientation();
-
-   @Override
    FramePoint2DReadOnly getPosition();
 
-   /**
-    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
-    * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the
-    *            same reference frame as {@code this}.
-    */
-   default void getOrientation(FixedFrameOrientation2DBasics orientationToPack)
-   {
-      orientationToPack.set(getReferenceFrame(), getOrientation());
-   }
-
-   /**
-    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
-    */
-   default void getOrientation(FrameOrientation2DBasics orientationToPack)
-   {
-      orientationToPack.setIncludingFrame(getReferenceFrame(), getOrientation());
-   }
+   @Override
+   FrameOrientation2DReadOnly getOrientation();
 
    /**
     * Packs the position part of this pose 2D into the given {@code positionToPack}.
@@ -42,7 +20,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default void getPosition(FixedFrameTuple2DBasics positionToPack)
    {
-      positionToPack.set(getReferenceFrame(), getPosition());
+      positionToPack.set(getPosition());
    }
 
    /**
@@ -52,7 +30,29 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default void getPosition(FrameTuple2DBasics positionToPack)
    {
-      positionToPack.setIncludingFrame(getReferenceFrame(), getPosition());
+      positionToPack.setIncludingFrame(getPosition());
+   }
+
+   /**
+    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
+    *
+    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
+    * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the
+    *            same reference frame as {@code this}.
+    */
+   default void getOrientation(FixedFrameOrientation2DBasics orientationToPack)
+   {
+      orientationToPack.set(getOrientation());
+   }
+
+   /**
+    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
+    *
+    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
+    */
+   default void getOrientation(FrameOrientation2DBasics orientationToPack)
+   {
+      orientationToPack.setIncludingFrame(getOrientation());
    }
 
    /**
@@ -65,8 +65,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default double getPositionDistance(FramePose2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      return Pose2DReadOnly.super.getPositionDistance(other);
+      return getPositionDistance(other.getPosition());
    }
 
    /**
@@ -79,8 +78,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default double getPositionDistance(FramePoint2DReadOnly point)
    {
-      checkReferenceFrameMatch(point);
-      return Pose2DReadOnly.super.getPositionDistance(point);
+      return getPosition().distance(point);
    }
 
    /**
@@ -94,8 +92,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default double getOrientationDistance(FrameOrientation2DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      return Pose2DReadOnly.super.getOrientationDistance(orientation);
+      return getOrientation().distance(orientation);
    }
 
    /**
@@ -109,8 +106,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default double getOrientationDistance(FramePose2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      return Pose2DReadOnly.super.getOrientationDistance(other);
+      return getOrientationDistance(other.getOrientation());
    }
 
    /**

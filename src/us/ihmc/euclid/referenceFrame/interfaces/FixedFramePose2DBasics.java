@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -17,8 +18,8 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
    FixedFramePoint2DBasics getPosition();
 
    /**
-    * Sets this orientation 2D to represent the orientation 2D from {@code this.getReferenceFrame()}
-    * to the given {@code referenceFrame}.
+    * Sets this pose 2D to represent the pose of the given {@code referenceFrame} expressed in
+    * {@code this.getReferenceFrame()}.
     *
     * @param referenceFrame the reference frame of interest.
     */
@@ -26,39 +27,6 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
    {
       setToZero();
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
-   }
-
-   default void set(ReferenceFrame referenceFrame, Pose2DReadOnly pose2DReadOnly)
-   {
-      checkReferenceFrameMatch(referenceFrame);
-      set(pose2DReadOnly);
-   }
-
-   /**
-    * Sets this frame pose 2D to the {@code other} frame pose 2D.
-    *
-    * @param other the other frame pose 2D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
-    */
-   default void set(FramePose2DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      Pose2DBasics.super.set(other);
-   }
-
-   /**
-    * Sets both position and orientation.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the orientation with the new angle value for this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed
-    *            in the same reference frame.
-    */
-   default void set(FrameTuple2DReadOnly position, Orientation2DReadOnly orientation)
-   {
-      checkReferenceFrameMatch(position);
-      Pose2DBasics.super.set(position, orientation);
    }
 
    /**
@@ -85,6 +53,59 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
    {
       checkReferenceFrameMatch(orientation);
       Pose2DBasics.super.setOrientation(orientation);
+   }
+
+   default void set(ReferenceFrame referenceFrame, Pose2DReadOnly pose2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(pose2DReadOnly);
+   }
+
+   default void set(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(pose3DReadOnly);
+   }
+
+   /**
+    * Sets this frame pose 2D to the {@code other} frame pose 2D.
+    *
+    * @param other the other frame pose 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
+    */
+   default void set(FramePose2DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Pose2DBasics.super.set(other);
+   }
+
+   /**
+    * Sets this frame pose 2D to the x, y, and yaw components of the given
+    * {@code framePose3DReadOnly}.
+    *
+    * @param framePose3DReadOnly the other frame pose 3D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code framePose3DReadOnly} are
+    *            not expressed in the same reference frame.
+    */
+   default void set(FramePose3DReadOnly framePose3DReadOnly)
+   {
+      checkReferenceFrameMatch(framePose3DReadOnly);
+      Pose2DBasics.super.set(framePose3DReadOnly);
+   }
+
+   /**
+    * Sets both position and orientation.
+    *
+    * @param position the tuple with the new position coordinates. Not modified.
+    * @param orientation the orientation with the new angle value for this. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed
+    *            in the same reference frame.
+    */
+   default void set(FrameTuple2DReadOnly position, Orientation2DReadOnly orientation)
+   {
+      checkReferenceFrameMatch(position);
+      Pose2DBasics.super.set(position, orientation);
    }
 
    /**
