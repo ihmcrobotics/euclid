@@ -237,8 +237,7 @@ public class Line2DTest
       Vector2D normalizedVector = new Vector2D(Math.sqrt(2.0) / 2.0, Math.sqrt(2.0) / 2.0);
       assertEquals(normalizedVector.getX(), line2d.getDirection().getX(), delta);
       assertEquals(normalizedVector.getY(), line2d.getDirection().getY(), delta);
-      Vector2D normalizedVector2 = new Vector2D();
-      line2d.getDirection(normalizedVector2);
+      Vector2D normalizedVector2 = new Vector2D(line2d.getDirection());
       assertFalse(line2d.getDirection() == normalizedVector2);
    }
 
@@ -339,8 +338,7 @@ public class Line2DTest
          Point2D firstPointOnLine = randomPoint(random);
          Point2D secondPointOnLine = randomPoint(random);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         Vector2D normalizedVectorCopy = new Vector2D();
-         line2d.getDirection(normalizedVectorCopy);
+         Vector2D normalizedVectorCopy = new Vector2D(line2d.getDirection());
          line2d.negateDirection();
          assertEquals(-normalizedVectorCopy.getX(), line2d.getDirection().getX(), delta);
          assertEquals(-normalizedVectorCopy.getY(), line2d.getDirection().getY(), delta);
@@ -595,8 +593,7 @@ public class Line2DTest
          assertEquals(intersectY, interiorBisector.getPoint().getY(), delta);
 
          Vector2D interiorNormalizedVector = new Vector2D(line2d.getDirection());
-         Vector2D vector = new Vector2D();
-         secondLine2d.getDirection(vector);
+         Vector2D vector = new Vector2D(secondLine2d.getDirection());
          interiorNormalizedVector.add(vector);
          double length = interiorNormalizedVector.length();
          assertEquals(interiorNormalizedVector.getX() / length, interiorBisector.getDirection().getX(), delta);
@@ -898,8 +895,7 @@ public class Line2DTest
          Point2D firstPointOnLine = randomPoint(random);
          Point2D secondPointOnLine = randomPoint(random);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         Vector2D normalizedVector = new Vector2D();
-         line2d.getDirection(normalizedVector);
+         Vector2D normalizedVector = new Vector2D(line2d.getDirection());
          Vector2D perpendicularVector = line2d.perpendicularVector();
          perpendicularVector.negate();
          Point2D checkPoint = new Point2D();
@@ -930,8 +926,7 @@ public class Line2DTest
          Point2D firstPointOnLine = randomPoint(random);
          Point2D secondPointOnLine = randomPoint(random);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         Vector2D normalizedVector = new Vector2D();
-         line2d.getDirection(normalizedVector);
+         Vector2D normalizedVector = new Vector2D(line2d.getDirection());
          Vector2D perpendicularVector = line2d.perpendicularVector();
          perpendicularVector.negate();
          Point2D checkPoint = new Point2D();
@@ -961,8 +956,7 @@ public class Line2DTest
          Point2D firstPointOnLine = randomPoint(random);
          Point2D secondPointOnLine = randomPoint(random);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         Vector2D normalizedVector = new Vector2D();
-         line2d.getDirection(normalizedVector);
+         Vector2D normalizedVector = new Vector2D(line2d.getDirection());
          Vector2D perpendicularVector = line2d.perpendicularVector();
          Point2D checkPoint = new Point2D();
 
@@ -1087,8 +1081,7 @@ public class Line2DTest
          Line2D line2d = new Line2D(firsPointOnLine, secondPointOnLine);
          double parameter = randomDouble(random);
          Point2D checkPoint = new Point2D(firsPointOnLine);
-         Vector2D normalizedVector = new Vector2D();
-         line2d.getDirection(normalizedVector);
+         Vector2D normalizedVector = new Vector2D(line2d.getDirection());
          checkPoint.scaleAdd(parameter, normalizedVector, firsPointOnLine);
 
          double calculatedParameter = line2d.parameterGivenPointOnLine(checkPoint, epsilon);
@@ -1111,8 +1104,7 @@ public class Line2DTest
          double perpendicularDistance = randomDouble(random);
          perpendicularDistance = perpendicularDistance + Math.signum(perpendicularDistance); // Ensures that the point cannot be on the line
          Point2D checkPoint = new Point2D(firsPointOnLine);
-         Vector2D normalizedVector = new Vector2D();
-         line2d.getDirection(normalizedVector);
+         Vector2D normalizedVector = new Vector2D(line2d.getDirection());
          checkPoint.scaleAdd(parameter, normalizedVector, firsPointOnLine);
          checkPoint.scaleAdd(perpendicularDistance, line2d.perpendicularVector(), checkPoint);
 
@@ -1223,10 +1215,8 @@ public class Line2DTest
       Point2D firstPointOnLine = randomPoint(random);
       Point2D secondPointOnLine = randomPoint(random);
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
-      Point2D point = new Point2D();
-      line.getPoint(point);
-      Vector2D vector = new Vector2D();
-      line.getDirection(vector);
+      Point2D point = new Point2D(line.getPoint());
+      Vector2D vector = new Vector2D(line.getDirection());
 
       line.applyTransform(transform);
       assertEquals("pure translation failed", point.getX() + translation.getX(), line.getPointX(), delta);
@@ -1253,10 +1243,8 @@ public class Line2DTest
       transform.setTranslation(translation);
 
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
-      Point2D point = new Point2D();
-      line.getPoint(point);
-      Vector2D vector = new Vector2D();
-      line.getDirection(vector);
+      Point2D point = new Point2D(line.getPoint());
+      Vector2D vector = new Vector2D(line.getDirection());
 
       line.applyTransform(transform);
 
@@ -1328,10 +1316,8 @@ public class Line2DTest
       transform.setTranslation(translation);
 
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
-      Point2D point = new Point2D();
-      line.getPoint(point);
-      Vector2D vector = new Vector2D();
-      line.getDirection(vector);
+      Point2D point = new Point2D(line.getPoint());
+      Vector2D vector = new Vector2D(line.getDirection());
 
       line.applyTransform(transform);
 
@@ -1363,10 +1349,6 @@ public class Line2DTest
       transform.setTranslation(translation);
 
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
-      Point2D point = new Point2D();
-      line.getPoint(point);
-      Vector2D vector = new Vector2D();
-      line.getDirection(vector);
 
       Line2D transformedCopy = line.applyTransformCopy(transform);
       line.applyTransform(transform);
@@ -1540,7 +1522,7 @@ public class Line2DTest
       for (int i = 0; i < ITERATIONS; ++i)
       { // Lines are equal if directions are equal but opposite and are otherwise the same
          firstLine = EuclidGeometryRandomTools.nextLine2D(random);
-         firstLine.getDirection(direction);
+         direction.set(firstLine.getDirection());
          direction.negate();
          secondLine = new Line2D(firstLine.getPoint(), direction);
 

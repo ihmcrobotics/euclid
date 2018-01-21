@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
-import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
@@ -9,7 +8,6 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FrameLine2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -20,33 +18,28 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolder
 {
    /** {@inheritDoc} */
+   @Override
    FramePoint2DReadOnly getPoint();
 
    /** {@inheritDoc} */
+   @Override
    FrameVector2DReadOnly getDirection();
 
    /**
-    * Gets the direction defining this line by storing its components in the given argument
-    * {@code directionToPack}.
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
     *
+    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
+    * @throws ReferenceFrameMismatchException if either argument is not expressed in the same
+    *            reference frame as this frame line 2D.
     */
-   default void getDirection(FrameVector2D directionToPack)
+   default void get(FixedFramePoint2DBasics pointToPack, FixedFrameVector2DBasics directionToPack)
    {
-      directionToPack.setIncludingFrame(getDirection());
-   }
-
-   /**
-    * Gets the point defining this line by storing its coordinates in the given argument
-    * {@code pointToPack}.
-    *
-    * @param pointOnLineToPack point in which the coordinates of this line's point are stored.
-    *           Modified.
-    */
-   default void getPoint(FramePoint2D pointOnLineToPack)
-   {
-      pointOnLineToPack.setIncludingFrame(getPoint());
+      checkReferenceFrameMatch(pointToPack);
+      checkReferenceFrameMatch(directionToPack);
+      Line2DReadOnly.super.get(pointToPack, directionToPack);
    }
 
    /**
@@ -57,10 +50,27 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
     */
-   default void getPointAndDirection(FramePoint2D pointToPack, Vector2DBasics directionToPack)
+   default void get(FramePoint2DBasics pointToPack, FrameVector2DBasics directionToPack)
    {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
+      pointToPack.setReferenceFrame(getReferenceFrame());
+      directionToPack.setReferenceFrame(getReferenceFrame());
+      Line2DReadOnly.super.get(pointToPack, directionToPack);
+   }
+
+   /**
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
+    *
+    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param directionToPack vector in which the components of this line's direction are stored.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code directionToPack} is not expressed in the
+    *            same reference frame as this frame line 2D.
+    */
+   default void get(Point2DBasics pointToPack, FixedFrameVector2DBasics directionToPack)
+   {
+      checkReferenceFrameMatch(directionToPack);
+      Line2DReadOnly.super.get(pointToPack, directionToPack);
    }
 
    /**
@@ -71,10 +81,26 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
     */
-   default void getPointAndDirection(Point2DBasics pointToPack, FrameVector2D directionToPack)
+   default void get(Point2DBasics pointToPack, FrameVector2DBasics directionToPack)
    {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
+      directionToPack.setReferenceFrame(getReferenceFrame());
+      Line2DReadOnly.super.get(pointToPack, directionToPack);
+   }
+
+   /**
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
+    *
+    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param directionToPack vector in which the components of this line's direction are stored.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code pointToPack} is not expressed in the same
+    *            reference frame as this frame line 2D.
+    */
+   default void get(FixedFramePoint2DBasics pointToPack, Vector2DBasics directionToPack)
+   {
+      checkReferenceFrameMatch(pointToPack);
+      Line2DReadOnly.super.get(pointToPack, directionToPack);
    }
 
    /**
@@ -85,10 +111,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
     */
-   default void getPointAndDirection(FramePoint2D pointToPack, FrameVector2D directionToPack)
+   default void get(FramePoint2DBasics pointToPack, Vector2DBasics directionToPack)
    {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
+      pointToPack.setReferenceFrame(getReferenceFrame());
+      Line2DReadOnly.super.get(pointToPack, directionToPack);
    }
 
    /**
@@ -248,10 +274,14 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
     *            expressed in the same reference frame.
     */
-   default Point2D intersectionWith(FrameLine2DReadOnly secondLine)
+   default FramePoint2D intersectionWith(FrameLine2DReadOnly secondLine)
    {
       checkReferenceFrameMatch(secondLine);
-      return Line2DReadOnly.super.intersectionWith(secondLine);
+      Point2D intersection = Line2DReadOnly.super.intersectionWith(secondLine);
+      if (intersection == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), intersection);
    }
 
    /**
@@ -295,13 +325,64 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param secondLine the other line that may intersect this line. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code secondLine}, and
+    *            {@code intersectionToPack} are not expressed in the same reference frame.
+    */
+   default boolean intersectionWith(FrameLine2DReadOnly secondLine, FixedFramePoint2DBasics intersectionToPack)
+   {
+      checkReferenceFrameMatch(secondLine);
+      checkReferenceFrameMatch(intersectionToPack);
+      return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line and the given line and stores
+    * the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
+    * method returns {@code null}.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code this.point}.
+    * </ul>
+    * </p>
+    *
+    * @param secondLine the other line that may intersect this line. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @return {@code true} if the two lines intersects, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
     *            expressed in the same reference frame.
     */
-   default boolean intersectionWith(FrameLine2DReadOnly secondLine, FramePoint2D intersectionToPack)
+   default boolean intersectionWith(FrameLine2DReadOnly secondLine, FramePoint2DBasics intersectionToPack)
    {
       checkReferenceFrameMatch(secondLine);
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line and the given line and stores
+    * the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
+    * method returns {@code null}.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code this.point}.
+    * </ul>
+    * </p>
+    *
+    * @param secondLine the other line that may intersect this line. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @return {@code true} if the two lines intersects, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code intersectionToPack} are not
+    *            expressed in the same reference frame.
+    */
+   default boolean intersectionWith(Line2DReadOnly secondLine, FixedFramePoint2DBasics intersectionToPack)
+   {
+      checkReferenceFrameMatch(intersectionToPack);
       return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
    }
 
@@ -322,148 +403,43 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
-   default boolean intersectionWith(Line2DReadOnly secondLine, FramePoint2D intersectionToPack)
+   default boolean intersectionWith(Line2DReadOnly secondLine, FramePoint2DBasics intersectionToPack)
    {
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
    }
 
    /**
     * Calculates the coordinates of the intersection between this line and the given line segment
-    * and stores the result in {@code intersectionToPack}.
+    * and returns the result.
     * <p>
     * Edge cases:
     * <ul>
     * <li>When this line and the line segment are parallel but not collinear, they do not intersect.
     * <li>When this line and the line segment are collinear, they are assumed to intersect at
     * {@code lineSegmentStart}.
-    * <li>When this line intersects the line segment at one of its endpoints, this method returns
-    * {@code true} and the endpoint is the intersection.
+    * <li>When this line intersects the line segment at one of its endpoints, this method returns a
+    * copy of the endpoint where the intersection is happening.
     * </ul>
     * </p>
-    *
-    * @param lineSegment the line segment that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
-    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
-    */
-   default boolean intersectionWith(LineSegment2DReadOnly lineSegment, FramePoint2D intersectionToPack)
-   {
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
-      return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
-   }
-
-   /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and stores the result in {@code intersectionToPack}.
     * <p>
-    * Edge cases:
-    * <ul>
-    * <li>When this line and the line segment are parallel but not collinear, they do not intersect.
-    * <li>When this line and the line segment are collinear, they are assumed to intersect at
-    * {@code lineSegmentStart}.
-    * <li>When this line intersects the line segment at one of its endpoints, this method returns
-    * {@code true} and the endpoint is the intersection.
-    * </ul>
+    * WARNING: This method generates garbage.
     * </p>
     *
     * @param lineSegment the line segment that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
-    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    * @return the coordinates of the intersection if the line intersects the line segment,
+    *         {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not
     *            expressed in the same reference frame.
     */
-   default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, FramePoint2D intersectionToPack)
+   default FramePoint2D intersectionWith(FrameLineSegment2DReadOnly lineSegment)
    {
       checkReferenceFrameMatch(lineSegment);
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
-      return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
-   }
-
-   /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * </ul>
-    * </p>
-    *
-    * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
-    */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2D firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
-   {
-      firstIntersectionToPack.setIncludingFrame(getReferenceFrame(), firstIntersectionToPack);
-      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
-   }
-
-   /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * </ul>
-    * </p>
-    *
-    * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
-    */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
-   {
-      firstIntersectionToPack.setIncludingFrame(getReferenceFrame(), firstIntersectionToPack);
-      secondIntersectionToPack.setIncludingFrame(getReferenceFrame(), secondIntersectionToPack);
-      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
-   }
-
-   /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * </ul>
-    * </p>
-    *
-    * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
-    */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
-   {
-      secondIntersectionToPack.setIncludingFrame(getReferenceFrame(), secondIntersectionToPack);
-      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+      Point2D intersection = Line2DReadOnly.super.intersectionWith(lineSegment);
+      if (intersection == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), intersection);
    }
 
    /**
@@ -495,31 +471,287 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
 
    /**
     * Calculates the coordinates of the intersection between this line and the given line segment
-    * and returns the result.
+    * and stores the result in {@code intersectionToPack}.
     * <p>
     * Edge cases:
     * <ul>
     * <li>When this line and the line segment are parallel but not collinear, they do not intersect.
     * <li>When this line and the line segment are collinear, they are assumed to intersect at
     * {@code lineSegmentStart}.
-    * <li>When this line intersects the line segment at one of its endpoints, this method returns a
-    * copy of the endpoint where the intersection is happening.
+    * <li>When this line intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
     * </ul>
-    * </p>
-    * <p>
-    * WARNING: This method generates garbage.
     * </p>
     *
     * @param lineSegment the line segment that may intersect this line. Not modified.
-    * @return the coordinates of the intersection if the line intersects the line segment,
-    *         {@code null} otherwise.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code intersectionToPack} are not
+    *            expressed in the same reference frame.
+    */
+   default boolean intersectionWith(LineSegment2DReadOnly lineSegment, FixedFramePoint2DBasics intersectionToPack)
+   {
+      checkReferenceFrameMatch(intersectionToPack);
+      return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line and the given line segment
+    * and stores the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When this line and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When this line intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param lineSegment the line segment that may intersect this line. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    */
+   default boolean intersectionWith(LineSegment2DReadOnly lineSegment, FramePoint2DBasics intersectionToPack)
+   {
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line and the given line segment
+    * and stores the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When this line and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When this line intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param lineSegment the line segment that may intersect this line. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code lineSegment}, and
+    *            {@code intersectionToPack} are not expressed in the same reference frame.
+    */
+   default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, FixedFramePoint2DBasics intersectionToPack)
+   {
+      checkReferenceFrameMatch(lineSegment);
+      checkReferenceFrameMatch(intersectionToPack);
+      return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line and the given line segment
+    * and stores the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When this line and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When this line intersects the line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param lineSegment the line segment that may intersect this line. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not
     *            expressed in the same reference frame.
     */
-   default Point2D intersectionWith(FrameLineSegment2DReadOnly lineSegment)
+   default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, FramePoint2DBasics intersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment);
-      return Line2DReadOnly.super.intersectionWith(lineSegment);
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line and the given
+    * convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstIntersectionToPack}
+    *            are not expressed in the same reference frame.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(firstIntersectionToPack);
+      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line and the given
+    * convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line and the given
+    * convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code firstIntersectionToPack}, and
+    *            {@code secondIntersectionToPack} are not expressed in the same reference frame.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+                                FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(secondIntersectionToPack);
+      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line and the given
+    * convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   {
+      firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line and the given
+    * convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondIntersectionToPack}
+    *            are not expressed in the same reference frame.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(secondIntersectionToPack);
+      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line and the given
+    * convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   {
+      secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -643,10 +875,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
-   default boolean orthogonalProjection(FramePoint2D pointToProject)
+   default boolean orthogonalProjection(FixedFramePoint2DBasics pointToProject)
    {
       checkReferenceFrameMatch(pointToProject);
-      pointToProject.setIncludingFrame(getReferenceFrame(), pointToProject);
       return Line2DReadOnly.super.orthogonalProjection(pointToProject);
    }
 
@@ -687,10 +918,57 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code projectionToPack} are not
+    *            expressed in the same reference frame.
     */
-   default boolean orthogonalProjection(Point2DReadOnly pointToProject, FramePoint2D projectionToPack)
+   default boolean orthogonalProjection(Point2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
    {
-      projectionToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(projectionToPack);
+      return Line2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of the given 2D point on this 2D line.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the given line direction is too small, i.e.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param projectionToPack point in which the projection of the point onto the line is stored.
+    *           Modified.
+    */
+   default boolean orthogonalProjection(Point2DReadOnly pointToProject, FramePoint2DBasics projectionToPack)
+   {
+      projectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of the given 2D point on this 2D line.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the given line direction is too small, i.e.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param projectionToPack point in which the projection of the point onto the line is stored.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code pointToProject}, and
+    *            {@code projectionToPack} are not expressed in the same reference frame.
+    */
+   default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
+   {
+      checkReferenceFrameMatch(pointToProject);
+      checkReferenceFrameMatch(projectionToPack);
       return Line2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -711,10 +989,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
-   default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FramePoint2D projectionToPack)
+   default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FramePoint2DBasics projectionToPack)
    {
       checkReferenceFrameMatch(pointToProject);
-      projectionToPack.setToZero(getReferenceFrame());
+      projectionToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -737,10 +1015,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
-   default Point2D orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
+   default FramePoint2D orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
    {
       checkReferenceFrameMatch(pointToProject);
-      return Line2DReadOnly.super.orthogonalProjectionCopy(pointToProject);
+      return new FramePoint2D(getReferenceFrame(), Line2DReadOnly.super.orthogonalProjectionCopy(pointToProject));
    }
 
    /**
@@ -772,10 +1050,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
     *            expressed in the same reference frame.
     */
-   default Line2D interiorBisector(FrameLine2DReadOnly secondLine)
+   default FrameLine2D interiorBisector(FrameLine2DReadOnly secondLine)
    {
       checkReferenceFrameMatch(secondLine);
-      return Line2DReadOnly.super.interiorBisector(secondLine);
+      return new FrameLine2D(getReferenceFrame(), Line2DReadOnly.super.interiorBisector(secondLine));
    }
 
    /**
@@ -849,10 +1127,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
-   default Line2D perpendicularLineThroughPoint(FramePoint2DReadOnly point)
+   default FrameLine2D perpendicularLineThroughPoint(FramePoint2DReadOnly point)
    {
       checkReferenceFrameMatch(point);
-      return Line2DReadOnly.super.perpendicularLineThroughPoint(point);
+      return new FrameLine2D(getReferenceFrame(), Line2DReadOnly.super.perpendicularLineThroughPoint(point));
    }
 
    /**
@@ -878,13 +1156,46 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param point the point the line has to go through. Not modified.
     * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
     *           {@code point}. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code point}, and
+    *            {@code perpendicularLineToPack} are not expressed in the same reference frame.
+    */
+   default void perpendicularLineThroughPoint(FramePoint2DReadOnly point, FixedFrameLine2DBasics perpendicularLineToPack)
+   {
+      checkReferenceFrameMatch(point);
+      checkReferenceFrameMatch(perpendicularLineToPack);
+      Line2DReadOnly.super.perpendicularLineThroughPoint(point, perpendicularLineToPack);
+   }
+
+   /**
+    * Modifies {@code perpendicularLineToPack} such that it is perpendicular to this line, with its
+    * direction pointing to the left of this line, while going through the given point.
+    *
+    * @param point the point the line has to go through. Not modified.
+    * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
+    *           {@code point}. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
-   default void perpendicularLineThroughPoint(FramePoint2DReadOnly point, FrameLine2D perpendicularLineToPack)
+   default void perpendicularLineThroughPoint(FramePoint2DReadOnly point, FrameLine2DBasics perpendicularLineToPack)
    {
       checkReferenceFrameMatch(point);
-      perpendicularLineToPack.setToZero(getReferenceFrame());
+      perpendicularLineToPack.setReferenceFrame(getReferenceFrame());
+      Line2DReadOnly.super.perpendicularLineThroughPoint(point, perpendicularLineToPack);
+   }
+
+   /**
+    * Modifies {@code perpendicularLineToPack} such that it is perpendicular to this line, with its
+    * direction pointing to the left of this line, while going through the given point.
+    *
+    * @param point the point the line has to go through. Not modified.
+    * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
+    *           {@code point}. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code perpendicularLineToPack}
+    *            are not expressed in the same reference frame.
+    */
+   default void perpendicularLineThroughPoint(Point2DReadOnly point, FixedFrameLine2DBasics perpendicularLineToPack)
+   {
+      checkReferenceFrameMatch(perpendicularLineToPack);
       Line2DReadOnly.super.perpendicularLineThroughPoint(point, perpendicularLineToPack);
    }
 
@@ -896,9 +1207,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
     *           {@code point}. Modified.
     */
-   default void perpendicularLineThroughPoint(Point2DReadOnly point, FrameLine2D perpendicularLineToPack)
+   default void perpendicularLineThroughPoint(Point2DReadOnly point, FrameLine2DBasics perpendicularLineToPack)
    {
-      perpendicularLineToPack.setToZero(getReferenceFrame());
+      perpendicularLineToPack.setReferenceFrame(getReferenceFrame());
       Line2DReadOnly.super.perpendicularLineThroughPoint(point, perpendicularLineToPack);
    }
 
@@ -908,10 +1219,12 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstPointOnLineToPack} are
+    *            not expressed in the same reference frame.
     */
-   default void getTwoPointsOnLine(FramePoint2D firstPointOnLineToPack, Point2DBasics secondPointOnLineToPack)
+   default void getTwoPointsOnLine(FixedFramePoint2DBasics firstPointOnLineToPack, Point2DBasics secondPointOnLineToPack)
    {
-      firstPointOnLineToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(firstPointOnLineToPack);
       Line2DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 
@@ -922,9 +1235,24 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
     */
-   default void getTwoPointsOnLine(Point2DBasics firstPointOnLineToPack, FramePoint2D secondPointOnLineToPack)
+   default void getTwoPointsOnLine(FramePoint2DBasics firstPointOnLineToPack, Point2DBasics secondPointOnLineToPack)
    {
-      secondPointOnLineToPack.setToZero(getReferenceFrame());
+      firstPointOnLineToPack.setReferenceFrame(getReferenceFrame());
+      Line2DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
+   }
+
+   /**
+    * Gets the coordinates of two distinct points this line goes through.
+    *
+    * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLineToPack}
+    *            are not expressed in the same reference frame.
+    */
+   default void getTwoPointsOnLine(Point2DBasics firstPointOnLineToPack, FixedFramePoint2DBasics secondPointOnLineToPack)
+   {
+      checkReferenceFrameMatch(secondPointOnLineToPack);
       Line2DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 
@@ -935,10 +1263,39 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
     */
-   default void getTwoPointsOnLine(FramePoint2D firstPointOnLineToPack, FramePoint2D secondPointOnLineToPack)
+   default void getTwoPointsOnLine(Point2DBasics firstPointOnLineToPack, FramePoint2DBasics secondPointOnLineToPack)
    {
-      firstPointOnLineToPack.setToZero(getReferenceFrame());
-      secondPointOnLineToPack.setToZero(getReferenceFrame());
+      secondPointOnLineToPack.setReferenceFrame(getReferenceFrame());
+      Line2DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
+   }
+
+   /**
+    * Gets the coordinates of two distinct points this line goes through.
+    *
+    * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if either of the given arguments is not expressed in
+    *            the same reference frame as this frame line.
+    */
+   default void getTwoPointsOnLine(FixedFramePoint2DBasics firstPointOnLineToPack, FixedFramePoint2DBasics secondPointOnLineToPack)
+   {
+      checkReferenceFrameMatch(firstPointOnLineToPack);
+      checkReferenceFrameMatch(secondPointOnLineToPack);
+      Line2DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
+   }
+
+   /**
+    * Gets the coordinates of two distinct points this line goes through.
+    *
+    * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
+    *           Modified.
+    */
+   default void getTwoPointsOnLine(FramePoint2DBasics firstPointOnLineToPack, FramePoint2DBasics secondPointOnLineToPack)
+   {
+      firstPointOnLineToPack.setReferenceFrame(getReferenceFrame());
+      secondPointOnLineToPack.setReferenceFrame(getReferenceFrame());
       Line2DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 
@@ -961,10 +1318,24 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * the left.
     *
     * @param vectorToPack the perpendicular vector to this line. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code vectorToPack} are not
+    *            expressed in the same reference frame.
     */
-   default void perpendicularVector(FrameVector2D vectorToPack)
+   default void perpendicularVector(FixedFrameVector2DBasics vectorToPack)
    {
-      vectorToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(vectorToPack);
+      Line2DReadOnly.super.perpendicularVector(vectorToPack);
+   }
+
+   /**
+    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to
+    * the left.
+    *
+    * @param vectorToPack the perpendicular vector to this line. Modified.
+    */
+   default void perpendicularVector(FrameVector2DBasics vectorToPack)
+   {
+      vectorToPack.setReferenceFrame(getReferenceFrame());
       Line2DReadOnly.super.perpendicularVector(vectorToPack);
    }
 
@@ -980,10 +1351,31 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *
     * @param t the parameter used to calculate the point coordinates.
     * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
+    *            expressed in the same reference frame.
     */
-   default void pointOnLineGivenParameter(double t, FramePoint2D pointToPack)
+   default void pointOnLineGivenParameter(double t, FixedFramePoint2DBasics pointToPack)
    {
-      pointToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(pointToPack);
+      Line2DReadOnly.super.pointOnLineGivenParameter(t, pointToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the point 'p' given the parameter 't' as follows:<br>
+    * p = t * n + p<sub>0</sub><br>
+    * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
+    * defining this line which also corresponds to the point for which t=0.
+    * <p>
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
+    * point p<sub>0</sub> defining this line.
+    * </p>
+    *
+    * @param t the parameter used to calculate the point coordinates.
+    * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
+    */
+   default void pointOnLineGivenParameter(double t, FramePoint2DBasics pointToPack)
+   {
+      pointToPack.setReferenceFrame(getReferenceFrame());
       Line2DReadOnly.super.pointOnLineGivenParameter(t, pointToPack);
    }
 
@@ -1048,10 +1440,81 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param interiorBisectorToPack the line in which the interior bisector point and direction are
     *           stored. Modified.
     * @return {@code true} if this method succeeded, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code interiorBisectorToPack} are
+    *            not expressed in the same reference frame.
     */
-   default boolean interiorBisector(Line2DReadOnly secondLine, FrameLine2D interiorBisectorToPack)
+   default boolean interiorBisector(Line2DReadOnly secondLine, FixedFrameLine2DBasics interiorBisectorToPack)
    {
-      interiorBisectorToPack.setIncludingFrame(getReferenceFrame(), interiorBisectorToPack.getGeometryObject());
+      checkReferenceFrameMatch(interiorBisectorToPack);
+      return Line2DReadOnly.super.interiorBisector(secondLine, interiorBisectorToPack);
+   }
+
+   /**
+    * Calculates the interior bisector defined by this line and the given {@code secondLine}.
+    * <p>
+    * The interior bisector is defined as follows:
+    * <ul>
+    * <li>It goes through the intersection between this line and {@code secondLine}.
+    * <li>Its direction point toward this line direction and the {@code secondLine}'s direction such
+    * that: {@code interiorBisector.direction.dot(this.direction) > 0.0} and
+    * {@code interiorBisector.direction.dot(secondLine.direction) > 0.0}.
+    * <li>Finally the angle from {@code this} to the interior bisector is half the angle from
+    * {@code this} to {@code secondLine}.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the two lines are parallel but not collinear, this method fails, returns {@code false},
+    * and {@code interiorBisectorToPack} remains unchanged.
+    * <li>If the two lines are collinear, {@code interiorBisectorToPack} is set to {@code this}.
+    * </ul>
+    * </p>
+    *
+    * @param secondLine the second line needed to calculate the interior bisector. Not modified.
+    * @param interiorBisectorToPack the line in which the interior bisector point and direction are
+    *           stored. Modified.
+    * @return {@code true} if this method succeeded, {@code false} otherwise.
+    */
+   default boolean interiorBisector(Line2DReadOnly secondLine, FrameLine2DBasics interiorBisectorToPack)
+   {
+      interiorBisectorToPack.setReferenceFrame(getReferenceFrame());
+      return Line2DReadOnly.super.interiorBisector(secondLine, interiorBisectorToPack);
+   }
+
+   /**
+    * Calculates the interior bisector defined by this line and the given {@code secondLine}.
+    * <p>
+    * The interior bisector is defined as follows:
+    * <ul>
+    * <li>It goes through the intersection between this line and {@code secondLine}.
+    * <li>Its direction point toward this line direction and the {@code secondLine}'s direction such
+    * that: {@code interiorBisector.direction.dot(this.direction) > 0.0} and
+    * {@code interiorBisector.direction.dot(secondLine.direction) > 0.0}.
+    * <li>Finally the angle from {@code this} to the interior bisector is half the angle from
+    * {@code this} to {@code secondLine}.
+    * </ul>
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the two lines are parallel but not collinear, this method fails, returns {@code false},
+    * and {@code interiorBisectorToPack} remains unchanged.
+    * <li>If the two lines are collinear, {@code interiorBisectorToPack} is set to {@code this}.
+    * </ul>
+    * </p>
+    *
+    * @param secondLine the second line needed to calculate the interior bisector. Not modified.
+    * @param interiorBisectorToPack the line in which the interior bisector point and direction are
+    *           stored. Modified.
+    * @return {@code true} if this method succeeded, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code secondLine}, and
+    *            {@code interiorBisectorToPack} are not expressed in the same reference frame.
+    */
+   default boolean interiorBisector(FrameLine2DReadOnly secondLine, FixedFrameLine2DBasics interiorBisectorToPack)
+   {
+      checkReferenceFrameMatch(secondLine);
+      checkReferenceFrameMatch(interiorBisectorToPack);
       return Line2DReadOnly.super.interiorBisector(secondLine, interiorBisectorToPack);
    }
 
@@ -1084,10 +1547,74 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
     *            expressed in the same reference frame.
     */
-   default boolean interiorBisector(FrameLine2DReadOnly secondLine, FrameLine2D interiorBisectorToPack)
+   default boolean interiorBisector(FrameLine2DReadOnly secondLine, FrameLine2DBasics interiorBisectorToPack)
    {
       checkReferenceFrameMatch(secondLine);
-      interiorBisectorToPack.setIncludingFrame(getReferenceFrame(), interiorBisectorToPack.getGeometryObject());
+      interiorBisectorToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.interiorBisector(secondLine, interiorBisectorToPack);
+   }
+
+   /**
+    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
+    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
+    * physically the same but either the point or vector of each line is different. For instance, if
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
+    * lines are physically the same but this method returns {@code false}.
+    * <p>
+    * If the two lines have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two lines are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
+    */
+   default boolean epsilonEquals(FrameLine2DReadOnly other, double epsilon)
+   {
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
+         return false;
+      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
+    */
+   default boolean geometricallyEquals(FrameLine2DReadOnly other, double epsilon)
+   {
+      return isCollinear(other, epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
+    * <p>
+    * If the two lines have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the other line 2D to compare against this. Not modified.
+    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in
+    *         the same reference frame, {@code false} otherwise.
+    */
+   default boolean equals(FrameLine2DReadOnly other)
+   {
+      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      else
+         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
    }
 }

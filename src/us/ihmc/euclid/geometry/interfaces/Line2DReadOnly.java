@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -30,18 +31,6 @@ public interface Line2DReadOnly
    Vector2DReadOnly getDirection();
 
    /**
-    * Gets the direction defining this line by storing its components in the given argument
-    * {@code directionToPack}.
-    *
-    * @param directionToPack vector in which the components of this line's direction are stored.
-    *           Modified.
-    */
-   default void getDirection(Vector2DBasics directionToPack)
-   {
-      directionToPack.set(getDirection());
-   }
-
-   /**
     * Gets the x-component of this line's direction.
     *
     * @return the x-component of this line's direction.
@@ -62,18 +51,6 @@ public interface Line2DReadOnly
    }
 
    /**
-    * Gets the point defining this line by storing its coordinates in the given argument
-    * {@code pointToPack}.
-    *
-    * @param pointOnLineToPack point in which the coordinates of this line's point are stored.
-    *           Modified.
-    */
-   default void getPoint(Point2DBasics pointOnLineToPack)
-   {
-      pointOnLineToPack.set(getPoint());
-   }
-
-   /**
     * Gets the point and direction defining this line by storing their components in the given
     * arguments {@code pointToPack} and {@code directionToPack}.
     *
@@ -81,10 +58,10 @@ public interface Line2DReadOnly
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
     */
-   default void getPointAndDirection(Point2DBasics pointToPack, Vector2DBasics directionToPack)
+   default void get(Point2DBasics pointToPack, Vector2DBasics directionToPack)
    {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
+      pointToPack.set(getPoint());
+      directionToPack.set(getDirection());
    }
 
    /**
@@ -868,5 +845,60 @@ public interface Line2DReadOnly
    {
       // Dot product of two vectors is zero if the vectors are perpendicular
       return getDirection().dot(other.getDirection()) < 1e-7;
+   }
+
+   /**
+    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
+    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
+    * physically the same but either the point or vector of each line is different. For instance, if
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
+    * lines are physically the same but this method returns {@code false}.
+    * 
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two lines are equal, {@code false} otherwise.
+    */
+   default boolean epsilonEquals(Line2DReadOnly other, double epsilon)
+   {
+      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
+         return false;
+      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
+    */
+   default boolean geometricallyEquals(Line2DReadOnly other, double epsilon)
+   {
+      return isCollinear(other, epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
+    *
+    * @param other the other line 2D to compare against this. Not modified.
+    * @return {@code true} if the two lines are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(Line2DReadOnly other)
+   {
+      if (other == null)
+         return false;
+      else
+         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
    }
 }

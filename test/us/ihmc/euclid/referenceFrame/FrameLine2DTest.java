@@ -8,10 +8,9 @@ import org.junit.Test;
 
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
 {
@@ -27,10 +26,8 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
       Random random = new Random(234235L);
 
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame, (Line2DReadOnly) line);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> createRandomLine(random).getGeometryObject();
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("setToZero") && !m.getName().equals("setToNaN")
-            && (!m.getReturnType().equals(Point2D[].class) && !(m.getParameterCount() > 0 && m.getParameterTypes()[0].equals(Point2D[].class)))
-            && (!m.getReturnType().equals(Point2DReadOnly[].class) && !(m.getParameterCount() > 0 && m.getParameterTypes()[0].equals(Point2DReadOnly[].class)));
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextLine2D(random);
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }
 

@@ -1,14 +1,14 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
@@ -84,55 +84,44 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    }
 
    /**
-    * Transforms this line using the given homogeneous transformation matrix.
+    * Sets this line to be the same as the given line.
     * 
-    * @param transform the transform to apply on this line's point and vector. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
+    * @param other the other line to copy. Not modified.
     */
    @Override
-   public void applyTransform(Transform transform)
+   public void set(Line2D other)
    {
-      point.applyTransform(transform);
-      direction.applyTransform(transform);
+      Line2DBasics.super.set(other);
    }
 
    /**
-    * Transforms this line using the inverse of the given homogeneous transformation matrix.
+    * Gets the read-only reference to the direction of this line.
     * 
-    * @param transform the transform to apply on this line's point and vector. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
+    * @return the reference to the direction.
     */
    @Override
-   public void applyInverseTransform(Transform transform)
+   public Vector2DBasics getDirection()
    {
-      point.applyInverseTransform(transform);
-      direction.applyInverseTransform(transform);
+      return direction;
    }
 
    /**
-    * Transforms this line using the given homogeneous transformation matrix and project the result
-    * onto the XY-plane.
+    * Gets the read-only reference to the point through which this line is going.
     * 
-    * @param transform the transform to apply on this line's point and vector. Not modified.
+    * @return the reference to the point.
     */
-   public void applyTransformAndProjectToXYPlane(Transform transform)
+   @Override
+   public Point2DBasics getPoint()
    {
-      point.applyTransform(transform, false);
-      direction.applyTransform(transform, false);
+      return point;
    }
 
    /**
-    * Tests if this line contains {@link Double#NaN}.
-    * 
-    * @return {@code true} if {@link #point} and/or {@link #direction} contains {@link Double#NaN},
-    *         {@code false} otherwise.
+    * Flips this line's direction.
     */
-   @Override
-   public boolean containsNaN()
+   public void negateDirection()
    {
-      return point.containsNaN() || direction.containsNaN();
+      direction.negate();
    }
 
    /**
@@ -149,145 +138,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    @Override
    public boolean epsilonEquals(Line2D other, double epsilon)
    {
-      if (!point.epsilonEquals(other.point, epsilon))
-         return false;
-      if (!direction.epsilonEquals(other.direction, epsilon))
-         return false;
-
-      return true;
-   }
-
-   /**
-    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
-    *
-    * @param other the other line 2D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   public boolean equals(Line2D other)
-   {
-      if (other == null)
-         return false;
-      else
-         return point.equals(other.point) && direction.equals(other.direction);
-   }
-
-   /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Line2D)}, it returns {@code false} otherwise.
-    *
-    * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean equals(Object obj)
-   {
-      try
-      {
-         return equals((Line2D) obj);
-      }
-      catch (ClassCastException e)
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Gets the read-only reference to the direction of this line.
-    * 
-    * @return the reference to the direction.
-    */
-   @Override
-   public Vector2DReadOnly getDirection()
-   {
-      return direction;
-   }
-
-   /**
-    * Gets the read-only reference to the point through which this line is going.
-    * 
-    * @return the reference to the point.
-    */
-   @Override
-   public Point2DReadOnly getPoint()
-   {
-      return point;
-   }
-
-   /**
-    * Flips this line's direction.
-    */
-   public void negateDirection()
-   {
-      direction.negate();
-   }
-
-   /**
-    * Sets this line to be the same as the given line.
-    * 
-    * @param other the other line to copy. Not modified.
-    */
-   @Override
-   public void set(Line2D other)
-   {
-      Line2DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setDirection(double lineDirectionX, double lineDirectionY)
-   {
-      setDirectionUnsafe(lineDirectionX, lineDirectionY);
-      direction.normalize();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY)
-   {
-      direction.set(lineDirectionX, lineDirectionY);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setPoint(double pointOnLineX, double pointOnLineY)
-   {
-      point.set(pointOnLineX, pointOnLineY);
-   }
-
-   /**
-    * Sets the point and vector of this line to {@link Double#NaN}. After calling this method, this
-    * line becomes invalid. A new valid point and valid vector will have to be set so this line is
-    * again usable.
-    */
-   @Override
-   public void setToNaN()
-   {
-      point.setToNaN();
-      direction.setToNaN();
-   }
-
-   /**
-    * Sets the point and vector of this line to zero. After calling this method, this line becomes
-    * invalid. A new valid point and valid vector will have to be set so this line is again usable.
-    */
-   @Override
-   public void setToZero()
-   {
-      point.setToZero();
-      direction.setToZero();
-   }
-
-   /**
-    * Provides a {@code String} representation of this line 2D as follows:<br>
-    * Line 2D: point = (x, y), direction = (x, y)
-    *
-    * @return the {@code String} representing this line 2D.
-    */
-   @Override
-   public String toString()
-   {
-      return EuclidGeometryIOTools.getLine2DString(this);
+      return Line2DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -305,6 +156,62 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    @Override
    public boolean geometricallyEquals(Line2D other, double epsilon)
    {
-      return isCollinear(other, epsilon);
+      return Line2DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
+    *
+    * @param other the other line 2D to compare against this. Not modified.
+    * @return {@code true} if the two lines are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   public boolean equals(Line2D other)
+   {
+      return Line2DBasics.super.equals(other);
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param obj the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object obj)
+   {
+      try
+      {
+         return equals((Line2DReadOnly) obj);
+      }
+      catch (ClassCastException e)
+      {
+         return false;
+      }
+   }
+
+   /**
+    * Provides a {@code String} representation of this line 2D as follows:<br>
+    * Line 3D: point = (x, y), direction = (x, y)
+    *
+    * @return the {@code String} representing this line 2D.
+    */
+   @Override
+   public String toString()
+   {
+      return EuclidGeometryIOTools.getLine2DString(this);
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this line 2D.
+    *
+    * @return the hash code value for this line 2D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long bits = 31L * point.hashCode() + direction.hashCode();
+      return (int) (bits ^ bits >> 32);
    }
 }

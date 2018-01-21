@@ -44,12 +44,12 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
-import us.ihmc.euclid.referenceFrame.FrameLine2D;
-import us.ihmc.euclid.referenceFrame.FrameLine3D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -62,7 +62,9 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector4DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
@@ -162,9 +164,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(LineSegment3DBasics.class, FrameLineSegment3D.class);
       
       modifiableMap.put(Line2DReadOnly.class, FrameLine2DReadOnly.class);
-      modifiableMap.put(Line2DBasics.class, FrameLine2D.class);
+      modifiableMap.put(Line2DBasics.class, FixedFrameLine2DBasics.class);
       modifiableMap.put(Line3DReadOnly.class, FrameLine3DReadOnly.class);
-      modifiableMap.put(Line3DBasics.class, FrameLine3D.class);
+      modifiableMap.put(Line3DBasics.class, FixedFrameLine3DBasics.class);
 
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
@@ -209,9 +211,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameLineSegment3D.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment3D(random, frame));
       
       modifiableMap.put(FrameLine2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
-      modifiableMap.put(FrameLine2D.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
+      modifiableMap.put(FrameLine2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
       modifiableMap.put(FrameLine3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine3D(random, frame));
-      modifiableMap.put(FrameLine3D.class, frame -> EuclidFrameRandomTools.nextFrameLine3D(random, frame));
+      modifiableMap.put(FrameLine3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameLine3D(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -307,6 +309,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FixedFrameOrientation2DBasics.class);
       modifiableSet.add(FixedFramePose2DBasics.class);
       modifiableSet.add(FixedFramePose3DBasics.class);
+      modifiableSet.add(FixedFrameLine2DBasics.class);
+      modifiableSet.add(FixedFrameLine3DBasics.class);
 
       fixedFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -329,8 +333,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FramePose3DBasics.class);
       modifiableSet.add(FrameLineSegment2D.class);
       modifiableSet.add(FrameLineSegment3D.class);
-      modifiableSet.add(FrameLine2D.class);
-      modifiableSet.add(FrameLine3D.class);
+      modifiableSet.add(FrameLine2DBasics.class);
+      modifiableSet.add(FrameLine3DBasics.class);
 
       mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -1194,12 +1198,12 @@ public class EuclidFrameAPITestTools
                }
                catch (Throwable e)
                {
-                  if (e.getClass() != expectedException.getClass())
+                  if (expectedException == null || e.getClass() != expectedException.getClass())
                   {
                      String message = "";
                      message += "The method: " + getMethodSimpleName(frameMethod);
                      message += "\ndid not throw the same exception as the original method: " + getMethodSimpleName(framelessMethod);
-                     message += "\nExpected exception class: " + expectedException.getClass().getSimpleName();
+                     message += "\nExpected exception class: " + (expectedException == null ? "none" : expectedException.getClass().getSimpleName());
                      message += "\nActual exception class: " + e.getClass().getSimpleName();
                      throw new AssertionError(message);
                   }

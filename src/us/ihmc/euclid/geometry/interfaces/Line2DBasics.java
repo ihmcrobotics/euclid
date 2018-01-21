@@ -1,18 +1,79 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.Line2D;
+import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
-public interface Line2DBasics extends Line2DReadOnly
+public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
 {
+   /**
+    * Gets the reference to the point through which this line is going.
+    *
+    * @return the reference to the point.
+    */
+   @Override
+   Point2DBasics getPoint();
+
+   /**
+    * Gets the reference to the direction of this line.
+    *
+    * @return the reference to the direction.
+    */
+   @Override
+   Vector2DBasics getDirection();
+
+   /**
+    * Tests if this line contains {@link Double#NaN}.
+    * 
+    * @return {@code true} if {@link #point} and/or {@link #direction} contains {@link Double#NaN},
+    *         {@code false} otherwise.
+    */
+   @Override
+   default boolean containsNaN()
+   {
+      return getPoint().containsNaN() || getDirection().containsNaN();
+   }
+
+   /**
+    * Sets the point and vector of this line to zero. After calling this method, this line becomes
+    * invalid. A new valid point and valid vector will have to be set so this line is again usable.
+    */
+   @Override
+   default void setToZero()
+   {
+      getPoint().setToZero();
+      getDirection().setToZero();
+   }
+
+   /**
+    * Sets the point and vector of this line to {@link Double#NaN}. After calling this method, this
+    * line becomes invalid. A new valid point and valid vector will have to be set so this line is
+    * again usable.
+    */
+   @Override
+   default void setToNaN()
+   {
+      getPoint().setToNaN();
+      getDirection().setToNaN();
+   }
+
    /**
     * Changes the point through which this line has to go.
     *
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
     */
-   void setPoint(double pointOnLineX, double pointOnLineY);
+   default void setPoint(double pointOnLineX, double pointOnLineY)
+   {
+      getPoint().set(pointOnLineX, pointOnLineY);
+   }
 
    /**
     * Changes the direction of this line by setting it to the normalized values provided.
@@ -20,15 +81,11 @@ public interface Line2DBasics extends Line2DReadOnly
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     */
-   void setDirection(double lineDirectionX, double lineDirectionY);
-
-   /**
-    * Changes the direction of this line by setting it to the raw values provided.
-    * 
-    * @param lineDirectionX the new x-component of the direction of this line.
-    * @param lineDirectionY the new y-component of the direction of this line.
-    */
-   void setDirectionUnsafe(double lineDirectionX, double lineDirectionY);
+   default void setDirection(double lineDirectionX, double lineDirectionY)
+   {
+      getDirection().set(lineDirectionX, lineDirectionY);
+      getDirection().normalize();
+   }
 
    /**
     * Copies this line and then flips the direction of the copy before returning it.
@@ -55,13 +112,7 @@ public interface Line2DBasics extends Line2DReadOnly
     */
    default void rotate(double angleInRadians)
    {
-      double vXOld = getDirectionX();
-      double vYOld = getDirectionY();
-
-      double vXNew = Math.cos(angleInRadians) * vXOld - Math.sin(angleInRadians) * vYOld;
-      double vYNew = Math.sin(angleInRadians) * vXOld + Math.cos(angleInRadians) * vYOld;
-
-      setDirection(vXNew, vYNew);
+      RotationMatrixTools.applyYawRotation(angleInRadians, getDirection(), getDirection());
    }
 
    /**
@@ -71,7 +122,7 @@ public interface Line2DBasics extends Line2DReadOnly
     */
    default void setPoint(Point2DReadOnly pointOnLine)
    {
-      setPoint(pointOnLine.getX(), pointOnLine.getY());
+      getPoint().set(pointOnLine);
    }
 
    /**
@@ -81,7 +132,7 @@ public interface Line2DBasics extends Line2DReadOnly
     */
    default void setDirection(Vector2DReadOnly lineDirection)
    {
-      setDirection(lineDirection.getX(), lineDirection.getY());
+      getDirection().setAndNormalize(lineDirection);
    }
 
    /**
@@ -91,8 +142,8 @@ public interface Line2DBasics extends Line2DReadOnly
     */
    default void set(Line2DReadOnly other)
    {
-      setPoint(other.getPoint());
-      setDirectionUnsafe(other.getDirectionX(), other.getDirectionY());
+      getPoint().set(other.getPoint());
+      getDirection().set(other.getDirection());
    }
 
    /**
@@ -124,7 +175,8 @@ public interface Line2DBasics extends Line2DReadOnly
       }
 
       setPoint(firstPointOnLine);
-      setDirection(secondPointOnLine.getX() - firstPointOnLine.getX(), secondPointOnLine.getY() - firstPointOnLine.getY());
+      getDirection().sub(secondPointOnLine, firstPointOnLine);
+      getDirection().normalize();
    }
 
    /**
@@ -198,6 +250,46 @@ public interface Line2DBasics extends Line2DReadOnly
     */
    default void translate(double x, double y)
    {
-      setPoint(getPointX() + x, getPointY() + y);
+      getPoint().add(x, y);
+   }
+
+   /**
+    * Transforms this line using the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on this line's point and vector. Not modified.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
+    */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      getPoint().applyTransform(transform);
+      getDirection().applyTransform(transform);
+   }
+
+   /**
+    * Transforms this line using the inverse of the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on this line's point and vector. Not modified.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
+    */
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      getPoint().applyInverseTransform(transform);
+      getDirection().applyInverseTransform(transform);
+   }
+
+   /**
+    * Transforms this line using the given homogeneous transformation matrix and project the result
+    * onto the XY-plane.
+    * 
+    * @param transform the transform to apply on this line's point and vector. Not modified.
+    */
+   default void applyTransformAndProjectToXYPlane(Transform transform)
+   {
+      getPoint().applyTransform(transform, false);
+      getDirection().applyTransform(transform, false);
    }
 }
