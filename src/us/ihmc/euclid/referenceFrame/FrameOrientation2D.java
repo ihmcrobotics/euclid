@@ -72,7 +72,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
     */
    public FrameOrientation2D(FrameOrientation2DReadOnly other)
    {
-      setIncludingFrame(referenceFrame, other);
+      setIncludingFrame(other);
    }
 
    public FrameOrientation2D(FrameQuaternionReadOnly frameQuaternionReadOnly)
