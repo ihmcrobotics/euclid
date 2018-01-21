@@ -1,18 +1,14 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**

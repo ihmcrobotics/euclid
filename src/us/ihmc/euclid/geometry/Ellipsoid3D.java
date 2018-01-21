@@ -6,7 +6,12 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Ellipsoid3D} represents a 3D ellipsoid defined by its three main radii and with its origin

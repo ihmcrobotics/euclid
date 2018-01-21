@@ -6,7 +6,8 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Represents a finite-length 3D line segment defined by its two 3D endpoints.

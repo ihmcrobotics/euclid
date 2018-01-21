@@ -1,16 +1,14 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.*;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
  * Represents a finite-length 2D line segment defined by its two 2D endpoints.

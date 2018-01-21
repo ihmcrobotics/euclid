@@ -2,7 +2,6 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
-import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
