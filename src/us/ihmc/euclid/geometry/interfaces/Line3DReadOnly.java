@@ -14,7 +14,6 @@ public interface Line3DReadOnly
     * Gets the read-only reference to the point through which this line is going.
     *
     * @return the reference to the point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    Point3DReadOnly getPoint();
 
@@ -22,31 +21,8 @@ public interface Line3DReadOnly
     * Gets the read-only reference to the direction of this line.
     *
     * @return the reference to the direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    Vector3DReadOnly getDirection();
-
-   /**
-    * Whether or not this line's point has been initialized and not set to zero or NaN.
-    *
-    * @return whether or not this line's direction is set.
-    */
-   boolean hasPointBeenSet();
-
-   /**
-    * Whether or not this line's direction has been initialized and not set to zero or NaN.
-    *
-    * @return whether or not this line's direction is set.
-    */
-   boolean hasDirectionBeenSet();
-
-   default void checkHasBeenInitialized()
-   {
-      if (!hasPointBeenSet())
-         throw new RuntimeException("The point of this line has not been initialized.");
-      if (!hasDirectionBeenSet())
-         throw new RuntimeException("The direction of this line has not been initialized.");
-   }
 
    /**
     * Gets the direction defining this line by storing its components in the given argument
@@ -54,11 +30,9 @@ public interface Line3DReadOnly
     *
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getDirection(Vector3DBasics directionToPack)
    {
-      checkHasBeenInitialized();
       directionToPack.set(getDirection());
    }
 
@@ -66,11 +40,9 @@ public interface Line3DReadOnly
     * Gets the x-component of this line's direction.
     *
     * @return the x-component of this line's direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getDirectionX()
    {
-      checkHasBeenInitialized();
       return getDirection().getX();
    }
 
@@ -78,11 +50,9 @@ public interface Line3DReadOnly
     * Gets the y-component of this line's direction.
     *
     * @return the y-component of this line's direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getDirectionY()
    {
-      checkHasBeenInitialized();
       return getDirection().getY();
    }
 
@@ -90,11 +60,9 @@ public interface Line3DReadOnly
     * Gets the z-component of this line's direction.
     *
     * @return the z-component of this line's direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getDirectionZ()
    {
-      checkHasBeenInitialized();
       return getDirection().getZ();
    }
 
@@ -103,11 +71,9 @@ public interface Line3DReadOnly
     * {@code pointToPack}.
     *
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getPoint(Point3DBasics pointToPack)
    {
-      checkHasBeenInitialized();
       pointToPack.set(getPoint());
    }
 
@@ -118,7 +84,6 @@ public interface Line3DReadOnly
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getPointAndDirection(Point3DBasics pointToPack, Vector3DBasics directionToPack)
    {
@@ -130,11 +95,9 @@ public interface Line3DReadOnly
     * Gets the x-coordinate of a point this line goes through.
     *
     * @return the x-coordinate of this line's point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getPointX()
    {
-      checkHasBeenInitialized();
       return getPoint().getX();
    }
 
@@ -142,11 +105,9 @@ public interface Line3DReadOnly
     * Gets the y-coordinate of a point this line goes through.
     *
     * @return the y-coordinate of this line's point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getPointY()
    {
-      checkHasBeenInitialized();
       return getPoint().getY();
    }
 
@@ -154,11 +115,9 @@ public interface Line3DReadOnly
     * Gets the z-coordinate of a point this line goes through.
     *
     * @return the z-coordinate of this line's point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getPointZ()
    {
-      checkHasBeenInitialized();
       return getPoint().getZ();
    }
 
@@ -168,11 +127,9 @@ public interface Line3DReadOnly
     *
     * @param otherLine the other line to compute the distance from. Not modified.
     * @return the minimum distance between the two lines.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double distance(Line3DReadOnly otherLine)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.distanceBetweenTwoLine3Ds(getPoint(), getDirection(), otherLine.getPoint(), otherLine.getDirection());
    }
 
@@ -188,22 +145,17 @@ public interface Line3DReadOnly
     *
     * @param point 3D point to compute the distance from the line. Not modified.
     * @return the minimum distance between the 3D point and this 3D line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double distance(Point3DReadOnly point)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, getPoint(), getDirection());
    }
 
    /**
     * Copies this line and then flips the direction of the copy before returning it.
-    *
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Line3D negateDirectionCopy()
    {
-      checkHasBeenInitialized();
       Line3D ret = new Line3D(this);
       ret.negateDirection();
 
@@ -224,11 +176,9 @@ public interface Line3DReadOnly
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.orthogonalProjectionOnLine3D(pointToProject, getPoint(), getDirection(), projectionToPack);
    }
 
@@ -248,11 +198,9 @@ public interface Line3DReadOnly
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto the line or {@code null} if the method failed.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Point3D orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.orthogonalProjectionOnLine3D(pointToProject, getPoint(), getDirection());
    }
 
@@ -266,11 +214,9 @@ public interface Line3DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @param epsilon the tolerance used for this test.
     * @return {@code true} if the point is located on this line, {@code false} otherwise.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean isPointOnLine(Point3DReadOnly point, double epsilon)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, getPoint(), getDirection()) < epsilon;
    }
 
@@ -291,7 +237,6 @@ public interface Line3DReadOnly
     *           given point is at a distance less than {@code epsilon} from this line, it is
     *           considered as being located on this line.
     * @return the value of the parameter 't' corresponding to the given point.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located at a distance greater than
     *            {@code epsilon} from this line.
     */
@@ -328,7 +273,6 @@ public interface Line3DReadOnly
     *
     * @param t the parameter used to calculate the point coordinates.
     * @return the coordinates of the point 'p'.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Point3D pointOnLineGivenParameter(double t)
    {
@@ -349,11 +293,9 @@ public interface Line3DReadOnly
     *
     * @param t the parameter used to calculate the point coordinates.
     * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void pointOnLineGivenParameter(double t, Point3DBasics pointToPack)
    {
-      checkHasBeenInitialized();
       pointToPack.scaleAdd(t, getDirection(), getPoint());
    }
 
@@ -363,11 +305,9 @@ public interface Line3DReadOnly
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, Point3DBasics secondPointOnLineToPack)
    {
-      checkHasBeenInitialized();
       firstPointOnLineToPack.set(getPoint());
       secondPointOnLineToPack.add(getPoint(), getDirection());
    }
@@ -408,11 +348,9 @@ public interface Line3DReadOnly
     * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(getPoint(), getDirection(), otherLine.getPoint(), otherLine.getDirection(),
                                                                   closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }

@@ -20,7 +20,6 @@ public interface Line3DBasics extends Line3DReadOnly
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     * @param lineDirectionZ the new z-component of the direction of this line.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ);
 
@@ -30,7 +29,6 @@ public interface Line3DBasics extends Line3DReadOnly
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     * @param lineDirectionZ the new z-component of the direction of this line.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirectionUnsafe(double lineDirectionX, double lineDirectionY, double lineDirectionZ);
 
@@ -48,7 +46,6 @@ public interface Line3DBasics extends Line3DReadOnly
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    default void setDirection(Vector3DReadOnly lineDirection)
    {
@@ -70,7 +67,6 @@ public interface Line3DBasics extends Line3DReadOnly
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     * @param lineDirectionZ the new z-component of the direction of this line.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    default void set(double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
@@ -83,7 +79,6 @@ public interface Line3DBasics extends Line3DReadOnly
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     * @throws RuntimeException if the two given points are exactly equal.
     */
    default void set(Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
@@ -104,7 +99,6 @@ public interface Line3DBasics extends Line3DReadOnly
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -117,7 +111,6 @@ public interface Line3DBasics extends Line3DReadOnly
     *
     * @param twoPointsOnLine a two-element array containing in order the first point and second
     *           point this line is to go through. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     * @throws RuntimeException if the two given points are exactly equal.
     * @throws IllegalArgumentException if the given array has a length different than 2.
     */
@@ -137,11 +130,9 @@ public interface Line3DBasics extends Line3DReadOnly
     * @param x the distance to translate this line along the x-axis.
     * @param y the distance to translate this line along the y-axis.
     * @param z the distance to translate this line along the z-axis.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void translate(double x, double y, double z)
    {
-      checkHasBeenInitialized();
       setPoint(getPointX() + x, getPointY() + y, getPointZ() + z);
    }
 }

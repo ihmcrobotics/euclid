@@ -15,26 +15,16 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class Line3D implements Line3DBasics, GeometryObject<Line3D>
 {
-   private final static double minAllowableVectorPart = Math.sqrt(Double.MIN_NORMAL);
-
    /** Coordinates of a point located on this line. */
    private final Point3D point = new Point3D();
    /** Normalized direction of this line. */
    private final Vector3D direction = new Vector3D();
 
-   /** Whether or not this line's point is set. */
-   private boolean pointHasBeenSet = false;
-   /** Whether or not this line's direction is set. */
-   private boolean directionHasBeenSet = false;
-
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero. This
-    * point and vector have to be set to valid values to make this line usable.
+    * Default constructor that initializes both {@link #point} and {@link #direction} to zero.
     */
    public Line3D()
    {
-      pointHasBeenSet = false;
-      directionHasBeenSet = false;
    }
 
    /**
@@ -46,7 +36,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * @param lineDirectionX the x-component of the direction of this line.
     * @param lineDirectionY the y-component of the direction of this line.
     * @param lineDirectionZ the z-component of the direction of this line.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    public Line3D(double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
@@ -78,7 +67,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * 
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     * @throws RuntimeException if the two given points are exactly equal.
     */
    public Line3D(Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
@@ -91,7 +79,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * 
     * @param pointOnLine point on this line. Not modified.
     * @param lineDirection direction of this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    public Line3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -102,12 +89,10 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * Transforms this line using the given homogeneous transformation matrix.
     * 
     * @param transform the transform to apply on this line's point and vector. Not modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    @Override
    public void applyTransform(Transform transform)
    {
-      checkHasBeenInitialized();
       point.applyTransform(transform);
       direction.applyTransform(transform);
    }
@@ -116,28 +101,12 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * Transforms this line using the inverse of the given homogeneous transformation matrix.
     * 
     * @param transform the transform to apply on this line's point and vector. Not modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    @Override
    public void applyInverseTransform(Transform transform)
    {
-      checkHasBeenInitialized();
       point.applyInverseTransform(transform);
       direction.applyInverseTransform(transform);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean hasPointBeenSet()
-   {
-      return pointHasBeenSet;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean hasDirectionBeenSet()
-   {
-      return directionHasBeenSet;
    }
 
    /**
@@ -162,12 +131,10 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    @Override
    public boolean epsilonEquals(Line3D other, double epsilon)
    {
-      checkHasBeenInitialized();
       if (!point.epsilonEquals(other.point, epsilon))
          return false;
       if (!direction.epsilonEquals(other.direction, epsilon))
@@ -200,7 +167,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public Vector3DReadOnly getDirection()
    {
-      checkHasBeenInitialized();
       return direction;
    }
 
@@ -208,18 +174,14 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public Point3DReadOnly getPoint()
    {
-      checkHasBeenInitialized();
       return point;
    }
 
    /**
     * Flips this line's direction.
-    * 
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    public void negateDirection()
    {
-      checkHasBeenInitialized();
       direction.negate();
    }
 
@@ -227,7 +189,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * Sets this line to be the same as the given line.
     * 
     * @param other the other line to copy. Not modified.
-    * @throws RuntimeException if the other line has not been initialized yet.
     */
    @Override
    public void set(Line3D other)
@@ -247,15 +208,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
       direction.set(lineDirectionX, lineDirectionY, lineDirectionZ);
-
-      // checkReasonableVector
-      if (Math.abs(direction.getX()) < minAllowableVectorPart && Math.abs(direction.getY()) < minAllowableVectorPart
-            && Math.abs(direction.getZ()) < minAllowableVectorPart)
-      {
-         throw new RuntimeException("Line length must be greater than zero");
-      }
-
-      directionHasBeenSet = true;
    }
 
    /** {@inheritDoc} */
@@ -263,7 +215,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    public void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ)
    {
       this.point.set(pointOnLineX, pointOnLineY, pointOnLineZ);
-      pointHasBeenSet = true;
    }
 
    /**
@@ -276,8 +227,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    {
       point.setToNaN();
       direction.setToNaN();
-      pointHasBeenSet = false;
-      directionHasBeenSet = false;
    }
 
    /**
@@ -289,8 +238,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    {
       point.setToZero();
       direction.setToZero();
-      pointHasBeenSet = false;
-      directionHasBeenSet = false;
    }
 
    /**
