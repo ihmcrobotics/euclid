@@ -171,4 +171,16 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    {
       return EuclidGeometryIOTools.getPose2DString(this);
    }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this pose 2D.
+    *
+    * @return the hash code value for this pose 2D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long bits = 31L * position.hashCode() + orientation.hashCode();
+      return (int) (bits ^ bits >> 32);
+   }
 }

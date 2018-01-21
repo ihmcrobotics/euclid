@@ -104,7 +104,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this pose 3D to the {@code other} pose 3D.
+    * Sets this pose 2D to the given {@code pose3DReadOnly}.
     *
     * @param pose3DReadOnly the pose 3D. Not modified.
     */

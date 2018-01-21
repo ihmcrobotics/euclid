@@ -1,15 +1,59 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
+/**
+ * Read-only interface for a 3D pose expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link Pose3DReadOnly}, a {@link ReferenceFrame} is associated to a
+ * {@code FramePose3DReadOnly}. This allows, for instance, to enforce, at runtime, that operations
+ * on poses occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FramePose3DReadOnly} extends {@code Pose3DReadOnly}, it is compatible with
+ * methods only requiring {@code Pose3DReadOnly}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FramePose3DReadOnly}.
+ * </p>
+ */
 public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolder
 {
+   /** {@inheritDoc} */
    @Override
    FramePoint3DReadOnly getPosition();
 
+   /** {@inheritDoc} */
    @Override
    FrameQuaternionReadOnly getOrientation();
+
+   /**
+    * Gets the position and orientation.
+    * 
+    * @param positionToPack the tuple used to store the position. Modified.
+    * @param orientationToPack the quaternion used to store the orientation. Modified.
+    * @throws ReferenceFrameMismatchException if {@code positionToPack} and/or
+    *            {@code orientationToPack} are not expressed in the same reference frame as this
+    *            frame pose.
+    */
+   default void get(FixedFrameTuple3DBasics positionToPack, FixedFrameQuaternionBasics orientationToPack)
+   {
+      positionToPack.set(getPosition());
+      orientationToPack.set(getOrientation());
+   }
+
+   /**
+    * Gets the position and orientation.
+    * 
+    * @param positionToPack the tuple used to store the position. Modified.
+    * @param orientationToPack the quaternion used to store the orientation. Modified.
+    */
+   default void get(FrameTuple3DBasics positionToPack, FrameQuaternionBasics orientationToPack)
+   {
+      positionToPack.setIncludingFrame(getPosition());
+      orientationToPack.setIncludingFrame(getOrientation());
+   }
 
    /**
     * Computes and packs the orientation described by the orientation part of this pose as a

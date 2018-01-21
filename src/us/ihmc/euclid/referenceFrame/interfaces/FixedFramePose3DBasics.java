@@ -9,11 +9,28 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Write and read interface for a 3D pose expressed in a constant reference frame, i.e. this pose is
+ * always expressed in the same reference frame.
+ * <p>
+ * In addition to representing a {@link Pose3DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FixedFramePose3DBasics}. This allows, for instance, to enforce, at runtime, that
+ * operations on poses occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FixedFramePose3DBasics} extends {@code Pose3DBasics}, it is compatible with
+ * methods only requiring {@code Pose3DBasics}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FixedFramePose3DBasics}.
+ * </p>
+ */
 public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasics
 {
+   /** {@inheritDoc} */
    @Override
    FixedFramePoint3DBasics getPosition();
 
+   /** {@inheritDoc} */
    @Override
    FixedFrameQuaternionBasics getOrientation();
 
@@ -99,22 +116,48 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
       Pose3DBasics.super.setOrientation(orientation);
    }
 
+   /**
+    * Sets the pose to represent the same pose as the given {@code pose2DReadOnly} that is expressed
+    * in the given {@code referenceFrame}.
+    * 
+    * @param referenceFrame the reference frame in which the given {@code pose2DReadOnly} is
+    *           expressed in.
+    * @param pose2DReadOnly the pose 2D used to set the pose of this frame pose 3D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    */
    default void set(ReferenceFrame referenceFrame, Pose2DReadOnly pose2DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
       set(pose2DReadOnly);
    }
 
+   /**
+    * Sets the pose from the given {@code pose3DReadOnly} that is expressed in the given
+    * {@code referenceFrame}.
+    * 
+    * @param referenceFrame the reference frame in which the given {@code pose3DReadOnly} is
+    *           expressed in.
+    * @param pose3DReadOnly the pose 3D used to set the pose of this frame pose 3D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    */
    default void set(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
       set(pose3DReadOnly);
    }
 
-   default void set(FramePose2DReadOnly other)
+   /**
+    * Sets this frame pose 3D to the represent the same pose as the given
+    * {@code framePose2DReadOnly}.
+    *
+    * @param framePose2DReadOnly the other frame pose 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code framePose2DReadOnly} are
+    *            not expressed in the same reference frame.
+    */
+   default void set(FramePose2DReadOnly framePose2DReadOnly)
    {
-      checkReferenceFrameMatch(other);
-      Pose3DBasics.super.set(other);
+      checkReferenceFrameMatch(framePose2DReadOnly);
+      Pose3DBasics.super.set(framePose2DReadOnly);
    }
 
    /**
