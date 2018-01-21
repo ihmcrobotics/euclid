@@ -5,11 +5,28 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Write and read interface for a quaternion expressed in a constant reference frame, i.e. this
+ * quaternion is always expressed in the same reference frame.
+ * <p>
+ * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to
+ * a {@code FixedFrameQuaternionBasics}. This allows, for instance, to enforce, at runtime, that
+ * operations on quaternions occur in the same coordinate system. Also, via the method
+ * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a quaternion in
+ * different reference frames.
+ * </p>
+ * <p>
+ * Because a {@code FixedFrameQuaternionBasics} extends {@code QuaternionBasics}, it is compatible
+ * with methods only requiring {@code QuaternionBasics}. However, these methods do NOT assert that
+ * the operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FixedFrameQuaternionBasics}.
+ * </p>
+ */
 public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, FixedFrameTuple4DBasics, QuaternionBasics
 {
    /**
-    * Sets this point coordinate to the given {@code referenceFrame}'s origin coordinate in this
-    * frame tuple current frame.
+    * Sets this quaternion to represent the orientation from {@code this.getReferenceFrame()} to the
+    * given {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame of interest.
     */
@@ -21,12 +38,11 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
 
    /**
     * Sets this frame quaternion to {@code quaternionReadOnly} and checks that its current frame
-    * equal {@code referenceFrame}.
+    * equals {@code referenceFrame}.
     * 
     * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
     *           expressed.
-    * @param quaternionReadOnly the geometry object used to update the geometry object in
-    *           {@code this}. Not modified.
+    * @param quaternionReadOnly the quaternion to copy the values from.Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)

@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -50,11 +52,22 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    }
 
    /**
+    * Creates a new pose 3D and initializes to represent the same pose as the given
+    * {@code pose2DReadOnly}.
+    * 
+    * @param pose2DReadOnly the pose 2D used to initialize this pose 3D. Not modified.
+    */
+   public Pose3D(Pose2DReadOnly pose2DReadOnly)
+   {
+      set(pose2DReadOnly);
+   }
+
+   /**
     * Creates a new pose 3D and initializes it to {@code other}.
     *
     * @param other the other pose 3D used to initialize this. Not modified.
     */
-   public Pose3D(Pose3D other)
+   public Pose3D(Pose3DReadOnly other)
    {
       set(other);
    }
@@ -83,48 +96,6 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
 
    /** {@inheritDoc} */
    @Override
-   public double getX()
-   {
-      return position.getX();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getY()
-   {
-      return position.getY();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getZ()
-   {
-      return position.getZ();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getYaw()
-   {
-      return orientation.getYaw();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getPitch()
-   {
-      return orientation.getPitch();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getRoll()
-   {
-      return orientation.getRoll();
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public Point3D getPosition()
    {
       return position;
@@ -135,27 +106,6 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    public Quaternion getOrientation()
    {
       return orientation;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setX(double x)
-   {
-      position.setX(x);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setY(double y)
-   {
-      position.setY(y);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setZ(double z)
-   {
-      position.setZ(z);
    }
 
    /**
@@ -170,23 +120,8 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    }
 
    /**
-    * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
-    *
-    * @param other the other pose 3D to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   public boolean equals(Pose3D other)
-   {
-      if (other == null)
-         return false;
-      else
-         return position.equals(other.position) && orientation.equals(other.orientation);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Pose3D)}, it returns {@code false} otherwise.
+    * returns {@link #equals(Pose3DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -196,7 +131,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    {
       try
       {
-         return equals((Pose3D) obj);
+         return equals((Pose3DReadOnly) obj);
       }
       catch (ClassCastException e)
       {
@@ -237,29 +172,6 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    }
 
    /**
-    * Provides a {@code String} representation of the position part of this pose 3D as follows:<br>
-    * (x, y, z)
-    *
-    * @return the {@code String} representing the position part of this pose 3D.
-    */
-   public String printOutPosition()
-   {
-      return position.toString();
-   }
-
-   /**
-    * Provides a {@code String} representation of the orientation part of this pose 3D as
-    * follows:<br>
-    * (qx, qy, qz, qs)
-    *
-    * @return the {@code String} representing the orientation part of this pose 3D.
-    */
-   public String printOutOrientation()
-   {
-      return orientation.toString();
-   }
-
-   /**
     * Provides a {@code String} representation of this pose 3D as follows:<br>
     * Pose 3D: position = (x, y, z), orientation = (qx, qy, qz, qs)
     *
@@ -269,5 +181,17 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    public String toString()
    {
       return EuclidGeometryIOTools.getPose3DString(this);
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this pose 3D.
+    *
+    * @return the hash code value for this pose 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long bits = 31L * position.hashCode() + orientation.hashCode();
+      return (int) (bits ^ bits >> 32);
    }
 }

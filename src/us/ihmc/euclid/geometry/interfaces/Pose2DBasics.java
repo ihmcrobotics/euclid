@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -9,7 +8,15 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Write and read interface for a pose 2D.
+ * <p>
+ * A pose 2D represents a position and orientation in the XY-plane.
+ * </p>
+ */
 public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
 {
    /**
@@ -97,6 +104,17 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
+    * Sets this pose 2D to the given {@code pose3DReadOnly}.
+    *
+    * @param pose3DReadOnly the pose 3D. Not modified.
+    */
+   default void set(Pose3DReadOnly pose3DReadOnly)
+   {
+      setPosition(pose3DReadOnly.getPosition());
+      setOrientation(pose3DReadOnly.getOrientation());
+   }
+
+   /**
     * Sets the position coordinates.
     *
     * @param x the x-coordinate of the position.
@@ -113,6 +131,16 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param position the tuple with the new position coordinates. Not modified.
     */
    default void setPosition(Tuple2DReadOnly position)
+   {
+      getPosition().set(position);
+   }
+
+   /**
+    * Sets the position to the given tuple.
+    *
+    * @param position the tuple with the new position coordinates. Not modified.
+    */
+   default void setPosition(Tuple3DReadOnly position)
    {
       getPosition().set(position);
    }
@@ -138,6 +166,16 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
+    * Sets the orientation from the yaw angle of the given quaternion.
+    *
+    * @param orientation the orientation with the new angle value for this. Not modified.
+    */
+   default void setOrientation(QuaternionReadOnly orientation)
+   {
+      getOrientation().set(orientation);
+   }
+
+   /**
     * Sets all the components of this pose 2D.
     *
     * @param x the x-coordinate of the position.
@@ -147,6 +185,18 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    default void set(double x, double y, double yaw)
    {
       setPosition(x, y);
+      setOrientation(yaw);
+   }
+
+   /**
+    * Sets this pose 2D from the given {@code position} and {@code yaw} angle.
+    * 
+    * @param position the tuple used to initialize this pose's position. Not modified.
+    * @param yaw the angle used to initialize the pose's orientation.
+    */
+   default void set(Tuple2DReadOnly position, double yaw)
+   {
+      setPosition(position);
       setOrientation(yaw);
    }
 
@@ -285,12 +335,12 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * to the orientation part.
     * <p>
     * If the rotation should not affect this pose's position, use
-    * {@link #appendRotation(Orientation2D)}.
+    * {@link #appendRotation(Orientation2DReadOnly)}.
     * </p>
     *
     * @param orientation the orientation to prepend to this pose 2D. Not modified.
     */
-   default void prependRotation(Orientation2D orientation)
+   default void prependRotation(Orientation2DReadOnly orientation)
    {
       prependRotation(orientation.getYaw());
    }
@@ -347,12 +397,12 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Adds the given {@code orientation} to the orientation of this pose 2D.
     * <p>
     * If the position part of this pose 2D is to be rotated by the given {@code orientation}, use
-    * {@link #prependRotation(Orientation2D)}.
+    * {@link #prependRotation(Orientation2DReadOnly)}.
     * </p>
     *
     * @param orientation the orientation to append to this pose 2D. Not modified.
     */
-   default void appendRotation(Orientation2D orientation)
+   default void appendRotation(Orientation2DReadOnly orientation)
    {
       appendRotation(orientation.getYaw());
    }

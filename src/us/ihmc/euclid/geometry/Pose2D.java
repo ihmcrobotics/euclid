@@ -1,8 +1,10 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -43,9 +45,31 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     *
     * @param other the other pose 2D used to initialize this. Not modified.
     */
-   public Pose2D(Pose2D other)
+   public Pose2D(Pose2DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Creates a new pose 2D and initializes it from {@code pose3DReadOnly}
+    * 
+    * @param pose3DReadOnly the pose 3D used to initialize this pose 2D. Not modified.
+    */
+   public Pose2D(Pose3DReadOnly pose3DReadOnly)
+   {
+      set(pose3DReadOnly);
+   }
+
+   /**
+    * Creates a new pose 2D and initializes it from the given {@code position} and {@code yaw}
+    * angle.
+    * 
+    * @param position the tuple used to initialize this pose's position. Not modified.
+    * @param yaw the angle used to initialize the pose's orientation.
+    */
+   public Pose2D(Tuple2DReadOnly position, double yaw)
+   {
+      set(position, yaw);
    }
 
    /**
@@ -54,7 +78,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     * @param position tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
-   public Pose2D(Tuple2DReadOnly position, Orientation2D orientation)
+   public Pose2D(Tuple2DReadOnly position, Orientation2DReadOnly orientation)
    {
       set(position, orientation);
    }
@@ -146,5 +170,17 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    public String toString()
    {
       return EuclidGeometryIOTools.getPose2DString(this);
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this pose 2D.
+    *
+    * @return the hash code value for this pose 2D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long bits = 31L * position.hashCode() + orientation.hashCode();
+      return (int) (bits ^ bits >> 32);
    }
 }

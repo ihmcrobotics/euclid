@@ -1,9 +1,25 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
+/**
+ * Write and read interface for a 4D vector expressed in a constant reference frame, i.e. this vector
+ * is always expressed in the same reference frame.
+ * <p>
+ * In addition to representing a {@link Vector4DBasics}, a {@link ReferenceFrame} is associated to
+ * a {@code FixedFrameVector4DBasics}. This allows, for instance, to enforce, at runtime, that
+ * operations on vectors occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FixedFrameVector4DBasics} extends {@code Vector4DBasics}, it is compatible with
+ * methods only requiring {@code Vector4DBasics}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FixedFrameVector4DBasics}.
+ * </p>
+ */
 public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFrameTuple4DBasics, Vector4DBasics
 {
    /**

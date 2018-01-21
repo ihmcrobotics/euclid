@@ -1,10 +1,31 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.referenceFrame.FrameQuaternion;
+import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
+/**
+ * {@code FixedFrameTuple4DBasics} is the base implementation for {@link FrameQuaternion} and
+ * {@link FrameVector4D}.
+ * <p>
+ * In addition to representing a {@link Tuple4DBasics}, a constant {@link ReferenceFrame} is
+ * associated to a {@code FixedFrameTuple4DBasics}. This allows, for instance, to enforce, at
+ * runtime, that operations on tuples occur in the same coordinate system.
+ * </p>
+ * <p>
+ * When using this interface, the reference frame of this tuple is assumed to be immutable, i.e. the
+ * tuple is always expressed in the same reference frame.
+ * </p>
+ * <p>
+ * Because a {@code FixedFrameTuple4DBasics} extends {@code Tuple4DBasics}, it is compatible with
+ * methods only requiring {@code Tuple4DBasics}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FixedFrameTuple4DBasics}.
+ * </p>
+ */
 public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBasics
 {
    /**

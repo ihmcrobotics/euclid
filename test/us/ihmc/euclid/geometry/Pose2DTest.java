@@ -182,7 +182,7 @@ public class Pose2DTest
 
          assertEquals(length, firstPose.getPositionDistance(secondPose), epsilon);
 
-         firstPose.getPosition(point);
+         point.set(firstPose.getPosition());
          point.add(translation);
 
          assertEquals(length, firstPose.getPositionDistance(point), epsilon);
@@ -208,7 +208,7 @@ public class Pose2DTest
 
          assertEquals(Math.abs(angleDiff), firstPose.getOrientationDistance(secondPose), epsilon);
 
-         firstPose.getOrientation(orientation);
+         orientation.set(firstPose.getOrientation());
          orientation.add(angleDiff);
 
          assertEquals(Math.abs(angleDiff), firstPose.getOrientationDistance(orientation), epsilon);

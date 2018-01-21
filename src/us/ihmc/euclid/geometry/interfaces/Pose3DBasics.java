@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
-import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -16,6 +15,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Write and read interface for pose 3D.
+ * <p>
+ * A pose 3D represents a position and orientation in 3 dimensions.
+ * </p>
+ */
 public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
 {
    /**
@@ -61,7 +66,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @return the orientation part of this pose 3D.
     */
    QuaternionBasics getOrientation();
-   
+
    /**
     * Sets the position coordinates.
     *
@@ -86,6 +91,9 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
 
    /**
     * Sets the x and y coordinates from the given tuple 2D, the z coordinate remains unchanged.
+    * <p>
+    * The z component remains unchanged.
+    * </p>
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
     */
@@ -98,7 +106,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the position from the given tuple 2D and z coordinate.
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
-    * @param z the new z value.
+    * @param z the new z value for this pose's position z-coordinate.
     */
    default void setPosition(Tuple2DReadOnly position2D, double z)
    {
@@ -126,6 +134,17 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
+    * Sets this pose 3D to the given {@code pose2DReadOnly}.
+    *
+    * @param pose2DReadOnly the pose 2D used to set this pose 3D. Not modified.
+    */
+   default void set(Pose2DReadOnly pose2DReadOnly)
+   {
+      setPosition(pose2DReadOnly.getPosition(), 0.0);
+      setOrientation(pose2DReadOnly.getOrientation());
+   }
+
+   /**
     * Sets this pose 3D to the {@code other} pose 3D.
     *
     * @param other the other pose 3D. Not modified.
@@ -150,6 +169,16 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    default void setOrientation(double qx, double qy, double qz, double qs)
    {
       getOrientation().set(qx, qy, qz, qs);
+   }
+
+   /**
+    * Sets the orientation part of this pose 3D with the given orientation 2D.
+    *
+    * @param orientation the orientation 2D used to set this pose's orientation. Not modified.
+    */
+   default void setOrientation(Orientation2DReadOnly orientation)
+   {
+      getOrientation().setToYawQuaternion(orientation.getYaw());
    }
 
    /**
@@ -326,7 +355,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     */
-   default void interpolate(Pose3D other, double alpha)
+   default void interpolate(Pose3DReadOnly other, double alpha)
    {
       getPosition().interpolate(other.getPosition(), alpha);
       getOrientation().interpolate(other.getOrientation(), alpha);
@@ -346,7 +375,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
     *           {@code this} to {@code pose2}.
     */
-   default void interpolate(Pose3D pose1, Pose3D pose2, double alpha)
+   default void interpolate(Pose3DReadOnly pose1, Pose3DReadOnly pose2, double alpha)
    {
       getPosition().interpolate(pose1.getPosition(), pose2.getPosition(), alpha);
       getOrientation().interpolate(pose1.getOrientation(), pose2.getOrientation(), alpha);
@@ -508,7 +537,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Rotates, then adds the given {@code translation} to this pose 3D.
     * <p>
     * Use this method if the {@code translation} is expressed in the local coordinates described by
-    * this pose 3D. Otherwise, use {@link #prependTranslation(Tuple2DReadOnly)}.
+    * this pose 3D. Otherwise, use {@link #prependTranslation(Tuple3DReadOnly)}.
     * </p>
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
