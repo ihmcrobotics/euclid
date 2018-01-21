@@ -9,11 +9,28 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
+/**
+ * Write and read interface for a 2D pose expressed in a constant reference frame, i.e. this pose is
+ * always expressed in the same reference frame.
+ * <p>
+ * In addition to representing a {@link Pose2DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FixedFramePose2DBasics}. This allows, for instance, to enforce, at runtime, that
+ * operations on poses occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FixedFramePose2DBasics} extends {@code Pose2DBasics}, it is compatible with
+ * methods only requiring {@code Pose2DBasics}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FixedFramePose2DBasics}.
+ * </p>
+ */
 public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasics
 {
+   /** {@inheritDoc} */
    @Override
    FixedFrameOrientation2DBasics getOrientation();
 
+   /** {@inheritDoc} */
    @Override
    FixedFramePoint2DBasics getPosition();
 
@@ -68,18 +85,43 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
       Pose2DBasics.super.setOrientation(orientation);
    }
 
+   /**
+    * Sets the orientation from the yaw angle of the given {@code orientation}.
+    * 
+    * @param orientation the orientation with the new angle value for this. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not
+    *            expressed in the same reference frame.
+    */
    default void setOrientation(FrameQuaternionReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
       Pose2DBasics.super.setOrientation(orientation);
    }
 
+   /**
+    * Sets the pose from the given {@code pose2DReadOnly} that is expressed in the given
+    * {@code referenceFrame}.
+    * 
+    * @param referenceFrame the reference frame in which the given {@code pose2DReadOnly} is
+    *           expressed in.
+    * @param pose2DReadOnly the pose 2D used to set the pose of this frame pose 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    */
    default void set(ReferenceFrame referenceFrame, Pose2DReadOnly pose2DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
       set(pose2DReadOnly);
    }
 
+   /**
+    * Sets the pose from the given {@code pose3DReadOnly} that is expressed in the given
+    * {@code referenceFrame}.
+    * 
+    * @param referenceFrame the reference frame in which the given {@code pose3DReadOnly} is
+    *           expressed in.
+    * @param pose2DReadOnly the pose 3D used to set the pose of this frame pose 2D. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    */
    default void set(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
@@ -113,6 +155,14 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
       Pose2DBasics.super.set(framePose3DReadOnly);
    }
 
+   /**
+    * Sets this frame pose 2D to the given {@code position} and {@code yaw} angle.
+    *
+    * @param position the tuple with the new position coordinates. Not modified.
+    * @param yaw the new angle for the orientation.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed
+    *            in the same reference frame.
+    */
    default void set(FrameTuple2DReadOnly position, double yaw)
    {
       checkReferenceFrameMatch(position);

@@ -1,13 +1,30 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
+/**
+ * Read-only interface for a 2D pose expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link Pose2DReadOnly}, a {@link ReferenceFrame} is associated to a
+ * {@code FramePose2DReadOnly}. This allows, for instance, to enforce, at runtime, that operations
+ * on poses occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FramePose2DReadOnly} extends {@code Pose2DReadOnly}, it is compatible with
+ * methods only requiring {@code Pose2DReadOnly}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FramePose2DReadOnly}.
+ * </p>
+ */
 public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolder
 {
+   /** {@inheritDoc} */
    @Override
    FramePoint2DReadOnly getPosition();
 
+   /** {@inheritDoc} */
    @Override
    FrameOrientation2DReadOnly getOrientation();
 

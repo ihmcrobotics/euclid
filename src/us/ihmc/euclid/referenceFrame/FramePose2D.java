@@ -1,8 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
@@ -13,6 +15,21 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
+/**
+ * {@code FramePose2D} is a 2D pose expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link Pose2DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FramePose2D}. This allows, for instance, to enforce, at runtime, that operations on poses
+ * occur in the same coordinate system. Also, via the method {@link #changeFrame(ReferenceFrame)},
+ * one can easily calculates the value of a point in different reference frames.
+ * </p>
+ * <p>
+ * Because a {@code FramePose2D} extends {@code Pose2DBasics}, it is compatible with methods only
+ * requiring {@code Pose2DBasics}. However, these methods do NOT assert that the operation occur in
+ * the proper coordinate system. Use this feature carefully and always prefer using methods
+ * requiring {@code FramePose2D}.
+ * </p>
+ */
 public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2D>
 {
    /** The reference frame is which this point is currently expressed. */
@@ -98,16 +115,34 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
       }
    };
 
+   /**
+    * Creates a new pose 2D initialized with its position at (0, 0) and orientation at 0 and its
+    * reference frame to {@code ReferenceFrame#getWorldFrame()}.
+    */
    public FramePose2D()
    {
       this(ReferenceFrame.getWorldFrame());
    }
 
+   /**
+    * Creates a new pose 2D initialized with its position at (0, 0) and orientation at 0 in the
+    * given {@code referenceFrame}.
+    * 
+    * @param referenceFrame the reference frame used to initialize this frame pose.
+    */
    public FramePose2D(ReferenceFrame referenceFrame)
    {
       setToZero(referenceFrame);
    }
 
+   /**
+    * Creates a new pose 2D initialize it from the given position and orientation.
+    * 
+    * @param position the position used to initialize this frame pose. Not modified.
+    * @param orientation the orientation used to initialize this frame pose. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
+    *            expressed in the same reference frame.
+    */
    public FramePose2D(FrameTuple2DReadOnly position, FrameOrientation2DReadOnly orientation)
    {
       setIncludingFrame(position, orientation);
@@ -116,21 +151,24 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    /**
     * Creates a new frame pose and initializes its current reference frame to
     * {@link ReferenceFrame#getWorldFrame()} and pose to {@code pose}.
-    * <p>
-    * The given {@code pose}'s reference is saved internally for performing all the future
-    * operations with this {@code FramePose3D}.
-    * </p>
     *
-    * @param pose the pose that is to be used internally. Copied. Not modified.
+    * @param other the other pose used to initialize this frame pose. Not modified.
     */
-   public FramePose2D(FramePose2DReadOnly pose)
+   public FramePose2D(FramePose2DReadOnly other)
    {
-      setIncludingFrame(ReferenceFrame.getWorldFrame(), pose);
+      setIncludingFrame(other);
    }
 
-   public FramePose2D(FramePose3DReadOnly pose)
+   /**
+    * Creates a new frame pose 2D and initializes it from the x, y, and yaw components of the given
+    * {@code framePose3DReadOnly}.
+    * 
+    * @param framePose3DReadOnly the frame pose 3D used to initialize this frame pose 2D. Not
+    *           modified.
+    */
+   public FramePose2D(FramePose3DReadOnly framePose3DReadOnly)
    {
-      setIncludingFrame(ReferenceFrame.getWorldFrame(), pose);
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), framePose3DReadOnly);
    }
 
    /**
@@ -148,46 +186,64 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
       setIncludingFrame(referenceFrame, pose);
    }
 
-   public FramePose2D(ReferenceFrame referenceFrame, FrameTuple2DReadOnly position, double yaw)
-   {
-      setIncludingFrame(referenceFrame, position, yaw);
-   }
-   
+   /**
+    * Creates a new frame pose 2D and initializes it from the given {@code position} and {@code yaw}
+    * angle.
+    * 
+    * @param referenceFrame the initial reference frame for this frame pose 2D.
+    * @param position the tuple used to initialize the position of this frame pose 2D. Not modified.
+    * @param yaw the angle used to initialize the orientation of this frame pose 2D. Not modified.
+    */
    public FramePose2D(ReferenceFrame referenceFrame, Tuple2DReadOnly position, double yaw)
    {
       setIncludingFrame(referenceFrame, position, yaw);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(FramePose2D other)
    {
       FramePose2DBasics.super.set(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
    }
 
+   /** {@inheritDoc} */
    @Override
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrame;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFramePoint2DBasics getPosition()
    {
       return positionPart;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFrameOrientation2DBasics getOrientation()
    {
       return orientationPart;
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(FramePose2DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two points have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
    @Override
    public boolean equals(Object obj)
    {
@@ -201,12 +257,38 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
       }
    }
 
+   /**
+    * Tests on a per component basis if this pose is equal to the given {@code other} to an
+    * {@code epsilon}.
+    * <p>
+    * If the two poses have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the other pose to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
+    */
    @Override
    public boolean epsilonEquals(FramePose2D other, double epsilon)
    {
       return FramePose2DBasics.super.epsilonEquals(other, epsilon);
    }
 
+   /**
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically
+    * equal.
+    * </p>
+    *
+    * @param other the pose to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
    @Override
    public boolean geometricallyEquals(FramePose2D other, double epsilon)
    {
