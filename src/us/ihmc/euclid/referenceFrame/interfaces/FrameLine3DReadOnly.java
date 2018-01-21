@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolder
 {
@@ -46,6 +47,66 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    {
       pointToPack.setReferenceFrame(getReferenceFrame());
       directionToPack.setReferenceFrame(getReferenceFrame());
+      Line3DReadOnly.super.get(pointToPack, directionToPack);
+   }
+
+   /**
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
+    *
+    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param directionToPack vector in which the components of this line's direction are stored.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code directionToPack} is not expressed in the
+    *            same reference frame as this frame line 3D.
+    */
+   default void get(Point3DBasics pointToPack, FixedFrameVector3DBasics directionToPack)
+   {
+      checkReferenceFrameMatch(directionToPack);
+      Line3DReadOnly.super.get(pointToPack, directionToPack);
+   }
+
+   /**
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
+    *
+    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param directionToPack vector in which the components of this line's direction are stored.
+    *           Modified.
+    */
+   default void get(Point3DBasics pointToPack, FrameVector3DBasics directionToPack)
+   {
+      directionToPack.setReferenceFrame(getReferenceFrame());
+      Line3DReadOnly.super.get(pointToPack, directionToPack);
+   }
+
+   /**
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
+    *
+    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param directionToPack vector in which the components of this line's direction are stored.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code pointToPack} is not expressed in the same
+    *            reference frame as this frame line 3D.
+    */
+   default void get(FixedFramePoint3DBasics pointToPack, Vector3DBasics directionToPack)
+   {
+      checkReferenceFrameMatch(pointToPack);
+      Line3DReadOnly.super.get(pointToPack, directionToPack);
+   }
+
+   /**
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
+    *
+    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param directionToPack vector in which the components of this line's direction are stored.
+    *           Modified.
+    */
+   default void get(FramePoint3DBasics pointToPack, Vector3DBasics directionToPack)
+   {
+      pointToPack.setReferenceFrame(getReferenceFrame());
       Line3DReadOnly.super.get(pointToPack, directionToPack);
    }
 

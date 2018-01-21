@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
@@ -183,6 +184,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
     * @param other the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
     */
    @Override
    public boolean geometricallyEquals(FrameLine3D other, double epsilon)
@@ -192,7 +195,7 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
+    * returns {@link #equals(FrameLine3DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param obj the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

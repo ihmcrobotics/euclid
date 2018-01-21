@@ -13,8 +13,6 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
 {
@@ -45,7 +43,6 @@ public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
       framelessMethodsToIgnore.put("equals", new Class<?>[] {Line3D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Line3D.class, Double.TYPE});
       framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Line3D.class, Double.TYPE});
-      framelessMethodsToIgnore.put("get", new Class<?>[] {Point3DBasics.class, Vector3DBasics.class});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLine3D.class, Line3D.class, true, 1, framelessMethodsToIgnore);
    }
 }
