@@ -3,42 +3,35 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
-import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolder
 {
    /** {@inheritDoc} */
+   @Override
    FramePoint3DReadOnly getPoint();
 
    /** {@inheritDoc} */
+   @Override
    FrameVector3DReadOnly getDirection();
 
    /**
-    * Gets the direction defining this line by storing its components in the given argument
-    * {@code directionToPack}.
-    *
-    * @param directionToPack vector in which the components of this line's direction are stored.
-    *           Modified.
-    */
-   default void getDirection(FrameVector3D directionToPack)
-   {
-      directionToPack.setIncludingFrame(getDirection());
-   }
-
-   /**
-    * Gets the point defining this line by storing its coordinates in the given argument
-    * {@code pointToPack}.
+    * Gets the point and direction defining this line by storing their components in the given
+    * arguments {@code pointToPack} and {@code directionToPack}.
     *
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param directionToPack vector in which the components of this line's direction are stored.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if either argument is not expressed in the same
+    *            reference frame as this frame line 3D.
     */
-   default void getPoint(FramePoint3D pointOnLineToPack)
+   default void get(FixedFramePoint3DBasics pointToPack, FixedFrameVector3DBasics directionToPack)
    {
-      pointOnLineToPack.setIncludingFrame(getPoint());
+      checkReferenceFrameMatch(pointToPack);
+      checkReferenceFrameMatch(directionToPack);
+      Line3DReadOnly.super.get(pointToPack, directionToPack);
    }
 
    /**
@@ -49,38 +42,11 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
     */
-   default void getPointAndDirection(FramePoint3D pointToPack, Vector3DBasics directionToPack)
+   default void get(FramePoint3DBasics pointToPack, FrameVector3DBasics directionToPack)
    {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
-   }
-
-   /**
-    * Gets the point and direction defining this line by storing their components in the given
-    * arguments {@code pointToPack} and {@code directionToPack}.
-    *
-    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
-    * @param directionToPack vector in which the components of this line's direction are stored.
-    *           Modified.
-    */
-   default void getPointAndDirection(Point3DBasics pointToPack, FrameVector3D directionToPack)
-   {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
-   }
-
-   /**
-    * Gets the point and direction defining this line by storing their components in the given
-    * arguments {@code pointToPack} and {@code directionToPack}.
-    *
-    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
-    * @param directionToPack vector in which the components of this line's direction are stored.
-    *           Modified.
-    */
-   default void getPointAndDirection(FramePoint3D pointToPack, FrameVector3D directionToPack)
-   {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
+      pointToPack.setReferenceFrame(getReferenceFrame());
+      directionToPack.setReferenceFrame(getReferenceFrame());
+      Line3DReadOnly.super.get(pointToPack, directionToPack);
    }
 
    /**
@@ -146,9 +112,9 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
     */
-   default double closestPointsWith(Line3DReadOnly otherLine, FramePoint3D closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
+   default double closestPointsWith(Line3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
-      closestPointOnThisLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnThisLineToPack);
+      checkReferenceFrameMatch(closestPointOnThisLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -164,9 +130,70 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
     */
-   default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, FramePoint3D closestPointOnOtherLineToPack)
+   default double closestPointsWith(Line3DReadOnly otherLine, FramePoint3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
-      closestPointOnOtherLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnOtherLineToPack);
+      closestPointOnThisLineToPack.setReferenceFrame(getReferenceFrame());
+      return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+   }
+
+   /**
+    * This methods computes two points P &in; this line and Q &in; {@code otherLine} such that the
+    * distance || P - Q || is the minimum distance between the two 3D lines.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param otherLine the second line. Not modified.
+    * @param closestPointOnThisLineToPack the 3D coordinates of the point P are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two lines.
+    * @throws ReferenceFrameMismatchException if {@code this} and
+    *            {@code closestPointOnOtherLineToPack} are not expressed in the same reference
+    *            frame.
+    */
+   default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, FixedFramePoint3DBasics closestPointOnOtherLineToPack)
+   {
+      checkReferenceFrameMatch(closestPointOnOtherLineToPack);
+      return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+   }
+
+   /**
+    * This methods computes two points P &in; this line and Q &in; {@code otherLine} such that the
+    * distance || P - Q || is the minimum distance between the two 3D lines.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param otherLine the second line. Not modified.
+    * @param closestPointOnThisLineToPack the 3D coordinates of the point P are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two lines.
+    */
+   default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, FramePoint3DBasics closestPointOnOtherLineToPack)
+   {
+      closestPointOnOtherLineToPack.setReferenceFrame(getReferenceFrame());
+      return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+   }
+
+   /**
+    * This methods computes two points P &in; this line and Q &in; {@code otherLine} such that the
+    * distance || P - Q || is the minimum distance between the two 3D lines.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param otherLine the second line. Not modified.
+    * @param closestPointOnThisLineToPack the 3D coordinates of the point P are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two lines.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code otherLine}, and
+    *            {@code closestPointOnThisLineToPack} are not expressed in the same reference frame.
+    */
+   default double closestPointsWith(FrameLine3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
+                                    Point3DBasics closestPointOnOtherLineToPack)
+   {
+      checkReferenceFrameMatch(otherLine);
+      checkReferenceFrameMatch(closestPointOnThisLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -184,10 +211,33 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
     *            expressed in the same reference frame.
     */
-   default double closestPointsWith(FrameLine3DReadOnly otherLine, FramePoint3D closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
+   default double closestPointsWith(FrameLine3DReadOnly otherLine, FramePoint3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(otherLine);
-      closestPointOnThisLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnThisLineToPack);
+      closestPointOnThisLineToPack.setReferenceFrame(getReferenceFrame());
+      return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+   }
+
+   /**
+    * This methods computes two points P &in; this line and Q &in; {@code otherLine} such that the
+    * distance || P - Q || is the minimum distance between the two 3D lines.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param otherLine the second line. Not modified.
+    * @param closestPointOnThisLineToPack the 3D coordinates of the point P are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two lines.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code otherLine}, and
+    *            {@code closestPointOnOtherLineToPack} are not expressed in the same reference
+    *            frame.
+    */
+   default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack,
+                                    FixedFramePoint3DBasics closestPointOnOtherLineToPack)
+   {
+      checkReferenceFrameMatch(otherLine);
+      checkReferenceFrameMatch(closestPointOnOtherLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -205,10 +255,34 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
     *            expressed in the same reference frame.
     */
-   default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, FramePoint3D closestPointOnOtherLineToPack)
+   default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, FramePoint3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(otherLine);
-      closestPointOnOtherLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnOtherLineToPack);
+      closestPointOnOtherLineToPack.setReferenceFrame(getReferenceFrame());
+      return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+   }
+
+   /**
+    * This methods computes two points P &in; this line and Q &in; {@code otherLine} such that the
+    * distance || P - Q || is the minimum distance between the two 3D lines.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param otherLine the second line. Not modified.
+    * @param closestPointOnThisLineToPack the 3D coordinates of the point P are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two lines.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code otherLine},
+    *            {@code closestPointOnThisLineToPack}, and {@code closestPointOnOtherLineToPack} are
+    *            not expressed in the same reference frame.
+    */
+   default double closestPointsWith(FrameLine3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
+                                    FixedFramePoint3DBasics closestPointOnOtherLineToPack)
+   {
+      checkReferenceFrameMatch(otherLine);
+      checkReferenceFrameMatch(closestPointOnThisLineToPack);
+      checkReferenceFrameMatch(closestPointOnOtherLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -226,11 +300,35 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
     *            expressed in the same reference frame.
     */
-   default double closestPointsWith(FrameLine3DReadOnly otherLine, FramePoint3D closestPointOnThisLineToPack, FramePoint3D closestPointOnOtherLineToPack)
+   default double closestPointsWith(FrameLine3DReadOnly otherLine, FramePoint3DBasics closestPointOnThisLineToPack,
+                                    FramePoint3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(otherLine);
-      closestPointOnThisLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnThisLineToPack);
-      closestPointOnOtherLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnOtherLineToPack);
+      closestPointOnThisLineToPack.setReferenceFrame(getReferenceFrame());
+      closestPointOnOtherLineToPack.setReferenceFrame(getReferenceFrame());
+      return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+   }
+
+   /**
+    * This methods computes two points P &in; this line and Q &in; {@code otherLine} such that the
+    * distance || P - Q || is the minimum distance between the two 3D lines.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param otherLine the second line. Not modified.
+    * @param closestPointOnThisLineToPack the 3D coordinates of the point P are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two lines.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code closestPointOnThisLineToPack},
+    *            and {@code closestPointOnOtherLineToPack} are not expressed in the same reference
+    *            frame.
+    */
+   default double closestPointsWith(Line3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
+                                    FixedFramePoint3DBasics closestPointOnOtherLineToPack)
+   {
+      checkReferenceFrameMatch(closestPointOnThisLineToPack);
+      checkReferenceFrameMatch(closestPointOnOtherLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -246,10 +344,10 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
     */
-   default double closestPointsWith(Line3DReadOnly otherLine, FramePoint3D closestPointOnThisLineToPack, FramePoint3D closestPointOnOtherLineToPack)
+   default double closestPointsWith(Line3DReadOnly otherLine, FramePoint3DBasics closestPointOnThisLineToPack, FramePoint3DBasics closestPointOnOtherLineToPack)
    {
-      closestPointOnThisLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnThisLineToPack);
-      closestPointOnOtherLineToPack.setIncludingFrame(getReferenceFrame(), closestPointOnOtherLineToPack);
+      closestPointOnThisLineToPack.setReferenceFrame(getReferenceFrame());
+      closestPointOnOtherLineToPack.setReferenceFrame(getReferenceFrame());
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -301,10 +399,31 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *
     * @param t the parameter used to calculate the point coordinates.
     * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
+    *            expressed in the same reference frame.
     */
-   default void pointOnLineGivenParameter(double t, FramePoint3D pointToPack)
+   default void pointOnLineGivenParameter(double t, FixedFramePoint3DBasics pointToPack)
    {
-      pointToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(pointToPack);
+      Line3DReadOnly.super.pointOnLineGivenParameter(t, pointToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the point 'p' given the parameter 't' as follows:<br>
+    * p = t * n + p<sub>0</sub><br>
+    * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
+    * defining this line which also corresponds to the point for which t=0.
+    * <p>
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
+    * point p<sub>0</sub> defining this line.
+    * </p>
+    *
+    * @param t the parameter used to calculate the point coordinates.
+    * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
+    */
+   default void pointOnLineGivenParameter(double t, FramePoint3DBasics pointToPack)
+   {
+      pointToPack.setReferenceFrame(getReferenceFrame());
       Line3DReadOnly.super.pointOnLineGivenParameter(t, pointToPack);
    }
 
@@ -327,10 +446,10 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
-   default Point3D orthogonalProjectionCopy(FramePoint3DReadOnly pointToProject)
+   default FramePoint3D orthogonalProjectionCopy(FramePoint3DReadOnly pointToProject)
    {
       checkReferenceFrameMatch(pointToProject);
-      return Line3DReadOnly.super.orthogonalProjectionCopy(pointToProject);
+      return new FramePoint3D(getReferenceFrame(), Line3DReadOnly.super.orthogonalProjectionCopy(pointToProject));
    }
 
    /**
@@ -370,10 +489,57 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code projectionToPack} are not
+    *            expressed in the same reference frame.
     */
-   default boolean orthogonalProjection(Point3DReadOnly pointToProject, FramePoint3D projectionToPack)
+   default boolean orthogonalProjection(Point3DReadOnly pointToProject, FixedFramePoint3DBasics projectionToPack)
    {
-      projectionToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(projectionToPack);
+      return Line3DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of the given 3D point on this 3D line.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the given line direction is too small, i.e.
+    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param projectionToPack point in which the projection of the point onto the line is stored.
+    *           Modified.
+    */
+   default boolean orthogonalProjection(Point3DReadOnly pointToProject, FramePoint3DBasics projectionToPack)
+   {
+      projectionToPack.setReferenceFrame(getReferenceFrame());
+      return Line3DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of the given 3D point on this 3D line.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the given line direction is too small, i.e.
+    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
+    * returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param projectionToPack point in which the projection of the point onto the line is stored.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code pointToProject}, and
+    *            {@code projectionToPack} are not expressed in the same reference frame.
+    */
+   default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, FixedFramePoint3DBasics projectionToPack)
+   {
+      checkReferenceFrameMatch(pointToProject);
+      checkReferenceFrameMatch(projectionToPack);
       return Line3DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -394,10 +560,10 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
-   default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, FramePoint3D projectionToPack)
+   default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, FramePoint3DBasics projectionToPack)
    {
       checkReferenceFrameMatch(pointToProject);
-      projectionToPack.setToZero(getReferenceFrame());
+      projectionToPack.setReferenceFrame(getReferenceFrame());
       return Line3DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -454,10 +620,12 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstPointOnLineToPack} are
+    *            not expressed in the same reference frame.
     */
-   default void getTwoPointsOnLine(FramePoint3D firstPointOnLineToPack, Point3DBasics secondPointOnLineToPack)
+   default void getTwoPointsOnLine(FixedFramePoint3DBasics firstPointOnLineToPack, Point3DBasics secondPointOnLineToPack)
    {
-      firstPointOnLineToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(firstPointOnLineToPack);
       Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 
@@ -468,9 +636,24 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
     */
-   default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, FramePoint3D secondPointOnLineToPack)
+   default void getTwoPointsOnLine(FramePoint3DBasics firstPointOnLineToPack, Point3DBasics secondPointOnLineToPack)
    {
-      secondPointOnLineToPack.setToZero(getReferenceFrame());
+      firstPointOnLineToPack.setReferenceFrame(getReferenceFrame());
+      Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
+   }
+
+   /**
+    * Gets the coordinates of two distinct points this line goes through.
+    *
+    * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLineToPack}
+    *            are not expressed in the same reference frame.
+    */
+   default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, FixedFramePoint3DBasics secondPointOnLineToPack)
+   {
+      checkReferenceFrameMatch(secondPointOnLineToPack);
       Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 
@@ -481,25 +664,103 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
     */
-   default void getTwoPointsOnLine(FramePoint3D firstPointOnLineToPack, FramePoint3D secondPointOnLineToPack)
+   default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, FramePoint3DBasics secondPointOnLineToPack)
    {
-      firstPointOnLineToPack.setToZero(getReferenceFrame());
-      secondPointOnLineToPack.setToZero(getReferenceFrame());
+      secondPointOnLineToPack.setReferenceFrame(getReferenceFrame());
       Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
+   }
+
+   /**
+    * Gets the coordinates of two distinct points this line goes through.
+    *
+    * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code firstPointOnLineToPack}, and
+    *            {@code secondPointOnLineToPack} are not expressed in the same reference frame.
+    */
+   default void getTwoPointsOnLine(FixedFramePoint3DBasics firstPointOnLineToPack, FixedFramePoint3DBasics secondPointOnLineToPack)
+   {
+      checkReferenceFrameMatch(firstPointOnLineToPack);
+      checkReferenceFrameMatch(secondPointOnLineToPack);
+      Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
+   }
+
+   /**
+    * Gets the coordinates of two distinct points this line goes through.
+    *
+    * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
+    *           Modified.
+    */
+   default void getTwoPointsOnLine(FramePoint3DBasics firstPointOnLineToPack, FramePoint3DBasics secondPointOnLineToPack)
+   {
+      firstPointOnLineToPack.setReferenceFrame(getReferenceFrame());
+      secondPointOnLineToPack.setReferenceFrame(getReferenceFrame());
+      Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
+   }
+
+   /**
+    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
+    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
+    * physically the same but either the point or vector of each line is different. For instance, if
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
+    * lines are physically the same but this method returns {@code false}.
+    * <p>
+    * If the two lines have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two lines are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
+    */
+   default boolean epsilonEquals(FrameLine3DReadOnly other, double epsilon)
+   {
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
+         return false;
+      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
+    */
+   default boolean geometricallyEquals(FrameLine3DReadOnly other, double epsilon)
+   {
+      return isCollinear(other, epsilon);
    }
 
    /**
     * Tests on a per component basis, if this line 3D is exactly equal to {@code other}.
+    * <p>
+    * If the two lines have different frames, this method returns {@code false}.
+    * </p>
     *
     * @param other the other line 3D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in
+    *         the same reference frame, {@code false} otherwise.
     */
    default boolean equals(FrameLine3DReadOnly other)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
+      if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
-
-      return Line3DReadOnly.super.equals(other);
+      else
+         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
    }
 }

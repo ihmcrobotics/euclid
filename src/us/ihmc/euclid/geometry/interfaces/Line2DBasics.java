@@ -139,20 +139,6 @@ public interface Line2DBasics extends Line2DReadOnly
       setDirection(lineDirection);
    }
 
-   /**
-    * Redefines this line such that it goes through the two given points.
-    *
-    * @param twoPointsOnLine a two-element array containing in order the first point and second
-    *           point this line is to go through. Not modified.
-    * @throws IllegalArgumentException if the given array has a length different than 2.
-    */
-   default void set(Point2DReadOnly[] twoPointsOnLine)
-   {
-      if (twoPointsOnLine.length != 2)
-         throw new IllegalArgumentException("Length of input array is not correct. Length = " + twoPointsOnLine.length + ", expected an array of two elements");
-      set(twoPointsOnLine[0], twoPointsOnLine[1]);
-   }
-
    default void shift(boolean shiftToLeft, double distanceToShift)
    {
       double vectorX = getDirectionX();

@@ -4,10 +4,11 @@ import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -44,16 +45,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
 
    /**
     * Creates a new line 3D and initializes it to {@code other}.
-    * 
-    * @param other the other line used to initialize this line. Not modified.
-    */
-   public Line3D(Line3D other)
-   {
-      set(other);
-   }
-
-   /**
-    * Creates a new line 3D and initializes it to {@code other}.
     *
     * @param other the other line used to initialize this line. Not modified.
     */
@@ -85,40 +76,29 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
       set(pointOnLine, lineDirection);
    }
 
-   /**
-    * Transforms this line using the given homogeneous transformation matrix.
-    * 
-    * @param transform the transform to apply on this line's point and vector. Not modified.
-    */
+   /** {@inheritDoc} */
    @Override
-   public void applyTransform(Transform transform)
+   public Vector3DBasics getDirection()
    {
-      point.applyTransform(transform);
-      direction.applyTransform(transform);
+      return direction;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public Point3DBasics getPoint()
+   {
+      return point;
    }
 
    /**
-    * Transforms this line using the inverse of the given homogeneous transformation matrix.
+    * Sets this line to be the same as the given line.
     * 
-    * @param transform the transform to apply on this line's point and vector. Not modified.
+    * @param other the other line to copy. Not modified.
     */
    @Override
-   public void applyInverseTransform(Transform transform)
+   public void set(Line3D other)
    {
-      point.applyInverseTransform(transform);
-      direction.applyInverseTransform(transform);
-   }
-
-   /**
-    * Tests if this line contains {@link Double#NaN}.
-    * 
-    * @return {@code true} if {@link #point} and/or {@link #direction} contains {@link Double#NaN},
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean containsNaN()
-   {
-      return point.containsNaN() || direction.containsNaN();
+      Line3DBasics.super.set(other);
    }
 
    /**
@@ -135,121 +115,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public boolean epsilonEquals(Line3D other, double epsilon)
    {
-      if (!point.epsilonEquals(other.point, epsilon))
-         return false;
-      if (!direction.epsilonEquals(other.direction, epsilon))
-         return false;
-
-      return true;
-   }
-
-   /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
-    *
-    * @param obj the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean equals(Object obj)
-   {
-      try
-      {
-         return equals((Line3D) obj);
-      }
-      catch (ClassCastException e)
-      {
-         return false;
-      }
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public Vector3DReadOnly getDirection()
-   {
-      return direction;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public Point3DReadOnly getPoint()
-   {
-      return point;
-   }
-
-   /**
-    * Flips this line's direction.
-    */
-   public void negateDirection()
-   {
-      direction.negate();
-   }
-
-   /**
-    * Sets this line to be the same as the given line.
-    * 
-    * @param other the other line to copy. Not modified.
-    */
-   @Override
-   public void set(Line3D other)
-   {
-      Line3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
-   {
-      setDirectionUnsafe(lineDirectionX, lineDirectionY, lineDirectionZ);
-      direction.normalize();
-   }
-
-   /** {@inheritDoc} */
-   public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
-   {
-      direction.set(lineDirectionX, lineDirectionY, lineDirectionZ);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ)
-   {
-      this.point.set(pointOnLineX, pointOnLineY, pointOnLineZ);
-   }
-
-   /**
-    * Sets the point and vector of this line to {@link Double#NaN}. After calling this method, this
-    * line becomes invalid. A new valid point and valid vector will have to be set so this line is
-    * again usable.
-    */
-   @Override
-   public void setToNaN()
-   {
-      point.setToNaN();
-      direction.setToNaN();
-   }
-
-   /**
-    * Sets the point and vector of this line to zero. After calling this method, this line becomes
-    * invalid. A new valid point and valid vector will have to be set so this line is again usable.
-    */
-   @Override
-   public void setToZero()
-   {
-      point.setToZero();
-      direction.setToZero();
-   }
-
-   /**
-    * Provides a {@code String} representation of this line 3D as follows:<br>
-    * Line 3D: point = (x, y, z), direction = (x, y, z)
-    *
-    * @return the {@code String} representing this line 3D.
-    */
-   @Override
-   public String toString()
-   {
-      return EuclidGeometryIOTools.getLine3DString(this);
+      return Line3DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -267,6 +133,50 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public boolean geometricallyEquals(Line3D other, double epsilon)
    {
-      return isCollinear(other, epsilon);
+      return Line3DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param obj the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object obj)
+   {
+      try
+      {
+         return equals((Line3DReadOnly) obj);
+      }
+      catch (ClassCastException e)
+      {
+         return false;
+      }
+   }
+
+   /**
+    * Provides a {@code String} representation of this line 3D as follows:<br>
+    * Line 3D: point = (x, y, z), direction = (x, y, z)
+    *
+    * @return the {@code String} representing this line 3D.
+    */
+   @Override
+   public String toString()
+   {
+      return EuclidGeometryIOTools.getLine3DString(this);
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this line 3D.
+    *
+    * @return the hash code value for this line 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long bits = 31L * point.hashCode() + direction.hashCode();
+      return (int) (bits ^ bits >> 32);
    }
 }

@@ -25,18 +25,6 @@ public interface Line3DReadOnly
    Vector3DReadOnly getDirection();
 
    /**
-    * Gets the direction defining this line by storing its components in the given argument
-    * {@code directionToPack}.
-    *
-    * @param directionToPack vector in which the components of this line's direction are stored.
-    *           Modified.
-    */
-   default void getDirection(Vector3DBasics directionToPack)
-   {
-      directionToPack.set(getDirection());
-   }
-
-   /**
     * Gets the x-component of this line's direction.
     *
     * @return the x-component of this line's direction.
@@ -67,17 +55,6 @@ public interface Line3DReadOnly
    }
 
    /**
-    * Gets the point defining this line by storing its coordinates in the given argument
-    * {@code pointToPack}.
-    *
-    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
-    */
-   default void getPoint(Point3DBasics pointToPack)
-   {
-      pointToPack.set(getPoint());
-   }
-
-   /**
     * Gets the point and direction defining this line by storing their components in the given
     * arguments {@code pointToPack} and {@code directionToPack}.
     *
@@ -85,10 +62,10 @@ public interface Line3DReadOnly
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
     */
-   default void getPointAndDirection(Point3DBasics pointToPack, Vector3DBasics directionToPack)
+   default void get(Point3DBasics pointToPack, Vector3DBasics directionToPack)
    {
-      getPoint(pointToPack);
-      getDirection(directionToPack);
+      pointToPack.set(getPoint());
+      directionToPack.set(getDirection());
    }
 
    /**
@@ -353,6 +330,44 @@ public interface Line3DReadOnly
    {
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(getPoint(), getDirection(), otherLine.getPoint(), otherLine.getDirection(),
                                                                   closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+   }
+
+   /**
+    * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
+    * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
+    * physically the same but either the point or vector of each line is different. For instance, if
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
+    * lines are physically the same but this method returns {@code false}.
+    * 
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two lines are equal, {@code false} otherwise.
+    */
+   default boolean epsilonEquals(Line3DReadOnly other, double epsilon)
+   {
+      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
+         return false;
+      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
+         return false;
+
+      return true;
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    */
+   default boolean geometricallyEquals(Line3DReadOnly other, double epsilon)
+   {
+      return isCollinear(other, epsilon);
    }
 
    /**

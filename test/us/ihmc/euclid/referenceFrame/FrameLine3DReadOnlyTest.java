@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -10,6 +12,8 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public abstract class FrameLine3DReadOnlyTest<T extends FrameLine3DReadOnly>
 {
@@ -28,15 +32,16 @@ public abstract class FrameLine3DReadOnlyTest<T extends FrameLine3DReadOnly>
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLine3DReadOnly.class, Line3DReadOnly.class, true);
+      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
+      framelessMethodsToIgnore.put("get", new Class<?>[] {Point3DBasics.class, Vector3DBasics.class});
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLine3DReadOnly.class, Line3DReadOnly.class, true, 1, framelessMethodsToIgnore);
    }
 
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
       Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameLine(random, frame), false, true,
-                                                                                     methodFilter);
+      Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameLine(random, frame), false, true, methodFilter);
    }
 }
