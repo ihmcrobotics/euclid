@@ -28,7 +28,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeable
 {
    /**
-    * Sets the reference frame of this orientation 2D without updating or modifying its position or
+    * Sets the reference frame of this pose 2D without updating or modifying its position or
     * orientation.
     * 
     * @param referenceFrame the new reference frame for this frame pose 2D.
