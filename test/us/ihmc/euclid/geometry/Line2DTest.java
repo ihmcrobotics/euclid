@@ -113,15 +113,6 @@ public class Line2DTest
    }
 
    @Test(expected = RuntimeException.class)
-   public void testPointVectorConstructorForException()
-   {
-      // TODO: Test this at various random points, or is this sufficient?
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      Vector2D vector = new Vector2D(0.0, 0.0);
-      new Line2D(firstPointOnLine, vector);
-   }
-
-   @Test(expected = RuntimeException.class)
    public void testPointPointConstructorForException()
    {
       // TODO: Test this at various random points, or is this sufficient?
@@ -171,22 +162,8 @@ public class Line2DTest
 
       Line2D line2D = EuclidGeometryRandomTools.nextLine2D(random);
       line2D.setToNaN();
-      try
-      {
-         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getPoint());
-      }
-      catch (RuntimeException e)
-      {
-         // Good
-      }
-      try
-      {
-         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getDirection());
-      }
-      catch (RuntimeException e)
-      {
-         // Good
-      }
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(line2D.getPoint());
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(line2D.getDirection());
    }
 
    @Test
@@ -420,17 +397,6 @@ public class Line2DTest
       assertEquals(secondLine2d.getDirection().getX(), line2d.getDirection().getX(), delta);
       assertEquals(secondLine2d.getDirection().getY(), line2d.getDirection().getY(), delta);
       assertFalse(secondLine2d.getDirection() == line2d.getDirection());
-   }
-
-   @Test(expected = RuntimeException.class)
-   public void testSetDoubleException()
-   {
-      // TODO: Failing test case ignored. Should throw an exception like the Point2d, Vector2d constructor
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      Point2D secondPointOnLine = new Point2D(1.0, 1.0);
-      Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-
-      line2d.set(5.0, 6.0, 0.0, 0.0);
    }
 
    @Test
@@ -844,8 +810,7 @@ public class Line2DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Point2D pointOnLine = EuclidCoreRandomTools.nextPoint2D(random, -10.0, 10.0);
-         Vector2D lineDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random,
-                                                                                              EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
+         Vector2D lineDirection = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
          Line2D line = new Line2D(pointOnLine, lineDirection);
 
          Point2D randomPointOnLine = new Point2D();

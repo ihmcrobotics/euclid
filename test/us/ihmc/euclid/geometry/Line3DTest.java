@@ -149,22 +149,8 @@ public class Line3DTest
 
       Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random);
       line3D.setToNaN();
-      try
-      {
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getPoint());
-      }
-      catch (RuntimeException e)
-      {
-         // Good
-      }
-      try
-      {
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getDirection());
-      }
-      catch (RuntimeException e)
-      {
-         // Good
-      }
+      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(line3D.getPoint());
+      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(line3D.getDirection());
    }
 
    @Test
@@ -336,7 +322,7 @@ public class Line3DTest
       Random random = new Random(234234L);
 
       for (int i = 0; i < ITERATIONS; i++)
-      {         
+      {
          Line3D line1 = EuclidGeometryRandomTools.nextLine3D(random);
          Line3D line2 = new Line3D(line1);
          double epsilon = 1.0e-12;
@@ -351,18 +337,18 @@ public class Line3DTest
          {
             line2.set(line1);
             //assertTrue(line1.equals(line2));
-            
+
             Point3D point = new Point3D(line2.getPoint());
             double element = point.getElement(j);
-            
+
             point.setElement(j, element + epsilon);
             line2.setPoint(point);
-            
+
             assertFalse(line1.equals(line2));
-            
+
             point.setElement(j, element - epsilon);
             line2.setPoint(point);
-            
+
             assertFalse(line1.equals(line2));
          }
 
@@ -370,18 +356,18 @@ public class Line3DTest
          {
             line2.set(line1);
             //assertTrue(line1.equals(line2));
-            
+
             Vector3D direction = new Vector3D(line2.getDirection());
             double element = direction.getElement(j);
-            
+
             direction.setElement(j, element + epsilon);
             line2.setDirection(direction);
-            
+
             assertFalse(line1.equals(line2));
-            
+
             direction.setElement(j, element - epsilon);
             line2.setDirection(direction);
-            
+
             assertFalse(line1.equals(line2));
          }
       }
