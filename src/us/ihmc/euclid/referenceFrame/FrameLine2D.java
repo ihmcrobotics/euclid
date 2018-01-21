@@ -55,7 +55,6 @@ public class FrameLine2D extends FrameGeometryObject<FrameLine2D, Line2D> implem
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not expressed
     *          in the same reference frame.
     */
@@ -84,19 +83,5 @@ public class FrameLine2D extends FrameGeometryObject<FrameLine2D, Line2D> implem
    public FrameVector2DReadOnly getDirection()
    {
       return new FrameVector2D(getReferenceFrame(), line.getDirection());
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean hasPointBeenSet()
-   {
-      return line.hasPointBeenSet();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean hasDirectionBeenSet()
-   {
-      return line.hasDirectionBeenSet();
    }
 }

@@ -19,7 +19,6 @@ public interface Line2DReadOnly
     * Gets the read-only reference to the point through which this line is going.
     *
     * @return the reference to the point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    Point2DReadOnly getPoint();
 
@@ -27,31 +26,8 @@ public interface Line2DReadOnly
     * Gets the read-only reference to the direction of this line.
     *
     * @return the reference to the direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    Vector2DReadOnly getDirection();
-
-   /**
-    * Whether or not this line's point has been initialized and not set to zero or NaN.
-    *
-    * @return whether or not this line's direction is set.
-    */
-   boolean hasPointBeenSet();
-
-   /**
-    * Whether or not this line's direction has been initialized and not set to zero or NaN.
-    * 
-    * @return whether or not this line's direction is set.
-    */
-   boolean hasDirectionBeenSet();
-
-   default void checkHasBeenInitialized()
-   {
-      if (!hasPointBeenSet())
-         throw new RuntimeException("The point of this line has not been initialized.");
-      if (!hasDirectionBeenSet())
-         throw new RuntimeException("The direction of this line has not been initialized.");
-   }
 
    /**
     * Gets the direction defining this line by storing its components in the given argument
@@ -59,11 +35,9 @@ public interface Line2DReadOnly
     *
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getDirection(Vector2DBasics directionToPack)
    {
-      checkHasBeenInitialized();
       directionToPack.set(getDirection());
    }
 
@@ -71,11 +45,9 @@ public interface Line2DReadOnly
     * Gets the x-component of this line's direction.
     *
     * @return the x-component of this line's direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getDirectionX()
    {
-      checkHasBeenInitialized();
       return getDirection().getX();
    }
 
@@ -83,11 +55,9 @@ public interface Line2DReadOnly
     * Gets the y-component of this line's direction.
     *
     * @return the y-component of this line's direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getDirectionY()
    {
-      checkHasBeenInitialized();
       return getDirection().getY();
    }
 
@@ -97,11 +67,9 @@ public interface Line2DReadOnly
     *
     * @param pointOnLineToPack point in which the coordinates of this line's point are stored.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getPoint(Point2DBasics pointOnLineToPack)
    {
-      checkHasBeenInitialized();
       pointOnLineToPack.set(getPoint());
    }
 
@@ -112,7 +80,6 @@ public interface Line2DReadOnly
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getPointAndDirection(Point2DBasics pointToPack, Vector2DBasics directionToPack)
    {
@@ -124,11 +91,9 @@ public interface Line2DReadOnly
     * Gets the x-coordinate of a point this line goes through.
     *
     * @return the x-coordinate of this line's point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getPointX()
    {
-      checkHasBeenInitialized();
       return getPoint().getX();
    }
 
@@ -136,11 +101,9 @@ public interface Line2DReadOnly
     * Gets the y-coordinate of a point this line goes through.
     *
     * @return the y-coordinate of this line's point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double getPointY()
    {
-      checkHasBeenInitialized();
       return getPoint().getY();
    }
 
@@ -152,13 +115,11 @@ public interface Line2DReadOnly
     * </p>
     *
     * @param transform the transform to apply on this line's copy. Not modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY-plane.
     */
    default Line2D applyTransformCopy(Transform transform)
    {
-      checkHasBeenInitialized();
       Line2D copy = new Line2D(this);
       copy.applyTransform(transform);
       return copy;
@@ -169,7 +130,6 @@ public interface Line2DReadOnly
     * project the result onto the XY-plane, and returns the result.
     *
     * @param transform the transform to apply on this line's copy. Not modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Line2D applyTransformAndProjectToXYPlaneCopy(Transform transform)
    {
@@ -190,11 +150,9 @@ public interface Line2DReadOnly
     *
     * @param point 2D point to compute the distance from the line. Not modified.
     * @return the minimum distance between the 2D point and this 2D line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double distance(Point2DReadOnly point)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.distanceFromPoint2DToLine2D(point, getPoint(), getDirection());
    }
 
@@ -216,12 +174,10 @@ public interface Line2DReadOnly
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
     * @return the intersections between between the line and the polygon or {@code null} if the
     *         method failed or if there is no intersections.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default Point2D[] intersectionWith(ConvexPolygon2D convexPolygon)
    {
-      checkHasBeenInitialized();
       return convexPolygon.intersectionWith(this);
    }
 
@@ -245,12 +201,10 @@ public interface Line2DReadOnly
     *           be {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
     *           be {@code null}. Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
-      checkHasBeenInitialized();
       return convexPolygon.intersectionWith(this, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -273,12 +227,9 @@ public interface Line2DReadOnly
     * @param secondLine the other line that may intersect this line. Not modified.
     * @return the coordinates of the intersection if the two lines intersects, {@code null}
     *         otherwise.
-    * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
-    *            yet.
     */
    default Point2D intersectionWith(Line2DReadOnly secondLine)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection());
    }
 
@@ -298,12 +249,9 @@ public interface Line2DReadOnly
     * @param secondLine the other line that may intersect this line. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
-    * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
-    *            yet.
     */
    default boolean intersectionWith(Line2DReadOnly secondLine, Point2DBasics intersectionToPack)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection(),
                                                                intersectionToPack);
    }
@@ -328,11 +276,9 @@ public interface Line2DReadOnly
     * @param lineSegment the line segment that may intersect this line. Not modified.
     * @return the coordinates of the intersection if the line intersects the line segment,
     *         {@code null} otherwise.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Point2D intersectionWith(LineSegment2DReadOnly lineSegment)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
                                                                            lineSegment.getSecondEndpoint());
    }
@@ -355,11 +301,9 @@ public interface Line2DReadOnly
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean intersectionWith(LineSegment2DReadOnly lineSegment, Point2DBasics intersectionToPack)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
                                                                            lineSegment.getSecondEndpoint(), intersectionToPack);
    }
@@ -373,7 +317,6 @@ public interface Line2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is in behind of this line, {@code false} if the point is
     *         front the line.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
     */
    default boolean isPointBehindLine(Point2DReadOnly point)
@@ -390,12 +333,10 @@ public interface Line2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is in front of this line, {@code false} if the point is
     *         behind the line.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
     */
    default boolean isPointInFrontOfLine(Point2DReadOnly point)
    {
-      checkHasBeenInitialized();
       if (getDirectionY() > 0.0)
          return isPointOnRightSideOfLine(point);
       else if (getDirectionY() < 0.0)
@@ -416,7 +357,6 @@ public interface Line2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is in front of this line, {@code false} if the point is
     *         behind the line.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located exactly on this line.
     */
    default boolean isPointInFrontOfLine(Vector2DReadOnly frontDirection, Point2DReadOnly point)
@@ -446,7 +386,6 @@ public interface Line2DReadOnly
     * @param point the coordinates of the query point.
     * @return {@code true} if the point is on the left side of this line, {@code false} if the point
     *         is on the right side or exactly on this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean isPointOnLeftSideOfLine(Point2DReadOnly point)
    {
@@ -462,7 +401,6 @@ public interface Line2DReadOnly
     *
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is located on this line, {@code false} otherwise.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean isPointOnLine(Point2DReadOnly point)
    {
@@ -479,11 +417,9 @@ public interface Line2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @param epsilon the tolerance used for this test.
     * @return {@code true} if the point is located on this line, {@code false} otherwise.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean isPointOnLine(Point2DReadOnly point, double epsilon)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.distanceFromPoint2DToLine2D(point, getPoint(), getDirection()) < epsilon;
    }
 
@@ -503,7 +439,6 @@ public interface Line2DReadOnly
     * @param point the coordinates of the query point.
     * @return {@code true} if the point is on the right side of this line, {@code false} if the
     *         point is on the left side or exactly on this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean isPointOnRightSideOfLine(Point2DReadOnly point)
    {
@@ -529,11 +464,9 @@ public interface Line2DReadOnly
     *           left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of this line, {@code false} if the
     *         point is on the opposite side or exactly on this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean isPointOnSideOfLine(double pointX, double pointY, boolean testLeftSide)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.isPoint2DOnSideOfLine2D(pointX, pointY, getPoint(), getDirection(), testLeftSide);
    }
 
@@ -555,11 +488,9 @@ public interface Line2DReadOnly
     *           left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of this line, {@code false} if the
     *         point is on the opposite side or exactly on this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean isPointOnSideOfLine(Point2DReadOnly point, boolean testLeftSide)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.isPoint2DOnSideOfLine2D(point, getPoint(), getDirection(), testLeftSide);
    }
 
@@ -576,7 +507,6 @@ public interface Line2DReadOnly
     *
     * @param pointToProject the point to project on this line. Modified.
     * @return whether the method succeeded or not.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean orthogonalProjection(Point2DBasics pointToProject)
    {
@@ -597,11 +527,9 @@ public interface Line2DReadOnly
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default boolean orthogonalProjection(Point2DReadOnly pointToProject, Point2DBasics projectionToPack)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, getPoint(), getDirection(), projectionToPack);
    }
 
@@ -621,11 +549,9 @@ public interface Line2DReadOnly
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto the line or {@code null} if the method failed.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Point2D orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, getPoint(), getDirection());
    }
 
@@ -646,7 +572,6 @@ public interface Line2DReadOnly
     *           given point is at a distance less than {@code epsilon} from this line, it is
     *           considered as being located on this line.
     * @return the value of the parameter 't' corresponding to the given point.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws RuntimeException if the given point is located at a distance greater than
     *            {@code epsilon} from this line.
     */
@@ -675,11 +600,9 @@ public interface Line2DReadOnly
     *
     * @param point the point the line has to go through. Not modified.
     * @return the line perpendicular to {@code this} and going through {@code point}.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Line2D perpendicularLineThroughPoint(Point2DReadOnly point)
    {
-      checkHasBeenInitialized();
       return new Line2D(point, perpendicularVector());
    }
 
@@ -690,11 +613,9 @@ public interface Line2DReadOnly
     * @param point the point the line has to go through. Not modified.
     * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
     *           {@code point}. Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void perpendicularLineThroughPoint(Point2DReadOnly point, Line2DBasics perpendicularLineToPack)
    {
-      checkHasBeenInitialized();
       perpendicularLineToPack.set(point.getX(), point.getY(), -getDirection().getY(), getDirection().getX());
    }
 
@@ -705,11 +626,9 @@ public interface Line2DReadOnly
     * </p>
     *
     * @return the perpendicular vector to this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Vector2D perpendicularVector()
    {
-      checkHasBeenInitialized();
       return EuclidGeometryTools.perpendicularVector2D(getDirection());
    }
 
@@ -718,11 +637,9 @@ public interface Line2DReadOnly
     * the left.
     *
     * @param vectorToPack the perpendicular vector to this line. Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void perpendicularVector(Vector2DBasics vectorToPack)
    {
-      checkHasBeenInitialized();
       EuclidGeometryTools.perpendicularVector2D(getDirection(), vectorToPack);
    }
 
@@ -741,7 +658,6 @@ public interface Line2DReadOnly
     *
     * @param t the parameter used to calculate the point coordinates.
     * @return the coordinates of the point 'p'.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Point2D pointOnLineGivenParameter(double t)
    {
@@ -762,11 +678,9 @@ public interface Line2DReadOnly
     *
     * @param t the parameter used to calculate the point coordinates.
     * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void pointOnLineGivenParameter(double t, Point2DBasics pointToPack)
    {
-      checkHasBeenInitialized();
       pointToPack.scaleAdd(t, getDirection(), getPoint());
    }
 
@@ -776,11 +690,9 @@ public interface Line2DReadOnly
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
     * @param secondPointOnLineToPack the coordinates of a second point located on this line.
     *           Modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getTwoPointsOnLine(Point2DBasics firstPointOnLineToPack, Point2DBasics secondPointOnLineToPack)
    {
-      checkHasBeenInitialized();
       firstPointOnLineToPack.set(getPoint());
       secondPointOnLineToPack.add(getPoint(), getDirection());
    }
@@ -811,8 +723,6 @@ public interface Line2DReadOnly
     *
     * @param secondLine the second line needed to calculate the interior bisector. Not modified.
     * @return the interior bisector if this method succeeded, {@code null} otherwise.
-    * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
-    *            yet.
     */
    default Line2D interiorBisector(Line2DReadOnly secondLine)
    {
@@ -847,14 +757,9 @@ public interface Line2DReadOnly
     * @param interiorBisectorToPack the line in which the interior bisector point and direction are
     *           stored. Modified.
     * @return {@code true} if this method succeeded, {@code false} otherwise.
-    * @throws RuntimeException if either this line or {@code secondLine} has not been initialized
-    *            yet.
     */
    default boolean interiorBisector(Line2DReadOnly secondLine, Line2DBasics interiorBisectorToPack)
    {
-      checkHasBeenInitialized();
-      secondLine.checkHasBeenInitialized();
-
       double t = EuclidGeometryTools.percentageOfIntersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection());
 
       if (Double.isNaN(t))
@@ -882,11 +787,9 @@ public interface Line2DReadOnly
     * {@code y=0}.
     *
     * @return the x-coordinate of the intersection between this line and the x-axis.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double xIntercept()
    {
-      checkHasBeenInitialized();
       double parameterAtIntercept = -getPointY() / getDirectionY();
       return parameterAtIntercept * getDirectionX() + getPointX();
    }
@@ -896,11 +799,9 @@ public interface Line2DReadOnly
     * {@code x=0}.
     *
     * @return the y-coordinate of the intersection between this line and the y-axis.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double yIntercept()
    {
-      checkHasBeenInitialized();
       double parameterAtIntercept = -getPointX() / getDirectionX();
       return parameterAtIntercept * getDirectionY() + getPointY();
    }
@@ -916,11 +817,9 @@ public interface Line2DReadOnly
     * </p>
     *
     * @return the value of the slope of this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default double slope()
    {
-      checkHasBeenInitialized();
       if (getDirectionX() == 0.0 && getDirectionY() > 0.0)
       {
          return Double.POSITIVE_INFINITY;
@@ -964,11 +863,9 @@ public interface Line2DReadOnly
     *
     * @param other the query. Not modified.
     * @return {@code true} if the two lines are perpendicular, {@code false} otherwise.
-    * @throws RuntimeException if either this line or {@code other} has not been initialized yet.
     */
    default boolean areLinesPerpendicular(Line2DReadOnly other)
    {
-      checkHasBeenInitialized();
       // Dot product of two vectors is zero if the vectors are perpendicular
       return getDirection().dot(other.getDirection()) < 1e-7;
    }

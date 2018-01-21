@@ -19,7 +19,6 @@ public interface Line2DBasics extends Line2DReadOnly
     *
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirection(double lineDirectionX, double lineDirectionY);
 
@@ -36,12 +35,9 @@ public interface Line2DBasics extends Line2DReadOnly
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    *
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default Line2D negateDirectionCopy()
    {
-      checkHasBeenInitialized();
       Line2D ret = new Line2D(this);
       ret.negateDirection();
 
@@ -56,11 +52,9 @@ public interface Line2DBasics extends Line2DReadOnly
     * </p>
     *
     * @param angleInRadians the angle to rotate this line's direction in radians.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void rotate(double angleInRadians)
    {
-      checkHasBeenInitialized();
       double vXOld = getDirectionX();
       double vYOld = getDirectionY();
 
@@ -84,7 +78,6 @@ public interface Line2DBasics extends Line2DReadOnly
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    default void setDirection(Vector2DReadOnly lineDirection)
    {
@@ -95,7 +88,6 @@ public interface Line2DBasics extends Line2DReadOnly
     * Sets this line to be the same as the given line.
     *
     * @param other the other line to copy. Not modified.
-    * @throws RuntimeException if the other line has not been initialized yet.
     */
    default void set(Line2DReadOnly other)
    {
@@ -110,7 +102,6 @@ public interface Line2DBasics extends Line2DReadOnly
     * @param pointOnLineY the new y-coordinate of the point on this line.
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    default void set(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY)
    {
@@ -123,8 +114,6 @@ public interface Line2DBasics extends Line2DReadOnly
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
-    * @throws RuntimeException if the two given points are exactly equal.
     */
    default void set(Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -143,7 +132,6 @@ public interface Line2DBasics extends Line2DReadOnly
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    default void set(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -156,8 +144,6 @@ public interface Line2DBasics extends Line2DReadOnly
     *
     * @param twoPointsOnLine a two-element array containing in order the first point and second
     *           point this line is to go through. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
-    * @throws RuntimeException if the two given points are exactly equal.
     * @throws IllegalArgumentException if the given array has a length different than 2.
     */
    default void set(Point2DReadOnly[] twoPointsOnLine)
@@ -169,7 +155,6 @@ public interface Line2DBasics extends Line2DReadOnly
 
    default void shift(boolean shiftToLeft, double distanceToShift)
    {
-      checkHasBeenInitialized();
       double vectorX = getDirectionX();
       double vectorY = getDirectionY();
 
@@ -196,7 +181,6 @@ public interface Line2DBasics extends Line2DReadOnly
     * </p>
     *
     * @param distanceToShift the distance to shift this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void shiftToLeft(double distanceToShift)
    {
@@ -211,7 +195,6 @@ public interface Line2DBasics extends Line2DReadOnly
     * </p>
     *
     * @param distanceToShift the distance to shift this line.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void shiftToRight(double distanceToShift)
    {
@@ -226,11 +209,9 @@ public interface Line2DBasics extends Line2DReadOnly
     *
     * @param x the distance to translate this line along the x-axis.
     * @param y the distance to translate this line along the y-axis.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    default void translate(double x, double y)
    {
-      checkHasBeenInitialized();
       setPoint(getPointX() + x, getPointY() + y);
    }
 }

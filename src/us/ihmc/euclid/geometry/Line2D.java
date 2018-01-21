@@ -16,26 +16,16 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  */
 public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 {
-   private final static double minAllowableVectorPart = Math.sqrt(Double.MIN_NORMAL);
-
    /** Coordinates of a point located on this line. */
    private final Point2D point = new Point2D();
    /** Normalized direction of this line. */
    private final Vector2D direction = new Vector2D();
 
-   /** Whether or not this line's point is set. */
-   private boolean pointHasBeenSet = false;
-   /** Whether or not this line's direction is set. */
-   private boolean directionHasBeenSet = false;
-
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero. This
-    * point and vector have to be set to valid values to make this line usable.
+    * Default constructor that initializes both {@link #point} and {@link #direction} to zero.
     */
    public Line2D()
    {
-      pointHasBeenSet = false;
-      directionHasBeenSet = false;
    }
 
    /**
@@ -45,7 +35,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * @param pointOnLineY the y-coordinate of a point on this line.
     * @param lineDirectionX the x-component of the direction of this line.
     * @param lineDirectionY the y-component of the direction of this line.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    public Line2D(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY)
    {
@@ -56,7 +45,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Creates a new line 2D and initializes it to {@code other}.
     * 
     * @param other the other line used to initialize this line. Not modified.
-    * @throws RuntimeException if the other line has not been initialized yet.
     */
    public Line2D(Line2D other)
    {
@@ -67,7 +55,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Creates a new line 2D and initializes it to {@code other}.
     *
     * @param other the other line used to initialize this line. Not modified.
-    * @throws RuntimeException if the other line has not been initialized yet.
     */
    public Line2D(Line2DReadOnly other)
    {
@@ -79,8 +66,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * 
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
-    * @throws RuntimeException if the two given points are exactly equal.
     */
    public Line2D(Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -92,39 +77,22 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * 
     * @param pointOnLine point on this line. Not modified.
     * @param lineDirection direction of this line. Not modified.
-    * @throws RuntimeException if the new direction is unreasonably small.
     */
    public Line2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
       set(pointOnLine, lineDirection);
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public boolean hasPointBeenSet()
-   {
-      return pointHasBeenSet;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean hasDirectionBeenSet()
-   {
-      return directionHasBeenSet;
-   }
-
    /**
     * Transforms this line using the given homogeneous transformation matrix.
     * 
     * @param transform the transform to apply on this line's point and vector. Not modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY-plane.
     */
    @Override
    public void applyTransform(Transform transform)
    {
-      checkHasBeenInitialized();
       point.applyTransform(transform);
       direction.applyTransform(transform);
    }
@@ -133,14 +101,12 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Transforms this line using the inverse of the given homogeneous transformation matrix.
     * 
     * @param transform the transform to apply on this line's point and vector. Not modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
     *            transformation in the XY-plane.
     */
    @Override
    public void applyInverseTransform(Transform transform)
    {
-      checkHasBeenInitialized();
       point.applyInverseTransform(transform);
       direction.applyInverseTransform(transform);
    }
@@ -150,11 +116,9 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * onto the XY-plane.
     * 
     * @param transform the transform to apply on this line's point and vector. Not modified.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    public void applyTransformAndProjectToXYPlane(Transform transform)
    {
-      checkHasBeenInitialized();
       point.applyTransform(transform, false);
       direction.applyTransform(transform, false);
    }
@@ -181,12 +145,10 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    @Override
    public boolean epsilonEquals(Line2D other, double epsilon)
    {
-      checkHasBeenInitialized();
       if (!point.epsilonEquals(other.point, epsilon))
          return false;
       if (!direction.epsilonEquals(other.direction, epsilon))
@@ -234,12 +196,10 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Gets the read-only reference to the direction of this line.
     * 
     * @return the reference to the direction.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    @Override
    public Vector2DReadOnly getDirection()
    {
-      checkHasBeenInitialized();
       return direction;
    }
 
@@ -247,23 +207,18 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Gets the read-only reference to the point through which this line is going.
     * 
     * @return the reference to the point.
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    @Override
    public Point2DReadOnly getPoint()
    {
-      checkHasBeenInitialized();
       return point;
    }
 
    /**
     * Flips this line's direction.
-    * 
-    * @throws RuntimeException if this line has not been initialized yet.
     */
    public void negateDirection()
    {
-      checkHasBeenInitialized();
       direction.negate();
    }
 
@@ -271,7 +226,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Sets this line to be the same as the given line.
     * 
     * @param other the other line to copy. Not modified.
-    * @throws RuntimeException if the other line has not been initialized yet.
     */
    @Override
    public void set(Line2D other)
@@ -292,14 +246,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    public void setDirectionUnsafe(double lineDirectionX, double lineDirectionY)
    {
       direction.set(lineDirectionX, lineDirectionY);
-
-      // checkReasonableVector
-      if (Math.abs(direction.getX()) < minAllowableVectorPart && Math.abs(direction.getY()) < minAllowableVectorPart)
-      {
-         throw new RuntimeException("Line length must be greater than zero.");
-      }
-
-      directionHasBeenSet = true;
    }
 
    /** {@inheritDoc} */
@@ -307,7 +253,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    public void setPoint(double pointOnLineX, double pointOnLineY)
    {
       point.set(pointOnLineX, pointOnLineY);
-      pointHasBeenSet = true;
    }
 
    /**
@@ -320,8 +265,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    {
       point.setToNaN();
       direction.setToNaN();
-      pointHasBeenSet = false;
-      directionHasBeenSet = false;
    }
 
    /**
@@ -333,8 +276,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    {
       point.setToZero();
       direction.setToZero();
-      pointHasBeenSet = false;
-      directionHasBeenSet = false;
    }
 
    /**
