@@ -531,21 +531,6 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    }
 
    @Test
-   public void testGetQuaternion()
-   {
-      Random random = new Random(43535);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         FrameQuaternion frameQuaternion = new FrameQuaternion(worldFrame, expected);
-         QuaternionReadOnly actual = frameQuaternion.getQuaternion();
-         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
-         EuclidCoreTestTools.assertTuple4DEquals(frameQuaternion, actual, EPSILON);
-      }
-   }
-
-   @Test
    public void testQuaternionBasicsFeatures() throws Exception
    {
       QuaternionBasicsTest<FrameQuaternion> quaternionBasicsTest = new QuaternionBasicsTest<FrameQuaternion>()

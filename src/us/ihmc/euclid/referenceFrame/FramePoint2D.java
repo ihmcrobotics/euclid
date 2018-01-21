@@ -128,7 +128,13 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
       setIncludingFrame(frameTuple3DReadOnly);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets this frame point to {@code other}.
+    * 
+    * @param other the other frame point to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
+    */
    @Override
    public void set(FramePoint2D other)
    {
@@ -192,16 +198,6 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
    public double getY()
    {
       return point.getY();
-   }
-
-   /**
-    * Gets the read-only reference to the point used in {@code this}.
-    *
-    * @return the point of {@code this}.
-    */
-   public final Point2D getPoint()
-   {
-      return point;
    }
 
    /** {@inheritDoc} */

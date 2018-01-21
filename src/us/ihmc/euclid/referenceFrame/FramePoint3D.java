@@ -126,7 +126,13 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
       setIncludingFrame(other);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets this frame point to {@code other}.
+    * 
+    * @param other the other frame point to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
+    */
    @Override
    public void set(FramePoint3D other)
    {
@@ -221,16 +227,6 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    }
 
    /**
-    * Gets the read-only reference to the point used in {@code this}.
-    *
-    * @return the point of {@code this}.
-    */
-   public Point3D getPoint()
-   {
-      return point;
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method
     * returns {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
@@ -297,7 +293,8 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    }
 
    /**
-    * Provides a {@code String} representation of this frame point 3D as follows: (x, y, z)-worldFrame.
+    * Provides a {@code String} representation of this frame point 3D as follows: (x, y,
+    * z)-worldFrame.
     *
     * @return the {@code String} representing this frame point 3D.
     */
@@ -308,7 +305,8 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    }
 
    /**
-    * Calculates and returns a hash code value from the value of each component of this frame point 3D.
+    * Calculates and returns a hash code value from the value of each component of this frame point
+    * 3D.
     *
     * @return the hash code value for this frame point 3D.
     */

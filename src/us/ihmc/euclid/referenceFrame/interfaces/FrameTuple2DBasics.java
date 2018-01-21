@@ -2,10 +2,31 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import org.ejml.data.DenseMatrix64F;
 
+import us.ihmc.euclid.referenceFrame.FramePoint2D;
+import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
+/**
+ * {@code FrameTuple2DBasics} is the base implementation for {@link FramePoint2D} and
+ * {@link FrameVector2D}.
+ * <p>
+ * In addition to representing a {@link Tuple2DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameTuple2DBasics}. This allows, for instance, to enforce, at runtime, that operations on
+ * tuples occur in the same coordinate system.
+ * </p>
+ * <p>
+ * This interface allows for changing the reference frame in which this tuple is expressed.
+ * </p>
+ * <p>
+ * Because a {@code FrameTuple2DBasics} extends {@code Tuple2DBasics}, it is compatible with methods
+ * only requiring {@code Tuple2DBasics}. However, these methods do NOT assert that the operation
+ * occur in the proper coordinate system. Use this feature carefully and always prefer using methods
+ * requiring {@code FrameTuple2DBasics}.
+ * </p>
+ */
 public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
 {
    /**

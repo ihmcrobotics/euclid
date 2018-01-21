@@ -51,7 +51,7 @@ public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, ReferenceFrameHol
     */
    default boolean equals(FrameTuple3DReadOnly other)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
+      if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Tuple3DReadOnly.super.equals(other);

@@ -1,10 +1,14 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 
+/**
+ * Read-only interface for a pose 2D.
+ * <p>
+ * A pose 2D represents a position and orientation in the XY-plane.
+ * </p>
+ */
 public interface Pose2DReadOnly
 {
    /**
@@ -63,26 +67,6 @@ public interface Pose2DReadOnly
    Orientation2DReadOnly getOrientation();
 
    /**
-    * Packs the position part of this pose 2D into the given {@code positionToPack}.
-    *
-    * @param positionToPack tuple used to store the position coordinates. Modified.
-    */
-   default void getPosition(Tuple2DBasics positionToPack)
-   {
-      positionToPack.set(getPosition());
-   }
-
-   /**
-    * Packs the orientation part of this pose 2D into the given {@code orientationToPack}.
-    *
-    * @param orientationToPack used to store the orientation of this pose 2D. Modified.
-    */
-   default void getOrientation(Orientation2D orientationToPack)
-   {
-      orientationToPack.set(getOrientation());
-   }
-
-   /**
     * Packs this pose 2D into the given {@code transformToPack}.
     *
     * @param transformToPack the rigid-body transform that is set to represent this pose 2D.
@@ -123,7 +107,7 @@ public interface Pose2DReadOnly
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
     */
-   default double getOrientationDistance(Orientation2D other)
+   default double getOrientationDistance(Orientation2DReadOnly other)
    {
       return getOrientation().distance(other);
    }
@@ -166,21 +150,7 @@ public interface Pose2DReadOnly
     */
    default boolean epsilonEquals(Pose2DReadOnly other, double epsilon)
    {
-      return epsilonEquals(other, epsilon, epsilon);
-   }
-
-   /**
-    * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
-    * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
-    *
-    * @param other the query. Not modified.
-    * @param positionEpsilon the tolerance to use for comparing the position part.
-    * @param orientationEpsilon the tolerance to use for comparing the orientation part.
-    * @return {@code true} if the two poses are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Pose2DReadOnly other, double positionEpsilon, double orientationEpsilon)
-   {
-      return getPosition().epsilonEquals(other.getPosition(), positionEpsilon) && getOrientation().epsilonEquals(other.getOrientation(), orientationEpsilon);
+      return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
    /**

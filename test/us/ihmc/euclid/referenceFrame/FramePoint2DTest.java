@@ -227,21 +227,6 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
       }
    }
 
-   @Test
-   public void testGetPoint()
-   {
-      Random random = new Random(43535);
-
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
-      {
-         Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
-         FramePoint2D frameVector = new FramePoint2D(worldFrame, expected);
-         Point2D actual = frameVector.getPoint();
-         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
-         EuclidCoreTestTools.assertTuple2DEquals(frameVector, actual, EPSILON);
-      }
-   }
-
    @Override
    public void testOverloading() throws Exception
    {

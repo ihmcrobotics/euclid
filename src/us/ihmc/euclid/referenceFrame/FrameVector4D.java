@@ -8,7 +8,6 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * {@code FrameVector4D} is a 4D vector expressed in a given reference frame.
@@ -102,7 +101,13 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
       setIncludingFrame(other);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets this frame vector to {@code other}.
+    *
+    * @param other the other frame vector to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
+    */
    @Override
    public void set(FrameVector4D other)
    {
@@ -215,16 +220,6 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
    public double getS()
    {
       return vector.getS();
-   }
-
-   /**
-    * Gets the read-only reference to the vector used in {@code this}.
-    *
-    * @return the vector of {@code this}.
-    */
-   public final Vector4DReadOnly getVector()
-   {
-      return vector;
    }
 
    /**

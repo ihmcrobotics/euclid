@@ -70,7 +70,7 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
     */
    default boolean equals(FrameTuple4DReadOnly other)
    {
-      if (getReferenceFrame() != other.getReferenceFrame())
+      if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Tuple4DReadOnly.super.equals(other);

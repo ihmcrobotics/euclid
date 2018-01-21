@@ -33,13 +33,7 @@ import us.ihmc.euclid.geometry.exceptions.BoundingBoxExceptionTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestToolsTest;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryToolsTest;
-import us.ihmc.euclid.referenceFrame.FramePoint2DTest;
-import us.ihmc.euclid.referenceFrame.FramePoint3DTest;
-import us.ihmc.euclid.referenceFrame.FrameQuaternionTest;
-import us.ihmc.euclid.referenceFrame.FrameVector2DTest;
-import us.ihmc.euclid.referenceFrame.FrameVector3DTest;
-import us.ihmc.euclid.referenceFrame.FrameVector4DTest;
-import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
+import us.ihmc.euclid.referenceFrame.*;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestToolsTest;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
 import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
@@ -60,9 +54,9 @@ import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
       ReferenceFrameTest.class,
       // 1D
       // 2D
-      FramePoint2DTest.class, FrameVector2DTest.class,
+      FramePoint2DTest.class, FrameVector2DTest.class, FramePose2DTest.class, FrameOrientation2DTest.class,
       // 3D
-      FramePoint3DTest.class, FrameVector3DTest.class,
+      FramePoint3DTest.class, FrameVector3DTest.class, FramePose3DTest.class,
       // 4D
       FrameQuaternionTest.class, FrameVector4DTest.class,
       // Tools tests

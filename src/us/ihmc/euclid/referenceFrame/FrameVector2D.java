@@ -128,7 +128,13 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
       setIncludingFrame(frameTuple3DReadOnly);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets this frame vector to {@code other}.
+    * 
+    * @param other the other frame vector to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
+    */
    @Override
    public void set(FrameVector2D other)
    {
@@ -197,16 +203,6 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    public double getY()
    {
       return vector.getY();
-   }
-
-   /**
-    * Gets the read-only reference to the vector used in {@code this}.
-    *
-    * @return the vector of {@code this}.
-    */
-   public final Vector2D getVector()
-   {
-      return vector;
    }
 
    /** {@inheritDoc} */

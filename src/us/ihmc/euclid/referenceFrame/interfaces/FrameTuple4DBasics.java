@@ -2,9 +2,30 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import org.ejml.data.DenseMatrix64F;
 
+import us.ihmc.euclid.referenceFrame.FrameQuaternion;
+import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
+/**
+ * {@code FrameTuple4DBasics} is the base implementation for {@link FrameQuaternion} and
+ * {@link FrameVector4D}.
+ * <p>
+ * In addition to representing a {@link Tuple4DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameTuple4DBasics}. This allows, for instance, to enforce, at runtime, that operations on
+ * tuples occur in the same coordinate system.
+ * </p>
+ * <p>
+ * This interface allows for changing the reference frame in which this tuple is expressed.
+ * </p>
+ * <p>
+ * Because a {@code FrameTuple4DBasics} extends {@code Tuple4DBasics}, it is compatible with methods
+ * only requiring {@code Tuple4DBasics}. However, these methods do NOT assert that the operation
+ * occur in the proper coordinate system. Use this feature carefully and always prefer using methods
+ * requiring {@code FrameTuple4DBasics}.
+ * </p>
+ */
 public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
 {
    /**
@@ -155,5 +176,4 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
       setReferenceFrame(other.getReferenceFrame());
       set((Tuple4DReadOnly) other);
    }
-
 }

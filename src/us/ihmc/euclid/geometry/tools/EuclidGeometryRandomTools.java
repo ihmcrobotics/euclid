@@ -686,28 +686,8 @@ public abstract class EuclidGeometryRandomTools
     * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
     * @return the random pose 2D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
-    * @deprecated Use {@link #nextLine2D(Random,double,double)} instead
     */
-   public static Pose2D generateRandomLine2D(Random random, double positionMinMax, double orientationMinMax)
-   {
-      return nextLine2D(random, positionMinMax, orientationMinMax);
-   }
-
-   /**
-    * Generates a random pose 2D.
-    * <p>
-    * <ul>
-    * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
-    * <li>{@code orientation} &in; [-{@code orientationMinMax}; {@code orientationMinMax}].
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
-    * @return the random pose 2D.
-    * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
-    */
-   public static Pose2D nextLine2D(Random random, double positionMinMax, double orientationMinMax)
+   public static Pose2D nextPose2D(Random random, double positionMinMax, double orientationMinMax)
    {
       return new Pose2D(nextPoint2D(random, positionMinMax), nextOrientation2D(random, orientationMinMax));
    }
@@ -747,25 +727,9 @@ public abstract class EuclidGeometryRandomTools
       return new Pose3D(nextPoint3D(random), nextQuaternion(random));
    }
 
-   /**
-    * Generates a random pose 3D.
-    * <p>
-    * <ul>
-    * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
-    * <li>{@code orientation.getAngle()} &in; [-{@code orientationMinMax};
-    * {@code orientationMinMax}].
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
-    * @return the random pose 3D.
-    * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
-    * @deprecated Use {@link #nextLine3D(Random,double,double)} instead
-    */
-   public static Pose3D generateRandomLine3D(Random random, double positionMinMax, double orientationMinMax)
+   public static Pose3D nextPose3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
-      return nextLine3D(random, positionMinMax, orientationMinMax);
+      return new Pose3D(nextPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ), nextQuaternion(random));
    }
 
    /**
@@ -783,7 +747,7 @@ public abstract class EuclidGeometryRandomTools
     * @return the random pose 3D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
     */
-   public static Pose3D nextLine3D(Random random, double positionMinMax, double orientationMinMax)
+   public static Pose3D nextPose3D(Random random, double positionMinMax, double orientationMinMax)
    {
       return new Pose3D(nextPoint3D(random, positionMinMax), nextQuaternion(random, orientationMinMax));
    }

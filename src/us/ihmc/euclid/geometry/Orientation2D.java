@@ -43,9 +43,19 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
     *
     * @param other the other orientation 2D used to initialize this. Not modified.
     */
-   public Orientation2D(Orientation2D other)
+   public Orientation2D(Orientation2DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Sets this orientation 2D to the {@code other} orientation 2D.
+    *
+    * @param other the other orientation 2D. Not modified.
+    */
+   public void set(Orientation2DReadOnly other)
+   {
+      Orientation2DBasics.super.set(other);
    }
 
    /**
@@ -167,6 +177,11 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
       return EuclidGeometryIOTools.getOrientation2DString(this);
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of the angle of this orientation 2D.
+    *
+    * @return the hash code value for this orientation 2D.
+    */
    @Override
    public int hashCode()
    {
