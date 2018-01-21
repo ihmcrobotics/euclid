@@ -1,10 +1,63 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface LineSegment3DBasics extends LineSegment3DReadOnly
+public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, Transformable
 {
+   /**
+    * Gets the reference to the first endpoint of this line segment.
+    *
+    * @return the reference to the first endpoint of this line segment.
+    */
+   Point3DBasics getFirstEndpoint();
+
+   /**
+    * Gets the reference to the second endpoint of this line segment.
+    *
+    * @return the reference to the second endpoint of this line segment.
+    */
+   Point3DBasics getSecondEndpoint();
+
+   /**
+    * Tests if this line segment contains {@link Double#NaN}.
+    * 
+    * @return {@code true} if {@link #firstEndpoint} and/or {@link #secondEndpoint} contains
+    *         {@link Double#NaN}, {@code false} otherwise.
+    */
+   @Override
+   default boolean containsNaN()
+   {
+      return getFirstEndpoint().containsNaN() || getSecondEndpoint().containsNaN();
+   }
+
+   /**
+    * Sets both endpoints of this line segment to zero.
+    */
+   @Override
+   default void setToZero()
+   {
+      getFirstEndpoint().setToZero();
+      getSecondEndpoint().setToZero();
+   }
+
+   /**
+    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method,
+    * this line segment becomes invalid. A new pair of valid endpoints will have to be set so this
+    * line segment is again usable.
+    */
+   @Override
+   default void setToNaN()
+   {
+      getFirstEndpoint().setToNaN();
+      getSecondEndpoint().setToNaN();
+   }
+
    /**
     * Changes the first endpoint of this line segment.
     *
@@ -12,7 +65,10 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
     * @param firstEndpointY y-coordinate of the new first endpoint.
     * @param firstEndpointZ z-coordinate of the new first endpoint.
     */
-   void setFirstEndpoint(double firstEndpointX, double firstEndpointY, double firstEndpointZ);
+   default void setFirstEndpoint(double firstEndpointX, double firstEndpointY, double firstEndpointZ)
+   {
+      getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ);
+   }
 
    /**
     * Changes the second endpoint of this line segment.
@@ -21,16 +77,19 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
     * @param secondEndpointY y-coordinate of the new second endpoint.
     * @param secondEndpointZ z-coordinate of the new second endpoint.
     */
-   void setSecondEndpoint(double secondEndpointX, double secondEndpointY, double secondEndpointZ);
+   default void setSecondEndpoint(double secondEndpointX, double secondEndpointY, double secondEndpointZ)
+   {
+      getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ);
+   }
 
    /**
     * Changes the first endpoint of this line segment.
     *
-    * @param firstEndpoint new endpoint of this line segment. Not modified
+    * @param firstEndpoint new endpoint of this line segment. Not modified.
     */
    default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
    {
-      setFirstEndpoint(firstEndpoint.getX(), firstEndpoint.getY(), firstEndpoint.getZ());
+      getFirstEndpoint().set(firstEndpoint);
    }
 
    /**
@@ -40,7 +99,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
     */
    default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
    {
-      setSecondEndpoint(secondEndpoint.getX(), secondEndpoint.getY(), secondEndpoint.getZ());
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -82,17 +141,17 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
    }
 
    /**
-    * Redefines this line segment with new endpoints.
+    * Redefines this line segment with a new first endpoint and a vector going from the first to the
+    * second endpoint.
     *
-    * @param endpoints a two-element array containing in order the first and second endpoints for
-    *           this line segment. Not modified.
-    * @throws IllegalArgumentException if the given array has a length different than 2.
+    * @param firstEndpoint new first endpoint. Not modified.
+    * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
+    *           modified.
     */
-   default void set(Point3DReadOnly[] endpoints)
+   default void set(Point3DReadOnly firstEndpoint, Vector3DReadOnly fromFirstToSecondEndpoint)
    {
-      if (endpoints.length != 2)
-         throw new RuntimeException("Length of input array is not correct. Length = " + endpoints.length + ", expected an array of two elements");
-      set(endpoints[0], endpoints[1]);
+      getFirstEndpoint().set(firstEndpoint);
+      getSecondEndpoint().add(firstEndpoint, fromFirstToSecondEndpoint);
    }
 
    /**
@@ -120,8 +179,8 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
     */
    default void translate(double x, double y, double z)
    {
-      setFirstEndpoint(getFirstEndpointX() + x, getFirstEndpointY() + y, getFirstEndpointZ() + z);
-      setSecondEndpoint(getSecondEndpointX() + x, getSecondEndpointY() + y, getSecondEndpointZ() + z);
+      getFirstEndpoint().add(x, y, z);
+      getSecondEndpoint().add(x, y, z);
    }
 
    /**
@@ -135,5 +194,29 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
    default void translate(Tuple3DReadOnly translation)
    {
       translate(translation.getX(), translation.getY(), translation.getZ());
+   }
+
+   /**
+    * Transforms this line segment using the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
+    */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      getFirstEndpoint().applyTransform(transform);
+      getSecondEndpoint().applyTransform(transform);
+   }
+
+   /**
+    * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
+    * 
+    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
+    */
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      getFirstEndpoint().applyInverseTransform(transform);
+      getSecondEndpoint().applyInverseTransform(transform);
    }
 }

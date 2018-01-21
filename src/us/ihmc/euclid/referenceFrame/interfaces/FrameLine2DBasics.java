@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -15,12 +16,6 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    @Override
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
-   {
-      setReferenceFrame(referenceFrame);
-      set(line2DReadOnly);
-   }
-
    /**
     * Sets the point and direction parts of this line 2D to zero and sets the current reference
     * frame to {@code referenceFrame}.
@@ -34,7 +29,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Sets the point and direction parts of this pose 2D to {@link Double#NaN} and sets the current
+    * Sets the point and direction parts of this line 2D to {@link Double#NaN} and sets the current
     * reference frame to {@code referenceFrame}.
     * 
     * @param referenceFrame the new reference frame to be associated with this line 2D.
@@ -43,6 +38,18 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    {
       setReferenceFrame(referenceFrame);
       setToNaN();
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(line2DReadOnly);
+   }
+
+   default void setIncludingFrame(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(lineSegment2DReadOnly);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
@@ -60,6 +67,11 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    default void setIncludingFrame(FrameLine2DReadOnly other)
    {
       setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
+   default void setIncludingFrame(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
+   {
+      setIncludingFrame(frameLineSegment2DReadOnly.getReferenceFrame(), frameLineSegment2DReadOnly);
    }
 
    default void setIncludingFrame(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)

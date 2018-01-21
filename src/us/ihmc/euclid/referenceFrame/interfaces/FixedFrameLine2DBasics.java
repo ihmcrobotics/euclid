@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -47,6 +48,12 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
       set(line2DReadOnly);
    }
 
+   default void set(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(lineSegment2DReadOnly);
+   }
+
    default void set(ReferenceFrame referenceFrame, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
       checkReferenceFrameMatch(referenceFrame);
@@ -62,6 +69,11 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
    default void set(FrameLine2DReadOnly other)
    {
       set(other.getReferenceFrame(), other);
+   }
+
+   default void set(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
+   {
+      set(frameLineSegment2DReadOnly.getReferenceFrame(), frameLineSegment2DReadOnly);
    }
 
    default void set(Point2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)

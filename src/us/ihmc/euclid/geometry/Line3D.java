@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -51,6 +52,11 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    public Line3D(Line3DReadOnly other)
    {
       set(other);
+   }
+
+   public Line3D(LineSegment3DReadOnly lineSegment3DReadOnly)
+   {
+      set(lineSegment3DReadOnly);
    }
 
    /**

@@ -540,27 +540,10 @@ public class LineSegment3DTest
 
          Point3D actualFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point3D actualSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         lineSegment3D.getFirstEndpoint(actualFirstEndpoint);
+         actualFirstEndpoint.set(lineSegment3D.getFirstEndpoint());
          EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, actualFirstEndpoint, EPSILON);
-         lineSegment3D.getSecondEndpoint(actualSecondEndpoint);
+         actualSecondEndpoint.set(lineSegment3D.getSecondEndpoint());
          EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, actualSecondEndpoint, EPSILON);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Line getters
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
-         Line3D actualLine = new Line3D();
-
-         lineSegment3D.getLine(actualLine);
-         EuclidCoreTestTools.assertTuple3DEquals(lineSegment3D.getFirstEndpoint(), actualLine.getPoint(), EPSILON);
-         Vector3D expectedDirection = lineSegment3D.getDirection(true);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualLine.getDirection(), EPSILON);
-
-         lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
-         actualLine = lineSegment3D.getLine();
-         EuclidCoreTestTools.assertTuple3DEquals(lineSegment3D.getFirstEndpoint(), actualLine.getPoint(), EPSILON);
-         expectedDirection = lineSegment3D.getDirection(true);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualLine.getDirection(), EPSILON);
       }
    }
 
@@ -574,10 +557,8 @@ public class LineSegment3DTest
          LineSegment3D lineSegment3d = EuclidGeometryRandomTools.nextLineSegment3D(random, EPSILON);
          Transform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
-         Point3D expectedFirstEndPoint = new Point3D();
-         Point3D expectedSecondEndpoint = new Point3D();
-         lineSegment3d.getFirstEndpoint(expectedFirstEndPoint);
-         lineSegment3d.getSecondEndpoint(expectedSecondEndpoint);
+         Point3D expectedFirstEndPoint = new Point3D(lineSegment3d.getFirstEndpoint());
+         Point3D expectedSecondEndpoint = new Point3D(lineSegment3d.getSecondEndpoint());
 
          lineSegment3d.applyTransform(transform);
          expectedFirstEndPoint.applyTransform(transform);
@@ -606,7 +587,7 @@ public class LineSegment3DTest
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getFirstEndpoint().getElement(j);
 
-            Point3D firstEndpoint = line2.getFirstEndpointCopy();
+            Point3D firstEndpoint = new Point3D(line2.getFirstEndpoint());
             firstEndpoint.setElement(j, element + 0.999 * epsilon);
             line2.setFirstEndpoint(firstEndpoint);
             
@@ -634,7 +615,7 @@ public class LineSegment3DTest
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getSecondEndpoint().getElement(j);
             
-            Point3D secondEndpoint = line2.getSecondEndpointCopy();
+            Point3D secondEndpoint = new Point3D(line2.getSecondEndpoint());
             secondEndpoint.setElement(j, element + 0.999 * epsilon);
             line2.setSecondEndpoint(secondEndpoint);
             
@@ -682,7 +663,7 @@ public class LineSegment3DTest
             assertTrue(line1.equals(line2));
             double element = line1.getFirstEndpoint().getElement(j);
             
-            Point3D firstEndpoint = line2.getFirstEndpointCopy();
+            Point3D firstEndpoint = new Point3D(line2.getFirstEndpoint());
             firstEndpoint.setElement(j, element + epsilon);
             line2.setFirstEndpoint(firstEndpoint);
             
@@ -700,7 +681,7 @@ public class LineSegment3DTest
             assertTrue(line1.equals(line2));
             double element = line1.getSecondEndpoint().getElement(j);
 
-            Point3D secondEndpoint = line2.getSecondEndpointCopy();
+            Point3D secondEndpoint = new Point3D(line2.getSecondEndpoint());
             secondEndpoint.setElement(j, element + epsilon);
             line2.setSecondEndpoint(secondEndpoint);
             

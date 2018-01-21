@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -49,6 +50,12 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
       set(line3DReadOnly);
    }
 
+   default void set(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(lineSegment3DReadOnly);
+   }
+
    default void set(ReferenceFrame referenceFrame, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
       checkReferenceFrameMatch(referenceFrame);
@@ -64,6 +71,11 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    default void set(FrameLine3DReadOnly other)
    {
       set(other.getReferenceFrame(), other);
+   }
+
+   default void set(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
+   {
+      set(frameLineSegment3DReadOnly.getReferenceFrame(), frameLineSegment3DReadOnly);
    }
 
    default void set(Point3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)

@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -9,6 +10,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
 
 public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3D>
 {
@@ -120,6 +122,26 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    public FrameLine3D(ReferenceFrame referenceFrame, Line3DReadOnly line3D)
    {
       setIncludingFrame(referenceFrame, line3D);
+   }
+
+   public FrameLine3D(LineSegment3DReadOnly lineSegment3DReadOnly)
+   {
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), lineSegment3DReadOnly);
+   }
+
+   public FrameLine3D(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
+   {
+      setIncludingFrame(referenceFrame, lineSegment3DReadOnly);
+   }
+
+   public FrameLine3D(FrameLine3DReadOnly other)
+   {
+      setIncludingFrame(other);
+   }
+
+   public FrameLine3D(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
+   {
+      setIncludingFrame(frameLineSegment3DReadOnly);
    }
 
    @Override

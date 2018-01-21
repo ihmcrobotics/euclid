@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -43,22 +44,22 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 
    /**
     * Creates a new line 2D and initializes it to {@code other}.
-    * 
-    * @param other the other line used to initialize this line. Not modified.
-    */
-   public Line2D(Line2D other)
-   {
-      set(other);
-   }
-
-   /**
-    * Creates a new line 2D and initializes it to {@code other}.
     *
     * @param other the other line used to initialize this line. Not modified.
     */
    public Line2D(Line2DReadOnly other)
    {
       set(other);
+   }
+
+   /**
+    * Creates a new line 2D and initializes it to {@code lineSegment2DReadOnly}.
+    *
+    * @param lineSegment2DReadOnly the line segment used to initialize this line. Not modified.
+    */
+   public Line2D(LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      set(lineSegment2DReadOnly);
    }
 
    /**

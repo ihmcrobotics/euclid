@@ -147,6 +147,16 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
+    * Sets this line from the given {@code lineSegment2DReadOnly}.
+    *
+    * @param lineSegment2DReadOnly the line segment to copy. Not modified.
+    */
+   default void set(LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      set(lineSegment2DReadOnly.getFirstEndpoint(), lineSegment2DReadOnly.getSecondEndpoint());
+   }
+
+   /**
     * Redefines this line with a new point and a new direction vector.
     *
     * @param pointOnLineX the new x-coordinate of the point on this line.

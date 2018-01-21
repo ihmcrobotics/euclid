@@ -780,12 +780,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    {
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-      if (!getPoint().epsilonEquals(other.getPoint(), epsilon))
-         return false;
-      if (!getDirection().epsilonEquals(other.getDirection(), epsilon))
-         return false;
-
-      return true;
+      return Line3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -804,7 +799,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     */
    default boolean geometricallyEquals(FrameLine3DReadOnly other, double epsilon)
    {
-      return isCollinear(other, epsilon);
+      checkReferenceFrameMatch(other);
+      return Line3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -822,6 +818,6 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
       if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
-         return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());
+         return Line3DReadOnly.super.equals(other);
    }
 }

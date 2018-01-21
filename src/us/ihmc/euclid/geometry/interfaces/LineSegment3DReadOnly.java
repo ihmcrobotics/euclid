@@ -1,6 +1,5 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -26,56 +25,6 @@ public interface LineSegment3DReadOnly
    Point3DReadOnly getSecondEndpoint();
 
    /**
-    * Gets the first endpoint defining this line segment by storing its coordinates in the given
-    * argument {@code firstEndpointToPack}.
-    *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    */
-   default void getFirstEndpoint(Point3DBasics firstEndpointToPack)
-   {
-      firstEndpointToPack.set(getFirstEndpoint());
-   }
-
-   /**
-    * Gets a copy of the first endpoint of this line segment.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the copy of the first endpoint of this line segment.
-    */
-   default Point3D getFirstEndpointCopy()
-   {
-      return new Point3D(getFirstEndpoint());
-   }
-
-   /**
-    * Gets the second endpoint defining this line segment by storing its coordinates in the given
-    * argument {@code secondEndpointToPack}.
-    *
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
-    */
-   default void getSecondEndpoint(Point3DBasics secondEndpointToPack)
-   {
-      secondEndpointToPack.set(getSecondEndpoint());
-   }
-
-   /**
-    * Gets a copy of the second endpoint of this line segment.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the copy of the second endpoint of this line segment.
-    */
-   default Point3D getSecondEndpointCopy()
-   {
-      return new Point3D(getSecondEndpoint());
-   }
-
-   /**
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
@@ -84,24 +33,10 @@ public interface LineSegment3DReadOnly
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
     */
-   default void getEndpoints(Point3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
+   default void get(Point3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
    {
       firstEndpointToPack.set(getFirstEndpoint());
       secondEndpointToPack.set(getSecondEndpoint());
-   }
-
-   /**
-    * Gets a copy of the endpoints of this line segment and returns them in a two-element array.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the two-element array containing in order this line segment first and second
-    *         endpoints.
-    */
-   default Point3D[] getEndpointsCopy()
-   {
-      return new Point3D[] {getFirstEndpointCopy(), getSecondEndpointCopy()};
    }
 
    /**
@@ -162,31 +97,6 @@ public interface LineSegment3DReadOnly
    default double getSecondEndpointZ()
    {
       return getSecondEndpoint().getZ();
-   }
-
-   /**
-    * Computes the line on which this line segment is lying. The line's vector is the direction from
-    * the first to the second endpoint of this line segment.
-    *
-    * @param lineToPack the line on which this line segment is lying. Modified.
-    */
-   default void getLine(Line3D lineToPack)
-   {
-      lineToPack.set(getFirstEndpoint(), getSecondEndpoint());
-   }
-
-   /**
-    * Computes the line on which this line segment is lying. The line's vector is the direction from
-    * the first to the second endpoint of this line segment.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the line on which this line segment is lying.
-    */
-   default Line3D getLine()
-   {
-      return new Line3D(getFirstEndpoint(), getSecondEndpoint());
    }
 
    /**
@@ -622,5 +532,57 @@ public interface LineSegment3DReadOnly
    default double dotProduct(LineSegment3DReadOnly other)
    {
       return EuclidGeometryTools.dotProduct(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(), other.getSecondEndpoint());
+   }
+
+   /**
+    * Tests on a per-component basis on both endpoints if this line segment is equal to
+    * {@code other} with the tolerance {@code epsilon}.
+    * 
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
+    */
+   default boolean epsilonEquals(LineSegment3DReadOnly other, double epsilon)
+   {
+      return getFirstEndpoint().epsilonEquals(other.getFirstEndpoint(), epsilon) && getSecondEndpoint().epsilonEquals(other.getSecondEndpoint(), epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this line segment 3D is exactly equal to {@code other}.
+    *
+    * @param other the other line segment 3D to compare against this. Not modified.
+    * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(LineSegment3DReadOnly other)
+   {
+      if (other == null)
+         return false;
+      else
+         return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
+    * similar.
+    * <p>
+    * The comparison is based on comparing the line segments' endpoints. Two line segments are
+    * considered geometrically equal even if they are defined with opposite direction.
+    * </p>
+    *
+    * @param other the line segment to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two line segments represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   default boolean geometricallyEquals(LineSegment3DReadOnly other, double epsilon)
+   {
+      if (getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
+            && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
+         return true;
+      if (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
+            && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon))
+         return true;
+      return false;
    }
 }

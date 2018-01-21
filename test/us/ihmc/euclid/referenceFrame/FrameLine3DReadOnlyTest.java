@@ -12,8 +12,6 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public abstract class FrameLine3DReadOnlyTest<T extends FrameLine3DReadOnly>
 {
@@ -33,7 +31,6 @@ public abstract class FrameLine3DReadOnlyTest<T extends FrameLine3DReadOnly>
    public void testOverloading() throws Exception
    {
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("get", new Class<?>[] {Point3DBasics.class, Vector3DBasics.class});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLine3DReadOnly.class, Line3DReadOnly.class, true, 1, framelessMethodsToIgnore);
    }
 

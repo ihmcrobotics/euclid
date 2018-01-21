@@ -121,6 +121,11 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
       getDirection().set(other.getDirection());
    }
 
+   default void set(LineSegment3DReadOnly lineSegment3DReadOnly)
+   {
+      set(lineSegment3DReadOnly.getFirstEndpoint(), lineSegment3DReadOnly.getSecondEndpoint());
+   }
+
    /**
     * Redefines this line with a new point and a new direction vector.
     *
