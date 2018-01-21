@@ -1,14 +1,15 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.lang.reflect.Method;
+import java.util.Random;
+import java.util.function.Predicate;
+
 import org.junit.Test;
+
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-
-import java.lang.reflect.Method;
-import java.util.Random;
-import java.util.function.Predicate;
 
 public abstract class FrameLine3DReadOnlyTest<T extends FrameLine3DReadOnly>
 {

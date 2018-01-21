@@ -1,16 +1,17 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.lang.reflect.Method;
+import java.util.Random;
+import java.util.function.Predicate;
+
 import org.junit.Test;
+
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-
-import java.lang.reflect.Method;
-import java.util.Random;
-import java.util.function.Predicate;
 
 public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
 {
