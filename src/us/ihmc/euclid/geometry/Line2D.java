@@ -98,16 +98,18 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    {
       set(pointOnLine, lineDirection);
    }
-   
+
    /** {@inheritDoc} */
    @Override
-   public boolean hasPointBeenSet() {
+   public boolean hasPointBeenSet()
+   {
       return pointHasBeenSet;
    }
-   
+
    /** {@inheritDoc} */
    @Override
-   public boolean hasDirectionBeenSet() {
+   public boolean hasDirectionBeenSet()
+   {
       return directionHasBeenSet;
    }
 
@@ -281,7 +283,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    @Override
    public void setDirection(double lineDirectionX, double lineDirectionY)
    {
-      setDirectionUnsafe(lineDirectionX, lineDirectionY);      
+      setDirectionUnsafe(lineDirectionX, lineDirectionY);
       direction.normalize();
    }
 
@@ -296,7 +298,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
       {
          throw new RuntimeException("Line length must be greater than zero.");
       }
-      
+
       directionHasBeenSet = true;
    }
 
@@ -333,7 +335,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
       direction.setToZero();
       pointHasBeenSet = false;
       directionHasBeenSet = false;
-   }   
+   }
 
    /**
     * Provides a {@code String} representation of this line 2D as follows:<br>

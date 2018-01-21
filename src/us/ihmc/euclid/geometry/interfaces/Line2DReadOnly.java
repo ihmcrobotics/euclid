@@ -32,21 +32,19 @@ public interface Line2DReadOnly
    Vector2DReadOnly getDirection();
 
    /**
-    * Whether or not this line's point has been initialized and not
-    * set to zero or NaN.
+    * Whether or not this line's point has been initialized and not set to zero or NaN.
     *
     * @return whether or not this line's direction is set.
     */
    boolean hasPointBeenSet();
 
-   /** 
-    * Whether or not this line's direction has been initialized and not
-    * set to zero or NaN.
+   /**
+    * Whether or not this line's direction has been initialized and not set to zero or NaN.
     * 
     * @return whether or not this line's direction is set.
     */
    boolean hasDirectionBeenSet();
-   
+
    default void checkHasBeenInitialized()
    {
       if (!hasPointBeenSet())
@@ -97,7 +95,8 @@ public interface Line2DReadOnly
     * Gets the point defining this line by storing its coordinates in the given argument
     * {@code pointToPack}.
     *
-    * @param pointOnLineToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param pointOnLineToPack point in which the coordinates of this line's point are stored.
+    *           Modified.
     * @throws RuntimeException if this line has not been initialized yet.
     */
    default void getPoint(Point2DBasics pointOnLineToPack)
@@ -144,7 +143,7 @@ public interface Line2DReadOnly
       checkHasBeenInitialized();
       return getPoint().getY();
    }
-   
+
    /**
     * Copies this line, transforms the copy using the given homogeneous transformation matrix, and
     * returns the result.
@@ -305,7 +304,8 @@ public interface Line2DReadOnly
    default boolean intersectionWith(Line2DReadOnly secondLine, Point2DBasics intersectionToPack)
    {
       checkHasBeenInitialized();
-      return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection(), intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection(),
+                                                               intersectionToPack);
    }
 
    /**
@@ -333,7 +333,8 @@ public interface Line2DReadOnly
    default Point2D intersectionWith(LineSegment2DReadOnly lineSegment)
    {
       checkHasBeenInitialized();
-      return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(), lineSegment.getSecondEndpoint());
+      return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
+                                                                           lineSegment.getSecondEndpoint());
    }
 
    /**
@@ -359,8 +360,8 @@ public interface Line2DReadOnly
    default boolean intersectionWith(LineSegment2DReadOnly lineSegment, Point2DBasics intersectionToPack)
    {
       checkHasBeenInitialized();
-      return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(), lineSegment.getSecondEndpoint(),
-                                                                           intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
+                                                                           lineSegment.getSecondEndpoint(), intersectionToPack);
    }
 
    /**
@@ -568,8 +569,8 @@ public interface Line2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -588,8 +589,8 @@ public interface Line2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -610,8 +611,8 @@ public interface Line2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     * <p>

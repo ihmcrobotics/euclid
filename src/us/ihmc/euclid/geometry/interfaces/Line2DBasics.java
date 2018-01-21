@@ -13,7 +13,7 @@ public interface Line2DBasics extends Line2DReadOnly
     * @param pointOnLineY the new y-coordinate of the point on this line.
     */
    void setPoint(double pointOnLineX, double pointOnLineY);
-   
+
    /**
     * Changes the direction of this line by setting it to the normalized values provided.
     *
@@ -69,7 +69,7 @@ public interface Line2DBasics extends Line2DReadOnly
 
       setDirection(vXNew, vYNew);
    }
-   
+
    /**
     * Changes the point through which this line has to go.
     *
@@ -79,7 +79,7 @@ public interface Line2DBasics extends Line2DReadOnly
    {
       setPoint(pointOnLine.getX(), pointOnLine.getY());
    }
-   
+
    /**
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
@@ -133,7 +133,7 @@ public interface Line2DBasics extends Line2DReadOnly
       {
          throw new RuntimeException("Tried to create a line from two coincidal points.");
       }
-      
+
       setPoint(firstPointOnLine);
       setDirection(secondPointOnLine.getX() - firstPointOnLine.getX(), secondPointOnLine.getY() - firstPointOnLine.getY());
    }

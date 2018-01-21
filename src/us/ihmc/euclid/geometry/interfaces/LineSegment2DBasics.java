@@ -14,7 +14,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly
    {
       set(other.getFirstEndpoint(), other.getSecondEndpoint());
    }
-   
+
    /**
     * Redefines this line segments with new endpoints.
     *

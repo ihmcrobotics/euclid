@@ -125,16 +125,18 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
       point.applyInverseTransform(transform);
       direction.applyInverseTransform(transform);
    }
-   
+
    /** {@inheritDoc} */
    @Override
-   public boolean hasPointBeenSet() {
+   public boolean hasPointBeenSet()
+   {
       return pointHasBeenSet;
    }
-   
+
    /** {@inheritDoc} */
    @Override
-   public boolean hasDirectionBeenSet() {
+   public boolean hasDirectionBeenSet()
+   {
       return directionHasBeenSet;
    }
 
@@ -252,7 +254,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
       {
          throw new RuntimeException("Line length must be greater than zero");
       }
-      
+
       directionHasBeenSet = true;
    }
 

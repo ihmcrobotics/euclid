@@ -27,16 +27,14 @@ public interface Line3DReadOnly
    Vector3DReadOnly getDirection();
 
    /**
-    * Whether or not this line's point has been initialized and not
-    * set to zero or NaN.
+    * Whether or not this line's point has been initialized and not set to zero or NaN.
     *
     * @return whether or not this line's direction is set.
     */
    boolean hasPointBeenSet();
 
    /**
-    * Whether or not this line's direction has been initialized and not
-    * set to zero or NaN.
+    * Whether or not this line's direction has been initialized and not set to zero or NaN.
     *
     * @return whether or not this line's direction is set.
     */
@@ -218,8 +216,8 @@ public interface Line3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -240,8 +238,8 @@ public interface Line3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     * <p>
@@ -415,8 +413,8 @@ public interface Line3DReadOnly
    default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
       checkHasBeenInitialized();
-      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(getPoint(), getDirection(), otherLine.getPoint(), otherLine.getDirection(), closestPointOnThisLineToPack,
-                                                                  closestPointOnOtherLineToPack);
+      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(getPoint(), getDirection(), otherLine.getPoint(), otherLine.getDirection(),
+                                                                  closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
    /**

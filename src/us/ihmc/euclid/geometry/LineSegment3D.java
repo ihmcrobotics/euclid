@@ -232,8 +232,8 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two line segments are
-    * geometrically similar.
+    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
+    * similar.
     * <p>
     * The comparison is based on comparing the line segments' endpoints. Two line segments are
     * considered geometrically equal even if they are defined with opposite direction.
@@ -242,7 +242,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
     * @param other the line segment to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
-    *            otherwise.
+    *         otherwise.
     */
    @Override
    public boolean geometricallyEquals(LineSegment3D other, double epsilon)

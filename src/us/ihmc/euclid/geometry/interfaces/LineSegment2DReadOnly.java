@@ -78,7 +78,7 @@ public interface LineSegment2DReadOnly
    {
       return new Point2D(getSecondEndpoint());
    }
-   
+
    /**
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
@@ -158,7 +158,7 @@ public interface LineSegment2DReadOnly
    {
       return getFirstEndpoint().containsNaN();
    }
-   
+
    /**
     * Test if the second endpoint of this line segment contains {@link Double#NaN}.
     *
@@ -506,7 +506,8 @@ public interface LineSegment2DReadOnly
     */
    default Point2D intersectionWith(LineSegment2DReadOnly other)
    {
-      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(), other.getSecondEndpoint());
+      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(),
+                                                                      other.getSecondEndpoint());
    }
 
    /**
@@ -529,8 +530,8 @@ public interface LineSegment2DReadOnly
     */
    default boolean intersectionWith(LineSegment2DReadOnly other, Point2DBasics intersectionToPack)
    {
-      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(), other.getSecondEndpoint(),
-                                                                      intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(),
+                                                                      other.getSecondEndpoint(), intersectionToPack);
    }
 
    /**

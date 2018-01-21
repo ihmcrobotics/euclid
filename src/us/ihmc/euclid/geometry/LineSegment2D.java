@@ -49,7 +49,7 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    {
       set(other);
    }
-   
+
    /**
     * Creates a new line segment 2D and initializes it to {@code other}.
     *

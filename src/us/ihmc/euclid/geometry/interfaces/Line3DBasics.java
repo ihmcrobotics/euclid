@@ -13,7 +13,7 @@ public interface Line3DBasics extends Line3DReadOnly
     * @param pointOnLineZ the new z-coordinate of the point on this line.
     */
    void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ);
-   
+
    /**
     * Changes the direction of this line by setting it to the normalized values provided.
     *
@@ -23,7 +23,7 @@ public interface Line3DBasics extends Line3DReadOnly
     * @throws RuntimeException if the new direction is unreasonably small.
     */
    void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ);
-   
+
    /**
     * Changes the direction of this line by setting it to the raw values provided.
     *
@@ -43,7 +43,7 @@ public interface Line3DBasics extends Line3DReadOnly
    {
       setPoint(pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ());
    }
-   
+
    /**
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
@@ -54,7 +54,7 @@ public interface Line3DBasics extends Line3DReadOnly
    {
       setDirection(lineDirection.getX(), lineDirection.getY(), lineDirection.getZ());
    }
-   
+
    default void set(Line3DReadOnly other)
    {
       setPoint(other.getPoint());
@@ -93,7 +93,7 @@ public interface Line3DBasics extends Line3DReadOnly
       {
          throw new RuntimeException("Tried to create a line from two coincidal points");
       }
-      
+
       setPoint(firstPointOnLine);
       setDirection(secondPointOnLine.getX() - firstPointOnLine.getX(), secondPointOnLine.getY() - firstPointOnLine.getY(),
                    secondPointOnLine.getZ() - firstPointOnLine.getZ());

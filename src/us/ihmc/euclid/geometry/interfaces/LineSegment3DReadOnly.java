@@ -163,7 +163,7 @@ public interface LineSegment3DReadOnly
    {
       return getSecondEndpoint().getZ();
    }
-   
+
    /**
     * Computes the line on which this line segment is lying. The line's vector is the direction from
     * the first to the second endpoint of this line segment.
@@ -188,7 +188,7 @@ public interface LineSegment3DReadOnly
    {
       return new Line3D(getFirstEndpoint(), getSecondEndpoint());
    }
-   
+
    /**
     * Test if the first endpoint of this line segment contains {@link Double#NaN}.
     *
@@ -544,7 +544,8 @@ public interface LineSegment3DReadOnly
     * <p>
     * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
     * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: </br><code>
+    * of the point can be computed from the {@code percentage} as follows: </br>
+    * <code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
     * </code>
@@ -575,7 +576,8 @@ public interface LineSegment3DReadOnly
     * <p>
     * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
     * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: </br><code>
+    * of the point can be computed from the {@code percentage} as follows: </br>
+    * <code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
     * </code>

@@ -13,7 +13,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
     * @param firstEndpointZ z-coordinate of the new first endpoint.
     */
    void setFirstEndpoint(double firstEndpointX, double firstEndpointY, double firstEndpointZ);
-   
+
    /**
     * Changes the second endpoint of this line segment.
     *
@@ -42,7 +42,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly
    {
       setSecondEndpoint(secondEndpoint.getX(), secondEndpoint.getY(), secondEndpoint.getZ());
    }
-   
+
    /**
     * Sets this line segment to be same as the given line segment.
     *
