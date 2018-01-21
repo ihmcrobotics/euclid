@@ -126,7 +126,13 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
       setIncludingFrame(other);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets this frame vector to {@code other}.
+    * 
+    * @param other the other frame vector to set this to. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
+    *            {@code this}.
+    */
    @Override
    public void set(FrameVector3D other)
    {

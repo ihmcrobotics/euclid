@@ -202,7 +202,13 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
       setIncludingFrame(other);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets this frame quaternion to {@code other}.
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
    @Override
    public void set(FrameQuaternion other)
    {
