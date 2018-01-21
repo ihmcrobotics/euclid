@@ -804,9 +804,12 @@ public class ConvexPolygon2DTest
 
       int otherEdgeVertexIndex = 0;
       boolean isClosestVertexPartOfClosestEdge = false;
+
+      Point2DReadOnly[] segmentVertices = {closestEdge.getFirstEndpoint(), closestEdge.getSecondEndpoint()}; 
+
       for (int i = 0; i < 2; i++)
       {
-         Point2DReadOnly segmentVertex = closestEdge.getEndpointsCopy()[i];
+         Point2DReadOnly segmentVertex = segmentVertices[i];
          if (arePointsAtExactlyEqualPosition(closestVertex, segmentVertex))
          {
             isClosestVertexPartOfClosestEdge = true;
@@ -843,7 +846,7 @@ public class ConvexPolygon2DTest
       for (int i = 0; i < 2; i++)
       {
          Point2DReadOnly neighbourPoint = neighbourPoints[i];
-         Point2DReadOnly closestEdgeVertexThatIsNotClosest = closestEdge.getEndpointsCopy()[otherEdgeVertexIndex];
+         Point2DReadOnly closestEdgeVertexThatIsNotClosest = segmentVertices[otherEdgeVertexIndex];
          if (arePointsAtExactlyEqualPosition(closestEdgeVertexThatIsNotClosest, neighbourPoint))
          {
             isClosestEdgeVertexThatIsNotClosestVertexNeighbourOfClosestVertex = true;
@@ -862,7 +865,7 @@ public class ConvexPolygon2DTest
       Line2D interiorBiSector = segmentLine.interiorBisector(otherLine);
 
       boolean isPointBehindLine = interiorBiSector.isPointBehindLine(point);
-      boolean isOtherEdgeVertexBehindLine = interiorBiSector.isPointBehindLine(closestEdge.getEndpointsCopy()[otherEdgeVertexIndex]);
+      boolean isOtherEdgeVertexBehindLine = interiorBiSector.isPointBehindLine(segmentVertices[otherEdgeVertexIndex]);
 
       // TODO this may fail, if the point is really close to the "true" biSecotor and the biSector float calc error moves it to the wrong side...
       // TODO edge cases unsolved...

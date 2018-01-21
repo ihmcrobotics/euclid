@@ -1,10 +1,66 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
-public interface LineSegment2DBasics extends LineSegment2DReadOnly
+public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, Transformable
 {
+   /**
+    * Gets the reference to the first endpoint of this line segment.
+    *
+    * @return the reference to the first endpoint of this line segment.
+    */
+   @Override
+   Point2DBasics getFirstEndpoint();
+
+   /**
+    * Gets the reference to the second endpoint of this line segment.
+    *
+    * @return the reference to the second endpoint of this line segment.
+    */
+   @Override
+   Point2DBasics getSecondEndpoint();
+
+   /**
+    * Tests if this line segment contains {@link Double#NaN}.
+    *
+    * @return {@code true} if {@link #firstEndpoint} and/or {@link #secondEndpoint} contains
+    *         {@link Double#NaN}, {@code false} otherwise.
+    */
+   @Override
+   default boolean containsNaN()
+   {
+      return getFirstEndpoint().containsNaN() || getSecondEndpoint().containsNaN();
+   }
+
+   /**
+    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method,
+    * this line segment becomes invalid. A new pair of valid endpoints will have to be set so this
+    * line segment is again usable.
+    */
+   @Override
+   default void setToNaN()
+   {
+      getFirstEndpoint().setToNaN();
+      getSecondEndpoint().setToNaN();
+   }
+
+   /**
+    * Sets both endpoints of this line segment to zero.
+    */
+   @Override
+   default void setToZero()
+   {
+      getFirstEndpoint().setToZero();
+      getSecondEndpoint().setToZero();
+   }
+
    /**
     * Sets this line segment to be same as the given line segment.
     *
@@ -35,7 +91,10 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly
     * @param firstEndpointX x-coordinate of the new first endpoint.
     * @param firstEndpointY y-coordinate of the new first endpoint.
     */
-   void setFirstEndpoint(double firstEndpointX, double firstEndpointY);
+   default void setFirstEndpoint(double firstEndpointX, double firstEndpointY)
+   {
+      getFirstEndpoint().set(firstEndpointX, firstEndpointY);
+   }
 
    /**
     * Changes the first endpoint of this line segment.
@@ -53,7 +112,10 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly
     * @param secondEndpointX x-coordinate of the new second endpoint.
     * @param secondEndpointY y-coordinate of the new second endpoint.
     */
-   void setSecondEndpoint(double secondEndpointX, double secondEndpointY);
+   default void setSecondEndpoint(double secondEndpointX, double secondEndpointY)
+   {
+      getSecondEndpoint().set(secondEndpointX, secondEndpointY);
+   }
 
    /**
     * Changes the second endpoint of this line segment.
@@ -78,17 +140,17 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly
    }
 
    /**
-    * Redefines this line segment with new endpoints.
+    * Redefines this line segment with a new first endpoint and a vector going from the first to the
+    * second endpoint.
     *
-    * @param endpoints a two-element array containing in order the first and second endpoints for
-    *           this line segment. Not modified.
-    * @throws IllegalArgumentException if the given array has a length different than 2.
+    * @param firstEndpoint new first endpoint. Not modified.
+    * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
+    *           modified.
     */
-   default void set(Point2DReadOnly[] endpoints)
+   default void set(Point2DReadOnly firstEndpoint, Vector2DReadOnly fromFirstToSecondEndpoint)
    {
-      if (endpoints.length != 2)
-         throw new RuntimeException("Length of input array is not correct. Length = " + endpoints.length + ", expected an array of two elements");
-      set(endpoints[0], endpoints[1]);
+      getFirstEndpoint().set(firstEndpoint);
+      getSecondEndpoint().add(firstEndpoint, fromFirstToSecondEndpoint);
    }
 
    /**
@@ -131,7 +193,26 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly
       setSecondEndpoint(x, y);
    }
 
-   void shift(boolean shiftToLeft, double distanceToShift);
+   default void shift(boolean shiftToLeft, double distanceToShift)
+   {
+      double vectorX = getSecondEndpointX() - getFirstEndpointX();
+      double vectorY = getSecondEndpointY() - getFirstEndpointY();
+
+      double length = length();
+      double orthogonalVectorX = -vectorY / length;
+      double orthogonalVectorY = vectorX / length;
+
+      if (!shiftToLeft)
+      {
+         orthogonalVectorX = -orthogonalVectorX;
+         orthogonalVectorY = -orthogonalVectorY;
+      }
+
+      orthogonalVectorX = distanceToShift * orthogonalVectorX;
+      orthogonalVectorY = distanceToShift * orthogonalVectorY;
+
+      translate(orthogonalVectorX, orthogonalVectorY);
+   }
 
    /**
     * Translates this line segment by {@code distanceToShift} along the vector perpendicular to this
@@ -159,5 +240,45 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly
    default void shiftToRight(double distanceToShift)
    {
       shift(false, distanceToShift);
+   }
+
+   /**
+    * Transforms this line segment using the given homogeneous transformation matrix.
+    *
+    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
+    */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      getFirstEndpoint().applyTransform(transform);
+      getSecondEndpoint().applyTransform(transform);
+   }
+
+   /**
+    * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
+    *
+    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
+    */
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      getFirstEndpoint().applyInverseTransform(transform);
+      getSecondEndpoint().applyInverseTransform(transform);
+   }
+
+   /**
+    * Transforms this line segment using the given homogeneous transformation matrix and project the
+    * result onto the XY-plane.
+    *
+    * @param transform the transform to apply on this line segment's endpoints. Not modified.
+    */
+   default void applyTransformAndProjectToXYPlane(Transform transform)
+   {
+      getFirstEndpoint().applyTransform(transform, false);
+      getSecondEndpoint().applyTransform(transform, false);
    }
 }

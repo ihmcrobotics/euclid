@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -8,10 +10,9 @@ import org.junit.Test;
 
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 public class FrameLineSegment2DTest extends FrameLineSegment2DReadOnlyTest<FrameLineSegment2D>
 {
@@ -26,11 +27,11 @@ public class FrameLineSegment2DTest extends FrameLineSegment2DReadOnlyTest<Frame
    {
       Random random = new Random(234235L);
 
-      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, quaternion) -> createFrameLineSegment(frame, (LineSegment2DReadOnly) quaternion);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> createRandomLineSegment(random).getGeometryObject();
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode")
-            && (!m.getReturnType().equals(Point2D[].class) && !(m.getParameterCount() > 0 && m.getParameterTypes()[0].equals(Point2D[].class)))
-            && (!m.getReturnType().equals(Point2DReadOnly[].class) && !(m.getParameterCount() > 0 && m.getParameterTypes()[0].equals(Point2DReadOnly[].class)));
+      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
+                                                                                                   quaternion) -> createFrameLineSegment(frame,
+                                                                                                                                         (LineSegment2DReadOnly) quaternion);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextLineSegment2D(random);
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }
 
@@ -39,10 +40,11 @@ public class FrameLineSegment2DTest extends FrameLineSegment2DReadOnlyTest<Frame
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set")
-            && !m.getName().equals("equals")
-            && !m.getName().equals("epsilonEquals")
-            && !m.getName().equals("geometricallyEquals");
+      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
+      framelessMethodsToIgnore.put("set", new Class<?>[] {LineSegment2D.class});
+      framelessMethodsToIgnore.put("equals", new Class<?>[] {LineSegment2D.class});
+      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {LineSegment2D.class, Double.TYPE});
+      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {LineSegment2D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLineSegment2D.class, LineSegment2D.class, true, 1, framelessMethodsToIgnore);
    }
 }

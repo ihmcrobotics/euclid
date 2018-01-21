@@ -35,7 +35,7 @@ public abstract class FrameLineSegment2DReadOnlyTest<T extends FrameLineSegment2
    public void testReferenceFrameChecks() throws Throwable
    {
       Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameLineSegment(random, frame), false, true,
                                                                                      methodFilter);
    }

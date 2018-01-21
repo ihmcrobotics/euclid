@@ -1,14 +1,12 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
  * Represents a finite-length 2D line segment defined by its two 2D endpoints.
@@ -72,52 +70,6 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Initializes this line segment to have the given endpoints.
-    *
-    * @param endpoints a two-element array containing in order the first and second endpoints for
-    *           this line segment. Not modified.
-    * @throws IllegalArgumentException if the given array has a length different than 2.
-    */
-   public LineSegment2D(Point2DReadOnly[] endpoints)
-   {
-      set(endpoints);
-   }
-
-   /**
-    * Tests if this line segment contains {@link Double#NaN}.
-    *
-    * @return {@code true} if {@link #firstEndpoint} and/or {@link #secondEndpoint} contains
-    *         {@link Double#NaN}, {@code false} otherwise.
-    */
-   @Override
-   public boolean containsNaN()
-   {
-      return getFirstEndpoint().containsNaN() || getSecondEndpoint().containsNaN();
-   }
-
-   /**
-    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method,
-    * this line segment becomes invalid. A new pair of valid endpoints will have to be set so this
-    * line segment is again usable.
-    */
-   @Override
-   public void setToNaN()
-   {
-      firstEndpoint.setToNaN();
-      secondEndpoint.setToNaN();
-   }
-
-   /**
-    * Sets both endpoints of this line segment to zero.
-    */
-   @Override
-   public void setToZero()
-   {
-      firstEndpoint.setToZero();
-      secondEndpoint.setToZero();
-   }
-
-   /**
     * Sets this line segment to be same as the given line segment.
     *
     * @param other the other line segment to copy. Not modified.
@@ -128,44 +80,18 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
       LineSegment2DBasics.super.set(other);
    }
 
-   /**
-    * Transforms this line segment using the given homogeneous transformation matrix.
-    *
-    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
-    */
+   /** {@inheritDoc} */
    @Override
-   public void applyTransform(Transform transform)
+   public Point2DBasics getFirstEndpoint()
    {
-      firstEndpoint.applyTransform(transform);
-      secondEndpoint.applyTransform(transform);
+      return firstEndpoint;
    }
 
-   /**
-    * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
-    *
-    * @param transform the transform to apply on the endpoints of this line segment. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
-    */
+   /** {@inheritDoc} */
    @Override
-   public void applyInverseTransform(Transform transform)
+   public Point2DBasics getSecondEndpoint()
    {
-      firstEndpoint.applyInverseTransform(transform);
-      secondEndpoint.applyInverseTransform(transform);
-   }
-
-   /**
-    * Transforms this line segment using the given homogeneous transformation matrix and project the
-    * result onto the XY-plane.
-    *
-    * @param transform the transform to apply on this line segment's endpoints. Not modified.
-    */
-   public void applyTransformAndProjectToXYPlane(Transform transform)
-   {
-      firstEndpoint.applyTransform(transform, false);
-      secondEndpoint.applyTransform(transform, false);
+      return secondEndpoint;
    }
 
    /**
@@ -179,91 +105,7 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    @Override
    public boolean epsilonEquals(LineSegment2D other, double epsilon)
    {
-      return firstEndpoint.epsilonEquals(other.firstEndpoint, epsilon) && secondEndpoint.epsilonEquals(other.secondEndpoint, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
-    *
-    * @param other the other line segment 2D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   public boolean equals(LineSegment2D other)
-   {
-      if (other == null)
-         return false;
-      else
-         return firstEndpoint.equals(other.firstEndpoint) && secondEndpoint.equals(other.secondEndpoint);
-   }
-
-   /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(LineSegment2D)}, it returns {@code false} otherwise.
-    *
-    * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean equals(Object obj)
-   {
-      try
-      {
-         return equals((LineSegment2D) obj);
-      }
-      catch (ClassCastException e)
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Redefines this line segment with a new first endpoint and a vector going from the first to the
-    * second endpoint.
-    *
-    * @param firstEndpoint new first endpoint. Not modified.
-    * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
-    *           modified.
-    */
-   public void set(Point2DReadOnly firstEndpoint, Vector2DReadOnly fromFirstToSecondEndpoint)
-   {
-      this.firstEndpoint.set(firstEndpoint);
-      secondEndpoint.add(firstEndpoint, fromFirstToSecondEndpoint);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void shift(boolean shiftToLeft, double distanceToShift)
-   {
-      double vectorX = secondEndpoint.getX() - firstEndpoint.getX();
-      double vectorY = secondEndpoint.getY() - firstEndpoint.getY();
-
-      double length = length();
-      double orthogonalVectorX = -vectorY / length;
-      double orthogonalVectorY = vectorX / length;
-
-      if (!shiftToLeft)
-      {
-         orthogonalVectorX = -orthogonalVectorX;
-         orthogonalVectorY = -orthogonalVectorY;
-      }
-
-      orthogonalVectorX = distanceToShift * orthogonalVectorX;
-      orthogonalVectorY = distanceToShift * orthogonalVectorY;
-
-      translate(orthogonalVectorX, orthogonalVectorY);
-   }
-
-   /**
-    * Provides a {@code String} representation of this line segment 2D as follows:<br>
-    * Line segment 2D: 1st endpoint = (x, y), 2nd endpoint = (x, y)
-    *
-    * @return the {@code String} representing this line segment 2D.
-    */
-   @Override
-   public String toString()
-   {
-      return EuclidGeometryIOTools.getLineSegment2DString(this);
+      return LineSegment2DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -282,36 +124,51 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    @Override
    public boolean geometricallyEquals(LineSegment2D other, double epsilon)
    {
-      if (firstEndpoint.geometricallyEquals(other.firstEndpoint, epsilon) && secondEndpoint.geometricallyEquals(other.secondEndpoint, epsilon))
-         return true;
-      if (firstEndpoint.geometricallyEquals(other.secondEndpoint, epsilon) && secondEndpoint.geometricallyEquals(other.firstEndpoint, epsilon))
-         return true;
-      return false;
+      return LineSegment2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(LineSegment2DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
    @Override
-   public Point2DReadOnly getFirstEndpoint()
+   public boolean equals(Object obj)
    {
-      return firstEndpoint;
+      try
+      {
+         return equals((LineSegment2DReadOnly) obj);
+      }
+      catch (ClassCastException e)
+      {
+         return false;
+      }
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Provides a {@code String} representation of this line segment 2D as follows:<br>
+    * Line segment 2D: 1st endpoint = (x, y), 2nd endpoint = (x, y)
+    *
+    * @return the {@code String} representing this line segment 2D.
+    */
    @Override
-   public Point2DReadOnly getSecondEndpoint()
+   public String toString()
    {
-      return secondEndpoint;
+      return EuclidGeometryIOTools.getLineSegment2DString(this);
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of each component of this line segment
+    * 2D.
+    *
+    * @return the hash code value for this line segment 2D.
+    */
    @Override
-   public void setFirstEndpoint(double firstEndpointX, double firstEndpointY)
+   public int hashCode()
    {
-      firstEndpoint.set(firstEndpointX, firstEndpointY);
-   }
-
-   @Override
-   public void setSecondEndpoint(double secondEndpointX, double secondEndpointY)
-   {
-      secondEndpoint.set(secondEndpointX, secondEndpointY);
+      long bits = 31L * firstEndpoint.hashCode() + secondEndpoint.hashCode();
+      return (int) (bits ^ bits >> 32);
    }
 }

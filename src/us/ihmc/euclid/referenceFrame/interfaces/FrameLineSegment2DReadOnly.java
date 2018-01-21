@@ -1,13 +1,11 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
-import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
-import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -30,29 +28,20 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    FramePoint2DReadOnly getSecondEndpoint();
 
    /**
-    * Gets the first endpoint defining this line segment by storing its coordinates in the given
-    * argument {@code firstEndpointToPack}.
+    * Gets the endpoints defining this line segment by storing their coordinates in the given
+    * arguments.
     *
     * @param firstEndpointToPack point in which the coordinates of this line segment's first
     *           endpoint are stored. Modified.
-    */
-   default void getFirstEndpoint(FramePoint2D firstEndpointToPack)
-   {
-      firstEndpointToPack.setToZero(getReferenceFrame());
-      LineSegment2DReadOnly.super.getFirstEndpoint(firstEndpointToPack);
-   }
-
-   /**
-    * Gets the second endpoint defining this line segment by storing its coordinates in the given
-    * argument {@code secondEndpointToPack}.
-    *
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpointToPack} are
+    *            not expressed in the same reference frame.
     */
-   default void getSecondEndpoint(FramePoint2D secondEndpointToPack)
+   default void get(FixedFramePoint2DBasics firstEndpointToPack, Point2DBasics secondEndpointToPack)
    {
-      secondEndpointToPack.setToZero(getReferenceFrame());
-      LineSegment2DReadOnly.super.getSecondEndpoint(secondEndpointToPack);
+      checkReferenceFrameMatch(firstEndpointToPack);
+      LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
    }
 
    /**
@@ -64,10 +53,27 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
     */
-   default void getEndpoints(FramePoint2D firstEndpointToPack, Point2DBasics secondEndpointToPack)
+   default void get(FramePoint2DBasics firstEndpointToPack, Point2DBasics secondEndpointToPack)
    {
-      firstEndpointToPack.setToZero(getReferenceFrame());
-      LineSegment2DReadOnly.super.getEndpoints(firstEndpointToPack, secondEndpointToPack);
+      firstEndpointToPack.setReferenceFrame(getReferenceFrame());
+      LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
+   }
+
+   /**
+    * Gets the endpoints defining this line segment by storing their coordinates in the given
+    * arguments.
+    *
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first
+    *           endpoint are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second
+    *           endpoint are stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpointToPack} are
+    *            not expressed in the same reference frame.
+    */
+   default void get(Point2DBasics firstEndpointToPack, FixedFramePoint2DBasics secondEndpointToPack)
+   {
+      checkReferenceFrameMatch(secondEndpointToPack);
+      LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
    }
 
    /**
@@ -79,10 +85,28 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
     */
-   default void getEndpoints(Point2DBasics firstEndpointToPack, FramePoint2D secondEndpointToPack)
+   default void get(Point2DBasics firstEndpointToPack, FramePoint2DBasics secondEndpointToPack)
    {
-      secondEndpointToPack.setToZero(getReferenceFrame());
-      LineSegment2DReadOnly.super.getEndpoints(firstEndpointToPack, secondEndpointToPack);
+      secondEndpointToPack.setReferenceFrame(getReferenceFrame());
+      LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
+   }
+
+   /**
+    * Gets the endpoints defining this line segment by storing their coordinates in the given
+    * arguments.
+    *
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first
+    *           endpoint are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second
+    *           endpoint are stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code firstEndpointToPack} and
+    *            {@code secondEndpointToPack} are not expressed in the same reference frame.
+    */
+   default void get(FixedFramePoint2DBasics firstEndpointToPack, FixedFramePoint2DBasics secondEndpointToPack)
+   {
+      checkReferenceFrameMatch(firstEndpointToPack);
+      checkReferenceFrameMatch(secondEndpointToPack);
+      LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
    }
 
    /**
@@ -94,21 +118,34 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
     */
-   default void getEndpoints(FramePoint2D firstEndpointToPack, FramePoint2D secondEndpointToPack)
+   default void get(FramePoint2DBasics firstEndpointToPack, FramePoint2DBasics secondEndpointToPack)
    {
-      firstEndpointToPack.setToZero(getReferenceFrame());
-      secondEndpointToPack.setToZero(getReferenceFrame());
-      LineSegment2DReadOnly.super.getEndpoints(firstEndpointToPack, secondEndpointToPack);
+      firstEndpointToPack.setReferenceFrame(getReferenceFrame());
+      secondEndpointToPack.setReferenceFrame(getReferenceFrame());
+      LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
    }
-   
+
+   /**
+    * Computes the coordinates of the point located exactly at the middle of this line segment.
+    *
+    * @param midpointToPack point in which the mid-point of this line segment is stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code midpointToPack} are not
+    *            expressed in the same reference frame.
+    */
+   default void midpoint(FixedFramePoint2DBasics midpointToPack)
+   {
+      checkReferenceFrameMatch(midpointToPack);
+      LineSegment2DReadOnly.super.midpoint(midpointToPack);
+   }
+
    /**
     * Computes the coordinates of the point located exactly at the middle of this line segment.
     *
     * @param midpointToPack point in which the mid-point of this line segment is stored. Modified.
     */
-   default void midpoint(FramePoint2D midpointToPack)
+   default void midpoint(FramePoint2DBasics midpointToPack)
    {
-      midpointToPack.setToZero(getReferenceFrame());
+      midpointToPack.setReferenceFrame(getReferenceFrame());
       LineSegment2DReadOnly.super.midpoint(midpointToPack);
    }
 
@@ -121,8 +158,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is located on this line segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default boolean isPointOnLineSegment(FramePoint2DReadOnly point)
    {
@@ -140,15 +177,15 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param point the coordinates of the query. Not modified.
     * @param epsilon the tolerance used for this test.
     * @return {@code true} if the point is located on this line segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default boolean isPointOnLineSegment(FramePoint2DReadOnly point, double epsilon)
    {
       checkReferenceFrameMatch(point);
       return LineSegment2DReadOnly.super.isPointOnLineSegment(point, epsilon);
    }
-   
+
    /**
     * Tests whether the projection of the given point onto this line segment is located between the
     * two endpoints with a given conservative tolerance {@code epsilon}:
@@ -165,8 +202,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param epsilon the tolerance to use.
     * @return {@code true} if the projection of the point is between the endpoints of this line
     *         segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default boolean isBetweenEndpoints(FramePoint2DReadOnly point, double epsilon)
    {
@@ -181,14 +218,14 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param point the query. Not modified.
     * @return {@code true} if the projection of the point is between the endpoints of this line
     *         segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default boolean isBetweenEndpoints(FramePoint2DReadOnly point)
    {
       return isBetweenEndpoints(point, 0);
    }
-   
+
    /**
     * Returns a boolean value, stating whether a 2D point is on the left or right side of this line
     * segment. The idea of "side" is determined based on the direction of the line segment.
@@ -205,8 +242,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param point the coordinates of the query point.
     * @return {@code true} if the point is on the left side of this line segment, {@code false} if
     *         the point is on the right side or exactly on this line segment.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default boolean isPointOnLeftSideOfLineSegment(FramePoint2DReadOnly point)
    {
@@ -219,10 +256,24 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param normalize whether the direction vector is to be normalized.
     * @param directionToPack vector in which the direction is stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpointToPack} are
+    *            not expressed in the same reference frame.
     */
-   default void direction(boolean normalize, FrameVector2D directionToPack)
+   default void direction(boolean normalize, FixedFrameVector2DBasics directionToPack)
    {
-      directionToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(directionToPack);
+      LineSegment2DReadOnly.super.direction(normalize, directionToPack);
+   }
+
+   /**
+    * Computes the vector going from the first to the second endpoint of this line segment.
+    *
+    * @param normalize whether the direction vector is to be normalized.
+    * @param directionToPack vector in which the direction is stored. Modified.
+    */
+   default void direction(boolean normalize, FrameVector2DBasics directionToPack)
+   {
+      directionToPack.setReferenceFrame(getReferenceFrame());
       LineSegment2DReadOnly.super.direction(normalize, directionToPack);
    }
 
@@ -238,8 +289,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param point 3D point to compute the distance from this line segment. Not modified.
     * @return the minimum distance between the 2D point and this 2D line segment.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default double distance(FramePoint2DReadOnly point)
    {
@@ -259,8 +310,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param point 3D point to compute the distance from this line segment. Not modified.
     * @return the minimum distance between the 2D point and this 2D line segment.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default double distanceSquared(FramePoint2DReadOnly point)
    {
@@ -284,8 +335,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param point the coordinates of the query point.
     * @return {@code true} if the point is on the right side of this line segment, {@code false} if
     *         the point is on the left side or exactly on this line segment.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default boolean isPointOnRightSideOfLineSegment(FramePoint2DReadOnly point)
    {
@@ -318,8 +369,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param point the query point. Not modified.
     * @return the computed percentage along the line segment representing where the point projection
     *         is located.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
+    *            the same reference frame.
     */
    default double percentageAlongLineSegment(FramePoint2DReadOnly point)
    {
@@ -335,15 +386,15 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param other the other line segment used to compute the dot product. Not modified.
     * @return the value of the dot product.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
     */
    default double dotProduct(FrameLineSegment2DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       return LineSegment2DReadOnly.super.dotProduct(other);
    }
-   
+
    /**
     * Computes the orthogonal projection of a 2D point on this 2D line segment.
     * <p>
@@ -360,10 +411,12 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param pointToProject the point to project on this line segment. Modified.
     * @return whether the method succeeded or not.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
+    *            expressed in the same reference frame.
     */
-   default boolean orthogonalProjection(FramePoint2D pointToProject)
+   default boolean orthogonalProjection(FixedFramePoint2DBasics pointToProject)
    {
-      return orthogonalProjection(new FramePoint2D(pointToProject), pointToProject);
+      return orthogonalProjection(pointToProject, pointToProject);
    }
 
    /**
@@ -384,8 +437,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param projectionToPack point in which the projection of the point onto this line segment is
     *           stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
+    *            expressed in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, Point2DBasics projectionToPack)
    {
@@ -411,12 +464,12 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param projectionToPack point in which the projection of the point onto this line segment is
     *           stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code projectionToPack} are not
+    *            expressed in the same reference frame.
     */
-   default boolean orthogonalProjection(Point2DReadOnly pointToProject, FramePoint2D projectionToPack)
+   default boolean orthogonalProjection(Point2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
    {
-      projectionToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(projectionToPack);
       return LineSegment2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -438,13 +491,66 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param projectionToPack point in which the projection of the point onto this line segment is
     *           stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
-    *          in the same reference frame.
     */
-   default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FramePoint2D projectionToPack)
+   default boolean orthogonalProjection(Point2DReadOnly pointToProject, FramePoint2DBasics projectionToPack)
+   {
+      projectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of a 2D point on this 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of this line segment is too small, i.e.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
+    * {@code firstEndpoint}.
+    * <li>the projection can not be outside the line segment. When the projection on the
+    * corresponding line is outside the line segment, the result is the closest of the two
+    * endpoints.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param projectionToPack point in which the projection of the point onto this line segment is
+    *           stored. Modified.
+    * @return whether the method succeeded or not.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code pointToProject}, and
+    *            {@code projectionToPack} are not expressed in the same reference frame.
+    */
+   default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
    {
       checkReferenceFrameMatch(pointToProject);
-      projectionToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(projectionToPack);
+      return LineSegment2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
+   }
+
+   /**
+    * Computes the orthogonal projection of a 2D point on this 2D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of this line segment is too small, i.e.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
+    * {@code firstEndpoint}.
+    * <li>the projection can not be outside the line segment. When the projection on the
+    * corresponding line is outside the line segment, the result is the closest of the two
+    * endpoints.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param projectionToPack point in which the projection of the point onto this line segment is
+    *           stored. Modified.
+    * @return whether the method succeeded or not.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
+    *            expressed in the same reference frame.
+    */
+   default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FramePoint2DBasics projectionToPack)
+   {
+      checkReferenceFrameMatch(pointToProject);
+      projectionToPack.setReferenceFrame(getReferenceFrame());
       return LineSegment2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -465,8 +571,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto this line segment or {@code null} if the method
     *         failed.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
+    *            expressed in the same reference frame.
     */
    default FramePoint2D orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
    {
@@ -492,10 +598,12 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code intersectionToPack} are not
+    *            expressed in the same reference frame.
     */
-   default boolean intersectionWith(Line2D line, FramePoint2D intersectionToPack)
+   default boolean intersectionWith(Line2DReadOnly line, FixedFramePoint2DBasics intersectionToPack)
    {
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      checkReferenceFrameMatch(intersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
    }
 
@@ -517,6 +625,33 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    */
+   default boolean intersectionWith(Line2DReadOnly line, FramePoint2DBasics intersectionToPack)
+   {
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line segment and the given line
+    * and stores the result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line segment and the line are parallel but not collinear, they do not intersect.
+    * <li>When this line segment and the line are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When the line intersects this line segment at one of its endpoints, this method returns
+    * {@code true} and the endpoint is the intersection.
+    * </ul>
+    * </p>
+    *
+    * @param line the line that may intersect this line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *           Modified.
+    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code intersectionToPack} are not
+    *            expressed in the same reference frame.
     */
    default boolean intersectionWith(FrameLine2DReadOnly line, Point2DBasics intersectionToPack)
    {
@@ -542,10 +677,13 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code line}, and
+    *            {@code intersectionToPack} are not expressed in the same reference frame.
     */
-   default boolean intersectionWith(Line2DReadOnly line, FramePoint2D intersectionToPack)
+   default boolean intersectionWith(FrameLine2DReadOnly line, FixedFramePoint2DBasics intersectionToPack)
    {
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      checkReferenceFrameMatch(line);
+      checkReferenceFrameMatch(intersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
    }
 
@@ -567,11 +705,13 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code line} are not expressed in
+    *            the same reference frame.
     */
-   default boolean intersectionWith(FrameLine2DReadOnly line, FramePoint2D intersectionToPack)
+   default boolean intersectionWith(FrameLine2DReadOnly line, FramePoint2DBasics intersectionToPack)
    {
       checkReferenceFrameMatch(line);
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
       return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
    }
 
@@ -596,11 +736,32 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @return the coordinates of the intersection if the line intersects this line segment,
     *         {@code null} otherwise.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code line} are not expressed in
+    *            the same reference frame.
     */
-   default Point2D intersectionWith(FrameLine2DReadOnly line)
+   default FramePoint2D intersectionWith(FrameLine2DReadOnly line)
    {
       checkReferenceFrameMatch(line);
-      return LineSegment2DReadOnly.super.intersectionWith(line);
+      Point2D intersection = LineSegment2DReadOnly.super.intersectionWith(line);
+      if (intersection == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), intersection);
+   }
+
+   /**
+    * Computes the vector perpendicular to the direction of this line segment.
+    *
+    * @param normalize whether the perpendicular vector is to be normalized.
+    * @param perpendicularVectorToPack vector in which the perpendicular vector components are
+    *           stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code perpendicularVectorToPack}
+    *            are not expressed in the same reference frame.
+    */
+   default void perpendicular(boolean normalize, FixedFrameVector2DBasics perpendicularVectorToPack)
+   {
+      checkReferenceFrameMatch(perpendicularVectorToPack);
+      LineSegment2DReadOnly.super.perpendicular(normalize, perpendicularVectorToPack);
    }
 
    /**
@@ -610,12 +771,12 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param perpendicularVectorToPack vector in which the perpendicular vector components are
     *           stored. Modified.
     */
-   default void perpendicular(boolean normalize, FrameVector2D perpendicularVectorToPack)
+   default void perpendicular(boolean normalize, FrameVector2DBasics perpendicularVectorToPack)
    {
-      perpendicularVectorToPack.setIncludingFrame(getReferenceFrame(), perpendicularVectorToPack);
+      perpendicularVectorToPack.setReferenceFrame(getReferenceFrame());
       LineSegment2DReadOnly.super.perpendicular(normalize, perpendicularVectorToPack);
    }
-   
+
    /**
     * Computes the intersection between this line segment and the given line segment and returns the
     * result.
@@ -636,13 +797,17 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param other the other line segment that may intersect this line segment. Not modified.
     * @return the intersection point if it exists, {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
     */
-   default Point2D intersectionWith(FrameLineSegment2DReadOnly other)
+   default FramePoint2D intersectionWith(FrameLineSegment2DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      return LineSegment2DReadOnly.super.intersectionWith(other);
+      Point2D intersection = LineSegment2DReadOnly.super.intersectionWith(other);
+      if (intersection == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), intersection);
    }
 
    /**
@@ -662,8 +827,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param other the other line segment that may intersect this line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
     */
    default boolean intersectionWith(FrameLineSegment2DReadOnly other, Point2DBasics intersectionToPack)
    {
@@ -688,12 +853,12 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param other the other line segment that may intersect this line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code other}, and
+    *            {@code intersectionToPack} are not expressed in the same reference frame.
     */
-   default boolean intersectionWith(LineSegment2DReadOnly other, FramePoint2D intersectionToPack)
+   default boolean intersectionWith(LineSegment2DReadOnly other, FixedFramePoint2DBasics intersectionToPack)
    {
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      checkReferenceFrameMatch(intersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(other, intersectionToPack);
    }
 
@@ -714,13 +879,66 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param other the other line segment that may intersect this line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed
-    *          in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
     */
-   default boolean intersectionWith(FrameLineSegment2DReadOnly other, FramePoint2D intersectionToPack)
+   default boolean intersectionWith(LineSegment2DReadOnly other, FramePoint2DBasics intersectionToPack)
+   {
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.intersectionWith(other, intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between this line segment and the given line segment and stores the
+    * result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the two line segments are parallel but not collinear, the two line segments do not
+    * intersect.
+    * <li>When the two line segments are collinear, this methods returns {@code true} only if the
+    * two line segments overlap or have at least one common endpoint.
+    * <li>When the two line segments have a common endpoint, this method returns true.
+    * </ul>
+    * </p>
+    *
+    * @param other the other line segment that may intersect this line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @return {@code true} if the two lines intersects, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code other}, and
+    *            {@code intersectionToPack} are not expressed in the same reference frame.
+    */
+   default boolean intersectionWith(FrameLineSegment2DReadOnly other, FixedFramePoint2DBasics intersectionToPack)
    {
       checkReferenceFrameMatch(other);
-      intersectionToPack.setIncludingFrame(getReferenceFrame(), intersectionToPack);
+      checkReferenceFrameMatch(intersectionToPack);
+      return LineSegment2DReadOnly.super.intersectionWith(other, intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between this line segment and the given line segment and stores the
+    * result in {@code intersectionToPack}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When the two line segments are parallel but not collinear, the two line segments do not
+    * intersect.
+    * <li>When the two line segments are collinear, this methods returns {@code true} only if the
+    * two line segments overlap or have at least one common endpoint.
+    * <li>When the two line segments have a common endpoint, this method returns true.
+    * </ul>
+    * </p>
+    *
+    * @param other the other line segment that may intersect this line segment. Not modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @return {@code true} if the two lines intersects, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
+    */
+   default boolean intersectionWith(FrameLineSegment2DReadOnly other, FramePoint2DBasics intersectionToPack)
+   {
+      checkReferenceFrameMatch(other);
+      intersectionToPack.setReferenceFrame(getReferenceFrame());
       return LineSegment2DReadOnly.super.intersectionWith(other, intersectionToPack);
    }
 
@@ -731,10 +949,26 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
+    *            expressed in the same reference frame.
     */
-   default void pointBetweenEndpointsGivenPercentage(double percentage, FramePoint2D pointToPack)
+   default void pointBetweenEndpointsGivenPercentage(double percentage, FixedFramePoint2DBasics pointToPack)
    {
-      pointToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(pointToPack);
+      LineSegment2DReadOnly.super.pointBetweenEndpointsGivenPercentage(percentage, pointToPack);
+   }
+
+   /**
+    * Computes the coordinates of the point located at a given percentage on this line segment: <br>
+    * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
+    *
+    * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
+    * @param pointToPack where the result is stored. Modified.
+    * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
+    */
+   default void pointBetweenEndpointsGivenPercentage(double percentage, FramePoint2DBasics pointToPack)
+   {
+      pointToPack.setReferenceFrame(getReferenceFrame());
       LineSegment2DReadOnly.super.pointBetweenEndpointsGivenPercentage(percentage, pointToPack);
    }
 
@@ -770,10 +1004,12 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *           be {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstIntersectionToPack}
+    *            are not expressed in the same reference frame.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2D firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
-      firstIntersectionToPack.setIncludingFrame(getReferenceFrame(), firstIntersectionToPack);
+      checkReferenceFrameMatch(firstIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -810,9 +1046,50 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @return the number of intersections between this line segment and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
-      secondIntersectionToPack.setIncludingFrame(getReferenceFrame(), secondIntersectionToPack);
+      firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If this line segment is collinear to an edge:
+    * <ul>
+    * <li>The edge entirely contains this line segment: this method finds two intersections which
+    * are the endpoints of this line segment.
+    * <li>This line segment entirely contains the edge: this method finds two intersections which
+    * are the vertices of the edge.
+    * <li>The edge and this line segment partially overlap: this method finds two intersections
+    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
+    * on the polygon's edge.
+    * </ul>
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondIntersectionToPack}
+    *            are not expressed in the same reference frame.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(secondIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -849,10 +1126,92 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @return the number of intersections between this line segment and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2D firstIntersectionToPack, FramePoint2D secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
    {
-      firstIntersectionToPack.setIncludingFrame(getReferenceFrame(), firstIntersectionToPack);
-      secondIntersectionToPack.setIncludingFrame(getReferenceFrame(), secondIntersectionToPack);
+      secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If this line segment is collinear to an edge:
+    * <ul>
+    * <li>The edge entirely contains this line segment: this method finds two intersections which
+    * are the endpoints of this line segment.
+    * <li>This line segment entirely contains the edge: this method finds two intersections which
+    * are the vertices of the edge.
+    * <li>The edge and this line segment partially overlap: this method finds two intersections
+    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
+    * on the polygon's edge.
+    * </ul>
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code firstIntersectionToPack}, and
+    *            {@code secondIntersectionToPack} are not expressed in the same reference frame.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+                                FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(secondIntersectionToPack);
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
+    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
+    * arguments remain unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If this line segment is collinear to an edge:
+    * <ul>
+    * <li>The edge entirely contains this line segment: this method finds two intersections which
+    * are the endpoints of this line segment.
+    * <li>This line segment entirely contains the edge: this method finds two intersections which
+    * are the vertices of the edge.
+    * <li>The edge and this line segment partially overlap: this method finds two intersections
+    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
+    * on the polygon's edge.
+    * </ul>
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    */
+   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   {
+      firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -862,10 +1221,82 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param percentage the percentage along this line segment of the point.
     * @param pointToPack where the result is stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
+    *            expressed in the same reference frame.
     */
-   default void pointOnLineGivenPercentage(double percentage, FramePoint2D pointToPack)
+   default void pointOnLineGivenPercentage(double percentage, FixedFramePoint2DBasics pointToPack)
    {
-      pointToPack.setToZero(getReferenceFrame());
+      checkReferenceFrameMatch(pointToPack);
       LineSegment2DReadOnly.super.pointOnLineGivenPercentage(percentage, pointToPack);
+   }
+
+   /**
+    * Computes the coordinates of the point located on the line this line segment is lying on: <br>
+    * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
+    *
+    * @param percentage the percentage along this line segment of the point.
+    * @param pointToPack where the result is stored. Modified.
+    */
+   default void pointOnLineGivenPercentage(double percentage, FramePoint2DBasics pointToPack)
+   {
+      pointToPack.setReferenceFrame(getReferenceFrame());
+      LineSegment2DReadOnly.super.pointOnLineGivenPercentage(percentage, pointToPack);
+   }
+
+   /**
+    * Tests on a per-component basis on both endpoints if this line segment is equal to
+    * {@code other} with the tolerance {@code epsilon}.
+    * <p>
+    * If the two line segments have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two line segments are equal and are expressed in the same
+    *         reference frame, {@code false} otherwise.
+    */
+   default boolean epsilonEquals(FrameLineSegment2DReadOnly other, double epsilon)
+   {
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      return LineSegment2DReadOnly.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
+    * similar.
+    * <p>
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
+    * or opposite direction.
+    * </p>
+    *
+    * @param other the line to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *            the same reference frame.
+    */
+   default boolean geometricallyEquals(FrameLineSegment2DReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+      return LineSegment2DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
+    * <p>
+    * If the two line segments have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other the other line segment 2D to compare against this. Not modified.
+    * @return {@code true} if the two line segments are exactly equal component-wise and are
+    *         expressed in the same reference frame, {@code false} otherwise.
+    */
+   default boolean equals(FrameLineSegment2DReadOnly other)
+   {
+      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      else
+         return LineSegment2DReadOnly.super.equals(other);
    }
 }

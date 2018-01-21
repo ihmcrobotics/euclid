@@ -66,35 +66,10 @@ public class LineSegment2DTest
          if (x1 != x2 || y1 != y2)
          {
             LineSegment2D test = new LineSegment2D(x1, y1, x2, y2);
-            assertEquals(test.getFirstEndpointCopy().getX(), x1, 0.001);
-            assertEquals(test.getFirstEndpointCopy().getY(), y1, 0.001);
-            assertEquals(test.getSecondEndpointCopy().getX(), x2, 0.001);
-            assertEquals(test.getSecondEndpointCopy().getY(), y2, 0.001);
-         }
-      }
-   }
-
-   @Test
-   public void testLineSegment2dPoint2dArray()
-   {
-      Random random = new Random(32423);
-
-      // WORKING CASES
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         double x1 = random.nextDouble() * 500 - 250;
-         double y1 = random.nextDouble() * 500 - 250;
-         double x2 = random.nextDouble() * 500 - 250;
-         double y2 = random.nextDouble() * 500 - 250;
-
-         if (x1 != x2 || y1 != y2)
-         {
-            Point2D[] points = new Point2D[2];
-            points[0] = new Point2D(x1, y1);
-            points[1] = new Point2D(x2, y2);
-            LineSegment2D test = new LineSegment2D(points);
-            assertEquals(test.getFirstEndpointCopy(), points[0]);
-            assertEquals(test.getSecondEndpointCopy(), points[1]);
+            assertEquals(test.getFirstEndpoint().getX(), x1, 0.001);
+            assertEquals(test.getFirstEndpoint().getY(), y1, 0.001);
+            assertEquals(test.getSecondEndpoint().getX(), x2, 0.001);
+            assertEquals(test.getSecondEndpoint().getY(), y2, 0.001);
          }
       }
    }
@@ -117,8 +92,8 @@ public class LineSegment2DTest
             points[0] = new Point2D(x1, y1);
             points[1] = new Point2D(x2, y2);
             LineSegment2D test = new LineSegment2D(points[0], points[1]);
-            assertEquals(test.getFirstEndpointCopy(), points[0]);
-            assertEquals(test.getSecondEndpointCopy(), points[1]);
+            assertEquals(test.getFirstEndpoint(), points[0]);
+            assertEquals(test.getSecondEndpoint(), points[1]);
          }
       }
    }
@@ -142,71 +117,10 @@ public class LineSegment2DTest
             points[1] = new Point2D(x2, y2);
             LineSegment2D test = new LineSegment2D(points[0], points[1]);
             LineSegment2D test2 = new LineSegment2D(test);
-            assertEquals(test.getFirstEndpointCopy(), test2.getFirstEndpointCopy());
-            assertEquals(test.getSecondEndpointCopy(), test2.getSecondEndpointCopy());
+            assertEquals(test.getFirstEndpoint(), test2.getFirstEndpoint());
+            assertEquals(test.getSecondEndpoint(), test2.getSecondEndpoint());
          }
       }
-
-   }
-
-   @Test
-   public void testGetEndpointsCopy()
-   {
-      Random random = new Random(3453);
-      Point2D segment1Point1 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-      Point2D segment1Point2 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-      LineSegment2D testSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
-
-      Point2D[] pointsCopy = testSegment1.getEndpointsCopy();
-      assertEquals(pointsCopy[0], testSegment1.getFirstEndpointCopy());
-      assertEquals(pointsCopy[1], testSegment1.getSecondEndpointCopy());
-      assertEquals(pointsCopy[0], segment1Point1);
-      assertEquals(pointsCopy[1], segment1Point2);
-
-      // make sure that chaning the copy does not change the origional
-      pointsCopy[0].set(pointsCopy[0].getX() - 10.0, pointsCopy[0].getY() - 10.0);
-      pointsCopy[1].set(pointsCopy[1].getX() - 10.0, pointsCopy[1].getY() - 10.0);
-
-      assertFalse(pointsCopy[0].equals(testSegment1.getFirstEndpointCopy()));
-      assertFalse(pointsCopy[1].equals(testSegment1.getSecondEndpointCopy()));
-      assertFalse(pointsCopy[0].equals(segment1Point1));
-      assertFalse(pointsCopy[1].equals(segment1Point2));
-
-   }
-
-   @Test
-   public void testGetFirstEndPointCopy()
-   {
-      Random random = new Random(3453);
-      Point2D segment1Point1 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-      Point2D segment1Point2 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-      LineSegment2D testSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
-
-      Point2D pointCopy = testSegment1.getFirstEndpointCopy();
-      assertEquals(pointCopy, segment1Point1);
-
-      // make sure that chaning the copy does not change the origional
-      pointCopy.set(pointCopy.getX() - 10.0, pointCopy.getY() - 10.0);
-
-      assertFalse(pointCopy.equals(segment1Point1));
-
-   }
-
-   @Test
-   public void testGetSecondEndPointCopy()
-   {
-      Random random = new Random(3453);
-      Point2D segment1Point1 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-      Point2D segment1Point2 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
-      LineSegment2D testSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
-
-      Point2D pointCopy = testSegment1.getSecondEndpointCopy();
-      assertEquals(pointCopy, segment1Point2);
-
-      // make sure that chaning the copy does not change the origional
-      pointCopy.set(pointCopy.getX() - 10.0, pointCopy.getY() - 10.0);
-
-      assertFalse(pointCopy.equals(segment1Point2));
 
    }
 
@@ -216,15 +130,15 @@ public class LineSegment2DTest
       Random random = new Random(3453);
       LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
 
-      Point2D[] pointsCopy = testSegment1.getEndpointsCopy();
+      Point2D[] pointsCopy = {new Point2D(testSegment1.getFirstEndpoint()), new Point2D(testSegment1.getSecondEndpoint())};
 
       pointsCopy[0].set(pointsCopy[0].getX() - 10.0, pointsCopy[0].getY() - 10.0);
       pointsCopy[1].set(pointsCopy[1].getX() - 10.0, pointsCopy[1].getY() - 10.0);
 
       testSegment1.set(pointsCopy[0], pointsCopy[1]);
 
-      assertEquals(pointsCopy[0], testSegment1.getFirstEndpointCopy());
-      assertEquals(pointsCopy[1], testSegment1.getSecondEndpointCopy());
+      assertEquals(pointsCopy[0], testSegment1.getFirstEndpoint());
+      assertEquals(pointsCopy[1], testSegment1.getSecondEndpoint());
    }
 
    @Test
@@ -233,31 +147,15 @@ public class LineSegment2DTest
       Random random = new Random(3453);
       LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
 
-      Point2D[] pointsCopy = testSegment1.getEndpointsCopy();
+      Point2D[] pointsCopy = {new Point2D(testSegment1.getFirstEndpoint()), new Point2D(testSegment1.getSecondEndpoint())};
 
       pointsCopy[0].set(pointsCopy[0].getX() - 10.0, pointsCopy[0].getY() - 10.0);
       pointsCopy[1].set(pointsCopy[1].getX() - 10.0, pointsCopy[1].getY() - 10.0);
 
       testSegment1.set(pointsCopy[0].getX(), pointsCopy[0].getY(), pointsCopy[1].getX(), pointsCopy[1].getY());
 
-      assertEquals(pointsCopy[0], testSegment1.getFirstEndpointCopy());
-      assertEquals(pointsCopy[1], testSegment1.getSecondEndpointCopy());
-   }
-
-   @Test
-   public void testSetPoint2dArray()
-   {
-      Random random = new Random(7653);
-      LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
-      Point2D[] pointsCopy = testSegment1.getEndpointsCopy();
-
-      pointsCopy[0].set(pointsCopy[0].getX() - 10.0, pointsCopy[0].getY() - 10.0);
-      pointsCopy[1].set(pointsCopy[1].getX() - 10.0, pointsCopy[1].getY() - 10.0);
-
-      testSegment1.set(pointsCopy);
-
-      assertEquals(pointsCopy[0], testSegment1.getFirstEndpointCopy());
-      assertEquals(pointsCopy[1], testSegment1.getSecondEndpointCopy());
+      assertEquals(pointsCopy[0], testSegment1.getFirstEndpoint());
+      assertEquals(pointsCopy[1], testSegment1.getSecondEndpoint());
    }
 
    @Test
@@ -269,8 +167,8 @@ public class LineSegment2DTest
 
       testSegment1.set(testSegment2);
 
-      assertEquals(testSegment2.getFirstEndpointCopy(), testSegment1.getFirstEndpointCopy());
-      assertEquals(testSegment2.getSecondEndpointCopy(), testSegment1.getSecondEndpointCopy());
+      assertEquals(testSegment2.getFirstEndpoint(), testSegment1.getFirstEndpoint());
+      assertEquals(testSegment2.getSecondEndpoint(), testSegment1.getSecondEndpoint());
    }
 
    @Test
@@ -282,8 +180,8 @@ public class LineSegment2DTest
       LineSegment2D testSegment1 = new LineSegment2D(segment1Point1, segment1Point2);
 
       testSegment1.flipDirection();
-      assertEquals(segment1Point2, testSegment1.getFirstEndpointCopy());
-      assertEquals(segment1Point1, testSegment1.getSecondEndpointCopy());
+      assertEquals(segment1Point2, testSegment1.getFirstEndpoint());
+      assertEquals(segment1Point1, testSegment1.getSecondEndpoint());
 
    }
 
@@ -294,7 +192,7 @@ public class LineSegment2DTest
       LineSegment2D testSegment1 = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
 
       Point2D midPoint = testSegment1.midpoint();
-      assertEquals(midPoint.distance(testSegment1.getFirstEndpointCopy()), midPoint.distance(testSegment1.getSecondEndpointCopy()), 0.001);
+      assertEquals(midPoint.distance(testSegment1.getFirstEndpoint()), midPoint.distance(testSegment1.getSecondEndpoint()), 0.001);
    }
 
    @Test
@@ -762,8 +660,8 @@ public class LineSegment2DTest
       LineSegment2D lineSegment = new LineSegment2D(0.0, 0.0, 0.0, 1.0);
       LineSegment2D shiftedLineSegment = lineSegment.shiftToRightCopy(distanceToShift);
 
-      Point2D firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      Point2D secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      Point2D firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      Point2D secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(distanceToShift, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(0.0, firstShiftedEndpoint.getY(), EPSILON);
@@ -772,8 +670,8 @@ public class LineSegment2DTest
 
       shiftedLineSegment = lineSegment.shiftToLeftCopy(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(-distanceToShift, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(0.0, firstShiftedEndpoint.getY(), EPSILON);
@@ -784,8 +682,8 @@ public class LineSegment2DTest
       lineSegment = new LineSegment2D(0.0, 0.0, 1.0, 0.0);
       shiftedLineSegment = lineSegment.shiftToRightCopy(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(0.0, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(-distanceToShift, firstShiftedEndpoint.getY(), EPSILON);
@@ -794,8 +692,8 @@ public class LineSegment2DTest
 
       shiftedLineSegment = lineSegment.shiftToLeftCopy(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(0.0, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(distanceToShift, firstShiftedEndpoint.getY(), EPSILON);
@@ -807,8 +705,8 @@ public class LineSegment2DTest
       shiftedLineSegment = lineSegment.shiftToRightCopy(distanceToShift);
       double distanceAtFortyFiveDegrees = distanceToShift * Math.sqrt(2.0) / 2.0;
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(distanceAtFortyFiveDegrees, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(-distanceAtFortyFiveDegrees, firstShiftedEndpoint.getY(), EPSILON);
@@ -817,8 +715,8 @@ public class LineSegment2DTest
 
       shiftedLineSegment = lineSegment.shiftToLeftCopy(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(-distanceAtFortyFiveDegrees, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(distanceAtFortyFiveDegrees, firstShiftedEndpoint.getY(), EPSILON);
@@ -836,8 +734,8 @@ public class LineSegment2DTest
       LineSegment2D shiftedLineSegment = new LineSegment2D(lineSegment);
       shiftedLineSegment.shiftToRight(distanceToShift);
 
-      Point2D firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      Point2D secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      Point2D firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      Point2D secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(distanceToShift, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(0.0, firstShiftedEndpoint.getY(), EPSILON);
@@ -847,8 +745,8 @@ public class LineSegment2DTest
       shiftedLineSegment.set(lineSegment);
       shiftedLineSegment.shiftToLeft(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(-distanceToShift, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(0.0, firstShiftedEndpoint.getY(), EPSILON);
@@ -860,8 +758,8 @@ public class LineSegment2DTest
       shiftedLineSegment.set(lineSegment);
       shiftedLineSegment.shiftToRight(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(0.0, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(-distanceToShift, firstShiftedEndpoint.getY(), EPSILON);
@@ -871,8 +769,8 @@ public class LineSegment2DTest
       shiftedLineSegment.set(lineSegment);
       shiftedLineSegment.shiftToLeft(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(0.0, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(distanceToShift, firstShiftedEndpoint.getY(), EPSILON);
@@ -886,8 +784,8 @@ public class LineSegment2DTest
 
       double distanceAtFortyFiveDegrees = distanceToShift * Math.sqrt(2.0) / 2.0;
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(distanceAtFortyFiveDegrees, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(-distanceAtFortyFiveDegrees, firstShiftedEndpoint.getY(), EPSILON);
@@ -897,8 +795,8 @@ public class LineSegment2DTest
       shiftedLineSegment.set(lineSegment);
       shiftedLineSegment.shiftToLeft(distanceToShift);
 
-      firstShiftedEndpoint = shiftedLineSegment.getFirstEndpointCopy();
-      secondShiftedEndpoint = shiftedLineSegment.getSecondEndpointCopy();
+      firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
+      secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());
 
       assertEquals(-distanceAtFortyFiveDegrees, firstShiftedEndpoint.getX(), EPSILON);
       assertEquals(distanceAtFortyFiveDegrees, firstShiftedEndpoint.getY(), EPSILON);

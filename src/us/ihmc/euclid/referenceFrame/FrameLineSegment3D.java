@@ -195,7 +195,8 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
    }
 
    /**
-    * Tests on a per component basis, if this line segment 3D is exactly equal to {@code other}.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method
+    * returns {@link #equals(FrameLineSegment3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
@@ -205,9 +206,16 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
     *         expressed in the same reference frame, {@code false} otherwise.
     */
    @Override
-   public boolean equals(FrameLineSegment3DReadOnly other)
+   public boolean equals(Object obj)
    {
-      return FrameLineSegment3DBasics.super.equals(other);
+      try
+      {
+         return equals((FrameLineSegment3DReadOnly) obj);
+      }
+      catch (ClassCastException e)
+      {
+         return false;
+      }
    }
 
    /**

@@ -14,7 +14,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 
 public interface LineSegment2DReadOnly
 {
-
    /**
     * Gets the read-only reference to the first endpoint of this line segment.
     *
@@ -30,56 +29,6 @@ public interface LineSegment2DReadOnly
    Point2DReadOnly getSecondEndpoint();
 
    /**
-    * Gets the first endpoint defining this line segment by storing its coordinates in the given
-    * argument {@code firstEndpointToPack}.
-    *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    */
-   default void getFirstEndpoint(Point2DBasics firstEndpointToPack)
-   {
-      firstEndpointToPack.set(getFirstEndpoint());
-   }
-
-   /**
-    * Gets a copy of the first endpoint of this line segment.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the copy of the first endpoint of this line segment.
-    */
-   default Point2D getFirstEndpointCopy()
-   {
-      return new Point2D(getFirstEndpoint());
-   }
-
-   /**
-    * Gets the second endpoint defining this line segment by storing its coordinates in the given
-    * argument {@code secondEndpointToPack}.
-    *
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
-    */
-   default void getSecondEndpoint(Point2DBasics secondEndpointToPack)
-   {
-      secondEndpointToPack.set(getSecondEndpoint());
-   }
-
-   /**
-    * Gets a copy of the second endpoint of this line segment.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the copy of the second endpoint of this line segment.
-    */
-   default Point2D getSecondEndpointCopy()
-   {
-      return new Point2D(getSecondEndpoint());
-   }
-
-   /**
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
@@ -88,24 +37,10 @@ public interface LineSegment2DReadOnly
     * @param secondEndpointToPack point in which the coordinates of this line segment's second
     *           endpoint are stored. Modified.
     */
-   default void getEndpoints(Point2DBasics firstEndpointToPack, Point2DBasics secondEndpointToPack)
+   default void get(Point2DBasics firstEndpointToPack, Point2DBasics secondEndpointToPack)
    {
       firstEndpointToPack.set(getFirstEndpoint());
       secondEndpointToPack.set(getSecondEndpoint());
-   }
-
-   /**
-    * Gets a copy of the endpoints of this line segment and returns them in a two-element array.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the two-element array containing in order this line segment first and second
-    *         endpoints.
-    */
-   default Point2D[] getEndpointsCopy()
-   {
-      return new Point2D[] {getFirstEndpointCopy(), getSecondEndpointCopy()};
    }
 
    /**
@@ -891,5 +826,57 @@ public interface LineSegment2DReadOnly
    default void pointOnLineGivenPercentage(double percentage, Point2DBasics pointToPack)
    {
       pointToPack.interpolate(getFirstEndpoint(), getSecondEndpoint(), percentage);
+   }
+
+   /**
+    * Tests on a per-component basis on both endpoints if this line segment is equal to
+    * {@code other} with the tolerance {@code epsilon}.
+    * 
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
+    */
+   default boolean epsilonEquals(LineSegment2DReadOnly other, double epsilon)
+   {
+      return getFirstEndpoint().epsilonEquals(other.getFirstEndpoint(), epsilon) && getSecondEndpoint().epsilonEquals(other.getSecondEndpoint(), epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this line segment 2D is exactly equal to {@code other}.
+    *
+    * @param other the other line segment 2D to compare against this. Not modified.
+    * @return {@code true} if the two line segments are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(LineSegment2DReadOnly other)
+   {
+      if (other == null)
+         return false;
+      else
+         return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two line segments are geometrically
+    * similar.
+    * <p>
+    * The comparison is based on comparing the line segments' endpoints. Two line segments are
+    * considered geometrically equal even if they are defined with opposite direction.
+    * </p>
+    *
+    * @param other the line segment to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two line segments represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   default boolean geometricallyEquals(LineSegment2DReadOnly other, double epsilon)
+   {
+      if (getFirstEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon)
+            && getSecondEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon))
+         return true;
+      if (getFirstEndpoint().geometricallyEquals(other.getSecondEndpoint(), epsilon)
+            && getSecondEndpoint().geometricallyEquals(other.getFirstEndpoint(), epsilon))
+         return true;
+      return false;
    }
 }
