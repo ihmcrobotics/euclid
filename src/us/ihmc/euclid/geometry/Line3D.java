@@ -1,7 +1,9 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -44,6 +46,11 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
       set(pointOnLineX, pointOnLineY, pointOnLineZ, lineDirectionX, lineDirectionY, lineDirectionZ);
    }
 
+   public Line3D(Line2DReadOnly line2DReadOnly)
+   {
+      set(line2DReadOnly);
+   }
+
    /**
     * Creates a new line 3D and initializes it to {@code other}.
     *
@@ -52,6 +59,11 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    public Line3D(Line3DReadOnly other)
    {
       set(other);
+   }
+
+   public Line3D(LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      set(lineSegment2DReadOnly);
    }
 
    public Line3D(LineSegment3DReadOnly lineSegment3DReadOnly)

@@ -8,12 +8,16 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 
 public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObject<FrameLineSegment2D>
 {
    private ReferenceFrame referenceFrame;
    /** The line segment. */
    private final LineSegment2D lineSegment = new LineSegment2D();
+   /** Rigid-body transform used to perform garbage-free operations. */
+   private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    private final FixedFramePoint2DBasics firstEndpoint = new FixedFramePoint2DBasics()
    {
@@ -86,6 +90,11 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   public FrameLineSegment2D(ReferenceFrame referenceFrame)
+   {
+      setToZero(referenceFrame);
+   }
+
    public FrameLineSegment2D(LineSegment2DReadOnly segment)
    {
       this(ReferenceFrame.getWorldFrame(), segment);
@@ -99,6 +108,11 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    public FrameLineSegment2D(FrameLineSegment2DReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   public FrameLineSegment2D(FramePoint2DReadOnly firstEndpoint, FramePoint2DReadOnly secondEndpoint)
+   {
+      setIncludingFrame(firstEndpoint, secondEndpoint);
    }
 
    /** {@inheritDoc} */
@@ -131,6 +145,18 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrame;
+   }
+
+   @Override
+   public void changeFrameAndProjectToXYPlane(ReferenceFrame desiredFrame)
+   {
+      // Check for the trivial case: the geometry is already expressed in the desired frame.
+      if (desiredFrame == referenceFrame)
+         return;
+
+      referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
+      applyTransform(transformToDesiredFrame, false);
+      referenceFrame = desiredFrame;
    }
 
    /**

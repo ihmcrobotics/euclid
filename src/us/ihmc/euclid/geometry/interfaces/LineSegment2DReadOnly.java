@@ -1,11 +1,9 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -135,7 +133,7 @@ public interface LineSegment2DReadOnly
     *
     * @return the mid-point of this line segment.
     */
-   default Point2D midpoint()
+   default Point2DBasics midpoint()
    {
       Point2D midpoint = new Point2D();
       midpoint(midpoint);
@@ -259,7 +257,7 @@ public interface LineSegment2DReadOnly
     * @param normalize whether the direction vector is to be normalized.
     * @return the direction of this line segment.
     */
-   default Vector2D direction(boolean normalize)
+   default Vector2DBasics direction(boolean normalize)
    {
       Vector2D direction = new Vector2D();
       direction(normalize, direction);
@@ -323,7 +321,7 @@ public interface LineSegment2DReadOnly
       return new LineSegment2D(getSecondEndpoint(), getFirstEndpoint());
    }
 
-   default Point2D[] intersectionWith(ConvexPolygon2D convexPolygon)
+   default Point2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
    {
       return convexPolygon.intersectionWith(this);
    }
@@ -388,7 +386,7 @@ public interface LineSegment2DReadOnly
     *         {@code null} otherwise.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
     */
-   default Point2D intersectionWith(Line2DReadOnly line)
+   default Point2DBasics intersectionWith(Line2DReadOnly line)
    {
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(line.getPoint(), line.getDirection(), getFirstEndpoint(), getSecondEndpoint());
    }
@@ -439,7 +437,7 @@ public interface LineSegment2DReadOnly
     * @param other the other line segment that may intersect this line segment. Not modified.
     * @return the intersection point if it exists, {@code null} otherwise.
     */
-   default Point2D intersectionWith(LineSegment2DReadOnly other)
+   default Point2DBasics intersectionWith(LineSegment2DReadOnly other)
    {
       return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(),
                                                                       other.getSecondEndpoint());
@@ -588,43 +586,6 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Copies this line segment, transforms the copy using the given homogeneous transformation
-    * matrix and project the result onto the XY-plane, and returns the result.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @param transform the transform to apply on this line segment's copy. Not modified.
-    * @param the copy of this transformed.
-    * @throws RuntimeException if this line has not been initialized yet.
-    */
-   default LineSegment2D applyTransformAndProjectToXYPlaneCopy(Transform transform)
-   {
-      LineSegment2D copy = new LineSegment2D(this);
-      copy.applyTransformAndProjectToXYPlane(transform);
-      return copy;
-   }
-
-   /**
-    * Copies this line segment, transforms the copy using the given homogeneous transformation
-    * matrix, and returns the result.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @param transform the transform to apply on this line segment's copy. Not modified.
-    * @param the copy of this transformed.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
-    */
-   default LineSegment2D applyTransformCopy(Transform transform)
-   {
-      LineSegment2D copy = new LineSegment2D(this);
-      copy.applyTransform(transform);
-      return copy;
-   }
-
-   /**
     * Computes the dot product of this line segment with the other line segment such that:<br>
     * {@code this }&middot;
     * {@code other = Math.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
@@ -636,51 +597,6 @@ public interface LineSegment2DReadOnly
    default double dotProduct(LineSegment2DReadOnly other)
    {
       return EuclidGeometryTools.dotProduct(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(), other.getSecondEndpoint());
-   }
-
-   /**
-    * Copies this and translates the copy by {@code distanceToShift} along the vector perpendicular
-    * to this line segment's direction.
-    * 
-    * @param shiftToLeft whether or not the shift is to the left.
-    * @param distanceToShift the distance to shift this line segment.
-    * @return the shifted line segment.
-    */
-   default LineSegment2D shiftAndCopy(boolean shiftToLeft, double distanceToShift)
-   {
-      LineSegment2D shifted = new LineSegment2D(this);
-      shifted.shift(shiftToLeft, distanceToShift);
-      return shifted;
-   }
-
-   /**
-    * Copies this and translates the copy by {@code distanceToShift} along the vector perpendicular
-    * to this line segment's direction and pointing to the left.
-    * <p>
-    * Note that the length and direction of the copy are the same as this line segment.
-    * </p>
-    *
-    * @param distanceToShift the distance to shift this line segment.
-    * @return the shifted line segment.
-    */
-   default LineSegment2D shiftToLeftCopy(double distanceToShift)
-   {
-      return shiftAndCopy(true, distanceToShift);
-   }
-
-   /**
-    * Copies this and translates the copy by {@code distanceToShift} along the vector perpendicular
-    * to this line segment's direction and pointing to the right.
-    * <p>
-    * Note that the length and direction of the copy are the same as this line segment.
-    * </p>
-    *
-    * @param distanceToShift the distance to shift this line segment.
-    * @return the shifted line segment.
-    */
-   default LineSegment2D shiftToRightCopy(double distanceToShift)
-   {
-      return shiftAndCopy(false, distanceToShift);
    }
 
    /**
@@ -747,7 +663,7 @@ public interface LineSegment2DReadOnly
     * @return the projection of the point onto this line segment or {@code null} if the method
     *         failed.
     */
-   default Point2D orthogonalProjectionCopy(Point2DReadOnly pointToProject)
+   default Point2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProject, getFirstEndpoint(), getSecondEndpoint());
    }
@@ -776,7 +692,7 @@ public interface LineSegment2DReadOnly
     * @return the computed point.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
     */
-   default Point2D pointBetweenEndpointsGivenPercentage(double percentage)
+   default Point2DBasics pointBetweenEndpointsGivenPercentage(double percentage)
    {
       Point2D point = new Point2D();
       pointBetweenEndpointsGivenPercentage(percentage, point);
@@ -809,7 +725,7 @@ public interface LineSegment2DReadOnly
     * @param percentage the percentage along this line segment of the point.
     * @return the computed point.
     */
-   default Point2D pointOnLineGivenPercentage(double percentage)
+   default Point2DBasics pointOnLineGivenPercentage(double percentage)
    {
       Point2D point = new Point2D();
       pointOnLineGivenPercentage(percentage, point);

@@ -8,6 +8,8 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, Transformable
 {
@@ -72,6 +74,16 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    }
 
    /**
+    * Sets this line segment to be same as the given line segment.
+    *
+    * @param other the other line segment to copy. Not modified.
+    */
+   default void set(LineSegment3DReadOnly other)
+   {
+      set(other.getFirstEndpoint(), other.getSecondEndpoint());
+   }
+
+   /**
     * Redefines this line segments with new endpoints.
     *
     * @param firstEndpointX x-coordinate of the new first endpoint.
@@ -107,6 +119,16 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    }
 
    /**
+    * Changes the first endpoint of this line segment.
+    *
+    * @param firstEndpoint new endpoint of this line segment. Not modified
+    */
+   default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
+   {
+      setFirstEndpoint(firstEndpoint.getX(), firstEndpoint.getY());
+   }
+
+   /**
     * Changes the second endpoint of this line segment.
     *
     * @param secondEndpointX x-coordinate of the new second endpoint.
@@ -128,12 +150,34 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    }
 
    /**
+    * Changes the second endpoint of this line segment.
+    *
+    * @param secondEndpoint new second endpoint of this line segment. Not modified.
+    */
+   default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
+   {
+      setSecondEndpoint(secondEndpoint.getX(), secondEndpoint.getY());
+   }
+
+   /**
     * Redefines this line segment with new endpoints.
     *
     * @param firstEndpoint new endpoint of this line segment. Not modified
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     */
    default void set(Point2DReadOnly firstEndpoint, Point2DReadOnly secondEndpoint)
+   {
+      setFirstEndpoint(firstEndpoint);
+      setSecondEndpoint(secondEndpoint);
+   }
+
+   /**
+    * Redefines this line segment with new endpoints.
+    *
+    * @param firstEndpoint new endpoint of this line segment. Not modified
+    * @param secondEndpoint new second endpoint of this line segment. Not modified.
+    */
+   default void set(Point3DReadOnly firstEndpoint, Point3DReadOnly secondEndpoint)
    {
       setFirstEndpoint(firstEndpoint);
       setSecondEndpoint(secondEndpoint);
@@ -151,6 +195,21 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    {
       getFirstEndpoint().set(firstEndpoint);
       getSecondEndpoint().add(firstEndpoint, fromFirstToSecondEndpoint);
+   }
+
+   /**
+    * Redefines this line segment with a new first endpoint and a vector going from the first to the
+    * second endpoint.
+    *
+    * @param firstEndpoint new first endpoint. Not modified.
+    * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
+    *           modified.
+    */
+   default void set(Point3DReadOnly firstEndpoint, Vector3DReadOnly fromFirstToSecondEndpoint)
+   {
+      setFirstEndpoint(firstEndpoint);
+      setSecondEndpoint(firstEndpoint);
+      getSecondEndpoint().add(fromFirstToSecondEndpoint.getX(), fromFirstToSecondEndpoint.getY());
    }
 
    /**
@@ -252,8 +311,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    @Override
    default void applyTransform(Transform transform)
    {
-      getFirstEndpoint().applyTransform(transform);
-      getSecondEndpoint().applyTransform(transform);
+      applyTransform(transform, true);
    }
 
    /**
@@ -266,8 +324,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    @Override
    default void applyInverseTransform(Transform transform)
    {
-      getFirstEndpoint().applyInverseTransform(transform);
-      getSecondEndpoint().applyInverseTransform(transform);
+      applyInverseTransform(transform, true);
    }
 
    /**
@@ -275,10 +332,30 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * result onto the XY-plane.
     *
     * @param transform the transform to apply on this line segment's endpoints. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
+    *            part of {@code transform} is not a transformation in the XY plane.
     */
-   default void applyTransformAndProjectToXYPlane(Transform transform)
+   default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
-      getFirstEndpoint().applyTransform(transform, false);
-      getSecondEndpoint().applyTransform(transform, false);
+      getFirstEndpoint().applyTransform(transform, checkIfTransformInXYPlane);
+      getSecondEndpoint().applyTransform(transform, checkIfTransformInXYPlane);
+   }
+
+   /**
+    * Transforms this line segment using the given homogeneous transformation matrix and project the
+    * result onto the XY-plane.
+    *
+    * @param transform the transform to apply on this line segment's endpoints. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
+    *            part of {@code transform} is not a transformation in the XY plane.
+    */
+   default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
+   {
+      getFirstEndpoint().applyInverseTransform(transform, checkIfTransformInXYPlane);
+      getSecondEndpoint().applyInverseTransform(transform, checkIfTransformInXYPlane);
    }
 }

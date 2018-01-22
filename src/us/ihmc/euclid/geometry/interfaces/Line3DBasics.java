@@ -3,6 +3,8 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -115,10 +117,21 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
       getDirection().normalize();
    }
 
+   default void set(Line2DReadOnly other)
+   {
+      getPoint().set(other.getPoint(), 0.0);
+      getDirection().set(other.getDirection(), 0.0);
+   }
+
    default void set(Line3DReadOnly other)
    {
       getPoint().set(other.getPoint());
       getDirection().set(other.getDirection());
+   }
+
+   default void set(LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      set(lineSegment2DReadOnly.getFirstEndpoint(), lineSegment2DReadOnly.getSecondEndpoint());
    }
 
    default void set(LineSegment3DReadOnly lineSegment3DReadOnly)
@@ -149,6 +162,28 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws RuntimeException if the two given points are exactly equal.
     */
+   default void set(Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      // checkDistinctPoints
+      if (firstPointOnLine.equals(secondPointOnLine))
+      {
+         throw new RuntimeException("Tried to create a line from two coincidal points");
+      }
+
+      getPoint().set(firstPointOnLine, 0.0);
+      getDirection().set(secondPointOnLine, 0.0);
+      getDirection().subX(firstPointOnLine.getX());
+      getDirection().subY(firstPointOnLine.getY());
+      getDirection().normalize();
+   }
+
+   /**
+    * Redefines this line such that it goes through the two given points.
+    *
+    * @param firstPointOnLine first point on this line. Not modified.
+    * @param secondPointOnLine second point on this line. Not modified.
+    * @throws RuntimeException if the two given points are exactly equal.
+    */
    default void set(Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
    {
       // checkDistinctPoints
@@ -160,6 +195,18 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
       setPoint(firstPointOnLine);
       getDirection().sub(secondPointOnLine, firstPointOnLine);
       getDirection().normalize();
+   }
+
+   /**
+    * Redefines this line with a new point and a new direction vector.
+    *
+    * @param pointOnLine new point on this line. Not modified.
+    * @param lineDirection new direction of this line. Not modified.
+    */
+   default void set(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      getPoint().set(pointOnLine, 0.0);
+      getDirection().set(lineDirection, 0.0);
    }
 
    /**

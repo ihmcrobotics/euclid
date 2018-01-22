@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -10,6 +9,8 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
 {
@@ -88,17 +89,11 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Copies this line and then flips the direction of the copy before returning it.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
+    * Flips this line's direction.
     */
-   default Line2D negateDirectionCopy()
+   default void negateDirection()
    {
-      Line2D ret = new Line2D(this);
-      ret.negateDirection();
-
-      return ret;
+      getDirection().negate();
    }
 
    /**
@@ -126,6 +121,16 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
+    * Changes the point through which this line has to go.
+    *
+    * @param pointOnLine new point on this line. Not modified.
+    */
+   default void setPoint(Point3DReadOnly pointOnLine)
+   {
+      getPoint().set(pointOnLine);
+   }
+
+   /**
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
@@ -133,6 +138,17 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    default void setDirection(Vector2DReadOnly lineDirection)
    {
       getDirection().setAndNormalize(lineDirection);
+   }
+
+   /**
+    * Changes the direction of this line by setting it to the normalized value of the given vector.
+    *
+    * @param lineDirection new direction of this line. Not modified.
+    */
+   default void setDirection(Vector3DReadOnly lineDirection)
+   {
+      getDirection().set(lineDirection);
+      getDirection().normalize();
    }
 
    /**
@@ -147,6 +163,17 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
+    * Sets this line to be the same as the given line.
+    *
+    * @param line3DReadOnly the other line to copy. Not modified.
+    */
+   default void set(Line3DReadOnly line3DReadOnly)
+   {
+      getPoint().set(line3DReadOnly.getPoint());
+      getDirection().set(line3DReadOnly.getDirection());
+   }
+
+   /**
     * Sets this line from the given {@code lineSegment2DReadOnly}.
     *
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
@@ -154,6 +181,16 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    default void set(LineSegment2DReadOnly lineSegment2DReadOnly)
    {
       set(lineSegment2DReadOnly.getFirstEndpoint(), lineSegment2DReadOnly.getSecondEndpoint());
+   }
+
+   /**
+    * Sets this line from the given {@code lineSegment2DReadOnly}.
+    *
+    * @param lineSegment3DReadOnly the line segment to copy. Not modified.
+    */
+   default void set(LineSegment3DReadOnly lineSegment3DReadOnly)
+   {
+      set(lineSegment3DReadOnly.getFirstEndpoint(), lineSegment3DReadOnly.getSecondEndpoint());
    }
 
    /**
@@ -190,12 +227,44 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
+    * Redefines this line such that it goes through the two given points.
+    *
+    * @param firstPointOnLine first point on this line. Not modified.
+    * @param secondPointOnLine second point on this line. Not modified.
+    */
+   default void set(Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
+   {
+      // checkDistinctPoints
+      if (firstPointOnLine.equals(secondPointOnLine))
+      {
+         throw new RuntimeException("Tried to create a line from two coincidal points.");
+      }
+
+      setPoint(firstPointOnLine);
+      getDirection().set(secondPointOnLine);
+      getDirection().sub(firstPointOnLine.getX(), firstPointOnLine.getY());
+      getDirection().normalize();
+   }
+
+   /**
     * Redefines this line with a new point and a new direction vector.
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     */
    default void set(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      setPoint(pointOnLine);
+      setDirection(lineDirection);
+   }
+
+   /**
+    * Redefines this line with a new point and a new direction vector.
+    *
+    * @param pointOnLine new point on this line. Not modified.
+    * @param lineDirection new direction of this line. Not modified.
+    */
+   default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
       setPoint(pointOnLine);
       setDirection(lineDirection);
@@ -273,8 +342,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    @Override
    default void applyTransform(Transform transform)
    {
-      getPoint().applyTransform(transform);
-      getDirection().applyTransform(transform);
+      applyTransform(transform, true);
    }
 
    /**
@@ -287,19 +355,38 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    @Override
    default void applyInverseTransform(Transform transform)
    {
-      getPoint().applyInverseTransform(transform);
-      getDirection().applyInverseTransform(transform);
+      applyInverseTransform(transform, true);
    }
 
    /**
-    * Transforms this line using the given homogeneous transformation matrix and project the result
-    * onto the XY-plane.
-    * 
-    * @param transform the transform to apply on this line's point and vector. Not modified.
+    * Transforms this line segment using the given homogeneous transformation matrix and project the
+    * result onto the XY-plane.
+    *
+    * @param transform the transform to apply on this line segment's endpoints. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
+    *            part of {@code transform} is not a transformation in the XY plane.
     */
-   default void applyTransformAndProjectToXYPlane(Transform transform)
+   default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
-      getPoint().applyTransform(transform, false);
-      getDirection().applyTransform(transform, false);
+      getPoint().applyTransform(transform, checkIfTransformInXYPlane);
+      getDirection().applyTransform(transform, checkIfTransformInXYPlane);
+   }
+
+   /**
+    * Transforms this line segment using the given homogeneous transformation matrix and project the
+    * result onto the XY-plane.
+    *
+    * @param transform the transform to apply on this line segment's endpoints. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
+    *            part of {@code transform} is not a transformation in the XY plane.
+    */
+   default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
+   {
+      getPoint().applyInverseTransform(transform, checkIfTransformInXYPlane);
+      getDirection().applyInverseTransform(transform, checkIfTransformInXYPlane);
    }
 }

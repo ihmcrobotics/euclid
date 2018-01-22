@@ -110,6 +110,11 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   public FrameLineSegment3D(ReferenceFrame referenceFrame)
+   {
+      setToZero(referenceFrame);
+   }
+
    public FrameLineSegment3D(LineSegment3DReadOnly segment)
    {
       this(ReferenceFrame.getWorldFrame(), segment);

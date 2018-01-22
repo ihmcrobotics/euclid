@@ -1,14 +1,11 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -85,37 +82,6 @@ public interface Line2DReadOnly
    }
 
    /**
-    * Copies this line, transforms the copy using the given homogeneous transformation matrix, and
-    * returns the result.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @param transform the transform to apply on this line's copy. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
-    */
-   default Line2D applyTransformCopy(Transform transform)
-   {
-      Line2D copy = new Line2D(this);
-      copy.applyTransform(transform);
-      return copy;
-   }
-
-   /**
-    * Copies this line, transforms the copy using the given homogeneous transformation matrix and
-    * project the result onto the XY-plane, and returns the result.
-    *
-    * @param transform the transform to apply on this line's copy. Not modified.
-    */
-   default Line2D applyTransformAndProjectToXYPlaneCopy(Transform transform)
-   {
-      Line2D copy = new Line2D(this);
-      copy.applyTransformAndProjectToXYPlane(transform);
-      return copy;
-   }
-
-   /**
     * Computes the minimum distance the given 3D point and this line.
     * <p>
     * Edge cases:
@@ -153,7 +119,7 @@ public interface Line2DReadOnly
     *         method failed or if there is no intersections.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default Point2D[] intersectionWith(ConvexPolygon2D convexPolygon)
+   default Point2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
    {
       return convexPolygon.intersectionWith(this);
    }
@@ -205,7 +171,7 @@ public interface Line2DReadOnly
     * @return the coordinates of the intersection if the two lines intersects, {@code null}
     *         otherwise.
     */
-   default Point2D intersectionWith(Line2DReadOnly secondLine)
+   default Point2DBasics intersectionWith(Line2DReadOnly secondLine)
    {
       return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection());
    }
@@ -254,7 +220,7 @@ public interface Line2DReadOnly
     * @return the coordinates of the intersection if the line intersects the line segment,
     *         {@code null} otherwise.
     */
-   default Point2D intersectionWith(LineSegment2DReadOnly lineSegment)
+   default Point2DBasics intersectionWith(LineSegment2DReadOnly lineSegment)
    {
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
                                                                            lineSegment.getSecondEndpoint());
@@ -527,7 +493,7 @@ public interface Line2DReadOnly
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto the line or {@code null} if the method failed.
     */
-   default Point2D orthogonalProjectionCopy(Point2DReadOnly pointToProject)
+   default Point2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, getPoint(), getDirection());
    }
@@ -578,7 +544,7 @@ public interface Line2DReadOnly
     * @param point the point the line has to go through. Not modified.
     * @return the line perpendicular to {@code this} and going through {@code point}.
     */
-   default Line2D perpendicularLineThroughPoint(Point2DReadOnly point)
+   default Line2DBasics perpendicularLineThroughPoint(Point2DReadOnly point)
    {
       return new Line2D(point, perpendicularVector());
    }
@@ -604,7 +570,7 @@ public interface Line2DReadOnly
     *
     * @return the perpendicular vector to this line.
     */
-   default Vector2D perpendicularVector()
+   default Vector2DBasics perpendicularVector()
    {
       return EuclidGeometryTools.perpendicularVector2D(getDirection());
    }
@@ -636,7 +602,7 @@ public interface Line2DReadOnly
     * @param t the parameter used to calculate the point coordinates.
     * @return the coordinates of the point 'p'.
     */
-   default Point2D pointOnLineGivenParameter(double t)
+   default Point2DBasics pointOnLineGivenParameter(double t)
    {
       Point2D pointToReturn = new Point2D();
       pointOnLineGivenParameter(t, pointToReturn);
@@ -701,7 +667,7 @@ public interface Line2DReadOnly
     * @param secondLine the second line needed to calculate the interior bisector. Not modified.
     * @return the interior bisector if this method succeeded, {@code null} otherwise.
     */
-   default Line2D interiorBisector(Line2DReadOnly secondLine)
+   default Line2DBasics interiorBisector(Line2DReadOnly secondLine)
    {
       Line2D interiorBisector = new Line2D();
       boolean success = interiorBisector(secondLine, interiorBisector);

@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FrameLine2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
+import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -271,13 +272,43 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param secondLine the other line that may intersect this line. Not modified.
     * @return the coordinates of the intersection if the two lines intersects, {@code null}
     *         otherwise.
+    */
+   @Override
+   default FramePoint2DBasics intersectionWith(Line2DReadOnly secondLine)
+   {
+      Point2DBasics intersection = Line2DReadOnly.super.intersectionWith(secondLine);
+      if (intersection == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), intersection);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line and the given line and
+    * returns the result.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
+    * method returns {@code null}.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code this.point}.
+    * </ul>
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param secondLine the other line that may intersect this line. Not modified.
+    * @return the coordinates of the intersection if the two lines intersects, {@code null}
+    *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
     *            expressed in the same reference frame.
     */
-   default FramePoint2D intersectionWith(FrameLine2DReadOnly secondLine)
+   default FramePoint2DBasics intersectionWith(FrameLine2DReadOnly secondLine)
    {
       checkReferenceFrameMatch(secondLine);
-      Point2D intersection = Line2DReadOnly.super.intersectionWith(secondLine);
+      Point2DBasics intersection = Line2DReadOnly.super.intersectionWith(secondLine);
       if (intersection == null)
          return null;
       else
@@ -429,13 +460,44 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param lineSegment the line segment that may intersect this line. Not modified.
     * @return the coordinates of the intersection if the line intersects the line segment,
     *         {@code null} otherwise.
+    */
+   @Override
+   default FramePoint2DBasics intersectionWith(LineSegment2DReadOnly lineSegment)
+   {
+      Point2DBasics intersection = Line2DReadOnly.super.intersectionWith(lineSegment);
+      if (intersection == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), intersection);
+   }
+
+   /**
+    * Calculates the coordinates of the intersection between this line and the given line segment
+    * and returns the result.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>When this line and the line segment are parallel but not collinear, they do not intersect.
+    * <li>When this line and the line segment are collinear, they are assumed to intersect at
+    * {@code lineSegmentStart}.
+    * <li>When this line intersects the line segment at one of its endpoints, this method returns a
+    * copy of the endpoint where the intersection is happening.
+    * </ul>
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param lineSegment the line segment that may intersect this line. Not modified.
+    * @return the coordinates of the intersection if the line intersects the line segment,
+    *         {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not
     *            expressed in the same reference frame.
     */
-   default FramePoint2D intersectionWith(FrameLineSegment2DReadOnly lineSegment)
+   default FramePoint2DBasics intersectionWith(FrameLineSegment2DReadOnly lineSegment)
    {
       checkReferenceFrameMatch(lineSegment);
-      Point2D intersection = Line2DReadOnly.super.intersectionWith(lineSegment);
+      Point2DBasics intersection = Line2DReadOnly.super.intersectionWith(lineSegment);
       if (intersection == null)
          return null;
       else
@@ -575,6 +637,43 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
       checkReferenceFrameMatch(lineSegment);
       intersectionToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line and the given
+    * convex polygon 2D.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
+    * returns {@code null}.
+    * <li>If no intersections exist, this method returns {@code null}.
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the convex polygon this line may intersect. Not modified.
+    * @return the intersections between between the line and the polygon or {@code null} if the
+    *         method failed or if there is no intersections.
+    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    */
+   @Override
+   default FramePoint2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
+   {
+      Point2D[] intersections = convexPolygon.intersectionWith(this);
+      if (intersections == null)
+      {
+         return null;
+      }
+      else
+      {
+         FramePoint2D[] frameIntersections = new FramePoint2D[intersections.length];
+         for (int i = 0; i < intersections.length; i++)
+            frameIntersections[i] = new FramePoint2D(getReferenceFrame(), intersections[i]);
+         return frameIntersections;
+      }
    }
 
    /**
@@ -1006,6 +1105,32 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * method fails and returns {@code false}.
     * </ul>
     * </p>
+    *
+    * @param pointToProject the point to project on this line. Modified.
+    * @return whether the method succeeded or not.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
+    *            expressed in the same reference frame.
+    */
+   @Override
+   default FramePoint2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
+   {
+      Point2DBasics projection = Line2DReadOnly.super.orthogonalProjectionCopy(pointToProject);
+      if (projection == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), projection);
+   }
+
+   /**
+    * Computes the orthogonal projection of the given 2D point on this 2D line.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the given line direction is too small, i.e.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -1015,7 +1140,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
-   default FramePoint2D orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
+   default FramePoint2DBasics orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
    {
       checkReferenceFrameMatch(pointToProject);
       return new FramePoint2D(getReferenceFrame(), Line2DReadOnly.super.orthogonalProjectionCopy(pointToProject));
@@ -1047,10 +1172,43 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *
     * @param secondLine the second line needed to calculate the interior bisector. Not modified.
     * @return the interior bisector if this method succeeded, {@code null} otherwise.
+    */
+   @Override
+   default FrameLine2DBasics interiorBisector(Line2DReadOnly secondLine)
+   {
+      return new FrameLine2D(getReferenceFrame(), Line2DReadOnly.super.interiorBisector(secondLine));
+   }
+
+   /**
+    * Calculates the interior bisector defined by this line and the given {@code secondLine}.
+    * <p>
+    * The interior bisector is defined as follows:
+    * <ul>
+    * <li>It goes through the intersection between this line and {@code secondLine}.
+    * <li>Its direction point toward this line direction and the {@code secondLine}'s direction such
+    * that: {@code interiorBisector.direction.dot(this.direction) > 0.0} and
+    * {@code interiorBisector.direction.dot(secondLine.direction) > 0.0}.
+    * <li>Finally the angle from {@code this} to the interior bisector is half the angle from
+    * {@code this} to {@code secondLine}.
+    * </ul>
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the two lines are parallel but not collinear, this method fails, returns {@code null}.
+    * <li>If the two lines are collinear, this method returns a copy of {@code this}.
+    * </ul>
+    * </p>
+    *
+    * @param secondLine the second line needed to calculate the interior bisector. Not modified.
+    * @return the interior bisector if this method succeeded, {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
     *            expressed in the same reference frame.
     */
-   default FrameLine2D interiorBisector(FrameLine2DReadOnly secondLine)
+   default FrameLine2DBasics interiorBisector(FrameLine2DReadOnly secondLine)
    {
       checkReferenceFrameMatch(secondLine);
       return new FrameLine2D(getReferenceFrame(), Line2DReadOnly.super.interiorBisector(secondLine));
@@ -1124,10 +1282,26 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *
     * @param point the point the line has to go through. Not modified.
     * @return the line perpendicular to {@code this} and going through {@code point}.
+    */
+   @Override
+   default FrameLine2DBasics perpendicularLineThroughPoint(Point2DReadOnly point)
+   {
+      return new FrameLine2D(getReferenceFrame(), Line2DReadOnly.super.perpendicularLineThroughPoint(point));
+   }
+
+   /**
+    * Calculates and returns a line that is perpendicular to this line, with its direction pointing
+    * to the left of this line, while going through the given point.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param point the point the line has to go through. Not modified.
+    * @return the line perpendicular to {@code this} and going through {@code point}.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
-   default FrameLine2D perpendicularLineThroughPoint(FramePoint2DReadOnly point)
+   default FrameLine2DBasics perpendicularLineThroughPoint(FramePoint2DReadOnly point)
    {
       checkReferenceFrameMatch(point);
       return new FrameLine2D(getReferenceFrame(), Line2DReadOnly.super.perpendicularLineThroughPoint(point));
@@ -1321,6 +1495,20 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code vectorToPack} are not
     *            expressed in the same reference frame.
     */
+   @Override
+   default FrameVector2DBasics perpendicularVector()
+   {
+      return new FrameVector2D(getReferenceFrame(), Line2DReadOnly.super.perpendicularVector());
+   }
+
+   /**
+    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to
+    * the left.
+    *
+    * @param vectorToPack the perpendicular vector to this line. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code vectorToPack} are not
+    *            expressed in the same reference frame.
+    */
    default void perpendicularVector(FixedFrameVector2DBasics vectorToPack)
    {
       checkReferenceFrameMatch(vectorToPack);
@@ -1377,6 +1565,28 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    {
       pointToPack.setReferenceFrame(getReferenceFrame());
       Line2DReadOnly.super.pointOnLineGivenParameter(t, pointToPack);
+   }
+
+   /**
+    * Calculates the coordinates of the point 'p' given the parameter 't' as follows:<br>
+    * p = t * n + p<sub>0</sub><br>
+    * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
+    * defining this line which also corresponds to the point for which t=0.
+    * <p>
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
+    * point p<sub>0</sub> defining this line.
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param t the parameter used to calculate the point coordinates.
+    * @return the coordinates of the point 'p'.
+    */
+   @Override
+   default FramePoint2DBasics pointOnLineGivenParameter(double t)
+   {
+      return new FramePoint2D(getReferenceFrame(), Line2DReadOnly.super.pointOnLineGivenParameter(t));
    }
 
    /**

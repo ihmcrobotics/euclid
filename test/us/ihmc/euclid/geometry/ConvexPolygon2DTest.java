@@ -11,6 +11,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -862,7 +863,7 @@ public class ConvexPolygon2DTest
       Line2D segmentLine = new Line2D(neighbourPoints[neighbourIndex], closestVertex);
       Line2D otherLine = new Line2D(neighbourPoints[wrongNeighbourIndex], closestVertex);
 
-      Line2D interiorBiSector = segmentLine.interiorBisector(otherLine);
+      Line2DBasics interiorBiSector = segmentLine.interiorBisector(otherLine);
 
       boolean isPointBehindLine = interiorBiSector.isPointBehindLine(point);
       boolean isOtherEdgeVertexBehindLine = interiorBiSector.isPointBehindLine(segmentVertices[otherEdgeVertexIndex]);

@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -9,16 +10,23 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
+import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2D>
 {
    private ReferenceFrame referenceFrame;
    /** The line. */
    private final Line2D line = new Line2D();
+   /** Rigid-body transform used to perform garbage-free operations. */
+   private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    private final FixedFramePoint2DBasics point = new FixedFramePoint2DBasics()
    {
-
       @Override
       public void setX(double x)
       {
@@ -52,7 +60,6 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    private final FixedFrameVector2DBasics direction = new FixedFrameVector2DBasics()
    {
-
       @Override
       public void setX(double x)
       {
@@ -89,6 +96,11 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   public FrameLine2D(ReferenceFrame referenceFrame)
+   {
+      setToZero(referenceFrame);
+   }
+
    public FrameLine2D(Line2DReadOnly line2D)
    {
       this(ReferenceFrame.getWorldFrame(), line2D);
@@ -97,6 +109,46 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    public FrameLine2D(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
    {
       setIncludingFrame(referenceFrame, line2DReadOnly);
+   }
+
+   public FrameLine2D(ReferenceFrame referenceFrame, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
+   {
+      setIncludingFrame(referenceFrame, firstPointOnLine, secondPointOnLine);
+   }
+   
+   public FrameLine2D(ReferenceFrame referenceFrame, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      setIncludingFrame(referenceFrame, pointOnLine, lineDirection);
+   }
+
+   public FrameLine2D(LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      this(ReferenceFrame.getWorldFrame(), lineSegment2DReadOnly);
+   }
+
+   public FrameLine2D(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      setIncludingFrame(referenceFrame, lineSegment2DReadOnly);
+   }
+
+   public FrameLine2D(FrameLine2DReadOnly other)
+   {
+      setIncludingFrame(other);
+   }
+   
+   public FrameLine2D(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
+   {
+      setIncludingFrame(frameLineSegment2DReadOnly);
+   }
+
+   public FrameLine2D(FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
+   {
+      setIncludingFrame(firstPointOnLine, secondPointOnLine);
+   }
+   
+   public FrameLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   {
+      setIncludingFrame(pointOnLine, lineDirection);
    }
 
    @Override
@@ -131,6 +183,18 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrame;
+   }
+
+   @Override
+   public void changeFrameAndProjectToXYPlane(ReferenceFrame desiredFrame)
+   {
+      // Check for the trivial case: the geometry is already expressed in the desired frame.
+      if (desiredFrame == referenceFrame)
+         return;
+
+      referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
+      applyTransform(transformToDesiredFrame, false);
+      referenceFrame = desiredFrame;
    }
 
    /**

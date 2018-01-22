@@ -118,14 +118,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    }
 
    /**
-    * Flips this line's direction.
-    */
-   public void negateDirection()
-   {
-      direction.negate();
-   }
-
-   /**
     * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
     * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
     * physically the same but either the point or vector of each line is different. For instance, if

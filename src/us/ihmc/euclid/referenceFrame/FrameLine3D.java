@@ -1,16 +1,24 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3D>
 {
@@ -114,6 +122,21 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   public FrameLine3D(ReferenceFrame referenceFrame)
+   {
+      setToZero(referenceFrame);
+   }
+
+   public FrameLine3D(Line2DReadOnly line2DReadOnly)
+   {
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), line2DReadOnly);
+   }
+
+   public FrameLine3D(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
+   {
+      setIncludingFrame(referenceFrame, line2DReadOnly);
+   }
+
    public FrameLine3D(Line3DReadOnly line3D)
    {
       setIncludingFrame(ReferenceFrame.getWorldFrame(), line3D);
@@ -122,6 +145,26 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    public FrameLine3D(ReferenceFrame referenceFrame, Line3DReadOnly line3D)
    {
       setIncludingFrame(referenceFrame, line3D);
+   }
+
+   public FrameLine3D(ReferenceFrame referenceFrame, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
+   {
+      setIncludingFrame(referenceFrame, firstPointOnLine, secondPointOnLine);
+   }
+   
+   public FrameLine3D(ReferenceFrame referenceFrame, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
+   {
+      setIncludingFrame(referenceFrame, pointOnLine, lineDirection);
+   }
+
+   public FrameLine3D(LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), lineSegment2DReadOnly);
+   }
+   
+   public FrameLine3D(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
+   {
+      setIncludingFrame(referenceFrame, lineSegment2DReadOnly);
    }
 
    public FrameLine3D(LineSegment3DReadOnly lineSegment3DReadOnly)
@@ -134,14 +177,34 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
       setIncludingFrame(referenceFrame, lineSegment3DReadOnly);
    }
 
+   public FrameLine3D(FrameLine2DReadOnly frameLine2DReadOnly)
+   {
+      setIncludingFrame(frameLine2DReadOnly);
+   }
+
    public FrameLine3D(FrameLine3DReadOnly other)
    {
       setIncludingFrame(other);
    }
 
+   public FrameLine3D(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
+   {
+      setIncludingFrame(frameLineSegment2DReadOnly);
+   }
+
    public FrameLine3D(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
    {
       setIncludingFrame(frameLineSegment3DReadOnly);
+   }
+
+   public FrameLine3D(FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
+   {
+      setIncludingFrame(firstPointOnLine, secondPointOnLine);
+   }
+   
+   public FrameLine3D(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
+   {
+      setIncludingFrame(pointOnLine, lineDirection);
    }
 
    @Override
