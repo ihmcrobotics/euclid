@@ -147,6 +147,23 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
       return referenceFrame;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   public void changeFrame(ReferenceFrame desiredFrame)
+   {
+      // Check for the trivial case: the geometry is already expressed in the desired frame.
+      if (desiredFrame == referenceFrame)
+         return;
+
+      /*
+       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of
+       * checking both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
+       */
+      referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
+      applyTransform(transformToDesiredFrame);
+      referenceFrame = desiredFrame;
+   }
+
    @Override
    public void changeFrameAndProjectToXYPlane(ReferenceFrame desiredFrame)
    {

@@ -12,6 +12,12 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Write and read interface for a line 2D.
+ * <p>
+ * A line 2D represents an infinitely long line in the XY-plane and defined by a point and a direction.
+ * </p>
+ */
 public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
 {
    /**
@@ -163,9 +169,9 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets this line to be the same as the given line.
+    * Sets this line to be the same as the given line projected onto the XY-plane.
     *
-    * @param line3DReadOnly the other line to copy. Not modified.
+    * @param line3DReadOnly the line to copy. Not modified.
     */
    default void set(Line3DReadOnly line3DReadOnly)
    {
@@ -174,7 +180,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets this line from the given {@code lineSegment2DReadOnly}.
+    * Sets this line to go through the endpoints of the given line segment.
     *
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
     */
@@ -184,7 +190,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets this line from the given {@code lineSegment2DReadOnly}.
+    * Sets this line to go through the endpoints of the given line segment projected on the XY-plane.
     *
     * @param lineSegment3DReadOnly the line segment to copy. Not modified.
     */
@@ -270,6 +276,12 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
       setDirection(lineDirection);
    }
 
+   /**
+    * Translates this line perpendicularly to its direction.
+    * 
+    * @param shiftToLeft defines to which side this line is to be translated.
+    * @param distanceToShift the distance this line is to be shifted.
+    */
    default void shift(boolean shiftToLeft, double distanceToShift)
    {
       double vectorX = getDirectionX();

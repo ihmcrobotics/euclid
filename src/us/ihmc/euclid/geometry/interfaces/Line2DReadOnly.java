@@ -11,6 +11,12 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
+/**
+ * Read-only interface for a line 2D.
+ * <p>
+ * A line 2D represents an infinitely long line in the XY-plane and defined by a point and a direction.
+ * </p>
+ */
 public interface Line2DReadOnly
 {
    /**

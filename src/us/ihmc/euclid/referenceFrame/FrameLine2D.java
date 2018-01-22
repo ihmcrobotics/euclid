@@ -19,6 +19,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2D>
 {
+   /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    /** The line. */
    private final Line2D line = new Line2D();
@@ -91,66 +92,149 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
       }
    };
 
+   /**
+    * Default constructor that initializes both {@link #point} and {@link #direction} to zero and
+    * the reference frame to {@code ReferenceFrame.getWorldFrame()}.
+    */
    public FrameLine2D()
    {
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   /**
+    * Creates a new line and initializes both {@link #point} and {@link #direction} to zero and the
+    * reference frame to the given {@code referenceFrame}.
+    * 
+    * @param referenceFrame the initial reference frame for this line.
+    */
    public FrameLine2D(ReferenceFrame referenceFrame)
    {
       setToZero(referenceFrame);
    }
 
-   public FrameLine2D(Line2DReadOnly line2D)
+   /**
+    * Creates a new line, initializes its point and direction from the given line and its reference
+    * frame to {@code ReferenceFrame.getWorldFrame()}.
+    * 
+    * @param line2dReadOnly the line used to initialize the point and direction of this. Not
+    *           modified.
+    */
+   public FrameLine2D(Line2DReadOnly line2dReadOnly)
    {
-      this(ReferenceFrame.getWorldFrame(), line2D);
+      this(ReferenceFrame.getWorldFrame(), line2dReadOnly);
    }
 
+   /**
+    * Creates a new line, initializes its point and direction from the given line and its reference
+    * frame to {@code referenceFrame}.
+    * 
+    * @param referenceFrame the initial reference frame for this line.
+    * @param line2dReadOnly the line used to initialize the point and direction of this. Not
+    *           modified.
+    */
    public FrameLine2D(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
    {
       setIncludingFrame(referenceFrame, line2DReadOnly);
    }
 
+   /**
+    * Creates a new line, initializes it to go through the two given points in the given frame.
+    * 
+    * @param referenceFrame the initial reference frame for this line.
+    * @param firstPointOnLine first point on this line. Not modified.
+    * @param secondPointOnLine second point on this line. Not modified.
+    */
    public FrameLine2D(ReferenceFrame referenceFrame, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
       setIncludingFrame(referenceFrame, firstPointOnLine, secondPointOnLine);
    }
-   
+
+   /**
+    * Creates a new line, initializes it using the given point and direction in the given frame.
+    * 
+    * @param referenceFrame the initial reference frame for this line.
+    * @param pointOnLine new point on this line. Not modified.
+    * @param lineDirection new direction of this line. Not modified.
+    */
    public FrameLine2D(ReferenceFrame referenceFrame, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
       setIncludingFrame(referenceFrame, pointOnLine, lineDirection);
    }
 
+   /**
+    * Creates a new line and initializes it to go through the endpoints of the given line segment.
+    * <p>
+    * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
+    * </p>
+    * 
+    * @param lineSegment2DReadOnly the line segment to copy. Not modified.
+    */
    public FrameLine2D(LineSegment2DReadOnly lineSegment2DReadOnly)
    {
-      this(ReferenceFrame.getWorldFrame(), lineSegment2DReadOnly);
+      setIncludingFrame(ReferenceFrame.getWorldFrame(), lineSegment2DReadOnly);
    }
 
+   /**
+    * Creates a new line and initializes it to go through the endpoints of the given line segment
+    * projected on the XY-plane.
+    * <p>
+    * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
+    * </p>
+    * 
+    * @param lineSegment2DReadOnly the line segment to copy. Not modified.
+    */
    public FrameLine2D(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
    {
       setIncludingFrame(referenceFrame, lineSegment2DReadOnly);
    }
 
+   /**
+    * Creates a new line and initializes it to other.
+    * 
+    * @param other the other line to copy. Not modified.
+    */
    public FrameLine2D(FrameLine2DReadOnly other)
    {
       setIncludingFrame(other);
    }
-   
+
+   /**
+    * Creates a new line and initializes it to go through the endpoints of the given line segment.
+    * 
+    * @param other the other line to copy. Not modified.
+    */
    public FrameLine2D(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
    {
       setIncludingFrame(frameLineSegment2DReadOnly);
    }
 
+   /**
+    * Creates a new line and initializes it to go through the given points.
+    * 
+    * @param firstPointOnLine first point on this line. Not modified.
+    * @param secondPointOnLine second point on this line. Not modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the reference
+    *            frame.
+    */
    public FrameLine2D(FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
       setIncludingFrame(firstPointOnLine, secondPointOnLine);
    }
-   
+
+   /**
+    * Creates a new line and initializes it to the given point and direction.
+    * 
+    * @param pointOnLine new point on this line. Not modified.
+    * @param lineDirection new direction of this line. Not modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the reference
+    *            frame.
+    */
    public FrameLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
       setIncludingFrame(pointOnLine, lineDirection);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(FrameLine2D other)
    {
@@ -185,6 +269,24 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
       return referenceFrame;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   public void changeFrame(ReferenceFrame desiredFrame)
+   {
+      // Check for the trivial case: the geometry is already expressed in the desired frame.
+      if (desiredFrame == referenceFrame)
+         return;
+
+      /*
+       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of
+       * checking both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
+       */
+      referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
+      applyTransform(transformToDesiredFrame);
+      referenceFrame = desiredFrame;
+   }
+
+   /** {@inheritDoc} */
    @Override
    public void changeFrameAndProjectToXYPlane(ReferenceFrame desiredFrame)
    {

@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FrameLine2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -16,6 +17,24 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
+/**
+ * Read-only interface for a line 2D expressed in a given reference frame.
+ * <p>
+ * A line 2D represents an infinitely long line in the XY-plane and defined by a point and a
+ * direction.
+ * </p>
+ * <p>
+ * In addition to representing a {@link Line2DReadOnly}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameLine2DReadOnly}. This allows, for instance, to enforce, at runtime, that operations
+ * on lines occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FrameLine2DReadOnly} extends {@code Line2DReadOnly}, it is compatible with
+ * methods only requiring {@code Line2DReadOnly}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FrameLine2DReadOnly}.
+ * </p>
+ */
 public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolder
 {
    /** {@inheritDoc} */
@@ -1108,8 +1127,6 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *
     * @param pointToProject the point to project on this line. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
-    *            expressed in the same reference frame.
     */
    @Override
    default FramePoint2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
@@ -1492,8 +1509,6 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * the left.
     *
     * @param vectorToPack the perpendicular vector to this line. Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code vectorToPack} are not
-    *            expressed in the same reference frame.
     */
    @Override
    default FrameVector2DBasics perpendicularVector()
@@ -1807,7 +1822,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean geometricallyEquals(FrameLine2DReadOnly other, double epsilon)
    {
-      return isCollinear(other, epsilon);
+      checkReferenceFrameMatch(other);
+      return Line2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**
