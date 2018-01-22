@@ -1,10 +1,29 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Write and read interface for a line segment 3D expressed in a constant reference frame, i.e. this
+ * line segment is always expressed in the same reference frame.
+ * <p>
+ * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
+ * </p>
+ * <p>
+ * In addition to representing a {@link LineSegment3DBasics}, a {@link ReferenceFrame} is associated
+ * to a {@code FrameLineSegment3DBasics}. This allows, for instance, to enforce, at runtime, that
+ * operations on lines occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FrameLineSegment3DBasics} extends {@code LineSegment3DBasics}, it is compatible
+ * with methods only requiring {@code LineSegment3DBasics}. However, these methods do NOT assert
+ * that the operation occur in the proper coordinate system. Use this feature carefully and always
+ * prefer using methods requiring {@code FrameLineSegment3DBasics}.
+ * </p>
+ */
 public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnly, LineSegment3DBasics
 {
    /**

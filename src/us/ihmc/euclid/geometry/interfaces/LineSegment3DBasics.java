@@ -8,6 +8,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Write and read interface for a line segment 3D.
+ * <p>
+ * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
+ * </p>
+ */
 public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, Transformable
 {
    /**

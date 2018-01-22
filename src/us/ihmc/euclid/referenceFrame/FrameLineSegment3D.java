@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -9,8 +10,25 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
 
+/**
+ * {@code FrameLineSegment3D} is a 3D line segment expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link LineSegment3DBasics}, a {@link ReferenceFrame} is associated
+ * to a {@code FrameLineSegment3D}. This allows, for instance, to enforce, at runtime, that
+ * operations on line segments occur in the same coordinate system. Also, via the method
+ * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a point in different
+ * reference frames.
+ * </p>
+ * <p>
+ * Because a {@code FrameLineSegment3D} extends {@code LineSegment3DBasics}, it is compatible with
+ * methods only requiring {@code LineSegment3DBasics}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FrameLineSegment3D}.
+ * </p>
+ */
 public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObject<FrameLineSegment3D>
 {
+   /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    /** The line segment. */
    private final LineSegment3D lineSegment = new LineSegment3D();
@@ -105,49 +123,82 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
       }
    };
 
+   /**
+    * Default constructor that initializes both endpoints of this line segment to zero and its
+    * reference frame to {@code ReferenceFrame.getWorldFrame()}.
+    */
    public FrameLineSegment3D()
    {
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   /**
+    * Default constructor that initializes both endpoints of this line segment to zero and its
+    * reference frame to {@code referenceFrame}.
+    * 
+    * @param referenceFrame the initial reference frame for this line segment.
+    */
    public FrameLineSegment3D(ReferenceFrame referenceFrame)
    {
       setToZero(referenceFrame);
    }
 
-   public FrameLineSegment3D(LineSegment3DReadOnly segment)
+   /**
+    * Creates a new line segment and initializes it to be same as the given line segment.
+    * <p>
+    * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
+    * </p>
+    *
+    * @param lineSegment3DReadOnly the other line segment to copy. Not modified.
+    */
+   public FrameLineSegment3D(LineSegment3DReadOnly lineSegment3DReadOnly)
    {
-      this(ReferenceFrame.getWorldFrame(), segment);
+      this(ReferenceFrame.getWorldFrame(), lineSegment3DReadOnly);
    }
 
-   public FrameLineSegment3D(ReferenceFrame referenceFrame, LineSegment3DReadOnly segment)
+   /**
+    * Creates a new line segment and initializes it to be same as the given line segment.
+    *
+    * @param referenceFrame the initial reference frame for this line segment.
+    * @param lineSegment3DReadOnly the other line segment to copy. Not modified.
+    */
+   public FrameLineSegment3D(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
    {
-      setIncludingFrame(referenceFrame, segment);
+      setIncludingFrame(referenceFrame, lineSegment3DReadOnly);
    }
 
+   /**
+    * Creates a new line segment and initializes it to be same as the given line segment.
+    *
+    * @param lineSegment2DReadOnly the other line segment to copy. Not modified.
+    */
    public FrameLineSegment3D(FrameLineSegment3DReadOnly other)
    {
       setIncludingFrame(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(FrameLineSegment3D other)
    {
       FrameLineSegment3DBasics.super.set(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFramePoint3DBasics getFirstEndpoint()
    {
       return firstEndpoint;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFramePoint3DBasics getSecondEndpoint()
    {

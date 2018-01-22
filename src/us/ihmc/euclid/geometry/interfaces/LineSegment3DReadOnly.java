@@ -1,6 +1,5 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -8,6 +7,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
+/**
+ * Read-only interface for a line segment 3D.
+ * <p>
+ * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
+ * </p>
+ */
 public interface LineSegment3DReadOnly
 {
    /**
@@ -211,7 +216,7 @@ public interface LineSegment3DReadOnly
     * @return the projection of the point onto the line segment or {@code null} if the method
     *         failed.
     */
-   default Point3D orthogonalProjectionCopy(Point3DReadOnly pointToProject)
+   default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(pointToProject, getFirstEndpoint(), getSecondEndpoint());
    }
@@ -273,7 +278,7 @@ public interface LineSegment3DReadOnly
     * @return the computed point.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
     */
-   default Point3D pointBetweenEndpointsGivenPercentage(double percentage)
+   default Point3DBasics pointBetweenEndpointsGivenPercentage(double percentage)
    {
       Point3D point = new Point3D();
       pointBetweenEndpointsGivenPercentage(percentage, point);
@@ -306,7 +311,7 @@ public interface LineSegment3DReadOnly
     * @param percentage the percentage along this line segment of the point.
     * @return the computed point.
     */
-   default Point3D pointOnLineGivenPercentage(double percentage)
+   default Point3DBasics pointOnLineGivenPercentage(double percentage)
    {
       Point3D point = new Point3D();
       pointOnLineGivenPercentage(percentage, point);
@@ -334,7 +339,7 @@ public interface LineSegment3DReadOnly
     *
     * @return the mid-point of this line segment.
     */
-   default Point3D midpoint()
+   default Point3DBasics midpoint()
    {
       Point3D midpoint = new Point3D();
       midpoint(midpoint);
@@ -373,7 +378,7 @@ public interface LineSegment3DReadOnly
     * @param normalize whether the direction vector is to be normalized.
     * @return the direction of this line segment.
     */
-   default Vector3D getDirection(boolean normalize)
+   default Vector3DBasics getDirection(boolean normalize)
    {
       Vector3D direction = new Vector3D();
       getDirection(normalize, direction);
@@ -510,14 +515,6 @@ public interface LineSegment3DReadOnly
    default double percentageAlongLineSegment(double x, double y, double z)
    {
       return EuclidGeometryTools.percentageAlongLineSegment3D(x, y, z, getFirstEndpoint(), getSecondEndpoint());
-   }
-
-   /**
-    * Returns a copy of this line segment with the endpoints swapped.
-    */
-   default LineSegment3D flipDirectionCopy()
-   {
-      return new LineSegment3D(getSecondEndpoint(), getFirstEndpoint());
    }
 
    /**

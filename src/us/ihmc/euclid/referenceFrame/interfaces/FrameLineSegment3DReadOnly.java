@@ -3,11 +3,30 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Read-only interface for a line segment 3D expressed in a given reference frame, i.e. this line
+ * segment is always expressed in the same reference frame.
+ * <p>
+ * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
+ * </p>
+ * <p>
+ * In addition to representing a {@link LineSegment3DReadOnly}, a {@link ReferenceFrame} is associated
+ * to a {@code FrameLineSegment3DReadOnly}. This allows, for instance, to enforce, at runtime, that
+ * operations on lines occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FrameLineSegment3DReadOnly} extends {@code LineSegment3DReadOnly}, it is compatible
+ * with methods only requiring {@code LineSegment3DReadOnly}. However, these methods do NOT assert
+ * that the operation occur in the proper coordinate system. Use this feature carefully and always
+ * prefer using methods requiring {@code FrameLineSegment3DReadOnly}.
+ * </p>
+ */
 public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, ReferenceFrameHolder
 {
    /**
@@ -129,6 +148,18 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     *
     * @param normalize whether the direction vector is to be normalized.
     * @param directionToPack vector in which the direction is stored. Modified.
+    */
+   @Override
+   default FrameVector3DBasics getDirection(boolean normalize)
+   {
+      return new FrameVector3D(getReferenceFrame(), LineSegment3DReadOnly.super.getDirection(normalize));
+   }
+
+   /**
+    * Computes the vector going from the first to the second endpoint of this line segment.
+    *
+    * @param normalize whether the direction vector is to be normalized.
+    * @param directionToPack vector in which the direction is stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code directionToPack} are not
     *            expressed in the same reference frame.
     */
@@ -228,14 +259,45 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto the line segment or {@code null} if the method
     *         failed.
+    */
+   @Override
+   default FramePoint3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
+   {
+      Point3DBasics projection = LineSegment3DReadOnly.super.orthogonalProjectionCopy(pointToProject);
+      if (projection == null)
+         return null;
+      else
+         return new FramePoint3D(getReferenceFrame(), projection);
+   }
+
+   /**
+    * Computes the orthogonal projection of a 3D point on this 3D line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of this line segment is too small, i.e.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
+    * {@code firstEndpoint}.
+    * <li>the projection can not be outside the line segment. When the projection on the
+    * corresponding line is outside the line segment, the result is the closest of the two
+    * endpoints.
+    * </ul>
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @return the projection of the point onto the line segment or {@code null} if the method
+    *         failed.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
-   default FramePoint3D orthogonalProjectionCopy(FramePoint3DReadOnly pointToProject)
+   default FramePoint3DBasics orthogonalProjectionCopy(FramePoint3DReadOnly pointToProject)
    {
       checkReferenceFrameMatch(pointToProject);
 
-      Point3D projection = LineSegment3DReadOnly.super.orthogonalProjectionCopy(pointToProject);
+      Point3DBasics projection = LineSegment3DReadOnly.super.orthogonalProjectionCopy(pointToProject);
       if (projection == null)
          return null;
       else
@@ -488,6 +550,22 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
     *            expressed in the same reference frame.
     */
+   @Override
+   default FramePoint3DBasics pointBetweenEndpointsGivenPercentage(double percentage)
+   {
+      return new FramePoint3D(getReferenceFrame(), LineSegment3DReadOnly.super.pointBetweenEndpointsGivenPercentage(percentage));
+   }
+
+   /**
+    * Computes the coordinates of the point located at a given percentage on this line segment: <br>
+    * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
+    *
+    * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
+    * @param pointToPack where the result is stored. Modified.
+    * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
+    *            expressed in the same reference frame.
+    */
    default void pointBetweenEndpointsGivenPercentage(double percentage, FixedFramePoint3DBasics pointToPack)
    {
       checkReferenceFrameMatch(pointToPack);
@@ -506,6 +584,19 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    {
       pointToPack.setReferenceFrame(getReferenceFrame());
       LineSegment3DReadOnly.super.pointBetweenEndpointsGivenPercentage(percentage, pointToPack);
+   }
+
+   /**
+    * Computes the coordinates of the point located on the line this line segment is lying on: <br>
+    * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
+    *
+    * @param percentage the percentage along this line segment of the point.
+    * @param pointToPack where the result is stored. Modified.
+    */
+   @Override
+   default FramePoint3DBasics pointOnLineGivenPercentage(double percentage)
+   {
+      return new FramePoint3D(getReferenceFrame(), LineSegment3DReadOnly.super.pointOnLineGivenPercentage(percentage));
    }
 
    /**
@@ -551,6 +642,17 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    {
       checkReferenceFrameMatch(other);
       return LineSegment3DReadOnly.super.dotProduct(other);
+   }
+
+   /**
+    * Computes the coordinates of the point located exactly at the middle of this line segment.
+    *
+    * @param midpointToPack point in which the mid-point of this line segment is stored. Modified.
+    */
+   @Override
+   default FramePoint3DBasics midpoint()
+   {
+      return new FramePoint3D(getReferenceFrame(), LineSegment3DReadOnly.super.midpoint());
    }
 
    /**
