@@ -458,9 +458,9 @@ public class EuclidFrameTools
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
       pointOnLine1.checkReferenceFrameMatch(lineDirection2);
       if (closestPointOnLine1ToPack != null)
-         closestPointOnLine1ToPack.setToZero(pointOnLine1.getReferenceFrame());
+         closestPointOnLine1ToPack.setReferenceFrame(pointOnLine1.getReferenceFrame());
       if (closestPointOnLine2ToPack != null)
-         closestPointOnLine2ToPack.setToZero(pointOnLine1.getReferenceFrame());
+         closestPointOnLine2ToPack.setReferenceFrame(pointOnLine1.getReferenceFrame());
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, closestPointOnLine1ToPack,
                                                                   closestPointOnLine2ToPack);
    }
@@ -526,9 +526,9 @@ public class EuclidFrameTools
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd2);
       if (closestPointOnLineSegment1ToPack != null)
-         closestPointOnLineSegment1ToPack.setToZero(lineSegmentStart1.getReferenceFrame());
+         closestPointOnLineSegment1ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
       if (closestPointOnLineSegment2ToPack != null)
-         closestPointOnLineSegment2ToPack.setToZero(lineSegmentStart1.getReferenceFrame());
+         closestPointOnLineSegment2ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
                                                                          closestPointOnLineSegment1ToPack, closestPointOnLineSegment2ToPack);
    }
@@ -1295,15 +1295,13 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(firstPointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(secondPointOnLine);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
                                                                                                 secondPointOnLine, firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1353,9 +1351,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -1397,14 +1395,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(pointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(lineDirection);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
                                                                                                 firstIntersectionToPack, secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1450,9 +1446,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -1530,11 +1526,10 @@ public class EuclidFrameTools
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       pointOnLine.checkReferenceFrameMatch(lineSegmentStart);
       pointOnLine.checkReferenceFrameMatch(lineSegmentEnd);
+      if (intersectionToPack != null)
+         pointOnLine.checkReferenceFrameMatch(intersectionToPack);
       boolean success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
                                                                                       intersectionToPack);
-
-      if (intersectionToPack != null)
-         intersectionToPack.set(pointOnLine.getReferenceFrame(), intersectionToPack);
 
       return success;
    }
@@ -1576,7 +1571,7 @@ public class EuclidFrameTools
                                                                                       intersectionToPack);
 
       if (intersectionToPack != null)
-         intersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), intersectionToPack);
+         intersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
 
       return success;
    }
@@ -1621,15 +1616,13 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(firstPointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(secondPointOnLine);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
                                                                                                 secondPointOnLine, firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1679,9 +1672,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -1722,14 +1715,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(pointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(lineDirection);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
                                                                                                 firstIntersectionToPack, secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1774,9 +1765,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -1820,16 +1811,14 @@ public class EuclidFrameTools
                                                                FixedFramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
+      if (firstIntersectionToPack != null)
+         pointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         pointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ,
                                                                                                 boundingBoxMaxX, boundingBoxMaxY, boundingBoxMaxZ, pointOnLine,
                                                                                                 lineDirection, firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1880,9 +1869,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -1935,15 +1924,13 @@ public class EuclidFrameTools
                                                             FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
+      if (firstIntersectionToPack != null)
+         firstPointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         firstPointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, firstPointOnLine,
                                                                                              secondPointOnLine, firstIntersectionToPack,
                                                                                              secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2002,9 +1989,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2057,14 +2044,12 @@ public class EuclidFrameTools
                                                             FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
+      if (firstIntersectionToPack != null)
+         pointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         pointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, pointOnLine,
                                                                                              lineDirection, firstIntersectionToPack, secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2122,9 +2107,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2168,14 +2153,12 @@ public class EuclidFrameTools
                                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
+      if (firstIntersectionToPack != null)
+         firstPointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         firstPointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
                                                                                               firstIntersectionToPack, secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2224,9 +2207,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(firstPointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(firstPointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2270,14 +2253,12 @@ public class EuclidFrameTools
                                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
+      if (firstIntersectionToPack != null)
+         pointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         pointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, pointOnLine, lineDirection,
                                                                                               firstIntersectionToPack, secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2326,9 +2307,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2396,12 +2377,9 @@ public class EuclidFrameTools
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       pointOnPlane.checkReferenceFrameMatch(pointOnLine);
       pointOnPlane.checkReferenceFrameMatch(lineDirection);
-      boolean success = EuclidGeometryTools.intersectionBetweenLine3DAndPlane3D(pointOnPlane, planeNormal, pointOnLine, lineDirection, intersectionToPack);
-
-      if (success && intersectionToPack != null)
-         intersectionToPack.set(pointOnLine.getReferenceFrame(), intersectionToPack);
-
-      return success;
+      if (intersectionToPack != null)
+         pointOnPlane.checkReferenceFrameMatch(intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenLine3DAndPlane3D(pointOnPlane, planeNormal, pointOnLine, lineDirection, intersectionToPack);
    }
 
    /**
@@ -2433,7 +2411,7 @@ public class EuclidFrameTools
       boolean success = EuclidGeometryTools.intersectionBetweenLine3DAndPlane3D(pointOnPlane, planeNormal, pointOnLine, lineDirection, intersectionToPack);
 
       if (success && intersectionToPack != null)
-         intersectionToPack.setIncludingFrame(pointOnLine.getReferenceFrame(), intersectionToPack);
+         intersectionToPack.setReferenceFrame(pointOnLine.getReferenceFrame());
 
       return success;
    }
@@ -2484,14 +2462,13 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentStart);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentEnd);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, lineSegmentStart,
                                                                                                        lineSegmentEnd, firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2547,9 +2524,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2600,14 +2577,13 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentStart);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentEnd);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, lineSegmentStart,
                                                                                                        lineSegmentEnd, firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2663,9 +2639,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2719,14 +2695,13 @@ public class EuclidFrameTools
                                                                    FixedFramePoint3DBasics secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
+      if (firstIntersectionToPack != null)
+         lineSegmentStart.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         lineSegmentStart.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius,
                                                                                                     lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
                                                                                                     secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2785,9 +2760,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2832,15 +2807,13 @@ public class EuclidFrameTools
                                                                     FixedFramePoint3DBasics secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
+      if (firstIntersectionToPack != null)
+         lineSegmentStart.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         lineSegmentStart.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart,
                                                                                                      lineSegmentEnd, firstIntersectionToPack,
                                                                                                      secondIntersectionToPack);
-
-      // Set the correct reference frame.
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2891,9 +2864,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(lineSegmentStart.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -2987,13 +2960,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(rayOrigin);
       boundingBoxMin.checkReferenceFrameMatch(rayDirection);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
                                                                                                firstIntersectionToPack, secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3048,9 +3020,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -3127,12 +3099,11 @@ public class EuclidFrameTools
       rayOrigin.checkReferenceFrameMatch(rayDirection);
       rayOrigin.checkReferenceFrameMatch(lineSegmentStart);
       rayOrigin.checkReferenceFrameMatch(lineSegmentEnd);
+      if (intersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(intersectionToPack);
 
       boolean success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd,
                                                                                      intersectionToPack);
-
-      if (intersectionToPack != null)
-         intersectionToPack.set(rayOrigin.getReferenceFrame(), intersectionToPack);
 
       return success;
    }
@@ -3174,7 +3145,7 @@ public class EuclidFrameTools
                                                                                      intersectionToPack);
 
       if (intersectionToPack != null)
-         intersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), intersectionToPack);
+         intersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
 
       return success;
    }
@@ -3224,13 +3195,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(rayOrigin);
       boundingBoxMin.checkReferenceFrameMatch(rayDirection);
+      if (firstIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
                                                                                                firstIntersectionToPack, secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3285,9 +3255,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -3340,13 +3310,12 @@ public class EuclidFrameTools
                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
+      if (firstIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, rayOrigin,
                                                                                             rayDirection, firstIntersectionToPack, secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3404,9 +3373,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -3450,13 +3419,12 @@ public class EuclidFrameTools
                                                             FixedFramePoint3DBasics secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
+      if (firstIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         rayOrigin.checkReferenceFrameMatch(secondIntersectionToPack);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
                                                                                              firstIntersectionToPack, secondIntersectionToPack);
-
-      if (firstIntersectionToPack != null)
-         firstIntersectionToPack.set(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
-      if (secondIntersectionToPack != null)
-         secondIntersectionToPack.set(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3505,9 +3473,9 @@ public class EuclidFrameTools
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
-         firstIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), firstIntersectionToPack);
+         firstIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
       if (secondIntersectionToPack != null)
-         secondIntersectionToPack.setIncludingFrame(rayOrigin.getReferenceFrame(), secondIntersectionToPack);
+         secondIntersectionToPack.setReferenceFrame(rayOrigin.getReferenceFrame());
 
       return numberOfIntersections;
    }
@@ -3619,10 +3587,9 @@ public class EuclidFrameTools
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
       pointOnLine1.checkReferenceFrameMatch(lineDirection2);
-      boolean success = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, intersectionToPack);
-
       if (intersectionToPack != null)
-         intersectionToPack.set(pointOnLine1.getReferenceFrame(), intersectionToPack);
+         pointOnLine1.checkReferenceFrameMatch(intersectionToPack);
+      boolean success = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, intersectionToPack);
 
       return success;
    }
@@ -3660,7 +3627,7 @@ public class EuclidFrameTools
       boolean success = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, intersectionToPack);
 
       if (intersectionToPack != null)
-         intersectionToPack.setIncludingFrame(pointOnLine1.getReferenceFrame(), intersectionToPack);
+         intersectionToPack.setReferenceFrame(pointOnLine1.getReferenceFrame());
 
       return success;
    }
@@ -3734,11 +3701,10 @@ public class EuclidFrameTools
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd2);
+      if (intersectionToPack != null)
+         lineSegmentStart1.checkReferenceFrameMatch(intersectionToPack);
       boolean success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
                                                                                  intersectionToPack);
-
-      if (intersectionToPack != null)
-         intersectionToPack.set(lineSegmentStart1.getReferenceFrame(), intersectionToPack);
 
       return success;
    }
@@ -3778,7 +3744,7 @@ public class EuclidFrameTools
                                                                                  intersectionToPack);
 
       if (intersectionToPack != null)
-         intersectionToPack.setIncludingFrame(lineSegmentStart1.getReferenceFrame(), intersectionToPack);
+         intersectionToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
 
       return success;
    }
@@ -3824,13 +3790,12 @@ public class EuclidFrameTools
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1);
       pointOnPlane1.checkReferenceFrameMatch(pointOnPlane2);
       pointOnPlane1.checkReferenceFrameMatch(planeNormal2);
+      if (pointOnIntersectionToPack != null)
+         pointOnPlane1.checkReferenceFrameMatch(pointOnIntersectionToPack);
+      if (intersectionDirectionToPack != null)
+         pointOnPlane1.checkReferenceFrameMatch(intersectionDirectionToPack);
       boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, angleThreshold,
                                                                            pointOnIntersectionToPack, intersectionDirectionToPack);
-
-      if (pointOnIntersectionToPack != null)
-         pointOnIntersectionToPack.set(planeNormal1.getReferenceFrame(), pointOnIntersectionToPack);
-      if (intersectionDirectionToPack != null)
-         intersectionDirectionToPack.set(planeNormal1.getReferenceFrame(), intersectionDirectionToPack);
 
       return success;
    }
@@ -3880,9 +3845,9 @@ public class EuclidFrameTools
                                                                            pointOnIntersectionToPack, intersectionDirectionToPack);
 
       if (pointOnIntersectionToPack != null)
-         pointOnIntersectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), pointOnIntersectionToPack);
+         pointOnIntersectionToPack.setReferenceFrame(planeNormal1.getReferenceFrame());
       if (intersectionDirectionToPack != null)
-         intersectionDirectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), intersectionDirectionToPack);
+         intersectionDirectionToPack.setReferenceFrame(planeNormal1.getReferenceFrame());
 
       return success;
    }
@@ -3924,16 +3889,12 @@ public class EuclidFrameTools
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1);
       pointOnPlane1.checkReferenceFrameMatch(pointOnPlane2);
       pointOnPlane1.checkReferenceFrameMatch(planeNormal2);
-      boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, pointOnIntersectionToPack,
-                                                                           intersectionDirectionToPack);
-      if (success)
-      {
-         if (pointOnIntersectionToPack != null)
-            pointOnIntersectionToPack.set(planeNormal1.getReferenceFrame(), pointOnIntersectionToPack);
-         if (intersectionDirectionToPack != null)
-            intersectionDirectionToPack.set(planeNormal1.getReferenceFrame(), intersectionDirectionToPack);
-      }
-      return success;
+      if (pointOnIntersectionToPack != null)
+         pointOnPlane1.checkReferenceFrameMatch(pointOnIntersectionToPack);
+      if (intersectionDirectionToPack != null)
+         pointOnPlane1.checkReferenceFrameMatch(intersectionDirectionToPack);
+      return EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, pointOnIntersectionToPack,
+                                                                intersectionDirectionToPack);
    }
 
    /**
@@ -3978,9 +3939,9 @@ public class EuclidFrameTools
       if (success)
       {
          if (pointOnIntersectionToPack != null)
-            pointOnIntersectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), pointOnIntersectionToPack);
+            pointOnIntersectionToPack.setReferenceFrame(planeNormal1.getReferenceFrame());
          if (intersectionDirectionToPack != null)
-            intersectionDirectionToPack.setIncludingFrame(planeNormal1.getReferenceFrame(), intersectionDirectionToPack);
+            intersectionDirectionToPack.setReferenceFrame(planeNormal1.getReferenceFrame());
       }
       return success;
    }
@@ -4351,7 +4312,7 @@ public class EuclidFrameTools
    {
       firstPointOnPlane.checkReferenceFrameMatch(secondPointOnPlane);
       firstPointOnPlane.checkReferenceFrameMatch(thirdPointOnPlane);
-      normalToPack.setToZero(firstPointOnPlane.getReferenceFrame());
+      normalToPack.setReferenceFrame(firstPointOnPlane.getReferenceFrame());
       return EuclidGeometryTools.normal3DFromThreePoint3Ds(firstPointOnPlane, secondPointOnPlane, thirdPointOnPlane, normalToPack);
    }
 
@@ -4445,7 +4406,7 @@ public class EuclidFrameTools
    {
       pointToProject.checkReferenceFrameMatch(firstPointOnLine);
       pointToProject.checkReferenceFrameMatch(secondPointOnLine);
-      projectionToPack.setToZero(pointToProject.getReferenceFrame());
+      projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, firstPointOnLine, secondPointOnLine, projectionToPack);
    }
 
@@ -4540,7 +4501,7 @@ public class EuclidFrameTools
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine);
       pointToProject.checkReferenceFrameMatch(lineDirection);
-      projectionToPack.setToZero(pointToProject.getReferenceFrame());
+      projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, pointOnLine, lineDirection, projectionToPack);
    }
 
@@ -4635,7 +4596,7 @@ public class EuclidFrameTools
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine);
       pointToProject.checkReferenceFrameMatch(lineDirection);
-      projectionToPack.setToZero(pointToProject.getReferenceFrame());
+      projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnLine3D(pointToProject, pointOnLine, lineDirection, projectionToPack);
    }
 
@@ -4740,7 +4701,7 @@ public class EuclidFrameTools
                                                              FramePoint2DReadOnly lineSegmentEnd, FramePoint2DBasics projectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      projectionToPack.setToZero(lineSegmentStart.getReferenceFrame());
+      projectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, lineSegmentStart, lineSegmentEnd, projectionToPack);
    }
 
@@ -4806,7 +4767,7 @@ public class EuclidFrameTools
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart);
       pointToProject.checkReferenceFrameMatch(lineSegmentEnd);
-      projectionToPack.setToZero(pointToProject.getReferenceFrame());
+      projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProject, lineSegmentStart, lineSegmentEnd, projectionToPack);
    }
 
@@ -4910,7 +4871,7 @@ public class EuclidFrameTools
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart);
       pointToProject.checkReferenceFrameMatch(lineSegmentEnd);
-      projectionToPack.setToZero(pointToProject.getReferenceFrame());
+      projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(pointToProject, lineSegmentStart, lineSegmentEnd, projectionToPack);
    }
 
@@ -4998,7 +4959,7 @@ public class EuclidFrameTools
    {
       pointToProject.checkReferenceFrameMatch(pointOnPlane);
       pointToProject.checkReferenceFrameMatch(planeNormal);
-      projectionToPack.setToZero(pointToProject.getReferenceFrame());
+      projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, pointOnPlane, planeNormal, projectionToPack);
    }
 
@@ -5058,7 +5019,7 @@ public class EuclidFrameTools
                                                        FramePoint3DBasics projectionToPack)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
-      projectionToPack.setToZero(pointOnPlane.getReferenceFrame());
+      projectionToPack.setReferenceFrame(pointOnPlane.getReferenceFrame());
       return EuclidGeometryTools.orthogonalProjectionOnPlane3D(x, y, z, pointOnPlane, planeNormal, projectionToPack);
    }
 
@@ -5338,8 +5299,8 @@ public class EuclidFrameTools
                                                  FramePoint2DBasics bisectorStartToPack, FrameVector2DBasics bisectorDirectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      bisectorStartToPack.setToZero(lineSegmentStart.getReferenceFrame());
-      bisectorDirectionToPack.setToZero(lineSegmentStart.getReferenceFrame());
+      bisectorStartToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
+      bisectorDirectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.perpendicularBisector2D(lineSegmentStart, lineSegmentEnd, bisectorStartToPack, bisectorDirectionToPack);
    }
 
@@ -5467,8 +5428,8 @@ public class EuclidFrameTools
                                                         FramePoint2DBasics bisectorSegmentEndToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      bisectorSegmentStartToPack.setToZero(lineSegmentStart.getReferenceFrame());
-      bisectorSegmentEndToPack.setToZero(lineSegmentStart.getReferenceFrame());
+      bisectorSegmentStartToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
+      bisectorSegmentEndToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       return EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength, bisectorSegmentStartToPack,
                                                                 bisectorSegmentEndToPack);
    }
@@ -5608,7 +5569,7 @@ public class EuclidFrameTools
    {
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
-      orthogonalProjectionToPack.setToZero(point.getReferenceFrame());
+      orthogonalProjectionToPack.setReferenceFrame(point.getReferenceFrame());
       Vector3D perpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine,
                                                                                                   orthogonalProjectionToPack);
       if (perpendicularVector == null)
@@ -5689,8 +5650,8 @@ public class EuclidFrameTools
    {
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
-      orthogonalProjectionToPack.setToZero(point.getReferenceFrame());
-      perpendicularVectorToPack.setToZero(point.getReferenceFrame());
+      orthogonalProjectionToPack.setReferenceFrame(point.getReferenceFrame());
+      perpendicularVectorToPack.setReferenceFrame(point.getReferenceFrame());
       return EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine, orthogonalProjectionToPack,
                                                                           perpendicularVectorToPack);
    }
@@ -5857,7 +5818,7 @@ public class EuclidFrameTools
    {
       baseVertexA.checkReferenceFrameMatch(baseVertexC);
       baseVertexA.checkReferenceFrameMatch(trianglePlaneNormal);
-      topVertexBToPack.setToZero(baseVertexA.getReferenceFrame());
+      topVertexBToPack.setReferenceFrame(baseVertexA.getReferenceFrame());
       EuclidGeometryTools.topVertex3DOfIsoscelesTriangle3D(baseVertexA, baseVertexC, trianglePlaneNormal, ccwAngleAboutNormalAtTopVertex, topVertexBToPack);
    }
 
@@ -5949,7 +5910,7 @@ public class EuclidFrameTools
    {
       A.checkReferenceFrameMatch(B);
       A.checkReferenceFrameMatch(C);
-      XToPack.setToZero(A.getReferenceFrame());
+      XToPack.setReferenceFrame(A.getReferenceFrame());
       return EuclidGeometryTools.triangleBisector2D(A, B, C, XToPack);
    }
 }

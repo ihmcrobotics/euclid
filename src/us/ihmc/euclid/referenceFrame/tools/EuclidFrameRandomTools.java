@@ -3,6 +3,10 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.Random;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.FrameLine2D;
+import us.ihmc.euclid.referenceFrame.FrameLine3D;
+import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
+import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
 import us.ihmc.euclid.referenceFrame.FrameOrientation2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -1227,61 +1231,6 @@ public class EuclidFrameRandomTools
    }
 
    /**
-    * Generates a random 2D frame orientation with a yaw uniformly distributed in [-<i>pi</i>;
-    * <i>pi</i>].
-    *
-    * @param random the random generator to use.
-    * @param referenceFrame the random frame orientation's reference frame.
-    * @return the random 2D frame orientation.
-    */
-   public static FrameOrientation2D nextFrameOrientation2D(Random random, ReferenceFrame referenceFrame)
-   {
-      return new FrameOrientation2D(referenceFrame, EuclidGeometryRandomTools.nextOrientation2D(random));
-   }
-
-   /**
-    * Generates a random 2D frame pose with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
-    *
-    * @param random the random generator to use.
-    * @param referenceFrame the random frame quaternion's reference frame.
-    * @return the random 2D frame pose.
-    */
-   public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame)
-   {
-      return new FramePose2D(referenceFrame, EuclidGeometryRandomTools.nextPose2D(random));
-   }
-
-   public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
-   {
-      return new FramePose2D(referenceFrame, EuclidGeometryRandomTools.nextPose2D(random, positionMinMax, orientationMinMax));
-   }
-
-   /**
-    * Generates a random 3D frame pose with a quaternion uniformly distributed on the unit-sphere.
-    * <p>
-    * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @param referenceFrame the random frame quaternion's reference frame.
-    * @return the random 3D frame pose.
-    */
-   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame)
-   {
-      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random));
-   }
-
-   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
-   {
-      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
-   }
-
-   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
-   {
-      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, positionMinMax, orientationMinMax));
-   }
-
-   /**
     * Generates a random frame quaternion uniformly distributed on the unit-sphere.
     * <p>
     * The rotation magnitude described by the generated quaternion is in [-{@code minMaxAngle};
@@ -1343,5 +1292,108 @@ public class EuclidFrameRandomTools
    public static FrameVector4D nextFrameVector4D(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameVector4D(referenceFrame, EuclidCoreRandomTools.nextVector4D(random));
+   }
+
+   /**
+    * Generates a random 2D frame orientation with a yaw uniformly distributed in [-<i>pi</i>;
+    * <i>pi</i>].
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame orientation's reference frame.
+    * @return the random 2D frame orientation.
+    */
+   public static FrameOrientation2D nextFrameOrientation2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameOrientation2D(referenceFrame, EuclidGeometryRandomTools.nextOrientation2D(random));
+   }
+
+   /**
+    * Generates a random 2D frame pose with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame quaternion's reference frame.
+    * @return the random 2D frame pose.
+    */
+   public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FramePose2D(referenceFrame, EuclidGeometryRandomTools.nextPose2D(random));
+   }
+
+   public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
+   {
+      return new FramePose2D(referenceFrame, EuclidGeometryRandomTools.nextPose2D(random, positionMinMax, orientationMinMax));
+   }
+
+   /**
+    * Generates a random 3D frame pose with a quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame quaternion's reference frame.
+    * @return the random 3D frame pose.
+    */
+   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random));
+   }
+
+   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
+   {
+      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
+   }
+
+   public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
+   {
+      return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, positionMinMax, orientationMinMax));
+   }
+
+   /**
+    * Generates a random 2D frame line.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame line's reference frame.
+    * @return the random frame line.
+    */
+   public static FrameLine2D nextFrameLine2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameLine2D(referenceFrame, EuclidGeometryRandomTools.nextLine2D(random));
+   }
+
+   /**
+    * Generates a random 2D frame line.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame line's reference frame.
+    * @return the random frame line.
+    */
+   public static FrameLine3D nextFrameLine3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameLine3D(referenceFrame, EuclidGeometryRandomTools.nextLine3D(random));
+   }
+
+   /**
+    * Generates a random 2D frame line segment.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame line segment's reference frame.
+    * @return the random frame line segment.
+    */
+   public static FrameLineSegment2D nextFrameLineSegment2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameLineSegment2D(referenceFrame, EuclidGeometryRandomTools.nextLineSegment2D(random));
+   }
+
+   /**
+    * Generates a random 3D frame line segment.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame line segment's reference frame.
+    * @return the random frame line segment.
+    */
+   public static FrameLineSegment3D nextFrameLineSegment3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameLineSegment3D(referenceFrame, EuclidGeometryRandomTools.nextLineSegment3D(random));
    }
 }

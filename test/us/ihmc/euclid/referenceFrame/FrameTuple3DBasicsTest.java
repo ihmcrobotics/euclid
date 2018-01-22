@@ -446,7 +446,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
    {
       Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), false, true, methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), methodFilter);
    }
 
    @Test

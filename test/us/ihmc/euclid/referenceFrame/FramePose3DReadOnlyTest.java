@@ -1,20 +1,19 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Predicate;
+
 import org.junit.Test;
+
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Predicate;
 
 public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
 {
@@ -48,14 +47,13 @@ public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
    {
       Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFramePose(random, frame), false, true, methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFramePose(random, frame), methodFilter);
    }
 
    @Test
    public void testOverloading() throws Exception
    {
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("get", new Class<?>[] {Tuple3DBasics.class, QuaternionBasics.class});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FramePose3DReadOnly.class, Pose3DReadOnly.class, true, 1, framelessMethodsToIgnore);
    }
 }

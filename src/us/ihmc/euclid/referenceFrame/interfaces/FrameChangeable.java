@@ -10,7 +10,7 @@ public interface FrameChangeable extends ReferenceFrameHolder, Transformable
     * 
     * @param referenceFrame the new reference frame.
     */
-   void setReferenceFrame(ReferenceFrame reference);
+   void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
     * Transforms this geometry such that the transformation represents the same geometry but from

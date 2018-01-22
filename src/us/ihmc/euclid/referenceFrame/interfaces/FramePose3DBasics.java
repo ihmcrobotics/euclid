@@ -28,10 +28,10 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeable
 {
    /**
-    * Sets the reference frame of this orientation 3D without updating or modifying its position or
+    * Sets the reference frame of this pose 3D without updating or modifying its position or
     * orientation.
     * 
-    * @param referenceFrame the new reference frame for this frame orientation 3D.
+    * @param referenceFrame the new reference frame for this frame pose 3D.
     */
    void setReferenceFrame(ReferenceFrame referenceFrame);
 

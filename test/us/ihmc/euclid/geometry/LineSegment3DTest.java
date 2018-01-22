@@ -18,7 +18,10 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class LineSegment3DTest
 {
@@ -152,7 +155,11 @@ public class LineSegment3DTest
       {
          LineSegment3D lineSegment3D = new LineSegment3D();
          assertFalse(lineSegment3D.containsNaN());
-         lineSegment3D.getFirstEndpoint().setElement(i, Double.NaN);
+         
+         Point3D firstEndpoint = new Point3D();
+         firstEndpoint.setElement(i, Double.NaN);
+         lineSegment3D.setFirstEndpoint(firstEndpoint);
+         
          assertTrue(lineSegment3D.containsNaN());
          assertTrue(lineSegment3D.firstEndpointContainsNaN());
          assertFalse(lineSegment3D.secondEndpointContainsNaN());
@@ -162,7 +169,11 @@ public class LineSegment3DTest
       {
          LineSegment3D lineSegment3D = new LineSegment3D();
          assertFalse(lineSegment3D.containsNaN());
-         lineSegment3D.getSecondEndpoint().setElement(i, Double.NaN);
+         
+         Point3D secondEndpoint = new Point3D();
+         secondEndpoint.setElement(i, Double.NaN);
+         lineSegment3D.setSecondEndpoint(secondEndpoint);
+         
          assertTrue(lineSegment3D.containsNaN());
          assertFalse(lineSegment3D.firstEndpointContainsNaN());
          assertTrue(lineSegment3D.secondEndpointContainsNaN());
@@ -228,7 +239,7 @@ public class LineSegment3DTest
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point3D expected = new Point3D();
-         Point3D actual = new Point3D();
+         Point3DBasics actual = new Point3D();
 
          expected = EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(query, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
          actual = lineSegment3D.orthogonalProjectionCopy(query);
@@ -260,7 +271,7 @@ public class LineSegment3DTest
 
          Point3D expected = new Point3D();
          expected.interpolate(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), percentage);
-         Point3D actual = new Point3D();
+         Point3DBasics actual = new Point3D();
          actual = lineSegment3D.pointBetweenEndpointsGivenPercentage(percentage);
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
       }
@@ -330,7 +341,7 @@ public class LineSegment3DTest
 
          Point3D expected = new Point3D();
          expected.interpolate(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), percentage);
-         Point3D actual = new Point3D();
+         Point3DBasics actual = new Point3D();
          actual = lineSegment3D.pointOnLineGivenPercentage(percentage);
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
       }
@@ -363,8 +374,8 @@ public class LineSegment3DTest
          Vector3D actualDirection = new Vector3D();
          lineSegment3D.getDirection(false, actualDirection);
 
-         Point3D firstEndpoint = lineSegment3D.getFirstEndpoint();
-         Point3D secondEndpoint = lineSegment3D.getSecondEndpoint();
+         Point3DReadOnly firstEndpoint = lineSegment3D.getFirstEndpoint();
+         Point3DReadOnly secondEndpoint = lineSegment3D.getSecondEndpoint();
          Vector3D expectedDirection = new Vector3D();
          expectedDirection.sub(secondEndpoint, firstEndpoint);
          EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualDirection, EPSILON);
@@ -388,7 +399,7 @@ public class LineSegment3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // getDirection(false)
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
-         Vector3D actualDirection = lineSegment3D.getDirection(false);
+         Vector3DBasics actualDirection = lineSegment3D.getDirection(false);
 
          Vector3D expectedDirection = new Vector3D();
          lineSegment3D.getDirection(false, expectedDirection);
@@ -399,7 +410,7 @@ public class LineSegment3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // getDirection(true, Vector3DBasics directionToPack)
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
-         Vector3D actualDirection = lineSegment3D.getDirection(true);
+         Vector3DBasics actualDirection = lineSegment3D.getDirection(true);
 
          assertEquals(1.0, actualDirection.length(), EPSILON);
 
@@ -418,7 +429,7 @@ public class LineSegment3DTest
       {
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          double percentage = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
-         Point3D pointInside;
+         Point3DBasics pointInside;
          pointInside = lineSegment3D.pointBetweenEndpointsGivenPercentage(percentage);
          assertTrue(lineSegment3D.isBetweenEndpoints(pointInside));
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
@@ -463,7 +474,7 @@ public class LineSegment3DTest
       {
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          double percentage = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
-         Point3D pointBefore;
+         Point3DBasics pointBefore;
          pointBefore = lineSegment3D.pointOnLineGivenPercentage(percentage);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointBefore));
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
@@ -481,7 +492,7 @@ public class LineSegment3DTest
       {
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          double percentage = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
-         Point3D pointAfter;
+         Point3DBasics pointAfter;
          pointAfter = lineSegment3D.pointOnLineGivenPercentage(percentage);
          assertFalse(lineSegment3D.isBetweenEndpoints(pointAfter));
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
@@ -531,27 +542,10 @@ public class LineSegment3DTest
 
          Point3D actualFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          Point3D actualSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         lineSegment3D.getFirstEndpoint(actualFirstEndpoint);
+         actualFirstEndpoint.set(lineSegment3D.getFirstEndpoint());
          EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, actualFirstEndpoint, EPSILON);
-         lineSegment3D.getSecondEndpoint(actualSecondEndpoint);
+         actualSecondEndpoint.set(lineSegment3D.getSecondEndpoint());
          EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, actualSecondEndpoint, EPSILON);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Line getters
-         LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
-         Line3D actualLine = new Line3D();
-
-         lineSegment3D.getLine(actualLine);
-         EuclidCoreTestTools.assertTuple3DEquals(lineSegment3D.getFirstEndpoint(), actualLine.getPoint(), EPSILON);
-         Vector3D expectedDirection = lineSegment3D.getDirection(true);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualLine.getDirection(), EPSILON);
-
-         lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
-         actualLine = lineSegment3D.getLine();
-         EuclidCoreTestTools.assertTuple3DEquals(lineSegment3D.getFirstEndpoint(), actualLine.getPoint(), EPSILON);
-         expectedDirection = lineSegment3D.getDirection(true);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualLine.getDirection(), EPSILON);
       }
    }
 
@@ -565,10 +559,8 @@ public class LineSegment3DTest
          LineSegment3D lineSegment3d = EuclidGeometryRandomTools.nextLineSegment3D(random, EPSILON);
          Transform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
-         Point3D expectedFirstEndPoint = new Point3D();
-         Point3D expectedSecondEndpoint = new Point3D();
-         lineSegment3d.getFirstEndpoint(expectedFirstEndPoint);
-         lineSegment3d.getSecondEndpoint(expectedSecondEndpoint);
+         Point3D expectedFirstEndPoint = new Point3D(lineSegment3d.getFirstEndpoint());
+         Point3D expectedSecondEndpoint = new Point3D(lineSegment3d.getSecondEndpoint());
 
          lineSegment3d.applyTransform(transform);
          expectedFirstEndPoint.applyTransform(transform);
@@ -596,13 +588,26 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getFirstEndpoint().getElement(j);
-            line2.getFirstEndpoint().setElement(j, element + 0.999 * epsilon);
+
+            Point3D firstEndpoint = new Point3D(line2.getFirstEndpoint());
+            firstEndpoint.setElement(j, element + 0.999 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getFirstEndpoint().setElement(j, element - 0.999 * epsilon);
+
+            firstEndpoint.setElement(j, element - 0.999 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getFirstEndpoint().setElement(j, element + 1.001 * epsilon);
+
+            firstEndpoint.setElement(j, element + 1.001 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
-            line2.getFirstEndpoint().setElement(j, element - 1.001 * epsilon);
+
+            firstEndpoint.setElement(j, element - 1.001 * epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
 
@@ -611,13 +616,26 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.epsilonEquals(line2, epsilon));
             double element = line1.getSecondEndpoint().getElement(j);
-            line2.getSecondEndpoint().setElement(j, element + 0.999 * epsilon);
+            
+            Point3D secondEndpoint = new Point3D(line2.getSecondEndpoint());
+            secondEndpoint.setElement(j, element + 0.999 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getSecondEndpoint().setElement(j, element - 0.999 * epsilon);
+
+            secondEndpoint.setElement(j, element - 0.999 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertTrue(line1.epsilonEquals(line2, epsilon));
-            line2.getSecondEndpoint().setElement(j, element + 1.001 * epsilon);
+
+            secondEndpoint.setElement(j, element + 1.001 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
-            line2.getSecondEndpoint().setElement(j, element - 1.001 * epsilon);
+
+            secondEndpoint.setElement(j, element - 1.001 * epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
       }
@@ -646,9 +664,16 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.equals(line2));
             double element = line1.getFirstEndpoint().getElement(j);
-            line2.getFirstEndpoint().setElement(j, element + epsilon);
+            
+            Point3D firstEndpoint = new Point3D(line2.getFirstEndpoint());
+            firstEndpoint.setElement(j, element + epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.equals(line2));
-            line2.getFirstEndpoint().setElement(j, element - epsilon);
+
+            firstEndpoint.setElement(j, element - epsilon);
+            line2.setFirstEndpoint(firstEndpoint);
+            
             assertFalse(line1.equals(line2));
          }
 
@@ -657,9 +682,16 @@ public class LineSegment3DTest
             line2.set(line1);
             assertTrue(line1.equals(line2));
             double element = line1.getSecondEndpoint().getElement(j);
-            line2.getSecondEndpoint().setElement(j, element + epsilon);
+
+            Point3D secondEndpoint = new Point3D(line2.getSecondEndpoint());
+            secondEndpoint.setElement(j, element + epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.equals(line2));
-            line2.getSecondEndpoint().setElement(j, element - epsilon);
+
+            secondEndpoint.setElement(j, element - epsilon);
+            line2.setSecondEndpoint(secondEndpoint);
+            
             assertFalse(line1.equals(line2));
          }
       }
