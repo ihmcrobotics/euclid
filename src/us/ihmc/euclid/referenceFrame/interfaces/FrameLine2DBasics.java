@@ -203,7 +203,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Sets this line from the given {@code frameLineSegment2DReadOnly}.
+    * Sets this line to go through the endpoints of the given line segment.
     *
     * @param referenceFrame the new reference frame for this frame line.
     * @param frameLineSegment2DReadOnly the line segment to copy. Not modified.
@@ -214,7 +214,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Sets this line from the given {@code frameLineSegment3DReadOnly}.
+    * Sets this line to go through the endpoints of the given line segment projected on the XY-plane.
     *
     * @param referenceFrame the new reference frame for this frame line.
     * @param frameLineSegment3DReadOnly the line segment to copy. Not modified.

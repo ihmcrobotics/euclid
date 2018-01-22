@@ -3,11 +3,30 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
+/**
+ * Read-only interface for a line 3D expressed in a given reference frame.
+ * <p>
+ * A line 3D represents an infinitely long line in the XY-plane and defined by a point and a
+ * direction.
+ * </p>
+ * <p>
+ * In addition to representing a {@link Line3DReadOnly}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameLine3DReadOnly}. This allows, for instance, to enforce, at runtime, that operations
+ * on lines occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FrameLine3DReadOnly} extends {@code Line3DReadOnly}, it is compatible with
+ * methods only requiring {@code Line3DReadOnly}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FrameLine3DReadOnly}.
+ * </p>
+ */
 public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolder
 {
    /** {@inheritDoc} */

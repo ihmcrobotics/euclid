@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Line2D;
+import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
@@ -17,6 +18,22 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
+/**
+ * {@code FrameLine2D} is a 2D line expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link Line2DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FrameLine2D}. This allows, for instance, to enforce, at runtime, that operations on
+ * lines occur in the same coordinate system. Also, via the method
+ * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a point in different
+ * reference frames.
+ * </p>
+ * <p>
+ * Because a {@code FrameLine2D} extends {@code Line2DBasics}, it is compatible with methods only
+ * requiring {@code Line2DBasics}. However, these methods do NOT assert that the operation occur in
+ * the proper coordinate system. Use this feature carefully and always prefer using methods
+ * requiring {@code FrameLine2D}.
+ * </p>
+ */
 public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2D>
 {
    /** The reference frame in which this line is expressed. */
@@ -116,12 +133,12 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
     * Creates a new line, initializes its point and direction from the given line and its reference
     * frame to {@code ReferenceFrame.getWorldFrame()}.
     * 
-    * @param line2dReadOnly the line used to initialize the point and direction of this. Not
+    * @param line2DReadOnly the line used to initialize the point and direction of this. Not
     *           modified.
     */
-   public FrameLine2D(Line2DReadOnly line2dReadOnly)
+   public FrameLine2D(Line2DReadOnly line2DReadOnly)
    {
-      this(ReferenceFrame.getWorldFrame(), line2dReadOnly);
+      this(ReferenceFrame.getWorldFrame(), line2DReadOnly);
    }
 
    /**
@@ -129,7 +146,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
     * frame to {@code referenceFrame}.
     * 
     * @param referenceFrame the initial reference frame for this line.
-    * @param line2dReadOnly the line used to initialize the point and direction of this. Not
+    * @param line2DReadOnly the line used to initialize the point and direction of this. Not
     *           modified.
     */
    public FrameLine2D(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
@@ -175,8 +192,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    }
 
    /**
-    * Creates a new line and initializes it to go through the endpoints of the given line segment
-    * projected on the XY-plane.
+    * Creates a new line and initializes it to go through the endpoints of the given line segment.
     * <p>
     * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
     * </p>

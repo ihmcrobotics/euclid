@@ -53,7 +53,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    }
 
    /**
-    * Creates a new line 2D and initializes it to {@code lineSegment2DReadOnly}.
+    * Creates a new line and initializes it to go through the endpoints of the given line segment.
     *
     * @param lineSegment2DReadOnly the line segment used to initialize this line. Not modified.
     */

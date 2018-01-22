@@ -46,6 +46,11 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
       set(pointOnLineX, pointOnLineY, pointOnLineZ, lineDirectionX, lineDirectionY, lineDirectionZ);
    }
 
+   /**
+    * Creates a new line 3D and initializes it to {@code other}.
+    *
+    * @param other the other line used to initialize this line. Not modified.
+    */
    public Line3D(Line2DReadOnly line2DReadOnly)
    {
       set(line2DReadOnly);
@@ -61,11 +66,21 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
       set(other);
    }
 
+   /**
+    * Creates a new line and initializes it to go through the endpoints of the given line segment.
+    *
+    * @param lineSegment2DReadOnly the line segment used to initialize this line. Not modified.
+    */
    public Line3D(LineSegment2DReadOnly lineSegment2DReadOnly)
    {
       set(lineSegment2DReadOnly);
    }
 
+   /**
+    * Creates a new line and initializes it to go through the endpoints of the given line segment.
+    *
+    * @param lineSegment3DReadOnly the line segment used to initialize this line. Not modified.
+    */
    public Line3D(LineSegment3DReadOnly lineSegment3DReadOnly)
    {
       set(lineSegment3DReadOnly);

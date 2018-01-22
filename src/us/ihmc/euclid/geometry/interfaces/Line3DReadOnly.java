@@ -1,6 +1,5 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -8,6 +7,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for a line 3D.
+ * <p>
+ * A line 3D represents an infinitely long line in 3 dimensions and defined by a point and a
+ * direction.
+ * </p>
+ */
 public interface Line3DReadOnly
 {
    /**
@@ -126,17 +132,6 @@ public interface Line3DReadOnly
    default double distance(Point3DReadOnly point)
    {
       return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, getPoint(), getDirection());
-   }
-
-   /**
-    * Copies this line and then flips the direction of the copy before returning it.
-    */
-   default Line3D negateDirectionCopy()
-   {
-      Line3D ret = new Line3D(this);
-      ret.negateDirection();
-
-      return ret;
    }
 
    /**

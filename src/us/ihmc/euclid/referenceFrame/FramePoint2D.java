@@ -25,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * Because a {@code FramePoint2D} extends {@code Point2DBasics}, it is compatible with methods only
  * requiring {@code Point2DBasics}. However, these methods do NOT assert that the operation occur in
  * the proper coordinate system. Use this feature carefully and always prefer using methods
- * requiring {@code FrameVector2D}.
+ * requiring {@code FramePoint2D}.
  * </p>
  */
 public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoint2D>

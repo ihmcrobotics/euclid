@@ -10,6 +10,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Write and read interface for a line 3D.
+ * <p>
+ * A line 3D represents an infinitely long line in 3 dimensions and defined by a point and a
+ * direction.
+ * </p>
+ */
 public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 {
    /**
@@ -117,23 +124,49 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
       getDirection().normalize();
    }
 
-   default void set(Line2DReadOnly other)
+   /**
+    * Sets this line to represent the same geometry as the given {@code line2DReadOnly}.
+    * <p>
+    * After calling this method this line is in the XY-plane.
+    * </p>
+    * 
+    * @param line2DReadOnly the other line to copy. Not modified.
+    */
+   default void set(Line2DReadOnly line2DReadOnly)
    {
-      getPoint().set(other.getPoint(), 0.0);
-      getDirection().set(other.getDirection(), 0.0);
+      getPoint().set(line2DReadOnly.getPoint(), 0.0);
+      getDirection().set(line2DReadOnly.getDirection(), 0.0);
    }
 
+   /**
+    * Sets this line to represent the same geometry as the given {@code other}.
+    * 
+    * @param line3DReadOnly the other line to copy. Not modified.
+    */
    default void set(Line3DReadOnly other)
    {
       getPoint().set(other.getPoint());
       getDirection().set(other.getDirection());
    }
 
+   /**
+    * Sets this line to go through the endpoints of the given line segment.
+    * <p>
+    * After calling this method this line is in the XY-plane.
+    * </p>
+    * 
+    * @param lineSegment2DReadOnly the line segment to get the endpoints from. Not modified.
+    */
    default void set(LineSegment2DReadOnly lineSegment2DReadOnly)
    {
       set(lineSegment2DReadOnly.getFirstEndpoint(), lineSegment2DReadOnly.getSecondEndpoint());
    }
 
+   /**
+    * Sets this line to go through the endpoints of the given line segment.
+    * 
+    * @param lineSegment2DReadOnly the line segment to get the endpoints from. Not modified.
+    */
    default void set(LineSegment3DReadOnly lineSegment3DReadOnly)
    {
       set(lineSegment3DReadOnly.getFirstEndpoint(), lineSegment3DReadOnly.getSecondEndpoint());
@@ -157,6 +190,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Redefines this line such that it goes through the two given points.
+    * <p>
+    * After calling this method this line is in the XY-plane.
+    * </p>
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
@@ -199,6 +235,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Redefines this line with a new point and a new direction vector.
+    * <p>
+    * After calling this method this line is in the XY-plane.
+    * </p>
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
