@@ -10,6 +10,12 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 
+/**
+ * Read-only interface for a line segment 2D.
+ * <p>
+ * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
+ * </p>
+ */
 public interface LineSegment2DReadOnly
 {
    /**
@@ -315,12 +321,45 @@ public interface LineSegment2DReadOnly
 
    /**
     * Returns a copy of this line segment with the endpoints swapped.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     */
    default LineSegment2D flipDirectionCopy()
    {
       return new LineSegment2D(getSecondEndpoint(), getFirstEndpoint());
    }
 
+   /**
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
+    * this convex polygon 2D.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
+    * this method returns {@code null}.
+    * <li>If no intersections exist, this method returns {@code null}.
+    * <li>If the line segment is collinear to an edge:
+    * <ul>
+    * <li>The edge entirely contains the line segment: this method finds two intersections which are
+    * the endpoints of the line segment.
+    * <li>The line segment entirely contains the edge: this method finds two intersections which are
+    * the vertices of the edge.
+    * <li>The edge and the line segment partially overlap: this method finds two intersections which
+    * the polygon's vertex that on the line segment and the line segment's endpoint that is on the
+    * polygon's edge.
+    * </ul>
+    * </ul>
+    * </p>
+    *
+    * @param convexPolygon the polygon this line segment may intersect. Not modified.
+    * @return the intersections between the line segment and the polygon.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    */
    default Point2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
    {
       return convexPolygon.intersectionWith(this);

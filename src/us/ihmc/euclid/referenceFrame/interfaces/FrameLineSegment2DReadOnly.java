@@ -7,10 +7,29 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
+/**
+ * Read-only interface for a line segment 2D expressed in a given reference frame, i.e. this line
+ * segment is always expressed in the same reference frame.
+ * <p>
+ * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
+ * </p>
+ * <p>
+ * In addition to representing a {@link LineSegment2DReadOnly}, a {@link ReferenceFrame} is associated
+ * to a {@code FrameLineSegment2DReadOnly}. This allows, for instance, to enforce, at runtime, that
+ * operations on lines occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FrameLineSegment2DReadOnly} extends {@code LineSegment2DReadOnly}, it is compatible
+ * with methods only requiring {@code LineSegment2DReadOnly}. However, these methods do NOT assert
+ * that the operation occur in the proper coordinate system. Use this feature carefully and always
+ * prefer using methods requiring {@code FrameLineSegment2DReadOnly}.
+ * </p>
+ */
 public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, ReferenceFrameHolder
 {
    /**

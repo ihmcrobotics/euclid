@@ -8,6 +8,24 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Write and read interface for a line segment 2D expressed in a constant reference frame, i.e. this
+ * line segment is always expressed in the same reference frame.
+ * <p>
+ * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
+ * </p>
+ * <p>
+ * In addition to representing a {@link LineSegment2DBasics}, a {@link ReferenceFrame} is associated
+ * to a {@code FrameLineSegment2DBasics}. This allows, for instance, to enforce, at runtime, that
+ * operations on lines occur in the same coordinate system.
+ * </p>
+ * <p>
+ * Because a {@code FrameLineSegment2DBasics} extends {@code LineSegment2DBasics}, it is compatible
+ * with methods only requiring {@code LineSegment2DBasics}. However, these methods do NOT assert
+ * that the operation occur in the proper coordinate system. Use this feature carefully and always
+ * prefer using methods requiring {@code FrameLineSegment2DBasics}.
+ * </p>
+ */
 public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnly, LineSegment2DBasics
 {
    /**
@@ -148,6 +166,15 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
       setSecondEndpoint(secondEndpoint.getReferenceFrame(), secondEndpoint);
    }
 
+   /**
+    * Redefines this line segments with new endpoints.
+    *
+    * @param firstEndpointX x-coordinate of the new first endpoint.
+    * @param firstEndpointY y-coordinate of the new first endpoint.
+    * @param secondEndpointX x-coordinate of the new second endpoint.
+    * @param secondEndpointY y-coordinate of the new second endpoint.
+    * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    */
    default void set(ReferenceFrame referenceFrame, double firstEndpointX, double firstEndpointY, double secondEndpointX, double secondEndpointY)
    {
       checkReferenceFrameMatch(referenceFrame);

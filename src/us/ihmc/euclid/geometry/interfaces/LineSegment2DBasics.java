@@ -11,6 +11,12 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Write and read interface for a line segment 2D.
+ * <p>
+ * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
+ * </p>
+ */
 public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, Transformable
 {
    /**
@@ -252,6 +258,12 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
       setSecondEndpoint(x, y);
    }
 
+   /**
+    * Translates this line segment perpendicularly to its direction.
+    * 
+    * @param shiftToLeft defines to which side this line segment is to be translated.
+    * @param distanceToShift the distance this line segment is to be shifted.
+    */
    default void shift(boolean shiftToLeft, double distanceToShift)
    {
       double vectorX = getSecondEndpointX() - getFirstEndpointX();
