@@ -8,15 +8,15 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
-import us.ihmc.euclid.geometry.Line2D;
-import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
-import us.ihmc.euclid.geometry.LineSegment2D;
-import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
-import us.ihmc.euclid.geometry.Pose2D;
-import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -39,7 +39,7 @@ public class EuclidGeometryIOTools
     * @param line2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLine2DString(Line2D line2D)
+   public static String getLine2DString(Line2DReadOnly line2D)
    {
       return getLine2DString(DEFAULT_FORMAT, line2D);
    }
@@ -58,7 +58,7 @@ public class EuclidGeometryIOTools
     * @param line2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLine2DString(String format, Line2D line2D)
+   public static String getLine2DString(String format, Line2DReadOnly line2D)
    {
       if (line2D == null)
          return "null";
@@ -97,7 +97,7 @@ public class EuclidGeometryIOTools
     * @param line3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLine3DString(Line3D line3D)
+   public static String getLine3DString(Line3DReadOnly line3D)
    {
       return getLine3DString(DEFAULT_FORMAT, line3D);
    }
@@ -116,7 +116,7 @@ public class EuclidGeometryIOTools
     * @param line3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLine3DString(String format, Line3D line3D)
+   public static String getLine3DString(String format, Line3DReadOnly line3D)
    {
       if (line3D == null)
          return "null";
@@ -216,7 +216,7 @@ public class EuclidGeometryIOTools
     * @param lineSegment2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLineSegment2DString(LineSegment2D lineSegment2D)
+   public static String getLineSegment2DString(LineSegment2DReadOnly lineSegment2D)
    {
       return getLineSegment2DString(DEFAULT_FORMAT, lineSegment2D);
    }
@@ -235,7 +235,7 @@ public class EuclidGeometryIOTools
     * @param lineSegment2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLineSegment2DString(String format, LineSegment2D lineSegment2D)
+   public static String getLineSegment2DString(String format, LineSegment2DReadOnly lineSegment2D)
    {
       if (lineSegment2D == null)
          return "null";
@@ -276,7 +276,7 @@ public class EuclidGeometryIOTools
     * @param lineSegment3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLineSegment3DString(LineSegment3D lineSegment3D)
+   public static String getLineSegment3DString(LineSegment3DReadOnly lineSegment3D)
    {
       return getLineSegment3DString(DEFAULT_FORMAT, lineSegment3D);
    }
@@ -295,7 +295,7 @@ public class EuclidGeometryIOTools
     * @param lineSegment3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getLineSegment3DString(String format, LineSegment3D lineSegment3D)
+   public static String getLineSegment3DString(String format, LineSegment3DReadOnly lineSegment3D)
    {
       if (lineSegment3D == null)
          return "null";
@@ -573,7 +573,7 @@ public class EuclidGeometryIOTools
     * @param pose2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getPose2DString(Pose2D pose2D)
+   public static String getPose2DString(Pose2DReadOnly pose2D)
    {
       return getPose2DString(DEFAULT_FORMAT, pose2D);
    }
@@ -592,7 +592,7 @@ public class EuclidGeometryIOTools
     * @param pose2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getPose2DString(String format, Pose2D pose2D)
+   public static String getPose2DString(String format, Pose2DReadOnly pose2D)
    {
       if (pose2D == null)
          return "null";
@@ -632,7 +632,7 @@ public class EuclidGeometryIOTools
     * @param pose3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getPose3DString(Pose3D pose3D)
+   public static String getPose3DString(Pose3DReadOnly pose3D)
    {
       return getPose3DString(DEFAULT_FORMAT, pose3D);
    }
@@ -651,7 +651,7 @@ public class EuclidGeometryIOTools
     * @param pose3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getPose3DString(String format, Pose3D pose3D)
+   public static String getPose3DString(String format, Pose3DReadOnly pose3D)
    {
       if (pose3D == null)
          return "null";

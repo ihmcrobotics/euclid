@@ -49,7 +49,7 @@ public class EuclidFrameToolsTest
    @Test
    public void testReferenceFrameChecked() throws Throwable
    {
-      EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, false, true);
+      EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class);
    }
 
    @Test

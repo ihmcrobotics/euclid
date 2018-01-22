@@ -68,18 +68,6 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
       {
          return pose.getY();
       }
-
-      @Override
-      public void applyTransform(Transform transform, boolean checkIfTransformInXYplane)
-      {
-         pose.getPosition().applyTransform(transform, checkIfTransformInXYplane);
-      }
-
-      @Override
-      public void applyInverseTransform(Transform transform, boolean checkIfTransformInXYplane)
-      {
-         pose.getPosition().applyInverseTransform(transform, checkIfTransformInXYplane);
-      }
    };
 
    private final FixedFrameOrientation2DBasics orientationPart = new FixedFrameOrientation2DBasics()

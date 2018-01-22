@@ -8,6 +8,9 @@ import java.util.Random;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -1790,7 +1793,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     * <p>
     * WARNING: This methods assumes that the ray does not intersect with the polygon. Such scenario
-    * should be handled with {@link #intersectionWithRay(Line2D, Point2DBasics, Point2DBasics)}.
+    * should be handled with {@link #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)}.
     * </p>
     * <p>
     * Edge cases:
@@ -1807,7 +1810,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public boolean getClosestPointWithRay(Line2D ray, Point2DBasics closestPointToPack)
+   public boolean getClosestPointWithRay(Line2DReadOnly ray, Point2DBasics closestPointToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), clockwiseOrderedVertices, numberOfVertices,
@@ -1818,7 +1821,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     * <p>
     * WARNING: This methods assumes that the ray does not intersect with the polygon. Such scenario
-    * should be handled with {@link #intersectionWithRay(Line2D, Point2DBasics, Point2DBasics)}.
+    * should be handled with {@link #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)}.
     * </p>
     * <p>
     * Edge cases:
@@ -1835,7 +1838,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D getClosestPointWithRay(Line2D ray)
+   public Point2D getClosestPointWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), clockwiseOrderedVertices, numberOfVertices,
@@ -2278,7 +2281,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int intersectionWith(Line2D line, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   public int intersectionWith(Line2DReadOnly line, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), clockwiseOrderedVertices,
@@ -2307,7 +2310,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D[] intersectionWith(Line2D line)
+   public Point2D[] intersectionWith(Line2DReadOnly line)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), clockwiseOrderedVertices,
@@ -2338,7 +2341,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int intersectionWithRay(Line2D ray, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   public int intersectionWithRay(Line2DReadOnly ray, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), clockwiseOrderedVertices,
@@ -2366,7 +2369,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D[] intersectionWithRay(Line2D ray)
+   public Point2D[] intersectionWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), clockwiseOrderedVertices,
@@ -2407,7 +2410,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int intersectionWith(LineSegment2D lineSegment2d, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   public int intersectionWith(LineSegment2DReadOnly lineSegment2d, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2d.getFirstEndpoint(), lineSegment2d.getSecondEndpoint(),
@@ -2445,7 +2448,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D[] intersectionWith(LineSegment2D lineSegment2d)
+   public Point2D[] intersectionWith(LineSegment2DReadOnly lineSegment2d)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2d.getFirstEndpoint(), lineSegment2d.getSecondEndpoint(),
@@ -2487,7 +2490,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public boolean getClosestEdge(Point2DReadOnly point, LineSegment2D closestEdgeToPack)
+   public boolean getClosestEdge(Point2DReadOnly point, LineSegment2DBasics closestEdgeToPack)
    {
       int edgeIndex = getClosestEdgeIndex(point);
       if (edgeIndex == -1)
@@ -2605,7 +2608,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int getClosestVertexIndex(Line2D line)
+   public int getClosestVertexIndex(Line2DReadOnly line)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestVertexIndexToLine2D(line.getPoint(), line.getDirection(), clockwiseOrderedVertices, numberOfVertices);
@@ -2626,7 +2629,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public boolean getClosestVertex(Line2D line, Point2DBasics vertexToPack)
+   public boolean getClosestVertex(Line2DReadOnly line, Point2DBasics vertexToPack)
    {
       int vertexIndex = getClosestVertexIndex(line);
       if (vertexIndex == -1)
@@ -2652,7 +2655,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D getClosestVertexCopy(Line2D line)
+   public Point2D getClosestVertexCopy(Line2DReadOnly line)
    {
       int vertexIndex = getClosestVertexIndex(line);
       if (vertexIndex == -1)
@@ -2671,7 +2674,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
-   public void getEdge(int edgeIndex, LineSegment2D edgeToPack)
+   public void getEdge(int edgeIndex, LineSegment2DBasics edgeToPack)
    {
       edgeToPack.set(getVertex(edgeIndex), getNextVertex(edgeIndex));
    }
