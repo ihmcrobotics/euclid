@@ -36,7 +36,6 @@ public abstract class FrameLineSegment3DReadOnlyTest<T extends FrameLineSegment3
    {
       Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameLineSegment(random, frame), false, true,
-                                                                                     methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameLineSegment(random, frame), methodFilter);
    }
 }

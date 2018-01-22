@@ -36,7 +36,6 @@ public abstract class FrameLine2DReadOnlyTest<T extends FrameLine2DReadOnly>
    {
       Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameLine(random, frame), false, true,
-                                                                                     methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameLine(random, frame), methodFilter);
    }
 }

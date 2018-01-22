@@ -50,6 +50,8 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -66,7 +68,9 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
@@ -159,10 +163,10 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Pose3DBasics.class, FixedFramePose3DBasics.class);
 
       modifiableMap.put(LineSegment2DReadOnly.class, FrameLineSegment2DReadOnly.class);
-      modifiableMap.put(LineSegment2DBasics.class, FrameLineSegment2D.class);
+      modifiableMap.put(LineSegment2DBasics.class, FixedFrameLineSegment2DBasics.class);
       modifiableMap.put(LineSegment3DReadOnly.class, FrameLineSegment3DReadOnly.class);
-      modifiableMap.put(LineSegment3DBasics.class, FrameLineSegment3D.class);
-      
+      modifiableMap.put(LineSegment3DBasics.class, FixedFrameLineSegment3DBasics.class);
+
       modifiableMap.put(Line2DReadOnly.class, FrameLine2DReadOnly.class);
       modifiableMap.put(Line2DBasics.class, FixedFrameLine2DBasics.class);
       modifiableMap.put(Line3DReadOnly.class, FrameLine3DReadOnly.class);
@@ -204,12 +208,12 @@ public class EuclidFrameAPITestTools
 
       modifiableMap.put(FramePose2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePose2D(random, frame));
       modifiableMap.put(FramePose2DBasics.class, frame -> EuclidFrameRandomTools.nextFramePose2D(random, frame));
-      
+
       modifiableMap.put(FrameLineSegment2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment2D(random, frame));
-      modifiableMap.put(FrameLineSegment2D.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment2D(random, frame));
+      modifiableMap.put(FrameLineSegment2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment2D(random, frame));
       modifiableMap.put(FrameLineSegment3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment3D(random, frame));
-      modifiableMap.put(FrameLineSegment3D.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment3D(random, frame));
-      
+      modifiableMap.put(FrameLineSegment3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment3D(random, frame));
+
       modifiableMap.put(FrameLine2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
       modifiableMap.put(FrameLine2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
       modifiableMap.put(FrameLine3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine3D(random, frame));
@@ -255,12 +259,12 @@ public class EuclidFrameAPITestTools
 
       modifiableMap.put(Pose3DReadOnly.class, () -> EuclidGeometryRandomTools.nextPose3D(random));
       modifiableMap.put(Pose3DBasics.class, () -> EuclidGeometryRandomTools.nextPose3D(random));
-      
+
       modifiableMap.put(Line2DReadOnly.class, () -> EuclidGeometryRandomTools.nextLine2D(random));
       modifiableMap.put(Line2DBasics.class, () -> EuclidGeometryRandomTools.nextLine2D(random));
       modifiableMap.put(Line3DReadOnly.class, () -> EuclidGeometryRandomTools.nextLine3D(random));
       modifiableMap.put(Line3DBasics.class, () -> EuclidGeometryRandomTools.nextLine3D(random));
-      
+
       modifiableMap.put(LineSegment2DReadOnly.class, () -> EuclidGeometryRandomTools.nextLineSegment2D(random));
       modifiableMap.put(LineSegment2DBasics.class, () -> EuclidGeometryRandomTools.nextLineSegment2D(random));
       modifiableMap.put(LineSegment3DReadOnly.class, () -> EuclidGeometryRandomTools.nextLineSegment3D(random));
@@ -285,10 +289,10 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameOrientation2DReadOnly.class);
       modifiableSet.add(FramePose2DReadOnly.class);
       modifiableSet.add(FramePose3DReadOnly.class);
-      modifiableSet.add(FrameLineSegment2DReadOnly.class);
-      modifiableSet.add(FrameLineSegment3DReadOnly.class);
       modifiableSet.add(FrameLine2DReadOnly.class);
       modifiableSet.add(FrameLine3DReadOnly.class);
+      modifiableSet.add(FrameLineSegment2DReadOnly.class);
+      modifiableSet.add(FrameLineSegment3DReadOnly.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -311,6 +315,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FixedFramePose3DBasics.class);
       modifiableSet.add(FixedFrameLine2DBasics.class);
       modifiableSet.add(FixedFrameLine3DBasics.class);
+      modifiableSet.add(FixedFrameLineSegment2DBasics.class);
+      modifiableSet.add(FixedFrameLineSegment3DBasics.class);
 
       fixedFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -335,6 +341,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameLineSegment3D.class);
       modifiableSet.add(FrameLine2DBasics.class);
       modifiableSet.add(FrameLine3DBasics.class);
+      modifiableSet.add(FrameLineSegment2DBasics.class);
+      modifiableSet.add(FrameLineSegment3DBasics.class);
 
       mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -507,24 +515,11 @@ public class EuclidFrameAPITestTools
     * </p>
     * 
     * @param typeDeclaringStaticMethodsToTest the type in which the methods are to be tested.
-    * @param shouldThrowExceptionForMutables indicates that the methods should throw a
-    *           {@link ReferenceFrameMismatchException} when at least two of the mutable arguments,
-    *           for instance {@code FramePoint3D} or {@code FrameTuple2D}, are expressed in a
-    *           different frame.
-    * @param shouldChangeFrameOfMutables indicates that the methods should set the reference frame
-    *           of the mutable arguments, such as {@code FramePoint3D} or {@code FrameTuple2D}. This
-    *           option is incompatible with {@code shouldThrowExceptionForMutables}.
-    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} and
-    *            {@code shouldThrowExceptionForMutables} are both set to {@code true}.
-    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} is set to {@code true}
-    *            and {@code shouldThrowExceptionForReadOnlies} is set to {@code false}.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
-   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, boolean shouldThrowExceptionForMutables,
-                                                             boolean shouldChangeFrameOfMutables)
-         throws Throwable
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest) throws Throwable
    {
-      assertStaticMethodsCheckReferenceFrame(typeDeclaringStaticMethodsToTest, shouldThrowExceptionForMutables, shouldChangeFrameOfMutables, m -> true);
+      assertStaticMethodsCheckReferenceFrame(typeDeclaringStaticMethodsToTest, m -> true);
    }
 
    /**
@@ -545,28 +540,12 @@ public class EuclidFrameAPITestTools
     * </p>
     * 
     * @param typeDeclaringStaticMethodsToTest the type in which the methods are to be tested.
-    * @param shouldThrowExceptionForMutables indicates that the methods should throw a
-    *           {@link ReferenceFrameMismatchException} when at least two of the mutable arguments,
-    *           for instance {@code FramePoint3D} or {@code FrameTuple2D}, are expressed in a
-    *           different frame.
-    * @param shouldChangeFrameOfMutables indicates that the methods should set the reference frame
-    *           of the mutable arguments, such as {@code FramePoint3D} or {@code FrameTuple2D}. This
-    *           option is incompatible with {@code shouldThrowExceptionForMutables}.
     * @param methodFilter custom filter used on the methods. The assertions are performed on the
     *           methods for which {@code methodFilter.test(method)} returns {@code true}.
-    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} and
-    *            {@code shouldThrowExceptionForMutables} are both set to {@code true}.
-    * @throws IllegalArgumentException if {@code shouldChangeFrameOfMutables} is set to {@code true}
-    *            and {@code shouldThrowExceptionForReadOnlies} is set to {@code false}.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
-   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, boolean shouldThrowExceptionForMutables,
-                                                             boolean shouldChangeFrameOfMutables, Predicate<Method> methodFilter)
-         throws Throwable, IllegalArgumentException
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, Predicate<Method> methodFilter) throws Throwable
    {
-      if (shouldThrowExceptionForMutables && shouldChangeFrameOfMutables)
-         throw new IllegalArgumentException("Incompatible selection. A method cannot check reference frames of mutable argument AND set their reference frame.");
-
       // We need at least 2 frame arguments to assert anything.
       List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeDeclaringStaticMethodsToTest.getMethods(), 2);
       // We keep only the public & static methods
@@ -615,8 +594,6 @@ public class EuclidFrameAPITestTools
             {
                if (!isFrameOfFrameTypeMutable(parameterType))
                   numberOfArgumentsToTest++;
-               if (shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType))
-                  numberOfArgumentsToTest++;
             }
             int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToTest);
 
@@ -629,7 +606,6 @@ public class EuclidFrameAPITestTools
                {
                   Class<?> parameterType = parameterTypes[j];
                   boolean mutateFrame = !isFrameOfFrameTypeMutable(parameterType);
-                  mutateFrame |= shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType);
 
                   if (!mutateFrame)
                   {
@@ -669,48 +645,45 @@ public class EuclidFrameAPITestTools
          }
 
          // Check that the frame of each mutable is changed (optional)
-         if (shouldChangeFrameOfMutables)
+         for (Method frameMethod : frameMethods)
          {
-            for (Method frameMethod : frameMethods)
+            Class<?>[] parameterTypes = frameMethod.getParameterTypes();
+            Object[] parameters = new Object[parameterTypes.length];
+
+            for (int i = 0; i < parameterTypes.length; i++)
             {
-               Class<?>[] parameterTypes = frameMethod.getParameterTypes();
-               Object[] parameters = new Object[parameterTypes.length];
+               Class<?> parameterType = parameterTypes[i];
+               if (isMutableFrameMutableType(parameterType))
+                  parameters[i] = instantiateParameterType(frameB, parameterType);
+               else
+                  parameters[i] = instantiateParameterType(frameA, parameterType);
+            }
 
-               for (int i = 0; i < parameterTypes.length; i++)
-               {
-                  Class<?> parameterType = parameterTypes[i];
-                  if (isMutableFrameMutableType(parameterType))
-                     parameters[i] = instantiateParameterType(frameB, parameterType);
-                  else
-                     parameters[i] = instantiateParameterType(frameA, parameterType);
-               }
+            try
+            {
+               invokeStaticMethod(frameMethod, parameters);
+            }
+            catch (Throwable t)
+            {
+               if (!isExceptionAcceptable(t))
+                  throw t;
+               else
+                  continue;
+            }
 
-               try
+            for (int i = 0; i < parameterTypes.length; i++)
+            {
+               Class<?> parameterType = parameterTypes[i];
+               if (isMutableFrameMutableType(parameterType))
                {
-                  invokeStaticMethod(frameMethod, parameters);
-               }
-               catch (Throwable t)
-               {
-                  if (!isExceptionAcceptable(t))
-                     throw t;
-                  else
-                     continue;
-               }
-
-               for (int i = 0; i < parameterTypes.length; i++)
-               {
-                  Class<?> parameterType = parameterTypes[i];
-                  if (isMutableFrameMutableType(parameterType))
+                  ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
+                  if (newFrame != frameA)
                   {
-                     ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
-                     if (newFrame != frameA)
-                     {
-                        String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (i + 1) + "th parameter.";
-                        message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
-                        message += "\nArguments used: " + Arrays.toString(parameters);
-                        message += "\nArgument types: " + getArgumentTypeString(parameters);
-                        throw new AssertionError(message);
-                     }
+                     String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (i + 1) + "th parameter.";
+                     message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
+                     message += "\nArguments used: " + Arrays.toString(parameters);
+                     message += "\nArgument types: " + getArgumentTypeString(parameters);
+                     throw new AssertionError(message);
                   }
                }
             }
@@ -757,14 +730,29 @@ public class EuclidFrameAPITestTools
       }
    }
 
+   /**
+    * Asserts, using reflection, that the methods, that are public and non-static, in the created
+    * instance from {@code frameTypeBuilder} are properly checking and/or setting reference frames
+    * of their arguments.
+    * <p>
+    * This assertion expects methods to be declaring arguments as read-only to inform that they are
+    * used as input only, and as mutable to inform that they are the output(s).
+    * </p>
+    * <p>
+    * This expects methods to throw a {@link ReferenceFrameMismatchException} to indicate that the
+    * operation cannot be performed because at least one argument with an immutable frame is
+    * expressed in a different reference frame.
+    * </p>
+    * 
+    * @param frameTypeBuilder builder used to generate an instance of the type to be tested.
+    * @param methodFilter custom filter used on the methods. The assertions are performed on the
+    *           methods for which {@code methodFilter.test(method)} returns {@code true}.
+    * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
+    */
    public static void assertMethodsOfReferenceFrameHolderCheckReferenceFrame(RandomFrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder,
-                                                                             boolean shouldThrowExceptionForMutables, boolean shouldChangeFrameOfMutables,
                                                                              Predicate<Method> methodFilter)
-         throws Throwable, IllegalArgumentException
+         throws Throwable
    {
-      if (shouldThrowExceptionForMutables && shouldChangeFrameOfMutables)
-         throw new IllegalArgumentException("Incompatible selection. A method cannot check reference frames of mutable argument AND set their reference frame.");
-
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(worldFrame).getClass();
 
       // We need at least 1 frame arguments to assert anything.
@@ -816,8 +804,6 @@ public class EuclidFrameAPITestTools
             {
                if (!isFrameOfFrameTypeMutable(parameterType))
                   numberOfArgumentsToTest++;
-               if (shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType))
-                  numberOfArgumentsToTest++;
             }
             int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToTest);
 
@@ -830,7 +816,6 @@ public class EuclidFrameAPITestTools
                {
                   Class<?> parameterType = parameterTypes[j];
                   boolean mutateFrame = !isFrameOfFrameTypeMutable(parameterType);
-                  mutateFrame |= shouldThrowExceptionForMutables && isMutableFrameMutableType(parameterType);
 
                   if (!mutateFrame)
                   {
@@ -870,49 +855,46 @@ public class EuclidFrameAPITestTools
          }
 
          // Check that the frame of each mutable is changed (optional)
-         if (shouldChangeFrameOfMutables)
+         for (Method frameMethod : frameMethods)
          {
-            for (Method frameMethod : frameMethods)
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
+            Class<?>[] parameterTypes = frameMethod.getParameterTypes();
+            Object[] parameters = new Object[parameterTypes.length];
+
+            for (int i = 0; i < parameterTypes.length; i++)
             {
-               ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
-               Class<?>[] parameterTypes = frameMethod.getParameterTypes();
-               Object[] parameters = new Object[parameterTypes.length];
+               Class<?> parameterType = parameterTypes[i];
+               if (isMutableFrameMutableType(parameterType))
+                  parameters[i] = instantiateParameterType(frameB, parameterType);
+               else
+                  parameters[i] = instantiateParameterType(frameA, parameterType);
+            }
 
-               for (int i = 0; i < parameterTypes.length; i++)
-               {
-                  Class<?> parameterType = parameterTypes[i];
-                  if (isMutableFrameMutableType(parameterType))
-                     parameters[i] = instantiateParameterType(frameB, parameterType);
-                  else
-                     parameters[i] = instantiateParameterType(frameA, parameterType);
-               }
+            try
+            {
+               invokeMethod(frameObject, frameMethod, parameters);
+            }
+            catch (Throwable t)
+            {
+               if (!isExceptionAcceptable(t))
+                  throw t;
+               else
+                  continue;
+            }
 
-               try
+            for (int i = 0; i < parameterTypes.length; i++)
+            {
+               Class<?> parameterType = parameterTypes[i];
+               if (isMutableFrameMutableType(parameterType))
                {
-                  invokeMethod(frameObject, frameMethod, parameters);
-               }
-               catch (Throwable t)
-               {
-                  if (!isExceptionAcceptable(t))
-                     throw t;
-                  else
-                     continue;
-               }
-
-               for (int i = 0; i < parameterTypes.length; i++)
-               {
-                  Class<?> parameterType = parameterTypes[i];
-                  if (isMutableFrameMutableType(parameterType))
+                  ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
+                  if (newFrame != frameA)
                   {
-                     ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
-                     if (newFrame != frameA)
-                     {
-                        String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (i + 1) + "th parameter.";
-                        message += "\nType being tested: " + frameType.getSimpleName();
-                        message += "\nArguments used: " + Arrays.toString(parameters);
-                        message += "\nArgument types: " + getArgumentTypeString(parameters);
-                        throw new AssertionError(message);
-                     }
+                     String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (i + 1) + "th parameter.";
+                     message += "\nType being tested: " + frameType.getSimpleName();
+                     message += "\nArguments used: " + Arrays.toString(parameters);
+                     message += "\nArgument types: " + getArgumentTypeString(parameters);
+                     throw new AssertionError(message);
                   }
                }
             }
