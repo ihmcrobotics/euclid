@@ -634,7 +634,6 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void appendRollRotation(double roll)
    {
-      RotationMatrixTools.applyRollRotation(roll, getPosition(), getPosition());
       getOrientation().appendRollRotation(roll);
    }
 
