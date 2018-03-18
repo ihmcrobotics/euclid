@@ -43,6 +43,7 @@ import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameGeometryObject;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
@@ -269,6 +270,18 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(LineSegment2DBasics.class, () -> EuclidGeometryRandomTools.nextLineSegment2D(random));
       modifiableMap.put(LineSegment3DReadOnly.class, () -> EuclidGeometryRandomTools.nextLineSegment3D(random));
       modifiableMap.put(LineSegment3DBasics.class, () -> EuclidGeometryRandomTools.nextLineSegment3D(random));
+
+      modifiableMap.put(Orientation3DReadOnly.class, () -> {
+         switch (random.nextInt(3))
+         {
+         case 0:
+            return EuclidCoreRandomTools.nextQuaternion(random);
+         case 1:
+            return EuclidCoreRandomTools.nextAxisAngle(random);
+         default:
+            return EuclidCoreRandomTools.nextRotationMatrix(random);
+         }
+      });
 
       framelessTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
