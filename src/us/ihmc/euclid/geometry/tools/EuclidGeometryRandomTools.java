@@ -702,7 +702,8 @@ public abstract class EuclidGeometryRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @param positionMinMax the maximum absolute value for each coordinate of the line's point.
+    * @param orientationMinMax the maximum absolute value orientation 2D's angle.
     * @return the random pose 2D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
     */

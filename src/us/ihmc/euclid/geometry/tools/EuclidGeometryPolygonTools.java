@@ -104,8 +104,6 @@ public class EuclidGeometryPolygonTools
     * </p>
     *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. The algorithm will
-    *           only process the points &in; [0; {@code numberOfVertices}[.
     * @return the size of the convex hull.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
     *            of the given list of vertices.
@@ -304,7 +302,7 @@ public class EuclidGeometryPolygonTools
     * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@link Double#NaN} and
     * {@code centroidToPack} is set to {@link Double#NaN}.
-    * <li>if {@code numberOfVertices < 3}, this method returns {@link 0.0} and {@code centroidToPack}
+    * <li>if {@code numberOfVertices < 3}, this method returns {@code 0.0} and {@code centroidToPack}
     * is set to average of the polygon vertices.
     * </ul>
     * </p>

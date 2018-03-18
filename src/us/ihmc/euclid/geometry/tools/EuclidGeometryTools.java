@@ -23,21 +23,32 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class provides a large variety of basics geometry operations.
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidGeometryTools
 {
+   /** Tolerance used to identify edge cases. */
    public static final double ONE_MILLIONTH = 1.0e-6;
+   /** Tolerance used to identify edge cases. */
    public static final double ONE_TEN_MILLIONTH = 1.0e-7;
+   /** Tolerance used to identify edge cases. */
    public static final double ONE_TRILLIONTH = 1.0e-12;
+   /** Tolerance used to identify edge cases. */
    public static final double IS_POINT_ON_LINE_EPS = 1.0e-8;
-
+   /** Constant used to save some computation. */
    public static final double HALF_PI = 0.5 * Math.PI;
 
    /**
     * Computes the angle in radians from the first 2D vector to the second 2D vector. The computed
     * angle is in the range [-<i>pi</i>; <i>pi</i>].
     *
-    * @param firstVector the first vector. Not modified.
-    * @param secondVector the second vector. Not modified.
+    * @param firstVectorX x-component of the first vector. Not modified.
+    * @param firstVectorY y-component of the first vector. Not modified.
+    * @param secondVectorX x-component of the second vector. Not modified.
+    * @param secondVectorY y-component of the second vector. Not modified.
     * @return the angle in radians from the first vector to the second vector.
     */
    public static double angleFromFirstToSecondVector2D(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY)
@@ -137,13 +148,13 @@ public class EuclidGeometryTools
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     */
    public static boolean areLine2DsCollinear(double pointOnLine1x, double pointOnLine1y, double lineDirection1x, double lineDirection1y, double pointOnLine2x,
-                                             double pointOnLine2y, double lineDirection2x, double lineDirection2y, double angleEpsilon, double distanceEspilon)
+                                             double pointOnLine2y, double lineDirection2x, double lineDirection2y, double angleEpsilon, double distanceEpsilon)
    {
       if (!areVector2DsParallel(lineDirection1x, lineDirection1y, lineDirection2x, lineDirection2y, angleEpsilon))
          return false;
 
       double distance = distanceFromPoint2DToLine2D(pointOnLine2x, pointOnLine2y, pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y);
-      return distance < distanceEspilon;
+      return distance < distanceEpsilon;
    }
 
    /**
@@ -169,7 +180,7 @@ public class EuclidGeometryTools
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     */
    public static boolean areLine2DsCollinear(Point2DReadOnly firstPointOnLine1, Point2DReadOnly secondPointOnLine1, Point2DReadOnly firstPointOnLine2,
-                                             Point2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
+                                             Point2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
    {
       double pointOnLine1x = firstPointOnLine1.getX();
       double pointOnLine1y = firstPointOnLine1.getY();
@@ -180,7 +191,7 @@ public class EuclidGeometryTools
       double lineDirection2x = secondPointOnLine2.getX() - firstPointOnLine2.getX();
       double lineDirection2y = secondPointOnLine2.getY() - firstPointOnLine2.getY();
       return areLine2DsCollinear(pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y, pointOnLine2x, pointOnLine2y, lineDirection2x, lineDirection2y,
-                                 angleEpsilon, distanceEspilon);
+                                 angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -206,14 +217,14 @@ public class EuclidGeometryTools
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     */
    public static boolean areLine2DsCollinear(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly firstPointOnLine2,
-                                             Point2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
+                                             Point2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
    {
       double pointOnLine2x = firstPointOnLine2.getX();
       double pointOnLine2y = firstPointOnLine2.getY();
       double lineDirection2x = secondPointOnLine2.getX() - firstPointOnLine2.getX();
       double lineDirection2y = secondPointOnLine2.getY() - firstPointOnLine2.getY();
       return areLine2DsCollinear(pointOnLine1.getX(), pointOnLine1.getY(), lineDirection1.getX(), lineDirection1.getY(), pointOnLine2x, pointOnLine2y,
-                                 lineDirection2x, lineDirection2y, angleEpsilon, distanceEspilon);
+                                 lineDirection2x, lineDirection2y, angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -239,10 +250,10 @@ public class EuclidGeometryTools
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     */
    public static boolean areLine2DsCollinear(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly pointOnLine2,
-                                             Vector2DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
+                                             Vector2DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
    {
       return areLine2DsCollinear(pointOnLine1.getX(), pointOnLine1.getY(), lineDirection1.getX(), lineDirection1.getY(), pointOnLine2.getX(),
-                                 pointOnLine2.getY(), lineDirection2.getX(), lineDirection2.getY(), angleEpsilon, distanceEspilon);
+                                 pointOnLine2.getY(), lineDirection2.getX(), lineDirection2.getY(), angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -277,14 +288,14 @@ public class EuclidGeometryTools
     */
    public static boolean areLine3DsCollinear(double pointOnLine1x, double pointOnLine1y, double pointOnLine1z, double lineDirection1x, double lineDirection1y,
                                              double lineDirection1z, double pointOnLine2x, double pointOnLine2y, double pointOnLine2z, double lineDirection2x,
-                                             double lineDirection2y, double lineDirection2z, double angleEpsilon, double distanceEspilon)
+                                             double lineDirection2y, double lineDirection2z, double angleEpsilon, double distanceEpsilon)
    {
       if (!areVector3DsParallel(lineDirection1x, lineDirection1y, lineDirection1z, lineDirection2x, lineDirection2y, lineDirection2z, angleEpsilon))
          return false;
 
       double distance = distanceFromPoint3DToLine3D(pointOnLine2x, pointOnLine2y, pointOnLine2z, pointOnLine1x, pointOnLine1y, pointOnLine1z, lineDirection1x,
                                                     lineDirection1y, lineDirection1z);
-      return distance < distanceEspilon;
+      return distance < distanceEpsilon;
    }
 
    /**
@@ -310,7 +321,7 @@ public class EuclidGeometryTools
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     */
    public static boolean areLine3DsCollinear(Point3DReadOnly firstPointOnLine1, Point3DReadOnly secondPointOnLine1, Point3DReadOnly firstPointOnLine2,
-                                             Point3DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
+                                             Point3DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
    {
       double pointOnLine1x = firstPointOnLine1.getX();
       double pointOnLine1y = firstPointOnLine1.getY();
@@ -325,7 +336,7 @@ public class EuclidGeometryTools
       double lineDirection2y = secondPointOnLine2.getY() - firstPointOnLine2.getY();
       double lineDirection2z = secondPointOnLine2.getZ() - firstPointOnLine2.getZ();
       return areLine3DsCollinear(pointOnLine1x, pointOnLine1y, pointOnLine1z, lineDirection1x, lineDirection1y, lineDirection1z, pointOnLine2x, pointOnLine2y,
-                                 pointOnLine2z, lineDirection2x, lineDirection2y, lineDirection2z, angleEpsilon, distanceEspilon);
+                                 pointOnLine2z, lineDirection2x, lineDirection2y, lineDirection2z, angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -351,11 +362,11 @@ public class EuclidGeometryTools
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     */
    public static boolean areLine3DsCollinear(Point3DReadOnly pointOnLine1, Vector3DReadOnly lineDirection1, Point3DReadOnly pointOnLine2,
-                                             Vector3DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
+                                             Vector3DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
    {
       return areLine3DsCollinear(pointOnLine1.getX(), pointOnLine1.getY(), pointOnLine1.getZ(), lineDirection1.getX(), lineDirection1.getY(),
                                  lineDirection1.getZ(), pointOnLine2.getX(), pointOnLine2.getY(), pointOnLine2.getZ(), lineDirection2.getX(),
-                                 lineDirection2.getY(), lineDirection2.getZ(), angleEpsilon, distanceEspilon);
+                                 lineDirection2.getY(), lineDirection2.getZ(), angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -2021,7 +2032,7 @@ public class EuclidGeometryTools
     *
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param firstPointOnLine a point located on the infinitely long line. Not modified.
+    * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
@@ -2442,7 +2453,6 @@ public class EuclidGeometryTools
     * @param lineDirection the line direction. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if it exist, {@code null} otherwise.
     */
    public static Point2D intersectionBetweenLine2DAndLineSegment2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection,
@@ -2631,12 +2641,12 @@ public class EuclidGeometryTools
     * @param boundingBoxMaxX the maximum x-coordinate of the bounding box.
     * @param boundingBoxMaxY the maximum y-coordinate of the bounding box.
     * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box.
-    * @param pointOnLine the x-coordinate of a point located on the infinitely long line.
-    * @param pointOnLine the y-coordinate of a point located on the infinitely long line.
-    * @param pointOnLine the z-coordinate of a point located on the infinitely long line.
-    * @param lineDirection the x-component of the direction of the line.
-    * @param lineDirection the y-component of the direction of the line.
-    * @param lineDirection the z-component of the direction of the line.
+    * @param pointOnLineX the x-coordinate of a point located on the infinitely long line.
+    * @param pointOnLineY the y-coordinate of a point located on the infinitely long line.
+    * @param pointOnLineZ the z-coordinate of a point located on the infinitely long line.
+    * @param lineDirectionX the x-component of the direction of the line.
+    * @param lineDirectionY the y-component of the direction of the line.
+    * @param lineDirectionZ the z-component of the direction of the line.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
@@ -2931,12 +2941,12 @@ public class EuclidGeometryTools
     *           Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
     *           Modified.
-    * @param pointOnLine the x-coordinate of a point located on the infinitely long line.
-    * @param pointOnLine the y-coordinate of a point located on the infinitely long line.
-    * @param pointOnLine the z-coordinate of a point located on the infinitely long line.
-    * @param lineDirection the x-component of the direction of the line.
-    * @param lineDirection the y-component of the direction of the line.
-    * @param lineDirection the z-component of the direction of the line.
+    * @param pointOnLineX the x-coordinate of a point located on the infinitely long line.
+    * @param pointOnLineY the y-coordinate of a point located on the infinitely long line.
+    * @param pointOnLineZ the z-coordinate of a point located on the infinitely long line.
+    * @param lineDirectionX the x-component of the direction of the line.
+    * @param lineDirectionY the y-component of the direction of the line.
+    * @param lineDirectionZ the z-component of the direction of the line.
     *
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
@@ -3326,12 +3336,12 @@ public class EuclidGeometryTools
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param pointOnLine the x-coordinate of a point located on the infinitely long line.
-    * @param pointOnLine the y-coordinate of a point located on the infinitely long line.
-    * @param pointOnLine the z-coordinate of a point located on the infinitely long line.
-    * @param lineDirection the x-component of the direction of the line.
-    * @param lineDirection the y-component of the direction of the line.
-    * @param lineDirection the z-component of the direction of the line.
+    * @param pointOnLineX the x-coordinate of a point located on the infinitely long line.
+    * @param pointOnLineY the y-coordinate of a point located on the infinitely long line.
+    * @param pointOnLineZ the z-coordinate of a point located on the infinitely long line.
+    * @param lineDirectionX the x-component of the direction of the line.
+    * @param lineDirectionY the y-component of the direction of the line.
+    * @param lineDirectionZ the z-component of the direction of the line.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
@@ -3891,8 +3901,8 @@ public class EuclidGeometryTools
     * </ul>
     * </p>
     * Once the existence of an intersection is verified, this method calls
-    * {@link #intersectionBetweenLine3DAndPlane3D(Point3D, Vector3D, Point3D, Vector3D)} to perform the
-    * actual computation.
+    * {@link #intersectionBetweenLine3DAndPlane3D(Point3DReadOnly, Vector3DReadOnly, Point3DReadOnly, Vector3DReadOnly)}
+    * to perform the actual computation.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -4029,7 +4039,6 @@ public class EuclidGeometryTools
     * @param rayDirection the direction of the ray. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if it exist, {@code null} otherwise.
     */
    public static Point2D intersectionBetweenRay2DAndLineSegment2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DReadOnly lineSegmentStart,
@@ -4290,7 +4299,6 @@ public class EuclidGeometryTools
     * @param secondPointOnLine1 a second point located on the first line. Not modified.
     * @param firstPointOnLine2 a first point located on the second line. Not modified.
     * @param secondPointOnLine2 a second point located on the second line. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if the two lines intersect, {@code null} otherwise.
     */
    public static Point2D intersectionBetweenTwoLine2Ds(Point2DReadOnly firstPointOnLine1, Point2DReadOnly secondPointOnLine1, Point2DReadOnly firstPointOnLine2,
@@ -4335,7 +4343,6 @@ public class EuclidGeometryTools
     * @param lineDirection1 the first line direction. Not modified.
     * @param pointOnLine2 point located on the second line. Not modified.
     * @param lineDirection2 the second line direction. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if the two lines intersect, {@code null} otherwise.
     */
    public static Point2D intersectionBetweenTwoLine2Ds(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly pointOnLine2,
@@ -4591,7 +4598,7 @@ public class EuclidGeometryTools
     * <ul>
     * <li>When the length of either the plane normal is below {@link #ONE_TRILLIONTH}, this methods
     * fails and returns {@code false}.
-    * <li>When the angle between the two planes is below {@link Epsilons#ONE_MILLIONTH}, this methods
+    * <li>When the angle between the two planes is below {@link #ONE_MILLIONTH}, this methods
     * fails and returns {@code false}.
     * <li>When there is no intersection, this method returns {@code false} and
     * {@code pointOnIntersectionToPack} and {@code intersectionDirectionToPack} are set to
@@ -6236,7 +6243,7 @@ public class EuclidGeometryTools
     * Edge cases:
     * <ul>
     * <li>when the distance between the two points defining the line is below
-    * {@value Epsilons#ONE_TRILLIONTH}, the method fails and returns {@code null}.
+    * {@value #ONE_TRILLIONTH}, the method fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -6274,7 +6281,7 @@ public class EuclidGeometryTools
     * Edge cases:
     * <ul>
     * <li>when the distance between the two points defining the line is below
-    * {@value Epsilons#ONE_TRILLIONTH}, the method fails and returns {@code false}.
+    * {@value #ONE_TRILLIONTH}, the method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -6670,6 +6677,7 @@ public class EuclidGeometryTools
     * @param lengthNeighbourSideA the length of the side A.
     * @param lengthNeighbourSideB the length of the side B.
     * @param lengthOppositeSideC the length of the side C.
+    * @return the value in radians of the unknown angle.
     * @throws RuntimeException if the lengths do not describe a triangle, see
     *            {@link #isFormingTriangle(double, double, double)}.
     */
@@ -6700,6 +6708,7 @@ public class EuclidGeometryTools
     * @param lengthSideA the length of the side A.
     * @param lengthSideB the length of the side B.
     * @param angleBetweenAAndB the angle between the sides A and B.
+    * @return the value of the unknown side length.
     * @throws RuntimeException if {@code lengthSideA} and/or {@code lengthSideB} are negative, if
     *            {@code angleBetweenAAndB} is greater than <i>pi</i>.
     */
