@@ -45,8 +45,8 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
@@ -203,8 +203,8 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     *
     * @param referenceFrame the reference frame in which the given line is expressed.
     * @param frameLine2DReadOnly the line to copy. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLine2DReadOnly} are
-    *            not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLine2DReadOnly} are not
+    *            expressed in the same reference frame.
     */
    default void set(FrameLine2DReadOnly frameLine2DReadOnly)
    {
@@ -275,8 +275,8 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default void set(FramePoint2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -318,8 +318,8 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default void set(FramePoint3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {

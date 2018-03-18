@@ -6,12 +6,12 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-//TODO
+// TODO
 public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnly, Orientation2DBasics
 {
    /**
-    * Sets this orientation 2D to represent the orientation 2D from {@code this.getReferenceFrame()}
-    * to the given {@code referenceFrame}.
+    * Sets this orientation 2D to represent the orientation 2D from {@code this.getReferenceFrame()} to
+    * the given {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame of interest.
     */
@@ -24,9 +24,9 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
    /**
     * Sets this frame orientation to {@code orientation2DReadOnly} and checks that its current frame
     * equals {@code referenceFrame}.
-    * 
-    * @param referenceFrame the coordinate system in which the given {@code orientation2DReadOnly}
-    *           is expressed.
+    *
+    * @param referenceFrame the coordinate system in which the given {@code orientation2DReadOnly} is
+    *           expressed.
     * @param orientation2DReadOnly the orientation 2D to copy the value from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
@@ -213,8 +213,8 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * </p>
     *
     * @param other the other orientation 2D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.

@@ -40,8 +40,8 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    private final Quaternion quaternion = new Quaternion();
 
    /**
-    * Creates a new frame quaternion and initializes it to the neutral quaternion, i.e. representing
-    * a 'zero' rotation, and its reference frame to {@link ReferenceFrame#getWorldFrame()}.
+    * Creates a new frame quaternion and initializes it to the neutral quaternion, i.e. representing a
+    * 'zero' rotation, and its reference frame to {@link ReferenceFrame#getWorldFrame()}.
     */
    public FrameQuaternion()
    {
@@ -49,8 +49,8 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    }
 
    /**
-    * Creates a new frame quaternion and initializes it to the neutral quaternion, i.e. representing
-    * a 'zero' rotation, and its reference frame to the {@code referenceFrame}.
+    * Creates a new frame quaternion and initializes it to the neutral quaternion, i.e. representing a
+    * 'zero' rotation, and its reference frame to the {@code referenceFrame}.
     *
     * @param referenceFrame the initial frame for this frame quaternion.
     */
@@ -153,9 +153,9 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Creates a new frame quaternion and initializes such that it represents the same orientation as
     * the given {@code rotationVector} and initializes its reference frame.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param referenceFrame the initial frame for this frame quaternion.
@@ -183,8 +183,8 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    /**
     * Creates a new frame quaternion and initializes it to {@code frameTuple4DReadOnly}.
     *
-    * @param frameTuple4DReadOnly the frame tuple 4D to copy the components and reference frame
-    *           from. Not modified.
+    * @param frameTuple4DReadOnly the frame tuple 4D to copy the components and reference frame from.
+    *           Not modified.
     */
    public FrameQuaternion(FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -194,8 +194,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    /**
     * Creates a new frame quaternion and initializes it to {@code other}.
     *
-    * @param other the frame quaternion to copy the components and reference frame from. Not
-    *           modified.
+    * @param other the frame quaternion to copy the components and reference frame from. Not modified.
     */
    public FrameQuaternion(FrameQuaternionReadOnly other)
    {
@@ -206,8 +205,8 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Sets this frame quaternion to {@code other}.
     *
     * @param other the other quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    @Override
    public void set(FrameQuaternion other)
@@ -287,15 +286,15 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameTuple4DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameTuple4DReadOnly)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in the
+    *         same reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)
@@ -331,13 +330,12 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    /**
     * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
     * <p>
-    * Two quaternions are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
+    * Two quaternions are considered geometrically equal if the magnitude of their difference is less
+    * than or equal to {@code epsilon}.
     * </p>
     * <p>
     * Note that two quaternions of opposite sign are considered equal, such that the two quaternions
-    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically
-    * equal.
+    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically equal.
     * </p>
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
@@ -345,12 +343,11 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * </p>
     *
     * @param other the other quaternion to compare against this. Not modified.
-    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions
-    *           to be considered equal.
-    * @return {@code true} if the two quaternions represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
+    *           be considered equal.
+    * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FrameQuaternion other, double epsilon)

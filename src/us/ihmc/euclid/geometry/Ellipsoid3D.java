@@ -32,7 +32,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Creates a new ellipsoid 3D identical to {@code other}.
-    * 
+    *
     * @param other the other ellipsoid to copy. Not modified.
     */
    public Ellipsoid3D(Ellipsoid3D other)
@@ -42,7 +42,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Creates a new 3D ellipsoid and initializes its radii.
-    * 
+    *
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @param radiusZ radius of the ellipsoid along the z-axis.
@@ -55,7 +55,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
-    * 
+    *
     * @param pose the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -69,7 +69,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
-    * 
+    *
     * @param pose the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -91,7 +91,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    /**
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
-    * 
+    *
     * @param other the other ellipsoid which pose and radii is to be compared against this ellipsoid
     *           pose and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -149,7 +149,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Packs the 3 radii of this ellipsoid in the given tuple.
-    * 
+    *
     * @param radiiToPack the tuple in which the radii are stored. Modified.
     */
    public void getRadii(Tuple3DBasics radiiToPack)
@@ -159,7 +159,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Gets the radius along the x-axis.
-    * 
+    *
     * @return the x radius.
     */
    public double getRadiusX()
@@ -169,7 +169,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Gets the radius along the y-axis.
-    * 
+    *
     * @return the y radius.
     */
    public double getRadiusY()
@@ -179,7 +179,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Gets the radius along the z-axis.
-    * 
+    *
     * @return the z radius.
     */
    public double getRadiusZ()
@@ -193,15 +193,15 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * In the case the line and this box do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
-    * 
+    *
     * @param line the line expressed in world coordinates that may intersect this ellipsoid. Not
     *           modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
     *           {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
     *           {@code null}. Modified.
-    * @return the number of intersections between the line and this ellipsoid. It is either equal to
-    *         0, 1, or 2.
+    * @return the number of intersections between the line and this ellipsoid. It is either equal to 0,
+    *         1, or 2.
     */
    public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
@@ -215,16 +215,15 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
     * {@link Double#NaN}.
     * </p>
-    * 
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not
-    *           modified.
+    *
+    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
     * @param lineDirection the direction expressed in world of the line. Not modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
     *           {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
     *           {@code null}. Modified.
-    * @return the number of intersections between the line and this ellipsoid. It is either equal to
-    *         0, 1, or 2.
+    * @return the number of intersections between the line and this ellipsoid. It is either equal to 0,
+    *         1, or 2.
     */
    public int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                Point3DBasics secondIntersectionToPack)
@@ -260,7 +259,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Copies the {@code other} ellipsoid data into {@code this}.
-    * 
+    *
     * @param other the other ellipsoid to copy. Not modified.
     */
    @Override
@@ -288,7 +287,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Sets the pose and radii of this ellipsoid.
-    * 
+    *
     * @param pose the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -303,7 +302,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Sets the pose and radii of this ellipsoid.
-    * 
+    *
     * @param pose the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -318,7 +317,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Sets the radii of this ellipsoid.
-    * 
+    *
     * @param radii tuple holding the 3 radii of the ellipsoid.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
@@ -331,7 +330,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Sets the radii of this ellipsoid.
-    * 
+    *
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @param radiusZ radius of the ellipsoid along the z-axis.
@@ -346,7 +345,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Sets the radius along the x-axis for this ellipsoid.
-    * 
+    *
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @throws IllegalArgumentException if the argument is negative.
     */
@@ -359,7 +358,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Sets the radius along the y-axis for this ellipsoid.
-    * 
+    *
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @throws IllegalArgumentException if the argument is negative.
     */
@@ -372,7 +371,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
 
    /**
     * Sets the radius along the z-axis for this ellipsoid.
-    * 
+    *
     * @param radiusZ radius of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if the argument is negative.
     */
@@ -402,9 +401,9 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
     * <p>
-    * This method accounts for the multiple combinations of radii and rotations that generate
-    * identical ellipsoids. For instance, two ellipsoids that are identical but one is flipped by
-    * 180 degrees are considered geometrically equal.
+    * This method accounts for the multiple combinations of radii and rotations that generate identical
+    * ellipsoids. For instance, two ellipsoids that are identical but one is flipped by 180 degrees are
+    * considered geometrically equal.
     * </p>
     *
     * @param other the ellipsoid to compare to. Not modified.
@@ -428,8 +427,8 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
          if (!EuclidCoreTools.epsilonEquals(other.radii.getX(), other.radii.getZ(), epsilon))
             return false;
          // Second - assert that the radii are the same between the two ellipsoids.
-         double thisRadiiSum = (radii.getX() + radii.getY() + radii.getZ());
-         double otherRadiiSum = (other.radii.getX() + other.radii.getY() + other.radii.getZ());
+         double thisRadiiSum = radii.getX() + radii.getY() + radii.getZ();
+         double otherRadiiSum = other.radii.getX() + other.radii.getY() + other.radii.getZ();
          return Math.abs(thisRadiiSum - otherRadiiSum) <= 3.0 * epsilon; // Comparing the average of each ellipsoid's radii.
       }
 

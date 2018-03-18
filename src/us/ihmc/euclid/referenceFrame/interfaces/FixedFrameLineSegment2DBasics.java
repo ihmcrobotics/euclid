@@ -330,8 +330,8 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param firstEndpoint new first endpoint. Not modified.
     * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
     *           modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code fromFirstToSecondEndpoint}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code fromFirstToSecondEndpoint} are
+    *            not expressed in the same reference frame.
     */
    default void set(Point2DReadOnly firstEndpoint, FrameVector2DReadOnly fromFirstToSecondEndpoint)
    {
@@ -379,8 +379,8 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param firstEndpoint new first endpoint. Not modified.
     * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
     *           modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code fromFirstToSecondEndpoint}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code fromFirstToSecondEndpoint} are
+    *            not expressed in the same reference frame.
     */
    default void set(Point3DReadOnly firstEndpoint, FrameVector3DReadOnly fromFirstToSecondEndpoint)
    {
@@ -412,8 +412,8 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * </p>
     *
     * @param translation the translation to add to each endpoint of this line segment. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code translation} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code translation} are not expressed
+    *            in the same reference frame.
     */
    default void translate(FrameTuple2DReadOnly translation)
    {

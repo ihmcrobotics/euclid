@@ -12,19 +12,19 @@ public enum Axis implements Vector3DReadOnly
    /** The x-axis is usually associated with the forward direction. */
    X(1.0, 0.0, 0.0),
    /**
-    * The y-axis is usually associated with the direction pointing to the left of the forward
-    * direction and is horizontal.
+    * The y-axis is usually associated with the direction pointing to the left of the forward direction
+    * and is horizontal.
     */
    Y(0.0, 1.0, 0.0),
    /**
-    * The z-axis is usually associated with the vertical direction, parallel to the gravity vector
-    * but pointing the opposite direction.
+    * The z-axis is usually associated with the vertical direction, parallel to the gravity vector but
+    * pointing the opposite direction.
     */
    Z(0.0, 0.0, 1.0);
 
    /**
-    * Static final field holding the return from {@link #values()}. This field should be used in
-    * place of calling values() for garbage-free operations.
+    * Static final field holding the return from {@link #values()}. This field should be used in place
+    * of calling values() for garbage-free operations.
     */
    public static final Axis[] values = values();
 

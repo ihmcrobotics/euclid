@@ -30,15 +30,16 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
    /**
     * Sets the reference frame of this pose 3D without updating or modifying its position or
     * orientation.
-    * 
+    *
     * @param referenceFrame the new reference frame for this frame pose 3D.
     */
+   @Override
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
     * Sets the position and orientation parts of this pose 3D to zero and sets the current reference
     * frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this pose 3D.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -48,9 +49,9 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
    }
 
    /**
-    * Sets the position and position parts of this pose 3D to {@link Double#NaN} and sets the
-    * current reference frame to {@code referenceFrame}.
-    * 
+    * Sets the position and position parts of this pose 3D to {@link Double#NaN} and sets the current
+    * reference frame to {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame to be associated with this pose 3D.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -60,9 +61,9 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
    }
 
    /**
-    * Sets this pose 3D to represent the same pose as the given {@code pose2DReadOnly} expressed in
-    * the given {@code referenceFrame}.
-    * 
+    * Sets this pose 3D to represent the same pose as the given {@code pose2DReadOnly} expressed in the
+    * given {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame.
     * @param pose2DReadOnly the pose 2D used to set this pose. Not modified.
     */
@@ -74,7 +75,7 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
 
    /**
     * Sets this pose 3D from the given pose 3D and sets the reference frame.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param pose3DReadOnly the pose 3D used to sets the position and orientation. Not modified.
     */
@@ -86,7 +87,7 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
 
    /**
     * Sets this pose 3D from the given reference frame and transform.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param rigidBodyTransform the transform used to set the pose. Not modified.
     */
@@ -139,7 +140,7 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
 
    /**
     * Sets this frame pose 3D to represent the same pose as the given {@code framePose2DReadOnly}.
-    * 
+    *
     * @param framePose2DReadOnly the frame pose 2D used to set this frame pose 3D. Not modified.
     */
    default void setIncludingFrame(FramePose2DReadOnly framePose2DReadOnly)

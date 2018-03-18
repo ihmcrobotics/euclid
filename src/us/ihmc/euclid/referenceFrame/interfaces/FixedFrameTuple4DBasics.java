@@ -31,7 +31,7 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
    /**
     * Sets this frame tuple to {@code tuple4DReadOnly} and checks that its current frame equal
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the coordinate system in which the given {@code tuple4DReadOnly} is
     *           expressed.
     * @param tuple4DReadOnly the geometry object used to update the geometry object in {@code this}.
@@ -47,7 +47,7 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
    /**
     * Sets this frame tuple components to {@code x}, {@code y}, {@code z}, and {@code s} and checks
     * that its current frame equal {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the coordinate system in which the given components ares expressed.
     * @param x the new x component.
     * @param y the new y component.
@@ -104,8 +104,8 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     * Sets this frame tuple to {@code other} and then calls {@link #normalize()}.
     *
     * @param other the other frame tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void setAndNormalize(FrameTuple4DReadOnly other)
    {

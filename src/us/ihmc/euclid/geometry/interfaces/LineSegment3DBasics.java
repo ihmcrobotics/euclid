@@ -21,6 +21,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     *
     * @return the reference to the first endpoint of this line segment.
     */
+   @Override
    Point3DBasics getFirstEndpoint();
 
    /**
@@ -28,11 +29,12 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     *
     * @return the reference to the second endpoint of this line segment.
     */
+   @Override
    Point3DBasics getSecondEndpoint();
 
    /**
     * Tests if this line segment contains {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if {@link #firstEndpoint} and/or {@link #secondEndpoint} contains
     *         {@link Double#NaN}, {@code false} otherwise.
     */
@@ -53,9 +55,9 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
    }
 
    /**
-    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method,
-    * this line segment becomes invalid. A new pair of valid endpoints will have to be set so this
-    * line segment is again usable.
+    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method, this
+    * line segment becomes invalid. A new pair of valid endpoints will have to be set so this line
+    * segment is again usable.
     */
    @Override
    default void setToNaN()
@@ -204,7 +206,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
 
    /**
     * Transforms this line segment using the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on the endpoints of this line segment. Not modified.
     */
    @Override
@@ -216,7 +218,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
 
    /**
     * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on the endpoints of this line segment. Not modified.
     */
    @Override

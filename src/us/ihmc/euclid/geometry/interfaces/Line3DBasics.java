@@ -37,7 +37,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Tests if this line contains {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if {@link #point} and/or {@link #direction} contains {@link Double#NaN},
     *         {@code false} otherwise.
     */
@@ -129,7 +129,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * <p>
     * After calling this method this line is in the XY-plane.
     * </p>
-    * 
+    *
     * @param line2DReadOnly the other line to copy. Not modified.
     */
    default void set(Line2DReadOnly line2DReadOnly)
@@ -140,7 +140,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Sets this line to represent the same geometry as the given {@code other}.
-    * 
+    *
     * @param line3DReadOnly the other line to copy. Not modified.
     */
    default void set(Line3DReadOnly other)
@@ -154,7 +154,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * <p>
     * After calling this method this line is in the XY-plane.
     * </p>
-    * 
+    *
     * @param lineSegment2DReadOnly the line segment to get the endpoints from. Not modified.
     */
    default void set(LineSegment2DReadOnly lineSegment2DReadOnly)
@@ -164,7 +164,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Sets this line to go through the endpoints of the given line segment.
-    * 
+    *
     * @param lineSegment2DReadOnly the line segment to get the endpoints from. Not modified.
     */
    default void set(LineSegment3DReadOnly lineSegment3DReadOnly)
@@ -277,7 +277,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Transforms this line using the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on this line's point and vector. Not modified.
     */
    @Override
@@ -289,7 +289,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Transforms this line using the inverse of the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on this line's point and vector. Not modified.
     */
    @Override

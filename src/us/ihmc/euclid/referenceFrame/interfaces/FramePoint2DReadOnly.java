@@ -54,8 +54,8 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
    }
 
    /**
-    * Calculates and returns the distance between this frame point and {@code framePoint3DReadOnly}
-    * in the XY-plane.
+    * Calculates and returns the distance between this frame point and {@code framePoint3DReadOnly} in
+    * the XY-plane.
     * <p>
     * Effectively, this calculates the distance as follows:<br>
     * d<sub>xy</sub> = &radic;((this.x - framePoint3DReadOnly.x)<sup>2</sup> + (this.y -
@@ -64,8 +64,8 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
     *
     * @param framePoint3DReadOnly the other frame point used to measure the distance.
     * @return the distance between the two frame points in the XY-plane.
-    * @throws ReferenceFrameMismatchException if {@code framePoint3DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code framePoint3DReadOnly} is not expressed in the
+    *            same frame as {@code this}.
     */
    default double distanceXY(FramePoint3DReadOnly framePoint3DReadOnly)
    {
@@ -82,15 +82,15 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
     * framePoint3DReadOnly.y)<sup>2</sup>
     * </p>
     * <p>
-    * This method is usually preferred over {@link #distanceXY(FramePoint3DReadOnly)} when
-    * calculation speed matters and knowledge of the actual distance does not, i.e. when comparing
-    * distances between several pairs of points.
+    * This method is usually preferred over {@link #distanceXY(FramePoint3DReadOnly)} when calculation
+    * speed matters and knowledge of the actual distance does not, i.e. when comparing distances
+    * between several pairs of points.
     * </p>
     *
     * @param framePoint3DReadOnly the frame other point used to measure the square of the distance.
     * @return the square of the distance between the two frame points in the XY-plane.
-    * @throws ReferenceFrameMismatchException if {@code framePoint3DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code framePoint3DReadOnly} is not expressed in the
+    *            same frame as {@code this}.
     */
    default double distanceXYSquared(FramePoint3DReadOnly framePoint3DReadOnly)
    {
@@ -106,8 +106,8 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two frame points represent the same geometry, {@code false}
     *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default boolean geometricallyEquals(FramePoint2DReadOnly other, double epsilon)
    {

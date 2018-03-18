@@ -42,9 +42,9 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    }
 
    /**
-    * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D}
-    * and its reference frame to {@link ReferenceFrame#getWorldFrame()}.
-    * 
+    * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D} and
+    * its reference frame to {@link ReferenceFrame#getWorldFrame()}.
+    *
     * @param orientation2DReadOnly the orientation this frame orientation will represent. Modified.
     */
    public FrameOrientation2D(Orientation2DReadOnly orientation2DReadOnly)
@@ -55,10 +55,9 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    /**
     * Creates a new frame vector and initializes its orientation components to the given
     * {@link Orientation2DReadOnly} and its reference frame to the given {@link ReferenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial frame for this orientation.
-    * @param orientation2DReadOnly the orientation this frame orientation will represent. Not
-    *           modified.
+    * @param orientation2DReadOnly the orientation this frame orientation will represent. Not modified.
     */
    public FrameOrientation2D(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation2DReadOnly)
    {
@@ -130,8 +129,8 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameOrientation2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameOrientation2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

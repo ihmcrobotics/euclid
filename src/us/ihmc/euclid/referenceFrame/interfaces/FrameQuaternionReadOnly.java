@@ -34,10 +34,10 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * Computes and returns the distance from this quaternion to {@code other}.
     *
     * @param other the other quaternion to measure the distance. Not modified.
-    * @return the angle representing the distance between the two quaternions. It is contained in
-    *         [0, 2<i>pi</i>]
-    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other}
-    *            do not match.
+    * @return the angle representing the distance between the two quaternions. It is contained in [0,
+    *         2<i>pi</i>]
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
+    *            not match.
     */
    default double distance(FrameQuaternionReadOnly other)
    {
@@ -55,9 +55,9 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    /**
     * Computes and packs the orientation described by this quaternion as a rotation vector.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
@@ -73,9 +73,9 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    /**
     * Computes and packs the orientation described by this quaternion as a rotation vector.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
@@ -251,8 +251,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param tupleOriginal the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
+    *            not represent a transformation in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
@@ -373,8 +373,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param tupleTransformed the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this quaternion
     *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
+    *            not represent a transformation in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code tupleOriginal} do not match.
     */
@@ -709,8 +709,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this
-    * quaternion and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this quaternion
+    * and stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
     * </p>
@@ -727,8 +727,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this
-    * quaternion and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this quaternion
+    * and stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
     * </p>
@@ -745,8 +745,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this
-    * quaternion and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this quaternion
+    * and stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal * this
     * </p>
@@ -1063,8 +1063,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by
-    * this quaternion and stores the result in {@code quaternionTransformed}.
+    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by this
+    * quaternion and stores the result in {@code quaternionTransformed}.
     * <p>
     * quaternionTransformed = this<sup>-1</sup> * quaternionOriginal * this
     * </p>
@@ -1081,8 +1081,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by
-    * this quaternion and stores the result in {@code quaternionTransformed}.
+    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by this
+    * quaternion and stores the result in {@code quaternionTransformed}.
     * <p>
     * quaternionTransformed = this<sup>-1</sup> * quaternionOriginal * this
     * </p>
@@ -1099,8 +1099,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by
-    * this quaternion and stores the result in {@code quaternionTransformed}.
+    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by this
+    * quaternion and stores the result in {@code quaternionTransformed}.
     * <p>
     * quaternionTransformed = this<sup>-1</sup> * quaternionOriginal * this
     * </p>
@@ -1115,8 +1115,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by
-    * this quaternion and stores the result in {@code quaternionTransformed}.
+    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by this
+    * quaternion and stores the result in {@code quaternionTransformed}.
     * <p>
     * quaternionTransformed = this<sup>-1</sup> * quaternionOriginal * this
     * </p>
@@ -1134,8 +1134,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by
-    * this quaternion and stores the result in {@code quaternionTransformed}.
+    * Performs the inverse of the transform to the given quaternion {@code quaternionOriginal} by this
+    * quaternion and stores the result in {@code quaternionTransformed}.
     * <p>
     * quaternionTransformed = this<sup>-1</sup> * quaternionOriginal * this
     * </p>
@@ -1153,8 +1153,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    }
 
    /**
-    * Performs the inverse of the transform to the vector part the given 4D vector by this
-    * quaternion.
+    * Performs the inverse of the transform to the vector part the given 4D vector by this quaternion.
     * <p>
     * vectorToTransform.s = vectorToTransform.s <br>
     * vectorToTransform.xyz = this<sup>-1</sup> * vectorToTransform.xyz * this
@@ -1274,8 +1273,8 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two frame quaternions represent the same geometry, {@code false}
     *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default boolean geometricallyEquals(FrameQuaternionReadOnly other, double epsilon)
    {

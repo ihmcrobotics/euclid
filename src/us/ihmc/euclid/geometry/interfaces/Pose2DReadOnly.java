@@ -43,7 +43,7 @@ public interface Pose2DReadOnly
 
    /**
     * Tests if this pose 2D contains a {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if either the position or orientation part of this pose 2D contains
     *         {@link Double#NaN}, {@code false} otherwise.
     */
@@ -69,8 +69,7 @@ public interface Pose2DReadOnly
    /**
     * Packs this pose 2D into the given {@code transformToPack}.
     *
-    * @param transformToPack the rigid-body transform that is set to represent this pose 2D.
-    *           Modified.
+    * @param transformToPack the rigid-body transform that is set to represent this pose 2D. Modified.
     */
    default void get(RigidBodyTransform transformToPack)
    {
@@ -101,8 +100,8 @@ public interface Pose2DReadOnly
    }
 
    /**
-    * Computes the absolute angle difference between the orientation part of this pose 2D and the
-    * give {@code orientation}.
+    * Computes the absolute angle difference between the orientation part of this pose 2D and the give
+    * {@code orientation}.
     *
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
@@ -128,8 +127,7 @@ public interface Pose2DReadOnly
     * Tests on a per component basis, if this pose 2D is exactly equal to {@code other}.
     *
     * @param other the other pose 2D to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
     */
    default boolean equals(Pose2DReadOnly other)
    {
@@ -154,11 +152,9 @@ public interface Pose2DReadOnly
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
     * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
     * @param other the pose to compare to. Not modified.

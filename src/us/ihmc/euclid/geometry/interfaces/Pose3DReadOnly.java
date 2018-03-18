@@ -61,8 +61,8 @@ public interface Pose3DReadOnly
    }
 
    /**
-    * Computes and returns the yaw angle from the yaw-pitch-roll representation of the orientation
-    * part of this pose 3D.
+    * Computes and returns the yaw angle from the yaw-pitch-roll representation of the orientation part
+    * of this pose 3D.
     * <p>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
     * sometimes undefined.
@@ -131,12 +131,12 @@ public interface Pose3DReadOnly
    }
 
    /**
-    * Computes and packs the orientation described by the orientation part of this pose as a
-    * rotation vector.
+    * Computes and packs the orientation described by the orientation part of this pose as a rotation
+    * vector.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
@@ -169,12 +169,12 @@ public interface Pose3DReadOnly
    }
 
    /**
-    * Computes the smallest angle representing the difference between the orientation part of this
-    * pose 3D and the give {@code orientation}.
+    * Computes the smallest angle representing the difference between the orientation part of this pose
+    * 3D and the give {@code orientation}.
     *
     * @param orientation the orientation used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this} and {@code orientation}, it is contained in
-    *         [0, 2<i>pi</i>].
+    * @return the angle difference between {@code this} and {@code orientation}, it is contained in [0,
+    *         2<i>pi</i>].
     */
    default double getOrientationDistance(QuaternionReadOnly orientation)
    {
@@ -185,8 +185,8 @@ public interface Pose3DReadOnly
     * Computes the absolute angle difference between this pose 3D and {@code other}.
     *
     * @param other the other pose 3D used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this.orientation} and {@code other.orientation},
-    *         it is contained in [0, 2<i>pi</i>].
+    * @return the angle difference between {@code this.orientation} and {@code other.orientation}, it
+    *         is contained in [0, 2<i>pi</i>].
     */
    default double getOrientationDistance(Pose3DReadOnly other)
    {
@@ -195,7 +195,7 @@ public interface Pose3DReadOnly
 
    /**
     * Gets the position and orientation parts of this pose 3D.
-    * 
+    *
     * @param positionToPack tuple in which the position is stored. Modified.
     * @param orientationToPack quaternion in which the orientation is stored. Modified.
     */
@@ -208,8 +208,7 @@ public interface Pose3DReadOnly
    /**
     * Packs this pose 3D into the given {@code transformToPack}.
     *
-    * @param transformToPack the rigid-body transform that is set to represent this pose 3D.
-    *           Modified.
+    * @param transformToPack the rigid-body transform that is set to represent this pose 3D. Modified.
     */
    default void get(RigidBodyTransform transformToPack)
    {
@@ -241,11 +240,9 @@ public interface Pose3DReadOnly
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
     * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
     * @param other the pose to compare to. Not modified.
@@ -254,15 +251,14 @@ public interface Pose3DReadOnly
     */
    default boolean geometricallyEquals(Pose3DReadOnly other, double epsilon)
    {
-      return this.getPosition().geometricallyEquals(other.getPosition(), epsilon) && this.getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
+      return getPosition().geometricallyEquals(other.getPosition(), epsilon) && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 
    /**
     * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
     *
     * @param other the other pose 3D to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
     */
    default boolean equals(Pose3DReadOnly other)
    {

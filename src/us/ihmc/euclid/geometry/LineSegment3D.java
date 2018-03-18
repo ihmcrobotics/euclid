@@ -27,7 +27,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
 
    /**
     * Creates a new line segment 3D and initializes it to {@code other}.
-    * 
+    *
     * @param other the other line segment used to initialize this line segment. Not modified.
     */
    public LineSegment3D(LineSegment3D other)
@@ -37,7 +37,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
 
    /**
     * Creates a new line segment 3D and initializes it to {@code other}.
-    * 
+    *
     * @param other the other line segment used to initialize this line segment. Not modified.
     */
    public LineSegment3D(LineSegment3DReadOnly other)
@@ -47,7 +47,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
 
    /**
     * Initializes this line segment to have the given endpoints.
-    * 
+    *
     * @param firstEndpoint the first endpoint of this line segment. Not modified.
     * @param secondEndpoint the second endpoint of this line segment. Not modified.
     */
@@ -58,7 +58,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
 
    /**
     * Initializes this line segment to have the given endpoints.
-    * 
+    *
     * @param firstEndpointX x-coordinate of the first endpoint of this line segment.
     * @param firstEndpointY y-coordinate of the first endpoint of this line segment.
     * @param firstEndpointZ z-coordinate of the first endpoint of this line segment.
@@ -74,7 +74,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
 
    /**
     * Sets this line segment to be same as the given line segment.
-    * 
+    *
     * @param other the other line segment to copy. Not modified.
     */
    @Override
@@ -98,9 +98,9 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to
-    * {@code other} with the tolerance {@code epsilon}.
-    * 
+    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
+    * with the tolerance {@code epsilon}.
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
@@ -112,8 +112,8 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(LineSegment3DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(LineSegment3DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

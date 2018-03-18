@@ -184,8 +184,8 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
     * </p>
     *
     * @param other the other orientation 2D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     */
    default void interpolate(Orientation2DReadOnly other, double alpha)
@@ -215,13 +215,13 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
    /**
     * Transforms this orientation 2D by the given {@code transform}.
     * <p>
-    * This is equivalent to extracting the yaw rotation part from the given transform and adding it
-    * to this.
+    * This is equivalent to extracting the yaw rotation part from the given transform and adding it to
+    * this.
     * </p>
     *
     * @param transform the geometric transform to apply on this orientation 2D. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY plane.
     */
    @Override
    void applyTransform(Transform transform);
@@ -229,13 +229,13 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
    /**
     * Transforms this orientation 2D by the inverse of the given {@code transform}.
     * <p>
-    * This is equivalent to extracting the yaw rotation part from the given transform and
-    * subtracting it to this.
+    * This is equivalent to extracting the yaw rotation part from the given transform and subtracting
+    * it to this.
     * </p>
     *
     * @param transform the geometric transform to apply on this orientation 2D. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY plane.
     */
    @Override
    void applyInverseTransform(Transform transform);

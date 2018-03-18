@@ -44,8 +44,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Creates a new frame vector and initializes it components to zero and its reference frame to
-    * the {@code referenceFrame}.
+    * Creates a new frame vector and initializes it components to zero and its reference frame to the
+    * {@code referenceFrame}.
     *
     * @param referenceFrame the initial frame for this frame vector.
     */
@@ -55,8 +55,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Creates a new frame vector and initializes it with the given components and the given
-    * reference frame.
+    * Creates a new frame vector and initializes it with the given components and the given reference
+    * frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
     * @param x the x-component.
@@ -69,8 +69,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Creates a new frame vector and initializes its component {@code x}, {@code y}, {@code z} in
-    * order from the given array and initializes its reference frame.
+    * Creates a new frame vector and initializes its component {@code x}, {@code y}, {@code z} in order
+    * from the given array and initializes its reference frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
     * @param vectorArray the array containing this vector's components. Not modified.
@@ -93,8 +93,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Creates a new frame vector and initializes its x and y coordinate to {@code tuple2DReadOnly}
-    * and to the given reference frame.
+    * Creates a new frame vector and initializes its x and y coordinate to {@code tuple2DReadOnly} and
+    * to the given reference frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
     * @param tuple2DReadOnly the tuple to copy the coordinates from. Not modified.
@@ -128,7 +128,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
 
    /**
     * Sets this frame vector to {@code other}.
-    * 
+    *
     * @param other the other frame vector to set this to. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
@@ -140,9 +140,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Sets the reference frame of this vector without updating or modifying its x, y, and z
-    * components.
-    * 
+    * Sets the reference frame of this vector without updating or modifying its x, y, and z components.
+    *
     * @param referenceFrame the new reference frame for this frame vector.
     */
    @Override
@@ -227,15 +226,15 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameTuple3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if the two vectors are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two vectors are exactly equal component-wise and are expressed in the
+    *         same reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)
@@ -259,8 +258,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
     *
     * @param other the other vector to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two vectors are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
+    * @return {@code true} if the two vectors are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(FrameVector3D other, double epsilon)
@@ -271,8 +270,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    /**
     * Tests if {@code this} and {@code other} represent the same vector 3D to an {@code epsilon}.
     * <p>
-    * Two vectors are considered geometrically equal if they are at a distance of less than or equal
-    * to {@code epsilon}.
+    * Two vectors are considered geometrically equal if they are at a distance of less than or equal to
+    * {@code epsilon}.
     * </p>
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
@@ -283,8 +282,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
     * @param epsilon the maximum distance that the two vectors can be spaced and still considered
     *           equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FrameVector3D other, double epsilon)
@@ -293,7 +292,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Provides a {@code String} representation of this frame vector 3D as follows: (x, y, z)-worldFrame.
+    * Provides a {@code String} representation of this frame vector 3D as follows: (x, y,
+    * z)-worldFrame.
     *
     * @return the {@code String} representing this frame vector 3D.
     */
@@ -304,7 +304,8 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Calculates and returns a hash code value from the value of each component of this frame vector 3D.
+    * Calculates and returns a hash code value from the value of each component of this frame vector
+    * 3D.
     *
     * @return the hash code value for this frame vector 3D.
     */

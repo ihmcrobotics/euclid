@@ -30,15 +30,16 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
    /**
     * Sets the reference frame of this pose 2D without updating or modifying its position or
     * orientation.
-    * 
+    *
     * @param referenceFrame the new reference frame for this frame pose 2D.
     */
+   @Override
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
     * Sets the position and orientation parts of this pose 2D to zero and sets the current reference
     * frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this pose 2D.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -48,9 +49,9 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
    }
 
    /**
-    * Sets the position and position parts of this pose 2D to {@link Double#NaN} and sets the
-    * current reference frame to {@code referenceFrame}.
-    * 
+    * Sets the position and position parts of this pose 2D to {@link Double#NaN} and sets the current
+    * reference frame to {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame to be associated with this pose 2D.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -61,7 +62,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
 
    /**
     * Sets the position, orientation, and reference frame.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param x the x-coordinate for the position.
     * @param y the y-coordinate for the position.
@@ -75,7 +76,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
 
    /**
     * Sets this pose 2D from the given pose 3D and sets the reference frame.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param pose3DReadOnly the pose 3D used to sets the position and orientation. Not modified.
     */
@@ -87,7 +88,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
 
    /**
     * Sets this pose 2D from the given pose 2D and sets the reference frame.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param pose3DReadOnly the pose 2D used to sets the position and orientation. Not modified.
     */
@@ -99,7 +100,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
 
    /**
     * Sets the position, orientation, and reference frame.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param position the new position. Not modified.
     * @param orientation the new orientation. Not modified.
@@ -115,7 +116,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * <p>
     * The given transform has to represent a 2D transformation.
     * </p>
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param rigidBodyTransform the transform used to update the position and orientation. Not
     *           modified.
@@ -129,14 +130,14 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
 
    /**
     * Sets this pose 2D to match the given rigid-body transform and sets the reference frame.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param rigidBodyTransform the transform used to update the position and orientation. Not
     *           modified.
-    * @param checkIsTransform2D indicates whether or not the method should check that the rotation
-    *           part of the given transform represents a 2D rotation in the XY-plane.
-    * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the
-    *            rotation part of the transform does not represent a 2D transformation.
+    * @param checkIsTransform2D indicates whether or not the method should check that the rotation part
+    *           of the given transform represents a 2D rotation in the XY-plane.
+    * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the rotation
+    *            part of the transform does not represent a 2D transformation.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
    {
@@ -147,7 +148,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
    /**
     * Sets this pose 2D from the given {@code position}, {@code yaw} angle and sets the reference
     * frame.
-    * 
+    *
     * @param referenceFrame the new reference frame.
     * @param position the tuple used to initialize this pose's position. Not modified.
     * @param yaw the angle used to initialize the pose's orientation.

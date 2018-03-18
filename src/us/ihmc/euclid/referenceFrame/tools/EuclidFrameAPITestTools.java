@@ -362,19 +362,19 @@ public class EuclidFrameAPITestTools
     * Asserts, using reflection, that all methods with frameless arguments, such as
     * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
     * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
-    * 
+    *
     * @param typeWithFrameMethods refers to the type to be tested. This asserts that
     *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
     *           overload {@code typeWithFramelessMethods}.
-    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
-    *           that are to be overloaded.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects that
+    *           are to be overloaded.
     * @param assertAllCombinations when {@code false}, this asserts that for each method in
     *           {@code typeWithFramelessMethods} there is one overloading method in
     *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
     *           When {@code true}, this asserts that for each method in
-    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
-    *           all the possible combinations of frame & frameless arguments, except for the
-    *           original frameless signature.
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with all
+    *           the possible combinations of frame & frameless arguments, except for the original
+    *           frameless signature.
     */
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations)
    {
@@ -385,19 +385,19 @@ public class EuclidFrameAPITestTools
     * Asserts, using reflection, that all methods with frameless arguments, such as
     * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
     * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
-    * 
+    *
     * @param typeWithFrameMethods refers to the type to be tested. This asserts that
     *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
     *           overload {@code typeWithFramelessMethods}.
-    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
-    *           that are to be overloaded.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects that
+    *           are to be overloaded.
     * @param assertAllCombinations when {@code false}, this asserts that for each method in
     *           {@code typeWithFramelessMethods} there is one overloading method in
     *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
     *           When {@code true}, this asserts that for each method in
-    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
-    *           all the possible combinations of frame & frameless arguments, except for the
-    *           original frameless signature.
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with all
+    *           the possible combinations of frame & frameless arguments, except for the original
+    *           frameless signature.
     * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
     *           {@code typeWithFramelessMethods}.
     */
@@ -411,19 +411,19 @@ public class EuclidFrameAPITestTools
     * Asserts, using reflection, that all methods with frameless arguments, such as
     * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
     * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
-    * 
+    *
     * @param typeWithFrameMethods refers to the type to be tested. This asserts that
     *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
     *           overload {@code typeWithFramelessMethods}.
-    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
-    *           that are to be overloaded.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects that
+    *           are to be overloaded.
     * @param assertAllCombinations when {@code false}, this asserts that for each method in
     *           {@code typeWithFramelessMethods} there is one overloading method in
     *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
     *           When {@code true}, this asserts that for each method in
-    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
-    *           all the possible combinations of frame & frameless arguments, except for the
-    *           original frameless signature.
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with all
+    *           the possible combinations of frame & frameless arguments, except for the original
+    *           frameless signature.
     * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
     *           {@code typeWithFramelessMethods}.
     * @param framelessMethodsToIgnore map containing the name and argument types of the methods in
@@ -456,24 +456,24 @@ public class EuclidFrameAPITestTools
     * Asserts, using reflection, that all methods with frameless arguments, such as
     * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
     * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
-    * 
+    *
     * @param typeWithFrameMethods refers to the type to be tested. This asserts that
     *           {@code typeWithFrameMethods} properly has all the methods necessary to properly
     *           overload {@code typeWithFramelessMethods}.
-    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects
-    *           that are to be overloaded.
+    * @param typeWithFramelessMethods refers to the type declaring methods with frameless objects that
+    *           are to be overloaded.
     * @param assertAllCombinations when {@code false}, this asserts that for each method in
     *           {@code typeWithFramelessMethods} there is one overloading method in
     *           {@code typeWithFrameMethods} with all the arguments using the equivalent frame type.
     *           When {@code true}, this asserts that for each method in
-    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with
-    *           all the possible combinations of frame & frameless arguments, except for the
-    *           original frameless signature.
+    *           {@code typeWithFramelessArguments}, {@code typeWithFrameMethods} overloads it with all
+    *           the possible combinations of frame & frameless arguments, except for the original
+    *           frameless signature.
     * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
     *           {@code typeWithFramelessMethods}.
     * @param framelessMethodFilter custom filter used on the methods of
-    *           {@code typeWithFramelessMethods}. The assertions are performed on the methods for
-    *           which {@code framelessMethodFilter.test(method)} returns {@code true}.
+    *           {@code typeWithFramelessMethods}. The assertions are performed on the methods for which
+    *           {@code framelessMethodFilter.test(method)} returns {@code true}.
     */
    public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
                                                         int minNumberOfFramelessArguments, Predicate<Method> framelessMethodFilter)
@@ -499,8 +499,8 @@ public class EuclidFrameAPITestTools
 
    /**
     * Asserts, using reflection, that the methods, that are public and static, in
-    * {@code typeHoldingStaticMethodsToTest} are properly checking and/or setting reference frames
-    * of their arguments.
+    * {@code typeHoldingStaticMethodsToTest} are properly checking and/or setting reference frames of
+    * their arguments.
     * <p>
     * This assertion expects methods to be declaring arguments as read-only to inform that they are
     * used as input only, and as mutable to inform that they are the output(s).
@@ -513,7 +513,7 @@ public class EuclidFrameAPITestTools
     * operation cannot be performed because at least two arguments are expressed in a different
     * reference frame.
     * </p>
-    * 
+    *
     * @param typeDeclaringStaticMethodsToTest the type in which the methods are to be tested.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
@@ -524,8 +524,8 @@ public class EuclidFrameAPITestTools
 
    /**
     * Asserts, using reflection, that the methods, that are public and static, in
-    * {@code typeHoldingStaticMethodsToTest} are properly checking and/or setting reference frames
-    * of their arguments.
+    * {@code typeHoldingStaticMethodsToTest} are properly checking and/or setting reference frames of
+    * their arguments.
     * <p>
     * This assertion expects methods to be declaring arguments as read-only to inform that they are
     * used as input only, and as mutable to inform that they are the output(s).
@@ -538,7 +538,7 @@ public class EuclidFrameAPITestTools
     * operation cannot be performed because at least two arguments are expressed in a different
     * reference frame.
     * </p>
-    * 
+    *
     * @param typeDeclaringStaticMethodsToTest the type in which the methods are to be tested.
     * @param methodFilter custom filter used on the methods. The assertions are performed on the
     *           methods for which {@code methodFilter.test(method)} returns {@code true}.
@@ -732,18 +732,18 @@ public class EuclidFrameAPITestTools
 
    /**
     * Asserts, using reflection, that the methods, that are public and non-static, in the created
-    * instance from {@code frameTypeBuilder} are properly checking and/or setting reference frames
-    * of their arguments.
+    * instance from {@code frameTypeBuilder} are properly checking and/or setting reference frames of
+    * their arguments.
     * <p>
     * This assertion expects methods to be declaring arguments as read-only to inform that they are
     * used as input only, and as mutable to inform that they are the output(s).
     * </p>
     * <p>
     * This expects methods to throw a {@link ReferenceFrameMismatchException} to indicate that the
-    * operation cannot be performed because at least one argument with an immutable frame is
-    * expressed in a different reference frame.
+    * operation cannot be performed because at least one argument with an immutable frame is expressed
+    * in a different reference frame.
     * </p>
-    * 
+    *
     * @param frameTypeBuilder builder used to generate an instance of the type to be tested.
     * @param methodFilter custom filter used on the methods. The assertions are performed on the
     *           methods for which {@code methodFilter.test(method)} returns {@code true}.
@@ -943,16 +943,16 @@ public class EuclidFrameAPITestTools
    }
 
    /**
-    * Assuming the type {@code typeWithFrameMethodsToTest} declares the same static methods as
-    * declared in {@code typeWithFramlessMethods} with the difference of dealing with reference
-    * frame holders, this method asserts that the methods in {@code typeWithFrameMethodsToTest} does
-    * not change the underlying algorithms.
+    * Assuming the type {@code typeWithFrameMethodsToTest} declares the same static methods as declared
+    * in {@code typeWithFramlessMethods} with the difference of dealing with reference frame holders,
+    * this method asserts that the methods in {@code typeWithFrameMethodsToTest} does not change the
+    * underlying algorithms.
     * <p>
     * For each method declared in {@code typeWithFrameMethodsToTest}, this methods searched for the
     * equivalent method in {@code typeWithFramelessMethods} and the methods from both classes are
     * invoked to compare the output.
     * </p>
-    * 
+    *
     * @param typeWithFrameMethodsToTest the type in which the methods are to be tested.
     * @param typeWithFramelessMethods the type declaring the methods against which the methods from
     *           {@code typeWithFrameMethodsToTest} are to be compared.
@@ -963,16 +963,16 @@ public class EuclidFrameAPITestTools
    }
 
    /**
-    * Assuming the type {@code typeWithFrameMethodsToTest} declares the same static methods as
-    * declared in {@code typeWithFramlessMethods} with the difference of dealing with reference
-    * frame holders, this method asserts that the methods in {@code typeWithFrameMethodsToTest} does
-    * not change the underlying algorithms.
+    * Assuming the type {@code typeWithFrameMethodsToTest} declares the same static methods as declared
+    * in {@code typeWithFramlessMethods} with the difference of dealing with reference frame holders,
+    * this method asserts that the methods in {@code typeWithFrameMethodsToTest} does not change the
+    * underlying algorithms.
     * <p>
     * For each method declared in {@code typeWithFrameMethodsToTest}, this methods searched for the
     * equivalent method in {@code typeWithFramelessMethods} and the methods from both classes are
     * invoked to compare the output.
     * </p>
-    * 
+    *
     * @param typeWithFrameMethodsToTest the type in which the methods are to be tested.
     * @param typeWithFramelessMethods the type declaring the methods against which the methods from
     *           {@code typeWithFrameMethodsToTest} are to be compared.

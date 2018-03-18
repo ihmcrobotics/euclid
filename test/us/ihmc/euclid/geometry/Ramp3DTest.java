@@ -24,8 +24,8 @@ public class Ramp3DTest
    private static final int ITERATIONS = 1000;
 
    /**
-    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
-    * normal tests at the corners.
+    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface normal
+    * tests at the corners.
     */
    @Test
    public void testCommonShape3dFunctionality()
@@ -206,8 +206,8 @@ public class Ramp3DTest
    }
 
    /**
-    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
-    * normal tests at the corners.
+    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface normal
+    * tests at the corners.
     */
    @Test
    public void testIsInsideOrOnSurfaceRandomOrientations()
@@ -287,8 +287,8 @@ public class Ramp3DTest
    }
 
    /**
-    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
-    * normal tests at the corners.
+    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface normal
+    * tests at the corners.
     */
 
    @Test
@@ -332,8 +332,8 @@ public class Ramp3DTest
    }
 
    /**
-    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface
-    * normal tests at the corners.
+    * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface normal
+    * tests at the corners.
     */
    @Test
    public void testGetClosestPointAndNormalAt()

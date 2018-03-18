@@ -58,6 +58,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @return the position part of this pose 3D.
     */
+   @Override
    Point3DBasics getPosition();
 
    /**
@@ -65,6 +66,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @return the orientation part of this pose 3D.
     */
+   @Override
    QuaternionBasics getOrientation();
 
    /**
@@ -313,8 +315,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Normalizes the quaternion part of this pose to ensure it is a unit-quaternion describing a
-    * proper orientation.
+    * Normalizes the quaternion part of this pose to ensure it is a unit-quaternion describing a proper
+    * orientation.
     * <p>
     * Edge cases:
     * <ul>
@@ -351,8 +353,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * </p>
     *
     * @param other the other pose 3D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     */
    default void interpolate(Pose3DReadOnly other, double alpha)
@@ -372,8 +374,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param pose1 the first pose 3D used in the interpolation. Not modified.
     * @param pose2 the second pose 3D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code pose2}.
+    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting {@code this}
+    *           to {@code pose2}.
     */
    default void interpolate(Pose3DReadOnly pose1, Pose3DReadOnly pose2, double alpha)
    {
@@ -399,11 +401,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Adds the given {@code translation} to this pose 3D assuming it is expressed in the coordinates
-    * in which this pose is expressed.
+    * Adds the given {@code translation} to this pose 3D assuming it is expressed in the coordinates in
+    * which this pose is expressed.
     * <p>
-    * If the {@code translation} is expressed in the local coordinates described by this pose 3D,
-    * use {@link #appendTranslation(Tuple3DReadOnly)}.
+    * If the {@code translation} is expressed in the local coordinates described by this pose 3D, use
+    * {@link #appendTranslation(Tuple3DReadOnly)}.
     * </p>
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
@@ -450,8 +452,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Prepends a rotation about the z-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
+    * Prepends a rotation about the z-axis to this pose 3D: Rotates the position part and prepends the
+    * rotation to the orientation part.
     *
     * @param yaw the angle to rotate about the z-axis.
     */
@@ -462,8 +464,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Prepends a rotation about the y-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
+    * Prepends a rotation about the y-axis to this pose 3D: Rotates the position part and prepends the
+    * rotation to the orientation part.
     *
     * @param pitch the angle to rotate about the y-axis.
     */
@@ -474,8 +476,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Prepends a rotation about the x-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
+    * Prepends a rotation about the x-axis to this pose 3D: Rotates the position part and prepends the
+    * rotation to the orientation part.
     *
     * @param roll the angle to rotate about the x-axis.
     */
@@ -514,8 +516,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    /**
     * Rotates, then adds the translation (x, y, z) to this pose 3D.
     * <p>
-    * Use this method if the translation (x, y, z) is expressed in the local coordinates described
-    * by this pose 3D. Otherwise, use {@link #prependTranslation(double, double, double)}.
+    * Use this method if the translation (x, y, z) is expressed in the local coordinates described by
+    * this pose 3D. Otherwise, use {@link #prependTranslation(double, double, double)}.
     * </p>
     *
     * @param x the translation distance along the x-axis.

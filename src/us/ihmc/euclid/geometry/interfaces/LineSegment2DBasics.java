@@ -48,9 +48,9 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    }
 
    /**
-    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method,
-    * this line segment becomes invalid. A new pair of valid endpoints will have to be set so this
-    * line segment is again usable.
+    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method, this
+    * line segment becomes invalid. A new pair of valid endpoints will have to be set so this line
+    * segment is again usable.
     */
    @Override
    default void setToNaN()
@@ -260,7 +260,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
 
    /**
     * Translates this line segment perpendicularly to its direction.
-    * 
+    *
     * @param shiftToLeft defines to which side this line segment is to be translated.
     * @param distanceToShift the distance this line segment is to be shifted.
     */
@@ -317,8 +317,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * Transforms this line segment using the given homogeneous transformation matrix.
     *
     * @param transform the transform to apply on the endpoints of this line segment. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY-plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -330,8 +330,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * Transforms this line segment using the inverse of the given homogeneous transformation matrix.
     *
     * @param transform the transform to apply on the endpoints of this line segment. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY-plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)
@@ -344,10 +344,10 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * result onto the XY-plane.
     *
     * @param transform the transform to apply on this line segment's endpoints. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the given transform represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
-    *            part of {@code transform} is not a transformation in the XY plane.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *           given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *            of {@code transform} is not a transformation in the XY plane.
     */
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
@@ -360,10 +360,10 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * result onto the XY-plane.
     *
     * @param transform the transform to apply on this line segment's endpoints. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the given transform represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
-    *            part of {@code transform} is not a transformation in the XY plane.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *           given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *            of {@code transform} is not a transformation in the XY plane.
     */
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {

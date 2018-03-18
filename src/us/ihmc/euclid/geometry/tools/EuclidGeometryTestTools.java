@@ -38,8 +38,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 2D. Not modified.
     * @param actual the actual line 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertLine2DEquals(Line2D expected, Line2D actual, double epsilon)
    {
@@ -56,8 +56,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 2D. Not modified.
     * @param actual the actual line 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertLine2DEquals(String messagePrefix, Line2D expected, Line2D actual, double epsilon)
    {
@@ -76,8 +76,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two line 2Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertLine2DEquals(String messagePrefix, Line2D expected, Line2D actual, double epsilon, String format)
    {
@@ -102,8 +102,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 2D. Not modified.
     * @param actual the actual line 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 2Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two line 2Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertLine2DGeometricallyEquals(Line2D expected, Line2D actual, double epsilon)
    {
@@ -120,8 +120,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 2D. Not modified.
     * @param actual the actual line 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 2Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two line 2Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertLine2DGeometricallyEquals(String messagePrefix, Line2D expected, Line2D actual, double epsilon)
    {
@@ -140,8 +140,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two line 2Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two line 2Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertLine2DGeometricallyEquals(String messagePrefix, Line2D expected, Line2D actual, double epsilon, String format)
    {
@@ -166,8 +166,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 3D. Not modified.
     * @param actual the actual line 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertLine3DEquals(Line3D expected, Line3D actual, double epsilon)
    {
@@ -184,8 +184,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 3D. Not modified.
     * @param actual the actual line 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertLine3DEquals(String messagePrefix, Line3D expected, Line3D actual, double epsilon)
    {
@@ -204,8 +204,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two line 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertLine3DEquals(String messagePrefix, Line3D expected, Line3D actual, double epsilon, String format)
    {
@@ -230,8 +230,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 3D. Not modified.
     * @param actual the actual line 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 3Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two line 3Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertLine3DGeometricallyEquals(Line3D expected, Line3D actual, double epsilon)
    {
@@ -248,8 +248,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line 3D. Not modified.
     * @param actual the actual line 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line 3Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two line 3Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertLine3DGeometricallyEquals(String messagePrefix, Line3D expected, Line3D actual, double epsilon)
    {
@@ -268,8 +268,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two line 3Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two line 3Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertLine3DGeometricallyEquals(String messagePrefix, Line3D expected, Line3D actual, double epsilon, String format)
    {
@@ -286,8 +286,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 1Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 1Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -295,8 +294,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line segment 1D. Not modified.
     * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment1DEquals(LineSegment1D expected, LineSegment1D actual, double epsilon)
    {
@@ -304,8 +303,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 1Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 1Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -314,8 +312,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line segment 1D. Not modified.
     * @param actual the actual line segment 1D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment1DEquals(String messagePrefix, LineSegment1D expected, LineSegment1D actual, double epsilon)
    {
@@ -323,8 +321,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 1Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 1Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -335,8 +332,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 1Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment1DEquals(String messagePrefix, LineSegment1D expected, LineSegment1D actual, double epsilon, String format)
    {
@@ -415,8 +412,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 2Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 2Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -424,8 +420,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line segment 2D. Not modified.
     * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment2DEquals(LineSegment2D expected, LineSegment2D actual, double epsilon)
    {
@@ -433,8 +429,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 2Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 2Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -443,8 +438,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line segment 2D. Not modified.
     * @param actual the actual line segment 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment2DEquals(String messagePrefix, LineSegment2D expected, LineSegment2D actual, double epsilon)
    {
@@ -452,8 +447,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 2Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 2Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -464,8 +458,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment2DEquals(String messagePrefix, LineSegment2D expected, LineSegment2D actual, double epsilon, String format)
    {
@@ -544,8 +538,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 3Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 3Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -553,8 +546,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line segment 3D. Not modified.
     * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment3DEquals(LineSegment3D expected, LineSegment3D actual, double epsilon)
    {
@@ -562,8 +555,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 3Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 3Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -572,8 +564,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected line segment 3D. Not modified.
     * @param actual the actual line segment 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment3DEquals(String messagePrefix, LineSegment3D expected, LineSegment3D actual, double epsilon)
    {
@@ -581,8 +573,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two line segment 3Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two line segment 3Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -593,8 +584,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertLineSegment3DEquals(String messagePrefix, LineSegment3D expected, LineSegment3D actual, double epsilon, String format)
    {
@@ -673,8 +664,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 2Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 2Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -682,8 +672,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected bounding box 2D. Not modified.
     * @param actual the actual bounding box 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertBoundingBox2DEquals(BoundingBox2D expected, BoundingBox2D actual, double epsilon)
    {
@@ -691,8 +681,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 2Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 2Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -701,8 +690,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected bounding box 2D. Not modified.
     * @param actual the actual bounding box 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertBoundingBox2DEquals(String messagePrefix, BoundingBox2D expected, BoundingBox2D actual, double epsilon)
    {
@@ -710,8 +699,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 2Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 2Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -722,8 +710,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertBoundingBox2DEquals(String messagePrefix, BoundingBox2D expected, BoundingBox2D actual, double epsilon, String format)
    {
@@ -740,8 +728,8 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 2Ds represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 2Ds represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -758,8 +746,8 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 2Ds represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 2Ds represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -777,8 +765,8 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 2Ds represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 2Ds represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -807,8 +795,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 3Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 3Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -816,8 +803,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected bounding box 3D. Not modified.
     * @param actual the actual bounding box 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertBoundingBox3DEquals(BoundingBox3D expected, BoundingBox3D actual, double epsilon)
    {
@@ -825,8 +812,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 3Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 3Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -835,8 +821,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected bounding box 3D. Not modified.
     * @param actual the actual bounding box 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertBoundingBox3DEquals(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, double epsilon)
    {
@@ -844,8 +830,7 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 3Ds are equal to an
-    * {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 3Ds are equal to an {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -856,8 +841,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertBoundingBox3DEquals(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, double epsilon, String format)
    {
@@ -874,8 +859,8 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 3Ds represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 3Ds represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -892,8 +877,8 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 3Ds represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 3Ds represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -911,8 +896,8 @@ public class EuclidGeometryTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two bounding box 3Ds represent the same geometry to
-    * an {@code epsilon}.
+    * Asserts on a per component basis that the two bounding box 3Ds represent the same geometry to an
+    * {@code epsilon}.
     * <p>
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
@@ -949,8 +934,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected orientation 2D. Not modified.
     * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertOrientation2DEquals(Orientation2D expected, Orientation2D actual, double epsilon)
    {
@@ -967,8 +952,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected orientation 2D. Not modified.
     * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertOrientation2DEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon)
    {
@@ -987,8 +972,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments
-    *            is equal to {@code null}.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
+    *            equal to {@code null}.
     */
    public static void assertOrientation2DEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon, String format)
    {
@@ -1013,8 +998,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected orientation 2D. Not modified.
     * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only
-    *            one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
+    *            of the arguments is equal to {@code null}.
     */
    public static void assertOrientation2DGeometricallyEquals(Orientation2D expected, Orientation2D actual, double epsilon)
    {
@@ -1031,8 +1016,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected orientation 2D. Not modified.
     * @param actual the actual orientation 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only
-    *            one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
+    *            of the arguments is equal to {@code null}.
     */
    public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon)
    {
@@ -1051,8 +1036,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only
-    *            one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
+    *            of the arguments is equal to {@code null}.
     */
    public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2D expected, Orientation2D actual, double epsilon, String format)
    {
@@ -1077,8 +1062,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected plane 3D. Not modified.
     * @param actual the actual plane 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPlane3DEquals(Plane3D expected, Plane3D actual, double epsilon)
    {
@@ -1095,8 +1080,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected plane 3D. Not modified.
     * @param actual the actual plane 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPlane3DEquals(String messagePrefix, Plane3D expected, Plane3D actual, double epsilon)
    {
@@ -1115,8 +1100,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two plane 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPlane3DEquals(String messagePrefix, Plane3D expected, Plane3D actual, double epsilon, String format)
    {
@@ -1205,8 +1190,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 2D. Not modified.
     * @param actual the actual pose 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPose2DEquals(Pose2D expected, Pose2D actual, double epsilon)
    {
@@ -1223,8 +1208,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 2D. Not modified.
     * @param actual the actual pose 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPose2DEquals(String messagePrefix, Pose2D expected, Pose2D actual, double epsilon)
    {
@@ -1243,8 +1228,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two pose 2Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPose2DEquals(String messagePrefix, Pose2D expected, Pose2D actual, double epsilon, String format)
    {
@@ -1269,8 +1254,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 2D. Not modified.
     * @param actual the actual pose 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 2Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two pose 2Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertPose2DGeometricallyEquals(Pose2D expected, Pose2D actual, double epsilon)
    {
@@ -1287,8 +1272,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 2D. Not modified.
     * @param actual the actual pose 2D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 2Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two pose 2Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertPose2DGeometricallyEquals(String messagePrefix, Pose2D expected, Pose2D actual, double epsilon)
    {
@@ -1307,8 +1292,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two pose 2Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two pose 2Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertPose2DGeometricallyEquals(String messagePrefix, Pose2D expected, Pose2D actual, double epsilon, String format)
    {
@@ -1333,8 +1318,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 3D. Not modified.
     * @param actual the actual pose 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPose3DEquals(Pose3D expected, Pose3D actual, double epsilon)
    {
@@ -1351,8 +1336,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 3D. Not modified.
     * @param actual the actual pose 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPose3DEquals(String messagePrefix, Pose3D expected, Pose3D actual, double epsilon)
    {
@@ -1371,8 +1356,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is
-    *            equal to {@code null}.
+    * @throws AssertionError if the two pose 3Ds are not equal. If only one of the arguments is equal
+    *            to {@code null}.
     */
    public static void assertPose3DEquals(String messagePrefix, Pose3D expected, Pose3D actual, double epsilon, String format)
    {
@@ -1397,8 +1382,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 3D. Not modified.
     * @param actual the actual pose 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 3Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two pose 3Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertPose3DGeometricallyEquals(Pose3D expected, Pose3D actual, double epsilon)
    {
@@ -1415,8 +1400,8 @@ public class EuclidGeometryTestTools
     * @param expected the expected pose 3D. Not modified.
     * @param actual the actual pose 3D. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two pose 3Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two pose 3Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertPose3DGeometricallyEquals(String messagePrefix, Pose3D expected, Pose3D actual, double epsilon)
    {
@@ -1435,8 +1420,8 @@ public class EuclidGeometryTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two pose 3Ds do not represent the same geometry. If only one of
-    *            the arguments is equal to {@code null}.
+    * @throws AssertionError if the two pose 3Ds do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
     */
    public static void assertPose3DGeometricallyEquals(String messagePrefix, Pose3D expected, Pose3D actual, double epsilon, String format)
    {

@@ -9,15 +9,16 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
 {
    /**
     * Sets the reference frame of this orientation 2D without updating or modifying its yaw angle.
-    * 
+    *
     * @param referenceFrame the new reference frame for this frame orientation 2D.
     */
+   @Override
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
     * Sets the yaw angle of this orientation 2D to zero and sets the current reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this orientation 2D.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -29,7 +30,7 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
    /**
     * Sets the yaw angle of this orientation 2D to {@link Double#NaN} and sets the current reference
     * frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this orientation 2D.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -39,12 +40,11 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
    }
 
    /**
-    * Sets the yaw angle of this orientation 2D and sets its reference frame to
-    * {@code referenceFrame}
+    * Sets the yaw angle of this orientation 2D and sets its reference frame to {@code referenceFrame}
     * <p>
     * Note that the argument is trimmed to be contained in [-<i>pi</i>, <i>pi</pi>].
     * </p>
-    * 
+    *
     * @param referenceFrame the new reference frame for this frame orientation 2D.
     * @param yaw the new value for the yaw angle of this orientation 2D.
     */
@@ -94,8 +94,8 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
    /**
     * Sets this frame orientation 2D to {@code frameQuaternionReadOnly}.
     *
-    * @param frameQuaternionReadOnly the other frame orientation 2D to copy the values and reference frame from. Not
-    *           modified.
+    * @param frameQuaternionReadOnly the other frame orientation 2D to copy the values and reference
+    *           frame from. Not modified.
     */
    default void setIncludingFrame(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {

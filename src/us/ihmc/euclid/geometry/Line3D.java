@@ -33,7 +33,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
 
    /**
     * Initializes this line to be passing through the given point, with the vector as the direction.
-    * 
+    *
     * @param pointOnLineX the x-coordinate of a point on this line.
     * @param pointOnLineY the y-coordinate of a point on this line.
     * @param pointOnLineZ the z-coordinate of a point on this line.
@@ -88,7 +88,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
 
    /**
     * Initializes this line to be passing through the two given points.
-    * 
+    *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws RuntimeException if the two given points are exactly equal.
@@ -100,7 +100,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
 
    /**
     * Initializes this line to be passing through the given point, with the vector as the direction.
-    * 
+    *
     * @param pointOnLine point on this line. Not modified.
     * @param lineDirection direction of this line. Not modified.
     */
@@ -125,7 +125,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
 
    /**
     * Sets this line to be the same as the given line.
-    * 
+    *
     * @param other the other line to copy. Not modified.
     */
    @Override
@@ -138,9 +138,9 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
     * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
     * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
-    * lines are physically the same but this method returns {@code false}.
-    * 
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
+    * are physically the same but this method returns {@code false}.
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
@@ -152,11 +152,10 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -170,8 +169,8 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param obj the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

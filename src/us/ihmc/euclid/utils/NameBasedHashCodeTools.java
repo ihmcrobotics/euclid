@@ -18,9 +18,9 @@ public class NameBasedHashCodeTools
    public static final long PRIME = 31L;
 
    /**
-    * Combines the hash codes from each of the {@code holders} to calculate a new name based hash
-    * code that represents the given array.
-    * 
+    * Combines the hash codes from each of the {@code holders} to calculate a new name based hash code
+    * that represents the given array.
+    *
     * @param holders the objects which hash codes are to be combined. Not modified.
     * @return the combined unique hash code.
     */
@@ -40,7 +40,7 @@ public class NameBasedHashCodeTools
    /**
     * Combines the hash codes from each of the {@code holders} &in; [ {@code firstIndex},
     * {@code secondIndex} ] to calculate a new name based hash code that represents the sub-array.
-    * 
+    *
     * @param holders the objects which hash codes are to be combined. Not modified.
     * @param firstIndex index of the first object to use for computing the combined hash code.
     * @param lastIndex index of the last object to use for computing the combined hash code.
@@ -62,10 +62,10 @@ public class NameBasedHashCodeTools
    /**
     * Computes the unique hash code from the given {@code string}.
     * <p>
-    * The hash code is computed using {@code String#hashCode()} when the object is not {@code null}.
-    * If the object is {@code null}, this method returns {@value #NULL_HASHCODE}.
+    * The hash code is computed using {@code String#hashCode()} when the object is not {@code null}. If
+    * the object is {@code null}, this method returns {@value #NULL_HASHCODE}.
     * </p>
-    * 
+    *
     * @param string the string to compute the hash code of.
     * @return the string hash code.
     */
@@ -79,7 +79,7 @@ public class NameBasedHashCodeTools
 
    /**
     * Combines two hash codes into one.
-    * 
+    *
     * @param hashCodeToUpdate the value of the first hash code to be combined.
     * @param holder the object which hash code is to be combined. Not modified.
     * @return the value of the combined hash code.
@@ -91,7 +91,7 @@ public class NameBasedHashCodeTools
 
    /**
     * Combines two hash codes into one.
-    * 
+    *
     * @param holder1 the first object which hash code is to be combined. Not modified.
     * @param holder2 the second object which hash code is to be combined. Not modified.
     * @return the value of the combined hash code.

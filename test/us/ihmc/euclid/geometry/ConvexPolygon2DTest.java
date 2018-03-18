@@ -806,7 +806,7 @@ public class ConvexPolygon2DTest
       int otherEdgeVertexIndex = 0;
       boolean isClosestVertexPartOfClosestEdge = false;
 
-      Point2DReadOnly[] segmentVertices = {closestEdge.getFirstEndpoint(), closestEdge.getSecondEndpoint()}; 
+      Point2DReadOnly[] segmentVertices = {closestEdge.getFirstEndpoint(), closestEdge.getSecondEndpoint()};
 
       for (int i = 0; i < 2; i++)
       {

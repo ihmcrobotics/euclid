@@ -5,11 +5,11 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 
 /**
- * Write and read interface for a 2D vector expressed in a constant reference frame, i.e. this vector
- * is always expressed in the same reference frame.
+ * Write and read interface for a 2D vector expressed in a constant reference frame, i.e. this
+ * vector is always expressed in the same reference frame.
  * <p>
- * In addition to representing a {@link Vector2DBasics}, a {@link ReferenceFrame} is associated to
- * a {@code FixedFrameVector2DBasics}. This allows, for instance, to enforce, at runtime, that
+ * In addition to representing a {@link Vector2DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FixedFrameVector2DBasics}. This allows, for instance, to enforce, at runtime, that
  * operations on vectors occur in the same coordinate system.
  * </p>
  * <p>
@@ -25,8 +25,8 @@ public interface FixedFrameVector2DBasics extends FrameVector2DReadOnly, FixedFr
     * Sets this frame vector to {@code other} and then calls {@link #normalize()}.
     *
     * @param other the other frame vector to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void setAndNormalize(FrameVector2DReadOnly other)
    {

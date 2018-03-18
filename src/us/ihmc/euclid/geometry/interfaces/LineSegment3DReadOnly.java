@@ -33,10 +33,10 @@ public interface LineSegment3DReadOnly
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
     */
    default void get(Point3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
    {
@@ -203,9 +203,8 @@ public interface LineSegment3DReadOnly
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     * <p>
@@ -213,8 +212,7 @@ public interface LineSegment3DReadOnly
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
-    * @return the projection of the point onto the line segment or {@code null} if the method
-    *         failed.
+    * @return the projection of the point onto the line segment or {@code null} if the method failed.
     */
    default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
@@ -229,9 +227,8 @@ public interface LineSegment3DReadOnly
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -251,9 +248,8 @@ public interface LineSegment3DReadOnly
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -386,8 +382,8 @@ public interface LineSegment3DReadOnly
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints or exactly on an endpoint.
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints or exactly on an endpoint.
     *
     * @param point the query. Not modified.
     * @return {@code true} if the projection of the point is between the endpoints of this line
@@ -399,13 +395,13 @@ public interface LineSegment3DReadOnly
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints with a given conservative tolerance {@code epsilon}:
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints with a given conservative tolerance {@code epsilon}:
     * <ul>
-    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum
-    * distance of {@code epsilon * this.length()} from the closest endpoint.
-    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance
-    * of {@code -epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum distance
+    * of {@code epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance of
+    * {@code -epsilon * this.length()} from the closest endpoint.
     * <li>if {@code epsilon = 0}, the point has to be between the endpoints or equal to one of the
     * endpoints.
     * </ul>
@@ -421,13 +417,13 @@ public interface LineSegment3DReadOnly
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints with a given conservative tolerance {@code epsilon}:
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints with a given conservative tolerance {@code epsilon}:
     * <ul>
-    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum
-    * distance of {@code epsilon * this.length()} from the closest endpoint.
-    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance
-    * of {@code -epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum distance
+    * of {@code epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance of
+    * {@code -epsilon * this.length()} from the closest endpoint.
     * <li>if {@code epsilon = 0}, the point has to be between the endpoints or equal to one of the
     * endpoints.
     * </ul>
@@ -457,9 +453,9 @@ public interface LineSegment3DReadOnly
     * {@code 0.0} representing {@code firstEndpoint}, and {@code 1.0} representing
     * {@code secondEndpoint}.
     * <p>
-    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
-    * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: </br>
+    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the given
+    * point is located at the middle of this line segment. The coordinates of the projection of the
+    * point can be computed from the {@code percentage} as follows: </br>
     * <code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
@@ -469,14 +465,14 @@ public interface LineSegment3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails
-    * and returns {@code 0.0}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
+    * returns {@code 0.0}.
     * </ul>
     * </p>
     *
     * @param point the query point. Not modified.
-    * @return the computed percentage along the line segment representing where the point projection
-    *         is located.
+    * @return the computed percentage along the line segment representing where the point projection is
+    *         located.
     */
    default double percentageAlongLineSegment(Point3DReadOnly point)
    {
@@ -489,9 +485,9 @@ public interface LineSegment3DReadOnly
     * {@code 0.0} representing {@code firstEndpoint}, and {@code 1.0} representing
     * {@code secondEndpoint}.
     * <p>
-    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
-    * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: </br>
+    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the given
+    * point is located at the middle of this line segment. The coordinates of the projection of the
+    * point can be computed from the {@code percentage} as follows: </br>
     * <code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
@@ -501,16 +497,16 @@ public interface LineSegment3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails
-    * and returns {@code 0.0}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
+    * returns {@code 0.0}.
     * </ul>
     * </p>
     *
     * @param x the x-coordinate of the query point.
     * @param y the y-coordinate of the query point.
     * @param z the z-coordinate of the query point.
-    * @return the computed percentage along the line segment representing where the point projection
-    *         is located.
+    * @return the computed percentage along the line segment representing where the point projection is
+    *         located.
     */
    default double percentageAlongLineSegment(double x, double y, double z)
    {
@@ -532,9 +528,9 @@ public interface LineSegment3DReadOnly
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to
-    * {@code other} with the tolerance {@code epsilon}.
-    * 
+    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
+    * with the tolerance {@code epsilon}.
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.

@@ -36,10 +36,10 @@ public interface LineSegment2DReadOnly
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
     */
    default void get(Point2DBasics firstEndpointToPack, Point2DBasics secondEndpointToPack)
    {
@@ -167,13 +167,13 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints with a given conservative tolerance {@code epsilon}:
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints with a given conservative tolerance {@code epsilon}:
     * <ul>
-    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum
-    * distance of {@code epsilon * this.length()} from the closest endpoint.
-    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance
-    * of {@code -epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum distance
+    * of {@code epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance of
+    * {@code -epsilon * this.length()} from the closest endpoint.
     * <li>if {@code epsilon = 0}, the point has to be between the endpoints or equal to one of the
     * endpoints.
     * </ul>
@@ -198,8 +198,8 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints or exactly on an endpoint.
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints or exactly on an endpoint.
     *
     * @param point the query. Not modified.
     * @return {@code true} if the projection of the point is between the endpoints of this line
@@ -211,13 +211,13 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints with a given conservative tolerance {@code epsilon}:
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints with a given conservative tolerance {@code epsilon}:
     * <ul>
-    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum
-    * distance of {@code epsilon * this.length()} from the closest endpoint.
-    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance
-    * of {@code -epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum distance
+    * of {@code epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance of
+    * {@code -epsilon * this.length()} from the closest endpoint.
     * <li>if {@code epsilon = 0}, the point has to be between the endpoints or equal to one of the
     * endpoints.
     * </ul>
@@ -246,8 +246,8 @@ public interface LineSegment2DReadOnly
     * This method will return {@code false} if the point is on this line.
     *
     * @param point the coordinates of the query point.
-    * @return {@code true} if the point is on the left side of this line segment, {@code false} if
-    *         the point is on the right side or exactly on this line segment.
+    * @return {@code true} if the point is on the left side of this line segment, {@code false} if the
+    *         point is on the right side or exactly on this line segment.
     */
    default boolean isPointOnLeftSideOfLineSegment(Point2DReadOnly point)
    {
@@ -331,16 +331,16 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
-    * this method returns {@code null}.
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and this
+    * method returns {@code null}.
     * <li>If no intersections exist, this method returns {@code null}.
     * <li>If the line segment is collinear to an edge:
     * <ul>
@@ -366,35 +366,35 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line segment and the
-    * given convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line segment and the given
+    * convex polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
+    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
+    * remains unmodified.
     * <li>If this line segment is collinear to an edge:
     * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
+    * <li>The edge entirely contains this line segment: this method finds two intersections which are
+    * the endpoints of this line segment.
+    * <li>This line segment entirely contains the edge: this method finds two intersections which are
+    * the vertices of the edge.
+    * <li>The edge and this line segment partially overlap: this method finds two intersections which
+    * the polygon's vertex that on this line segment and this line segment's endpoint that is on the
+    * polygon's edge.
     * </ul>
     * </ul>
     * </p>
     *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
+    *           {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
@@ -404,8 +404,8 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line segment and the given line
-    * and returns the result.
+    * Calculates the coordinates of the intersection between this line segment and the given line and
+    * returns the result.
     * <p>
     * Edge cases:
     * <ul>
@@ -431,8 +431,8 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line segment and the given line
-    * and stores the result in {@code intersectionToPack}.
+    * Calculates the coordinates of the intersection between this line segment and the given line and
+    * stores the result in {@code intersectionToPack}.
     * <p>
     * Edge cases:
     * <ul>
@@ -463,10 +463,10 @@ public interface LineSegment2DReadOnly
     * <ul>
     * <li>When the two line segments are parallel but not collinear, the two line segments do not
     * intersect, this method returns {@code null}.
-    * <li>When the two line segments are collinear, if the two line segments do not overlap do not
-    * have at least one common endpoint, this method returns {@code null}.
-    * <li>When the two line segments have a common endpoint, this method returns the common endpoint
-    * as the intersection.
+    * <li>When the two line segments are collinear, if the two line segments do not overlap do not have
+    * at least one common endpoint, this method returns {@code null}.
+    * <li>When the two line segments have a common endpoint, this method returns the common endpoint as
+    * the intersection.
     * </ul>
     * </p>
     * <p>
@@ -490,8 +490,8 @@ public interface LineSegment2DReadOnly
     * <ul>
     * <li>When the two line segments are parallel but not collinear, the two line segments do not
     * intersect.
-    * <li>When the two line segments are collinear, this methods returns {@code true} only if the
-    * two line segments overlap or have at least one common endpoint.
+    * <li>When the two line segments are collinear, this methods returns {@code true} only if the two
+    * line segments overlap or have at least one common endpoint.
     * <li>When the two line segments have a common endpoint, this method returns true.
     * </ul>
     * </p>
@@ -551,8 +551,8 @@ public interface LineSegment2DReadOnly
     * This method will return {@code false} if the point is on this line.
     *
     * @param point the coordinates of the query point.
-    * @return {@code true} if the point is on the right side of this line segment, {@code false} if
-    *         the point is on the left side or exactly on this line segment.
+    * @return {@code true} if the point is on the right side of this line segment, {@code false} if the
+    *         point is on the left side or exactly on this line segment.
     */
    default boolean isPointOnRightSideOfLineSegment(Point2DReadOnly point)
    {
@@ -565,9 +565,9 @@ public interface LineSegment2DReadOnly
     * {@code 0.0} representing {@code firstEndpoint}, and {@code 1.0} representing
     * {@code secondEndpoint}.
     * <p>
-    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
-    * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows:<br>
+    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the given
+    * point is located at the middle of this line segment. The coordinates of the projection of the
+    * point can be computed from the {@code percentage} as follows:<br>
     * <code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
@@ -577,16 +577,16 @@ public interface LineSegment2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails
-    * and returns {@code 0.0}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
+    * returns {@code 0.0}.
     * </ul>
     * </p>
     *
     * @param x the x-coordinate of the query point.
     * @param y the y-coordinate of the query point.
     * @param z the z-coordinate of the query point.
-    * @return the computed percentage along the line segment representing where the point projection
-    *         is located.
+    * @return the computed percentage along the line segment representing where the point projection is
+    *         located.
     */
    default double percentageAlongLineSegment(double x, double y)
    {
@@ -599,9 +599,9 @@ public interface LineSegment2DReadOnly
     * {@code 0.0} representing {@code firstEndpoint}, and {@code 1.0} representing
     * {@code secondEndpoint}.
     * <p>
-    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
-    * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: <code>
+    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the given
+    * point is located at the middle of this line segment. The coordinates of the projection of the
+    * point can be computed from the {@code percentage} as follows: <code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
     * </code>
@@ -610,14 +610,14 @@ public interface LineSegment2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails
-    * and returns {@code 0.0}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
+    * returns {@code 0.0}.
     * </ul>
     * </p>
     *
     * @param point the query point. Not modified.
-    * @return the computed percentage along the line segment representing where the point projection
-    *         is located.
+    * @return the computed percentage along the line segment representing where the point projection is
+    *         located.
     */
    default double percentageAlongLineSegment(Point2DReadOnly point)
    {
@@ -646,9 +646,8 @@ public interface LineSegment2DReadOnly
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -668,9 +667,8 @@ public interface LineSegment2DReadOnly
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -692,15 +690,13 @@ public interface LineSegment2DReadOnly
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
-    * @return the projection of the point onto this line segment or {@code null} if the method
-    *         failed.
+    * @return the projection of the point onto this line segment or {@code null} if the method failed.
     */
    default Point2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
@@ -711,8 +707,8 @@ public interface LineSegment2DReadOnly
     * Computes the vector perpendicular to the direction of this line segment.
     *
     * @param normalize whether the perpendicular vector is to be normalized.
-    * @param perpendicularVectorToPack vector in which the perpendicular vector components are
-    *           stored. Modified.
+    * @param perpendicularVectorToPack vector in which the perpendicular vector components are stored.
+    *           Modified.
     */
    default void perpendicular(boolean normalize, Vector2DBasics perpendicularVectorToPack)
    {
@@ -784,9 +780,9 @@ public interface LineSegment2DReadOnly
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to
-    * {@code other} with the tolerance {@code epsilon}.
-    * 
+    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
+    * with the tolerance {@code epsilon}.
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.

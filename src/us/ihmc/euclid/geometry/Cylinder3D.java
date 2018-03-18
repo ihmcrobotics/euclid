@@ -23,7 +23,10 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
 {
    /** Radius of the cylinder part. */
    private double radius;
-   /** Overall height of the cylinder, i.e. the top face is at {@code 0.5 * height} and the bottom face at {@code - 0.5 * height}. */
+   /**
+    * Overall height of the cylinder, i.e. the top face is at {@code 0.5 * height} and the bottom face
+    * at {@code - 0.5 * height}.
+    */
    private double height;
 
    /**
@@ -175,8 +178,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * Tests separately and on a per component basis if the pose and the size of this cylinder and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param other the other cylinder which pose and size is to be compared against this cylinder
-    *           pose and size. Not modified.
+    * @param other the other cylinder which pose and size is to be compared against this cylinder pose
+    *           and size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
     */
@@ -200,8 +203,8 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     *           {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
     *           {@code null}. Modified.
-    * @return the number of intersections between the line and this cylinder. It is either equal to
-    *         0, 1, or 2.
+    * @return the number of intersections between the line and this cylinder. It is either equal to 0,
+    *         1, or 2.
     */
    public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
@@ -215,15 +218,14 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     *
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not
-    *           modified.
+    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
     * @param lineDirection the direction expressed in world of the line. Not modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
     *           {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
     *           {@code null}. Modified.
-    * @return the number of intersections between the line and this cylinder. It is either equal to
-    *         0, 1, or 2.
+    * @return the number of intersections between the line and this cylinder. It is either equal to 0,
+    *         1, or 2.
     */
    public int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                Point3DBasics secondIntersectionToPack)
@@ -237,8 +239,9 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
 
       double halfHeight = 0.5 * height;
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal,
-                                                                                             dzLocal, firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, radius, xLocal, yLocal, zLocal, dxLocal,
+                                                                                             dyLocal, dzLocal, firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
       if (secondIntersectionToPack != null && numberOfIntersections == 2)
@@ -404,12 +407,12 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two cylinders are
-    * geometrically similar.
+    * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
+    * similar.
     * <p>
-    * This method accounts for the multiple combinations of radius/height and rotations
-    * that generate identical cylinder. For instance, two cylinders that are identical
-    * but one is rotated around its main axis are considered geometrically equal.
+    * This method accounts for the multiple combinations of radius/height and rotations that generate
+    * identical cylinder. For instance, two cylinders that are identical but one is rotated around its
+    * main axis are considered geometrically equal.
     * </p>
     *
     * @param other the cylinder to compare to. Not modified.
@@ -426,18 +429,13 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
          return false;
 
       /*
-        Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
-        inherently lies on the XY plane) is the same axis that the other cylinder is aligned on
-        using EuclidGeometryTools#areVector3DsParallel().
-        
-        We could do this by transforming two (0, 0, 1) vectors by each shapePose, but for each:
-        
-        / r00 r01 r02 \   / 0 \   / r02 \
-        | r10 r11 r12 | * | 0 | = | r12 |
-        \ r20 r21 r22 /   \ 1 /   \ r22 /
-        
-        So rather than perform this transform, just check that the last column of the rotation
-        matrix of each cylinder (M02, M12, and M22 in shapePose) are aligned vectors.
+       * Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
+       * inherently lies on the XY plane) is the same axis that the other cylinder is aligned on using
+       * EuclidGeometryTools#areVector3DsParallel(). We could do this by transforming two (0, 0, 1)
+       * vectors by each shapePose, but for each: / r00 r01 r02 \ / 0 \ / r02 \ | r10 r11 r12 | * | 0 | =
+       * | r12 | \ r20 r21 r22 / \ 1 / \ r22 / So rather than perform this transform, just check that the
+       * last column of the rotation matrix of each cylinder (M02, M12, and M22 in shapePose) are aligned
+       * vectors.
        */
 
       return EuclidGeometryTools.areVector3DsParallel(shapePose.getM02(), shapePose.getM12(), shapePose.getM22(), other.shapePose.getM02(),

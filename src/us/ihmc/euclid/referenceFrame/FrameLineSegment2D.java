@@ -115,7 +115,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    /**
     * Default constructor that initializes both endpoints of this line segment to zero and its
     * reference frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this line segment.
     */
    public FrameLineSegment2D(ReferenceFrame referenceFrame)
@@ -159,11 +159,11 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
 
    /**
     * Creates a new line segment and initializes to with the given endpoints.
-    * 
+    *
     * @param firstEndpoint new endpoint of this line segment. Not modified
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
-    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same
-    *            reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
+    *            frame.
     */
    public FrameLineSegment2D(FramePoint2DReadOnly firstEndpoint, FramePoint2DReadOnly secondEndpoint)
    {
@@ -214,8 +214,8 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
          return;
 
       /*
-       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of
-       * checking both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
+       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of checking
+       * both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
        */
       referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
       applyTransform(transformToDesiredFrame);
@@ -236,16 +236,16 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to
-    * {@code other} with the tolerance {@code epsilon}.
+    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
+    * with the tolerance {@code epsilon}.
     * <p>
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
     *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal and are expressed in the same
-    *         reference frame, {@code false} otherwise.
+    * @return {@code true} if the two line segments are equal and are expressed in the same reference
+    *         frame, {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(FrameLineSegment2D other, double epsilon)
@@ -254,11 +254,10 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -274,15 +273,15 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameLineSegment2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameLineSegment2DReadOnly)}, it returns {@code false} otherwise.
     * <p>
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
     *
     * @param other the other line segment 2D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two line segments are exactly equal component-wise and are expressed
+    *         in the same reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object obj)
@@ -299,8 +298,8 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
 
    /**
     * Provides a {@code String} representation of this frame line segment 2D as follows:<br>
-    * Line segment 2D: 1st endpoint = ( 0.174, 0.732, -0.222 ), 2nd endpoint = (-0.558, -0.380,
-    * 0.130 )-worldFrame
+    * Line segment 2D: 1st endpoint = ( 0.174, 0.732, -0.222 ), 2nd endpoint = (-0.558, -0.380, 0.130
+    * )-worldFrame
     *
     * @return the {@code String} representing this line segment 2D.
     */

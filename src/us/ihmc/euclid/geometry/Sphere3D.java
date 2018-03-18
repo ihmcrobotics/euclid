@@ -117,14 +117,13 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     *
-    * @param line the line expressed in world coordinates that may intersect this sphere. Not
-    *           modified.
+    * @param line the line expressed in world coordinates that may intersect this sphere. Not modified.
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
     *           {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
     *           {@code null}. Modified.
-    * @return the number of intersections between the line and this sphere. It is either equal to 0,
-    *         1, or 2.
+    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
+    *         or 2.
     */
    public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
@@ -139,15 +138,14 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * {@link Double#NaN}.
     * </p>
     *
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not
-    *           modified.
+    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
     * @param lineDirection the direction expressed in world of the line. Not modified.s
     * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
     *           {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
     *           {@code null}. Modified.
-    * @return the number of intersections between the line and this sphere. It is either equal to 0,
-    *         1, or 2.
+    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
+    *         or 2.
     */
    public int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                Point3DBasics secondIntersectionToPack)
@@ -266,9 +264,9 @@ public class Sphere3D extends Shape3D<Sphere3D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically
-    * similar, i.e. the position of each sphere is geometrically similar given {@code epsilon} and
-    * the difference between the radius of each sphere is less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar,
+    * i.e. the position of each sphere is geometrically similar given {@code epsilon} and the
+    * difference between the radius of each sphere is less than or equal to {@code epsilon}.
     *
     * @param other the sphere to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.

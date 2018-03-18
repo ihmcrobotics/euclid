@@ -41,11 +41,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * </p>
     *
     * @param center the center coordinate of the new bounding box. Not modified.
-    * @param plusMinusTuple tuple representing half of the size of the new bounding box. Not
-    *           modified.
+    * @param plusMinusTuple tuple representing half of the size of the new bounding box. Not modified.
     * @return the new bounding box.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public static BoundingBox3D createUsingCenterAndPlusMinusVector(Point3DReadOnly center, Tuple3DReadOnly plusMinusTuple)
    {
@@ -70,8 +69,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Creates a new bounding box initialized with both its minimum and maximum coordinates to (0,
-    * 0).
+    * Creates a new bounding box initialized with both its minimum and maximum coordinates to (0, 0).
     */
    public BoundingBox3D()
    {
@@ -82,8 +80,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     *
     * @param min the minimum coordinates for this. Not modified.
     * @param max the maximum coordinates for this. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public BoundingBox3D(Point3DReadOnly min, Point3DReadOnly max)
    {
@@ -105,8 +103,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     *
     * @param min the minimum coordinates for this. Not modified.
     * @param max the maximum coordinates for this. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public BoundingBox3D(double[] min, double[] max)
    {
@@ -122,8 +120,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param maxX the maximum x-coordinates for this.
     * @param maxY the maximum y-coordinates for this.
     * @param maxZ the maximum z-coordinates for this.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public BoundingBox3D(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
    {
@@ -133,8 +131,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    /**
     * Asserts that the minimum coordinates are less or equal to the maximum coordinates.
     *
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void checkBounds()
    {
@@ -150,8 +148,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Sets the minimum coordinate of this bounding box.
     *
     * @param min the minimum coordinate for this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void setMin(Point3DReadOnly min)
    {
@@ -163,8 +161,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Sets the minimum coordinate of this bounding box.
     *
     * @param min the minimum coordinates for this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void setMin(double[] min)
    {
@@ -178,8 +176,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param minX the new minimum x-coordinate for this bounding box.
     * @param minY the new minimum y-coordinate for this bounding box.
     * @param minZ the new minimum z-coordinate for this bounding box.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void setMin(double minX, double minY, double minZ)
    {
@@ -191,8 +189,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Sets the maximum coordinate of this bounding box.
     *
     * @param max the maximum coordinate for this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void setMax(Point3DReadOnly max)
    {
@@ -204,8 +202,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Sets the maximum coordinate of this bounding box.
     *
     * @param max the maximum coordinates for this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void setMax(double[] max)
    {
@@ -219,8 +217,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param maxX the new maximum x-coordinate for this bounding box.
     * @param maxY the new maximum y-coordinate for this bounding box.
     * @param maxZ the new maximum z-coordinate for this bounding box.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void setMax(double maxX, double maxY, double maxZ)
    {
@@ -237,8 +235,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param maxX the new maximum x-coordinates for this bounding box.
     * @param maxY the new maximum y-coordinates for this bounding box.
     * @param maxZ the new maximum z-coordinates for this bounding box.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void set(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
    {
@@ -252,8 +250,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     *
     * @param min the new minimum coordinates for this bounding box. Not modified.
     * @param max the new maximum coordinates for this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void set(double[] min, double[] max)
    {
@@ -267,8 +265,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     *
     * @param min the new minimum coordinates for this bounding box. Not modified.
     * @param max the new maximum coordinates for this bounding box. Not modified.
-    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the
-    *            maximum coordinate on the same axis.
+    * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
+    *            coordinate on the same axis.
     */
    public void set(Point3DReadOnly min, Point3DReadOnly max)
    {
@@ -278,9 +276,9 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Redefines this bounding box given its {@code center} location and half its size along each
-    * axis {@code halfSize}.
-    * 
+    * Redefines this bounding box given its {@code center} location and half its size along each axis
+    * {@code halfSize}.
+    *
     * @param center the new center location of this bounding box. Not modified.
     * @param halfSize half the size of this bounding box. Not modified.
     */
@@ -306,7 +304,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    /**
     * Combines this bounding box with {@code other} such that it becomes the smallest bounding box
     * containing this and {@code other}.
-    * 
+    *
     * @param other the other bounding box to combine with this. Not modified.
     */
    public void combine(BoundingBox3D other)
@@ -320,7 +318,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * This bounding box is set such that it is the smallest bounding box containing the two given
     * bounding boxes.
     * </p>
-    * 
+    *
     * @param boundingBoxOne the first bounding box. Can be the same instance as this. Not modified.
     * @param boundingBoxTwo the second bounding box. Can be the same instance as this. Not modified.
     */
@@ -376,9 +374,9 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Performs a linear interpolation between this bounding box minimum and maximum coordinates
-    * using independent parameters {@code xParameter}, {@code yParameter}, and {@code zParameter}
-    * for the x-axis, y-axis, and z-axis respectively. The result is stored in {@code pointToPack}.
+    * Performs a linear interpolation between this bounding box minimum and maximum coordinates using
+    * independent parameters {@code xParameter}, {@code yParameter}, and {@code zParameter} for the
+    * x-axis, y-axis, and z-axis respectively. The result is stored in {@code pointToPack}.
     * <p>
     * <ul>
     * <li>{@code (xParameter == 0)} results in: {@code (pointToPack.getX() == this.getMinX())}.
@@ -402,8 +400,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Calculates the squared value of the distance between the minimum and maximum coordinates of
-    * this bounding box.
+    * Calculates the squared value of the distance between the minimum and maximum coordinates of this
+    * bounding box.
     *
     * @return the squared value of this bounding box diagonal.
     */
@@ -507,10 +505,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
     * {@link #isInsideExclusive(Point3DReadOnly)}.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
-    * of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
-    * of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
+    * {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * {@code epsilon} toward the inside.
     * </ul>
     * </p>
     *
@@ -531,10 +529,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
     * {@link #isInsideExclusive(Point3DReadOnly)}.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
-    * of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
-    * of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
+    * {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * {@code epsilon} toward the inside.
     * </ul>
     * </p>
     *
@@ -645,16 +643,16 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * * Tests if the {@code query} is located inside the projection onto the XY-plane of this
-    * bounding box given the tolerance {@code epsilon}.
+    * * Tests if the {@code query} is located inside the projection onto the XY-plane of this bounding
+    * box given the tolerance {@code epsilon}.
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
     * {@link #isInsideExclusive(Point3DReadOnly)}.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
-    * of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
-    * of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
+    * {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * {@code epsilon} toward the inside.
     * </ul>
     * </p>
     *
@@ -669,16 +667,16 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * * Tests if the {@code query} is located inside the projection onto the XY-plane of this
-    * bounding box given the tolerance {@code epsilon}.
+    * * Tests if the {@code query} is located inside the projection onto the XY-plane of this bounding
+    * box given the tolerance {@code epsilon}.
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
     * {@link #isInsideExclusive(Point3DReadOnly)}.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
-    * of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
-    * of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
+    * {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * {@code epsilon} toward the inside.
     * </ul>
     * </p>
     *
@@ -704,8 +702,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    /**
     * Tests if this bounding box and {@code other} intersects.
     * <p>
-    * The two bounding boxes are considered to not be intersecting if they share a corner or an
-    * edge.
+    * The two bounding boxes are considered to not be intersecting if they share a corner or an edge.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -756,10 +753,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
     * {@link #intersectsExclusive(BoundingBox3D)}.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
-    * of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
-    * of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
+    * {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * {@code epsilon} toward the inside.
     * </ul>
     * </p>
     *
@@ -785,12 +782,11 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    /**
     * Tests if this bounding box and {@code other} intersects.
     * <p>
-    * The two bounding boxes are considered to not be intersecting if they share a corner or an
-    * edge.
+    * The two bounding boxes are considered to not be intersecting if they share a corner or an edge.
     * </p>
     * <p>
-    * This method is equivalent to projecting this bounding box onto the XY-plane before performing
-    * the test.
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the
+    * test.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -814,8 +810,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
     * </p>
     * <p>
-    * This method is equivalent to projecting this bounding box onto the XY-plane before performing
-    * the test.
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the
+    * test.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -839,15 +835,15 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
     * {@link #intersectsEpsilonInXYPlane(BoundingBox2D)}.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges
-    * of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges
-    * of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
+    * {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * {@code epsilon} toward the inside.
     * </ul>
     * </p>
     * <p>
-    * This method is equivalent to projecting this bounding box onto the XY-plane before performing
-    * the test.
+    * This method is equivalent to projecting this bounding box onto the XY-plane before performing the
+    * test.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -936,10 +932,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param line3D the query. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
-    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line and this bounding box. It is either equal
-    *         to 0 or 2.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *           Modified.
+    * @return the number of intersections between the line and this bounding box. It is either equal to
+    *         0 or 2.
     */
    public int intersectionWithLine3D(Line3D line3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
@@ -957,10 +953,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param lineDirection the line direction. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
-    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line and this bounding box. It is either equal
-    *         to 0 or 2.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *           Modified.
+    * @return the number of intersections between the line and this bounding box. It is either equal to
+    *         0 or 2.
     */
    public int intersectionWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                      Point3DBasics secondIntersectionToPack)
@@ -969,8 +965,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Computes the coordinates of the two intersections between a line segment and this bounding
-    * box.
+    * Computes the coordinates of the two intersections between a line segment and this bounding box.
     * <p>
     * Intersection(s) between the line segment and this bounding box can only exist between the
     * endpoints of the line segment.
@@ -989,10 +984,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param lineSegment3D the query. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
-    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line segment and this bounding box. It is
-    *         either equal to 0, 1, or 2.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *           Modified.
+    * @return the number of intersections between the line segment and this bounding box. It is either
+    *         equal to 0, 1, or 2.
     */
    public int intersectionWithLineSegment3D(LineSegment3D lineSegment3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
@@ -1001,15 +996,15 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Computes the coordinates of the two intersections between a line segment and this bounding
-    * box.
+    * Computes the coordinates of the two intersections between a line segment and this bounding box.
     * <p>
     * Intersection(s) between the line segment and this bounding box can only exist between the
     * endpoints of the line segment.
     * </p>
     * <p>
     * In the case the line segment and this bounding box do not intersect, this method returns
-    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the line segment and the bounding box,
@@ -1021,10 +1016,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
-    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line segment and this bounding box. It is
-    *         either equal to 0, 1, or 2.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *           Modified.
+    * @return the number of intersections between the line segment and this bounding box. It is either
+    *         equal to 0, 1, or 2.
     */
    public int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
                                             Point3DBasics secondIntersectionToPack)
@@ -1036,12 +1031,12 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    /**
     * Computes the coordinates of the two intersections between a ray and this bounding box.
     * <p>
-    * Intersection(s) between the ray and the bounding box cannot exist before the origin of the
-    * ray.
+    * Intersection(s) between the ray and the bounding box cannot exist before the origin of the ray.
     * </p>
     * </p>
     * In the case the ray and this bounding box do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to {@link Double#NaN}.
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
     * </p>
     * <p>
     * In the case only one intersection exists between the ray and this bounding box,
@@ -1053,10 +1048,10 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param rayDirection the direction of the ray. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
-    * @param secondIntersectionToPack the coordinate of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the ray and this bounding box. It is either equal
-    *         to 0, 1, or 2.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *           Modified.
+    * @return the number of intersections between the ray and this bounding box. It is either equal to
+    *         0, 1, or 2.
     */
    public int intersectionWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
                                     Point3DBasics secondIntersectionToPack)
@@ -1065,9 +1060,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Updates this bounding box to be the smallest bounding box that includes this and the given
-    * point.
-    * 
+    * Updates this bounding box to be the smallest bounding box that includes this and the given point.
+    *
     * @param point the point to be included in this bounding box. Not modified.
     */
    public void updateToIncludePoint(Point3DReadOnly point)
@@ -1076,9 +1070,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Updates this bounding box to be the smallest bounding box that includes this and the given
-    * point.
-    * 
+    * Updates this bounding box to be the smallest bounding box that includes this and the given point.
+    *
     * @param x x-coordinate of the point to be included in this bounding box. Not modified.
     * @param y y-coordinate of the point to be included in this bounding box. Not modified.
     * @param z z-coordinate of the point to be included in this bounding box. Not modified.
@@ -1142,8 +1135,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Gets the minimum coordinate of this bounding box and stores it in the given array
     * {@code maxToPack}.
     *
-    * @param maxToPack array in which the minimum coordinate of this bounding box is stored.
-    *           Modified.
+    * @param maxToPack array in which the minimum coordinate of this bounding box is stored. Modified.
     */
    public void getMinPoint(double[] minToPack)
    {
@@ -1154,8 +1146,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Gets the maximum coordinate of this bounding box and stores it in the given array
     * {@code maxToPack}.
     *
-    * @param maxToPack array in which the maximum coordinate of this bounding box is stored.
-    *           Modified.
+    * @param maxToPack array in which the maximum coordinate of this bounding box is stored. Modified.
     */
    public void getMaxPoint(double[] maxToPack)
    {
@@ -1257,8 +1248,8 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(BoundingBox3D)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(BoundingBox3D)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -1304,14 +1295,14 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes
-    * are geometrically similar, i.e. the distance between their min and max points
-    * is less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
+    * similar, i.e. the distance between their min and max points is less than or equal to
+    * {@code epsilon}.
     *
     * @param other the bounding box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry,
-    *            {@code false} otherwise.
+    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
+    *         otherwise.
     */
    @Override
    public boolean geometricallyEquals(BoundingBox3D other, double epsilon)

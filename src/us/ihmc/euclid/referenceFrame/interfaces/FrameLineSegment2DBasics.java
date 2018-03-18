@@ -40,9 +40,9 @@ public interface FrameLineSegment2DBasics extends FixedFrameLineSegment2DBasics,
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
-    * Sets the point and direction parts of this line segment 2D to zero and sets the current
-    * reference frame to {@code referenceFrame}.
-    * 
+    * Sets the point and direction parts of this line segment 2D to zero and sets the current reference
+    * frame to {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame to be associated with this line segment 2D.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -54,7 +54,7 @@ public interface FrameLineSegment2DBasics extends FixedFrameLineSegment2DBasics,
    /**
     * Sets the point and direction parts of this line segment 2D to {@link Double#NaN} and sets the
     * current reference frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this line segment 2D.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -91,7 +91,7 @@ public interface FrameLineSegment2DBasics extends FixedFrameLineSegment2DBasics,
 
    /**
     * Sets this line segment to be the same as the given line segment projected on the XY-plane.
-    * 
+    *
     * @param referenceFrame the reference frame in which the given line segment is expressed.
     * @param lineSegment3DReadOnly the other line segment to copy. Not modified.
     */
@@ -106,8 +106,8 @@ public interface FrameLineSegment2DBasics extends FixedFrameLineSegment2DBasics,
     *
     * @param firstEndpoint new endpoint of this line segment. Not modified
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstEndpoint} and {@code secondEndpoint}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code firstEndpoint} and {@code secondEndpoint} are
+    *            not expressed in the same reference frame.
     */
    default void setIncludingFrame(FramePoint2DReadOnly firstEndpoint, FramePoint2DReadOnly secondEndpoint)
    {
@@ -133,8 +133,8 @@ public interface FrameLineSegment2DBasics extends FixedFrameLineSegment2DBasics,
     *
     * @param firstEndpoint new endpoint of this line segment. Not modified
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstEndpoint} and {@code secondEndpoint}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code firstEndpoint} and {@code secondEndpoint} are
+    *            not expressed in the same reference frame.
     */
    default void setIncludingFrame(FramePoint3DReadOnly firstEndpoint, FramePoint3DReadOnly secondEndpoint)
    {

@@ -52,7 +52,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
 
    /**
     * Creates a new pose 2D and initializes it from {@code pose3DReadOnly}
-    * 
+    *
     * @param pose3DReadOnly the pose 3D used to initialize this pose 2D. Not modified.
     */
    public Pose2D(Pose3DReadOnly pose3DReadOnly)
@@ -61,9 +61,8 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    }
 
    /**
-    * Creates a new pose 2D and initializes it from the given {@code position} and {@code yaw}
-    * angle.
-    * 
+    * Creates a new pose 2D and initializes it from the given {@code position} and {@code yaw} angle.
+    *
     * @param position the tuple used to initialize this pose's position. Not modified.
     * @param yaw the angle used to initialize the pose's orientation.
     */
@@ -109,8 +108,8 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Pose2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Pose2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -143,11 +142,9 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
     * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
     * @param other the pose to compare to. Not modified.

@@ -191,7 +191,7 @@ public class Sphere3DTest
 
          RigidBodyTransform rotationOnly = new RigidBodyTransform();
          rotationOnly.setRotation(EuclidCoreRandomTools.nextQuaternion(random));
-         
+
          secondSphere.appendTransform(rotationOnly);
 
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));

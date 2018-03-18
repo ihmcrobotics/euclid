@@ -27,8 +27,8 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, FrameTuple4DBasics, FrameChangeable
 {
    /**
-    * Sets this frame quaternion to the same orientation described by the given {@code axisAngle}
-    * and sets the frame to the given {@code referenceFrame}.
+    * Sets this frame quaternion to the same orientation described by the given {@code axisAngle} and
+    * sets the frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame quaternion.
     * @param axisAngle the axis-angle used to set this quaternion. Not modified.
@@ -40,8 +40,8 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
    }
 
    /**
-    * Sets this frame quaternion to the same orientation described by the given
-    * {@code rotationMatrix} and sets the frame to the given {@code referenceFrame}.
+    * Sets this frame quaternion to the same orientation described by the given {@code rotationMatrix}
+    * and sets the frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame quaternion.
     * @param rotationMatrix the rotation matrix used to set this quaternion. Not modified.
@@ -69,9 +69,9 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
     * Sets this frame quaternion to the same orientation described by the given rotation vector
     * {@code rotationVector} and sets the frame to the given {@code referenceFrame}.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame quaternion.
@@ -87,9 +87,9 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
     * Sets this frame quaternion to the same orientation described by the given rotation vector
     * {@code rotationVector} and sets the frame to {@code rotationVector.getReferenceFrame()}.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotation vector the rotation vector used to set this quaternion. Not modified.
@@ -104,8 +104,7 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
     * Sets this quaternion to represent the same orientation as the given yaw-pitch-roll
     * {@code yawPitchRoll} and sets the frame to the given {@code referenceFrame}.
     *
-    * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not
-    *           modified.
+    * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
     */
    default void setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double[] yawPitchRoll)
    {
@@ -114,9 +113,8 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
    }
 
    /**
-    * Sets this quaternion to represent the same orientation as the given yaw-pitch-roll
-    * {@code yaw}, {@code pitch}, and {@code roll} and sets the frame to the given
-    * {@code referenceFrame}.
+    * Sets this quaternion to represent the same orientation as the given yaw-pitch-roll {@code yaw},
+    * {@code pitch}, and {@code roll} and sets the frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame quaternion.
     * @param yaw the angle to rotate about the z-axis.

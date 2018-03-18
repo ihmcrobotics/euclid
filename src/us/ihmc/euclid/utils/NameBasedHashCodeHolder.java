@@ -24,11 +24,11 @@ public interface NameBasedHashCodeHolder
     * object unique name.
     * </p>
     * <p>
-    * This hash code has the benefit of remaining the same when creating several instances of the
-    * same object. It can be used to refer to a specific object instead of serializing and
-    * deserializing it when communicating across a network.
+    * This hash code has the benefit of remaining the same when creating several instances of the same
+    * object. It can be used to refer to a specific object instead of serializing and deserializing it
+    * when communicating across a network.
     * </p>
-    * 
+    *
     * @return this object's name based hash code.
     */
    public abstract long getNameBasedHashCode();

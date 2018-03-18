@@ -54,8 +54,8 @@ public class Torus3D extends Shape3D<Torus3D>
     *
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
-    *            or if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
+    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
    public Torus3D(double radius, double tubeRadius)
    {
@@ -68,8 +68,8 @@ public class Torus3D extends Shape3D<Torus3D>
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
-    *            or if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
+    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
    public Torus3D(RigidBodyTransform pose, double radius, double tubeRadius)
    {
@@ -82,8 +82,8 @@ public class Torus3D extends Shape3D<Torus3D>
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
-    *            or if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
+    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
    public Torus3D(Pose3D pose, double radius, double thickness)
    {
@@ -109,8 +109,8 @@ public class Torus3D extends Shape3D<Torus3D>
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
-    *            or if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
+    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
    public void set(Pose3D pose, double radius, double tubeRadius)
    {
@@ -124,8 +124,8 @@ public class Torus3D extends Shape3D<Torus3D>
     * @param pose the position and orientation of this torus. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
-    *            or if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
+    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
    public void set(RigidBodyTransform pose, double radius, double tubeRadius)
    {
@@ -138,8 +138,8 @@ public class Torus3D extends Shape3D<Torus3D>
     *
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS}
-    *            or if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
+    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
    public void setRadii(double radius, double tubeRadius)
    {
@@ -178,8 +178,8 @@ public class Torus3D extends Shape3D<Torus3D>
     * Tests separately and on a per component basis if the pose and the radii of this torus and
     * {@code other}'s pose and radii are equal to an {@code epsilon}.
     *
-    * @param other the other torus which pose and radii is to be compared against this torus pose
-    *           and radii. Not modified.
+    * @param other the other torus which pose and radii is to be compared against this torus pose and
+    *           radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two tori are equal component-wise, {@code false} otherwise.
     */
@@ -315,12 +315,11 @@ public class Torus3D extends Shape3D<Torus3D>
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two tori are geometrically
-    * similar.
+    * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
     * <p>
-    * This method accounts for the multiple combinations of radii and rotations that generate
-    * identical tori. For instance, two tori that are identical but one is rotated around its main
-    * axis are considered geometrically equal.
+    * This method accounts for the multiple combinations of radii and rotations that generate identical
+    * tori. For instance, two tori that are identical but one is rotated around its main axis are
+    * considered geometrically equal.
     * </p>
     *
     * @param other the torus to compare to. Not modified.
@@ -337,18 +336,13 @@ public class Torus3D extends Shape3D<Torus3D>
          return false;
 
       /*
-       * Here, we check that the axis the torus is aligned on (the Z axis, since the cylinder
--      * inherently lies on the XY plane) is the same axis that the other torus is aligned on
--      * using EuclidGeometryTools#areVector3DsParallel().
--      * 
--      * We could do this by transforming two (0, 0, 1) vectors by each shapePose, but for each:
--      * 
--      * / r00 r01 r02 \   / 0 \   / r02 \
--      * | r10 r11 r12 | * | 0 | = | r12 |
--      * \ r20 r21 r22 /   \ 1 /   \ r22 /
--      * 
--      * So rather than perform this transform, just check that the last column of the rotation
--      * matrix of each torus (M02, M12, and M22 in shapePose) are aligned vectors.
+       * Here, we check that the axis the torus is aligned on (the Z axis, since the cylinder - *
+       * inherently lies on the XY plane) is the same axis that the other torus is aligned on - * using
+       * EuclidGeometryTools#areVector3DsParallel(). - * - * We could do this by transforming two (0, 0,
+       * 1) vectors by each shapePose, but for each: - * - * / r00 r01 r02 \ / 0 \ / r02 \ - * | r10 r11
+       * r12 | * | 0 | = | r12 | - * \ r20 r21 r22 / \ 1 / \ r22 / - * - * So rather than perform this
+       * transform, just check that the last column of the rotation - * matrix of each torus (M02, M12,
+       * and M22 in shapePose) are aligned vectors.
        */
 
       return EuclidGeometryTools.areVector3DsParallel(shapePose.getM02(), shapePose.getM12(), shapePose.getM22(), other.shapePose.getM02(),

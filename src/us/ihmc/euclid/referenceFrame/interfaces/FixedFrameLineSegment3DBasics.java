@@ -31,6 +31,7 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     *
     * @return the reference to the first endpoint of this line segment.
     */
+   @Override
    FixedFramePoint3DBasics getFirstEndpoint();
 
    /**
@@ -38,6 +39,7 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     *
     * @return the reference to the second endpoint of this line segment.
     */
+   @Override
    FixedFramePoint3DBasics getSecondEndpoint();
 
    /**
@@ -143,8 +145,8 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     * @param firstEndpoint new first endpoint. Not modified.
     * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
     *           modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code fromFirstToSecondEndpoint}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code fromFirstToSecondEndpoint} are
+    *            not expressed in the same reference frame.
     */
    default void set(Point3DReadOnly firstEndpoint, FrameVector3DReadOnly fromFirstToSecondEndpoint)
    {
@@ -176,8 +178,8 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     * </p>
     *
     * @param translation the translation to add to each endpoint of this line segment. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code translation}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code translation} are not expressed
+    *            in the same reference frame.
     */
    default void translate(FrameTuple3DReadOnly translation)
    {

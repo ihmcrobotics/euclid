@@ -42,9 +42,9 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
-    * Sets the point and direction parts of this line 2D to zero and sets the current reference
-    * frame to {@code referenceFrame}.
-    * 
+    * Sets the point and direction parts of this line 2D to zero and sets the current reference frame
+    * to {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame to be associated with this line 2D.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -56,7 +56,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    /**
     * Sets the point and direction parts of this line 2D to {@link Double#NaN} and sets the current
     * reference frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this line 2D.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -155,8 +155,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param referenceFrame the new reference frame for this frame line.
     * @param firstPointOnLine first point on this line. Not modified.
@@ -169,8 +168,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param referenceFrame the new reference frame for this frame line.
     * @param firstPointOnLine first point on this line. Not modified.
@@ -229,8 +227,8 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are
-    *            not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are not
+    *            expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -265,8 +263,8 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are
-    *            not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are not
+    *            expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
@@ -297,13 +295,12 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and
-    *            {@code secondPointOnLine} are not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and {@code secondPointOnLine}
+    *            are not expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -312,8 +309,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
@@ -324,8 +320,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
@@ -336,13 +331,12 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and
-    *            {@code secondPointOnLine} are not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and {@code secondPointOnLine}
+    *            are not expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
    {
@@ -351,8 +345,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
@@ -363,8 +356,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.

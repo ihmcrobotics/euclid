@@ -53,6 +53,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
     *
     * @param other the other orientation 2D. Not modified.
     */
+   @Override
    public void set(Orientation2DReadOnly other)
    {
       Orientation2DBasics.super.set(other);
@@ -112,8 +113,8 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Orientation2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Orientation2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

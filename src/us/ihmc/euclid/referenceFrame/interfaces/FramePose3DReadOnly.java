@@ -32,12 +32,12 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
 
    /**
     * Gets the position and orientation.
-    * 
+    *
     * @param positionToPack the tuple used to store the position. Modified.
     * @param orientationToPack the quaternion used to store the orientation. Modified.
     * @throws ReferenceFrameMismatchException if {@code positionToPack} and/or
-    *            {@code orientationToPack} are not expressed in the same reference frame as this
-    *            frame pose.
+    *            {@code orientationToPack} are not expressed in the same reference frame as this frame
+    *            pose.
     */
    default void get(FixedFrameTuple3DBasics positionToPack, FixedFrameQuaternionBasics orientationToPack)
    {
@@ -47,7 +47,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
 
    /**
     * Gets the position and orientation.
-    * 
+    *
     * @param positionToPack the tuple used to store the position. Modified.
     * @param orientationToPack the quaternion used to store the orientation. Modified.
     */
@@ -59,7 +59,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
 
    /**
     * Gets the position and orientation.
-    * 
+    *
     * @param positionToPack the tuple used to store the position. Modified.
     * @param orientationToPack the quaternion used to store the orientation. Modified.
     * @throws ReferenceFrameMismatchException if {@code positionToPack} is not expressed in the same
@@ -73,7 +73,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
 
    /**
     * Gets the position and orientation.
-    * 
+    *
     * @param positionToPack the tuple used to store the position. Modified.
     * @param orientationToPack the quaternion used to store the orientation. Modified.
     */
@@ -85,11 +85,11 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
 
    /**
     * Gets the position and orientation.
-    * 
+    *
     * @param positionToPack the tuple used to store the position. Modified.
     * @param orientationToPack the quaternion used to store the orientation. Modified.
-    * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the
-    *            same reference frame as this frame pose.
+    * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the same
+    *            reference frame as this frame pose.
     */
    default void get(Tuple3DBasics positionToPack, FixedFrameQuaternionBasics orientationToPack)
    {
@@ -99,7 +99,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
 
    /**
     * Gets the position and orientation.
-    * 
+    *
     * @param positionToPack the tuple used to store the position. Modified.
     * @param orientationToPack the quaternion used to store the orientation. Modified.
     */
@@ -110,17 +110,17 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes and packs the orientation described by the orientation part of this pose as a
-    * rotation vector.
+    * Computes and packs the orientation described by the orientation part of this pose as a rotation
+    * vector.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code rotationVectorToPack} is not expressed in
-    *            the same reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code rotationVectorToPack} is not expressed in the
+    *            same reference frame as {@code this}.
     */
    default void getRotationVector(FixedFrameVector3DBasics rotationVectorToPack)
    {
@@ -128,12 +128,12 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes and packs the orientation described by the orientation part of this pose as a
-    * rotation vector.
+    * Computes and packs the orientation described by the orientation part of this pose as a rotation
+    * vector.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
@@ -148,8 +148,8 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     *
     * @param point the other point used to measure the distance. Not modified.
     * @return the distance between this pose and the given {@code point}.
-    * @throws ReferenceFrameMismatchException if {@code point} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code point} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default double getPositionDistance(FramePoint3DReadOnly point)
    {
@@ -161,8 +161,8 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     *
     * @param other the other pose used to measure the distance. Not modified.
     * @return the distance between the position part of the two poses.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default double getPositionDistance(FramePose3DReadOnly other)
    {
@@ -170,12 +170,12 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the smallest angle representing the difference between the orientation part of this
-    * pose 3D and the give {@code orientation}.
+    * Computes the smallest angle representing the difference between the orientation part of this pose
+    * 3D and the give {@code orientation}.
     *
     * @param orientation the orientation used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this} and {@code orientation}, it is contained in
-    *         [0, 2<i>pi</i>].
+    * @return the angle difference between {@code this} and {@code orientation}, it is contained in [0,
+    *         2<i>pi</i>].
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
     *            reference frame as {@code this}.
     */
@@ -188,10 +188,10 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * Computes the absolute angle difference between this pose 3D and {@code other}.
     *
     * @param other the other pose 3D used to compute the orientation distance. Not modified.
-    * @return the angle difference between {@code this.orientation} and {@code other.orientation},
-    *         it is contained in [0, 2<i>pi</i>].
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @return the angle difference between {@code this.orientation} and {@code other.orientation}, it
+    *         is contained in [0, 2<i>pi</i>].
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default double getOrientationDistance(FramePose3DReadOnly other)
    {
@@ -218,18 +218,16 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
     * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
     * @param other the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default boolean geometricallyEquals(FramePose3DReadOnly other, double epsilon)
    {
@@ -244,8 +242,8 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param other the other pose to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal and are expressed in the same
-    *         reference frame, {@code false} otherwise.
+    * @return {@code true} if the two poses are exactly equal and are expressed in the same reference
+    *         frame, {@code false} otherwise.
     */
    default boolean equals(FramePose3DReadOnly other)
    {

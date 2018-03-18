@@ -10,7 +10,7 @@ public class ReferenceFrameMismatchException extends RuntimeException
 
    /**
     * Creates a new exception with a specified message.
-    * 
+    *
     * @param message the message detailing the cause of this exception.
     */
    public ReferenceFrameMismatchException(String message)

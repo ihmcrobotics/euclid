@@ -2266,8 +2266,8 @@ public class EuclidGeometryPolygonToolsTest
          assertNotEquals(-1, lineOfSightEndIndex);
 
          /*
-          * Drawing lines from the observer going through the start/end vertices. Each line should
-          * intersect only once the polygon.
+          * Drawing lines from the observer going through the start/end vertices. Each line should intersect
+          * only once the polygon.
           */
          {
             Point2DReadOnly startVertex = convexPolygon2D.get(lineOfSightStartIndex);
@@ -2293,9 +2293,8 @@ public class EuclidGeometryPolygonToolsTest
          }
 
          /*
-          * Shooting ray from the observer to each vertex of the polygon. If the vertex is in the
-          * line of sight, that means, there should not anything between the observer and the
-          * vertex.
+          * Shooting ray from the observer to each vertex of the polygon. If the vertex is in the line of
+          * sight, that means, there should not anything between the observer and the vertex.
           */
          for (Integer currentIndex = 0; currentIndex < hullSize; currentIndex++)
          {

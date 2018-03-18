@@ -52,8 +52,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws ReferenceFrameMismatchException if either argument is not expressed in the same
-    *            reference frame as this frame line 2D.
+    * @throws ReferenceFrameMismatchException if either argument is not expressed in the same reference
+    *            frame as this frame line 2D.
     */
    default void get(FixedFramePoint2DBasics pointToPack, FixedFrameVector2DBasics directionToPack)
    {
@@ -84,8 +84,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws ReferenceFrameMismatchException if {@code directionToPack} is not expressed in the
-    *            same reference frame as this frame line 2D.
+    * @throws ReferenceFrameMismatchException if {@code directionToPack} is not expressed in the same
+    *            reference frame as this frame line 2D.
     */
    default void get(Point2DBasics pointToPack, FixedFrameVector2DBasics directionToPack)
    {
@@ -151,8 +151,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * This method will return {@code false} if the point is on this line.
     *
     * @param point the coordinates of the query point.
-    * @return {@code true} if the point is on the left side of this line, {@code false} if the point
-    *         is on the right side or exactly on this line.
+    * @return {@code true} if the point is on the left side of this line, {@code false} if the point is
+    *         on the right side or exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
@@ -186,8 +186,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    /**
     * Tests if the given is located on this line.
     * <p>
-    * More precisely, the point is assumed to be on this line if it is located at a distance less
-    * than {@code 1.0e-8} from it.
+    * More precisely, the point is assumed to be on this line if it is located at a distance less than
+    * {@code 1.0e-8} from it.
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
@@ -204,8 +204,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    /**
     * Tests if the given is located on this line.
     * <p>
-    * More precisely, the point is assumed to be on this line if it is located at a distance less
-    * than {@code epsilon} from it.
+    * More precisely, the point is assumed to be on this line if it is located at a distance less than
+    * {@code epsilon} from it.
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
@@ -234,8 +234,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * This method will return {@code false} if the point is on this line.
     *
     * @param point the coordinates of the query point.
-    * @return {@code true} if the point is on the right side of this line, {@code false} if the
-    *         point is on the left side or exactly on this line.
+    * @return {@code true} if the point is on the right side of this line, {@code false} if the point
+    *         is on the left side or exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
@@ -259,10 +259,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * This method will return {@code false} if the point is on this line.
     *
     * @param point the coordinates of the query point.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the
-    *           left side, {@code false} this will test for the right side.
-    * @return {@code true} if the point is on the query side of this line, {@code false} if the
-    *         point is on the opposite side or exactly on this line.
+    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
+    *           side, {@code false} this will test for the right side.
+    * @return {@code true} if the point is on the query side of this line, {@code false} if the point
+    *         is on the opposite side or exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
@@ -273,8 +273,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line and
-    * returns the result.
+    * Calculates the coordinates of the intersection between this line and the given line and returns
+    * the result.
     * <p>
     * Edge cases:
     * <ul>
@@ -289,8 +289,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param secondLine the other line that may intersect this line. Not modified.
-    * @return the coordinates of the intersection if the two lines intersects, {@code null}
-    *         otherwise.
+    * @return the coordinates of the intersection if the two lines intersects, {@code null} otherwise.
     */
    @Override
    default FramePoint2DBasics intersectionWith(Line2DReadOnly secondLine)
@@ -303,8 +302,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line and
-    * returns the result.
+    * Calculates the coordinates of the intersection between this line and the given line and returns
+    * the result.
     * <p>
     * Edge cases:
     * <ul>
@@ -319,10 +318,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param secondLine the other line that may intersect this line. Not modified.
-    * @return the coordinates of the intersection if the two lines intersects, {@code null}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
-    *            expressed in the same reference frame.
+    * @return the coordinates of the intersection if the two lines intersects, {@code null} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *            in the same reference frame.
     */
    default FramePoint2DBasics intersectionWith(FrameLine2DReadOnly secondLine)
    {
@@ -350,8 +348,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param secondLine the other line that may intersect this line. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *            in the same reference frame.
     */
    default boolean intersectionWith(FrameLine2DReadOnly secondLine, Point2DBasics intersectionToPack)
    {
@@ -401,8 +399,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param secondLine the other line that may intersect this line. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *            in the same reference frame.
     */
    default boolean intersectionWith(FrameLine2DReadOnly secondLine, FramePoint2DBasics intersectionToPack)
    {
@@ -460,8 +458,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and returns the result.
+    * Calculates the coordinates of the intersection between this line and the given line segment and
+    * returns the result.
     * <p>
     * Edge cases:
     * <ul>
@@ -477,8 +475,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param lineSegment the line segment that may intersect this line. Not modified.
-    * @return the coordinates of the intersection if the line intersects the line segment,
-    *         {@code null} otherwise.
+    * @return the coordinates of the intersection if the line intersects the line segment, {@code null}
+    *         otherwise.
     */
    @Override
    default FramePoint2DBasics intersectionWith(LineSegment2DReadOnly lineSegment)
@@ -491,8 +489,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and returns the result.
+    * Calculates the coordinates of the intersection between this line and the given line segment and
+    * returns the result.
     * <p>
     * Edge cases:
     * <ul>
@@ -508,10 +506,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param lineSegment the line segment that may intersect this line. Not modified.
-    * @return the coordinates of the intersection if the line intersects the line segment,
-    *         {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not
-    *            expressed in the same reference frame.
+    * @return the coordinates of the intersection if the line intersects the line segment, {@code null}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not expressed
+    *            in the same reference frame.
     */
    default FramePoint2DBasics intersectionWith(FrameLineSegment2DReadOnly lineSegment)
    {
@@ -524,8 +522,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and stores the result in {@code intersectionToPack}.
+    * Calculates the coordinates of the intersection between this line and the given line segment and
+    * stores the result in {@code intersectionToPack}.
     * <p>
     * Edge cases:
     * <ul>
@@ -541,8 +539,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not expressed
+    *            in the same reference frame.
     */
    default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, Point2DBasics intersectionToPack)
    {
@@ -551,8 +549,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and stores the result in {@code intersectionToPack}.
+    * Calculates the coordinates of the intersection between this line and the given line segment and
+    * stores the result in {@code intersectionToPack}.
     * <p>
     * Edge cases:
     * <ul>
@@ -578,8 +576,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and stores the result in {@code intersectionToPack}.
+    * Calculates the coordinates of the intersection between this line and the given line segment and
+    * stores the result in {@code intersectionToPack}.
     * <p>
     * Edge cases:
     * <ul>
@@ -603,8 +601,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and stores the result in {@code intersectionToPack}.
+    * Calculates the coordinates of the intersection between this line and the given line segment and
+    * stores the result in {@code intersectionToPack}.
     * <p>
     * Edge cases:
     * <ul>
@@ -631,8 +629,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates the coordinates of the intersection between this line and the given line segment
-    * and stores the result in {@code intersectionToPack}.
+    * Calculates the coordinates of the intersection between this line and the given line segment and
+    * stores the result in {@code intersectionToPack}.
     * <p>
     * Edge cases:
     * <ul>
@@ -648,8 +646,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
     *           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code lineSegment} are not expressed
+    *            in the same reference frame.
     */
    default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, FramePoint2DBasics intersectionToPack)
    {
@@ -659,8 +657,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line and the given convex
+    * polygon 2D.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -674,8 +672,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @return the intersections between between the line and the polygon or {@code null} if the
-    *         method failed or if there is no intersections.
+    * @return the intersections between between the line and the polygon or {@code null} if the method
+    *         failed or if there is no intersections.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    @Override
@@ -696,28 +694,28 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line and the given convex
+    * polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
+    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
+    * remains unmodified.
     * </ul>
     * </p>
     *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
+    *           {@code null}. Modified.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstIntersectionToPack}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstIntersectionToPack} are
+    *            not expressed in the same reference frame.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
@@ -726,25 +724,25 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line and the given convex
+    * polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
+    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
+    * remains unmodified.
     * </ul>
     * </p>
     *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
+    *           {@code null}. Modified.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -754,25 +752,25 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line and the given convex
+    * polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
+    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
+    * remains unmodified.
     * </ul>
     * </p>
     *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
+    *           {@code null}. Modified.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstIntersectionToPack}, and
     *            {@code secondIntersectionToPack} are not expressed in the same reference frame.
@@ -786,25 +784,25 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line and the given convex
+    * polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
+    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
+    * remains unmodified.
     * </ul>
     * </p>
     *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
+    *           {@code null}. Modified.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
@@ -815,28 +813,28 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line and the given convex
+    * polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
+    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
+    * remains unmodified.
     * </ul>
     * </p>
     *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
+    *           {@code null}. Modified.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondIntersectionToPack}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondIntersectionToPack} are
+    *            not expressed in the same reference frame.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
@@ -845,25 +843,25 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between this line and the given
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between this line and the given convex
+    * polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
+    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
+    * remains unmodified.
     * </ul>
     * </p>
     *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
+    *           {@code null}. Modified.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
@@ -879,8 +877,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
-    * @return {@code true} if the point is in behind of this line, {@code false} if the point is
-    *         front the line.
+    * @return {@code true} if the point is in behind of this line, {@code false} if the point is front
+    *         the line.
     * @throws RuntimeException if the given point is located exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
@@ -898,11 +896,11 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * {@code frontDirection} is pointing.
     * </p>
     *
-    * @param frontDirection the vector used to define the side of the line which is to be considered
-    *           as the front. Not modified.
+    * @param frontDirection the vector used to define the side of the line which is to be considered as
+    *           the front. Not modified.
     * @param point the coordinates of the query. Not modified.
-    * @return {@code true} if the point is in front of this line, {@code false} if the point is
-    *         behind the line.
+    * @return {@code true} if the point is in front of this line, {@code false} if the point is behind
+    *         the line.
     * @throws RuntimeException if the given point is located exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code frontDirection} are not
     *            expressed in the same reference frame.
@@ -920,11 +918,11 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * {@code frontDirection} is pointing.
     * </p>
     *
-    * @param frontDirection the vector used to define the side of the line which is to be considered
-    *           as the front. Not modified.
+    * @param frontDirection the vector used to define the side of the line which is to be considered as
+    *           the front. Not modified.
     * @param point the coordinates of the query. Not modified.
-    * @return {@code true} if the point is in front of this line, {@code false} if the point is
-    *         behind the line.
+    * @return {@code true} if the point is in front of this line, {@code false} if the point is behind
+    *         the line.
     * @throws RuntimeException if the given point is located exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
@@ -942,8 +940,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
-    * @return {@code true} if the point is in front of this line, {@code false} if the point is
-    *         behind the line.
+    * @return {@code true} if the point is in front of this line, {@code false} if the point is behind
+    *         the line.
     * @throws RuntimeException if the given point is located exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
@@ -961,11 +959,11 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * {@code frontDirection} is pointing.
     * </p>
     *
-    * @param frontDirection the vector used to define the side of the line which is to be considered
-    *           as the front. Not modified.
+    * @param frontDirection the vector used to define the side of the line which is to be considered as
+    *           the front. Not modified.
     * @param point the coordinates of the query. Not modified.
-    * @return {@code true} if the point is in front of this line, {@code false} if the point is
-    *         behind the line.
+    * @return {@code true} if the point is in front of this line, {@code false} if the point is behind
+    *         the line.
     * @throws RuntimeException if the given point is located exactly on this line.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code point}, and
     *            {@code frontDirection} are not expressed in the same reference frame.
@@ -983,8 +981,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -1005,8 +1003,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -1028,8 +1026,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -1051,8 +1049,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -1072,8 +1070,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -1096,8 +1094,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -1120,8 +1118,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -1144,8 +1142,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     * <p>
@@ -1222,8 +1220,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *
     * @param secondLine the second line needed to calculate the interior bisector. Not modified.
     * @return the interior bisector if this method succeeded, {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *            in the same reference frame.
     */
    default FrameLine2DBasics interiorBisector(FrameLine2DReadOnly secondLine)
    {
@@ -1269,20 +1267,20 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
-    * @param pointOnLine the coordinates of the 'p' from which the parameter 't' is to be
-    *           calculated. The point has to be on the line. Not modified.
-    * @param epsilon the maximum distance allowed between the given point and this line. If the
-    *           given point is at a distance less than {@code epsilon} from this line, it is
-    *           considered as being located on this line.
+    * @param pointOnLine the coordinates of the 'p' from which the parameter 't' is to be calculated.
+    *           The point has to be on the line. Not modified.
+    * @param epsilon the maximum distance allowed between the given point and this line. If the given
+    *           point is at a distance less than {@code epsilon} from this line, it is considered as
+    *           being located on this line.
     * @return the value of the parameter 't' corresponding to the given point.
-    * @throws RuntimeException if the given point is located at a distance greater than
-    *            {@code epsilon} from this line.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws RuntimeException if the given point is located at a distance greater than {@code epsilon}
+    *            from this line.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default double parameterGivenPointOnLine(FramePoint2DReadOnly pointOnLine, double epsilon)
    {
@@ -1291,8 +1289,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates and returns a line that is perpendicular to this line, with its direction pointing
-    * to the left of this line, while going through the given point.
+    * Calculates and returns a line that is perpendicular to this line, with its direction pointing to
+    * the left of this line, while going through the given point.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -1307,8 +1305,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Calculates and returns a line that is perpendicular to this line, with its direction pointing
-    * to the left of this line, while going through the given point.
+    * Calculates and returns a line that is perpendicular to this line, with its direction pointing to
+    * the left of this line, while going through the given point.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -1381,8 +1379,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param point the point the line has to go through. Not modified.
     * @param perpendicularLineToPack the line perpendicular to {@code this} and going through
     *           {@code point}. Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code perpendicularLineToPack}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code perpendicularLineToPack} are
+    *            not expressed in the same reference frame.
     */
    default void perpendicularLineThroughPoint(Point2DReadOnly point, FixedFrameLine2DBasics perpendicularLineToPack)
    {
@@ -1408,8 +1406,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstPointOnLineToPack} are
     *            not expressed in the same reference frame.
     */
@@ -1423,8 +1420,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(FramePoint2DBasics firstPointOnLineToPack, Point2DBasics secondPointOnLineToPack)
    {
@@ -1436,10 +1432,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLineToPack}
-    *            are not expressed in the same reference frame.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLineToPack} are
+    *            not expressed in the same reference frame.
     */
    default void getTwoPointsOnLine(Point2DBasics firstPointOnLineToPack, FixedFramePoint2DBasics secondPointOnLineToPack)
    {
@@ -1451,8 +1446,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(Point2DBasics firstPointOnLineToPack, FramePoint2DBasics secondPointOnLineToPack)
    {
@@ -1464,10 +1458,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
-    * @throws ReferenceFrameMismatchException if either of the given arguments is not expressed in
-    *            the same reference frame as this frame line.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
+    * @throws ReferenceFrameMismatchException if either of the given arguments is not expressed in the
+    *            same reference frame as this frame line.
     */
    default void getTwoPointsOnLine(FixedFramePoint2DBasics firstPointOnLineToPack, FixedFramePoint2DBasics secondPointOnLineToPack)
    {
@@ -1480,8 +1473,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(FramePoint2DBasics firstPointOnLineToPack, FramePoint2DBasics secondPointOnLineToPack)
    {
@@ -1505,8 +1497,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to
-    * the left.
+    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to the
+    * left.
     *
     * @param vectorToPack the perpendicular vector to this line. Modified.
     */
@@ -1517,8 +1509,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to
-    * the left.
+    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to the
+    * left.
     *
     * @param vectorToPack the perpendicular vector to this line. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code vectorToPack} are not
@@ -1531,8 +1523,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to
-    * the left.
+    * Packs into {@code vectorToPack} the vector that is perpendicular to this line and pointing to the
+    * left.
     *
     * @param vectorToPack the perpendicular vector to this line. Modified.
     */
@@ -1548,14 +1540,14 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
     * @param t the parameter used to calculate the point coordinates.
     * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
+    *            in the same reference frame.
     */
    default void pointOnLineGivenParameter(double t, FixedFramePoint2DBasics pointToPack)
    {
@@ -1569,8 +1561,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
     * @param t the parameter used to calculate the point coordinates.
@@ -1588,8 +1580,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     * <p>
     * WARNING: This method generates garbage.
@@ -1630,8 +1622,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param interiorBisectorToPack the line in which the interior bisector point and direction are
     *           stored. Modified.
     * @return {@code true} if this method succeeded, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *            in the same reference frame.
     */
    default boolean interiorBisector(FrameLine2DReadOnly secondLine, Line2DBasics interiorBisectorToPack)
    {
@@ -1769,8 +1761,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param interiorBisectorToPack the line in which the interior bisector point and direction are
     *           stored. Modified.
     * @return {@code true} if this method succeeded, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
+    *            in the same reference frame.
     */
    default boolean interiorBisector(FrameLine2DReadOnly secondLine, FrameLine2DBasics interiorBisectorToPack)
    {
@@ -1783,8 +1775,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
     * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
     * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
-    * lines are physically the same but this method returns {@code false}.
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
+    * are physically the same but this method returns {@code false}.
     * <p>
     * If the two lines have different frames, this method returns {@code false}.
     * </p>
@@ -1807,11 +1799,10 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -1833,8 +1824,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param other the other line 2D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in the
+    *         same reference frame, {@code false} otherwise.
     */
    default boolean equals(FrameLine2DReadOnly other)
    {
