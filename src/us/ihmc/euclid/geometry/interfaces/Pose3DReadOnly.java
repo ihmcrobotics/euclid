@@ -143,7 +143,7 @@ public interface Pose3DReadOnly
     */
    default void getRotationVector(Vector3DBasics rotationVectorToPack)
    {
-      getOrientation().get(rotationVectorToPack);
+      getOrientation().getRotationVector(rotationVectorToPack);
    }
 
    /**

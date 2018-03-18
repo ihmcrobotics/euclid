@@ -67,7 +67,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default void get(FixedFrameVector3DBasics rotationVectorToPack)
    {
       checkReferenceFrameMatch(rotationVectorToPack);
-      QuaternionReadOnly.super.get(rotationVectorToPack);
+      QuaternionReadOnly.super.getRotationVector(rotationVectorToPack);
    }
 
    /**
@@ -83,7 +83,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
    default void get(FrameVector3DBasics rotationVectorToPack)
    {
       rotationVectorToPack.setToZero(getReferenceFrame());
-      QuaternionReadOnly.super.get(rotationVectorToPack);
+      QuaternionReadOnly.super.getRotationVector(rotationVectorToPack);
    }
 
    /**

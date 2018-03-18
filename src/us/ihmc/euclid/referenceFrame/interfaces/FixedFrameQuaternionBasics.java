@@ -67,7 +67,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    default void set(FrameVector3DReadOnly rotationVector)
    {
       checkReferenceFrameMatch(rotationVector);
-      QuaternionBasics.super.set(rotationVector);
+      QuaternionBasics.super.setRotationVector(rotationVector);
    }
 
    /**

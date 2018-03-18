@@ -4,6 +4,8 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
@@ -550,33 +552,17 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Appends the given rotation to this pose 3D.
+    * Appends the given orientation to this pose 3D.
     * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * {@code this.orientation = this.orientation * rotation}
+    * Only the orientation part of this pose is affected by this operation, for more details see
+    * {@link Orientation3DBasics#append(Orientation3DReadOnly)}.
     * </p>
     *
-    * @param rotation the rotation to append to this pose 3D. Not modified.
+    * @param orientation the orientation to append to this pose 3D. Not modified.
     */
-   default void appendRotation(QuaternionReadOnly rotation)
+   default void appendRotation(Orientation3DReadOnly orientation)
    {
-      getOrientation().multiply(rotation);
-   }
-
-   /**
-    * Appends the given rotation to this pose 3D.
-    * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * {@code this.orientation = this.orientation * rotation}
-    * </p>
-    *
-    * @param rotation the rotation to append to this pose 3D. Not modified.
-    */
-   default void appendRotation(RotationMatrixReadOnly rotation)
-   {
-      getOrientation().multiply(rotation);
+      getOrientation().append(orientation);
    }
 
    /**
@@ -647,7 +633,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    default void appendTransform(RigidBodyTransform transform)
    {
       QuaternionTools.addTransform(getOrientation(), transform.getTranslationVector(), getPosition());
-      getOrientation().multiply(transform.getRotationMatrix());
+      getOrientation().append(transform.getRotationMatrix());
    }
 
    /**
