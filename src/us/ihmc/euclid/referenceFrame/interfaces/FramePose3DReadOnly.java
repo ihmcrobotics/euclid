@@ -124,7 +124,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default void getRotationVector(FixedFrameVector3DBasics rotationVectorToPack)
    {
-      getOrientation().get(rotationVectorToPack);
+      getOrientation().getRotationVector(rotationVectorToPack);
    }
 
    /**
@@ -140,7 +140,7 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default void getRotationVector(FrameVector3DBasics rotationVectorToPack)
    {
-      getOrientation().get(rotationVectorToPack);
+      getOrientation().getRotationVector(rotationVectorToPack);
    }
 
    /**
