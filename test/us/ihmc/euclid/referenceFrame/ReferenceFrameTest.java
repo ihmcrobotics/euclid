@@ -20,6 +20,47 @@ public class ReferenceFrameTest
    private static final int ITERATIONS = 1000;
 
    private static final double EPSILON = 1.0e-12;
+   
+   /**
+    * Test for the issue: <a href="https://github.com/ihmcrobotics/euclid/issues/12">Issue 12</a>.
+    */
+   @Test
+   public void testIssue12()
+   {
+      Random random = new Random(43563);
+      ReferenceFrame world = ReferenceFrame.getWorldFrame();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with constructFrameWithUnchangingTransformToParent
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = new RigidBodyTransform();
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant", world, expected);
+
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
+
+         constantFrame.getTransformToParent(actual);
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+         constantFrame.getTransformToDesiredFrame(actual, world);
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with constructFrameWithUnchangingTransformFromParent
+         RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         RigidBodyTransform actual = new RigidBodyTransform();
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
+         expected.invert();
+
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
+
+         constantFrame.getTransformToParent(actual);
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+         constantFrame.getTransformToDesiredFrame(actual, world);
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+      }
+   }
 
    private Random random;
    private ReferenceFrame root, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8;
