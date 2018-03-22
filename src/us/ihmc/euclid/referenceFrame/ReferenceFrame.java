@@ -538,7 +538,9 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public RigidBodyTransform getTransformToParent()
    {
-      return new RigidBodyTransform(transformToParent);
+      RigidBodyTransform transformToReturn = new RigidBodyTransform();
+      getTransformToParent(transformToReturn);
+      return transformToReturn;
    }
 
    /**
@@ -554,7 +556,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public void getTransformToParent(RigidBodyTransform transformToPack)
    {
-      updateTransformToParent(transformToPack);
+      transformToPack.set(transformToParent);
    }
 
    /**
