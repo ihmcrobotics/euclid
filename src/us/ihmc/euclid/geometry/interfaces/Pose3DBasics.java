@@ -3,7 +3,6 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
@@ -186,31 +185,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the orientation part of this pose 3D with the given quaternion.
+    * Sets the orientation part of this pose 3D with the given orientation.
     *
-    * @param orientation the quaternion used to set this pose's orientation. Not modified.
+    * @param orientation the orientation used to set this pose's orientation. Not modified.
     */
-   default void setOrientation(QuaternionReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given rotation matrix.
-    *
-    * @param orientation the rotation matrix used to set this pose's orientation. Not modified.
-    */
-   default void setOrientation(RotationMatrixReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given axis-angle.
-    *
-    * @param orientation the axis-angle used to set this pose's orientation. Not modified.
-    */
-   default void setOrientation(AxisAngleReadOnly orientation)
+   default void setOrientation(Orientation3DReadOnly orientation)
    {
       getOrientation().set(orientation);
    }
@@ -423,31 +402,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param rotation the rotation to prepend to this pose 3D. Not modified.
     */
-   default void prependRotation(QuaternionReadOnly rotation)
-   {
-      rotation.transform(getPosition());
-      rotation.transform(getOrientation());
-   }
-
-   /**
-    * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
-    * orientation part.
-    *
-    * @param rotation the rotation to prepend to this pose 3D. Not modified.
-    */
-   default void prependRotation(RotationMatrixReadOnly rotation)
-   {
-      rotation.transform(getPosition());
-      rotation.transform(getOrientation());
-   }
-
-   /**
-    * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
-    * orientation part.
-    *
-    * @param rotation the rotation to prepend to this pose 3D. Not modified.
-    */
-   default void prependRotation(AxisAngleReadOnly rotation)
+   default void prependRotation(Orientation3DReadOnly rotation)
    {
       rotation.transform(getPosition());
       rotation.transform(getOrientation());

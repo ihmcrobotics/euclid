@@ -4,14 +4,13 @@ import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -21,8 +20,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * Base implementation for 3D shapes such as: cylinder, box, sphere, etc.
@@ -254,38 +251,11 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * This method does not affect the position of this shape.
     * </p>
     *
-    * @param axisAngle the axis-angle holding the new orientation for this shape. Not modified.
+    * @param orientation the new orientation for this shape. Not modified.
     */
-   public final void setOrientation(AxisAngleReadOnly axisAngle)
+   public final void setOrientation(Orientation3DReadOnly orientation)
    {
-      shapePose.setRotation(axisAngle);
-   }
-
-   /**
-    * Sets the orientation of this shape.
-    * <p>
-    * This method does not affect the position of this shape.
-    * </p>
-    *
-    * @param quaternion the quaternion holding the new orientation for this shape. Not modified.
-    */
-   public final void setOrientation(QuaternionReadOnly quaternion)
-   {
-      shapePose.setRotation(quaternion);
-   }
-
-   /**
-    * Sets the orientation of this shape.
-    * <p>
-    * This method does not affect the position of this shape.
-    * </p>
-    *
-    * @param rotationMatrix the rotation matrix holding the new orientation for this shape. Not
-    *           modified.
-    */
-   public final void setOrientation(RotationMatrixReadOnly rotationMatrix)
-   {
-      shapePose.setRotation(rotationMatrix);
+      shapePose.setRotation(orientation);
    }
 
    /**
@@ -372,34 +342,11 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * Sets the pose, i.e. position and orientation, of this shape.
     *
     * @param position the new position for this shape. Not modified.
-    * @param axisAngle the axis-angle holding the new orientation for this shape. Not modified.
+    * @param orientation the new orientation for this shape. Not modified.
     */
-   public final void setPose(Tuple3DReadOnly position, AxisAngleReadOnly axisAngle)
+   public final void setPose(Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
-      shapePose.set(axisAngle, position);
-   }
-
-   /**
-    * Sets the pose, i.e. position and orientation, of this shape.
-    *
-    * @param position the new position for this shape. Not modified.
-    * @param quaternion the quaternion holding the new orientation for this shape. Not modified.
-    */
-   public final void setPose(Tuple3DReadOnly position, QuaternionReadOnly quaternion)
-   {
-      shapePose.set(quaternion, position);
-   }
-
-   /**
-    * Sets the pose, i.e. position and orientation, of this shape.
-    *
-    * @param position the new position for this shape. Not modified.
-    * @param rotationMatrix the rotation matrix holding the new orientation for this shape. Not
-    *           modified.
-    */
-   public final void setPose(Tuple3DReadOnly position, RotationMatrixReadOnly rotationMatrix)
-   {
-      shapePose.set(rotationMatrix, position);
+      shapePose.set(orientation, position);
    }
 
    /**
@@ -498,32 +445,11 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    /**
     * Packs the orientation of this shape into an axis-angle.
     *
-    * @param axisAngleToPack the axis-angle that is set to the orientation of this shape. Modified.
+    * @param orientationToPack used to pack the orientation of this shape. Modified.
     */
-   public final void getOrientation(AxisAngleBasics axisAngleToPack)
+   public final void getOrientation(Orientation3DBasics orientationToPack)
    {
-      shapePose.getRotation(axisAngleToPack);
-   }
-
-   /**
-    * Packs the orientation of this shape into a quaternion.
-    *
-    * @param quaternionToPack the quaternion that is set to the orientation of this shape. Modified.
-    */
-   public final void getOrientation(QuaternionBasics quaternionToPack)
-   {
-      shapePose.getRotation(quaternionToPack);
-   }
-
-   /**
-    * Packs the orientation of this shape into a rotation matrix.
-    *
-    * @param rotationMatrixToPack the matrix in which the orientation of this shape is stored.
-    *           Modified.
-    */
-   public final void getOrientation(RotationMatrix matrixToPack)
-   {
-      shapePose.getRotation(matrixToPack);
+      shapePose.getRotation(orientationToPack);
    }
 
    /**
