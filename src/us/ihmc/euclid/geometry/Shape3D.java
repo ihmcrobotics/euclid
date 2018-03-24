@@ -32,6 +32,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    protected final RigidBodyTransform shapePose = new RigidBodyTransform();
 
+   /**
+    * Default constructor for creating a new shape with its local frame aligned with world.
+    */
    public Shape3D()
    {
    }

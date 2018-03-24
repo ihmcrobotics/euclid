@@ -103,7 +103,7 @@ public interface Pose2DReadOnly
     * Computes the absolute angle difference between the orientation part of this pose 2D and the give
     * {@code orientation}.
     *
-    * @param orientation the orientation used to compute the orientation distance. Not modified.
+    * @param other the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
     */
    default double getOrientationDistance(Orientation2DReadOnly other)
@@ -142,8 +142,7 @@ public interface Pose2DReadOnly
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
     *
     * @param other the query. Not modified.
-    * @param positionEpsilon the tolerance to use for comparing the position part.
-    * @param orientationEpsilon the tolerance to use for comparing the orientation part.
+    * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
    default boolean epsilonEquals(Pose2DReadOnly other, double epsilon)

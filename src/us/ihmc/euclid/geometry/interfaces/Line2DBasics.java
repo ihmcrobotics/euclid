@@ -40,7 +40,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Tests if this line contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #point} and/or {@link #direction} contains {@link Double#NaN},
+    * @return {@code true} if {@link #getPoint()} and/or {@link #getDirection()} contains {@link Double#NaN},
     *         {@code false} otherwise.
     */
    @Override

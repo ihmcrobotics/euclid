@@ -392,6 +392,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     *
     * @param xParameter the parameter to use for the interpolation along the x-axis.
     * @param yParameter the parameter to use for the interpolation along the y-axis.
+    * @param zParameter the parameter to use for the interpolation along the z-axis.
     * @param pointToPack the point 3D in which the result is stored. Modified.
     */
    public void getPointGivenParameters(double xParameter, double yParameter, double zParameter, Point3DBasics pointToPack)
@@ -836,7 +837,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
-    * {@link #intersectsEpsilonInXYPlane(BoundingBox2D)}.
+    * {@link #intersectsExclusiveInXYPlane(BoundingBox2D)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
     * {@code epsilon} toward the outside.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
@@ -916,7 +917,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Tests if this the given ray 3D intersects this bounding box.
     *
     * @param rayOrigin the origin of the ray. Not modified.
-    * @param lineDirection the ray direction. Not modified.
+    * @param rayDirection the ray direction. Not modified.
     * @return {@code true} if the ray and this bounding box intersect, {@code false} otherwise.
     */
    public boolean doesIntersectWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection)
@@ -1137,7 +1138,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * Gets the minimum coordinate of this bounding box and stores it in the given array
     * {@code maxToPack}.
     *
-    * @param maxToPack array in which the minimum coordinate of this bounding box is stored. Modified.
+    * @param minToPack array in which the minimum coordinate of this bounding box is stored. Modified.
     */
    public void getMinPoint(double[] minToPack)
    {
@@ -1257,11 +1258,11 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((BoundingBox3D) obj);
+         return equals((BoundingBox3D) object);
       }
       catch (ClassCastException e)
       {

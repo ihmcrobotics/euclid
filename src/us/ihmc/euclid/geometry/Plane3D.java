@@ -31,7 +31,7 @@ public class Plane3D implements GeometryObject<Plane3D>
    private boolean hasNormalBeenSet = false;
 
    /**
-    * Default constructor that initializes both {@link #point} and {@link #normal} to zero. This point
+    * Default constructor that initializes both {@code point} and {@code normal} to zero. This point
     * and vector have to be set to valid values to make this plane usable.
     */
    public Plane3D()
@@ -70,9 +70,9 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Initializes this plane to be passing through the three given points.
     *
-    * @param firstPointOnLine first point on this plane. Not modified.
-    * @param secondPointOnLine second point on this plane. Not modified.
-    * @param thirdPointOnLine second point on this plane. Not modified.
+    * @param firstPointOnPlane first point on this plane. Not modified.
+    * @param secondPointOnPlane second point on this plane. Not modified.
+    * @param thirdPointOnPlane second point on this plane. Not modified.
     * @throws RuntimeException if at least two of the given points are exactly equal.
     * @throws RuntimeException if the plane normal could not be computed from the three given points.
     */
@@ -149,7 +149,7 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Tests if this plane contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #point} and/or {@link #normal} contains {@link Double#NaN},
+    * @return {@code true} if {@code point} and/or {@code normal} contains {@link Double#NaN},
     *         {@code false} otherwise.
     */
    @Override
@@ -227,11 +227,11 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((Plane3D) obj);
+         return equals((Plane3D) object);
       }
       catch (ClassCastException e)
       {
@@ -332,7 +332,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * Gets the point defining this plane by storing its coordinates in the given argument
     * {@code pointToPack}.
     *
-    * @param pointToPack point in which the coordinates of this plane's point are stored. Modified.
+    * @param pointOnPlaneToPack point in which the coordinates of this plane's point are stored. Modified.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
    public void getPoint(Point3DBasics pointOnPlaneToPack)
@@ -717,9 +717,12 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Computes the orthogonal projection of the given 3D point on this 3D plane.
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointX the x-coordinate of the point to compute the projection of.
+    * @param pointY the y-coordinate of the point to compute the projection of.
+    * @param pointZ the z-coordinate of the point to compute the projection of.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
    public boolean orthogonalProjection(double pointX, double pointY, double pointZ, Point3DBasics projectionToPack)
@@ -734,6 +737,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
    public boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
@@ -793,9 +797,9 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Redefines this plane such that it goes through the three given points.
     *
-    * @param firstPointOnLine first point on this plane. Not modified.
-    * @param secondPointOnLine second point on this plane. Not modified.
-    * @param thirdPointOnLine second point on this plane. Not modified.
+    * @param firstPointOnPlane first point on this plane. Not modified.
+    * @param secondPointOnPlane second point on this plane. Not modified.
+    * @param thirdPointOnPlane second point on this plane. Not modified.
     * @throws RuntimeException if at least two of the given points are exactly equal.
     * @throws RuntimeException if the plane normal could not be computed from the three given points.
     */
@@ -869,7 +873,7 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Changes the point through which this plane has to go.
     *
-    * @param pointOnLine new point on this plane. Not modified.
+    * @param pointOnPlane new point on this plane. Not modified.
     */
    public void setPoint(Point3DReadOnly pointOnPlane)
    {

@@ -135,11 +135,11 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((LineSegment2DReadOnly) obj);
+         return equals((LineSegment2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringOf;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
@@ -17,17 +17,25 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * {@code EuclidGeometryIOTools}, as {@link EuclidCoreIOTools}, is intended to gather the input &
+ * output tools for printing, saving, and loading geometry objects.
+ * <p>
+ * At this time, only a few print tools are offered, additional features will come in future
+ * releases.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidGeometryIOTools
 {
-   /** Default format used to print decimal numbers. */
-   private static final String DEFAULT_FORMAT = getStringFormat(6, 3);
-
    /**
     * Gets a representative {@code String} of {@code line2D} as follows:
     *

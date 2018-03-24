@@ -151,6 +151,7 @@ public interface Line2DReadOnly
     *           {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
     *           {@code null}. Modified.
+    * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -476,6 +477,7 @@ public interface Line2DReadOnly
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point2DReadOnly pointToProject, Point2DBasics projectionToPack)
    {

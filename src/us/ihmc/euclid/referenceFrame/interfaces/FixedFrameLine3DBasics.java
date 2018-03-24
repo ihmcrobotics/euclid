@@ -88,7 +88,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * Sets this line to be the same as the given line.
     *
     * @param referenceFrame the reference frame in which the given line is expressed.
-    * @param line2DReadOnly the line to copy. Not modified.
+    * @param line3DReadOnly the line to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
     *            {@code referenceFrame} are not the same reference frame.
     */
@@ -119,7 +119,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * Sets this line to go through the endpoints of the given line segment.
     *
     * @param referenceFrame the reference frame in which the given line segment is expressed.
-    * @param lineSegment2DReadOnly the line segment to copy. Not modified.
+    * @param lineSegment3DReadOnly the line segment to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
     *            {@code referenceFrame} are not the same reference frame.
     */

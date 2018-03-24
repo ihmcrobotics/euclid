@@ -25,6 +25,11 @@ import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 
+/**
+ * This class provides the tools to perform a variety of assertions on geometry types.
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidGeometryTestTools
 {
    private static final String DEFAULT_FORMAT = getStringFormat(15, 12);

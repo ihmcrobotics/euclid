@@ -30,6 +30,14 @@ import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
+/**
+ * This class provides random generators to generate random geometry objects.
+ * <p>
+ * The main application is for writing JUnit Tests.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public abstract class EuclidGeometryRandomTools
 {
    /**
@@ -748,6 +756,26 @@ public abstract class EuclidGeometryRandomTools
       return new Pose3D(nextPoint3D(random), nextQuaternion(random));
    }
 
+   /**
+    * Generates a random pose 3D.
+    * <p>
+    * <ul>
+    * <li>{@code position}<sub>X</sub> &in; [-{@code maxAbsoluteX}; {@code maxAbsoluteX}].
+    * <li>{@code position}<sub>Y</sub> &in; [-{@code maxAbsoluteY}; {@code maxAbsoluteY}].
+    * <li>{@code position}<sub>Z</sub> &in; [-{@code maxAbsoluteZ}; {@code maxAbsoluteZ}].
+    * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @param maxAbsoluteX the maximum absolute value for the x-coordinate of the position part of the
+    *           pose 3D.
+    * @param maxAbsoluteY the maximum absolute value for the y-coordinate of the position part of the
+    *           pose 3D.
+    * @param maxAbsoluteZ the maximum absolute value for the z-coordinate of the position part of the
+    *           pose 3D.
+    * @return the random pose 3D.
+    */
    public static Pose3D nextPose3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
       return new Pose3D(nextPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ), nextQuaternion(random));
@@ -763,7 +791,9 @@ public abstract class EuclidGeometryRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
+    * @param positionMinMax the maximum absolute value for each coordinate of the pose's position.
+    * @param orientationMinMax the maximum absolute value of the rotation angle for the pose's
+    *           orientation.
     * @return the random pose 3D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
     */

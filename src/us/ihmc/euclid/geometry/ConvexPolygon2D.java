@@ -625,7 +625,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * <li>{@link #update()}.
     * </ol>
     *
-    * @param otherPolygon the other convex polygon to copy. Not modified.
+    * @param other the other convex polygon to copy. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
     *            other polygon's vertices were edited.
     */
@@ -1140,6 +1140,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this vertex
     * will remain unmodified.
     * </p>
+    * @param pointToScaleAbout the center of the scale transformation. Not modified.
     *
     * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
     *           nothing.
@@ -1203,6 +1204,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Copies this polygon, translates the copy, and returns it.
     *
     * @param translation the translation to apply to the copy of this polygon. Not modified.
+    * @return the copy of this polygon translated.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -1310,7 +1312,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     *
     * @param transform the transform to apply on the vertices of the copy of this convex polygon. Not
     *           modified.
-    * @param the copy of this transformed.
+    * @return the copy of this transformed.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -1333,7 +1335,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     *
     * @param transform the transform to apply on the vertices of the copy of this convex polygon. Not
     *           modified.
-    * @param the copy of this transformed.
+    * @return the copy of this transformed.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -1661,7 +1663,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
    }
 
    /**
-    * Checks if the given index is contained in the range [0, {@link #numberOfVertices}[.
+    * Checks if the given index is contained in the range [0, {@link #getNumberOfVertices()}[.
     *
     * @param index the index to check.
     * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal than
@@ -1954,10 +1956,10 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D orthogonalProjectionCopy(Point2DReadOnly point)
+   public Point2D orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(point, clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered);
+      return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered);
    }
 
    /**
@@ -2399,7 +2401,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * </ul>
     * </p>
     *
-    * @param lineSegment the line segment that may intersect this polygon. Not modified.
+    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection between
     *           the line and the convex polygon. Can be {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection between
@@ -2408,10 +2410,10 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public int intersectionWith(LineSegment2DReadOnly lineSegment2d, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   public int intersectionWith(LineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2d.getFirstEndpoint(), lineSegment2d.getSecondEndpoint(),
+      return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
                                                                                            clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered,
                                                                                            firstIntersectionToPack, secondIntersectionToPack);
    }
@@ -2441,15 +2443,15 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * </ul>
     * </p>
     *
-    * @param lineSegment the line segment that may intersect this polygon. Not modified.
+    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
     * @return the intersections between the line segment and the polygon.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   public Point2D[] intersectionWith(LineSegment2DReadOnly lineSegment2d)
+   public Point2D[] intersectionWith(LineSegment2DReadOnly lineSegment2D)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2d.getFirstEndpoint(), lineSegment2d.getSecondEndpoint(),
+      return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
                                                                                            clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered);
    }
 

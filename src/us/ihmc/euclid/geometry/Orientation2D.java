@@ -120,11 +120,11 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((Orientation2DReadOnly) obj);
+         return equals((Orientation2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

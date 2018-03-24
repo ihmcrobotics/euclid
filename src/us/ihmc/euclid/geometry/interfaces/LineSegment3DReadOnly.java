@@ -107,7 +107,7 @@ public interface LineSegment3DReadOnly
    /**
     * Test if the first endpoint of this line segment contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #firstEndpoint} contains {@link Double#NaN}, {@code false}
+    * @return {@code true} if {@link #getFirstEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
     */
    default boolean firstEndpointContainsNaN()
@@ -118,7 +118,7 @@ public interface LineSegment3DReadOnly
    /**
     * Test if the second endpoint of this line segment contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #secondEndpoint} contains {@link Double#NaN}, {@code false}
+    * @return {@code true} if {@link #getSecondEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
     */
    default boolean secondEndpointContainsNaN()

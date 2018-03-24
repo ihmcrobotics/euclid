@@ -29,6 +29,11 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
+/**
+ * This class provides a variety of tools to perform operations with polygons.
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidGeometryPolygonTools
 {
    private static final Random random = new Random();
@@ -1316,8 +1321,8 @@ public class EuclidGeometryPolygonTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of the
     *           convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.

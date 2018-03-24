@@ -16,16 +16,18 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * <ul>
  * <li>The origin is located at the centroid or center of the torus.
  * <li>The axis of revolution is the z-axis.
- * <li>The torus is defined by two radii: {@link #tubeRadius} that represents the radius of the
- * tube, and {@link #radius} that is the radius for the center of the torus to the center of the
+ * <li>The torus is defined by two radii: {@code tubeRadius} that represents the radius of the
+ * tube, and {@code radius} that is the radius for the center of the torus to the center of the
  * tube.
  * </ul>
  * </p>
  */
 public class Torus3D extends Shape3D<Torus3D>
 {
-   private static final double MIN_TUBE_RADIUS = 1.0e-4;
-   private static final double MIN_INNER_RADIUS = 1.0e-4;
+   /** The minimum allowable value for the radius of the tube. */
+   public static final double MIN_TUBE_RADIUS = 1.0e-4;
+   /** The minimum allowable value for the major radius. */
+   public static final double MIN_INNER_RADIUS = 1.0e-4;
 
    /** It is the radius for the center of the torus to the center of the tube. */
    private double radius;
@@ -86,7 +88,7 @@ public class Torus3D extends Shape3D<Torus3D>
     * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
     *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
-   public Torus3D(Pose3DReadOnly pose, double radius, double thickness)
+   public Torus3D(Pose3DReadOnly pose, double radius, double tubeRadius)
    {
       set(pose, radius, tubeRadius);
    }

@@ -38,7 +38,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    /**
     * Tests if this line segment contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #firstEndpoint} and/or {@link #secondEndpoint} contains
+    * @return {@code true} if {@link #getFirstEndpoint()} and/or {@link #getSecondEndpoint()} contains
     *         {@link Double#NaN}, {@code false} otherwise.
     */
    @Override

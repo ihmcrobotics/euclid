@@ -104,6 +104,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
    /**
     * Redefines this line with a new point and a new direction vector.
     *
+    * @param referenceFrame the reference frame in which the given coordinates are expressed.
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
     * @param lineDirectionX the new x-component of the direction of this line.

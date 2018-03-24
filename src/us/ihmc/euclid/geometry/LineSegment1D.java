@@ -448,7 +448,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    /**
     * Updates the endpoint of this line segment with the highest coordinate.
     *
-    * @param newMinPoint the new coordinate for the endpoint with the highest coordinate.
+    * @param newMaxPoint the new coordinate for the endpoint with the highest coordinate.
     * @throws RuntimeException if the argument is less or equal to the endpoint with lowest coordinate.
     *            This prevents to flip this line segment's direction.
     */
@@ -635,11 +635,11 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((LineSegment1D) obj);
+         return equals((LineSegment1D) object);
       }
       catch (ClassCastException e)
       {

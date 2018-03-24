@@ -7,7 +7,14 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-// TODO
+/**
+ * Read-only interface for a 2D orientation.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Orientation2DReadOnly
 {
    /**

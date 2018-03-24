@@ -7,7 +7,14 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-// TODO
+/**
+ * Write and read interface for a 2D orientation.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, Transformable
 {
    /**

@@ -580,7 +580,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
-    * {@link #intersectsExclusive(BoundingBox3D)}.
+    * {@link #intersectsExclusive(BoundingBox2D)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
     * {@code epsilon} toward the outside.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
@@ -633,7 +633,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * Tests if this the given ray 2D intersects this bounding box.
     *
     * @param rayOrigin the origin of the ray. Not modified.
-    * @param lineDirection the ray direction. Not modified.
+    * @param rayDirection the ray direction. Not modified.
     * @return {@code true} if the ray and this bounding box intersect, {@code false} otherwise.
     */
    public boolean doesIntersectWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
@@ -793,7 +793,7 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * Gets the minimum coordinate of this bounding box and stores it in the given array
     * {@code maxToPack}.
     *
-    * @param maxToPack array in which the minimum coordinate of this bounding box is stored. Modified.
+    * @param minToPack array in which the minimum coordinate of this bounding box is stored. Modified.
     */
    public void getMinPoint(double[] minToPack)
    {
@@ -893,11 +893,11 @@ public class BoundingBox2D implements EpsilonComparable<BoundingBox2D>, Settable
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((BoundingBox2D) obj);
+         return equals((BoundingBox2D) object);
       }
       catch (ClassCastException e)
       {

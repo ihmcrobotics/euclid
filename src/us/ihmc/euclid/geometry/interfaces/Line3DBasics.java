@@ -38,7 +38,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    /**
     * Tests if this line contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #point} and/or {@link #direction} contains {@link Double#NaN},
+    * @return {@code true} if {@link #getPoint()} and/or {@link #getDirection()} contains {@link Double#NaN},
     *         {@code false} otherwise.
     */
    @Override
@@ -141,7 +141,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    /**
     * Sets this line to represent the same geometry as the given {@code other}.
     *
-    * @param line3DReadOnly the other line to copy. Not modified.
+    * @param other the other line to copy. Not modified.
     */
    default void set(Line3DReadOnly other)
    {
@@ -165,7 +165,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    /**
     * Sets this line to go through the endpoints of the given line segment.
     *
-    * @param lineSegment2DReadOnly the line segment to get the endpoints from. Not modified.
+    * @param lineSegment3DReadOnly the line segment to get the endpoints from. Not modified.
     */
    default void set(LineSegment3DReadOnly lineSegment3DReadOnly)
    {

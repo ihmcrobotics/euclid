@@ -90,7 +90,7 @@ public interface LineSegment2DReadOnly
    /**
     * Test if the first endpoint of this line segment contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #firstEndpoint} contains {@link Double#NaN}, {@code false}
+    * @return {@code true} if {@link #getFirstEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
     */
    default boolean firstEndpointContainsNaN()
@@ -101,7 +101,7 @@ public interface LineSegment2DReadOnly
    /**
     * Test if the second endpoint of this line segment contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #secondEndpoint} contains {@link Double#NaN}, {@code false}
+    * @return {@code true} if {@link #getSecondEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
     */
    default boolean secondEndpointContainsNaN()
@@ -112,7 +112,7 @@ public interface LineSegment2DReadOnly
    /**
     * Tests if this line segment contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #firstEndpoint} and/or {@link #secondEndpoint} contains
+    * @return {@code true} if {@link #getFirstEndpoint()} and/or {@link #getSecondEndpoint()} contains
     *         {@link Double#NaN}, {@code false} otherwise.
     */
    default boolean containsNaN()
@@ -324,6 +324,7 @@ public interface LineSegment2DReadOnly
     * <p>
     * WARNING: This method generates garbage.
     * </p>
+    * @return copy of this line segment flipped.
     */
    default LineSegment2D flipDirectionCopy()
    {
@@ -357,7 +358,7 @@ public interface LineSegment2DReadOnly
     *
     * @param convexPolygon the polygon this line segment may intersect. Not modified.
     * @return the intersections between the line segment and the polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2D#update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
    default Point2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
@@ -423,7 +424,6 @@ public interface LineSegment2DReadOnly
     * @param line the line that may intersect this line segment. Not modified.
     * @return the coordinates of the intersection if the line intersects this line segment,
     *         {@code null} otherwise.
-    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
     */
    default Point2DBasics intersectionWith(Line2DReadOnly line)
    {

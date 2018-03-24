@@ -23,7 +23,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    private final Vector2D direction = new Vector2D();
 
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero.
+    * Default constructor that initializes both {@code point} and {@code direction} to zero.
     */
    public Line2D()
    {

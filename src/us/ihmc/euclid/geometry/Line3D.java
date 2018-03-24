@@ -25,7 +25,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    private final Vector3D direction = new Vector3D();
 
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero.
+    * Default constructor that initializes both {@code point} and {@code direction} to zero.
     */
    public Line3D()
    {
@@ -49,7 +49,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    /**
     * Creates a new line 3D and initializes it to {@code other}.
     *
-    * @param other the other line used to initialize this line. Not modified.
+    * @param line2DReadOnly the other line used to initialize this line. Not modified.
     */
    public Line3D(Line2DReadOnly line2DReadOnly)
    {
