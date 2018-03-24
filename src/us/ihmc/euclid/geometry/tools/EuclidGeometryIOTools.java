@@ -9,12 +9,12 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -456,7 +456,7 @@ public class EuclidGeometryIOTools
     * @param orientation2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getOrientation2DString(Orientation2D orientation2D)
+   public static String getOrientation2DString(Orientation2DReadOnly orientation2D)
    {
       return getOrientation2DString(DEFAULT_FORMAT, orientation2D);
    }
@@ -475,7 +475,7 @@ public class EuclidGeometryIOTools
     * @param orientation2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getOrientation2DString(String format, Orientation2D orientation2D)
+   public static String getOrientation2DString(String format, Orientation2DReadOnly orientation2D)
    {
       if (orientation2D == null)
          return "null";

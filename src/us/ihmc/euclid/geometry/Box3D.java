@@ -4,6 +4,8 @@ import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -120,7 +122,7 @@ public class Box3D extends Shape3D<Box3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Box3D(Pose3D pose, double length, double width, double height)
+   public Box3D(Pose3DReadOnly pose, double length, double width, double height)
    {
       setPose(pose);
       setSize(length, width, height);
@@ -419,7 +421,7 @@ public class Box3D extends Shape3D<Box3D>
     * @return the number of intersections between the line and this box. It is either equal to 0, 1, or
     *         2.
     */
-   public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   public int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
    }

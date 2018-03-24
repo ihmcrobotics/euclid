@@ -5,6 +5,8 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetw
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -868,7 +870,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param line3D the query. Not modified.
     * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
     */
-   public boolean doesIntersectWithLine3D(Line3D line3D)
+   public boolean doesIntersectWithLine3D(Line3DReadOnly line3D)
    {
       return doesIntersectWithLine3D(line3D.getPoint(), line3D.getDirection());
    }
@@ -892,7 +894,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @return {@code true} if the line segment and this bounding box intersect, {@code false}
     *         otherwise.
     */
-   public boolean doesIntersectWithLineSegment3D(LineSegment3D lineSegment3D)
+   public boolean doesIntersectWithLineSegment3D(LineSegment3DReadOnly lineSegment3D)
    {
       return doesIntersectWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
    }
@@ -937,7 +939,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @return the number of intersections between the line and this bounding box. It is either equal to
     *         0 or 2.
     */
-   public int intersectionWithLine3D(Line3D line3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   public int intersectionWithLine3D(Line3DReadOnly line3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWithLine3D(line3D.getPoint(), line3D.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
    }
@@ -989,7 +991,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
     */
-   public int intersectionWithLineSegment3D(LineSegment3D lineSegment3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   public int intersectionWithLineSegment3D(LineSegment3DReadOnly lineSegment3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), firstIntersectionToPack,
                                            secondIntersectionToPack);

@@ -152,17 +152,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    }
 
    /**
-    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
-    *
-    * @param other the other line 2D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false} otherwise.
-    */
-   public boolean equals(Line2D other)
-   {
-      return Line2DBasics.super.equals(other);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
     *

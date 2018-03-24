@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry;
 
 import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
@@ -125,7 +126,7 @@ public class Sphere3D extends Shape3D<Sphere3D>
     * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
     *         or 2.
     */
-   public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   public int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
    }

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -92,7 +93,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Ramp3D(Pose3D pose, double length, double width, double height)
+   public Ramp3D(Pose3DReadOnly pose, double length, double width, double height)
    {
       setPose(pose);
       setSize(length, width, height);

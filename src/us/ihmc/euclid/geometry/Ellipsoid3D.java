@@ -1,5 +1,7 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -62,7 +64,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * @param radiusZ radius of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
-   public Ellipsoid3D(Pose3D pose, double radiusX, double radiusY, double radiusZ)
+   public Ellipsoid3D(Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       set(pose, radiusX, radiusY, radiusZ);
    }
@@ -203,7 +205,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * @return the number of intersections between the line and this ellipsoid. It is either equal to 0,
     *         1, or 2.
     */
-   public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   public int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
    }
@@ -294,7 +296,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * @param radiusZ radius of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
-   public void set(Pose3D pose, double radiusX, double radiusY, double radiusZ)
+   public void set(Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       setPose(pose);
       setRadii(radiusX, radiusY, radiusZ);

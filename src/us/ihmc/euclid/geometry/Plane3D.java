@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -431,7 +432,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
-   public boolean intersectionWith(Line3D line, Point3DBasics intersectionToPack)
+   public boolean intersectionWith(Line3DReadOnly line, Point3DBasics intersectionToPack)
    {
       checkHasBeenInitialized();
       return intersectionWith(intersectionToPack, line.getPoint(), line.getDirection());

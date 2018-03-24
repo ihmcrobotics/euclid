@@ -14,6 +14,12 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestToolsTest;
 
 public class EuclidGeometryTestToolsTest
@@ -25,7 +31,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLine2DEquals";
-      Class<Line2D> argumentsClass = Line2D.class;
+      Class<Line2DReadOnly> argumentsClass = Line2DReadOnly.class;
 
       {
          Line2D expected = null;
@@ -63,7 +69,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLine2DGeometricallyEquals";
-      Class<Line2D> argumentsClass = Line2D.class;
+      Class<Line2DReadOnly> argumentsClass = Line2DReadOnly.class;
 
       {
          Line2D expected = null;
@@ -101,7 +107,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLine3DEquals";
-      Class<Line3D> argumentsClass = Line3D.class;
+      Class<Line3DReadOnly> argumentsClass = Line3DReadOnly.class;
 
       {
          Line3D expected = null;
@@ -139,7 +145,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLine3DGeometricallyEquals";
-      Class<Line3D> argumentsClass = Line3D.class;
+      Class<Line3DReadOnly> argumentsClass = Line3DReadOnly.class;
 
       {
          Line3D expected = null;
@@ -253,7 +259,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLineSegment2DEquals";
-      Class<LineSegment2D> argumentsClass = LineSegment2D.class;
+      Class<LineSegment2DReadOnly> argumentsClass = LineSegment2DReadOnly.class;
 
       {
          LineSegment2D expected = null;
@@ -291,7 +297,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLineSegment2DGeometricallyEquals";
-      Class<LineSegment2D> argumentsClass = LineSegment2D.class;
+      Class<LineSegment2DReadOnly> argumentsClass = LineSegment2DReadOnly.class;
 
       {
          LineSegment2D expected = null;
@@ -329,7 +335,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLineSegment3DEquals";
-      Class<LineSegment3D> argumentsClass = LineSegment3D.class;
+      Class<LineSegment3DReadOnly> argumentsClass = LineSegment3DReadOnly.class;
 
       {
          LineSegment3D expected = null;
@@ -367,7 +373,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertLineSegment3DGeometricallyEquals";
-      Class<LineSegment3D> argumentsClass = LineSegment3D.class;
+      Class<LineSegment3DReadOnly> argumentsClass = LineSegment3DReadOnly.class;
 
       {
          LineSegment3D expected = null;
@@ -557,7 +563,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertOrientation2DEquals";
-      Class<Orientation2D> argumentsClass = Orientation2D.class;
+      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
 
       {
          Orientation2D expected = null;
@@ -595,7 +601,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertOrientation2DGeometricallyEquals";
-      Class<Orientation2D> argumentsClass = Orientation2D.class;
+      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
 
       {
          Orientation2D expected = null;
@@ -709,7 +715,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertPose2DEquals";
-      Class<Pose2D> argumentsClass = Pose2D.class;
+      Class<Pose2DReadOnly> argumentsClass = Pose2DReadOnly.class;
 
       {
          Pose2D expected = null;
@@ -747,7 +753,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertPose2DGeometricallyEquals";
-      Class<Pose2D> argumentsClass = Pose2D.class;
+      Class<Pose2DReadOnly> argumentsClass = Pose2DReadOnly.class;
 
       {
          Pose2D expected = null;

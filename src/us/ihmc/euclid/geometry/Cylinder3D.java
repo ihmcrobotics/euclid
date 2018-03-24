@@ -1,5 +1,7 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
@@ -83,7 +85,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * @param radius the radius of the cylinder.
     * @throws IllegalArgumentException if either {@code height} or {@code radius} is negative.
     */
-   public Cylinder3D(Pose3D pose, double height, double radius)
+   public Cylinder3D(Pose3DReadOnly pose, double height, double radius)
    {
       setPose(pose);
       setHeight(height);
@@ -206,7 +208,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * @return the number of intersections between the line and this cylinder. It is either equal to 0,
     *         1, or 2.
     */
-   public int intersectionWith(Line3D line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   public int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
    }

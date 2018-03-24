@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -529,7 +530,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * @param line3d the 3D line used as reference to compute the 3D line segment.
     * @return the 3D equivalent of this line segment.
     */
-   public LineSegment3D toLineSegment3d(Line3D line3d)
+   public LineSegment3D toLineSegment3d(Line3DReadOnly line3d)
    {
       return toLineSegment3d(line3d.getPoint(), line3d.getDirection());
    }
