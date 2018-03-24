@@ -1,8 +1,8 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 // TODO
 public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics, FrameChangeable
@@ -68,16 +68,16 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
    }
 
    /**
-    * Sets this frame orientation 2D to {@code quaternionReadOnly} and sets its current frame to
+    * Sets this frame orientation 2D to {@code orientationReadOnly} and sets its current frame to
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame orientation 2D.
-    * @param quaternionReadOnly the quaternion to get the yaw angle from. Not modified.
+    * @param orientationReadOnly the orientation to get the yaw angle from. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientationReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set(quaternionReadOnly);
+      set(orientationReadOnly);
    }
 
    /**

@@ -2,9 +2,9 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 // TODO
 public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnly, Orientation2DBasics
@@ -36,10 +36,10 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
       set(orientation2DReadOnly);
    }
 
-   default void set(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
+   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientationReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
-      set(quaternionReadOnly);
+      set(orientationReadOnly);
    }
 
    /**
