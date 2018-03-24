@@ -52,6 +52,17 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       return QuaternionReadOnly.super.distancePrecise(other);
    }
 
+   default void get(FixedFrameQuaternionBasics quaternionToPack)
+   {
+      checkReferenceFrameMatch(quaternionToPack);
+      quaternionToPack.set(this);
+   }
+
+   default void get(FrameQuaternionBasics quaternionToPack)
+   {
+      quaternionToPack.setIncludingFrame(this);
+   }
+
    /**
     * Computes and packs the orientation described by this quaternion as a rotation vector.
     * <p>
@@ -64,10 +75,10 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code rotationVectorToPack} do not match.
     */
-   default void get(FixedFrameVector3DBasics rotationVectorToPack)
+   default void getRotationVector(FixedFrameVector3DBasics rotationVectorToPack)
    {
       checkReferenceFrameMatch(rotationVectorToPack);
-      QuaternionReadOnly.super.get(rotationVectorToPack);
+      QuaternionReadOnly.super.getRotationVector(rotationVectorToPack);
    }
 
    /**
@@ -80,10 +91,10 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
     */
-   default void get(FrameVector3DBasics rotationVectorToPack)
+   default void getRotationVector(FrameVector3DBasics rotationVectorToPack)
    {
       rotationVectorToPack.setToZero(getReferenceFrame());
-      QuaternionReadOnly.super.get(rotationVectorToPack);
+      QuaternionReadOnly.super.getRotationVector(rotationVectorToPack);
    }
 
    /**
@@ -93,11 +104,11 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * sometimes undefined.
     * </p>
     *
-    * @param eulerAnglesToPack the vector in which the Euler angles are stored. Modified.
+    * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code eulerAnglesToPack} do not match.
     */
-   default void getEuler(FixedFrameVector3DBasics eulerAnglesToPack)
+   default void getEuler(FixedFrameTuple3DBasics eulerAnglesToPack)
    {
       checkReferenceFrameMatch(eulerAnglesToPack);
       QuaternionReadOnly.super.getEuler(eulerAnglesToPack);
@@ -110,9 +121,9 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * sometimes undefined.
     * </p>
     *
-    * @param eulerAnglesToPack the vector in which the Euler angles are stored. Modified.
+    * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
     */
-   default void getEuler(FrameVector3DBasics eulerAnglesToPack)
+   default void getEuler(FrameTuple3DBasics eulerAnglesToPack)
    {
       eulerAnglesToPack.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.getEuler(eulerAnglesToPack);
@@ -222,6 +233,124 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setToZero(getReferenceFrame());
       QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple by this orientation and adds the result to the tuple.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleToTransform the 3D tuple to be transformed. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
+    */
+   default void addTransform(FixedFrameTuple3DBasics tupleToTransform)
+   {
+      checkReferenceFrameMatch(tupleToTransform);
+      QuaternionReadOnly.super.addTransform(tupleToTransform);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>adds</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleOriginal} do not match.
+    */
+   default void addTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      QuaternionReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>adds</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
+    */
+   default void addTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>adds</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    */
+   default void addTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
+   {
+      tupleTransformed.setReferenceFrame(getReferenceFrame());
+      QuaternionReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>adds</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    */
+   default void addTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
+      QuaternionReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>adds</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleOriginal} do not match.
+    */
+   default void addTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      tupleTransformed.setReferenceFrame(getReferenceFrame());
+      QuaternionReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
    }
 
    /**

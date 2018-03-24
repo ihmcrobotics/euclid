@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -17,7 +18,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * {@code Box3D} represents an axis-aligned box with a length, a width, and a height.
@@ -106,7 +106,7 @@ public class Box3D extends Shape3D<Box3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Box3D(Point3DReadOnly position, QuaternionReadOnly orientation, double length, double width, double height)
+   public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double length, double width, double height)
    {
       setPose(position, orientation);
       setSize(length, width, height);

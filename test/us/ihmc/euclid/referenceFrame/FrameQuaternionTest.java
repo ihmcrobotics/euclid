@@ -288,7 +288,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          Quaternion quaternion = new Quaternion();
          assertEquals(initialFrame, frameQuaternion.getReferenceFrame());
          frameQuaternion.setIncludingFrame(newFrame, rotationVector);
-         quaternion.set(rotationVector);
+         quaternion.setRotationVector(rotationVector);
          assertEquals(newFrame, frameQuaternion.getReferenceFrame());
          EuclidCoreTestTools.assertTuple4DEquals(quaternion, frameQuaternion, EPSILON);
       }
@@ -301,7 +301,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          Quaternion quaternion = new Quaternion();
          assertEquals(initialFrame, frameQuaternion.getReferenceFrame());
          frameQuaternion.setIncludingFrame(rotationVector);
-         quaternion.set(rotationVector);
+         quaternion.setRotationVector(rotationVector);
          assertEquals(newFrame, frameQuaternion.getReferenceFrame());
          EuclidCoreTestTools.assertTuple4DEquals(quaternion, frameQuaternion, EPSILON);
       }

@@ -64,10 +64,10 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * @throws ReferenceFrameMismatchException if {@code rotationVector} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   default void set(FrameVector3DReadOnly rotationVector)
+   default void setRotationVector(FrameVector3DReadOnly rotationVector)
    {
       checkReferenceFrameMatch(rotationVector);
-      QuaternionBasics.super.set(rotationVector);
+      QuaternionBasics.super.setRotationVector(rotationVector);
    }
 
    /**
@@ -122,11 +122,37 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * @param other the other frame quaternion to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *            frame as {@code this}.
+    * @deprecated Use {@link #setAndInvert(FrameQuaternionReadOnly)} instead
     */
    default void setAndInverse(FrameQuaternionReadOnly other)
    {
+      setAndInvert(other);
+   }
+
+   /**
+    * Sets this frame quaternion to the inverse of {@code other}.
+    *
+    * @param other the other frame quaternion to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void setAndInvert(FrameQuaternionReadOnly other)
+   {
       checkReferenceFrameMatch(other);
-      QuaternionBasics.super.setAndInverse(other);
+      QuaternionBasics.super.setAndInvert(other);
+   }
+
+   /**
+    * Sets this frame quaternion to {@code other} and then calls {@link #normalize()}.
+    *
+    * @param other the other frame quaternion to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void setAndNormalize(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.setAndNormalize(other);
    }
 
    /**
@@ -252,6 +278,22 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    }
 
    /**
+    * Multiplies this frame quaternion by {@code other}.
+    * <p>
+    * this = this * other
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void append(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.append(other);
+   }
+
+   /**
     * Sets this frame quaternion to the multiplication of {@code q1} and {@code q2}.
     * <p>
     * this = q1 * q2
@@ -372,6 +414,22 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    }
 
    /**
+    * Multiplies this frame quaternion by the conjugate of {@code other}.
+    * <p>
+    * this = this * other*
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void appendInvertOther(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.appendInvertOther(other);
+   }
+
+   /**
     * Sets this frame quaternion to the multiplication of the conjugate of {@code this} and
     * {@code other}.
     * <p>
@@ -389,6 +447,57 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    }
 
    /**
+    * Sets this frame quaternion to the multiplication of the conjugate of {@code this} and
+    * {@code other}.
+    * <p>
+    * this = this* * other
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void appendInvertThis(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.appendInvertThis(other);
+   }
+
+   /**
+    * Sets this frame quaternion to the multiplication of the conjugate of {@code this} and the
+    * conjugate of {@code other}.
+    * <p>
+    * this = this* * other*
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void multiplyConjugateBoth(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.multiplyConjugateBoth(other);
+   }
+
+   /**
+    * Sets this frame quaternion to the multiplication of the conjugate of {@code this} and the
+    * conjugate of {@code other}.
+    * <p>
+    * this = this* * other*
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void appendInvertBoth(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.appendInvertBoth(other);
+   }
+
+   /**
     * Pre-multiplies this frame quaternion by {@code other}.
     * <p>
     * this = other * this
@@ -402,6 +511,22 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    {
       checkReferenceFrameMatch(other);
       QuaternionBasics.super.preMultiply(other);
+   }
+
+   /**
+    * Pre-multiplies this frame quaternion by {@code other}.
+    * <p>
+    * this = other * this
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void prepend(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.prepend(other);
    }
 
    /**
@@ -422,6 +547,23 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    }
 
    /**
+    * Sets this frame quaternion to the multiplication of the conjugate of {@code other} and
+    * {@code this}.
+    * <p>
+    * this = other* * this
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void prependInvertOther(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.prependInvertOther(other);
+   }
+
+   /**
     * Sets this frame quaternion to the multiplication of {@code other} and the conjugate of
     * {@code this}.
     * <p>
@@ -436,5 +578,56 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    {
       checkReferenceFrameMatch(other);
       QuaternionBasics.super.preMultiplyConjugateThis(other);
+   }
+
+   /**
+    * Sets this frame quaternion to the multiplication of the conjugate of {@code other} and
+    * {@code this}.
+    * <p>
+    * this = other* * this
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void prependInvertThis(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.prependInvertThis(other);
+   }
+
+   /**
+    * Sets this frame quaternion to the multiplication of the conjugate of {@code other} and the
+    * conjugate of {@code this}.
+    * <p>
+    * this = other* * this*
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void preMultiplyConjugateBoth(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.preMultiplyConjugateBoth(other);
+   }
+
+   /**
+    * Sets this frame quaternion to the multiplication of the conjugate of {@code other} and the
+    * conjugate of {@code this}.
+    * <p>
+    * this = other* * this*
+    * </p>
+    *
+    * @param other the other frame quaternion to multiply this with. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
+    */
+   default void prependInvertBoth(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.prependInvertBoth(other);
    }
 }

@@ -80,7 +80,7 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
    default void setIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
    {
       setReferenceFrame(referenceFrame);
-      set(rotationVector);
+      setRotationVector(rotationVector);
    }
 
    /**
@@ -97,7 +97,7 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
    default void setIncludingFrame(FrameVector3DReadOnly rotationVector)
    {
       setReferenceFrame(rotationVector.getReferenceFrame());
-      set((Vector3DReadOnly) rotationVector);
+      setRotationVector((Vector3DReadOnly) rotationVector);
    }
 
    /**

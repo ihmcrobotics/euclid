@@ -1,11 +1,11 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
@@ -143,7 +143,7 @@ public interface Pose3DReadOnly
     */
    default void getRotationVector(Vector3DBasics rotationVectorToPack)
    {
-      getOrientation().get(rotationVectorToPack);
+      getOrientation().getRotationVector(rotationVectorToPack);
    }
 
    /**
@@ -197,9 +197,9 @@ public interface Pose3DReadOnly
     * Gets the position and orientation parts of this pose 3D.
     *
     * @param positionToPack tuple in which the position is stored. Modified.
-    * @param orientationToPack quaternion in which the orientation is stored. Modified.
+    * @param orientationToPack orientation in which the orientation is stored. Modified.
     */
-   default void get(Tuple3DBasics positionToPack, QuaternionBasics orientationToPack)
+   default void get(Tuple3DBasics positionToPack, Orientation3DBasics orientationToPack)
    {
       positionToPack.set(getPosition());
       orientationToPack.set(getOrientation());

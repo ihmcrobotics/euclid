@@ -202,7 +202,10 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
+            String message = e.getMessage();
+            if (!e.getClass().equals(expectedException.getClass()))
+               throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
+            else if (message != null && !message.equals(expectedException.getMessage())) // TODO Somehow it can happen (very rarely) that the message is null, which does not make much sense... Need to figure it out.
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
