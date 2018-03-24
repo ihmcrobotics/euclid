@@ -119,10 +119,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void setAndScale(double scaleFactor, FrameTuple2DReadOnly other)
+   default void setAndScale(double scalar, FrameTuple2DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      Tuple2DBasics.super.setAndScale(scaleFactor, other);
+      Tuple2DBasics.super.setAndScale(scalar, other);
    }
 
    /**
@@ -178,10 +178,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void add(FrameTuple2DReadOnly frameTuple1)
+   default void add(FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      Tuple2DBasics.super.add(frameTuple1);
+      checkReferenceFrameMatch(other);
+      Tuple2DBasics.super.add(other);
    }
 
    /**
@@ -213,10 +213,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void add(FrameTuple2DReadOnly frameTuple1, Tuple2DReadOnly frameTuple2)
+   default void add(FrameTuple2DReadOnly frameTuple1, Tuple2DReadOnly tuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
-      Tuple2DBasics.super.add(frameTuple1, frameTuple2);
+      Tuple2DBasics.super.add(frameTuple1, tuple2);
    }
 
    /**
@@ -230,10 +230,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void add(Tuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
+   default void add(Tuple2DReadOnly tuple1, FrameTuple2DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
-      Tuple2DBasics.super.add(frameTuple1, frameTuple2);
+      Tuple2DBasics.super.add(tuple1, frameTuple2);
    }
 
    /**
@@ -246,10 +246,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void sub(FrameTuple2DReadOnly frameTuple1)
+   default void sub(FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      Tuple2DBasics.super.sub(frameTuple1);
+      checkReferenceFrameMatch(other);
+      Tuple2DBasics.super.sub(other);
    }
 
    /**
@@ -315,10 +315,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple2DReadOnly frameTuple1)
+   default void scaleAdd(double scalar, FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      Tuple2DBasics.super.scaleAdd(scaleFactor, frameTuple1);
+      checkReferenceFrameMatch(other);
+      Tuple2DBasics.super.scaleAdd(scalar, other);
    }
 
    /**
@@ -333,11 +333,11 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
     *            not expressed in the same frame as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
+   default void scaleAdd(double scalar, FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
       checkReferenceFrameMatch(frameTuple2);
-      Tuple2DBasics.super.scaleAdd(scaleFactor, frameTuple1, frameTuple2);
+      Tuple2DBasics.super.scaleAdd(scalar, frameTuple1, frameTuple2);
    }
 
    /**
@@ -352,10 +352,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, Tuple2DReadOnly tuple1, FrameTuple2DReadOnly frameTuple2)
+   default void scaleAdd(double scalar, Tuple2DReadOnly tuple1, FrameTuple2DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
-      Tuple2DBasics.super.scaleAdd(scaleFactor, tuple1, frameTuple2);
+      Tuple2DBasics.super.scaleAdd(scalar, tuple1, frameTuple2);
    }
 
    /**
@@ -370,10 +370,10 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple2DReadOnly frameTuple1, Tuple2DReadOnly tuple2)
+   default void scaleAdd(double scalar, FrameTuple2DReadOnly frameTuple1, Tuple2DReadOnly tuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
-      Tuple2DBasics.super.scaleAdd(scaleFactor, frameTuple1, tuple2);
+      Tuple2DBasics.super.scaleAdd(scalar, frameTuple1, tuple2);
    }
 
    /**
@@ -438,7 +438,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     *
     * @param scalar the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the difference. Not modified.
-    * @param frameTuple2 the second tuple of the difference. Not modified.
+    * @param tuple2 the second tuple of the difference. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
     *            as {@code this}.
     */

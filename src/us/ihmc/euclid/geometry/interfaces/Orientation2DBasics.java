@@ -61,13 +61,13 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
    }
 
    /**
-    * Sets this orientation 2D to the yaw angle of the given {@code orientationReadOnly}.
+    * Sets this orientation 2D to the yaw angle of the given {@code orientation3DReadOnly}.
     *
-    * @param orientationReadOnly the orientation to get the yaw angle from. Not modified.
+    * @param orientation3DReadOnly the orientation to get the yaw angle from. Not modified.
     */
-   default void set(Orientation3DReadOnly orientationReadOnly)
+   default void set(Orientation3DReadOnly orientation3DReadOnly)
    {
-      setYaw(orientationReadOnly.getYaw());
+      setYaw(orientation3DReadOnly.getYaw());
    }
 
    /**

@@ -713,6 +713,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
     *           {@code null}. Modified.
+    * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstIntersectionToPack} are
     *            not expressed in the same reference frame.
@@ -743,6 +744,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
     *           {@code null}. Modified.
+    * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -771,6 +773,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
     *           {@code null}. Modified.
+    * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstIntersectionToPack}, and
     *            {@code secondIntersectionToPack} are not expressed in the same reference frame.
@@ -803,6 +806,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
     *           {@code null}. Modified.
+    * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
@@ -832,6 +836,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
     *           {@code null}. Modified.
+    * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondIntersectionToPack} are
     *            not expressed in the same reference frame.
@@ -862,6 +867,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     *           {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
     *           {@code null}. Modified.
+    * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
@@ -1011,6 +1017,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
@@ -1034,6 +1041,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code projectionToPack} are not
     *            expressed in the same reference frame.
     */
@@ -1057,6 +1065,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point2DReadOnly pointToProject, FramePoint2DBasics projectionToPack)
    {
@@ -1078,6 +1087,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pointToProject}, and
     *            {@code projectionToPack} are not expressed in the same reference frame.
     */
@@ -1102,6 +1112,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */

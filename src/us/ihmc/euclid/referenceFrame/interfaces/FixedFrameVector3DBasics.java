@@ -128,10 +128,10 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
     *            reference frame as {@code this}.
     */
-   default void cross(Tuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   default void cross(Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
-      Vector3DBasics.super.cross(frameTuple1, frameTuple2);
+      Vector3DBasics.super.cross(tuple1, frameTuple2);
    }
 
 }

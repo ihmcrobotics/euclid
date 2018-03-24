@@ -74,7 +74,7 @@ public interface FrameLineSegment3DBasics extends FixedFrameLineSegment3DBasics,
     * Sets this line segment to be same as the given line segment including its reference frame.
     *
     * @param referenceFrame the new reference frame to be associated with this line segment 3D.
-    * @param other the other line segment to copy. Not modified.
+    * @param lineSegment3DReadOnly the line segment to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
    {
@@ -102,8 +102,7 @@ public interface FrameLineSegment3DBasics extends FixedFrameLineSegment3DBasics,
     *
     * @param referenceFrame the new reference frame to be associated with this line segment 3D.
     * @param firstEndpoint new first endpoint. Not modified.
-    * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
-    *           modified.
+    * @param secondEndpoint new second endpoint. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Point3DReadOnly firstEndpoint, Point3DReadOnly secondEndpoint)
    {

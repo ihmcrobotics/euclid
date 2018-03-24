@@ -4,7 +4,14 @@ import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 
-// TODO
+/**
+ * Write and read interface for a 2D orientation that is expressed in a mutable reference frame.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics, FrameChangeable
 {
    /**

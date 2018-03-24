@@ -122,6 +122,16 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
+/**
+ * This class provides tools that using reflection can perform a variety of comparison-based
+ * assertions on a frame geometry given its corresponding frameless type.
+ * <p>
+ * These tools are still experimental and are improved through heavy internal usage for building
+ * Euclid's test suite. The objective it to make this class usable for third party classes.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameAPITestTools
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
@@ -1144,6 +1154,23 @@ public class EuclidFrameAPITestTools
       }
    }
 
+   /**
+    * Assuming the type built by the {@code frameTypeBuilder} declares the same methods as declared in
+    * the type built by {@code framelessTypeBuilder} with the difference of handling the reference
+    * frame information, this method asserts that the methods the type built by the
+    * {@code frameTypeBuilder} does not change the underlying algorithms.
+    * <p>
+    * For each method declared in the type built by the {@code frameTypeBuilder}, this methods searched
+    * for the equivalent method in type built by the {@code framelessTypeBuilder} and the methods from
+    * both classes are invoked to compare the output.
+    * </p>
+    * 
+    * @param frameTypeBuilder the builder for creating instances of the frame object to test.
+    * @param framelessTypeBuilber the builder for creating instances of the corresponding frameless
+    *           objects.
+    * @param methodFilter custom filter used on the methods. The assertions are performed on the
+    *           methods for which {@code methodFilter.test(method)} returns {@code true}.
+    */
    public static void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder,
                                                                            GenericTypeBuilder framelessTypeBuilber, Predicate<Method> methodFilter)
    {

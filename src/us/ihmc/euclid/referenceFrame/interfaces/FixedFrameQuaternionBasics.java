@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to
  * a {@code FixedFrameQuaternionBasics}. This allows, for instance, to enforce, at runtime, that
  * operations on quaternions occur in the same coordinate system. Also, via the method
- * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a quaternion in
+ * {@link FrameChangeable#changeFrame(ReferenceFrame)}, one can easily calculates the value of a quaternion in
  * different reference frames.
  * </p>
  * <p>

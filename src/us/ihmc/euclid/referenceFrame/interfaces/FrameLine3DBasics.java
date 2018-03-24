@@ -71,8 +71,10 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * @param referenceFrame the new reference frame for this frame line.
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
+    * @param pointOnLineZ the new z-coordinate of the point on this line.
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
+    * @param lineDirectionZ the new z-component of the direction of this line.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX,
                                   double lineDirectionY, double lineDirectionZ)
@@ -88,7 +90,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param other the other line to copy. Not modified.
+    * @param line2DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
    {
@@ -100,7 +102,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * Sets this line to be the same as the given line.
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param other the other line to copy. Not modified.
+    * @param line3DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Line3DReadOnly line3DReadOnly)
    {
@@ -127,7 +129,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * Sets this line to go through the endpoints of the given line segment.
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param lineSegment2DReadOnly the line segment to copy. Not modified.
+    * @param lineSegment3DReadOnly the line segment to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
    {
@@ -199,7 +201,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param other the other line to copy. Not modified.
+    * @param frameLine2DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(FrameLine2DReadOnly frameLine2DReadOnly)
    {
@@ -234,7 +236,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param frameLineSegment2DReadOnly the line segment to copy. Not modified.
+    * @param frameLineSegment3DReadOnly the line segment to copy. Not modified.
     */
    default void setIncludingFrame(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
    {

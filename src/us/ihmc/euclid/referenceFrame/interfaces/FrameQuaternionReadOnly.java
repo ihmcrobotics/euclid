@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * In addition to representing a {@link QuaternionReadOnly}, a {@link ReferenceFrame} is associated
  * to a {@code FrameQuaternionReadOnly}. This allows, for instance, to enforce, at runtime, that
  * operations on quaternions occur in the same coordinate system. Also, via the method
- * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a quaternion in
+ * {@link FrameChangeable#changeFrame(ReferenceFrame)}, one can easily calculates the value of a quaternion in
  * different reference frames.
  * </p>
  * <p>
@@ -45,19 +45,44 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
       return QuaternionReadOnly.super.distance(other);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Computes and returns the distance from this quaternion to {@code other}.
+    * <p>
+    * This method is equivalent to {@link #distance(QuaternionReadOnly)} but is more accurate when
+    * computing the distance between two quaternions that are very close. Note that it is also more
+    * expensive.
+    * </p>
+    *
+    * @param other the other quaternion to measure the distance. Not modified.
+    * @return the angle representing the distance between the two quaternions. It is contained in [0,
+    *         2<i>pi</i>]
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
+    *            not match.
+    */
    default double distancePrecise(FrameQuaternionReadOnly other)
    {
       checkReferenceFrameMatch(other);
       return QuaternionReadOnly.super.distancePrecise(other);
    }
 
+   /**
+    * Packs this quaternion in the given {@code quaternionToPack}.
+    * 
+    * @param quaternionToPack the quaternion in which this quaternion is stored. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code quaternionToPack} do
+    *            not match.
+    */
    default void get(FixedFrameQuaternionBasics quaternionToPack)
    {
       checkReferenceFrameMatch(quaternionToPack);
       quaternionToPack.set(this);
    }
 
+   /**
+    * Packs this quaternion in the given {@code quaternionToPack}.
+    * 
+    * @param quaternionToPack the quaternion in which this quaternion is stored. Modified.
+    */
    default void get(FrameQuaternionBasics quaternionToPack)
    {
       quaternionToPack.setIncludingFrame(this);
@@ -702,11 +727,11 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, Quaternio
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
     *            {@code quaternionOriginal} do not match.
     */
-   default void transform(FrameQuaternionReadOnly tupleOriginal, FrameQuaternionBasics tupleTransformed)
+   default void transform(FrameQuaternionReadOnly quaternionOriginal, FrameQuaternionBasics quaternionTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      tupleTransformed.setToZero(getReferenceFrame());
-      QuaternionReadOnly.super.transform(tupleOriginal, tupleTransformed);
+      checkReferenceFrameMatch(quaternionOriginal);
+      quaternionTransformed.setToZero(getReferenceFrame());
+      QuaternionReadOnly.super.transform(quaternionOriginal, quaternionTransformed);
    }
 
    /**

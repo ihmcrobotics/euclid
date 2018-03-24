@@ -90,7 +90,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * Sets this pose 2D from the given pose 2D and sets the reference frame.
     *
     * @param referenceFrame the new reference frame.
-    * @param pose3DReadOnly the pose 2D used to sets the position and orientation. Not modified.
+    * @param pose2DReadOnly the pose 2D used to sets the position and orientation. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Pose2DReadOnly pose2DReadOnly)
    {

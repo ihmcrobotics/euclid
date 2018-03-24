@@ -6,7 +6,14 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
-// TODO
+/**
+ * Write and read interface for a 2D orientation that is expressed in a immutable reference frame.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnly, Orientation2DBasics
 {
    /**
@@ -36,10 +43,19 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
       set(orientation2DReadOnly);
    }
 
-   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientationReadOnly)
+   /**
+    * Sets this frame orientation to the yaw angle of the given {@code orientationReadOnly} and checks
+    * that its current frame equals {@code referenceFrame}.
+    * 
+    * @param referenceFrame the coordinate system in which the given {@code orientation3DReadOnly} is
+    *           expressed.
+    * @param orientation3DReadOnly the orientation to get the yaw angle from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
-      set(orientationReadOnly);
+      set(orientation3DReadOnly);
    }
 
    /**
@@ -55,6 +71,13 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
       Orientation2DBasics.super.set(other);
    }
 
+   /**
+    * Sets this orientation 2D to the yaw angle of the given {@code frameQuaternionReadOnly}.
+    * 
+    * @param frameQuaternionReadOnly the quaternion to get the yaw angle from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code frameQuaternionReadOnly} is not expressed in
+    *            the same frame as {@code this}.
+    */
    default void set(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {
       checkReferenceFrameMatch(frameQuaternionReadOnly);

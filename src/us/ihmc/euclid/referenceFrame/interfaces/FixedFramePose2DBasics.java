@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
@@ -119,7 +118,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     *
     * @param referenceFrame the reference frame in which the given {@code pose3DReadOnly} is expressed
     *           in.
-    * @param pose2DReadOnly the pose 3D used to set the pose of this frame pose 2D. Not modified.
+    * @param pose3DReadOnly the pose 3D used to set the pose of this frame pose 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
@@ -216,7 +215,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     * the orientation part.
     * <p>
     * If the rotation should not affect this pose's position, use
-    * {@link #appendRotation(Orientation2D)}.
+    * {@link #appendRotation(Orientation2DReadOnly)}.
     * </p>
     *
     * @param orientation the orientation to prepend to this pose 2D. Not modified.
@@ -251,7 +250,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     * Adds the given {@code orientation} to the orientation of this pose 2D.
     * <p>
     * If the position part of this pose 2D is to be rotated by the given {@code orientation}, use
-    * {@link #prependRotation(Orientation2D)}.
+    * {@link #prependRotation(Orientation2DReadOnly)}.
     * </p>
     *
     * @param orientation the orientation to append to this pose 2D. Not modified.

@@ -511,7 +511,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
     * {@code false}.
     * </ul>
     * </p>
@@ -536,7 +536,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
     * {@code false}.
     * </ul>
     * </p>
@@ -544,6 +544,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
@@ -559,7 +560,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
     * {@code false}.
     * </ul>
     * </p>
@@ -567,6 +568,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code projectionToPack} are not
     *            expressed in the same reference frame.
     */
@@ -582,7 +584,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
     * {@code false}.
     * </ul>
     * </p>
@@ -590,6 +592,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, FramePoint3DBasics projectionToPack)
    {
@@ -603,7 +606,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
     * {@code false}.
     * </ul>
     * </p>
@@ -611,6 +614,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pointToProject}, and
     *            {@code projectionToPack} are not expressed in the same reference frame.
     */
@@ -627,7 +631,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
     * {@code false}.
     * </ul>
     * </p>
@@ -635,6 +639,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */

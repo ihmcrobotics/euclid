@@ -84,7 +84,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
     * Sets this line to be the same as the given line.
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param other the other line to copy. Not modified.
+    * @param line2DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
    {
@@ -96,7 +96,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
     * Sets this line to be the same as the given line.
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param other the other line to copy. Not modified.
+    * @param line3DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Line3DReadOnly line3DReadOnly)
    {
@@ -193,7 +193,7 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    /**
     * Sets this line to be the same as the given line.
     *
-    * @param other the other line to copy. Not modified.
+    * @param frameLine3DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(FrameLine3DReadOnly frameLine3DReadOnly)
    {

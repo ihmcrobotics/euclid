@@ -822,7 +822,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param line the line that may intersect this line segment. Not modified.
     * @return the coordinates of the intersection if the line intersects this line segment,
     *         {@code null} otherwise.
-    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code line} are not expressed in the
     *            same reference frame.
     */

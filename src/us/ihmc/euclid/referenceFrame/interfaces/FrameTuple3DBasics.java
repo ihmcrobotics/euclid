@@ -138,10 +138,10 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(tupleDenseMatrix);
+      set(matrix);
    }
 
    /**
@@ -154,10 +154,10 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(startRow, tupleDenseMatrix);
+      set(startRow, matrix);
    }
 
    /**
@@ -171,10 +171,10 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(startRow, column, tupleDenseMatrix);
+      set(startRow, column, matrix);
    }
 
    /**

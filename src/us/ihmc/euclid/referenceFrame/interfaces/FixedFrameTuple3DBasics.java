@@ -139,10 +139,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void setAndScale(double scaleFactor, FrameTuple3DReadOnly other)
+   default void setAndScale(double scalar, FrameTuple3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      Tuple3DBasics.super.setAndScale(scaleFactor, other);
+      Tuple3DBasics.super.setAndScale(scalar, other);
    }
 
    /**
@@ -335,10 +335,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple3DReadOnly other)
+   default void scaleAdd(double scalar, FrameTuple3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, other);
+      Tuple3DBasics.super.scaleAdd(scalar, other);
    }
 
    /**
@@ -353,11 +353,11 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
     *            not expressed in the same frame as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleAdd(double scalar, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, frameTuple1, frameTuple2);
+      Tuple3DBasics.super.scaleAdd(scalar, frameTuple1, frameTuple2);
    }
 
    /**
@@ -372,10 +372,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleAdd(double scalar, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, tuple1, frameTuple2);
+      Tuple3DBasics.super.scaleAdd(scalar, tuple1, frameTuple2);
    }
 
    /**
@@ -390,10 +390,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
+   default void scaleAdd(double scalar, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, frameTuple1, tuple2);
+      Tuple3DBasics.super.scaleAdd(scalar, frameTuple1, tuple2);
    }
 
    /**
@@ -407,10 +407,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void scaleSub(double scaleFactor, FrameTuple3DReadOnly other)
+   default void scaleSub(double scalar, FrameTuple3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      Tuple3DBasics.super.scaleSub(scaleFactor, other);
+      Tuple3DBasics.super.scaleSub(scalar, other);
    }
 
    /**
@@ -425,11 +425,11 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
     *            not expressed in the same frame as {@code this}.
     */
-   default void scaleSub(double scaleFactor, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleSub(double scalar, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleSub(scaleFactor, frameTuple1, frameTuple2);
+      Tuple3DBasics.super.scaleSub(scalar, frameTuple1, frameTuple2);
    }
 
    /**
@@ -462,10 +462,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void scaleSub(double scaleFactor, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly frameTuple2)
+   default void scaleSub(double scalar, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
-      Tuple3DBasics.super.scaleSub(scaleFactor, frameTuple1, frameTuple2);
+      Tuple3DBasics.super.scaleSub(scalar, frameTuple1, frameTuple2);
    }
 
    /**

@@ -75,7 +75,7 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame quaternion.
-    * @param rotation vector the rotation vector used to set this quaternion. Not modified.
+    * @param rotationVector vector the rotation vector used to set this quaternion. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
    {
@@ -92,7 +92,7 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
     * same axis-angle.
     * </p>
     *
-    * @param rotation vector the rotation vector used to set this quaternion. Not modified.
+    * @param rotationVector vector the rotation vector used to set this quaternion. Not modified.
     */
    default void setIncludingFrame(FrameVector3DReadOnly rotationVector)
    {
@@ -104,6 +104,7 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
     * Sets this quaternion to represent the same orientation as the given yaw-pitch-roll
     * {@code yawPitchRoll} and sets the frame to the given {@code referenceFrame}.
     *
+    * @param referenceFrame the reference frame in which the Euler angles are expressed.
     * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
     */
    default void setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double[] yawPitchRoll)
