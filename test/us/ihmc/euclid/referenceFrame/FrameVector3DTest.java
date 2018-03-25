@@ -119,7 +119,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    }
 
    @Test
-   public void testSetMatchinFrame() throws Exception
+   public void testSetMatchingFrame() throws Exception
    {
       Random random = new Random(544354);
       

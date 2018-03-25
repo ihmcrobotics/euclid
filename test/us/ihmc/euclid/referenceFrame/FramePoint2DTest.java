@@ -117,7 +117,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    }
 
    @Test
-   public void testSetMatchinFrame() throws Exception
+   public void testSetMatchingFrame() throws Exception
    {
       Random random = new Random(544354);
       
