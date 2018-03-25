@@ -7,7 +7,6 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -19,8 +18,7 @@ public class AxisTest
    private Random random = new Random(12345);
    private Vector3D randomVector = new Vector3D(random.nextDouble(), random.nextDouble(), random.nextDouble());
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test(timeout = 30000)
+   @Test
    public void testOrdinals()
    {
       assertEquals(xAxis.ordinal(), 0, allowedDelta);
@@ -28,7 +26,6 @@ public class AxisTest
       assertEquals(zAxis.ordinal(), 2, allowedDelta);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
    @Test(timeout = 30000)
    public void testAxisValuesGetter()
    {
@@ -64,8 +61,7 @@ public class AxisTest
       assertTrue(touchedZ);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test(timeout = 30000)
+   @Test
    public void testAxisValuesField()
    {
       assertEquals(3, Axis.values.length);
@@ -100,8 +96,7 @@ public class AxisTest
       assertTrue(touchedZ);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test(timeout = 30000)
+   @Test
    public void testAxisVectorsForCorrectValues()
    {
       Vector3DReadOnly xAxisVector = xAxis;
@@ -123,8 +118,7 @@ public class AxisTest
       assertEquals(1.0, zAxisVector.getZ(), allowedDelta);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test(timeout = 30000)
+   @Test
    public void testAxisSetterWorks()
    {
       double newXValue = random.nextDouble(), newYValue = random.nextDouble(), newZValue = random.nextDouble();
@@ -138,8 +132,7 @@ public class AxisTest
       assertEquals(newZValue, randomVector.getZ(), allowedDelta);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test(timeout = 30000)
+   @Test
    public void testAxisGetterWorks()
    {
       assertEquals(randomVector.getX(), Axis.get(randomVector, Axis.X), allowedDelta);
@@ -147,8 +140,7 @@ public class AxisTest
       assertEquals(randomVector.getZ(), Axis.get(randomVector, Axis.Z), allowedDelta);
    }
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
-   @Test(timeout = 30000)
+   @Test
    public void testClockwiseAxisGetters()
    {
       assertEquals(Axis.Z, Axis.X.getNextClockwiseAxis());
