@@ -19,6 +19,7 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -244,6 +245,41 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          frameGeometryObject.setToNaN(newFrame);
          assertEquals(newFrame, frameGeometryObject.getReferenceFrame());
          EuclidCoreTestTools.assertTuple4DContainsOnlyNaN(frameGeometryObject);
+      }
+   }
+
+   @Test
+   public void testMatchingFrame() throws Exception
+   {
+      Random random = new Random(3225);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test setMatchingFrame(FrameQuaternionReadOnly other)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+
+         FrameQuaternion expected = EuclidFrameRandomTools.nextFrameQuaternion(random, sourceFrame);
+         FrameQuaternion actual = EuclidFrameRandomTools.nextFrameQuaternion(random, destinationFrame);
+
+         actual.setMatchingFrame(expected);
+         expected.changeFrame(destinationFrame);
+         
+         EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test setMatchingFrame(FrameTuple4DReadOnly other)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+
+         FrameTuple4DBasics source = EuclidFrameRandomTools.nextFrameQuaternion(random, sourceFrame);
+         FrameQuaternion actual = EuclidFrameRandomTools.nextFrameQuaternion(random, destinationFrame);
+
+         actual.setMatchingFrame(source);
+         FrameQuaternion expected = new FrameQuaternion(source);
+         expected.changeFrame(destinationFrame);
+         
+         EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
       }
    }
 

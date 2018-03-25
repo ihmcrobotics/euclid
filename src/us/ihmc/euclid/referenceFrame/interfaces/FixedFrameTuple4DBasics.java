@@ -75,6 +75,25 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
    }
 
    /**
+    * Sets this frame tuple to {@code other}.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple4DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other tuple to copy the values from. Not modified.
+    */
+   default void setMatchingFrame(FrameTuple4DReadOnly other)
+   {
+      Tuple4DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this frame tuple to {@code other} and then calls {@link #absolute()}.
     *
     * @param other the other frame tuple to copy the values from. Not modified.
