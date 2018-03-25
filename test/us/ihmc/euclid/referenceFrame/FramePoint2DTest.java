@@ -11,6 +11,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
@@ -112,6 +113,28 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          assertTrue(framePoint2D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple2DEquals(randomTuple, framePoint2D, EPSILON);
          EuclidFrameTestTools.assertFrameTuple2DEquals(randomTuple, framePoint2D, EPSILON);
+      }
+   }
+
+   @Test
+   public void testSetMatchinFrame() throws Exception
+   {
+      Random random = new Random(544354);
+      
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test setMatchingFrame(FrameTuple2DReadOnly other)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         FrameTuple2DReadOnly source = EuclidFrameRandomTools.nextFramePoint2D(random, sourceFrame);
+         FramePoint2D actual = createEmptyFrameTuple(destinationFrame);
+         
+         actual.setMatchingFrame(source);
+         
+         FramePoint2D expected = new FramePoint2D(source);
+         expected.changeFrame(destinationFrame);
+         
+         EuclidFrameTestTools.assertFrameTuple2DEquals(expected, actual, EPSILON);
       }
    }
 

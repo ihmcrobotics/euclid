@@ -86,6 +86,25 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    }
 
    /**
+    * Sets this frame tuple to {@code other}.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame tuple to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameTuple2DReadOnly other)
+   {
+      Tuple2DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this frame tuple to {@code other} and then calls {@link #absolute()}.
     *
     * @param other the other frame tuple to copy the values from. Not modified.
