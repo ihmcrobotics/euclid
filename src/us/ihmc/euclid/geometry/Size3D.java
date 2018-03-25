@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 /**
@@ -144,5 +145,17 @@ class Size3D implements Tuple3DBasics
    public String toString()
    {
       return EuclidCoreIOTools.getTuple3DString(this);
+   }
+
+   @Override
+   public void applyTransform(Transform transform)
+   {
+      throw new UnsupportedOperationException();
+   }
+
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      throw new UnsupportedOperationException();
    }
 }
