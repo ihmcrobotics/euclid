@@ -10,7 +10,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
- * read-only interface for a 2D axis-aligned bounding box defined from a set of minimum and maximum
+ * Read-only interface for a 2D axis-aligned bounding box defined from a set of minimum and maximum
  * coordinates.
  */
 public interface BoundingBox2DReadOnly
@@ -144,9 +144,11 @@ public interface BoundingBox2DReadOnly
     * {@code centerToPack}.
     *
     * @param centerToPack point 2D in which the center of this bounding box is stored. Modified.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default void getCenterPoint(Point2DBasics centerToPack)
    {
+      checkBounds();
       centerToPack.interpolate(getMinPoint(), getMaxPoint(), 0.5);
    }
 
@@ -166,9 +168,11 @@ public interface BoundingBox2DReadOnly
     * @param xParameter the parameter to use for the interpolation along the x-axis.
     * @param yParameter the parameter to use for the interpolation along the y-axis.
     * @param pointToPack the point 2D in which the result is stored. Modified.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default void getPointGivenParameters(double xParameter, double yParameter, Point2DBasics pointToPack)
    {
+      checkBounds();
       pointToPack.setX(getMinX() + xParameter * (getMaxX() - getMinX()));
       pointToPack.setY(getMinY() + yParameter * (getMaxY() - getMinY()));
    }
@@ -178,9 +182,11 @@ public interface BoundingBox2DReadOnly
     * bounding box.
     *
     * @return the squared value of this bounding box diagonal.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default double getDiagonalLengthSquared()
    {
+      checkBounds();
       return getMinPoint().distanceSquared(getMaxPoint());
    }
 
@@ -193,6 +199,7 @@ public interface BoundingBox2DReadOnly
     * @param query the query to test if it is located inside this bounding box. Not modified.
     * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
     *         this bounding box.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean isInsideExclusive(Point2DReadOnly query)
    {
@@ -211,9 +218,11 @@ public interface BoundingBox2DReadOnly
     *           modified.
     * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
     *         this bounding box.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean isInsideExclusive(double x, double y)
    {
+      checkBounds();
       if (x <= getMinX() || x >= getMaxX())
          return false;
 
@@ -232,6 +241,7 @@ public interface BoundingBox2DReadOnly
     * @param query the query to test if it is located inside this bounding box. Not modified.
     * @return {@code true} if the query is inside or located on an edge of this bounding box,
     *         {@code false} if outside.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean isInsideInclusive(Point2DReadOnly query)
    {
@@ -250,9 +260,11 @@ public interface BoundingBox2DReadOnly
     *           modified.
     * @return {@code true} if the query is inside or located on an edge of this bounding box,
     *         {@code false} if outside.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean isInsideInclusive(double x, double y)
    {
+      checkBounds();
       if (x < getMinX() || x > getMaxX())
          return false;
 
@@ -280,6 +292,7 @@ public interface BoundingBox2DReadOnly
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean isInsideEpsilon(Point2DReadOnly query, double epsilon)
    {
@@ -309,9 +322,11 @@ public interface BoundingBox2DReadOnly
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean isInsideEpsilon(double x, double y, double epsilon)
    {
+      checkBounds();
       if (x <= getMinX() - epsilon || x >= getMaxX() + epsilon)
          return false;
 
@@ -333,6 +348,7 @@ public interface BoundingBox2DReadOnly
     */
    default boolean intersectsExclusive(BoundingBox2DReadOnly other)
    {
+      checkBounds();
       if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX())
          return false;
 
@@ -351,9 +367,11 @@ public interface BoundingBox2DReadOnly
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean intersectsInclusive(BoundingBox2DReadOnly other)
    {
+      checkBounds();
       if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
          return false;
 
@@ -380,9 +398,11 @@ public interface BoundingBox2DReadOnly
     *           Modified.
     * @param epsilon the tolerance to use in this test.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean intersectsEpsilon(BoundingBox2DReadOnly other, double epsilon)
    {
+      checkBounds();
       if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon)
          return false;
 
@@ -398,6 +418,7 @@ public interface BoundingBox2DReadOnly
     * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the line direction. Not modified.
     * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean doesIntersectWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -411,6 +432,7 @@ public interface BoundingBox2DReadOnly
     * @param lineSegmentEnd second endpoint of the line segment. Not modified.
     * @return {@code true} if the line segment and this bounding box intersect, {@code false}
     *         otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean doesIntersectWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
    {
@@ -423,6 +445,7 @@ public interface BoundingBox2DReadOnly
     * @param rayOrigin the origin of the ray. Not modified.
     * @param rayDirection the ray direction. Not modified.
     * @return {@code true} if the ray and this bounding box intersect, {@code false} otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default boolean doesIntersectWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
    {
@@ -445,10 +468,12 @@ public interface BoundingBox2DReadOnly
     *           Modified.
     * @return the number of intersections between the line and this bounding box. It is either equal to
     *         0 or 2.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, Point2DBasics firstIntersectionToPack,
                                       Point2DBasics secondIntersectionToPack)
    {
+      checkBounds();
       return intersectionBetweenLine2DAndBoundingBox2D(getMinPoint(), getMaxPoint(), pointOnLine, lineDirection, firstIntersectionToPack,
                                                        secondIntersectionToPack);
    }
@@ -478,10 +503,12 @@ public interface BoundingBox2DReadOnly
     *           Modified.
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, Point2DBasics firstIntersectionToPack,
                                              Point2DBasics secondIntersectionToPack)
    {
+      checkBounds();
       return intersectionBetweenLineSegment2DAndBoundingBox2D(getMinPoint(), getMaxPoint(), lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
                                                               secondIntersectionToPack);
    }
@@ -510,10 +537,12 @@ public interface BoundingBox2DReadOnly
     *           Modified.
     * @return the number of intersections between the ray and this bounding box. It is either equal to
     *         0, 1, or 2.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
    default int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DBasics firstIntersectionToPack,
                                      Point2DBasics secondIntersectionToPack)
    {
+      checkBounds();
       return intersectionBetweenRay2DAndBoundingBox2D(getMinPoint(), getMaxPoint(), rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
