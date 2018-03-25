@@ -16,6 +16,7 @@ import java.util.Random;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
@@ -800,6 +801,24 @@ public abstract class EuclidGeometryRandomTools
    public static Pose3D nextPose3D(Random random, double positionMinMax, double orientationMinMax)
    {
       return new Pose3D(nextPoint3D(random, positionMinMax), nextQuaternion(random, orientationMinMax));
+   }
+
+   /**
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
+    *
+    * @param random the random generator to use.
+    * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
+    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
+    *           the random convex polygon. The size of the resulting convex polygon will be less than
+    *           {@code numberOfPossiblePoints}.
+    * @return the random convex polygon.
+    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
+    */
+   public static ConvexPolygon2D nextConvexPolygon2D(Random random, double maxAbsoluteXY, int numberOfPossiblePoints)
+   {
+      List<Point2D> vertices = EuclidGeometryRandomTools.nextPointCloud2D(random, 0.0, maxAbsoluteXY, numberOfPossiblePoints);
+      return new ConvexPolygon2D(vertices);
    }
 
    /**

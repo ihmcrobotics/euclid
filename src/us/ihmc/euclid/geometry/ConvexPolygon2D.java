@@ -281,6 +281,9 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     *
+    * @deprecated Use {@link EuclidGeometryRandomTools#nextConvexPolygon2D(Random, double, int)}
+    *             instead.
+    *
     * @param random the random generator to use.
     * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
@@ -1140,6 +1143,7 @@ public class ConvexPolygon2D implements GeometryObject<ConvexPolygon2D>
     * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this vertex
     * will remain unmodified.
     * </p>
+    * 
     * @param pointToScaleAbout the center of the scale transformation. Not modified.
     *
     * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
