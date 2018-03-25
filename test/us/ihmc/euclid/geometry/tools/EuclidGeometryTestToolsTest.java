@@ -14,6 +14,7 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
@@ -411,7 +412,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertBoundingBox2DEquals";
-      Class<BoundingBox2D> argumentsClass = BoundingBox2D.class;
+      Class<BoundingBox2DReadOnly> argumentsClass = BoundingBox2DReadOnly.class;
 
       {
          BoundingBox2D expected = null;
@@ -449,7 +450,7 @@ public class EuclidGeometryTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertBoundingBox2DGeometricallyEquals";
-      Class<BoundingBox2D> argumentsClass = BoundingBox2D.class;
+      Class<BoundingBox2DReadOnly> argumentsClass = BoundingBox2DReadOnly.class;
 
       {
          BoundingBox2D expected = null;

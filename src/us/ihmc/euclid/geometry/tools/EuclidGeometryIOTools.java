@@ -6,10 +6,10 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 
-import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
@@ -344,7 +344,7 @@ public class EuclidGeometryIOTools
     * @param boundingBox2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox2DString(BoundingBox2D boundingBox2D)
+   public static String getBoundingBox2DString(BoundingBox2DReadOnly boundingBox2D)
    {
       return getBoundingBox2DString(DEFAULT_FORMAT, boundingBox2D);
    }
@@ -363,7 +363,7 @@ public class EuclidGeometryIOTools
     * @param boundingBox2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox2DString(String format, BoundingBox2D boundingBox2D)
+   public static String getBoundingBox2DString(String format, BoundingBox2DReadOnly boundingBox2D)
    {
       if (boundingBox2D == null)
          return "null";
