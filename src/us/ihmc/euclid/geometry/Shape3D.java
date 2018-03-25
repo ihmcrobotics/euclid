@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 /**
  * Base implementation for 3D shapes such as: cylinder, box, sphere, etc.
  *
- * @param <S>
+ * @param <S> the final type of this shape.
  */
 public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 {

@@ -444,10 +444,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
     *            as {@code this}.
     */
-   default void scaleSub(double scaleFactor, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleSub(double scalar, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleSub(scaleFactor, tuple1, frameTuple2);
+      Tuple3DBasics.super.scaleSub(scalar, tuple1, frameTuple2);
    }
 
    /**

@@ -115,11 +115,11 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((Pose2DReadOnly) obj);
+         return equals((Pose2DReadOnly) object);
       }
       catch (ClassCastException e)
       {
