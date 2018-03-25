@@ -150,7 +150,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    /**
     * Creates a new line segment and initializes it to be same as the given line segment.
     *
-    * @param lineSegment2DReadOnly the other line segment to copy. Not modified.
+    * @param other the other line segment to copy. Not modified.
     */
    public FrameLineSegment2D(FrameLineSegment2DReadOnly other)
    {
@@ -279,16 +279,16 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other line segment 2D to compare against this. Not modified.
+    * @param object the object to compare against this. Not modified.
     * @return {@code true} if the two line segments are exactly equal component-wise and are expressed
     *         in the same reference frame, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((FrameLineSegment2DReadOnly) obj);
+         return equals((FrameLineSegment2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

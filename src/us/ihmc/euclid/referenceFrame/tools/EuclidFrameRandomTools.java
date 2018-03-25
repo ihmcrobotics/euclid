@@ -1382,7 +1382,7 @@ public class EuclidFrameRandomTools
     * Generates a random 2D frame pose with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
     *
     * @param random the random generator to use.
-    * @param referenceFrame the random frame quaternion's reference frame.
+    * @param referenceFrame the random frame pose reference frame.
     * @return the random 2D frame pose.
     */
    public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame)
@@ -1393,13 +1393,16 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random 2D frame pose.
     * <p>
-    * </p.
+    * {@code pose.position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].<br>
+    * The rotation magnitude described by the orientation part of the generated pose is in
+    * [-{@code orientationMinMax}; {@code orientationMinMax}].
+    * </p>
     * 
-    * @param random
-    * @param referenceFrame
-    * @param positionMinMax
-    * @param orientationMinMax
-    * @return
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame pose reference frame.
+    * @param positionMinMax the maximum absolute value of each position coordinate.
+    * @param orientationMinMax the maximum absolute value of the orientation's magnitude.
+    * @return the random 2D frame pose.
     */
    public static FramePose2D nextFramePose2D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
    {
@@ -1413,7 +1416,7 @@ public class EuclidFrameRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param referenceFrame the random frame quaternion's reference frame.
+    * @param referenceFrame the random frame pose's reference frame.
     * @return the random 3D frame pose.
     */
    public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame)
@@ -1421,11 +1424,41 @@ public class EuclidFrameRandomTools
       return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random));
    }
 
+   /**
+    * Generates a random 3D frame pose with a quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * {@code pose.position}<sub>X</sub> &in; [-{@code maxAbsoluteX}; {@code maxAbsoluteX}].<br>
+    * {@code pose.position}<sub>Y</sub> &in; [-{@code maxAbsoluteY}; {@code maxAbsoluteY}].<br>
+    * {@code pose.position}<sub>Z</sub> &in; [-{@code maxAbsoluteZ}; {@code maxAbsoluteZ}].<br>
+    * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame pose's reference frame.
+    * @param maxAbsoluteX the maximum absolute value of the position x-coordinate.
+    * @param maxAbsoluteY the maximum absolute value of the position y-coordinate.
+    * @param maxAbsoluteZ the maximum absolute value of the position z-coordinate.
+    * @return the random 3D frame pose.
+    */
    public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
       return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ));
    }
 
+   /**
+    * Generates a random 3D frame pose with a quaternion uniformly distributed on the unit-sphere.
+    * <p>
+    * {@code pose.position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].<br>
+    * The rotation magnitude described by the orientation part of the generated pose is in
+    * [-{@code orientationMinMax}; {@code orientationMinMax}].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame pose's reference frame.
+    * @param positionMinMax the maximum absolute value of each position coordinate.
+    * @param orientationMinMax the maximum absolute value of the orientation's magnitude.
+    * @return the random 3D frame pose.
+    */
    public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double positionMinMax, double orientationMinMax)
    {
       return new FramePose3D(referenceFrame, EuclidGeometryRandomTools.nextPose3D(random, positionMinMax, orientationMinMax));

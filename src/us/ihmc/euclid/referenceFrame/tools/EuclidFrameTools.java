@@ -27,7 +27,14 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Extension of the tools provided in {@link EuclidGeometryTools} for frame geometries.
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameTools
 {
    /**
@@ -38,8 +45,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the direction magnitude of either line is below {@link #ONE_TEN_MILLIONTH}, this method
-    * fails and returns {@code false}.
+    * <li>if the direction magnitude of either line is below
+    * {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -56,13 +63,13 @@ public class EuclidFrameTools
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
                                              FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon,
-                                             double distanceEspilon)
+                                             double distanceEpsilon)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1);
       firstPointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine2);
       return EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
-                                                     distanceEspilon);
+                                                     distanceEpsilon);
    }
 
    /**
@@ -73,8 +80,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the direction magnitude of either line is below {@link #ONE_TEN_MILLIONTH}, this method
-    * fails and returns {@code false}.
+    * <li>if the direction magnitude of either line is below
+    * {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -90,12 +97,12 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly firstPointOnLine2,
-                                             FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEspilon)
+                                             FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
       pointOnLine1.checkReferenceFrameMatch(secondPointOnLine2);
-      return EuclidGeometryTools.areLine2DsCollinear(pointOnLine1, lineDirection1, firstPointOnLine2, secondPointOnLine2, angleEpsilon, distanceEspilon);
+      return EuclidGeometryTools.areLine2DsCollinear(pointOnLine1, lineDirection1, firstPointOnLine2, secondPointOnLine2, angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -106,8 +113,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the direction magnitude of either line is below {@link #ONE_TEN_MILLIONTH}, this method
-    * fails and returns {@code false}.
+    * <li>if the direction magnitude of either line is below
+    * {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -123,12 +130,12 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly pointOnLine2,
-                                             FrameVector2DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
+                                             FrameVector2DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
       pointOnLine1.checkReferenceFrameMatch(lineDirection2);
-      return EuclidGeometryTools.areLine2DsCollinear(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, angleEpsilon, distanceEspilon);
+      return EuclidGeometryTools.areLine2DsCollinear(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -139,8 +146,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the direction magnitude of either line is below {@link #ONE_TEN_MILLIONTH}, this method
-    * fails and returns {@code false}.
+    * <li>if the direction magnitude of either line is below
+    * {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -157,13 +164,13 @@ public class EuclidFrameTools
     */
    public static boolean areLine3DsCollinear(FramePoint3DReadOnly firstPointOnLine1, FramePoint3DReadOnly secondPointOnLine1,
                                              FramePoint3DReadOnly firstPointOnLine2, FramePoint3DReadOnly secondPointOnLine2, double angleEpsilon,
-                                             double distanceEspilon)
+                                             double distanceEpsilon)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1);
       firstPointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine2);
       return EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
-                                                     distanceEspilon);
+                                                     distanceEpsilon);
    }
 
    /**
@@ -174,8 +181,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the direction magnitude of either line is below {@link #ONE_TEN_MILLIONTH}, this method
-    * fails and returns {@code false}.
+    * <li>if the direction magnitude of either line is below
+    * {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -191,12 +198,12 @@ public class EuclidFrameTools
     *            reference frame.
     */
    public static boolean areLine3DsCollinear(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1, FramePoint3DReadOnly pointOnLine2,
-                                             FrameVector3DReadOnly lineDirection2, double angleEpsilon, double distanceEspilon)
+                                             FrameVector3DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1);
       pointOnLine1.checkReferenceFrameMatch(pointOnLine2);
       pointOnLine1.checkReferenceFrameMatch(lineDirection2);
-      return EuclidGeometryTools.areLine3DsCollinear(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, angleEpsilon, distanceEspilon);
+      return EuclidGeometryTools.areLine3DsCollinear(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, angleEpsilon, distanceEpsilon);
    }
 
    /**
@@ -210,8 +217,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of either normal is below {@link #ONE_TEN_MILLIONTH}, this method fails and
-    * returns {@code false}.
+    * <li>if the length of either normal is below {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -244,8 +251,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of either vector is below {@link #ONE_TEN_MILLIONTH}, this method fails and
-    * returns {@code false}.
+    * <li>if the length of either vector is below {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -270,8 +277,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of either vector is below {@link #ONE_TEN_MILLIONTH}, this method fails and
-    * returns {@code false}.
+    * <li>if the length of either vector is below {@link EuclidGeometryTools#ONE_TEN_MILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -599,8 +606,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if
+    * {@code firstPointOnLine.distance(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code firstPointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -624,8 +632,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
-    * distance between {@code pointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -649,8 +657,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if
+    * {@code firstPointOnLine.distance(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code firstPointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -674,8 +683,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
-    * distance between {@code pointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -698,8 +707,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -723,8 +733,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -755,8 +766,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code rayDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the distance
-    * between {@code rayOrigin} and the given {@code point}.
+    * <li>if {@code rayDirection.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code rayOrigin} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -786,8 +797,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code rayDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the distance
-    * between {@code rayOrigin} and the given {@code point}.
+    * <li>if {@code rayDirection.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code rayOrigin} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -812,8 +823,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if
+    * {@code firstPointOnLine.distance(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code firstPointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -838,8 +850,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
-    * distance between {@code pointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -862,8 +874,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -888,8 +901,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -991,8 +1005,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -1016,8 +1031,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -1042,8 +1058,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -1165,8 +1182,8 @@ public class EuclidFrameTools
     *
     * @param lineSegmentStart1 first endpoint of the first line segment. Not modified.
     * @param lineSegmentEnd1 second endpoint of the first line segment. Not modified.
-    * @param lineSegmentStart1 first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd1 second endpoint of the second line segment. Not modified.
+    * @param lineSegmentStart2 first endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2 second endpoint of the second line segment. Not modified.
     * @return {@code true} if the two line segments intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -1374,7 +1391,7 @@ public class EuclidFrameTools
     *
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param firstPointOnLine a point located on the infinitely long line. Not modified.
+    * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
@@ -1421,7 +1438,7 @@ public class EuclidFrameTools
     *
     * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
     * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param firstPointOnLine a point located on the infinitely long line. Not modified.
+    * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
     *           Modified.
@@ -1475,7 +1492,6 @@ public class EuclidFrameTools
     * @param lineDirection the line direction. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if it exist, {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -2875,8 +2891,8 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     * Once the existence of an intersection is verified, this method calls
-    * {@link #intersectionBetweenLine3DAndPlane3D(Point3D, Vector3D, Point3D, Vector3D)} to perform the
-    * actual computation.
+    * {@link EuclidGeometryTools#intersectionBetweenLine3DAndPlane3D(Point3DReadOnly, Vector3DReadOnly, Point3DReadOnly, Vector3DReadOnly)}
+    * to perform the actual computation.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -3038,7 +3054,6 @@ public class EuclidFrameTools
     * @param rayDirection the direction of the ray. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if it exist, {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -3485,7 +3500,6 @@ public class EuclidFrameTools
     * @param secondPointOnLine1 a second point located on the first line. Not modified.
     * @param firstPointOnLine2 a first point located on the second line. Not modified.
     * @param secondPointOnLine2 a second point located on the second line. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if the two lines intersect, {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -3524,7 +3538,6 @@ public class EuclidFrameTools
     * @param lineDirection1 the first line direction. Not modified.
     * @param pointOnLine2 point located on the second line. Not modified.
     * @param lineDirection2 the second line direction. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
     * @return the 2D point of intersection if the two lines intersect, {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -3746,8 +3759,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>When the length of either the plane normal is below {@link #ONE_TRILLIONTH}, this methods
-    * fails and returns {@code false}.
+    * <li>When the length of either the plane normal is below
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this methods fails and returns {@code false}.
     * <li>When the angle between the two planes is below {@code angleThreshold}, this methods fails and
     * returns {@code false}.
     * <li>When there is no intersection, this method returns {@code false} and
@@ -3797,8 +3810,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>When the length of either the plane normal is below {@link #ONE_TRILLIONTH}, this methods
-    * fails and returns {@code false}.
+    * <li>When the length of either the plane normal is below
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this methods fails and returns {@code false}.
     * <li>When the angle between the two planes is below {@code angleThreshold}, this methods fails and
     * returns {@code false}.
     * <li>When there is no intersection, this method returns {@code false} and
@@ -3849,10 +3862,10 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>When the length of either the plane normal is below {@link #ONE_TRILLIONTH}, this methods
-    * fails and returns {@code false}.
-    * <li>When the angle between the two planes is below {@link Epsilons#ONE_MILLIONTH}, this methods
-    * fails and returns {@code false}.
+    * <li>When the length of either the plane normal is below
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this methods fails and returns {@code false}.
+    * <li>When the angle between the two planes is below {@link EuclidGeometryTools#ONE_MILLIONTH},
+    * this methods fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -3894,10 +3907,10 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>When the length of either the plane normal is below {@link #ONE_TRILLIONTH}, this methods
-    * fails and returns {@code false}.
-    * <li>When the angle between the two planes is below {@link Epsilons#ONE_MILLIONTH}, this methods
-    * fails and returns {@code false}.
+    * <li>When the length of either the plane normal is below
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this methods fails and returns {@code false}.
+    * <li>When the angle between the two planes is below {@link EuclidGeometryTools#ONE_MILLIONTH},
+    * this methods fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -3976,7 +3989,7 @@ public class EuclidFrameTools
     * Tests if the point 2D is located on the infinitely long line 2D.
     * <p>
     * The test is performed by computing the distance between the point and the line, if that distance
-    * is below {@link #IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * is below {@link EuclidGeometryTools#IS_POINT_ON_LINE_EPS} this method returns {@code true}.
     * </p>
     *
     * @param pointX the x-coordinate of the query.
@@ -3997,7 +4010,7 @@ public class EuclidFrameTools
     * Tests if the point 2D is located on the infinitely long line 2D.
     * <p>
     * The test is performed by computing the distance between the point and the line, if that distance
-    * is below {@link #IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * is below {@link EuclidGeometryTools#IS_POINT_ON_LINE_EPS} this method returns {@code true}.
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
@@ -4018,7 +4031,7 @@ public class EuclidFrameTools
     * Tests if the point 2D is located on the infinitely long line 2D.
     * <p>
     * The test is performed by computing the distance between the point and the line, if that distance
-    * is below {@link #IS_POINT_ON_LINE_EPS} this method returns {@code true}.
+    * is below {@link EuclidGeometryTools#IS_POINT_ON_LINE_EPS} this method returns {@code true}.
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
@@ -4306,8 +4319,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the two given points on the line are too close, i.e.
-    * {@code firstPointOnLine.distanceSquared(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method fails and returns {@code null}.
+    * {@code firstPointOnLine.distanceSquared(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -4340,8 +4353,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the two given points on the line are too close, i.e.
-    * {@code firstPointOnLine.distanceSquared(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code firstPointOnLine.distanceSquared(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4370,8 +4383,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the two given points on the line are too close, i.e.
-    * {@code firstPointOnLine.distanceSquared(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code firstPointOnLine.distanceSquared(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4400,8 +4413,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
-    * {@code null}.
+    * {@code lineDirection.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -4435,8 +4448,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
-    * {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4465,8 +4478,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
-    * {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4495,8 +4508,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
-    * {@code null}.
+    * {@code lineDirection.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -4530,8 +4543,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
-    * {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4560,8 +4573,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
-    * {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4590,8 +4603,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4627,8 +4640,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4659,8 +4672,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4691,8 +4704,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4723,8 +4736,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4755,8 +4768,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4791,8 +4804,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4823,8 +4836,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * returns {@code lineSegmentStart}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns {@code lineSegmentStart}.
     * <li>the projection can not be outside the line segment. When the projection on the corresponding
     * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
@@ -4854,8 +4867,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of the plane normal is too small, i.e. less than {@link #ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * <li>if the length of the plane normal is too small, i.e. less than
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4884,8 +4897,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of the plane normal is too small, i.e. less than {@link #ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * <li>if the length of the plane normal is too small, i.e. less than
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4913,8 +4926,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of the plane normal is too small, i.e. less than {@link #ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * <li>if the length of the plane normal is too small, i.e. less than
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4942,8 +4955,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of the plane normal is too small, i.e. less than {@link #ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * <li>if the length of the plane normal is too small, i.e. less than
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -4972,8 +4985,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the length of the plane normal is too small, i.e. less than {@link #ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * <li>if the length of the plane normal is too small, i.e. less than
+    * {@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -5081,8 +5094,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * fails and returns {@code 0.0}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method fails and returns {@code 0.0}.
     * </ul>
     * </p>
     *
@@ -5117,8 +5130,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * fails and returns {@code 0.0}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method fails and returns {@code 0.0}.
     * </ul>
     * </p>
     *
@@ -5153,8 +5166,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * fails and returns {@code 0.0}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method fails and returns {@code 0.0}.
     * </ul>
     * </p>
     *
@@ -5191,8 +5204,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this method
-    * fails and returns {@code 0.0}.
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method fails and returns {@code 0.0}.
     * </ul>
     * </p>
     *
@@ -5219,8 +5232,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the line segment endpoints are equal, more precisely when
-    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, the method fails
-    * and returns {@code false}.
+    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * the method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -5250,8 +5263,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the line segment endpoints are equal, more precisely when
-    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, the method fails
-    * and returns {@code false}.
+    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * the method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -5287,8 +5300,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the line segment endpoints are equal, more precisely when
-    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, the method fails
-    * and returns {@code null}.
+    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * the method fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -5326,8 +5339,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the line segment endpoints are equal, more precisely when
-    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, the method fails
-    * and returns false.
+    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * the method fails and returns false.
     * </ul>
     * </p>
     *
@@ -5370,8 +5383,8 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the line segment endpoints are equal, more precisely when
-    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, the method fails
-    * and returns false.
+    * {@code lineSegmentStart.distance(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * the method fails and returns false.
     * </ul>
     * </p>
     *
@@ -5468,7 +5481,7 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the distance between the two points defining the line is below
-    * {@value Epsilons#ONE_TRILLIONTH}, the method fails and returns {@code null}.
+    * {@value EuclidGeometryTools#ONE_TRILLIONTH}, the method fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -5512,7 +5525,7 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the distance between the two points defining the line is below
-    * {@value Epsilons#ONE_TRILLIONTH}, the method fails and returns {@code null}.
+    * {@value EuclidGeometryTools#ONE_TRILLIONTH}, the method fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -5555,7 +5568,7 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the distance between the two points defining the line is below
-    * {@value Epsilons#ONE_TRILLIONTH}, the method fails and returns {@code false}.
+    * {@value EuclidGeometryTools#ONE_TRILLIONTH}, the method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -5594,7 +5607,7 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>when the distance between the two points defining the line is below
-    * {@value Epsilons#ONE_TRILLIONTH}, the method fails and returns {@code false}.
+    * {@value EuclidGeometryTools#ONE_TRILLIONTH}, the method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -5631,8 +5644,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if
+    * {@code firstPointOnLine.distance(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code firstPointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -5661,8 +5675,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
-    * distance between {@code pointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -5690,8 +5704,9 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code firstPointOnLine.distance(secondPointOnLine) < }{@value #ONE_TRILLIONTH}, this
-    * method returns the distance between {@code firstPointOnLine} and the given {@code point}.
+    * <li>if
+    * {@code firstPointOnLine.distance(secondPointOnLine) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code firstPointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -5720,8 +5735,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
-    * distance between {@code pointOnLine} and the given {@code point}.
+    * <li>if {@code lineDirection.length() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * returns the distance between {@code pointOnLine} and the given {@code point}.
     * </ul>
     * </p>
     *
@@ -5795,8 +5810,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if any the triangle's edge is shorter than {@link #ONE_TRILLIONTH}, this method fails and
-    * returns {@code null}.
+    * <li>if any the triangle's edge is shorter than {@link EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -5829,8 +5844,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if any the triangle's edge is shorter than {@link #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * <li>if any the triangle's edge is shorter than {@link EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *
@@ -5858,8 +5873,8 @@ public class EuclidFrameTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if any the triangle's edge is shorter than {@link #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * <li>if any the triangle's edge is shorter than {@link EuclidGeometryTools#ONE_TRILLIONTH}, this
+    * method fails and returns {@code false}.
     * </ul>
     * </p>
     *

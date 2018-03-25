@@ -101,8 +101,7 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
    /**
     * Sets this frame orientation 2D to {@code frameQuaternionReadOnly}.
     *
-    * @param frameQuaternionReadOnly the other frame orientation 2D to copy the values and reference
-    *           frame from. Not modified.
+    * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame from. Not modified.
     */
    default void setIncludingFrame(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {

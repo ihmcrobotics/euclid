@@ -242,11 +242,11 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((FramePose2DReadOnly) obj);
+         return equals((FramePose2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

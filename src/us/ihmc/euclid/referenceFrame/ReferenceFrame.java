@@ -240,8 +240,14 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    }
 
    /**
-    * Return the world reference frame that is a root reference frame. If located at (0, 0, 0) and its
-    * coordinate system is such as the z-axis is up, x-axis is forward, and y-axis points to the left.
+    * Return the world reference frame that is a root reference frame.
+    * <p>
+    * The world reference frame can be used to create child reference frames. It is usually assumed
+    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents the
+    * forward/backward direction and the y-axis represents the transversal direction.
+    * </p>
+    * 
+    * @return the world reference frame.
     */
    public static ReferenceFrame getWorldFrame()
    {
@@ -956,6 +962,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * different names to have the same hash code or to enforce a common frame to have a specific hash
     * code that can be known without holding on its actual instance.
     * </p>
+    * @return the name based hash code for this reference frame.
     */
    public long getAdditionalNameBasedHashCode()
    {

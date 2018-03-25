@@ -160,9 +160,9 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * @param referenceFrame the initial reference frame in which the given pose is expressed in.
     * @param pose3DReadOnly the pose used to initialize the this frame pose. Not modified.
     */
-   public FramePose3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose)
+   public FramePose3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
    {
-      setIncludingFrame(referenceFrame, pose);
+      setIncludingFrame(referenceFrame, pose3DReadOnly);
    }
 
    /**
@@ -276,11 +276,11 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return super.equals(obj);
+         return super.equals(object);
       }
       catch (ClassCastException e)
       {

@@ -28,6 +28,11 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 
+/**
+ * This class provides the tools to perform a variety of assertions on frame geometry types.
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameTestTools
 {
    private static final String DEFAULT_FORMAT = getStringFormat(15, 12);

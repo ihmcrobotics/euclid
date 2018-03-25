@@ -106,7 +106,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * reference frame.
     *
     * @param referenceFrame the initial frame for this frame quaternion.
-    * @param other the quaternion to copy the components from. Not modified.
+    * @param quaternionReadOnly the quaternion to copy the components from. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
    {

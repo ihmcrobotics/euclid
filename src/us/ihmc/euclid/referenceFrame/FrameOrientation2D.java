@@ -9,7 +9,13 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
-// TODO
+/**
+ * A {@code FrameOrientation2D} represents an orientation in the XY-plane expressed in a given
+ * reference frame.
+ * 
+ * @author Sylvain Bertrand
+ *
+ */
 public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObject<FrameOrientation2D>
 {
    /** The reference frame is which this orientation is currently expressed. */
@@ -26,16 +32,33 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   /**
+    * Create a new orientation 2D initialized with its yaw angle to zero in a given reference frame.
+    * 
+    * @param referenceFrame the initial reference frame for this orientation 2D.
+    */
    public FrameOrientation2D(ReferenceFrame referenceFrame)
    {
       setToZero(referenceFrame);
    }
 
+   /**
+    * Creates a new orientation 2D and initializes its yaw angle to the given one, and its reference
+    * frame to {@link ReferenceFrame#getWorldFrame()}.
+    * 
+    * @param yaw the initial yaw angle for this orientation 2D.
+    */
    public FrameOrientation2D(double yaw)
    {
       setIncludingFrame(ReferenceFrame.getWorldFrame(), yaw);
    }
 
+   /**
+    * Creates a new orientation 2D and initializes its yaw angle and reference frame.
+    * 
+    * @param referenceFrame the initial reference frame for this orientation 2D.
+    * @param yaw the initial yaw angle for this orientation 2D.
+    */
    public FrameOrientation2D(ReferenceFrame referenceFrame, double yaw)
    {
       setIncludingFrame(referenceFrame, yaw);
@@ -74,6 +97,12 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
       setIncludingFrame(other);
    }
 
+   /**
+    * Creates a new frame orientation 2D and initializes it using a frame quaternion.
+    * 
+    * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame
+    *           from. Not modified.
+    */
    public FrameOrientation2D(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {
       setIncludingFrame(frameQuaternionReadOnly);
@@ -136,11 +165,11 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((FrameOrientation2DReadOnly) obj);
+         return equals((FrameOrientation2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

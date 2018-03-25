@@ -190,10 +190,9 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line and initializes it to go through the endpoints of the given line segment.
-    * <p>
-    * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
-    * </p>
     *
+    * @param referenceFrame the reference frame in which the given line segment is expressed. The
+    *           initial frame for this frame line.
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
     */
    public FrameLine2D(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
@@ -214,7 +213,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    /**
     * Creates a new line and initializes it to go through the endpoints of the given line segment.
     *
-    * @param other the other line to copy. Not modified.
+    * @param frameLineSegment2DReadOnly the line segment used to. Not modified.
     */
    public FrameLine2D(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
    {
@@ -352,15 +351,15 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameLine2DReadOnly)}, it returns {@code false} otherwise.
     *
-    * @param obj the object to compare against this. Not modified.
+    * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((FrameLine2DReadOnly) obj);
+         return equals((FrameLine2DReadOnly) object);
       }
       catch (ClassCastException e)
       {
