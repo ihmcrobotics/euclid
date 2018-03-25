@@ -106,6 +106,47 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    }
 
    /**
+    * Sets the x and y components of this frame tuple with the x and y components of the given
+    * {@code frameTuple2DReadOnly} and the z-component to the given {@code z}.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple2DReadOnly, double)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set
+    * with {@code frameTuple2DReadOnly} and {@code z}, and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param frameTuple2DReadOnly the frame tuple to copy the values from. Not modified.
+    * @param z the new z-coordinate for this tuple.
+    */
+   default void setMatchingFrame(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)
+   {
+      Tuple3DBasics.super.set(frameTuple2DReadOnly, z);
+      frameTuple2DReadOnly.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
+    * Sets this frame tuple to {@code other}.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame tuple to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameTuple3DReadOnly other)
+   {
+      Tuple3DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this frame tuple to {@code other} and then calls {@link #absolute()}.
     *
     * @param other the other frame tuple to copy the values from. Not modified.

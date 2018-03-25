@@ -12,8 +12,8 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to
  * a {@code FixedFrameQuaternionBasics}. This allows, for instance, to enforce, at runtime, that
  * operations on quaternions occur in the same coordinate system. Also, via the method
- * {@link FrameChangeable#changeFrame(ReferenceFrame)}, one can easily calculates the value of a quaternion in
- * different reference frames.
+ * {@link FrameChangeable#changeFrame(ReferenceFrame)}, one can easily calculates the value of a
+ * quaternion in different reference frames.
  * </p>
  * <p>
  * Because a {@code FixedFrameQuaternionBasics} extends {@code QuaternionBasics}, it is compatible
@@ -81,6 +81,25 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    {
       checkReferenceFrameMatch(other);
       QuaternionBasics.super.set(other);
+   }
+
+   /**
+    * Sets this frame quaternion to {@code other}.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameQuaternionReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other quaternion to copy the values from. Not modified.
+    */
+   default void setMatchingFrame(FrameQuaternionReadOnly other)
+   {
+      QuaternionBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
    /**

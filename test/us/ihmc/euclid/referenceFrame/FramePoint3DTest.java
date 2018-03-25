@@ -11,6 +11,8 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
@@ -114,6 +116,46 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
          assertTrue(framePoint3D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, framePoint3D, EPSILON);
          EuclidFrameTestTools.assertFrameTuple3DEquals(randomTuple, framePoint3D, EPSILON);
+      }
+   }
+
+   @Test
+   public void testSetMatchingFrame() throws Exception
+   {
+      Random random = new Random(544354);
+      
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test setMatchingFrame(FrameTuple3DReadOnly other)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         FrameTuple3DReadOnly source = EuclidFrameRandomTools.nextFramePoint3D(random, sourceFrame);
+         FramePoint3D actual = createEmptyFrameTuple(destinationFrame);
+         
+         actual.setMatchingFrame(source);
+         
+         FramePoint3D expected = new FramePoint3D(source);
+         expected.changeFrame(destinationFrame);
+         
+         EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
+      }
+      
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test setMatchingFrame(FrameTuple2DReadOnly other, double z)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         FrameTuple2DReadOnly source = EuclidFrameRandomTools.nextFramePoint2D(random, sourceFrame);
+         double z = EuclidCoreRandomTools.nextDouble(random);
+         FramePoint3D actual = createEmptyFrameTuple(destinationFrame);
+         
+         actual.setMatchingFrame(source, z);
+         
+         FramePoint3D expected = new FramePoint3D();
+         expected.setIncludingFrame(source, z);
+         expected.changeFrame(destinationFrame);
+         
+         EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
       }
    }
 

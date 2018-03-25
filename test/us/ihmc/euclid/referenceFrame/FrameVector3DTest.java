@@ -11,6 +11,8 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
@@ -113,6 +115,46 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          assertTrue(frameVector3D.getReferenceFrame() == randomFrame);
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
          EuclidFrameTestTools.assertFrameTuple3DEquals(randomTuple, frameVector3D, EPSILON);
+      }
+   }
+
+   @Test
+   public void testSetMatchingFrame() throws Exception
+   {
+      Random random = new Random(544354);
+      
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test setMatchingFrame(FrameTuple3DReadOnly other)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         FrameTuple3DReadOnly source = EuclidFrameRandomTools.nextFrameVector3D(random, sourceFrame);
+         FrameVector3D actual = createEmptyFrameTuple(destinationFrame);
+         
+         actual.setMatchingFrame(source);
+         
+         FrameVector3D expected = new FrameVector3D(source);
+         expected.changeFrame(destinationFrame);
+         
+         EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
+      }
+      
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      { // Test setMatchingFrame(FrameTuple2DReadOnly other, double z)
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         FrameTuple2DReadOnly source = EuclidFrameRandomTools.nextFrameVector2D(random, sourceFrame);
+         double z = EuclidCoreRandomTools.nextDouble(random);
+         FrameVector3D actual = createEmptyFrameTuple(destinationFrame);
+         
+         actual.setMatchingFrame(source, z);
+         
+         FrameVector3D expected = new FrameVector3D();
+         expected.setIncludingFrame(source, z);
+         expected.changeFrame(destinationFrame);
+         
+         EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
       }
    }
 
