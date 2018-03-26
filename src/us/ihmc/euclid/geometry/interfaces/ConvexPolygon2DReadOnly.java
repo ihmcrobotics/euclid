@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import java.util.List;
 
+import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
@@ -9,6 +10,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public interface ConvexPolygon2DReadOnly
 {
@@ -1544,6 +1546,22 @@ public interface ConvexPolygon2DReadOnly
    default void getEdge(int edgeIndex, LineSegment2DBasics edgeToPack)
    {
       edgeToPack.set(getVertex(edgeIndex), getNextVertex(edgeIndex));
+   }
+
+   /**
+    * Copies this polygon, translates the copy, and returns it.
+    *
+    * @param translation the translation to apply to the copy of this polygon. Not modified.
+    * @return the copy of this polygon translated.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    */
+   default ConvexPolygon2DBasics translateCopy(Tuple2DReadOnly translation)
+   {
+      ConvexPolygon2D copy = new ConvexPolygon2D(this);
+      copy.translate(translation);
+      return copy;
    }
 
    default boolean equals(ConvexPolygon2DReadOnly other)

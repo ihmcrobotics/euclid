@@ -12,8 +12,8 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 /**
@@ -474,6 +474,14 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
       area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered, centroid);
    }
 
+   @Override
+   public Point2DBasics getVertexUnsafe(int index)
+   {
+      checkNonEmpty();
+      checkIndexInBoundaries(index);
+      return clockwiseOrderedVertices.get(index);
+   }
+
    /** {@inheritDoc} */
    @Override
    public double getArea()
@@ -498,14 +506,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
       return boundingBox;
    }
 
-   @Override
-   public void setVertex(int index, double x, double y)
-   {
-      checkNonEmpty();
-      checkIndexInBoundaries(index);
-      clockwiseOrderedVertices.get(index).set(x, y);
-   }
-
    /**
     * Gets the number of vertices composing this convex polygon.
     *
@@ -521,50 +521,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    public List<? extends Point2DReadOnly> getUnmodifiableVertexBuffer()
    {
       return unmodifiableVertexBuffer;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void applyTransform(Transform transform)
-   {
-      checkIfUpToDate();
-      notifyVerticesChanged();
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2D vertex = clockwiseOrderedVertices.get(i);
-         vertex.applyTransform(transform);
-      }
-      update();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void applyInverseTransform(Transform transform)
-   {
-      checkIfUpToDate();
-      notifyVerticesChanged();
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2D vertex = clockwiseOrderedVertices.get(i);
-         vertex.applyInverseTransform(transform);
-      }
-      update();
-   }
-
-   /** {@inheritDoc} */
-   public void applyTransformAndProjectToXYPlane(Transform transform)
-   {
-      checkIfUpToDate();
-      notifyVerticesChanged();
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2D vertex = clockwiseOrderedVertices.get(i);
-         vertex.applyTransform(transform, false);
-      }
-      update();
    }
 
    /** {@inheritDoc} */

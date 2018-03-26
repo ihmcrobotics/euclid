@@ -3,12 +3,12 @@ package us.ihmc.euclid.geometry.interfaces;
 import java.util.List;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
@@ -87,6 +87,26 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
     */
    void updateCentroidAndArea();
+
+   /**
+    * Gets the reference to the {@code index}<sup>th</sup> vertex of this polygon.
+    * <p>
+    * WARNING: Through this method, the user can modify the vertices of this polygon without it being
+    * notified of such change. When modifying a vertex, the method {@link #notifyVerticesChanged()}
+    * should be called followed by {@link #update()}. Always prefer using {@link #getVertex(int)}
+    * instead.
+    * </p>
+    * <p>
+    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
+    * x-coordinate.
+    * </p>
+    *
+    * @param index the index of the vertex in the clockwise ordered list.
+    * @return the reference to the vertex.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    */
+   Point2DBasics getVertexUnsafe(int index);
 
    /**
     * Add a vertex to this polygon.
@@ -323,8 +343,6 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
       update();
    }
 
-   void setVertex(int index, double x, double y);
-
    /**
     * Scale this convex polygon about its centroid.
     * <p>
@@ -368,10 +386,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
 
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         Point2DReadOnly vertex = getUnmodifiableVertexBuffer().get(i);
-         double x = pointToScaleAbout.getX() + scaleFactor * (vertex.getX() - pointToScaleAbout.getX());
-         double y = pointToScaleAbout.getY() + scaleFactor * (vertex.getY() - pointToScaleAbout.getY());
-         setVertex(i, x, y);
+         Point2DBasics vertex = getVertexUnsafe(i);
+         vertex.sub(pointToScaleAbout);
+         vertex.scale(scaleFactor);
+         vertex.add(pointToScaleAbout);
       }
 
       update();
@@ -405,28 +423,11 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
 
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         Point2DReadOnly vertex = getUnmodifiableVertexBuffer().get(i);
-         setVertex(i, vertex.getX() + x, vertex.getY() + y);
+         getVertexUnsafe(i).add(x, y);
       }
 
       updateBoundingBox();
       updateCentroidAndArea();
-   }
-
-   /**
-    * Copies this polygon, translates the copy, and returns it.
-    *
-    * @param translation the translation to apply to the copy of this polygon. Not modified.
-    * @return the copy of this polygon translated.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   default ConvexPolygon2DBasics translateCopy(Tuple2DReadOnly translation)
-   {
-      ConvexPolygon2D copy = new ConvexPolygon2D(this);
-      copy.translate(translation);
-      return copy;
    }
 
    /**
@@ -440,7 +441,22 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *            in the XY-plane.
     */
    @Override
-   void applyTransform(Transform transform);
+   default void applyTransform(Transform transform)
+   {
+      applyTransform(transform, true);
+   }
+
+   default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
+   {
+      checkIfUpToDate();
+      notifyVerticesChanged();
+      
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         getVertexUnsafe(i).applyTransform(transform, checkIfTransformInXYPlane);
+      }
+      update();
+   }
 
    /**
     * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
@@ -453,16 +469,20 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *            in the XY-plane.
     */
    @Override
-   void applyInverseTransform(Transform transform);
+   default void applyInverseTransform(Transform transform)
+   {
+      applyInverseTransform(transform, true);
+   }
 
-   /**
-    * Transforms this convex polygon using the given homogeneous transformation matrix and project the
-    * result onto the XY-plane.
-    *
-    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   void applyTransformAndProjectToXYPlane(Transform transform);
+   default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
+   {
+      checkIfUpToDate();
+      notifyVerticesChanged();
+      
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         getVertexUnsafe(i).applyInverseTransform(transform, checkIfTransformInXYPlane);
+      }
+      update();
+   }
 }

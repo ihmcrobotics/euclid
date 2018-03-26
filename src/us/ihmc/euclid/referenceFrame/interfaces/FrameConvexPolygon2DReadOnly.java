@@ -8,11 +8,13 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, ReferenceFrameHolder
 {
@@ -3123,6 +3125,38 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    {
       edgeToPack.setReferenceFrame(getReferenceFrame());
       ConvexPolygon2DReadOnly.super.getEdge(edgeIndex, edgeToPack);
+   }
+
+   /**
+    * Copies this polygon, translates the copy, and returns it.
+    *
+    * @param translation the translation to apply to the copy of this polygon. Not modified.
+    * @return the copy of this polygon translated.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    */
+   default FrameConvexPolygon2DBasics translateCopy(Tuple2DReadOnly translation)
+   {
+      FrameConvexPolygon2D copy = new FrameConvexPolygon2D(this);
+      copy.translate(translation);
+      return copy;
+   }
+
+   /**
+    * Copies this polygon, translates the copy, and returns it.
+    *
+    * @param translation the translation to apply to the copy of this polygon. Not modified.
+    * @return the copy of this polygon translated.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    * @throws ReferenceFrameMismatchException if {@code translation} and {@code this} are not expressed
+    *            in the same reference frame.
+    */
+   default FrameConvexPolygon2DBasics translateCopy(FrameTuple2DReadOnly translation)
+   {
+      return translateCopy((Tuple2DReadOnly) translation);
    }
 
    default boolean equals(FrameConvexPolygon2DReadOnly other)
