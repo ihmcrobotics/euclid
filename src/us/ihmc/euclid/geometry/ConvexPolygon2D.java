@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -15,7 +15,6 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
  * Describes a planar convex polygon defined in the XY-plane.
@@ -26,7 +25,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>
  */
-public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<ConvexPolygon2D>
+public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<ConvexPolygon2D>
 {
    /**
     * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
@@ -303,13 +302,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
       return clockwiseOrdered;
    }
 
-   /**
-    * After calling this method, the polygon has no vertex, area, or centroid.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    */
+   /** {@inheritDoc} */
    public void clear()
    {
       numberOfVertices = 0;
@@ -318,72 +311,14 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
       isUpToDate = false;
    }
 
-   /**
-    * After calling this method, the polygon has no vertex, area, or centroid.
-    * <p>
-    * Use only when an empty polygon is desired.
-    * </p>
-    */
+   /** {@inheritDoc} */
    public void clearAndUpdate()
    {
       clear();
       isUpToDate = true;
    }
 
-   /**
-    * Clears this polygon, adds a single vertex at (0, 0), and updates it.
-    */
-   @Override
-   public void setToZero()
-   {
-      clear();
-      addVertex(0.0, 0.0);
-      update();
-   }
-
-   /**
-    * Clears this polygon, adds a single vertex at ({@link Double#NaN}, {@link Double#NaN}), and
-    * updates it.
-    */
-   @Override
-   public void setToNaN()
-   {
-      clear();
-      addVertex(Double.NaN, Double.NaN);
-      update();
-   }
-
    /** {@inheritDoc} */
-   @Override
-   public boolean containsNaN()
-   {
-      return ConvexPolygon2DReadOnly.super.containsNaN();
-   }
-
-   /**
-    * Add a vertex to this polygon.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param vertex the new vertex. Not modified.
-    */
-   public void addVertex(Point2DReadOnly vertex)
-   {
-      addVertex(vertex.getX(), vertex.getY());
-   }
-
-   /**
-    * Add a vertex to this polygon.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param x the x-coordinate of the new vertex.
-    * @param y the y-coordinate of the new vertex.
-    */
    public void addVertex(double x, double y)
    {
       isUpToDate = false;
@@ -391,107 +326,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
       numberOfVertices++;
    }
 
-   /**
-    * Adds the N first vertices from the given list to this polygon, where N is equal to
-    * {@code numberOfVertices}.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param vertices the list containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
-    *           [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
-    */
-   public void addVertices(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.size())
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices.get(i));
-   }
-
-   /**
-    * Adds the N first vertices from the given array to this polygon, where N is equal to
-    * {@code numberOfVertices}.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param vertices the array containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
-    */
-   public void addVertices(Point2DReadOnly[] vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices[i]);
-   }
-
-   /**
-    * Adds the N first vertices from the given array to this polygon, where N is equal to
-    * {@code numberOfVertices}.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param vertices the array containing the vertices to add to this polygon. Each row contains one
-    *           point whereas the (at least) two columns contains in order the coordinates x and y. Not
-    *           modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
-    */
-   public void addVertices(double[][] vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices[i][0], vertices[i][1]);
-   }
-
-   /**
-    * Adds new vertices to this polygon from another convex polygon.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param otherPolygon the other convex polygon that is used to add new vertices to this polygon.
-    *           Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygon's vertices were edited.
-    */
-   public void addVertices(ConvexPolygon2DReadOnly otherPolygon)
-   {
-      for (int i = 0; i < otherPolygon.getNumberOfVertices(); i++)
-         addVertex(otherPolygon.getVertex(i));
-   }
-
-   /**
-    * Removes the vertex of this polygon positioned at the index {@code indexOfVertexToRemove}.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param indexOfVertexToRemove the index of the vertex to remove.
-    * @throws EmptyPolygonException if this polygon is empty before calling this method.
-    * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal than
-    *            the polygon's number of vertices.
-    */
+   /** {@inheritDoc} */
    public void removeVertex(int indexOfVertexToRemove)
    {
       checkNonEmpty();
@@ -525,15 +360,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
       clockwiseOrderedVertices.get(i).set(x, y);
    }
 
-   /**
-    * Updates the vertices so they represent a clockwise convex polygon.
-    * <p>
-    * Call this method after editing the vertices of this polygon.
-    * </p>
-    * <p>
-    * Note that this also updates centroid, area and the bounding box of this polygon.
-    * </p>
-    */
+   /** {@inheritDoc} */
    public void update()
    {
       if (isUpToDate)
@@ -544,71 +371,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
 
       updateCentroidAndArea();
       updateBoundingBox();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(List, int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
-    *           [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
-    */
-   public void setAndUpdate(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(Point2DReadOnly[], int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
-    */
-   public void setAndUpdate(Point2DReadOnly[] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(double[][], int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
-    *           contains one point whereas the (at least) two columns contains in order the coordinates
-    *           x and y. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
-    */
-   public void setAndUpdate(double[][] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
    }
 
    /**
@@ -630,50 +392,9 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
    }
 
    /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(ConvexPolygon2DReadOnly)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param otherPolygon the other convex polygon to copy. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygon's vertices were edited.
-    */
-   // TODO There is no need to call update() there, instead update everything from the other polygon to make it faster.
-   public void setAndUpdate(ConvexPolygon2DReadOnly otherPolygon)
-   {
-      clear();
-      addVertices(otherPolygon);
-      update();
-   }
-
-   /**
-    * Sets this polygon such that it represents the smallest convex hull that contains both polygons.
-    * <p>
-    * Note that the resulting polygon is ready to be used for any operations, no need to call
-    * {@link #update()}.
-    * </p>
-    *
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygons' vertices were edited.
-    */
-   // TODO: Make this more efficient by finding the rotating calipers, as in the intersection method.
-   public void setAndUpdate(ConvexPolygon2DReadOnly firstPolygon, ConvexPolygon2DReadOnly secondPolygon)
-   {
-      clear();
-      addVertices(firstPolygon);
-      addVertices(secondPolygon);
-      update();
-   }
-
-   /**
     * Updates the bounding box properties.
     */
-   private void updateBoundingBox()
+   public void updateBoundingBox()
    {
       minX_index = 0;
       maxX_index = 0;
@@ -685,16 +406,16 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
 
       if (!isEmpty())
       {
-         Point2D firstVertex = getVertexUnsafe(0);
+         Point2DReadOnly firstVertex = getVertex(0);
          double minX = firstVertex.getX();
          double minY = firstVertex.getY();
          double maxX = firstVertex.getX();
          double maxY = firstVertex.getY();
 
-         Point2D p;
+         Point2DReadOnly p;
          for (int i = 1; i < numberOfVertices; i++)
          {
-            p = getVertexUnsafe(i);
+            p = getVertex(i);
 
             if (p.getX() < minX)
             {
@@ -748,7 +469,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
     * Compute centroid and area of this polygon. Formula taken from
     * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
     */
-   private void updateCentroidAndArea()
+   public void updateCentroidAndArea()
    {
       area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered, centroid);
    }
@@ -777,17 +498,12 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
       return boundingBox;
    }
 
-   /**
-    * Same as {@link #getVertex(int)} but without checking if the polygon has been updated.
-    * <p>
-    * For internal use only.
-    * </p>
-    */
-   private Point2D getVertexUnsafe(int vertexIndex)
+   @Override
+   public void setVertex(int index, double x, double y)
    {
       checkNonEmpty();
-      checkIndexInBoundaries(vertexIndex);
-      return clockwiseOrderedVertices.get(vertexIndex);
+      checkIndexInBoundaries(index);
+      clockwiseOrderedVertices.get(index).set(x, y);
    }
 
    /**
@@ -807,239 +523,48 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
       return unmodifiableVertexBuffer;
    }
 
-   /**
-    * Scale this convex polygon about its centroid.
-    * <p>
-    * The polygon centroid remains unchanged.
-    * </p>
-    *
-    * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
-    *           nothing.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   public void scale(double scaleFactor)
-   {
-      scale(centroid, scaleFactor);
-   }
-
-   /**
-    * Scale this convex polygon about {@code pointToScaleAbout}.
-    * <p>
-    * This method effectively modifies the vertices of this polygon such that the scale is applied on
-    * the distance between each vertex and the given {@code pointToScaleAbout}.
-    * </p>
-    * <p>
-    * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this vertex
-    * will remain unmodified.
-    * </p>
-    *
-    * @param pointToScaleAbout the center of the scale transformation. Not modified.
-    *
-    * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
-    *           nothing.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   public void scale(Point2DReadOnly pointToScaleAbout, double scaleFactor)
-   {
-      checkIfUpToDate();
-      isUpToDate = false;
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2D vertex = getVertexUnsafe(i);
-         vertex.sub(pointToScaleAbout);
-         vertex.scale(scaleFactor);
-         vertex.add(pointToScaleAbout);
-      }
-
-      update();
-   }
-
-   /**
-    * Translates this polygon.
-    *
-    * @param translation the translation to apply to this polygon's vertices. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   public void translate(Tuple2DReadOnly translation)
-   {
-      translate(translation.getX(), translation.getY());
-   }
-
-   /**
-    * Translated this polygon.
-    *
-    * @param x the translation along the x-axis to apply to each of this polygon's vertices.
-    * @param y the translation along the y-axis to apply to each of this polygon's vertices.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   public void translate(double x, double y)
-   {
-      checkIfUpToDate();
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2D vertex = getVertexUnsafe(i);
-         vertex.add(x, y);
-      }
-
-      updateBoundingBox();
-      updateCentroidAndArea();
-   }
-
-   /**
-    * Copies this polygon, translates the copy, and returns it.
-    *
-    * @param translation the translation to apply to the copy of this polygon. Not modified.
-    * @return the copy of this polygon translated.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   public ConvexPolygon2D translateCopy(Tuple2DReadOnly translation)
-   {
-      ConvexPolygon2D copy = new ConvexPolygon2D(this);
-      copy.translate(translation);
-      return copy;
-   }
-
-   /**
-    * Creates and returns a representative {@code String} for this polygon.
-    */
-   @Override
-   public String toString()
-   {
-      String ret = "";
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2D vertex = clockwiseOrderedVertices.get(i);
-         ret = ret + "(" + vertex.getX() + ", " + vertex.getY() + ")," + "\n";
-      }
-
-      return ret;
-   }
-
-   /**
-    * Transforms this convex polygon using the given homogeneous transformation matrix.
-    *
-    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
-    */
+   /** {@inheritDoc} */
    @Override
    public void applyTransform(Transform transform)
    {
       checkIfUpToDate();
-      isUpToDate = false;
+      notifyVerticesChanged();
 
       for (int i = 0; i < numberOfVertices; i++)
       {
-         Point2D vertex = getVertexUnsafe(i);
+         Point2D vertex = clockwiseOrderedVertices.get(i);
          vertex.applyTransform(transform);
       }
       update();
    }
 
-   /**
-    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
-    *
-    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
-    */
+   /** {@inheritDoc} */
    @Override
    public void applyInverseTransform(Transform transform)
    {
       checkIfUpToDate();
-      isUpToDate = false;
+      notifyVerticesChanged();
 
       for (int i = 0; i < numberOfVertices; i++)
       {
-         Point2D vertex = getVertexUnsafe(i);
+         Point2D vertex = clockwiseOrderedVertices.get(i);
          vertex.applyInverseTransform(transform);
       }
       update();
    }
 
-   /**
-    * Transforms this convex polygon using the given homogeneous transformation matrix and project the
-    * result onto the XY-plane.
-    *
-    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
+   /** {@inheritDoc} */
    public void applyTransformAndProjectToXYPlane(Transform transform)
    {
       checkIfUpToDate();
-      isUpToDate = false;
+      notifyVerticesChanged();
 
       for (int i = 0; i < numberOfVertices; i++)
       {
-         Point2D vertex = getVertexUnsafe(i);
+         Point2D vertex = clockwiseOrderedVertices.get(i);
          vertex.applyTransform(transform, false);
       }
       update();
-   }
-
-   /**
-    * Creates a copy of this polygon, transforms it using {@link #applyTransform(Transform)}, and
-    * returns the copy.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @param transform the transform to apply on the vertices of the copy of this convex polygon. Not
-    *           modified.
-    * @return the copy of this transformed.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
-    */
-   public ConvexPolygon2D applyTransformCopy(Transform transform)
-   {
-      ConvexPolygon2D copy = new ConvexPolygon2D(this);
-      copy.applyTransform(transform);
-      return copy;
-   }
-
-   /**
-    * Creates a copy of this polygon, transforms it using
-    * {@link #applyTransformAndProjectToXYPlane(Transform)}, and returns the copy.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @param transform the transform to apply on the vertices of the copy of this convex polygon. Not
-    *           modified.
-    * @return the copy of this transformed.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   public ConvexPolygon2D applyTransformAndProjectToXYPlaneCopy(Transform transform)
-   {
-      ConvexPolygon2D copy = new ConvexPolygon2D(this);
-      copy.applyTransformAndProjectToXYPlane(transform);
-      return copy;
    }
 
    /** {@inheritDoc} */
@@ -1128,10 +653,16 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
    }
 
    @Override
+   public void notifyVerticesChanged()
+   {
+      isUpToDate = false;
+   }
+
+   @Override
    public boolean equals(Object object)
    {
       if (object instanceof ConvexPolygon2DReadOnly)
-         return ConvexPolygon2DReadOnly.super.equals((ConvexPolygon2DReadOnly) object);
+         return ConvexPolygon2DBasics.super.equals((ConvexPolygon2DReadOnly) object);
       else
          return false;
    }
@@ -1153,7 +684,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
    @Override
    public boolean epsilonEquals(ConvexPolygon2D other, double epsilon)
    {
-      return ConvexPolygon2DReadOnly.super.epsilonEquals(other, epsilon);
+      return ConvexPolygon2DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -1173,6 +704,23 @@ public class ConvexPolygon2D implements ConvexPolygon2DReadOnly, GeometryObject<
    @Override
    public boolean geometricallyEquals(ConvexPolygon2D other, double epsilon)
    {
-      return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);
+      return ConvexPolygon2DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Creates and returns a representative {@code String} for this polygon.
+    */
+   @Override
+   public String toString()
+   {
+      String ret = "";
+
+      for (int i = 0; i < numberOfVertices; i++)
+      {
+         Point2D vertex = clockwiseOrderedVertices.get(i);
+         ret = ret + "(" + vertex.getX() + ", " + vertex.getY() + ")," + "\n";
+      }
+
+      return ret;
    }
 }
