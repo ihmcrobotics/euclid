@@ -2,8 +2,6 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import java.util.List;
 
-import us.ihmc.euclid.geometry.BoundingBox2D;
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
@@ -293,25 +291,6 @@ public interface ConvexPolygon2DReadOnly
    Point2DReadOnly getCentroid();
 
    /**
-    * Gets this polygon's centroid coordinates.
-    * <p>
-    * The centroid is not necessarily equal to the average of this polygon's vertices.
-    * </p>
-    * <p>
-    * When viewing a polygon as a physical object with constant density and thickness, the centroid is
-    * equivalent to the polygon's center of mass.
-    * </p>
-    *
-    * @param centroidToPack the point in which the coordinates of the centroid are stored. Modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    */
-   default void getCentroid(Point2DBasics centroidToPack)
-   {
-      centroidToPack.set(getCentroid());
-   }
-
-   /**
     * Gets the read-only reference to this polygon's axis-aligned bounding box.
     *
     * @return this polygon's bounding box.
@@ -344,33 +323,6 @@ public interface ConvexPolygon2DReadOnly
    {
       BoundingBox2DReadOnly boundingBox = getBoundingBox();
       return boundingBox.getMaxPoint().getY() - boundingBox.getMinPoint().getY();
-   }
-
-   /**
-    * Gets a copy of this polygon's axis-aligned bounding box.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return the copy of this polygon's bounding box.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    */
-   default BoundingBox2D getBoundingBoxCopy()
-   {
-      return new BoundingBox2D(getBoundingBox());
-   }
-
-   /**
-    * Packs this polygon's axis-aligned bounding box in the given {@code boundingBoxToPack}.
-    *
-    * @param boundingBoxToPack the bounding box that is set to this polygon's bounding box. Modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    */
-   default void getBoundingBox(BoundingBox2DBasics boundingBoxToPack)
-   {
-      boundingBoxToPack.set(getBoundingBox());
    }
 
    /**
@@ -556,7 +508,7 @@ public interface ConvexPolygon2DReadOnly
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
-   default void getVerticesInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, ConvexPolygon2D polygonToPack)
+   default void getVerticesInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, ConvexPolygon2DBasics polygonToPack)
    {
       checkIfUpToDate();
       int index = startIndexInclusive;
@@ -715,6 +667,9 @@ public interface ConvexPolygon2DReadOnly
    /**
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
     * WARNING: This methods assumes that the ray does not intersect with the polygon. Such scenario
     * should be handled with
     * {@link #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)}.
@@ -734,7 +689,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D getClosestPointWithRay(Line2DReadOnly ray)
+   default Point2DBasics getClosestPointWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
@@ -853,7 +808,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D orthogonalProjectionCopy(Point2DReadOnly pointToProject)
+   default Point2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
@@ -924,6 +879,9 @@ public interface ConvexPolygon2DReadOnly
     * From the point of view of an observer located outside the polygon, only a continuous subset of
     * the polygon's edges can be seen defining a line-of-sight. This method finds the indices of the
     * first and last vertices that are in the line-of-sight.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     * <p>
     * WARNING: This method assumes that the given observer is located outside the polygon.
     * </p>
@@ -1030,6 +988,9 @@ public interface ConvexPolygon2DReadOnly
     * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
     * is in the line-of-sight.
     * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
     * WARNING: This method assumes that the given observer is located outside the polygon.
     * </p>
     * <p>
@@ -1049,7 +1010,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D lineOfSightStartVertexCopy(Point2DReadOnly observer)
+   default Point2DBasics lineOfSightStartVertexCopy(Point2DReadOnly observer)
    {
       Point2D startVertex = new Point2D();
       boolean success = lineOfSightStartVertex(observer, startVertex);
@@ -1060,6 +1021,9 @@ public interface ConvexPolygon2DReadOnly
     * From the point of view of an observer located outside the polygon, only a continuous subset of
     * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
     * is in the line-of-sight.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     * <p>
     * WARNING: This method assumes that the given observer is located outside the polygon.
     * </p>
@@ -1080,7 +1044,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D lineOfSightEndVertexCopy(Point2DReadOnly observer)
+   default Point2DBasics lineOfSightEndVertexCopy(Point2DReadOnly observer)
    {
       Point2D endVertex = new Point2D();
       boolean success = lineOfSightEndVertex(observer, endVertex);
@@ -1091,6 +1055,9 @@ public interface ConvexPolygon2DReadOnly
     * From the point of view of an observer located outside the polygon, only a continuous subset of
     * the polygon's edges can be seen defining a line-of-sight. This method finds the first and last
     * vertices that is in the line-of-sight.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     * <p>
     * WARNING: This method assumes that the given observer is located outside the polygon.
     * </p>
@@ -1111,14 +1078,14 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D[] lineOfSightVertices(Point2DReadOnly observer)
+   default Point2DBasics[] lineOfSightVertices(Point2DReadOnly observer)
    {
-      Point2D startVertex = lineOfSightStartVertexCopy(observer);
-      Point2D endVertex = lineOfSightEndVertexCopy(observer);
+      Point2DBasics startVertex = lineOfSightStartVertexCopy(observer);
+      Point2DBasics endVertex = lineOfSightEndVertexCopy(observer);
       if (startVertex == null || endVertex == null)
          return null;
       else
-         return new Point2D[] {startVertex, endVertex};
+         return new Point2DBasics[] {startVertex, endVertex};
    }
 
    /**
@@ -1208,7 +1175,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D[] intersectionWith(Line2DReadOnly line)
+   default Point2DBasics[] intersectionWith(Line2DReadOnly line)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(),
@@ -1267,7 +1234,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D[] intersectionWithRay(Line2DReadOnly ray)
+   default Point2DBasics[] intersectionWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
@@ -1347,7 +1314,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D[] intersectionWith(LineSegment2DReadOnly lineSegment2D)
+   default Point2DBasics[] intersectionWith(LineSegment2DReadOnly lineSegment2D)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
@@ -1416,7 +1383,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default LineSegment2D getClosestEdgeCopy(Point2DReadOnly point)
+   default LineSegment2DBasics getClosestEdgeCopy(Point2DReadOnly point)
    {
       LineSegment2D closestEdge = new LineSegment2D();
       if (getClosestEdge(point, closestEdge))
@@ -1486,7 +1453,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D getClosestVertexCopy(Point2DReadOnly point)
+   default Point2DBasics getClosestVertexCopy(Point2DReadOnly point)
    {
       int vertexIndex = getClosestVertexIndex(point);
       if (vertexIndex == -1)
