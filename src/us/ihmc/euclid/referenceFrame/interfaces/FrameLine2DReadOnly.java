@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
@@ -11,7 +11,6 @@ import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -677,9 +676,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
    @Override
-   default FramePoint2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
+   default FramePoint2DBasics[] intersectionWith(ConvexPolygon2DReadOnly convexPolygon)
    {
-      Point2D[] intersections = convexPolygon.intersectionWith(this);
+      Point2DBasics[] intersections = convexPolygon.intersectionWith(this);
       if (intersections == null)
       {
          return null;
@@ -718,7 +717,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstIntersectionToPack} are
     *            not expressed in the same reference frame.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(firstIntersectionToPack);
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -747,7 +746,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -778,7 +777,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstIntersectionToPack}, and
     *            {@code secondIntersectionToPack} are not expressed in the same reference frame.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(firstIntersectionToPack);
@@ -809,7 +808,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
    {
       firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
       secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
@@ -841,7 +840,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondIntersectionToPack} are
     *            not expressed in the same reference frame.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(secondIntersectionToPack);
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -870,7 +869,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
    {
       secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);

@@ -422,7 +422,7 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
-   default ConvexPolygon2D translateCopy(Tuple2DReadOnly translation)
+   default ConvexPolygon2DBasics translateCopy(Tuple2DReadOnly translation)
    {
       ConvexPolygon2D copy = new ConvexPolygon2D(this);
       copy.translate(translation);

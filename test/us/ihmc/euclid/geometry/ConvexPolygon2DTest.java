@@ -12,11 +12,14 @@ import org.junit.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
@@ -115,7 +118,7 @@ public class ConvexPolygon2DTest
       ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
       Point2D centroid = new Point2D();
 
-      doubles.getCentroid(centroid);
+      centroid.set(doubles.getCentroid());
       assertEquals("Centroids should be equal", centroid, doubles.getCentroid());
    }
 
@@ -799,9 +802,9 @@ public class ConvexPolygon2DTest
 
       assertFalse(polygon.isPointInside(point));
 
-      LineSegment2D closestEdge = polygon.getClosestEdgeCopy(point);
+      LineSegment2DBasics closestEdge = polygon.getClosestEdgeCopy(point);
 
-      Point2D closestVertex = polygon.getClosestVertexCopy(point);
+      Point2DBasics closestVertex = polygon.getClosestVertexCopy(point);
 
       int otherEdgeVertexIndex = 0;
       boolean isClosestVertexPartOfClosestEdge = false;
@@ -922,7 +925,7 @@ public class ConvexPolygon2DTest
                }
             }
 
-            Point2D projectedPoint = convexPolygon.orthogonalProjectionCopy(testPoint);
+            Point2DBasics projectedPoint = convexPolygon.orthogonalProjectionCopy(testPoint);
 
             if (convexPolygon.isPointInside(testPoint))
                assertNull(projectedPoint);
@@ -1544,12 +1547,12 @@ public class ConvexPolygon2DTest
       }
    }
 
-   private static void assertEdgesEqual(LineSegment2D expected, LineSegment2D actual)
+   private static void assertEdgesEqual(LineSegment2DReadOnly expected, LineSegment2DReadOnly actual)
    {
       assertTrue("Edge did not match expected.", expected.epsilonEquals(actual, epsilon) || expected.epsilonEquals(actual.flipDirectionCopy(), epsilon));
    }
 
-   private static void assertPointsEqual(Point2D[] expected, Point2D[] actual, boolean enforceOrder)
+   private static void assertPointsEqual(Point2DReadOnly[] expected, Point2DReadOnly[] actual, boolean enforceOrder)
    {
       if (expected == null || actual == null)
       {
@@ -1577,7 +1580,7 @@ public class ConvexPolygon2DTest
       }
    }
 
-   private static void assertPointsEqual(Point2D expected, Point2D actual)
+   private static void assertPointsEqual(Point2DReadOnly expected, Point2DReadOnly actual)
    {
       if (expected == null && actual == null)
          return;

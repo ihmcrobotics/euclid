@@ -361,7 +361,7 @@ public interface LineSegment2DReadOnly
     * @throws OutdatedPolygonException if {@link ConvexPolygon2D#update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
+   default Point2DBasics[] intersectionWith(ConvexPolygon2DReadOnly convexPolygon)
    {
       return convexPolygon.intersectionWith(this);
    }
@@ -399,7 +399,7 @@ public interface LineSegment2DReadOnly
     * @return the number of intersections between this line segment and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       return convexPolygon.intersectionWith(this, firstIntersectionToPack, secondIntersectionToPack);
    }
