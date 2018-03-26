@@ -1522,7 +1522,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     */
-   default Point2D getClosestVertexCopy(Line2DReadOnly line)
+   default Point2DBasics getClosestVertexCopy(Line2DReadOnly line)
    {
       int vertexIndex = getClosestVertexIndex(line);
       if (vertexIndex == -1)

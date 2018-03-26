@@ -2202,7 +2202,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            reference frame.
     */
    default int intersectionWith(LineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
-                                FixedFramePoint2DBasics secondIntersectionToPack)
+         FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(firstIntersectionToPack);
       checkReferenceFrameMatch(secondIntersectionToPack);
@@ -2330,7 +2330,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack,
-                                FixedFramePoint2DBasics secondIntersectionToPack)
+         FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       checkReferenceFrameMatch(secondIntersectionToPack);
@@ -2375,7 +2375,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
-                                Point2DBasics secondIntersectionToPack)
+         Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       checkReferenceFrameMatch(firstIntersectionToPack);
@@ -2420,7 +2420,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            are not expressed in the same reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
-                                FixedFramePoint2DBasics secondIntersectionToPack)
+         FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       checkReferenceFrameMatch(firstIntersectionToPack);
@@ -2465,7 +2465,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            expressed in the same reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FramePoint2DBasics firstIntersectionToPack,
-                                FramePoint2DBasics secondIntersectionToPack)
+         FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
@@ -3036,5 +3036,147 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
       checkReferenceFrameMatch(line);
       vertexToPack.setReferenceFrame(getReferenceFrame());
       return ConvexPolygon2DReadOnly.super.getClosestVertex(line, vertexToPack);
+   }
+
+   /**
+    * Finds the index of the closest vertex to the given line.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param line the query. Not modified.
+    * @return the coordinates of the closest vertex or {@code null} if this method failed.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    */
+   default FramePoint2DBasics getClosestVertexCopy(Line2DReadOnly line)
+   {
+      Point2DBasics closestVertex = ConvexPolygon2DReadOnly.super.getClosestVertexCopy(line);
+      if (closestVertex == null)
+         return null;
+      else
+         return new FramePoint2D(getReferenceFrame(), closestVertex);
+   }
+
+   /**
+    * Finds the index of the closest vertex to the given line.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param line the query. Not modified.
+    * @return the coordinates of the closest vertex or {@code null} if this method failed.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *            same reference frame.
+    */
+   default FramePoint2DBasics getClosestVertexCopy(FrameLine2DReadOnly line)
+   {
+      checkReferenceFrameMatch(line);
+      return getClosestVertexCopy((Line2DReadOnly) line);
+   }
+
+   /**
+    * Packs the endpoints of an edge of this polygon into {@code edgeToPack}.
+    *
+    * @param edgeIndex index of the vertex that starts the edge.
+    * @param edgeToPack line segment used to store the edge endpoints. Modified.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
+    *            this polygon's number of vertices.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    * @throws ReferenceFrameMismatchException if {@code edge} and {@code this} are not expressed in the
+    *            same reference frame.
+    */
+   default void getEdge(int edgeIndex, FixedFrameLineSegment2DBasics edgeToPack)
+   {
+      checkReferenceFrameMatch(edgeToPack);
+      ConvexPolygon2DReadOnly.super.getEdge(edgeIndex, edgeToPack);
+   }
+
+   /**
+    * Packs the endpoints of an edge of this polygon into {@code edgeToPack}.
+    *
+    * @param edgeIndex index of the vertex that starts the edge.
+    * @param edgeToPack line segment used to store the edge endpoints. Modified.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
+    *            this polygon's number of vertices.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    */
+   default void getEdge(int edgeIndex, FrameLineSegment2DBasics edgeToPack)
+   {
+      edgeToPack.setReferenceFrame(getReferenceFrame());
+      ConvexPolygon2DReadOnly.super.getEdge(edgeIndex, edgeToPack);
+   }
+
+   default boolean equals(FrameConvexPolygon2DReadOnly other)
+   {
+      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      else
+         return ConvexPolygon2DReadOnly.super.equals(other);
+   }
+
+   /**
+    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
+    * with the tolerance {@code epsilon}.
+    * <p>
+    * The method returns {@code false} if the two polygons have different size.
+    * </p>
+    * <p>
+    * The method returns {@code false} if the two polygons are expressed in different frames.
+    * </p>
+    *
+    * @param other the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two line segments are equal, {@code false} otherwise.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    */
+   default boolean epsilonEquals(FrameConvexPolygon2DReadOnly other, double epsilon)
+   {
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      else
+         return ConvexPolygon2DReadOnly.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
+    * similar.
+    * <p>
+    * This method performs the comparison on a per vertex basis while accounting for a possible shift
+    * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
+    * counter-clockwise order, are considered geometrically equal even if they do not start with the
+    * same vertex.
+    * </p>
+    *
+    * @param other the convex polygon to compare to.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} and {@code this} are not expressed in
+    *            the same reference frame.
+    */
+   default boolean geometricallyEquals(FrameConvexPolygon2DReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+      return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
