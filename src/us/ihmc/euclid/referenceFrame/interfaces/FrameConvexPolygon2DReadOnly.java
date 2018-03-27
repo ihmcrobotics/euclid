@@ -2048,6 +2048,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
       Point2DBasics[] intersections = ConvexPolygon2DReadOnly.super.intersectionWithRay(ray);
       if (intersections == null)
          return null;
+      else if (intersections.length == 1)
+         return new FramePoint2D[] {new FramePoint2D(getReferenceFrame(), intersections[0])};
       else
          return new FramePoint2D[] {new FramePoint2D(getReferenceFrame(), intersections[0]), new FramePoint2D(getReferenceFrame(), intersections[1])};
    }
@@ -2508,6 +2510,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
       Point2DBasics[] intersections = ConvexPolygon2DReadOnly.super.intersectionWith(lineSegment2D);
       if (intersections == null)
          return null;
+      else if (intersections.length == 1)
+         return new FramePoint2D[] {new FramePoint2D(getReferenceFrame(), intersections[0])};
       else
          return new FramePoint2D[] {new FramePoint2D(getReferenceFrame(), intersections[0]), new FramePoint2D(getReferenceFrame(), intersections[1])};
    }

@@ -80,7 +80,7 @@ public interface ConvexPolygon2DReadOnly
    {
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         if (getVertex(i).containsNaN())
+         if (getUnmodifiableVertexBuffer().get(i).containsNaN())
             return true;
       }
 
@@ -1592,14 +1592,10 @@ public interface ConvexPolygon2DReadOnly
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default boolean epsilonEquals(ConvexPolygon2DReadOnly other, double epsilon)
    {
-      checkIfUpToDate();
-
       if (getNumberOfVertices() != other.getNumberOfVertices())
          return false;
 

@@ -1547,6 +1547,20 @@ public class EuclidFrameAPITestTools
       if (framelessParameter instanceof Class && frameParameter instanceof Class)
          return true;
 
+      if (framelessParameter.getClass().isArray() && frameParameter.getClass().isArray())
+      {
+         Object[] framelessArray = (Object[]) framelessParameter;
+         Object[] frameArray = (Object[]) frameParameter;
+         if (framelessArray.length != frameArray.length)
+            return false;
+         for (int i = 0; i < framelessArray.length; i++)
+         {
+            if (!epsilonEquals(framelessArray[i], frameArray[i], epsilon))
+               return false;
+         }
+         return true;
+      }
+
       throw new RuntimeException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
             + frameParameter.getClass().getSimpleName());
    }
