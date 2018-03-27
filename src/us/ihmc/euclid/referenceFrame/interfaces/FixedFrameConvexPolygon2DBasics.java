@@ -208,15 +208,15 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * <li>{@link #update()}.
     * </ol>
     *
-    * @param otherPolygon the other convex polygon to copy. Not modified.
+    * @param other the other convex polygon to copy. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
     *            other polygon's vertices were edited.
     */
    // TODO There is no need to call update() there, instead update everything from the other polygon to make it faster.
-   default void setAndUpdate(FrameConvexPolygon2DReadOnly otherPolygon)
+   default void setAndUpdate(FrameConvexPolygon2DReadOnly other)
    {
-      checkReferenceFrameMatch(otherPolygon);
-      ConvexPolygon2DBasics.super.setAndUpdate(otherPolygon);
+      checkReferenceFrameMatch(other);
+      ConvexPolygon2DBasics.super.setAndUpdate(other);
    }
 
    /**
