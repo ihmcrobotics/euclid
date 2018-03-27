@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -24,6 +25,8 @@ import org.ejml.ops.RandomMatrices;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
@@ -51,6 +54,7 @@ import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment2DBasics;
@@ -67,6 +71,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector4DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
@@ -200,6 +206,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Line3DReadOnly.class, FrameLine3DReadOnly.class);
       modifiableMap.put(Line3DBasics.class, FixedFrameLine3DBasics.class);
 
+      modifiableMap.put(ConvexPolygon2DReadOnly.class, FrameConvexPolygon2DReadOnly.class);
+      modifiableMap.put(ConvexPolygon2DBasics.class, FixedFrameConvexPolygon2DBasics.class);
+
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
 
@@ -246,6 +255,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameLine2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
       modifiableMap.put(FrameLine3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine3D(random, frame));
       modifiableMap.put(FrameLine3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameLine3D(random, frame));
+
+      modifiableMap.put(FrameConvexPolygon2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, frame, 1.0, 10));
+      modifiableMap.put(FrameConvexPolygon2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, frame, 1.0, 10));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -299,6 +311,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(LineSegment3DReadOnly.class, () -> EuclidGeometryRandomTools.nextLineSegment3D(random));
       modifiableMap.put(LineSegment3DBasics.class, () -> EuclidGeometryRandomTools.nextLineSegment3D(random));
 
+      modifiableMap.put(ConvexPolygon2DReadOnly.class, () -> EuclidGeometryRandomTools.nextConvexPolygon2D(random, 1.0, 10));
+      modifiableMap.put(ConvexPolygon2DBasics.class, () -> EuclidGeometryRandomTools.nextConvexPolygon2D(random, 1.0, 10));
+
       modifiableMap.put(Orientation3DReadOnly.class, () -> {
          switch (random.nextInt(3))
          {
@@ -334,6 +349,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameLine3DReadOnly.class);
       modifiableSet.add(FrameLineSegment2DReadOnly.class);
       modifiableSet.add(FrameLineSegment3DReadOnly.class);
+      modifiableSet.add(FrameConvexPolygon2DReadOnly.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -358,6 +374,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FixedFrameLine3DBasics.class);
       modifiableSet.add(FixedFrameLineSegment2DBasics.class);
       modifiableSet.add(FixedFrameLineSegment3DBasics.class);
+      modifiableSet.add(FixedFrameConvexPolygon2DBasics.class);
 
       fixedFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -384,6 +401,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameLine3DBasics.class);
       modifiableSet.add(FrameLineSegment2DBasics.class);
       modifiableSet.add(FrameLineSegment3DBasics.class);
+      modifiableSet.add(FrameConvexPolygon2DBasics.class);
 
       mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -1762,6 +1780,9 @@ public class EuclidFrameAPITestTools
 
    private static Class<?> findCorrespondingFrameType(Class<?> framelessType)
    {
+      if (framelessType.isArray())
+         return Array.newInstance(findCorrespondingFrameType(framelessType.getComponentType()), 0).getClass();
+
       if (!isFramelessTypeWithFrameEquivalent(framelessType))
          throw new IllegalArgumentException("Cannot handle the following type: " + framelessType.getSimpleName());
 
@@ -1784,6 +1805,9 @@ public class EuclidFrameAPITestTools
 
    private static Class<?> findCorrespondingFramelessType(Class<?> frameType)
    {
+      if (frameType.isArray())
+         return Array.newInstance(findCorrespondingFramelessType(frameType.getComponentType()), 0).getClass();
+
       if (!isFrameType(frameType))
          throw new IllegalArgumentException("Cannot handle the following type: " + frameType.getSimpleName());
 
@@ -1839,6 +1863,8 @@ public class EuclidFrameAPITestTools
 
    private static boolean isFramelessTypeWithFrameEquivalent(Class<?> type)
    {
+      if (type.isArray())
+         return isFramelessTypeWithFrameEquivalent(type.getComponentType());
       return isFramelessType(type) && !framelessTypesWithoutFrameEquivalent.contains(type);
    }
 

@@ -65,7 +65,7 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    default void addVertex(FramePoint2DReadOnly vertex)
    {
       checkReferenceFrameMatch(vertex);
-      addVertex(vertex);
+      ConvexPolygon2DBasics.super.addVertex(vertex);
    }
 
    /**

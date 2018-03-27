@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
@@ -17,7 +18,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
-public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics
+public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, GeometryObject<FrameConvexPolygon2D>
 {
    /**
     * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
@@ -187,6 +188,12 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics
    public FrameConvexPolygon2D(FrameConvexPolygon2DReadOnly firstPolygon, FrameConvexPolygon2DReadOnly secondPolygon)
    {
       setIncludingFrameAndUpdate(firstPolygon, secondPolygon);
+   }
+
+   @Override
+   public void set(FrameConvexPolygon2D other)
+   {
+      setAndUpdate(other);
    }
 
    @Override
@@ -495,6 +502,18 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrame;
+   }
+
+   @Override
+   public boolean epsilonEquals(FrameConvexPolygon2D other, double epsilon)
+   {
+      return FrameConvexPolygon2DBasics.super.epsilonEquals(other, epsilon);
+   }
+
+   @Override
+   public boolean geometricallyEquals(FrameConvexPolygon2D other, double epsilon)
+   {
+      return FrameConvexPolygon2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    private class FrameVertex2D implements FixedFramePoint2DBasics

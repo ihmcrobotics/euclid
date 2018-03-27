@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.Random;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLine2D;
 import us.ihmc.euclid.referenceFrame.FrameLine3D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
@@ -1510,5 +1511,10 @@ public class EuclidFrameRandomTools
    public static FrameLineSegment3D nextFrameLineSegment3D(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameLineSegment3D(referenceFrame, EuclidGeometryRandomTools.nextLineSegment3D(random));
+   }
+
+   public static FrameConvexPolygon2D nextFrameConvexPolygon2D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteXY, int numberOfPossiblePoints)
+   {
+      return new FrameConvexPolygon2D(referenceFrame, EuclidGeometryRandomTools.nextConvexPolygon2D(random, maxAbsoluteXY, numberOfPossiblePoints));
    }
 }

@@ -172,8 +172,9 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
     *            the same reference frame.
     */
-   default boolean isPointInside(Point2DReadOnly point, double epsilon)
+   default boolean isPointInside(FramePoint2DReadOnly point, double epsilon)
    {
+      checkReferenceFrameMatch(point);
       return ConvexPolygon2DReadOnly.super.isPointInside(point, epsilon);
    }
 
@@ -286,7 +287,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
-    * @throws ReferenceFrameMismatchException if @{@code ray}, {@code closestPointToPack}, and
+    * @throws ReferenceFrameMismatchException if {@code ray}, {@code closestPointToPack}, and
     *            {@code this} are not expressed in the same reference frame.
     */
    default boolean getClosestPointWithRay(FrameLine2DReadOnly ray, FixedFramePoint2DBasics closestPointToPack)
@@ -592,7 +593,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @return whether the method succeeded or not.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
-    * @throws ReferenceFrameMismatchException if @{@code pointToProject}, {@code projectionToPack}, and
+    * @throws ReferenceFrameMismatchException if {@code pointToProject}, {@code projectionToPack}, and
     *            {@code this} are not expressed in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
@@ -620,7 +621,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @return whether the method succeeded or not.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
-    * @throws ReferenceFrameMismatchException if @{@code pointToProject} and {@code this} are not
+    * @throws ReferenceFrameMismatchException if {@code pointToProject} and {@code this} are not
     *            expressed in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FramePoint2DBasics projectionToPack)
@@ -681,11 +682,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default FramePoint2DBasics orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
    {
-      Point2DBasics orthogonalProjection = ConvexPolygon2DReadOnly.super.orthogonalProjectionCopy(pointToProject);
-      if (orthogonalProjection == null)
-         return null;
-      else
-         return new FramePoint2D(getReferenceFrame(), orthogonalProjection);
+      checkReferenceFrameMatch(pointToProject);
+      return orthogonalProjectionCopy((Point2DReadOnly) pointToProject);
    }
 
    /**
@@ -2204,7 +2202,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            reference frame.
     */
    default int intersectionWith(LineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
-         FixedFramePoint2DBasics secondIntersectionToPack)
+                                FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(firstIntersectionToPack);
       checkReferenceFrameMatch(secondIntersectionToPack);
@@ -2332,7 +2330,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack,
-         FixedFramePoint2DBasics secondIntersectionToPack)
+                                FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       checkReferenceFrameMatch(secondIntersectionToPack);
@@ -2377,7 +2375,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
-         Point2DBasics secondIntersectionToPack)
+                                Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       checkReferenceFrameMatch(firstIntersectionToPack);
@@ -2422,7 +2420,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            are not expressed in the same reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
-         FixedFramePoint2DBasics secondIntersectionToPack)
+                                FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       checkReferenceFrameMatch(firstIntersectionToPack);
@@ -2467,7 +2465,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *            expressed in the same reference frame.
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FramePoint2DBasics firstIntersectionToPack,
-         FramePoint2DBasics secondIntersectionToPack)
+                                FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment2D);
       firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
@@ -2820,11 +2818,35 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @return whether this method succeeded or not.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
-    * @throws ReferenceFrameMismatchException if @{@code point}, {@code vertexToPack}, and {@code this}
+    * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
+    *            the same reference frame.
+    */
+   default boolean getClosestVertex(FramePoint2DReadOnly point, Point2DBasics vertexToPack)
+   {
+      checkReferenceFrameMatch(point);
+      return ConvexPolygon2DReadOnly.super.getClosestVertex(point, vertexToPack);
+   }
+
+   /**
+    * Finds the index of the closest vertex to the query.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the polygon has no vertices, this method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param vertexToPack point used to store the result. Modified.
+    * @return whether this method succeeded or not.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws ReferenceFrameMismatchException if {@code point}, {@code vertexToPack}, and {@code this}
     *            are not expressed in the same reference frame.
     */
    default boolean getClosestVertex(FramePoint2DReadOnly point, FixedFramePoint2DBasics vertexToPack)
    {
+      checkReferenceFrameMatch(point);
       checkReferenceFrameMatch(vertexToPack);
       return ConvexPolygon2DReadOnly.super.getClosestVertex(point, vertexToPack);
    }
@@ -2848,6 +2870,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean getClosestVertex(FramePoint2DReadOnly point, FramePoint2DBasics vertexToPack)
    {
+      checkReferenceFrameMatch(point);
       vertexToPack.setReferenceFrame(getReferenceFrame());
       return ConvexPolygon2DReadOnly.super.getClosestVertex(point, vertexToPack);
    }
@@ -3156,6 +3179,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default FrameConvexPolygon2DBasics translateCopy(FrameTuple2DReadOnly translation)
    {
+      checkReferenceFrameMatch(translation);
       return translateCopy((Tuple2DReadOnly) translation);
    }
 
