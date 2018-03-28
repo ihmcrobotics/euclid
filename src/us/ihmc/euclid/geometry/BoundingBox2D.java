@@ -15,8 +15,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * A {@link BoundingBox2D} can be used to define from a set of minimum and maximum coordinates an
  * axis-aligned bounding box in the XY-plane.
  */
-public class BoundingBox2D
-      implements BoundingBox2DBasics, EpsilonComparable<BoundingBox2D>, Settable<BoundingBox2D>, GeometricallyComparable<BoundingBox2D>
+public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<BoundingBox2D>, Settable<BoundingBox2D>, GeometricallyComparable<BoundingBox2D>
 {
    /** The minimum coordinates of this bounding box. */
    private final Point2D minPoint = new Point2D();
@@ -161,7 +160,7 @@ public class BoundingBox2D
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(BoundingBox2D)}, it returns {@code false} otherwise.
+    * {@link #equals(BoundingBox2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

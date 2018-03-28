@@ -12,6 +12,14 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
+/**
+ * Write and read interface for a convex polygon defined in the XY-plane.
+ * <p>
+ * This implementation of convex polygon is designed for garbage free operations.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearable, Transformable
 {
    /**
@@ -446,11 +454,23 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
       applyTransform(transform, true);
    }
 
+   /**
+    * Transforms this convex polygon using the given homogeneous transformation matrix.
+    *
+    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *           given transform represents a transformation in the XY plane.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *            of {@code transform} is not a transformation in the XY plane.
+    */
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
       checkIfUpToDate();
       notifyVerticesChanged();
-      
+
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
          getVertexUnsafe(i).applyTransform(transform, checkIfTransformInXYPlane);
@@ -474,11 +494,23 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
       applyInverseTransform(transform, true);
    }
 
+   /**
+    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
+    *
+    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *           given transform represents a transformation in the XY plane.
+    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
+    *            polygon's vertices were edited.
+    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *            of {@code transform} is not a transformation in the XY plane.
+    */
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
       checkIfUpToDate();
       notifyVerticesChanged();
-      
+
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
          getVertexUnsafe(i).applyInverseTransform(transform, checkIfTransformInXYPlane);

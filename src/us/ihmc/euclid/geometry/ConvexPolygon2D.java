@@ -19,7 +19,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 /**
  * Describes a planar convex polygon defined in the XY-plane.
  * <p>
- * The vertices of a convex polygon are clockwise and are all different.
+ * The vertices of a convex polygon are clockwise ordered and are all different.
  * </p>
  * <p>
  * This implementation of convex polygon is designed for garbage free operations.

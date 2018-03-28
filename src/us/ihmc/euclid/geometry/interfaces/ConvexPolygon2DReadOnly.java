@@ -13,6 +13,14 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
+/**
+ * Read-only interface for a convex polygon defined in the XY-plane.
+ * <p>
+ * This implementation of convex polygon is designed for garbage free operations.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface ConvexPolygon2DReadOnly
 {
    /**
@@ -631,7 +639,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(x, y, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(),
-            epsilon);
+                                                                       epsilon);
    }
 
    /**
@@ -686,7 +694,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(),
-            epsilon);
+                                                                       epsilon);
    }
 
    /**
@@ -715,7 +723,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-            getNumberOfVertices(), isClockwiseOrdered(), closestPointToPack);
+                                                                          getNumberOfVertices(), isClockwiseOrdered(), closestPointToPack);
    }
 
    /**
@@ -747,7 +755,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-            getNumberOfVertices(), isClockwiseOrdered());
+                                                                          getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -792,7 +800,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-            isClockwiseOrdered());
+                                                                                   isClockwiseOrdered());
    }
 
    /**
@@ -840,7 +848,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-            isClockwiseOrdered(), projectionToPack);
+                                                                              isClockwiseOrdered(), projectionToPack);
    }
 
    /**
@@ -866,7 +874,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-            isClockwiseOrdered());
+                                                                              isClockwiseOrdered());
    }
 
    /**
@@ -1204,7 +1212,8 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(),
-            getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack, secondIntersectionToPack);
+                                                                                    getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack,
+                                                                                    secondIntersectionToPack);
    }
 
    /**
@@ -1232,7 +1241,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(),
-            getNumberOfVertices(), isClockwiseOrdered());
+                                                                                    getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1263,7 +1272,8 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-            getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack, secondIntersectionToPack);
+                                                                                   getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack,
+                                                                                   secondIntersectionToPack);
    }
 
    /**
@@ -1290,7 +1300,7 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-            getNumberOfVertices(), isClockwiseOrdered());
+                                                                                   getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1331,7 +1341,9 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
-            getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack, secondIntersectionToPack);
+                                                                                           getUnmodifiableVertexBuffer(), getNumberOfVertices(),
+                                                                                           isClockwiseOrdered(), firstIntersectionToPack,
+                                                                                           secondIntersectionToPack);
    }
 
    /**
@@ -1368,7 +1380,8 @@ public interface ConvexPolygon2DReadOnly
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
-            getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered());
+                                                                                           getUnmodifiableVertexBuffer(), getNumberOfVertices(),
+                                                                                           isClockwiseOrdered());
    }
 
    /**
@@ -1611,6 +1624,13 @@ public interface ConvexPolygon2DReadOnly
       return copy;
    }
 
+   /**
+    * Tests on a per vertex and per component basis, if this polygon is exactly equal to {@code other}.
+    *
+    * @param other the other polygon to compare against this. Not modified.
+    * @return {@code true} if the two polygons are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
    default boolean equals(ConvexPolygon2DReadOnly other)
    {
       if (other == null)
