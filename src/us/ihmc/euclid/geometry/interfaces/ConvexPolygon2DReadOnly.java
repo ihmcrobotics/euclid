@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import java.util.Collections;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
@@ -14,16 +15,33 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public interface ConvexPolygon2DReadOnly
 {
+   /**
+    * Tests whether the vertices of this polygon are clockwise or counter-clockwise ordered.
+    * 
+    * @return {@code true} if the vertices are clockwise ordered, {@code false} otherwise.
+    */
    boolean isClockwiseOrdered();
 
+   /**
+    * Tests whether the vertices of this polygon have been updated to ensure {@code this} is a convex
+    * polygon.
+    * <p>
+    * When this polygon is up-to-date, all operations are available. However, when this polygon is
+    * out-of-date, most of the operations on {@code this} will throw an
+    * {@code OutdatedPolygonException}. To update a polygon, please see
+    * {@link ConvexPolygon2DBasics#update()}.
+    * </p>
+    * 
+    * @return whether {@code this} is up-to-date or not.
+    */
    boolean isUpToDate();
 
    /**
-    * Checks if this polygon has been updated via {@link #update()} since last time its vertices have
-    * been modified.
+    * Checks if this polygon has been updated via {@link ConvexPolygon2DBasics#update()} since last
+    * time its vertices have been modified.
     *
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default void checkIfUpToDate()
    {
@@ -31,9 +49,45 @@ public interface ConvexPolygon2DReadOnly
          throw new OutdatedPolygonException("Call the update method before doing any other calculation!");
    }
 
+   /**
+    * Gets the number of vertices composing this convex polygon.
+    *
+    * @return this polygon's size.
+    */
    int getNumberOfVertices();
 
+   /**
+    * Gets a read-only view of this polygon internal vertex buffer.
+    * <p>
+    * WARNING: The size of the returned list is usually greater than the size of this polygon. The
+    * vertices currently composing this polygon are located at the indices &in; [0;
+    * {@code this.getNumberOfVertices()}[.
+    * </p>
+    * <p>
+    * The returned list is an unmodifiable list created with
+    * {@link Collections#unmodifiableList(List)}.
+    * </p>
+    * 
+    * @return a read-only view of this polygon internal vertex buffer.
+    */
    List<? extends Point2DReadOnly> getUnmodifiableVertexBuffer();
+
+   /**
+    * Gets a read-only view of this polygon vertices.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * The returned list is an unmodifiable list created with
+    * {@link Collections#unmodifiableList(List)}.
+    * </p>
+    * 
+    * @return a read-only view of this polygon vertices.
+    */
+   default List<? extends Point2DReadOnly> getUnmodifiablePolygonVertices()
+   {
+      return getUnmodifiableVertexBuffer().subList(0, getNumberOfVertices());
+   }
 
    /**
     * Tests whether this polygon is empty, i.e. it has no vertices.
@@ -90,14 +144,13 @@ public interface ConvexPolygon2DReadOnly
    /**
     * Gets the read-only reference to the {@code index}<sup>th</sup> vertex of this polygon.
     * <p>
-    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
-    * x-coordinate.
+    * Note that the first vertex has the lowest x-coordinate.
     * </p>
     *
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the read-only reference to the vertex.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DReadOnly getVertex(int index)
    {
@@ -111,14 +164,13 @@ public interface ConvexPolygon2DReadOnly
     * Gets the read-only reference to the vertex located after the {@code index}<sup>th</sup> vertex of
     * this polygon.
     * <p>
-    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
-    * x-coordinate.
+    * Note that the first vertex has the lowest x-coordinate.
     * </p>
     *
-    * @param index the index of the vertex in the clockwise ordered list.
+    * @param index the index of the vertex.
     * @return the read-only reference to the next vertex.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -138,8 +190,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the read-only reference to the previous vertex.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -158,8 +210,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param index the index of the vertex in the counter-clockwise ordered list.
     * @return the read-only reference to the vertex.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -179,8 +231,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param index the index of the vertex in the counter-clockwise ordered list.
     * @return the read-only reference to the next vertex.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -200,8 +252,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param index the index of the vertex in the counter-clockwise ordered list.
     * @return the read-only reference to the previous vertex.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -221,8 +273,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param currentVertexIndex the current vertex index.
     * @return the next vertex index.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -249,8 +301,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param currentVertexIndex the current vertex index.
     * @return the before vertex index.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -271,8 +323,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the value of this polygon area.
     *
     * @return the are of this polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    double getArea();
 
@@ -287,8 +339,8 @@ public interface ConvexPolygon2DReadOnly
     * </p>
     *
     * @return the read-only reference to this polygon's centroid.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    Point2DReadOnly getCentroid();
 
@@ -296,8 +348,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the read-only reference to this polygon's axis-aligned bounding box.
     *
     * @return this polygon's bounding box.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    BoundingBox2DReadOnly getBoundingBox();
 
@@ -305,8 +357,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the size along the x-axis of this polygon's bounding box.
     *
     * @return the range on the x-axis of the bounding box.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default double getBoundingBoxRangeX()
    {
@@ -318,8 +370,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the size along the y-axis of this polygon's bounding box.
     *
     * @return the range on the y-axis of the bounding box.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default double getBoundingBoxRangeY()
    {
@@ -331,8 +383,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the highest x-coordinate value of the vertices composing this polygon.
     *
     * @return the maximum x-coordinate.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default double getMaxX()
@@ -344,8 +396,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the lowest x-coordinate value of the vertices composing this polygon.
     *
     * @return the minimum x-coordinate.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default double getMinX()
@@ -357,8 +409,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the highest y-coordinate value of the vertices composing this polygon.
     *
     * @return the maximum y-coordinate.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default double getMaxY()
@@ -370,8 +422,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the lowest y-coordinate value of the vertices composing this polygon.
     *
     * @return the minimum y-coordinate.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default double getMinY()
@@ -383,8 +435,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the index of the vertex with the lowest x-coordinate.
     *
     * @return the index of the vertex located at the minimum x.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMinXIndex();
@@ -393,8 +445,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the index of the vertex with the highest x-coordinate.
     *
     * @return the index of the vertex located at the maximum x.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMaxXIndex();
@@ -403,8 +455,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the index of the vertex with the lowest y-coordinate.
     *
     * @return the index of the vertex located at the minimum y.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMinYIndex();
@@ -413,8 +465,8 @@ public interface ConvexPolygon2DReadOnly
     * Gets the index of the vertex with the highest y-coordinate.
     *
     * @return the index of the vertex located at the maximum y.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMaxYIndex();
@@ -425,8 +477,8 @@ public interface ConvexPolygon2DReadOnly
     * of the candidates.
     *
     * @return the index of the vertex located at the minimum x and maximum y.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMinXMaxYIndex();
@@ -437,8 +489,8 @@ public interface ConvexPolygon2DReadOnly
     * of the candidates.
     *
     * @return the index of the vertex located at the minimum x and minimum y.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMinXMinYIndex();
@@ -449,8 +501,8 @@ public interface ConvexPolygon2DReadOnly
     * of the candidates.
     *
     * @return the index of the vertex located at the maximum x and maximum y.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMaxXMaxYIndex();
@@ -461,8 +513,8 @@ public interface ConvexPolygon2DReadOnly
     * of the candidates.
     *
     * @return the index of the vertex located at the maximum x and minimum y.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    int getMaxXMinYIndex();
@@ -477,8 +529,8 @@ public interface ConvexPolygon2DReadOnly
     * @param startIndexInclusive the index of the first vertex to add.
     * @param endIndexInclusive the index of the last vertex to add.
     * @param pointListToPack the list into which the vertices are to be added.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default void getPointsInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, List<Point2DReadOnly> pointListToPack)
@@ -506,8 +558,8 @@ public interface ConvexPolygon2DReadOnly
     * @param startIndexInclusive the index of the first vertex to add.
     * @param endIndexInclusive the index of the last vertex to add.
     * @param polygonToPack the polygon into which the vertices are to be added.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default void getVerticesInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, ConvexPolygon2DBasics polygonToPack)
@@ -540,8 +592,8 @@ public interface ConvexPolygon2DReadOnly
     * @param x the x-coordinate of the query.
     * @param y the y-coordinate of the query.
     * @return {@code true} if the query is inside this polygon, {@code false} otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean isPointInside(double x, double y)
    {
@@ -572,14 +624,14 @@ public interface ConvexPolygon2DReadOnly
     * @param epsilon the tolerance to use during the test.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
     *         otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean isPointInside(double x, double y, double epsilon)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(x, y, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(),
-                                                                       epsilon);
+            epsilon);
    }
 
    /**
@@ -596,8 +648,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param point the query. Not modified.
     * @return {@code true} if the query is inside this polygon, {@code false} otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean isPointInside(Point2DReadOnly point)
    {
@@ -627,14 +679,14 @@ public interface ConvexPolygon2DReadOnly
     * @param epsilon the tolerance to use during the test.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
     *         otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean isPointInside(Point2DReadOnly point, double epsilon)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(),
-                                                                       epsilon);
+            epsilon);
    }
 
    /**
@@ -656,14 +708,14 @@ public interface ConvexPolygon2DReadOnly
     * @param closestPointToPack the point in which the coordinates of the closest point are stored.
     *           Modified.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean getClosestPointWithRay(Line2DReadOnly ray, Point2DBasics closestPointToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-                                                                          getNumberOfVertices(), isClockwiseOrdered(), closestPointToPack);
+            getNumberOfVertices(), isClockwiseOrdered(), closestPointToPack);
    }
 
    /**
@@ -688,14 +740,14 @@ public interface ConvexPolygon2DReadOnly
     * @return the coordinates of the closest point if the method succeeds, {@code null} otherwise.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
     *            of the given list of vertices.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics getClosestPointWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-                                                                          getNumberOfVertices(), isClockwiseOrdered());
+            getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -706,8 +758,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param point the coordinates of the query. Not modified.
     * @return the value of the distance between the point and this polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default double distance(Point2DReadOnly point)
    {
@@ -733,14 +785,14 @@ public interface ConvexPolygon2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @return the distance between the query and the polygon, it is negative if the point is inside the
     *         polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default double signedDistance(Point2DReadOnly point)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-                                                                                   isClockwiseOrdered());
+            isClockwiseOrdered());
    }
 
    /**
@@ -757,8 +809,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param pointToProject the point to project on this polygon. Modified.
     * @return whether the method succeeded or not.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean orthogonalProjection(Point2DBasics pointToProject)
    {
@@ -781,14 +833,14 @@ public interface ConvexPolygon2DReadOnly
     * @param projectionToPack point in which the projection of the point onto the convex polygon is
     *           stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean orthogonalProjection(Point2DReadOnly pointToProject, Point2DBasics projectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-                                                                              isClockwiseOrdered(), projectionToPack);
+            isClockwiseOrdered(), projectionToPack);
    }
 
    /**
@@ -807,14 +859,14 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
     * @return the coordinates of the projection, or {@code null} if the method failed.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-                                                                              isClockwiseOrdered());
+            isClockwiseOrdered());
    }
 
    /**
@@ -838,8 +890,8 @@ public interface ConvexPolygon2DReadOnly
     * @param observer the coordinates of the observer. Not modified.
     * @return the index of the first vertex that is in the line-of-sight, {@code -1} if this method
     *         fails.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int lineOfSightStartIndex(Point2DReadOnly observer)
    {
@@ -868,8 +920,8 @@ public interface ConvexPolygon2DReadOnly
     * @param observer the coordinates of the observer. Not modified.
     * @return the index of the last vertex that is in the line-of-sight, {@code -1} if this method
     *         fails.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int lineOfSightEndIndex(Point2DReadOnly observer)
    {
@@ -901,8 +953,8 @@ public interface ConvexPolygon2DReadOnly
     * @param observer the coordinates of the observer. Not modified.
     * @return the indices in order of the first and last vertices that are in the line-of-sight,
     *         {@code null} if this method fails.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int[] lineOfSightIndices(Point2DReadOnly observer)
    {
@@ -932,8 +984,8 @@ public interface ConvexPolygon2DReadOnly
     * @param startVertexToPack point in which the coordinates of the first vertex in the line-of-sight
     *           are stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean lineOfSightStartVertex(Point2DReadOnly observer, Point2DBasics startVertexToPack)
    {
@@ -969,8 +1021,8 @@ public interface ConvexPolygon2DReadOnly
     * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight are
     *           stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean lineOfSightEndVertex(Point2DReadOnly observer, Point2DBasics endVertexToPack)
    {
@@ -1009,8 +1061,8 @@ public interface ConvexPolygon2DReadOnly
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates of the first vertex in the line-of-sight or {@code null} if this method
     *         failed. Modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics lineOfSightStartVertexCopy(Point2DReadOnly observer)
    {
@@ -1043,8 +1095,8 @@ public interface ConvexPolygon2DReadOnly
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates of the last vertex in the line-of-sight or {@code null} if this method
     *         failed. Modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics lineOfSightEndVertexCopy(Point2DReadOnly observer)
    {
@@ -1077,8 +1129,8 @@ public interface ConvexPolygon2DReadOnly
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates in order of the first and last vertices in the line-of-sight or
     *         {@code null} if this method failed. Modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics[] lineOfSightVertices(Point2DReadOnly observer)
    {
@@ -1101,8 +1153,8 @@ public interface ConvexPolygon2DReadOnly
     * @param observer the coordinates of the observer. Not modified.
     * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
     *         observer cannot see the outside or is lying on the edge.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean canObserverSeeEdge(int edgeIndex, Point2DReadOnly observer)
    {
@@ -1116,8 +1168,8 @@ public interface ConvexPolygon2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @return {@code true} if the point is considered to be on an edge of this polygon, {@code false}
     *         otherwise.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean pointIsOnPerimeter(Point2DReadOnly point)
    {
@@ -1145,15 +1197,14 @@ public interface ConvexPolygon2DReadOnly
     * @param secondIntersectionToPack point in which the coordinates of the second intersection between
     *           the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int intersectionWith(Line2DReadOnly line, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(),
-                                                                                    getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack,
-                                                                                    secondIntersectionToPack);
+            getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1174,14 +1225,14 @@ public interface ConvexPolygon2DReadOnly
     * @param line the line that may intersect this polygon. Not modified.
     * @return the coordinates of the intersections between the line and the polygon, or {@code null} if
     *         they do not intersect.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics[] intersectionWith(Line2DReadOnly line)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(),
-                                                                                    getNumberOfVertices(), isClockwiseOrdered());
+            getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1205,15 +1256,14 @@ public interface ConvexPolygon2DReadOnly
     * @param secondIntersectionToPack point in which the coordinates of the second intersection between
     *           the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int intersectionWithRay(Line2DReadOnly ray, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-                                                                                   getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack,
-                                                                                   secondIntersectionToPack);
+            getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1233,14 +1283,14 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param ray the ray that may intersect this polygon. Not modified.
     * @return the intersections between the ray and the polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics[] intersectionWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
-                                                                                   getNumberOfVertices(), isClockwiseOrdered());
+            getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1274,16 +1324,14 @@ public interface ConvexPolygon2DReadOnly
     * @param secondIntersectionToPack point in which the coordinates of the second intersection between
     *           the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int intersectionWith(LineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
-                                                                                           getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-                                                                                           isClockwiseOrdered(), firstIntersectionToPack,
-                                                                                           secondIntersectionToPack);
+            getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
@@ -1313,15 +1361,14 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
     * @return the intersections between the line segment and the polygon.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics[] intersectionWith(LineSegment2DReadOnly lineSegment2D)
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
-                                                                                           getUnmodifiableVertexBuffer(), getNumberOfVertices(),
-                                                                                           isClockwiseOrdered());
+            getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1335,8 +1382,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param point the coordinates of the query. Not modified.
     * @return the index of the closest edge to the query.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int getClosestEdgeIndex(Point2DReadOnly point)
    {
@@ -1356,8 +1403,8 @@ public interface ConvexPolygon2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @param closestEdgeToPack the line segment used to store the result. Not modified.
     * @return whether this method succeeded or not.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean getClosestEdge(Point2DReadOnly point, LineSegment2DBasics closestEdgeToPack)
    {
@@ -1382,8 +1429,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param point the coordinates of the query. Not modified.
     * @return the line segment representing the closest edge or {@code null} if this method failed.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default LineSegment2DBasics getClosestEdgeCopy(Point2DReadOnly point)
    {
@@ -1405,8 +1452,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param point the coordinates of the query. Not modified.
     * @return the index of the closest vertex to the query.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int getClosestVertexIndex(Point2DReadOnly point)
    {
@@ -1426,8 +1473,8 @@ public interface ConvexPolygon2DReadOnly
     * @param point the coordinates of the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean getClosestVertex(Point2DReadOnly point, Point2DBasics vertexToPack)
    {
@@ -1452,8 +1499,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param point the coordinates of the query. Not modified.
     * @return the coordinates of the closest vertex, or {@code null} if this method failed.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics getClosestVertexCopy(Point2DReadOnly point)
    {
@@ -1474,8 +1521,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param line the query. Not modified.
     * @return the index of the closest vertex to the query.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default int getClosestVertexIndex(Line2DReadOnly line)
    {
@@ -1495,8 +1542,8 @@ public interface ConvexPolygon2DReadOnly
     * @param line the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default boolean getClosestVertex(Line2DReadOnly line, Point2DBasics vertexToPack)
    {
@@ -1521,8 +1568,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param line the query. Not modified.
     * @return the coordinates of the closest vertex or {@code null} if this method failed.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     */
    default Point2DBasics getClosestVertexCopy(Line2DReadOnly line)
    {
@@ -1537,8 +1584,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param edgeIndex index of the vertex that starts the edge.
     * @param edgeToPack line segment used to store the edge endpoints. Modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
     *            this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
@@ -1553,8 +1600,8 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param translation the translation to apply to the copy of this polygon. Not modified.
     * @return the copy of this polygon translated.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
+    *            since last time this polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default ConvexPolygon2DBasics translateCopy(Tuple2DReadOnly translation)
