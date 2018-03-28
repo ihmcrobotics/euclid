@@ -9,7 +9,17 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Write and read interface for a convex polygon defined in the XY-plane and that is expressed in an
+ * immutable reference frame.
+ * <p>
+ * This implementation of convex polygon is designed for garbage free operations.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DReadOnly, ConvexPolygon2DBasics
 {
    /**
@@ -52,6 +62,24 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    }
 
    /**
+    * Add a vertex to this polygon using only the x and y coordinates of the given {@code vertex}.
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
+    * @param vertex the new vertex. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code referenceFrame} and
+    *            {@code this.getReferenceFrame()} are not the same.
+    */
+   default void addVertex(ReferenceFrame referenceFrame, Point3DReadOnly vertex)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      addVertex(vertex);
+   }
+
+   /**
     * Add a vertex to this polygon.
     * <p>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
@@ -63,6 +91,23 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *            the same reference frame.
     */
    default void addVertex(FramePoint2DReadOnly vertex)
+   {
+      checkReferenceFrameMatch(vertex);
+      ConvexPolygon2DBasics.super.addVertex(vertex);
+   }
+
+   /**
+    * Add a vertex to this polygon using only the x and y coordinates of the given {@code vertex}.
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param vertex the new vertex. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code vertex} and {@code this} are not expressed in
+    *            the same reference frame.
+    */
+   default void addVertex(FramePoint3DReadOnly vertex)
    {
       checkReferenceFrameMatch(vertex);
       ConvexPolygon2DBasics.super.addVertex(vertex);
@@ -90,6 +135,7 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *            {@code FramePoint2DReadOnly} and is not expressed in the same reference frame as
     *            {@code this}.
     */
+   @Override
    default void addVertices(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
       if (numberOfVertices < 0 || numberOfVertices > vertices.size())
@@ -98,6 +144,47 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
       for (int i = 0; i < numberOfVertices; i++)
       {
          Point2DReadOnly vertex = vertices.get(i);
+         if (vertex instanceof FramePoint2DReadOnly)
+            addVertex((FramePoint2DReadOnly) vertex);
+         else
+            addVertex(vertex);
+      }
+   }
+
+   /**
+    * Adds the N first vertices from the given list to this polygon, where N is equal to
+    * {@code numberOfVertices}.
+    * <p>
+    * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
+    * </p>
+    * <p>
+    * WARNING: Each element of the given list is tested such that if they implement
+    * {@code FramePoint3DReadOnly}, the method checks that they are expressed in the same reference
+    * frame as {@code this}.
+    * </p>
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param vertices the list containing the vertices to add to this polygon. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
+    *           [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given list of vertices.
+    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
+    *            {@code FramePoint3DReadOnly} and is not expressed in the same reference frame as
+    *            {@code this}.
+    */
+   @Override
+   default void addVertices3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   {
+      if (numberOfVertices < 0 || numberOfVertices > vertices.size())
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
+
+      for (int i = 0; i < numberOfVertices; i++)
+      {
+         Point3DReadOnly vertex = vertices.get(i);
          if (vertex instanceof FramePoint2DReadOnly)
             addVertex((FramePoint2DReadOnly) vertex);
          else
@@ -122,6 +209,34 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *            the same reference frame as {@code this}.
     */
    default void addVertices(FramePoint2DReadOnly[] vertices, int numberOfVertices)
+   {
+      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
+
+      for (int i = 0; i < numberOfVertices; i++)
+         addVertex(vertices[i]);
+   }
+
+   /**
+    * Adds the N first vertices from the given array to this polygon, where N is equal to
+    * {@code numberOfVertices}.
+    * <p>
+    * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
+    * </p>
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param vertices the array containing the vertices to add to this polygon. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given array of vertices.
+    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is not expressed in
+    *            the same reference frame as {@code this}.
+    */
+   default void addVertices(FramePoint3DReadOnly[] vertices, int numberOfVertices)
    {
       if (numberOfVertices < 0 || numberOfVertices > vertices.length)
          throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
@@ -170,10 +285,41 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *            {@code FramePoint2DReadOnly} and is not expressed in the same reference frame as
     *            {@code this}.
     */
+   @Override
    default void setAndUpdate(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
       clear();
       addVertices(vertices, numberOfVertices);
+      update();
+   }
+
+   /**
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
+    * <li>{@link #addVertices3D(List, int)}.
+    * <li>{@link #update()}.
+    * </ol>
+    * <p>
+    * WARNING: Each element of the given list is tested such that if they implement
+    * {@code FramePoint3DReadOnly}, the method checks that they are expressed in the same reference
+    * frame as {@code this}.
+    * </p>
+    *
+    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
+    *           [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given list of vertices.
+    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
+    *            {@code FramePoint3DReadOnly} and is not expressed in the same reference frame as
+    *            {@code this}.
+    */
+   @Override
+   default void setAndUpdate3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   {
+      clear();
+      addVertices3D(vertices, numberOfVertices);
       update();
    }
 
@@ -194,6 +340,29 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *            the same reference frame as {@code this}.
     */
    default void setAndUpdate(FramePoint2DReadOnly[] vertices, int numberOfVertices)
+   {
+      clear();
+      addVertices(vertices, numberOfVertices);
+      update();
+   }
+
+   /**
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
+    * <li>{@link #addVertices(FramePoint3DReadOnly[], int)}.
+    * <li>{@link #update()}.
+    * </ol>
+    *
+    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given array of vertices.
+    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is not expressed in
+    *            the same reference frame as {@code this}.
+    */
+   default void setAndUpdate(FramePoint3DReadOnly[] vertices, int numberOfVertices)
    {
       clear();
       addVertices(vertices, numberOfVertices);
@@ -317,8 +486,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws ReferenceFrameMismatchException if {@code translation} and {@code this} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code translation} and {@code this} are not expressed
+    *            in the same reference frame.
     */
    default void translate(FrameTuple2DReadOnly translation)
    {

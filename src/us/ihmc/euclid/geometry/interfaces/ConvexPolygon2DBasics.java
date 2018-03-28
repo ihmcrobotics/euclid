@@ -11,6 +11,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
  * Write and read interface for a convex polygon defined in the XY-plane.
@@ -143,6 +144,20 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
+    * Add a vertex to this polygon using the x and y coordinates of the given {@code vertex}.
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param vertex the new vertex. Not modified.
+    */
+   default void addVertex(Point3DReadOnly vertex)
+   {
+      addVertex(vertex.getX(), vertex.getY());
+   }
+
+   /**
     * Adds the N first vertices from the given list to this polygon, where N is equal to
     * {@code numberOfVertices}.
     * <p>
@@ -166,6 +181,32 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
+    * Adds the N first vertices from the given list to this polygon, where N is equal to
+    * {@code numberOfVertices}.
+    * <p>
+    * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
+    * </p>
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param vertices the list containing the vertices to add to this polygon. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
+    *           [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given list of vertices.
+    */
+   default void addVertices3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   {
+      if (numberOfVertices < 0 || numberOfVertices > vertices.size())
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
+
+      for (int i = 0; i < numberOfVertices; i++)
+         addVertex(vertices.get(i));
+   }
+
+   /**
     * Adds the N first vertices from the given array to this polygon, where N is equal to
     * {@code numberOfVertices}.
     * <p>
@@ -180,6 +221,32 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *            of the given array of vertices.
     */
    default void addVertices(Point2DReadOnly[] vertices, int numberOfVertices)
+   {
+      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
+
+      for (int i = 0; i < numberOfVertices; i++)
+         addVertex(vertices[i]);
+   }
+
+   /**
+    * Adds the N first vertices from the given array to this polygon, where N is equal to
+    * {@code numberOfVertices}.
+    * <p>
+    * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
+    * </p>
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param vertices the array containing the vertices to add to this polygon. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given array of vertices.
+    */
+   default void addVertices(Point3DReadOnly[] vertices, int numberOfVertices)
    {
       if (numberOfVertices < 0 || numberOfVertices > vertices.length)
          throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
@@ -270,6 +337,27 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * This method does:
     * <ol>
     * <li>{@link #clear()}.
+    * <li>{@link #addVertices3D(List, int)}.
+    * <li>{@link #update()}.
+    * </ol>
+    *
+    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
+    *           [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given list of vertices.
+    */
+   default void setAndUpdate3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   {
+      clear();
+      addVertices3D(vertices, numberOfVertices);
+      update();
+   }
+
+   /**
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
     * <li>{@link #addVertices(Point2DReadOnly[], int)}.
     * <li>{@link #update()}.
     * </ol>
@@ -281,6 +369,27 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *            of the given array of vertices.
     */
    default void setAndUpdate(Point2DReadOnly[] vertices, int numberOfVertices)
+   {
+      clear();
+      addVertices(vertices, numberOfVertices);
+      update();
+   }
+
+   /**
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
+    * <li>{@link #addVertices(Point3DReadOnly[], int)}.
+    * <li>{@link #update()}.
+    * </ol>
+    *
+    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
+    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *            of the given array of vertices.
+    */
+   default void setAndUpdate(Point3DReadOnly[] vertices, int numberOfVertices)
    {
       clear();
       addVertices(vertices, numberOfVertices);
