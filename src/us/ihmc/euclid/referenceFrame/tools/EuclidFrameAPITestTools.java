@@ -1338,6 +1338,11 @@ public class EuclidFrameAPITestTools
                   System.err.println(message);
                }
             }
+            catch (RuntimeException e)
+            {
+               System.err.println("Problem when evaluating the method: " + getMethodSimpleName(frameMethod.getReturnType(), frameMethodName, frameMethodParameterTypes));
+               throw e;
+            }
          }
       }
    }
