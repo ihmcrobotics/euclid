@@ -80,6 +80,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    default void getFramePointsInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, List<FramePoint2DReadOnly> pointListToPack)
    {
       checkIfUpToDate();
+      checkIndexInBoundaries(startIndexInclusive);
+      checkIndexInBoundaries(endIndexInclusive);
       int index = startIndexInclusive;
 
       while (true)
@@ -111,17 +113,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    default void getVerticesInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, FixedFrameConvexPolygon2DBasics polygonToPack)
    {
       checkReferenceFrameMatch(polygonToPack);
-      checkIfUpToDate();
-      int index = startIndexInclusive;
-
-      while (true)
-      {
-         polygonToPack.addVertex((Point2DReadOnly) getVertex(index));
-
-         if (index == endIndexInclusive)
-            break;
-         index = getNextVertexIndex(index);
-      }
+      ConvexPolygon2DReadOnly.super.getVerticesInClockwiseOrder(startIndexInclusive, endIndexInclusive, polygonToPack);
    }
 
    /**

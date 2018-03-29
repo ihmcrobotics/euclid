@@ -544,6 +544,8 @@ public interface ConvexPolygon2DReadOnly
    default void getPointsInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, List<Point2DReadOnly> pointListToPack)
    {
       checkIfUpToDate();
+      checkIndexInBoundaries(startIndexInclusive);
+      checkIndexInBoundaries(endIndexInclusive);
       int index = startIndexInclusive;
 
       while (true)
@@ -573,6 +575,8 @@ public interface ConvexPolygon2DReadOnly
    default void getVerticesInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, ConvexPolygon2DBasics polygonToPack)
    {
       checkIfUpToDate();
+      checkIndexInBoundaries(startIndexInclusive);
+      checkIndexInBoundaries(endIndexInclusive);
       int index = startIndexInclusive;
 
       while (true)
