@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -669,14 +670,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    @Override
    public String toString()
    {
-      String ret = "";
-
-      for (int i = 0; i < numberOfVertices; i++)
-      {
-         Point2D vertex = clockwiseOrderedVertices.get(i);
-         ret = ret + "(" + vertex.getX() + ", " + vertex.getY() + ")," + "\n";
-      }
-
-      return ret;
+      return EuclidGeometryIOTools.getConvexPolygon2DString(this);
    }
 }

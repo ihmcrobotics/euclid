@@ -7,6 +7,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
@@ -514,6 +515,12 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    public boolean geometricallyEquals(FrameConvexPolygon2D other, double epsilon)
    {
       return FrameConvexPolygon2DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   @Override
+   public String toString()
+   {
+      return EuclidGeometryIOTools.getConvexPolygon2DString(this) + "-" + referenceFrame;
    }
 
    private class FrameVertex2D implements FixedFramePoint2DBasics
