@@ -7,6 +7,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
@@ -53,7 +54,12 @@ public abstract class FrameConvexPolygon2DReadOnlyTest<F extends FrameConvexPoly
       return createFrameConvexPolygon2D(ReferenceFrame.getWorldFrame(), vertices);
    }
 
-   public abstract F createFrameConvexPolygon2D(ReferenceFrame referenceFrame, List<? extends Point2DReadOnly> vertices);
+   public F createFrameConvexPolygon2D(ReferenceFrame referenceFrame, List<? extends Point2DReadOnly> vertices)
+   {
+      return createFrameConvexPolygon2D(referenceFrame, Vertex2DSupplier.asVertex2DSupplier(vertices));
+   }
+
+   public abstract F createFrameConvexPolygon2D(ReferenceFrame referenceFrame, Vertex2DSupplier vertex2DSupplier);
 
    @Test
    public void testOverloading() throws Exception

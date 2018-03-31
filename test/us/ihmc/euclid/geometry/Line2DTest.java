@@ -13,6 +13,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -1088,7 +1089,7 @@ public class Line2DTest
             pointList.add(randomPoint(random));
          }
 
-         ConvexPolygon2D convexPolygon = new ConvexPolygon2D(pointList);
+         ConvexPolygon2D convexPolygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(pointList));
          Point2DBasics[] intersectionList = line2d.intersectionWith(convexPolygon);
 
          assertTrue(intersectionList == null || intersectionList.length % 2 == 0);
@@ -1106,7 +1107,7 @@ public class Line2DTest
       polygonPoints.add(firstPolygonPoint);
       polygonPoints.add(secondPolygonPoint);
       polygonPoints.add(thirdPolygonPoint);
-      ConvexPolygon2D triangle = new ConvexPolygon2D(polygonPoints);
+      ConvexPolygon2D triangle = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(polygonPoints));
 
       Point2DBasics[] intersections = line2d.intersectionWith(triangle);
       assertEquals(1, intersections.length);

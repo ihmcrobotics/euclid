@@ -1,12 +1,9 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import java.util.List;
-
-import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
  * Write and read interface for a convex polygon defined in the XY-plane and that is expressed in in
@@ -57,198 +54,115 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * This method does:
     * <ol>
     * <li>{@link #setReferenceFrame(ReferenceFrame)}
-    * <li>{@link #setAndUpdate(List, int)}.
+    * <li>{@link #set(Vertex2DSupplier)}.
     * </ol>
     * 
     * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate(List, int)
+    * @param vertex2DSupplier the supplier of vertices.
+    * @see Vertex2DSupplier
+    * @see #set(Vertex2DSupplier)
     */
-   default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Vertex2DSupplier vertex2DSupplier)
    {
       setReferenceFrame(referenceFrame);
-      setAndUpdate(vertices, numberOfVertices);
+      set(vertex2DSupplier);
    }
 
    /**
     * This method does:
     * <ol>
     * <li>{@link #setReferenceFrame(ReferenceFrame)}
-    * <li>{@link #setAndUpdate3D(List, int)}.
+    * <li>{@link #set(Vertex3DSupplier)}.
     * </ol>
     * 
     * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate3D(List, int)
+    * @param vertex3DSupplier the supplier of vertices.
+    * @see Vertex3DSupplier
+    * @see #set(Vertex3DSupplier)
     */
-   default void setIncludingFrameAndUpdate3D(ReferenceFrame referenceFrame, List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Vertex3DSupplier vertex3DSupplier)
    {
       setReferenceFrame(referenceFrame);
-      setAndUpdate3D(vertices, numberOfVertices);
+      set(vertex3DSupplier);
    }
 
    /**
     * This method does:
     * <ol>
     * <li>{@link #setReferenceFrame(ReferenceFrame)}
-    * <li>{@link #setAndUpdate(Point2DReadOnly[], int)}.
+    * <li>{@link #set(Vertex2DSupplier, Vertex2DSupplier)}.
     * </ol>
     * 
     * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate(Point2DReadOnly[], int)
+    * @param firstVertexSupplier the first supplier of vertices.
+    * @param secondVertexSupplier the second supplier of vertices.
+    * @see Vertex2DSupplier
+    * @see #set(Vertex2DSupplier, Vertex2DSupplier)
     */
-   default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, Point2DReadOnly[] vertices, int numberOfVertices)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Vertex2DSupplier firstVertexSupplier, Vertex2DSupplier secondVertexSupplier)
    {
       setReferenceFrame(referenceFrame);
-      setAndUpdate(vertices, numberOfVertices);
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)}
-    * <li>{@link #setAndUpdate(Point2DReadOnly[], int)}.
-    * </ol>
-    * 
-    * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate(Point3DReadOnly[], int)
-    */
-   default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, Point3DReadOnly[] vertices, int numberOfVertices)
-   {
-      setReferenceFrame(referenceFrame);
-      setAndUpdate(vertices, numberOfVertices);
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)}
-    * <li>{@link #setAndUpdate(ConvexPolygon2DReadOnly)}.
-    * </ol>
-    * 
-    * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param other the other convex polygon to copy. Not modified.
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly)
-    */
-   default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, ConvexPolygon2DReadOnly other)
-   {
-      setReferenceFrame(referenceFrame);
-      setAndUpdate(other);
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)}
-    * <li>{@link #setAndUpdate(ConvexPolygon2DReadOnly, ConvexPolygon2DReadOnly)}.
-    * </ol>
-    * 
-    * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly, ConvexPolygon2DReadOnly)
-    */
-   default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, ConvexPolygon2DReadOnly firstPolygon, ConvexPolygon2DReadOnly secondPolygon)
-   {
-      setReferenceFrame(referenceFrame);
-      setAndUpdate(firstPolygon, secondPolygon);
+      set(firstVertexSupplier, secondVertexSupplier);
    }
 
    /**
     * This method does:
     * <ol>
     * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of the first vertex.
-    * <li>{@link #setAndUpdate(List, int)}.
+    * <li>{@link #set(FrameVertex2DSupplier)}.
     * </ol>
+    * <p>
+    * If the supplier has no vertex, this polygon is cleared and the reference frame is not updated.
+    * </p>
     * 
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate(List, int)
+    * @param frameVertex2DSupplier the supplier of vertices.
+    * @throws ReferenceFrameMismatchException if the reference frame of the supplied vertices are
+    *            inconsistent.
+    * @see FrameVertex2DSupplier
+    * @see #set(FrameVertex2DSupplier)
     */
-   default void setIncludingFrameAndUpdate(List<? extends FramePoint2DReadOnly> vertices, int numberOfVertices)
+   default void setIncludingFrame(FrameVertex2DSupplier frameVertex2DSupplier)
    {
-      setReferenceFrame(vertices.get(0).getReferenceFrame());
-      setAndUpdate(vertices, numberOfVertices);
+      if (frameVertex2DSupplier.getNumberOfVertices() == 0)
+      {
+         clearAndUpdate();
+         return;
+      }
+      else
+      {
+         setReferenceFrame(frameVertex2DSupplier.getVertex(0).getReferenceFrame());
+         set(frameVertex2DSupplier);
+      }
    }
 
    /**
     * This method does:
     * <ol>
     * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of the first vertex.
-    * <li>{@link #setAndUpdate(List, int)}.
+    * <li>{@link #set(FrameVertex3DSupplier)}.
     * </ol>
+    * <p>
+    * If the supplier has no vertex, this polygon is cleared and the reference frame is not updated.
+    * </p>
     * 
-    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate3D(List, int)
+    * @param frameVertex3DSupplier the supplier of vertices.
+    * @throws ReferenceFrameMismatchException if the reference frame of the supplied vertices are
+    *            inconsistent.
+    * @see FrameVertex3DSupplier
+    * @see #set(FrameVertex3DSupplier)
     */
-   default void setIncludingFrameAndUpdate3D(List<? extends FramePoint3DReadOnly> vertices, int numberOfVertices)
+   default void setIncludingFrame(FrameVertex3DSupplier frameVertex3DSupplier)
    {
-      setReferenceFrame(vertices.get(0).getReferenceFrame());
-      setAndUpdate3D(vertices, numberOfVertices);
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of the first vertex.
-    * <li>{@link #setAndUpdate(FramePoint2DReadOnly[], int)}.
-    * </ol>
-    * 
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate(FramePoint2DReadOnly[], int)
-    */
-   default void setIncludingFrameAndUpdate(FramePoint2DReadOnly[] vertices, int numberOfVertices)
-   {
-      setReferenceFrame(vertices[0].getReferenceFrame());
-      setAndUpdate(vertices, numberOfVertices);
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of the first vertex.
-    * <li>{@link #setAndUpdate(FramePoint3DReadOnly[], int)}.
-    * </ol>
-    * 
-    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    */
-   default void setIncludingFrameAndUpdate(FramePoint3DReadOnly[] vertices, int numberOfVertices)
-   {
-      setReferenceFrame(vertices[0].getReferenceFrame());
-      setAndUpdate(vertices, numberOfVertices);
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of {@code other}.
-    * <li>{@link #setAndUpdate(ConvexPolygon2DReadOnly)}.
-    * </ol>
-    * 
-    * @param other the other convex polygon to copy. Not modified.
-    * @see #setIncludingFrameAndUpdate(ReferenceFrame, ConvexPolygon2DReadOnly)
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly)
-    */
-   default void setIncludingFrameAndUpdate(FrameConvexPolygon2DReadOnly other)
-   {
-      setIncludingFrameAndUpdate(other.getReferenceFrame(), other);
+      if (frameVertex3DSupplier.getNumberOfVertices() == 0)
+      {
+         clearAndUpdate();
+         return;
+      }
+      else
+      {
+         setReferenceFrame(frameVertex3DSupplier.getVertex(0).getReferenceFrame());
+         set(frameVertex3DSupplier);
+      }
    }
 
    /**
@@ -256,20 +170,31 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * <ol>
     * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of
     * {@code firstPolygon}.
-    * <li>{@link #setAndUpdate(ConvexPolygon2DReadOnly, ConvexPolygon2DReadOnly)}.
+    * <li>{@link #set(FrameVertex2DSupplier, FrameVertex2DSupplier)}.
     * </ol>
     * 
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstPolygon} and {@code secondPolygon} are
-    *            not expressed in the same reference frame.
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly, ConvexPolygon2DReadOnly)
+    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param secondVertex2DSupplier the second supplier of vertices.
+    * @throws ReferenceFrameMismatchException if the reference frame of the supplied vertices are
+    *            inconsistent.
+    * @see #set(FrameVertex2DSupplier, FrameVertex2DSupplier)
     */
-   default void setIncludingFrameAndUpdate(FrameConvexPolygon2DReadOnly firstPolygon, FrameConvexPolygon2DReadOnly secondPolygon)
+   default void setIncludingFrame(FrameVertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)
    {
-      firstPolygon.checkReferenceFrameMatch(secondPolygon);
-      setReferenceFrame(firstPolygon.getReferenceFrame());
-      setAndUpdate((ConvexPolygon2DReadOnly) firstPolygon, (ConvexPolygon2DReadOnly) secondPolygon);
+      if (firstVertex2DSupplier.getNumberOfVertices() > 0)
+      {
+         setReferenceFrame(firstVertex2DSupplier.getVertex(0).getReferenceFrame());
+         set(firstVertex2DSupplier, secondVertex2DSupplier);
+      }
+      else if (secondVertex2DSupplier.getNumberOfVertices() > 0)
+      {
+         setReferenceFrame(secondVertex2DSupplier.getVertex(0).getReferenceFrame());
+         set(firstVertex2DSupplier, secondVertex2DSupplier);
+      }
+      else
+      {
+         clearAndUpdate();
+      }
    }
 
    /**

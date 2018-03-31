@@ -6,14 +6,16 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -160,40 +162,35 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       clearAndUpdate();
    }
 
-   public FrameConvexPolygon2D(ReferenceFrame referenceFrame, List<? extends Point2DReadOnly> vertices)
+   public FrameConvexPolygon2D(ReferenceFrame referenceFrame, Vertex2DSupplier vertex2DSupplier)
    {
-      setIncludingFrameAndUpdate(referenceFrame, vertices, vertices.size());
+      setIncludingFrame(referenceFrame, vertex2DSupplier);
    }
 
-   public FrameConvexPolygon2D(ReferenceFrame referenceFrame, Point2DReadOnly[] vertices)
+   public FrameConvexPolygon2D(ReferenceFrame referenceFrame, Vertex3DSupplier vertex3DSupplier)
    {
-      setIncludingFrameAndUpdate(referenceFrame, vertices, vertices.length);
+      setIncludingFrame(referenceFrame, vertex3DSupplier);
    }
 
-   public FrameConvexPolygon2D(List<? extends FramePoint2DReadOnly> frameVertices)
+   public FrameConvexPolygon2D(FrameVertex2DSupplier vertex2DSupplier)
    {
-      setIncludingFrameAndUpdate(frameVertices, frameVertices.size());
+      setIncludingFrame(vertex2DSupplier);
    }
 
-   public FrameConvexPolygon2D(ReferenceFrame referenceFrame, ConvexPolygon2DReadOnly otherPolygon)
+   public FrameConvexPolygon2D(FrameVertex3DSupplier vertex3DSupplier)
    {
-      setIncludingFrameAndUpdate(referenceFrame, otherPolygon);
+      setIncludingFrame(vertex3DSupplier);
    }
 
-   public FrameConvexPolygon2D(FrameConvexPolygon2DReadOnly other)
+   public FrameConvexPolygon2D(FrameVertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)
    {
-      setIncludingFrameAndUpdate(other);
-   }
-
-   public FrameConvexPolygon2D(FrameConvexPolygon2DReadOnly firstPolygon, FrameConvexPolygon2DReadOnly secondPolygon)
-   {
-      setIncludingFrameAndUpdate(firstPolygon, secondPolygon);
+      setIncludingFrame(firstVertex2DSupplier, secondVertex2DSupplier);
    }
 
    @Override
    public void set(FrameConvexPolygon2D other)
    {
-      setAndUpdate(other);
+      set(other);
    }
 
    @Override

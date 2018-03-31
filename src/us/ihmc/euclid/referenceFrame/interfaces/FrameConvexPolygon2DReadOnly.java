@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, ReferenceFrameHolder
+public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, ReferenceFrameHolder, FrameVertex2DSupplier
 {
    /** {@inheritDoc} */
    @Override

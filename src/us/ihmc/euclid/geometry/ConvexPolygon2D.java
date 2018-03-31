@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -29,8 +30,8 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<ConvexPolygon2D>
 {
    /**
-    * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
-    * or counter-clockwise ordered.
+    * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in
+    * clockwise or counter-clockwise ordered.
     */
    private final boolean clockwiseOrdered = true;
    /**
@@ -48,8 +49,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * actual size of this polygon.
     * </p>
     * <p>
-    * The vertices composing this polygon are located in the index range [0, {@link #numberOfVertices}[
-    * in this list.
+    * The vertices composing this polygon are located in the index range [0,
+    * {@link #numberOfVertices}[ in this list.
     * </p>
     */
    private final List<Point2D> clockwiseOrderedVertices = new ArrayList<>();
@@ -100,9 +101,9 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    /** Index of the vertex with the highest y-coordinate. */
    private int maxY_index = 0;
    /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more than
-    * one vertex in the list, it is the index of the vertex with the highest y-coordinate out of the
-    * candidates.
+    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
+    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
+    * of the candidates.
     * <p>
     * Note that the method {@link #update()} will always position this vertex at the index 0, so it
     * does not need to be updated.
@@ -110,9 +111,9 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     */
    private final int minXmaxY_index = 0;
    /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more than
-    * one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of the
-    * candidates.
+    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
+    * than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of
+    * the candidates.
     */
    private int minXminY_index = 0;
    /**
@@ -123,8 +124,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    private int maxXminY_index = 0;
    /**
     * Index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out of
-    * the candidates.
+    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
+    * of the candidates.
     */
    private int maxXmaxY_index = 0;
 
@@ -138,115 +139,48 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /**
-    * Creates a new convex polygon such that it represents the convex hull of the points from the given
-    * {@code vertices} list that are in the index range [0, {@code numberOfVertices}[.
+    * Creates a new convex polygon such that it represents the convex hull of all the points
+    * provided by the supplier.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
     *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
-    *           [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
+    * @param vertex2DSupplier the supplier of vertices.
     */
-   public ConvexPolygon2D(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   public ConvexPolygon2D(Vertex2DSupplier vertex2DSupplier)
    {
-      setAndUpdate(vertices, numberOfVertices);
+      set(vertex2DSupplier);
    }
 
    /**
-    * Creates a new convex polygon such that it represents the convex hull of the points from the given
-    * {@code vertices} list.
+    * Creates a new convex polygon by combining the vertices from two suppliers. The result is the
+    * smallest convex hull that contains all the vertices provided by the two suppliers.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
     *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
+    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param secondVertex2DSupplier the second supplier of vertices.
     */
-   public ConvexPolygon2D(List<? extends Point2DReadOnly> vertices)
+   public ConvexPolygon2D(Vertex2DSupplier firstVertex2DSupplier, Vertex2DSupplier secondVertex2DSupplier)
    {
-      this(vertices, vertices.size());
+      set(firstVertex2DSupplier, secondVertex2DSupplier);
    }
 
    /**
-    * Creates a new convex polygon such that it represents the convex hull of the points from the given
-    * {@code vertices} array that are in the index range [0, {@code numberOfVertices}[.
-    * <p>
-    * Note that the resulting polygon is ready to be used for any operations, no need to call
-    * {@link #update()}.
-    * </p>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
-    */
-   public ConvexPolygon2D(Point2DReadOnly[] vertices, int numberOfVertices)
-   {
-      setAndUpdate(vertices, numberOfVertices);
-   }
-
-   /**
-    * Creates a new convex polygon such that it represents the convex hull of the points from the given
-    * {@code vertices} array.
-    * <p>
-    * Note that the resulting polygon is ready to be used for any operations, no need to call
-    * {@link #update()}.
-    * </p>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    */
-   public ConvexPolygon2D(Point2DReadOnly[] vertices)
-   {
-      this(vertices, vertices.length);
-   }
-
-   /**
-    * Copy constructor.
-    *
-    * @param otherPolygon the other convex polygon to copy. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygon's vertices were edited.
-    */
-   public ConvexPolygon2D(ConvexPolygon2DReadOnly otherPolygon)
-   {
-      setAndUpdate(otherPolygon);
-   }
-
-   /**
-    * Creates a new convex polygon by combining two other convex polygons. The result is the smallest
-    * convex hull that contains both polygons.
-    * <p>
-    * Note that the resulting polygon is ready to be used for any operations, no need to call
-    * {@link #update()}.
-    * </p>
-    *
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygons' vertices were edited.
-    */
-   public ConvexPolygon2D(ConvexPolygon2DReadOnly firstPolygon, ConvexPolygon2DReadOnly secondPolygon)
-   {
-      setAndUpdate(firstPolygon, secondPolygon);
-   }
-
-   /**
-    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
-    * the size of the point cloud from which it is generated.
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices
+    * and the size of the point cloud from which it is generated.
     *
     * @deprecated Use {@link EuclidGeometryRandomTools#nextConvexPolygon2D(Random, double, int)}
     *             instead.
     *
     * @param random the random generator to use.
     * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
-    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
-    *           the random convex polygon. The size of the resulting convex polygon will be less than
-    *           {@code numberOfPossiblePoints}.
+    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for
+    *           computing the random convex polygon. The size of the resulting convex polygon will
+    *           be less than {@code numberOfPossiblePoints}.
     * @return the random convex polygon.
     * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
     */
@@ -254,7 +188,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    public static ConvexPolygon2D generateRandomConvexPolygon2d(Random random, double maxAbsoluteXY, int numberOfPossiblePoints)
    {
       List<Point2D> vertices = EuclidGeometryRandomTools.nextPointCloud2D(random, 0.0, maxAbsoluteXY, numberOfPossiblePoints);
-      return new ConvexPolygon2D(vertices);
+      return new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(vertices));
    }
 
    @Override
@@ -338,7 +272,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * This method does:
     * <ol>
     * <li>{@link #clear()}.
-    * <li>{@link #addVertices(ConvexPolygon2DReadOnly)}.
+    * <li>{@link #addVertices(Vertex2DSupplier)}.
     * <li>{@link #update()}.
     * </ol>
     *
@@ -349,7 +283,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    @Override
    public void set(ConvexPolygon2D other)
    {
-      setAndUpdate(other);
+      set(other);
    }
 
    /**
@@ -585,8 +519,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /**
-    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
-    * with the tolerance {@code epsilon}.
+    * Tests on a per-component basis on every vertices if this convex polygon is equal to
+    * {@code other} with the tolerance {@code epsilon}.
     * <p>
     * The method returns {@code false} if the two polygons have different size.
     * </p>
@@ -605,18 +539,19 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
-    * similar.
+    * Compares {@code this} and {@code other} to determine if the two convex polygons are
+    * geometrically similar.
     * <p>
-    * This method performs the comparison on a per vertex basis while accounting for a possible shift
-    * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
-    * counter-clockwise order, are considered geometrically equal even if they do not start with the
-    * same vertex.
+    * This method performs the comparison on a per vertex basis while accounting for a possible
+    * shift in the polygon indexing. For instance, two polygons that have the same vertices in
+    * clockwise or counter-clockwise order, are considered geometrically equal even if they do not
+    * start with the same vertex.
     * </p>
     *
     * @param other the convex polygon to compare to.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
+    * @return {@code true} if the convex polygons represent the same geometry, {@code false}
+    *         otherwise.
     */
    @Override
    public boolean geometricallyEquals(ConvexPolygon2D other, double epsilon)

@@ -18,14 +18,14 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * <p>
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
-public interface ConvexPolygon2DReadOnly
+public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
 {
    /**
     * Tests whether the vertices of this polygon are clockwise or counter-clockwise ordered.
-    * 
+    *
     * @return {@code true} if the vertices are clockwise ordered, {@code false} otherwise.
     */
    boolean isClockwiseOrdered();
@@ -39,7 +39,7 @@ public interface ConvexPolygon2DReadOnly
     * {@code OutdatedPolygonException}. To update a polygon, please see
     * {@link ConvexPolygon2DBasics#update()}.
     * </p>
-    * 
+    *
     * @return whether {@code this} is up-to-date or not.
     */
    boolean isUpToDate();
@@ -62,6 +62,7 @@ public interface ConvexPolygon2DReadOnly
     *
     * @return this polygon's size.
     */
+   @Override
    int getNumberOfVertices();
 
    /**
@@ -75,7 +76,7 @@ public interface ConvexPolygon2DReadOnly
     * The returned list is an unmodifiable list created with
     * {@link Collections#unmodifiableList(List)}.
     * </p>
-    * 
+    *
     * @return a read-only view of this polygon internal vertex buffer.
     */
    List<? extends Point2DReadOnly> getUnmodifiableVertexBuffer();
@@ -89,7 +90,7 @@ public interface ConvexPolygon2DReadOnly
     * The returned list is an unmodifiable list created with
     * {@link Collections#unmodifiableList(List)}.
     * </p>
-    * 
+    *
     * @return a read-only view of this polygon vertices.
     */
    default List<? extends Point2DReadOnly> getUnmodifiablePolygonVertices()
@@ -161,6 +162,7 @@ public interface ConvexPolygon2DReadOnly
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
     */
+   @Override
    default Point2DReadOnly getVertex(int index)
    {
       checkIfUpToDate();

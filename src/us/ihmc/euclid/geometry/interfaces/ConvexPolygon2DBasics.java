@@ -1,7 +1,5 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import java.util.List;
-
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
@@ -158,119 +156,42 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
-    * Adds the N first vertices from the given list to this polygon, where N is equal to
-    * {@code numberOfVertices}.
+    * Adds the vertices from the given vertex supplier.
     * <p>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
     *
-    * @param vertices the list containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given list of vertices.
+    * @param vertex2DSupplier the supplier of vertices.
+    * @see Vertex2DSupplier
     */
-   default void addVertices(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   default void addVertices(Vertex2DSupplier vertex2DSupplier)
    {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.size())
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices.get(i));
+      for (int index = 0; index < vertex2DSupplier.getNumberOfVertices(); index++)
+      {
+         addVertex(vertex2DSupplier.getVertex(index));
+      }
    }
 
    /**
-    * Adds the N first vertices from the given list to this polygon, where N is equal to
-    * {@code numberOfVertices}.
+    * Adds the vertices from the given vertex supplier.
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
     * <p>
     * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
     * </p>
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
     *
-    * @param vertices the list containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given list of vertices.
+    * @param vertex3DSupplier the supplier of vertices.
+    * @see Vertex3DSupplier
     */
-   default void addVertices3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   default void addVertices(Vertex3DSupplier vertex3DSupplier)
    {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.size())
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices.get(i));
-   }
-
-   /**
-    * Adds the N first vertices from the given array to this polygon, where N is equal to
-    * {@code numberOfVertices}.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param vertices the array containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given array of vertices.
-    */
-   default void addVertices(Point2DReadOnly[] vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices[i]);
-   }
-
-   /**
-    * Adds the N first vertices from the given array to this polygon, where N is equal to
-    * {@code numberOfVertices}.
-    * <p>
-    * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
-    * </p>
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param vertices the array containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given array of vertices.
-    */
-   default void addVertices(Point3DReadOnly[] vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices[i]);
-   }
-
-   /**
-    * Adds new vertices to this polygon from another convex polygon.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param other the other convex polygon that is used to add new vertices to this polygon.
-    *           Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygon's vertices were edited.
-    */
-   default void addVertices(ConvexPolygon2DReadOnly other)
-   {
-      for (int i = 0; i < other.getNumberOfVertices(); i++)
-         addVertex(other.getVertex(i));
+      for (int index = 0; index < vertex3DSupplier.getNumberOfVertices(); index++)
+      {
+         addVertex(vertex3DSupplier.getVertex(index));
+      }
    }
 
    /**
@@ -291,20 +212,18 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * This method does:
     * <ol>
     * <li>{@link #clear()}.
-    * <li>{@link #addVertices(List, int)}.
+    * <li>{@link #addVertices(Vertex2DSupplier)}.
     * <li>{@link #update()}.
     * </ol>
     *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given list of vertices.
+    * @param vertex2DSupplier the supplier of vertices.
+    * @see Vertex2DSupplier
+    * @see #addVertices(Vertex2DSupplier)
     */
-   default void setAndUpdate(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   default void set(Vertex2DSupplier vertex2DSupplier)
    {
       clear();
-      addVertices(vertices, numberOfVertices);
+      addVertices(vertex2DSupplier);
       update();
    }
 
@@ -312,104 +231,37 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * This method does:
     * <ol>
     * <li>{@link #clear()}.
-    * <li>{@link #addVertices3D(List, int)}.
+    * <li>{@link #addVertices(Vertex3DSupplier)}.
     * <li>{@link #update()}.
     * </ol>
     *
-    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given list of vertices.
+    * @param vertex3DSupplier the supplier of vertices.
+    * @see Vertex3DSupplier
+    * @see #addVertices(Vertex3DSupplier)
     */
-   default void setAndUpdate3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   default void set(Vertex3DSupplier vertex3DSupplier)
    {
       clear();
-      addVertices3D(vertices, numberOfVertices);
+      addVertices(vertex3DSupplier);
       update();
    }
 
    /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(Point2DReadOnly[], int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given array of vertices.
-    */
-   default void setAndUpdate(Point2DReadOnly[] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(Point3DReadOnly[], int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given array of vertices.
-    */
-   default void setAndUpdate(Point3DReadOnly[] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(ConvexPolygon2DReadOnly)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param other the other convex polygon to copy. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygon's vertices were edited.
-    */
-   // TODO There is no need to call update() there, instead update everything from the other polygon to make it faster.
-   default void setAndUpdate(ConvexPolygon2DReadOnly other)
-   {
-      clear();
-      addVertices(other);
-      update();
-   }
-
-   /**
-    * Sets this polygon such that it represents the smallest convex hull that contains both
-    * polygons.
+    * Sets this polygon such that it represents the smallest convex hull that contains all the
+    * vertices supplied by the two suppliers.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
     *
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygons' vertices were edited.
+    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param secondVertex2DSupplier the second supplier of vertices.
     */
-   // TODO: Make this more efficient by finding the rotating calipers, as in the intersection method.
-   default void setAndUpdate(ConvexPolygon2DReadOnly firstPolygon, ConvexPolygon2DReadOnly secondPolygon)
+   default void set(Vertex2DSupplier firstVertex2DSupplier, Vertex2DSupplier secondVertex2DSupplier)
    {
       clear();
-      addVertices(firstPolygon);
-      addVertices(secondPolygon);
+      addVertices(firstVertex2DSupplier);
+      addVertices(secondVertex2DSupplier);
       update();
    }
 

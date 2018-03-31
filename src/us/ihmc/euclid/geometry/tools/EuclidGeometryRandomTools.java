@@ -26,6 +26,7 @@ import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -818,7 +819,7 @@ public abstract class EuclidGeometryRandomTools
    public static ConvexPolygon2D nextConvexPolygon2D(Random random, double maxAbsoluteXY, int numberOfPossiblePoints)
    {
       List<Point2D> vertices = EuclidGeometryRandomTools.nextPointCloud2D(random, 0.0, maxAbsoluteXY, numberOfPossiblePoints);
-      return new ConvexPolygon2D(vertices);
+      return new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(vertices));
    }
 
    /**

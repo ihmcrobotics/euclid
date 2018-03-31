@@ -1,10 +1,8 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import java.util.List;
-
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
-import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -165,262 +163,166 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    }
 
    /**
-    * {@inheritDoc}
+    * Adds the vertices from the given vertex supplier.
     * <p>
-    * WARNING: Each element of the given list is tested such that if they implement
-    * {@code FramePoint2DReadOnly}, the method checks that they are expressed in the same reference
-    * frame as {@code this}.
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    *
+    * @param frameVertex2DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
     *            {@code FramePoint2DReadOnly} and is not expressed in the same reference frame as
     *            {@code this}.
+    * @see FrameVertex2DSupplier
+    * @see #addVertex(FramePoint2DReadOnly)
     */
-   @Override
-   default void addVertices(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   default void addVertices(FrameVertex2DSupplier frameVertex2DSupplier)
    {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.size())
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
+      for (int index = 0; index < frameVertex2DSupplier.getNumberOfVertices(); index++)
       {
-         Point2DReadOnly vertex = vertices.get(i);
-         if (vertex instanceof FramePoint2DReadOnly)
-            addVertex((FramePoint2DReadOnly) vertex);
-         else
-            addVertex(vertex);
+         addVertex(frameVertex2DSupplier.getVertex(index));
       }
    }
 
    /**
-    * {@inheritDoc}
+    * Adds the vertices from the given vertex supplier.
     * <p>
-    * WARNING: Each element of the given list is tested such that if they implement
-    * {@code FramePoint3DReadOnly}, the method checks that they are expressed in the same reference
-    * frame as {@code this}.
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
     * </p>
-    * 
+    * <p>
+    * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
+    * </p>
+    *
+    * @param frameVertex3DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
     *            {@code FramePoint3DReadOnly} and is not expressed in the same reference frame as
     *            {@code this}.
+    * @see FrameVertex3DSupplier
+    * @see #addVertex(FramePoint3DReadOnly)
     */
-   @Override
-   default void addVertices3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   default void addVertices(FrameVertex3DSupplier frameVertex3DSupplier)
    {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.size())
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.size() + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
+      for (int index = 0; index < frameVertex3DSupplier.getNumberOfVertices(); index++)
       {
-         Point3DReadOnly vertex = vertices.get(i);
-         if (vertex instanceof FramePoint2DReadOnly)
-            addVertex((FramePoint2DReadOnly) vertex);
-         else
-            addVertex(vertex);
+         addVertex(frameVertex3DSupplier.getVertex(index));
       }
    }
 
    /**
-    * Adds the N first vertices from the given array to this polygon, where N is equal to
-    * {@code numberOfVertices}.
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
+    * <li>{@link #addVertices(FrameVertex2DSupplier)}.
+    * <li>{@link #update()}.
+    * </ol>
     *
-    * @param vertices the array containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is not expressed
-    *            in the same reference frame as {@code this}.
-    * @see #addVertices(Point2DReadOnly[], int)
-    */
-   default void addVertices(FramePoint2DReadOnly[] vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices[i]);
-   }
-
-   /**
-    * Adds the N first vertices from the given array to this polygon, where N is equal to
-    * {@code numberOfVertices}.
-    *
-    * @param vertices the array containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is not expressed
-    *            in the same reference frame as {@code this}.
-    * @see #addVertices(Point3DReadOnly[], int)
-    */
-   default void addVertices(FramePoint3DReadOnly[] vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices[i]);
-   }
-
-   /**
-    * Adds new vertices to this polygon from another convex polygon.
-    *
-    * @param otherPolygon the other convex polygon that is used to add new vertices to this polygon.
-    *           Not modified.
-    * @see #addVertices(ConvexPolygon2DReadOnly)
-    */
-   default void addVertices(FrameConvexPolygon2DReadOnly otherPolygon)
-   {
-      for (int i = 0; i < otherPolygon.getNumberOfVertices(); i++)
-         addVertex(otherPolygon.getVertex(i));
-   }
-
-   /**
-    * {@inheritDoc}
-    * <p>
-    * WARNING: Each element of the given list is tested such that if they implement
-    * {@code FramePoint2DReadOnly}, the method checks that they are expressed in the same reference
-    * frame as {@code this}.
-    * </p>
-    * 
+    * @param frameVertex2DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
     *            {@code FramePoint2DReadOnly} and is not expressed in the same reference frame as
     *            {@code this}.
+    * @see FrameVertex2DSupplier
+    * @see #addVertices(FrameVertex2DSupplier)
     */
-   @Override
-   default void setAndUpdate(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   default void set(FrameVertex2DSupplier frameVertex2DSupplier)
    {
       clear();
-      addVertices(vertices, numberOfVertices);
+      addVertices(frameVertex2DSupplier);
       update();
    }
 
    /**
-    * {@inheritDoc}
-    * <p>
-    * WARNING: Each element of the given list is tested such that if they implement
-    * {@code FramePoint3DReadOnly}, the method checks that they are expressed in the same reference
-    * frame as {@code this}.
-    * </p>
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
+    * <li>{@link #addVertices(FrameVertex3DSupplier)}.
+    * <li>{@link #update()}.
+    * </ol>
     *
+    * @param frameVertex3DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
     *            {@code FramePoint3DReadOnly} and is not expressed in the same reference frame as
     *            {@code this}.
+    * @see FrameVertex3DSupplier
+    * @see #addVertices(FrameVertex3DSupplier)
     */
-   @Override
-   default void setAndUpdate3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   default void set(FrameVertex3DSupplier frameVertex3DSupplier)
    {
       clear();
-      addVertices3D(vertices, numberOfVertices);
+      addVertices(frameVertex3DSupplier);
       update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(FramePoint2DReadOnly[], int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is not expressed
-    *            in the same reference frame as {@code this}.
-    * @see #setAndUpdate(Point2DReadOnly[], int)
-    */
-   default void setAndUpdate(FramePoint2DReadOnly[] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(FramePoint3DReadOnly[], int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is not expressed
-    *            in the same reference frame as {@code this}.
-    * @see #setAndUpdate(Point3DReadOnly[], int)
-    */
-   default void setAndUpdate(FramePoint3DReadOnly[] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(FrameConvexPolygon2DReadOnly)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param other the other convex polygon to copy. Not modified.
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly)
-    */
-   default void setAndUpdate(FrameConvexPolygon2DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      ConvexPolygon2DBasics.super.setAndUpdate(other);
    }
 
    /**
     * Sets this polygon such that it represents the smallest convex hull that contains both
     * polygons.
+    * <p>
+    * Note that the resulting polygon is ready to be used for any operations, no need to call
+    * {@link #update()}.
+    * </p>
     *
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstPolygon}, {@code secondPolygon}, and
-    *            {@code this} are not expressed in the same reference frame.
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly, ConvexPolygon2DReadOnly)
+    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param secondVertex2DSupplier the second supplier of vertices.
+    * @throws ReferenceFrameMismatchException if any of the vertices provided by
+    *            {@code firstVertexSupplier} and {@code secondVertexSupplier} are not expressed in
+    *            the same reference frame as {@code this}.
+    * @see FrameVertex2DSupplier
+    * @see #addVertices(FrameVertex2DSupplier)
     */
-   default void setAndUpdate(FrameConvexPolygon2DReadOnly firstPolygon, FrameConvexPolygon2DReadOnly secondPolygon)
+   default void set(FrameVertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)
    {
-      checkReferenceFrameMatch(firstPolygon);
-      checkReferenceFrameMatch(secondPolygon);
-      ConvexPolygon2DBasics.super.setAndUpdate(firstPolygon, secondPolygon);
+      clear();
+      addVertices(firstVertex2DSupplier);
+      addVertices(secondVertex2DSupplier);
+      update();
    }
 
    /**
     * Sets this polygon such that it represents the smallest convex hull that contains both
     * polygons.
+    * <p>
+    * Note that the resulting polygon is ready to be used for any operations, no need to call
+    * {@link #update()}.
+    * </p>
     *
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstPolygon} and {@code this} are not
-    *            expressed in the same reference frame.
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly, ConvexPolygon2DReadOnly)
+    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param secondVertex2DSupplier the second supplier of vertices.
+    * @throws ReferenceFrameMismatchException if any of the vertices provided by
+    *            {@code firstVertexSupplier} are not expressed in the same reference frame as
+    *            {@code this}.
+    * @see FrameVertex2DSupplier
+    * @see #addVertices(FrameVertex2DSupplier)
     */
-   default void setAndUpdate(FrameConvexPolygon2DReadOnly firstPolygon, ConvexPolygon2DReadOnly secondPolygon)
+   default void set(FrameVertex2DSupplier firstVertex2DSupplier, Vertex2DSupplier secondVertex2DSupplier)
    {
-      checkReferenceFrameMatch(firstPolygon);
-      ConvexPolygon2DBasics.super.setAndUpdate(firstPolygon, secondPolygon);
+      clear();
+      addVertices(firstVertex2DSupplier);
+      addVertices(secondVertex2DSupplier);
+      update();
    }
 
    /**
     * Sets this polygon such that it represents the smallest convex hull that contains both
     * polygons.
+    * <p>
+    * Note that the resulting polygon is ready to be used for any operations, no need to call
+    * {@link #update()}.
+    * </p>
     *
-    * @param firstPolygon the first convex polygon to combine. Not modified.
-    * @param secondPolygon the second convex polygon to combine. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code secondPolygon} and {@code this} are not
-    *            expressed in the same reference frame.
-    * @see #setAndUpdate(ConvexPolygon2DReadOnly, ConvexPolygon2DReadOnly)
+    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param secondVertex2DSupplier the second supplier of vertices.
+    * @throws ReferenceFrameMismatchException if any of the vertices provided by
+    *            {@code secondVertexSupplier} are not expressed in the same reference frame as
+    *            {@code this}.
+    * @see FrameVertex2DSupplier
+    * @see #addVertices(FrameVertex2DSupplier)
     */
-   default void setAndUpdate(ConvexPolygon2DReadOnly firstPolygon, FrameConvexPolygon2DReadOnly secondPolygon)
+   default void set(Vertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)
    {
-      checkReferenceFrameMatch(secondPolygon);
-      ConvexPolygon2DBasics.super.setAndUpdate(firstPolygon, secondPolygon);
+      clear();
+      addVertices(firstVertex2DSupplier);
+      addVertices(secondVertex2DSupplier);
+      update();
    }
 
    /**
