@@ -1516,6 +1516,21 @@ public class EuclidFrameAPITestTools
          return MatrixFeatures.isEquals((DenseMatrix64F) framelessParameter, (DenseMatrix64F) frameParameter, epsilon);
       }
 
+      if (framelessParameter instanceof int[] && frameParameter instanceof int[])
+      {
+         int[] framelessArray = (int[]) framelessParameter;
+         int[] frameArray = (int[]) frameParameter;
+
+         if (framelessArray.length != frameArray.length)
+            return false;
+         for (int i = 0; i < framelessArray.length; i++)
+         {
+            if (Float.compare(framelessArray[i], frameArray[i]) != 0 && !EuclidCoreTools.epsilonEquals(framelessArray[i], frameArray[i], epsilon))
+               return false;
+         }
+         return true;
+      }
+
       if (framelessParameter instanceof float[] && frameParameter instanceof float[])
       {
          float[] framelessArray = (float[]) framelessParameter;
@@ -1919,7 +1934,17 @@ public class EuclidFrameAPITestTools
          {
             try
             {
-               clone[i] = newInstanceOf(parameterType);
+               if (parameterType.isArray() && !parameterType.getComponentType().isPrimitive())
+               {
+                  Object[] array = new Object[((Object[]) parametersToClone[i]).length];
+                  for (int j = 0; j < array.length; j++)
+                     array[j] = newInstanceOf(parameterType.getComponentType());
+                  clone[i] = array;
+               }
+               else
+               {
+                  clone[i] = newInstanceOf(parameterType);
+               }
                Method setter = parameterType.getMethod("set", parameterType);
                setter.invoke(clone[i], parametersToClone[i]);
             }
@@ -1936,11 +1961,28 @@ public class EuclidFrameAPITestTools
    private static Object[] instantiateParameterTypes(ReferenceFrame frame, Class<?>[] parameterTypes)
    {
       Object[] parameters = new Object[parameterTypes.length];
+
       for (int i = 0; i < parameterTypes.length; i++)
       {
-         parameters[i] = instantiateParameterType(frame, parameterTypes[i]);
-         if (parameters[i] == null)
-            return null;
+         Class<?> parameterType = parameterTypes[i];
+         if (parameterType.isArray() && !parameterType.getComponentType().isPrimitive())
+         {
+            Class<?> componentType = parameterType.getComponentType();
+            Object[] array = (Object[]) Array.newInstance(componentType, random.nextInt(15));
+            for (int j = 0; j < array.length; j++)
+            {
+               array[j] = instantiateParameterType(frame, componentType);
+               if (array[j] == null)
+                  return null;
+            }
+            parameters[i] = array;
+         }
+         else
+         {
+            parameters[i] = instantiateParameterType(frame, parameterType);
+            if (parameters[i] == null)
+               return null;
+         }
       }
       return parameters;
    }

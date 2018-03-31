@@ -2,6 +2,8 @@ package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -52,7 +54,7 @@ public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygo
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, polygon) -> createFrameConvexPolygon2D(frame,
                                                                                                                          (ConvexPolygon2DReadOnly) polygon);
       GenericTypeBuilder framelessTypeBuilber = () -> createRandomFramelessConvexPolygon2D(random);
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && Arrays.stream(m.getParameterTypes()).noneMatch(p -> Collection.class.isAssignableFrom(p));
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
    }
 
