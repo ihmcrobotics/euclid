@@ -190,6 +190,28 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
     * called afterward before being able to perform operations with this polygon.
     * </p>
+    *
+    * @param frameVertex2DSupplier the supplier of vertices.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the transform from the vertex's frame to this frame represents a transformation in
+    *           the XY plane.
+    * @see FrameVertex2DSupplier
+    * @see #addVertexMatchingFrame(FramePoint2DReadOnly, boolean)
+    */
+   default void addVerticesMatchingFrame(FrameVertex2DSupplier frameVertex2DSupplier, boolean checkIfTransformInXYPlane)
+   {
+      for (int index = 0; index < frameVertex2DSupplier.getNumberOfVertices(); index++)
+      {
+         addVertexMatchingFrame(frameVertex2DSupplier.getVertex(index), checkIfTransformInXYPlane);
+      }
+   }
+
+   /**
+    * Adds the vertices from the given vertex supplier.
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
     * <p>
     * Only the x and y coordinates of each vertex is used to add a vertex to this polygon.
     * </p>
@@ -206,6 +228,25 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
       for (int index = 0; index < frameVertex3DSupplier.getNumberOfVertices(); index++)
       {
          addVertex(frameVertex3DSupplier.getVertex(index));
+      }
+   }
+
+   /**
+    * Adds the vertices from the given vertex supplier.
+    * <p>
+    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
+    * called afterward before being able to perform operations with this polygon.
+    * </p>
+    *
+    * @param frameVertex3DSupplier the supplier of vertices.
+    * @see FrameVertex3DSupplier
+    * @see #addVertexMatchingFrame(FramePoint3DReadOnly)
+    */
+   default void addVerticesMatchingFrame(FrameVertex3DSupplier frameVertex3DSupplier)
+   {
+      for (int index = 0; index < frameVertex3DSupplier.getNumberOfVertices(); index++)
+      {
+         addVertexMatchingFrame(frameVertex3DSupplier.getVertex(index));
       }
    }
 
@@ -235,6 +276,28 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * This method does:
     * <ol>
     * <li>{@link #clear()}.
+    * <li>{@link #addVerticesMatchingFrame(FrameVertex2DSupplier, boolean)}.
+    * <li>{@link #update()}.
+    * </ol>
+    *
+    * @param frameVertex2DSupplier the supplier of vertices.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the transform from the vertex's frame to this frame represents a transformation in
+    *           the XY plane.
+    * @see FrameVertex2DSupplier
+    * @see #addVerticesMatchingFrame(FrameVertex2DSupplier, boolean)
+    */
+   default void setMatchingFrame(FrameVertex2DSupplier frameVertex2DSupplier, boolean checkIfTransformInXYPlane)
+   {
+      clear();
+      addVerticesMatchingFrame(frameVertex2DSupplier, checkIfTransformInXYPlane);
+      update();
+   }
+
+   /**
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
     * <li>{@link #addVertices(FrameVertex3DSupplier)}.
     * <li>{@link #update()}.
     * </ol>
@@ -250,6 +313,25 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    {
       clear();
       addVertices(frameVertex3DSupplier);
+      update();
+   }
+
+   /**
+    * This method does:
+    * <ol>
+    * <li>{@link #clear()}.
+    * <li>{@link #addVertices(FrameVertex3DSupplier)}.
+    * <li>{@link #update()}.
+    * </ol>
+    *
+    * @param frameVertex3DSupplier the supplier of vertices.
+    * @see FrameVertex3DSupplier
+    * @see #addVerticesMatchingFrame(FrameVertex3DSupplier)
+    */
+   default void setMatchingFrame(FrameVertex3DSupplier frameVertex3DSupplier)
+   {
+      clear();
+      addVerticesMatchingFrame(frameVertex3DSupplier);
       update();
    }
 
