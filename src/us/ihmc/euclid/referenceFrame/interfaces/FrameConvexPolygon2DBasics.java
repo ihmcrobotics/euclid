@@ -5,6 +5,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBasics, FrameChangeable
 {
@@ -41,7 +42,19 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
       setAndUpdate(vertices, numberOfVertices);
    }
 
+   default void setIncludingFrameAndUpdate3D(ReferenceFrame referenceFrame, List<? extends Point3DReadOnly> vertices, int numberOfVertices)
+   {
+      setReferenceFrame(referenceFrame);
+      setAndUpdate3D(vertices, numberOfVertices);
+   }
+
    default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, Point2DReadOnly[] vertices, int numberOfVertices)
+   {
+      setReferenceFrame(referenceFrame);
+      setAndUpdate(vertices, numberOfVertices);
+   }
+
+   default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, Point3DReadOnly[] vertices, int numberOfVertices)
    {
       setReferenceFrame(referenceFrame);
       setAndUpdate(vertices, numberOfVertices);
@@ -71,7 +84,19 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
       setAndUpdate(vertices, numberOfVertices);
    }
 
+   default void setIncludingFrameAndUpdate3D(List<? extends FramePoint3DReadOnly> vertices, int numberOfVertices)
+   {
+      setReferenceFrame(vertices.get(0).getReferenceFrame());
+      setAndUpdate3D(vertices, numberOfVertices);
+   }
+
    default void setIncludingFrameAndUpdate(FramePoint2DReadOnly[] vertices, int numberOfVertices)
+   {
+      setReferenceFrame(vertices[0].getReferenceFrame());
+      setAndUpdate(vertices, numberOfVertices);
+   }
+
+   default void setIncludingFrameAndUpdate(FramePoint3DReadOnly[] vertices, int numberOfVertices)
    {
       setReferenceFrame(vertices[0].getReferenceFrame());
       setAndUpdate(vertices, numberOfVertices);
