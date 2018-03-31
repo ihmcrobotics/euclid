@@ -31,8 +31,8 @@ public interface ConvexPolygon2DReadOnly
    boolean isClockwiseOrdered();
 
    /**
-    * Tests whether the vertices of this polygon have been updated to ensure {@code this} is a convex
-    * polygon.
+    * Tests whether the vertices of this polygon have been updated to ensure {@code this} is a
+    * convex polygon.
     * <p>
     * When this polygon is up-to-date, all operations are available. However, when this polygon is
     * out-of-date, most of the operations on {@code this} will throw an
@@ -122,8 +122,8 @@ public interface ConvexPolygon2DReadOnly
     * Checks if the given index is contained in the range [0, {@link #getNumberOfVertices()}[.
     *
     * @param index the index to check.
-    * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal than
-    *            the polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal
+    *            than the polygon's number of vertices.
     */
    default void checkIndexInBoundaries(int index)
    {
@@ -136,7 +136,8 @@ public interface ConvexPolygon2DReadOnly
    /**
     * Tests if any of this polygon's vertices contains a {@link Double#NaN}.
     *
-    * @return {@code true} if at least one vertex contains {@link Double#NaN}, {@code false} otherwise.
+    * @return {@code true} if at least one vertex contains {@link Double#NaN}, {@code false}
+    *         otherwise.
     */
    default boolean containsNaN()
    {
@@ -169,8 +170,8 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Gets the read-only reference to the vertex located after the {@code index}<sup>th</sup> vertex of
-    * this polygon.
+    * Gets the read-only reference to the vertex located after the {@code index}<sup>th</sup> vertex
+    * of this polygon.
     * <p>
     * Note that the first vertex has the lowest x-coordinate.
     * </p>
@@ -179,8 +180,8 @@ public interface ConvexPolygon2DReadOnly
     * @return the read-only reference to the next vertex.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default Point2DReadOnly getNextVertex(int index)
@@ -189,19 +190,19 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Gets the read-only reference to the vertex located before the {@code index}<sup>th</sup> vertex
-    * of this polygon.
+    * Gets the read-only reference to the vertex located before the {@code index}<sup>th</sup>
+    * vertex of this polygon.
     * <p>
-    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
-    * x-coordinate.
+    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
+    * lowest x-coordinate.
     * </p>
     *
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the read-only reference to the previous vertex.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default Point2DReadOnly getPreviousVertex(int index)
@@ -220,8 +221,8 @@ public interface ConvexPolygon2DReadOnly
     * @return the read-only reference to the vertex.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default Point2DReadOnly getVertexCCW(int index)
@@ -230,8 +231,8 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Gets the read-only reference to the vertex located after the {@code index}<sup>th</sup> vertex of
-    * this polygon.
+    * Gets the read-only reference to the vertex located after the {@code index}<sup>th</sup> vertex
+    * of this polygon.
     * <p>
     * This method calculates a new index to emulate a counter-clockwise ordering of this polygon's
     * vertices. The first vertex has the lowest x-coordinate.
@@ -241,8 +242,8 @@ public interface ConvexPolygon2DReadOnly
     * @return the read-only reference to the next vertex.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default Point2DReadOnly getNextVertexCCW(int index)
@@ -251,8 +252,8 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Gets the read-only reference to the vertex located before the {@code index}<sup>th</sup> vertex
-    * of this polygon.
+    * Gets the read-only reference to the vertex located before the {@code index}<sup>th</sup>
+    * vertex of this polygon.
     * <p>
     * This method calculates a new index to emulate a counter-clockwise ordering of this polygon's
     * vertices. The first vertex has the lowest x-coordinate.
@@ -262,8 +263,8 @@ public interface ConvexPolygon2DReadOnly
     * @return the read-only reference to the previous vertex.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default Point2DReadOnly getPreviousVertexCCW(int index)
@@ -272,19 +273,19 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Gets the index of the vertex located after the vertex at the index {@code currentVertexIndex} in
-    * the list of vertices.
+    * Gets the index of the vertex located after the vertex at the index {@code currentVertexIndex}
+    * in the list of vertices.
     * <p>
-    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
-    * x-coordinate.
+    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
+    * lowest x-coordinate.
     * </p>
     *
     * @param currentVertexIndex the current vertex index.
     * @return the next vertex index.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default int getNextVertexIndex(int currentVertexIndex)
@@ -300,19 +301,19 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Gets the index of the vertex located before the vertex at the index {@code currentVertexIndex} in
-    * the list of vertices.
+    * Gets the index of the vertex located before the vertex at the index {@code currentVertexIndex}
+    * in the list of vertices.
     * <p>
-    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
-    * x-coordinate.
+    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
+    * lowest x-coordinate.
     * </p>
     *
     * @param currentVertexIndex the current vertex index.
     * @return the before vertex index.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default int getPreviousVertexIndex(int currentVertexIndex)
@@ -342,8 +343,8 @@ public interface ConvexPolygon2DReadOnly
     * The centroid is not necessarily equal to the average of this polygon's vertices.
     * </p>
     * <p>
-    * When viewing a polygon as a physical object with constant density and thickness, the centroid is
-    * equivalent to the polygon's center of mass.
+    * When viewing a polygon as a physical object with constant density and thickness, the centroid
+    * is equivalent to the polygon's center of mass.
     * </p>
     *
     * @return the read-only reference to this polygon's centroid.
@@ -480,9 +481,9 @@ public interface ConvexPolygon2DReadOnly
    int getMaxYIndex();
 
    /**
-    * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in
-    * more than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
-    * of the candidates.
+    * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists
+    * in more than one vertex in the list, it is the index of the vertex with the highest
+    * y-coordinate out of the candidates.
     *
     * @return the index of the vertex located at the minimum x and maximum y.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
@@ -492,9 +493,9 @@ public interface ConvexPolygon2DReadOnly
    int getMinXMaxYIndex();
 
    /**
-    * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in
-    * more than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out
-    * of the candidates.
+    * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists
+    * in more than one vertex in the list, it is the index of the vertex with the lowest
+    * y-coordinate out of the candidates.
     *
     * @return the index of the vertex located at the minimum x and minimum y.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
@@ -504,9 +505,9 @@ public interface ConvexPolygon2DReadOnly
    int getMinXMinYIndex();
 
    /**
-    * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in
-    * more than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
-    * of the candidates.
+    * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists
+    * in more than one vertex in the list, it is the index of the vertex with the highest
+    * y-coordinate out of the candidates.
     *
     * @return the index of the vertex located at the maximum x and maximum y.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
@@ -516,9 +517,9 @@ public interface ConvexPolygon2DReadOnly
    int getMaxXMaxYIndex();
 
    /**
-    * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in
-    * more than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out
-    * of the candidates.
+    * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists
+    * in more than one vertex in the list, it is the index of the vertex with the lowest
+    * y-coordinate out of the candidates.
     *
     * @return the index of the vertex located at the maximum x and minimum y.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
@@ -530,8 +531,8 @@ public interface ConvexPolygon2DReadOnly
    /**
     * Adds a subset of this polygon's vertices into the given list.
     * <p>
-    * The subset consists of the vertices from the vertex at {@code startIndexInclusive} to the vertex
-    * {@code endIndexInclusive} while going from start to end in a clockwise order.
+    * The subset consists of the vertices from the vertex at {@code startIndexInclusive} to the
+    * vertex {@code endIndexInclusive} while going from start to end in a clockwise order.
     * </p>
     *
     * @param startIndexInclusive the index of the first vertex to add.
@@ -561,8 +562,8 @@ public interface ConvexPolygon2DReadOnly
    /**
     * Adds a subset of this polygon's vertices into the given polygon.
     * <p>
-    * The subset consists of the vertices from the vertex at {@code startIndexInclusive} to the vertex
-    * {@code endIndexInclusive} while going from start to end in a clockwise order.
+    * The subset consists of the vertices from the vertex at {@code startIndexInclusive} to the
+    * vertex {@code endIndexInclusive} while going from start to end in a clockwise order.
     * </p>
     *
     * @param startIndexInclusive the index of the first vertex to add.
@@ -595,8 +596,8 @@ public interface ConvexPolygon2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
-    * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single vertex
-    * are exactly equal.
+    * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single
+    * vertex are exactly equal.
     * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
     * polygons single edge.
     * </ul>
@@ -623,12 +624,12 @@ public interface ConvexPolygon2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
-    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0} or
-    * if the query is at a distance from the polygon's only vertex that is greater than
+    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only vertex that is greater than
     * {@code epsilon}, returns {@code true} otherwise.
-    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0} or
-    * if the query is at a distance from the polygon's only edge that is greater than {@code epsilon},
-    * returns {@code true} otherwise.
+    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only edge that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
     * </ul>
     *
     * @param x the x-coordinate of the query.
@@ -652,8 +653,8 @@ public interface ConvexPolygon2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
-    * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single vertex
-    * are exactly equal.
+    * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single
+    * vertex are exactly equal.
     * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
     * polygons single edge.
     * </ul>
@@ -679,12 +680,12 @@ public interface ConvexPolygon2DReadOnly
     * Edge cases:
     * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
-    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0} or
-    * if the query is at a distance from the polygon's only vertex that is greater than
+    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only vertex that is greater than
     * {@code epsilon}, returns {@code true} otherwise.
-    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0} or
-    * if the query is at a distance from the polygon's only edge that is greater than {@code epsilon},
-    * returns {@code true} otherwise.
+    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0}
+    * or if the query is at a distance from the polygon's only edge that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
     * </ul>
     *
     * @param point the query. Not modified.
@@ -750,8 +751,6 @@ public interface ConvexPolygon2DReadOnly
     *
     * @param ray the ray to find the closest point to. Not modified.
     * @return the coordinates of the closest point if the method succeeds, {@code null} otherwise.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
     */
@@ -789,14 +788,14 @@ public interface ConvexPolygon2DReadOnly
     * <li>If the polygon has no vertices, this method fails and returns {@link Double#NaN}.
     * <li>If the polygon has exactly one vertex, the returned value is positive and is equal to the
     * distance between the query and the polygon's vertex.
-    * <li>If the polygon has exactly two vertices, the returned value is positive and is equal to the
-    * distance and the line segment defined by the polygon's two vertices.
+    * <li>If the polygon has exactly two vertices, the returned value is positive and is equal to
+    * the distance and the line segment defined by the polygon's two vertices.
     * </ul>
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
-    * @return the distance between the query and the polygon, it is negative if the point is inside the
-    *         polygon.
+    * @return the distance between the query and the polygon, it is negative if the point is inside
+    *         the polygon.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
     */
@@ -913,8 +912,8 @@ public interface ConvexPolygon2DReadOnly
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the last
-    * vertex that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the
+    * last vertex that is in the line-of-sight.
     * <p>
     * WARNING: This method assumes that the given observer is located outside the polygon.
     * </p>
@@ -976,8 +975,8 @@ public interface ConvexPolygon2DReadOnly
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
-    * is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
+    * that is in the line-of-sight.
     * <p>
     * WARNING: This method assumes that the given observer is located outside the polygon.
     * </p>
@@ -986,15 +985,15 @@ public interface ConvexPolygon2DReadOnly
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code false}.
     * <li>The observer is inside the polygon, this method fails and returns {@code false}.
-    * <li>The polygon has exactly one vertex, this method succeeds and packs the vertex coordinates if
-    * the observer is different from the polygon's vertex, or returns {@code false} if the observer is
-    * equal to the polygon's vertex.
+    * <li>The polygon has exactly one vertex, this method succeeds and packs the vertex coordinates
+    * if the observer is different from the polygon's vertex, or returns {@code false} if the
+    * observer is equal to the polygon's vertex.
     * </ul>
     * </p>
     *
     * @param observer the coordinates of the observer. Not modified.
-    * @param startVertexToPack point in which the coordinates of the first vertex in the line-of-sight
-    *           are stored. Modified.
+    * @param startVertexToPack point in which the coordinates of the first vertex in the
+    *           line-of-sight are stored. Modified.
     * @return whether the method succeeded or not.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
@@ -1013,8 +1012,8 @@ public interface ConvexPolygon2DReadOnly
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
-    * is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
+    * that is in the line-of-sight.
     * <p>
     * WARNING: This method assumes that the given observer is located outside the polygon.
     * </p>
@@ -1023,15 +1022,15 @@ public interface ConvexPolygon2DReadOnly
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code false}.
     * <li>The observer is inside the polygon, this method fails and returns {@code false}.
-    * <li>The polygon has exactly one vertex, this method succeeds and packs the vertex coordinates if
-    * the observer is different from the polygon's vertex, or returns {@code false} if the observer is
-    * equal to the polygon's vertex.
+    * <li>The polygon has exactly one vertex, this method succeeds and packs the vertex coordinates
+    * if the observer is different from the polygon's vertex, or returns {@code false} if the
+    * observer is equal to the polygon's vertex.
     * </ul>
     * </p>
     *
     * @param observer the coordinates of the observer. Not modified.
-    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight are
-    *           stored. Modified.
+    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight
+    *           are stored. Modified.
     * @return whether the method succeeded or not.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
@@ -1051,8 +1050,8 @@ public interface ConvexPolygon2DReadOnly
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
-    * is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
+    * that is in the line-of-sight.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -1064,15 +1063,15 @@ public interface ConvexPolygon2DReadOnly
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code null}.
     * <li>The observer is inside the polygon, this method fails and returns {@code null}.
-    * <li>The polygon has exactly one vertex, this method succeeds and returns the vertex coordinates
-    * if the observer is different from the polygon's vertex, or returns {@code null} if the observer
-    * is equal to the polygon's vertex.
+    * <li>The polygon has exactly one vertex, this method succeeds and returns the vertex
+    * coordinates if the observer is different from the polygon's vertex, or returns {@code null} if
+    * the observer is equal to the polygon's vertex.
     * </ul>
     * </p>
     *
     * @param observer the coordinates of the observer. Not modified.
-    * @return the coordinates of the first vertex in the line-of-sight or {@code null} if this method
-    *         failed. Modified.
+    * @return the coordinates of the first vertex in the line-of-sight or {@code null} if this
+    *         method failed. Modified.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
     */
@@ -1085,8 +1084,8 @@ public interface ConvexPolygon2DReadOnly
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
-    * is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
+    * that is in the line-of-sight.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -1098,9 +1097,9 @@ public interface ConvexPolygon2DReadOnly
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code null}.
     * <li>The observer is inside the polygon, this method fails and returns {@code null}.
-    * <li>The polygon has exactly one vertex, this method succeeds and returns the vertex coordinates
-    * if the observer is different from the polygon's vertex, or returns {@code null} if the observer
-    * is equal to the polygon's vertex.
+    * <li>The polygon has exactly one vertex, this method succeeds and returns the vertex
+    * coordinates if the observer is different from the polygon's vertex, or returns {@code null} if
+    * the observer is equal to the polygon's vertex.
     * </ul>
     * </p>
     *
@@ -1132,9 +1131,9 @@ public interface ConvexPolygon2DReadOnly
     * <ul>
     * <li>The polygon has no vertices, this method fails and returns {@code null}.
     * <li>The observer is inside the polygon, this method fails and returns {@code null}.
-    * <li>The polygon has exactly one vertex, this method succeeds and returns the vertex coordinates
-    * if the observer is different from the polygon's vertex, or returns {@code null} if the observer
-    * is equal to the polygon's vertex.
+    * <li>The polygon has exactly one vertex, this method succeeds and returns the vertex
+    * coordinates if the observer is different from the polygon's vertex, or returns {@code null} if
+    * the observer is equal to the polygon's vertex.
     * </ul>
     * </p>
     *
@@ -1178,8 +1177,8 @@ public interface ConvexPolygon2DReadOnly
     * Tests if the given point lies on an edge of this convex polygon.
     *
     * @param point the coordinates of the query. Not modified.
-    * @return {@code true} if the point is considered to be on an edge of this polygon, {@code false}
-    *         otherwise.
+    * @return {@code true} if the point is considered to be on an edge of this polygon,
+    *         {@code false} otherwise.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
     */
@@ -1189,25 +1188,25 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
-    * polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
+    * convex polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
-    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
-    * remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
     * </ul>
     * </p>
     *
     * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection between
-    *           the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
-    *           the line and the convex polygon. Can be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
@@ -1221,8 +1220,8 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
-    * polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
+    * convex polygon 2D.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -1236,8 +1235,8 @@ public interface ConvexPolygon2DReadOnly
     * </p>
     *
     * @param line the line that may intersect this polygon. Not modified.
-    * @return the coordinates of the intersections between the line and the polygon, or {@code null} if
-    *         they do not intersect.
+    * @return the coordinates of the intersections between the line and the polygon, or {@code null}
+    *         if they do not intersect.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
     */
@@ -1249,25 +1248,25 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
-    * polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
+    * convex polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments might be modified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
-    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
-    * might be modified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} might be modified.
     * </ul>
     * </p>
     *
     * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection between
-    *           the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
-    *           the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection
+    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection
+    *           between the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
@@ -1281,8 +1280,8 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
-    * polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
+    * convex polygon 2D.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
@@ -1308,17 +1307,17 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
+    * this convex polygon 2D.
     * <p>
     * Edge cases:
     * <ul>
     * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
     * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
     * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of the
-    * only intersection are stored in {@code firstIntersectionToPack}. {@code secondIntersectionToPack}
-    * remains unmodified.
+    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
+    * the only intersection are stored in {@code firstIntersectionToPack}.
+    * {@code secondIntersectionToPack} remains unmodified.
     * <li>If the line segment is collinear to an edge:
     * <ul>
     * <li>The edge entirely contains the line segment: this method finds two intersections which are
@@ -1333,10 +1332,10 @@ public interface ConvexPolygon2DReadOnly
     * </p>
     *
     * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection between
-    *           the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
-    *           the line and the convex polygon. Can be {@code null}. Modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection
+    *           between the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
@@ -1351,16 +1350,16 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
+    * this convex polygon 2D.
     * <p>
     * WARNING: This method generates garbage.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and this
-    * method returns {@code null}.
+    * <li>If the polygon has no vertices, this method behaves as if there is no intersections and
+    * this method returns {@code null}.
     * <li>If no intersections exist, this method returns {@code null}.
     * <li>If the line segment is collinear to an edge:
     * <ul>
@@ -1603,8 +1602,8 @@ public interface ConvexPolygon2DReadOnly
     * @param edgeToPack line segment used to store the edge endpoints. Modified.
     * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
     *            since last time this polygon's vertices were edited.
-    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal than
-    *            this polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given {@code index} is negative or greater or equal
+    *            than this polygon's number of vertices.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
     */
    default void getEdge(int edgeIndex, LineSegment2DBasics edgeToPack)
@@ -1614,6 +1613,9 @@ public interface ConvexPolygon2DReadOnly
 
    /**
     * Copies this polygon, translates the copy, and returns it.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     *
     * @param translation the translation to apply to the copy of this polygon. Not modified.
     * @return the copy of this polygon translated.
@@ -1629,7 +1631,8 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Tests on a per vertex and per component basis, if this polygon is exactly equal to {@code other}.
+    * Tests on a per vertex and per component basis, if this polygon is exactly equal to
+    * {@code other}.
     *
     * @param other the other polygon to compare against this. Not modified.
     * @return {@code true} if the two polygons are exactly equal component-wise, {@code false}
@@ -1654,8 +1657,8 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
-    * with the tolerance {@code epsilon}.
+    * Tests on a per-component basis on every vertices if this convex polygon is equal to
+    * {@code other} with the tolerance {@code epsilon}.
     * <p>
     * The method returns {@code false} if the two polygons have different size.
     * </p>
@@ -1682,18 +1685,19 @@ public interface ConvexPolygon2DReadOnly
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
-    * similar.
+    * Compares {@code this} and {@code other} to determine if the two convex polygons are
+    * geometrically similar.
     * <p>
-    * This method performs the comparison on a per vertex basis while accounting for a possible shift
-    * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
-    * counter-clockwise order, are considered geometrically equal even if they do not start with the
-    * same vertex.
+    * This method performs the comparison on a per vertex basis while accounting for a possible
+    * shift in the polygon indexing. For instance, two polygons that have the same vertices in
+    * clockwise or counter-clockwise order, are considered geometrically equal even if they do not
+    * start with the same vertex.
     * </p>
     *
     * @param other the convex polygon to compare to.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
+    * @return {@code true} if the convex polygons represent the same geometry, {@code false}
+    *         otherwise.
     */
    default boolean geometricallyEquals(ConvexPolygon2DReadOnly other, double epsilon)
    {
