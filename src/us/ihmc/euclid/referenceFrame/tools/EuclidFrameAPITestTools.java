@@ -1622,7 +1622,7 @@ public class EuclidFrameAPITestTools
       }
       catch (IllegalAccessException | IllegalArgumentException e)
       {
-         System.err.println("Something went wrong when invoking the static method: " + getMethodSimpleName(frameMethod));
+         System.err.println("Something went wrong when invoking the method: " + getMethodSimpleName(frameMethod));
          System.err.println("Objects used as parameters: " + getArgumentTypeString(parameters));
          e.printStackTrace();
          throw e;
@@ -1904,7 +1904,7 @@ public class EuclidFrameAPITestTools
 
    private static Object[] clone(Object[] parametersToClone)
    {
-      Object[] clone = new Object[parametersToClone.length];
+      Object[] clone = (Object[]) Array.newInstance(parametersToClone.getClass().getComponentType(), parametersToClone.length);
 
       for (int i = 0; i < parametersToClone.length; i++)
       {
@@ -1930,23 +1930,26 @@ public class EuclidFrameAPITestTools
             clone[i] = new double[arrayToClone.length];
             System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
          }
+         else if (int[].class.equals(parameterType))
+         {
+            int[] arrayToClone = (int[]) parametersToClone[i];
+            clone[i] = new int[arrayToClone.length];
+            System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
+         }
          else
          {
             try
             {
-               if (parameterType.isArray() && !parameterType.getComponentType().isPrimitive())
+               if (parameterType.isArray())
                {
-                  Object[] array = new Object[((Object[]) parametersToClone[i]).length];
-                  for (int j = 0; j < array.length; j++)
-                     array[j] = newInstanceOf(parameterType.getComponentType());
-                  clone[i] = array;
+                  clone[i] = clone((Object[]) parametersToClone[i]);
                }
                else
                {
                   clone[i] = newInstanceOf(parameterType);
+                  Method setter = parameterType.getMethod("set", parameterType);
+                  setter.invoke(clone[i], parametersToClone[i]);
                }
-               Method setter = parameterType.getMethod("set", parameterType);
-               setter.invoke(clone[i], parametersToClone[i]);
             }
             catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
             {
