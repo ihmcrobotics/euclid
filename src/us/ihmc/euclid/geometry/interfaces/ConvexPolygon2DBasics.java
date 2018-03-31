@@ -100,14 +100,14 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    /**
     * Gets the reference to the {@code index}<sup>th</sup> vertex of this polygon.
     * <p>
-    * WARNING: Through this method, the user can modify the vertices of this polygon without it being
-    * notified of such change. When modifying a vertex, the method {@link #notifyVerticesChanged()}
-    * should be called followed by {@link #update()}. Always prefer using {@link #getVertex(int)}
-    * instead.
+    * WARNING: Through this method, the user can modify the vertices of this polygon without it
+    * being notified of such change. When modifying a vertex, the method
+    * {@link #notifyVerticesChanged()} should be called followed by {@link #update()}. Always prefer
+    * using {@link #getVertex(int)} instead.
     * </p>
     * <p>
-    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
-    * x-coordinate.
+    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
+    * lowest x-coordinate.
     * </p>
     *
     * @param index the index of the vertex in the clockwise ordered list.
@@ -166,10 +166,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </p>
     *
     * @param vertices the list containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
-    *           [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    default void addVertices(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
@@ -192,10 +192,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </p>
     *
     * @param vertices the list containing the vertices to add to this polygon. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
-    *           [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    default void addVertices3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
    {
@@ -217,8 +217,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @param vertices the array containing the vertices to add to this polygon. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given array of vertices.
     */
    default void addVertices(Point2DReadOnly[] vertices, int numberOfVertices)
    {
@@ -243,8 +243,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @param vertices the array containing the vertices to add to this polygon. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given array of vertices.
     */
    default void addVertices(Point3DReadOnly[] vertices, int numberOfVertices)
    {
@@ -263,13 +263,13 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * called afterward before being able to perform operations with this polygon.
     * </p>
     *
-    * @param vertices the array containing the vertices to add to this polygon. Each row contains one
-    *           point whereas the (at least) two columns contains in order the coordinates x and y. Not
-    *           modified.
+    * @param vertices the array containing the vertices to add to this polygon. Each row contains
+    *           one point whereas the (at least) two columns contains in order the coordinates x and
+    *           y. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given array of vertices.
     */
    default void addVertices(double[][] vertices, int numberOfVertices)
    {
@@ -287,15 +287,15 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * called afterward before being able to perform operations with this polygon.
     * </p>
     *
-    * @param otherPolygon the other convex polygon that is used to add new vertices to this polygon.
+    * @param other the other convex polygon that is used to add new vertices to this polygon.
     *           Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
     *            other polygon's vertices were edited.
     */
-   default void addVertices(ConvexPolygon2DReadOnly otherPolygon)
+   default void addVertices(ConvexPolygon2DReadOnly other)
    {
-      for (int i = 0; i < otherPolygon.getNumberOfVertices(); i++)
-         addVertex(otherPolygon.getVertex(i));
+      for (int i = 0; i < other.getNumberOfVertices(); i++)
+         addVertex(other.getVertex(i));
    }
 
    /**
@@ -307,8 +307,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *
     * @param indexOfVertexToRemove the index of the vertex to remove.
     * @throws EmptyPolygonException if this polygon is empty before calling this method.
-    * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal than
-    *            the polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal
+    *            than the polygon's number of vertices.
     */
    void removeVertex(int indexOfVertexToRemove);
 
@@ -321,10 +321,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </ol>
     *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
-    *           [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    default void setAndUpdate(List<? extends Point2DReadOnly> vertices, int numberOfVertices)
    {
@@ -342,10 +342,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </ol>
     *
     * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. Only the points &in;
-    *           [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given list of vertices.
+    * @param numberOfVertices specifies the number of relevant points in the list. Only the points
+    *           &in; [0; {@code numberOfVertices}[ are processed.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given list of vertices.
     */
    default void setAndUpdate3D(List<? extends Point3DReadOnly> vertices, int numberOfVertices)
    {
@@ -365,8 +365,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given array of vertices.
     */
    default void setAndUpdate(Point2DReadOnly[] vertices, int numberOfVertices)
    {
@@ -386,8 +386,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @param vertices the 3D point cloud from which the convex hull is to be computed. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given array of vertices.
     */
    default void setAndUpdate(Point3DReadOnly[] vertices, int numberOfVertices)
    {
@@ -405,12 +405,12 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </ol>
     *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
-    *           contains one point whereas the (at least) two columns contains in order the coordinates
-    *           x and y. Not modified.
+    *           contains one point whereas the (at least) two columns contains in order the
+    *           coordinates x and y. Not modified.
     * @param numberOfVertices specifies the number of relevant points in the array. Only the points
     *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
+    *            size of the given array of vertices.
     */
    default void setAndUpdate(double[][] vertices, int numberOfVertices)
    {
@@ -427,20 +427,21 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * <li>{@link #update()}.
     * </ol>
     *
-    * @param otherPolygon the other convex polygon to copy. Not modified.
+    * @param other the other convex polygon to copy. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
     *            other polygon's vertices were edited.
     */
    // TODO There is no need to call update() there, instead update everything from the other polygon to make it faster.
-   default void setAndUpdate(ConvexPolygon2DReadOnly otherPolygon)
+   default void setAndUpdate(ConvexPolygon2DReadOnly other)
    {
       clear();
-      addVertices(otherPolygon);
+      addVertices(other);
       update();
    }
 
    /**
-    * Sets this polygon such that it represents the smallest convex hull that contains both polygons.
+    * Sets this polygon such that it represents the smallest convex hull that contains both
+    * polygons.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
@@ -480,12 +481,12 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    /**
     * Scale this convex polygon about {@code pointToScaleAbout}.
     * <p>
-    * This method effectively modifies the vertices of this polygon such that the scale is applied on
-    * the distance between each vertex and the given {@code pointToScaleAbout}.
+    * This method effectively modifies the vertices of this polygon such that the scale is applied
+    * on the distance between each vertex and the given {@code pointToScaleAbout}.
     * </p>
     * <p>
-    * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this vertex
-    * will remain unmodified.
+    * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this
+    * vertex will remain unmodified.
     * </p>
     *
     * @param pointToScaleAbout the center of the scale transformation. Not modified.
@@ -554,8 +555,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -567,13 +568,13 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * Transforms this convex polygon using the given homogeneous transformation matrix.
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the given transform represents a transformation in the XY plane.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
+    *            part of {@code transform} is not a transformation in the XY plane.
     */
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
@@ -588,14 +589,15 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
-    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
+    * Transforms this convex polygon using the inverse of the given homogeneous transformation
+    * matrix.
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
+    *            transformation in the XY-plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)
@@ -604,16 +606,17 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
-    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
+    * Transforms this convex polygon using the inverse of the given homogeneous transformation
+    * matrix.
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the given transform represents a transformation in the XY plane.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
+    *            part of {@code transform} is not a transformation in the XY plane.
     */
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
