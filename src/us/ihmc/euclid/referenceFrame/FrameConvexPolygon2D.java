@@ -190,7 +190,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    @Override
    public void set(FrameConvexPolygon2D other)
    {
-      set(other);
+      FrameConvexPolygon2DBasics.super.set(other);
    }
 
    @Override

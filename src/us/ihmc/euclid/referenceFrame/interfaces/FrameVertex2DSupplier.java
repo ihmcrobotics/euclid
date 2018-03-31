@@ -9,6 +9,32 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier
    @Override
    FramePoint2DReadOnly getVertex(int index);
 
+   default boolean equals(FrameVertex2DSupplier other)
+   {
+      if (other == null)
+         return false;
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).equals(other.getVertex(i)))
+            return false;
+      }
+      return true;
+   }
+
+   default boolean epsilonEquals(FrameVertex2DSupplier other, double epsilon)
+   {
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
+            return false;
+      }
+      return true;
+   }
+
    public static FrameVertex2DSupplier asVertex2DSupplier(FramePoint2DReadOnly... vertices)
    {
       return asVertex2DSupplier(vertices, vertices.length);

@@ -10,6 +10,32 @@ public interface Vertex2DSupplier
 
    public int getNumberOfVertices();
 
+   default boolean equals(Vertex2DSupplier other)
+   {
+      if (other == null)
+         return false;
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).equals(other.getVertex(i)))
+            return false;
+      }
+      return true;
+   }
+
+   default boolean epsilonEquals(Vertex2DSupplier other, double epsilon)
+   {
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
+            return false;
+      }
+      return true;
+   }
+
    public static Vertex2DSupplier asVertex2DSupplier(Point2DReadOnly... vertices)
    {
       return asVertex2DSupplier(vertices, vertices.length);

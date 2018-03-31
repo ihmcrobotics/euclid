@@ -9,6 +9,32 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
    @Override
    FramePoint3DReadOnly getVertex(int index);
 
+   default boolean equals(FrameVertex3DSupplier other)
+   {
+      if (other == null)
+         return false;
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).equals(other.getVertex(i)))
+            return false;
+      }
+      return true;
+   }
+
+   default boolean epsilonEquals(FrameVertex3DSupplier other, double epsilon)
+   {
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
+            return false;
+      }
+      return true;
+   }
+
    public static FrameVertex3DSupplier asVertex3DSupplier(FramePoint3DReadOnly... vertices)
    {
       return asVertex3DSupplier(vertices, vertices.length);

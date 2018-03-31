@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
@@ -27,6 +29,7 @@ import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -770,12 +773,12 @@ public abstract class EuclidGeometryRandomTools
     * </p>
     * 
     * @param random the random generator to use.
-    * @param maxAbsoluteX the maximum absolute value for the x-coordinate of the position part of the
-    *           pose 3D.
-    * @param maxAbsoluteY the maximum absolute value for the y-coordinate of the position part of the
-    *           pose 3D.
-    * @param maxAbsoluteZ the maximum absolute value for the z-coordinate of the position part of the
-    *           pose 3D.
+    * @param maxAbsoluteX the maximum absolute value for the x-coordinate of the position part of
+    *           the pose 3D.
+    * @param maxAbsoluteY the maximum absolute value for the y-coordinate of the position part of
+    *           the pose 3D.
+    * @param maxAbsoluteZ the maximum absolute value for the z-coordinate of the position part of
+    *           the pose 3D.
     * @return the random pose 3D.
     */
    public static Pose3D nextPose3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
@@ -788,7 +791,8 @@ public abstract class EuclidGeometryRandomTools
     * <p>
     * <ul>
     * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
-    * <li>{@code orientation.getAngle()} &in; [-{@code orientationMinMax}; {@code orientationMinMax}].
+    * <li>{@code orientation.getAngle()} &in; [-{@code orientationMinMax};
+    * {@code orientationMinMax}].
     * </ul>
     * </p>
     *
@@ -805,14 +809,14 @@ public abstract class EuclidGeometryRandomTools
    }
 
    /**
-    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
-    * the size of the point cloud from which it is generated.
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices
+    * and the size of the point cloud from which it is generated.
     *
     * @param random the random generator to use.
     * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
-    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
-    *           the random convex polygon. The size of the resulting convex polygon will be less than
-    *           {@code numberOfPossiblePoints}.
+    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for
+    *           computing the random convex polygon. The size of the resulting convex polygon will
+    *           be less than {@code numberOfPossiblePoints}.
     * @return the random convex polygon.
     * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
     */
@@ -991,5 +995,17 @@ public abstract class EuclidGeometryRandomTools
       }
 
       return convexPolygon2D;
+   }
+
+   public static Vertex2DSupplier nextVertex2DSupplier(Random random, int numberOfVertices)
+   {
+      List<Point2D> vertices = IntStream.range(0, numberOfVertices).mapToObj(i -> nextPoint2D(random)).collect(Collectors.toList());
+      return Vertex2DSupplier.asVertex2DSupplier(vertices);
+   }
+
+   public static Vertex3DSupplier nextVertex3DSupplier(Random random, int numberOfVertices)
+   {
+      List<Point3D> vertices = IntStream.range(0, numberOfVertices).mapToObj(i -> nextPoint3D(random)).collect(Collectors.toList());
+      return Vertex3DSupplier.asVertex3DSupplier(vertices);
    }
 }

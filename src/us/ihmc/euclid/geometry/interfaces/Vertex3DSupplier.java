@@ -10,6 +10,32 @@ public interface Vertex3DSupplier
 
    public int getNumberOfVertices();
 
+   default boolean equals(Vertex3DSupplier other)
+   {
+      if (other == null)
+         return false;
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).equals(other.getVertex(i)))
+            return false;
+      }
+      return true;
+   }
+
+   default boolean epsilonEquals(Vertex3DSupplier other, double epsilon)
+   {
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
+            return false;
+      }
+      return true;
+   }
+
    public static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly... vertices)
    {
       return asVertex3DSupplier(vertices, vertices.length);

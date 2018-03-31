@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.MatrixFeatures;
@@ -41,6 +42,8 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -105,6 +108,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -209,6 +214,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(ConvexPolygon2DReadOnly.class, FrameConvexPolygon2DReadOnly.class);
       modifiableMap.put(ConvexPolygon2DBasics.class, FixedFrameConvexPolygon2DBasics.class);
 
+      modifiableMap.put(Vertex2DSupplier.class, FrameVertex2DSupplier.class);
+      modifiableMap.put(Vertex3DSupplier.class, FrameVertex3DSupplier.class);
+
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
 
@@ -258,6 +266,9 @@ public class EuclidFrameAPITestTools
 
       modifiableMap.put(FrameConvexPolygon2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, frame, 1.0, 10));
       modifiableMap.put(FrameConvexPolygon2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, frame, 1.0, 10));
+
+      modifiableMap.put(FrameVertex2DSupplier.class, frame -> EuclidFrameRandomTools.nextFrameVertex2DSupplier(random, frame, 20));
+      modifiableMap.put(FrameVertex3DSupplier.class, frame -> EuclidFrameRandomTools.nextFrameVertex3DSupplier(random, frame, 20));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -314,6 +325,9 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(ConvexPolygon2DReadOnly.class, () -> EuclidGeometryRandomTools.nextConvexPolygon2D(random, 1.0, 10));
       modifiableMap.put(ConvexPolygon2DBasics.class, () -> EuclidGeometryRandomTools.nextConvexPolygon2D(random, 1.0, 10));
 
+      modifiableMap.put(Vertex2DSupplier.class, () -> EuclidGeometryRandomTools.nextVertex2DSupplier(random, 20));
+      modifiableMap.put(Vertex3DSupplier.class, () -> EuclidGeometryRandomTools.nextVertex3DSupplier(random, 20));
+
       modifiableMap.put(Orientation3DReadOnly.class, () -> {
          switch (random.nextInt(3))
          {
@@ -350,6 +364,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameLineSegment2DReadOnly.class);
       modifiableSet.add(FrameLineSegment3DReadOnly.class);
       modifiableSet.add(FrameConvexPolygon2DReadOnly.class);
+      modifiableSet.add(FrameVertex2DSupplier.class);
+      modifiableSet.add(FrameVertex3DSupplier.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -1340,7 +1356,8 @@ public class EuclidFrameAPITestTools
             }
             catch (RuntimeException e)
             {
-               System.err.println("Problem when evaluating the method: " + getMethodSimpleName(frameMethod.getReturnType(), frameMethodName, frameMethodParameterTypes));
+               System.err.println("Problem when evaluating the method: "
+                     + getMethodSimpleName(frameMethod.getReturnType(), frameMethodName, frameMethodParameterTypes));
                throw e;
             }
          }
@@ -1388,7 +1405,24 @@ public class EuclidFrameAPITestTools
             return true;
       }
 
-      if (isFramelessObject(framelessParameter))
+      if (isVertexSupplier(frameParameter.getClass()))
+      {
+         try
+         {
+            Method epsilonEqualsMethod = frameParameter.getClass().getMethod("epsilonEquals", framelessParameter.getClass().getInterfaces()[0], double.class);
+            boolean epsilonEqualsResult = (boolean) epsilonEqualsMethod.invoke(frameParameter, framelessParameter, epsilon);
+            return epsilonEqualsResult;
+         }
+         catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+         {
+            System.err.println("Something went wrong when invoking the epsilonEquals method for " + frameParameter.getClass().getSimpleName());
+            System.err.println("Objects used as parameters: " + getArgumentTypeString(framelessParameter, epsilon));
+            e.printStackTrace();
+            throw new AssertionError(e);
+         }
+
+      }
+      else if (isFramelessObject(framelessParameter))
       {
          if (!isFrameObject(frameParameter) && !isFramelessObject(frameParameter))
             throw new RuntimeException("Reached unexpected state.");
@@ -1936,6 +1970,10 @@ public class EuclidFrameAPITestTools
             clone[i] = new int[arrayToClone.length];
             System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
          }
+         else if (isVertexSupplier(parameterType))
+         {
+            clone[i] = parametersToClone[i];
+         }
          else
          {
             try
@@ -1953,12 +1991,19 @@ public class EuclidFrameAPITestTools
             }
             catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
             {
-               throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName());
+               throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName(), e);
             }
          }
       }
 
       return clone;
+   }
+
+   private static boolean isVertexSupplier(Class<?> classToTest)
+   {
+      boolean implementSupplier = Stream.of(Vertex2DSupplier.class, Vertex3DSupplier.class, FrameVertex2DSupplier.class, FrameVertex3DSupplier.class)
+                                        .anyMatch(supplierType -> supplierType.isAssignableFrom(classToTest));
+      return implementSupplier && !ConvexPolygon2DReadOnly.class.isAssignableFrom(classToTest);
    }
 
    private static Object[] instantiateParameterTypes(ReferenceFrame frame, Class<?>[] parameterTypes)
@@ -2096,7 +2141,7 @@ public class EuclidFrameAPITestTools
       catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
             | SecurityException e)
       {
-         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName());
+         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName() + " " + type);
       }
    }
 
@@ -2110,7 +2155,7 @@ public class EuclidFrameAPITestTools
     * @author Sylvain Bertrand
     * @param <T> the type this builder can instantiate.
     */
-   public static interface RandomFrameTypeBuilder<T extends ReferenceFrameHolder>
+   public static interface RandomFrameTypeBuilder<T>
    {
       /**
        * Creates a new instance of the frame type.

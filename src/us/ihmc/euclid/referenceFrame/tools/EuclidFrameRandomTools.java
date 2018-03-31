@@ -2,6 +2,8 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.Random;
 
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLine2D;
@@ -18,7 +20,11 @@ import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -1516,5 +1522,45 @@ public class EuclidFrameRandomTools
    public static FrameConvexPolygon2D nextFrameConvexPolygon2D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteXY, int numberOfPossiblePoints)
    {
       return new FrameConvexPolygon2D(referenceFrame, EuclidGeometryRandomTools.nextConvexPolygon2D(random, maxAbsoluteXY, numberOfPossiblePoints));
+   }
+
+   public static FrameVertex2DSupplier nextFrameVertex2DSupplier(Random random, ReferenceFrame referenceFrame, int numberOfVertices)
+   {
+      return new FrameVertex2DSupplier()
+      {
+         Vertex2DSupplier vertex2dSupplier = EuclidGeometryRandomTools.nextVertex2DSupplier(random, numberOfVertices);
+
+         @Override
+         public int getNumberOfVertices()
+         {
+            return vertex2dSupplier.getNumberOfVertices();
+         }
+
+         @Override
+         public FramePoint2DReadOnly getVertex(int index)
+         {
+            return new FramePoint2D(referenceFrame, vertex2dSupplier.getVertex(index));
+         }
+      };
+   }
+
+   public static FrameVertex3DSupplier nextFrameVertex3DSupplier(Random random, ReferenceFrame referenceFrame, int numberOfVertices)
+   {
+      return new FrameVertex3DSupplier()
+      {
+         Vertex3DSupplier vertex2dSupplier = EuclidGeometryRandomTools.nextVertex3DSupplier(random, numberOfVertices);
+
+         @Override
+         public int getNumberOfVertices()
+         {
+            return vertex2dSupplier.getNumberOfVertices();
+         }
+
+         @Override
+         public FramePoint3DReadOnly getVertex(int index)
+         {
+            return new FramePoint3D(referenceFrame, vertex2dSupplier.getVertex(index));
+         }
+      };
    }
 }

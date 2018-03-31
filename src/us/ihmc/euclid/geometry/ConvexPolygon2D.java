@@ -283,7 +283,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    @Override
    public void set(ConvexPolygon2D other)
    {
-      set(other);
+      ConvexPolygon2DBasics.super.set(other);
    }
 
    /**
