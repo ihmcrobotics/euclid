@@ -206,46 +206,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /**
-    * Creates a new convex polygon such that it represents the convex hull of the points from the given
-    * {@code vertices} array that are in the index range [0, {@code numberOfVertices}[.
-    * <p>
-    * Note that the resulting polygon is ready to be used for any operations, no need to call
-    * {@link #update()}.
-    * </p>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
-    *           contains one point whereas the (at least) two columns contains in order the coordinates
-    *           x and y. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
-    *            of the given array of vertices.
-    */
-   public ConvexPolygon2D(double[][] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * Creates a new convex polygon such that it represents the convex hull of the points from the given
-    * {@code vertices} array.
-    * <p>
-    * Note that the resulting polygon is ready to be used for any operations, no need to call
-    * {@link #update()}.
-    * </p>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
-    *           contains one point whereas the (at least) two columns contains in order the coordinates
-    *           x and y. Not modified.
-    */
-   public ConvexPolygon2D(double[][] vertices)
-   {
-      this(vertices, vertices.length);
-   }
-
-   /**
     * Copy constructor.
     *
     * @param otherPolygon the other convex polygon to copy. Not modified.

@@ -50,7 +50,7 @@ public class ConvexPolygon2DTest
       ConvexPolygon2D list = new ConvexPolygon2D(verticesList);
       assertEquals("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), epsilon);
 
-      double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
+      Point2D[] verticesArray = {new Point2D(0.0, 0.0), new Point2D(0.0, 1.0), new Point2D(1.0, 0.0), new Point2D(1.0, 1.0)};
 
       ConvexPolygon2D doubleInt = new ConvexPolygon2D(verticesArray, numberOfVertices);
       assertEquals("Number of vertices should be four", 4.0, doubleInt.getNumberOfVertices(), epsilon);
@@ -105,7 +105,7 @@ public class ConvexPolygon2DTest
    {
       ConvexPolygon2D doubleInt = new ConvexPolygon2D();
       int numberOfVertices = 4;
-      double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
+      Point2D[] verticesArray = {new Point2D(0.0, 0.0), new Point2D(0.0, 1.0), new Point2D(1.0, 0.0), new Point2D(1.0, 1.0)};
       doubleInt.setAndUpdate(verticesArray, numberOfVertices);
       assertEquals("Number of vertices should be 4", 4.0, doubleInt.getNumberOfVertices(), epsilon);
       assertTrue(doubleInt.isUpToDate());
@@ -114,7 +114,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testGetCentroid()
    {
-      double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
+      Point2D[] verticesArray = {new Point2D(0.0, 0.0), new Point2D(0.0, 1.0), new Point2D(1.0, 0.0), new Point2D(1.0, 1.0)};
       ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
       Point2D centroid = new Point2D();
 
@@ -125,7 +125,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testGetBoundingBox()
    {
-      double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
+      Point2D[] verticesArray = {new Point2D(0.0, 0.0), new Point2D(0.0, 1.0), new Point2D(1.0, 0.0), new Point2D(1.0, 1.0)};
       ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
       BoundingBox2D box = doubles.getBoundingBox();
 
@@ -138,7 +138,7 @@ public class ConvexPolygon2DTest
    @Test
    public void testGetNextVertexCCWGetPreviousVertexCCW()
    {
-      double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
+      Point2D[] verticesArray = {new Point2D(0.0, 0.0), new Point2D(0.0, 1.0), new Point2D(1.0, 0.0), new Point2D(1.0, 1.0)};
       ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
 
       Point2DReadOnly oneNext = doubles.getNextVertexCCW(0); //(1.0, 0.0)
@@ -161,7 +161,7 @@ public class ConvexPolygon2DTest
    public void testScale()
    {
       double scaleFactor = 2.0;
-      double[][] verticesArray = {{-1.0, 1.0}, {1.0, 1.0}, {1.0, -1.0}, {-1.0, -1.0}};
+      Point2D[] verticesArray = {new Point2D(-1.0, 1.0), new Point2D(1.0, 1.0), new Point2D(1.0, -1.0), new Point2D(-1.0, -1.0)};
 
       ConvexPolygon2D polygon = new ConvexPolygon2D(verticesArray);
       polygon.scale(scaleFactor);
@@ -186,7 +186,7 @@ public class ConvexPolygon2DTest
    public void testIsPointInside()
    {
       Random random = new Random(4564656L);
-      double[][] verticesArray = {{-10.0, 10.0}, {10.0, 10.0}, {10.0, -10.0}, {-10.0, -10.0}};
+      Point2D[] verticesArray = {new Point2D(-10.0, 10.0), new Point2D(10.0, 10.0), new Point2D(10.0, -10.0), new Point2D(-10.0, -10.0)};
       ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
 
       for (int i = 0; i < 10; i++)
@@ -539,9 +539,9 @@ public class ConvexPolygon2DTest
    @Test
    public void testIsInside()
    {
-      double[][] polygonPoints = new double[][] {{-0.05107802536335158, 0.04155594197133163}, {-0.05052044462374434, 0.1431544119584275},
-            {0.12219695435431863, 0.14220652470109518}, {0.12219695435431865, -0.041946248489056696}, {0.12163937361471142, -0.1435447184761526},
-            {-0.05107802536335154, -0.14259683121882027}};
+      Point2D[] polygonPoints = {new Point2D(-0.05107802536335158, 0.04155594197133163), new Point2D(-0.05052044462374434, 0.1431544119584275),
+            new Point2D(0.12219695435431863, 0.14220652470109518), new Point2D(0.12219695435431865, -0.041946248489056696),
+            new Point2D(0.12163937361471142, -0.1435447184761526), new Point2D(-0.05107802536335154, -0.14259683121882027)};
 
       Point2D testPoint = new Point2D(-0.04907805548171582, 2.6934439541712686E-4);
 
@@ -884,9 +884,9 @@ public class ConvexPolygon2DTest
 
    private ConvexPolygon2D createSomeValidPolygon()
    {
-      double[][] polygonPoints = new double[][] {{-0.05107802536335158, 0.04155594197133163}, {-0.05052044462374434, 0.1431544119584275},
-            {0.12219695435431863, 0.14220652470109518}, {0.12219695435431865, -0.041946248489056696}, {0.12163937361471142, -0.1435447184761526},
-            {-0.05107802536335154, -0.14259683121882027}};
+      Point2D[] polygonPoints = {new Point2D(-0.05107802536335158, 0.04155594197133163), new Point2D(-0.05052044462374434, 0.1431544119584275),
+            new Point2D(0.12219695435431863, 0.14220652470109518), new Point2D(0.12219695435431865, -0.041946248489056696),
+            new Point2D(0.12163937361471142, -0.1435447184761526), new Point2D(-0.05107802536335154, -0.14259683121882027)};
 
       ConvexPolygon2D polygon = new ConvexPolygon2D(polygonPoints);
 

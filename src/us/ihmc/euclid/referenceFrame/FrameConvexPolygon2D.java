@@ -166,11 +166,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       setIncludingFrameAndUpdate(referenceFrame, vertices, vertices.length);
    }
 
-   public FrameConvexPolygon2D(ReferenceFrame referenceFrame, double[][] vertices)
-   {
-      setIncludingFrameAndUpdate(referenceFrame, vertices, vertices.length);
-   }
-
    public FrameConvexPolygon2D(List<? extends FramePoint2DReadOnly> frameVertices)
    {
       setIncludingFrameAndUpdate(frameVertices, frameVertices.size());

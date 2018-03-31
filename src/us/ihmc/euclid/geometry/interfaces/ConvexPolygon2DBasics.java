@@ -256,31 +256,6 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
-    * Adds the N first vertices from the given array to this polygon, where N is equal to
-    * {@code numberOfVertices}.
-    * <p>
-    * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
-    * called afterward before being able to perform operations with this polygon.
-    * </p>
-    *
-    * @param vertices the array containing the vertices to add to this polygon. Each row contains
-    *           one point whereas the (at least) two columns contains in order the coordinates x and
-    *           y. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given array of vertices.
-    */
-   default void addVertices(double[][] vertices, int numberOfVertices)
-   {
-      if (numberOfVertices < 0 || numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + vertices.length + "].");
-
-      for (int i = 0; i < numberOfVertices; i++)
-         addVertex(vertices[i][0], vertices[i][1]);
-   }
-
-   /**
     * Adds new vertices to this polygon from another convex polygon.
     * <p>
     * Note that this polygon is marked as being out-of-date. The method {@link #update()} has to be
@@ -390,29 +365,6 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *            size of the given array of vertices.
     */
    default void setAndUpdate(Point3DReadOnly[] vertices, int numberOfVertices)
-   {
-      clear();
-      addVertices(vertices, numberOfVertices);
-      update();
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #clear()}.
-    * <li>{@link #addVertices(double[][], int)}.
-    * <li>{@link #update()}.
-    * </ol>
-    *
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
-    *           contains one point whereas the (at least) two columns contains in order the
-    *           coordinates x and y. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
-    *            size of the given array of vertices.
-    */
-   default void setAndUpdate(double[][] vertices, int numberOfVertices)
    {
       clear();
       addVertices(vertices, numberOfVertices);

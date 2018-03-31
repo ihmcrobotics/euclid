@@ -133,27 +133,6 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * This method does:
     * <ol>
     * <li>{@link #setReferenceFrame(ReferenceFrame)}
-    * <li>{@link #setAndUpdate(Point2DReadOnly[], int)}.
-    * </ol>
-    * 
-    * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param vertices the 2D point cloud from which the convex hull is to be computed. Each row
-    *           contains one point whereas the (at least) two columns contains in order the
-    *           coordinates x and y. Not modified.
-    * @param numberOfVertices specifies the number of relevant points in the array. Only the points
-    *           &in; [0; {@code numberOfVertices}[ are processed.
-    * @see #setAndUpdate(double[][], int)
-    */
-   default void setIncludingFrameAndUpdate(ReferenceFrame referenceFrame, double[][] vertices, int numberOfVertices)
-   {
-      setReferenceFrame(referenceFrame);
-      setAndUpdate(vertices, numberOfVertices);
-   }
-
-   /**
-    * This method does:
-    * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)}
     * <li>{@link #setAndUpdate(ConvexPolygon2DReadOnly)}.
     * </ol>
     * 
