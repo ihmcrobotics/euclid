@@ -18,12 +18,14 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, GeometryObject<FrameConvexPolygon2D>
 {
    /**
-    * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
-    * or counter-clockwise ordered.
+    * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in
+    * clockwise or counter-clockwise ordered.
     */
    private final boolean clockwiseOrdered = true;
    /** Rigid-body transform used to perform garbage-free operations. */
@@ -43,8 +45,8 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * actual size of this polygon.
     * </p>
     * <p>
-    * The vertices composing this polygon are located in the index range [0, {@link #numberOfVertices}[
-    * in this list.
+    * The vertices composing this polygon are located in the index range [0,
+    * {@link #numberOfVertices}[ in this list.
     * </p>
     */
    private final List<FrameVertex2D> clockwiseOrderedVertices = new ArrayList<>();
@@ -115,9 +117,9 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    /** Index of the vertex with the highest y-coordinate. */
    private int maxY_index = 0;
    /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more than
-    * one vertex in the list, it is the index of the vertex with the highest y-coordinate out of the
-    * candidates.
+    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
+    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
+    * of the candidates.
     * <p>
     * Note that the method {@link #update()} will always position this vertex at the index 0, so it
     * does not need to be updated.
@@ -125,9 +127,9 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     */
    private final int minXmaxY_index = 0;
    /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more than
-    * one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of the
-    * candidates.
+    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
+    * than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of
+    * the candidates.
     */
    private int minXminY_index = 0;
    /**
@@ -138,12 +140,14 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    private int maxXminY_index = 0;
    /**
     * Index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out of
-    * the candidates.
+    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
+    * of the candidates.
     */
    private int maxXmaxY_index = 0;
 
    private ReferenceFrame referenceFrame;
+
+   private final Point3D vertex3D = new Point3D();
 
    public FrameConvexPolygon2D()
    {
@@ -220,6 +224,38 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    {
       clear();
       isUpToDate = true;
+   }
+
+   @Override
+   public void addVertexMatchingFrame(ReferenceFrame referenceFrame, Point2DReadOnly vertex, boolean checkIfTransformInXYPlane)
+   {
+      // Check for the trivial case: the geometry is already expressed in the desired frame.
+      if (getReferenceFrame() == referenceFrame)
+      {
+         addVertex(vertex);
+      }
+      else
+      {
+         referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, getReferenceFrame());
+         addVertex(vertex);
+         getVertexUnsafe(getNumberOfVertices() - 1).applyTransform(transformToDesiredFrame, checkIfTransformInXYPlane);
+      }
+   }
+
+   @Override
+   public void addVertexMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly vertex)
+   {
+      // Check for the trivial case: the geometry is already expressed in the desired frame.
+      if (getReferenceFrame() == referenceFrame)
+      {
+         addVertex(vertex);
+      }
+      else
+      {
+         referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, getReferenceFrame());
+         transformToDesiredFrame.transform(vertex, vertex3D);
+         addVertex(vertex3D);
+      }
    }
 
    @Override
@@ -353,8 +389,8 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
          return;
 
       /*
-       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of checking
-       * both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
+       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of
+       * checking both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
        */
       referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
       applyTransform(transformToDesiredFrame);

@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import java.util.List;
 
+import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -47,6 +48,28 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    }
 
    /**
+    * Add a vertex to this polygon.
+    * <p>
+    * If {@code vertex} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #addVertex(Point2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex}
+    * is added once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
+    * @param vertex the new vertex. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the transform from the vertex's frame to this frame represents a transformation in
+    *           the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
+    *            part of the transform is not a transformation in the XY plane.
+    * @see #addVertex(Point2DReadOnly)
+    */
+   void addVertexMatchingFrame(ReferenceFrame referenceFrame, Point2DReadOnly vertex, boolean checkIfTransformInXYPlane);
+
+   /**
     * Add a vertex to this polygon using only the x and y coordinates of the given {@code vertex}.
     *
     * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
@@ -63,6 +86,23 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
 
    /**
     * Add a vertex to this polygon.
+    * <p>
+    * If {@code vertex} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #addVertex(Point2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex}
+    * is added once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
+    * @param vertex the new vertex. Not modified.
+    * @see #addVertex(Point3DReadOnly)
+    */
+   void addVertexMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly vertex);
+
+   /**
+    * Add a vertex to this polygon.
     *
     * @param vertex the new vertex. Not modified.
     * @throws ReferenceFrameMismatchException if {@code vertex} and {@code this} are not expressed
@@ -73,6 +113,29 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    {
       checkReferenceFrameMatch(vertex);
       ConvexPolygon2DBasics.super.addVertex(vertex);
+   }
+
+   /**
+    * Add a vertex to this polygon.
+    * <p>
+    * If {@code vertex} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #addVertex(Point2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex}
+    * is added once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param vertex the new vertex. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
+    *           the transform from the vertex's frame to this frame represents a transformation in
+    *           the XY plane.
+    * @see #addVertexMatchingFrame(ReferenceFrame, Point2DReadOnly, boolean)
+    * @see #addVertex(Point2DReadOnly)
+    */
+   default void addVertexMatchingFrame(FramePoint2DReadOnly vertex, boolean checkIfTransformInXYPlane)
+   {
+      addVertexMatchingFrame(vertex.getReferenceFrame(), vertex, checkIfTransformInXYPlane);
    }
 
    /**
@@ -87,6 +150,18 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    {
       checkReferenceFrameMatch(vertex);
       ConvexPolygon2DBasics.super.addVertex(vertex);
+   }
+
+   /**
+    * Add a vertex to this polygon using only the x and y coordinates of the given {@code vertex}.
+    *
+    * @param vertex the new vertex. Not modified.
+    * @see #addVertexMatchingFrame(ReferenceFrame, Point3DReadOnly)
+    * @see #addVertex(Point3DReadOnly)
+    */
+   default void addVertexMatchingFrame(FramePoint3DReadOnly vertex)
+   {
+      addVertexMatchingFrame(vertex.getReferenceFrame(), vertex);
    }
 
    /**
