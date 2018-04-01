@@ -5,6 +5,7 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetw
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
@@ -796,7 +797,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   public boolean intersectsExclusiveInXYPlane(BoundingBox2D other)
+   public boolean intersectsExclusiveInXYPlane(BoundingBox2DReadOnly other)
    {
       if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX())
          return false;
@@ -821,7 +822,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   public boolean intersectsInclusiveInXYPlane(BoundingBox2D other)
+   public boolean intersectsInclusiveInXYPlane(BoundingBox2DReadOnly other)
    {
       if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
          return false;
@@ -854,7 +855,7 @@ public class BoundingBox3D implements EpsilonComparable<BoundingBox3D>, Settable
     * @param epsilon the tolerance to use in this test.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   public boolean intersectsEpsilonInXYPlane(BoundingBox2D other, double epsilon)
+   public boolean intersectsEpsilonInXYPlane(BoundingBox2DReadOnly other, double epsilon)
    {
       if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon)
          return false;
