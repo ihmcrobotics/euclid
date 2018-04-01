@@ -997,12 +997,26 @@ public abstract class EuclidGeometryRandomTools
       return convexPolygon2D;
    }
 
+   /**
+    * Generates a fixed-size supplier of random vertex 2D.
+    * 
+    * @param random the random generator to use.
+    * @param numberOfVertices the supplier's size.
+    * @return the random supplier.
+    */
    public static Vertex2DSupplier nextVertex2DSupplier(Random random, int numberOfVertices)
    {
       List<Point2D> vertices = IntStream.range(0, numberOfVertices).mapToObj(i -> nextPoint2D(random)).collect(Collectors.toList());
       return Vertex2DSupplier.asVertex2DSupplier(vertices);
    }
 
+   /**
+    * Generates a fixed-size supplier of random vertex 3D.
+    * 
+    * @param random the random generator to use.
+    * @param numberOfVertices the supplier's size.
+    * @return the random supplier.
+    */
    public static Vertex3DSupplier nextVertex3DSupplier(Random random, int numberOfVertices)
    {
       List<Point3D> vertices = IntStream.range(0, numberOfVertices).mapToObj(i -> nextPoint3D(random)).collect(Collectors.toList());
