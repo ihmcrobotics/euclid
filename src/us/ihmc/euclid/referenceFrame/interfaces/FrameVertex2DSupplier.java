@@ -1,91 +1,106 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import java.util.Arrays;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 
+/**
+ * Implement this interface to create a custom supplier of 2D frame vertices or use the static
+ * methods to create default suppliers.
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface FrameVertex2DSupplier extends Vertex2DSupplier
 {
+   /** {@inheritDoc} */
    @Override
    FramePoint2DReadOnly getVertex(int index);
 
-   default boolean equals(FrameVertex2DSupplier other)
+   /**
+    * Returns a fixed-size supplier backed by the given array.
+    * 
+    * @param vertices the array by which the supplier will be backed.
+    * @return the supplier.
+    */
+   public static FrameVertex2DSupplier asFrameVertex2DSupplier(FramePoint2DReadOnly... vertices)
    {
-      if (other == null)
-         return false;
-      if (getNumberOfVertices() != other.getNumberOfVertices())
-         return false;
-      for (int i = 0; i < getNumberOfVertices(); i++)
-      {
-         if (!getVertex(i).equals(other.getVertex(i)))
-            return false;
-      }
-      return true;
+      return asFrameVertex2DSupplier(Arrays.asList(vertices));
    }
 
-   default boolean epsilonEquals(FrameVertex2DSupplier other, double epsilon)
+   /**
+    * Returns a fixed-size supplier backed by a portion of the given array starting with the first
+    * element and specified by its length {@code numberOfVertices}.
+    * 
+    * @param vertices the array by which the supplier will be backed.
+    * @param numberOfVertices the portion's length.
+    * @return the supplier.
+    */
+   public static FrameVertex2DSupplier asFrameVertex2DSupplier(FramePoint2DReadOnly[] vertices, int numberOfVertices)
    {
-      if (getNumberOfVertices() != other.getNumberOfVertices())
-         return false;
-      for (int i = 0; i < getNumberOfVertices(); i++)
-      {
-         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
-            return false;
-      }
-      return true;
+      return asFrameVertex2DSupplier(Arrays.asList(vertices), numberOfVertices);
    }
 
-   public static FrameVertex2DSupplier asVertex2DSupplier(FramePoint2DReadOnly... vertices)
-   {
-      return asVertex2DSupplier(vertices, vertices.length);
-   }
-
-   public static FrameVertex2DSupplier asVertex2DSupplier(FramePoint2DReadOnly[] vertices, int numberOfVertices)
-   {
-      return asVertex2DSupplier(vertices, 0, numberOfVertices);
-   }
-
-   public static FrameVertex2DSupplier asVertex2DSupplier(FramePoint2DReadOnly[] vertices, int startIndex, int numberOfVertices)
+   /**
+    * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
+    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * 
+    * @param vertices the array by which the supplier will be backed.
+    * @param startIndex the first vertex index.
+    * @param numberOfVertices the portion's length.
+    * @return the supplier.
+    */
+   public static FrameVertex2DSupplier asFrameVertex2DSupplier(FramePoint2DReadOnly[] vertices, int startIndex, int numberOfVertices)
    {
       if (startIndex >= numberOfVertices)
          throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
       if (startIndex + numberOfVertices > vertices.length)
-         throw new IllegalArgumentException("The array is too small. Array length = " + vertices.length + ", expected minimum length = "
-               + (startIndex + numberOfVertices));
+         throw new IllegalArgumentException(
+               "The array is too small. Array length = " + vertices.length + ", expected minimum length = " + (startIndex + numberOfVertices));
 
-      return new FrameVertex2DSupplier()
-      {
-         @Override
-         public FramePoint2DReadOnly getVertex(int index)
-         {
-            return vertices[index + startIndex];
-         }
-
-         @Override
-         public int getNumberOfVertices()
-         {
-            return numberOfVertices;
-         }
-      };
+      return asFrameVertex2DSupplier(Arrays.asList(vertices), startIndex, numberOfVertices);
    }
 
+   /**
+    * Returns a fixed-size supplier backed by the given list.
+    * 
+    * @param vertices the list by which the supplier will be backed.
+    * @return the supplier.
+    */
    public static FrameVertex2DSupplier asFrameVertex2DSupplier(List<? extends FramePoint2DReadOnly> vertices)
    {
       return asFrameVertex2DSupplier(vertices, vertices.size());
    }
 
+   /**
+    * Returns a fixed-size supplier backed by a portion of the given list starting with the first
+    * element and specified by its length {@code numberOfVertices}.
+    * 
+    * @param vertices the list by which the supplier will be backed.
+    * @param numberOfVertices the portion's length.
+    * @return the supplier.
+    */
    public static FrameVertex2DSupplier asFrameVertex2DSupplier(List<? extends FramePoint2DReadOnly> vertices, int numberOfVertices)
    {
       return asFrameVertex2DSupplier(vertices, 0, numberOfVertices);
    }
 
+   /**
+    * Returns a fixed-size supplier backed by a portion of the given list specified by the first index
+    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * 
+    * @param vertices the list by which the supplier will be backed.
+    * @param startIndex the first vertex index.
+    * @param numberOfVertices the portion's length.
+    * @return the supplier.
+    */
    public static FrameVertex2DSupplier asFrameVertex2DSupplier(List<? extends FramePoint2DReadOnly> vertices, int startIndex, int numberOfVertices)
    {
       if (startIndex >= numberOfVertices)
          throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
       if (startIndex + numberOfVertices > vertices.size())
-         throw new IllegalArgumentException("The list is too small. List size = " + vertices.size() + ", expected minimum size = "
-               + (startIndex + numberOfVertices));
+         throw new IllegalArgumentException(
+               "The list is too small. List size = " + vertices.size() + ", expected minimum size = " + (startIndex + numberOfVertices));
 
       return new FrameVertex2DSupplier()
       {
@@ -99,6 +114,12 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier
          public int getNumberOfVertices()
          {
             return numberOfVertices;
+         }
+
+         @Override
+         public String toString()
+         {
+            return "Vertex 2D Supplier: " + vertices.subList(startIndex, startIndex + numberOfVertices).toString();
          }
       };
    }

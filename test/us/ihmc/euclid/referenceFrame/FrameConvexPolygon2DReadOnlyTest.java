@@ -40,13 +40,13 @@ public abstract class FrameConvexPolygon2DReadOnlyTest<F extends FrameConvexPoly
 
    public final F createFrameConvexPolygon2D(ReferenceFrame referenceFrame, ConvexPolygon2DReadOnly polygon)
    {
-      return createFrameConvexPolygon2D(referenceFrame, polygon.getUnmodifiableVertexBuffer());
+      return createFrameConvexPolygon2D(referenceFrame, polygon.getVertexBufferView());
    }
 
    public final F createFrameConvexPolygon2D(F frameConvexPolygon2D)
    {
       return createFrameConvexPolygon2D(frameConvexPolygon2D.getReferenceFrame(),
-                                        frameConvexPolygon2D.getUnmodifiableVertexBuffer().subList(0, frameConvexPolygon2D.getNumberOfVertices()));
+                                        frameConvexPolygon2D.getVertexBufferView().subList(0, frameConvexPolygon2D.getNumberOfVertices()));
    }
 
    public F createFrameConvexPolygon2D(List<? extends Point2DReadOnly> vertices)

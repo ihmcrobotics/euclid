@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.BoundingBox2D;
-import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
@@ -18,7 +18,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -26,8 +25,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, GeometryObject<FrameConvexPolygon2D>
 {
    /**
-    * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in
-    * clockwise or counter-clockwise ordered.
+    * Field for future expansion of {@code ConvexPolygon2d} to enable having the vertices in clockwise
+    * or counter-clockwise ordered.
     */
    private final boolean clockwiseOrdered = true;
    /** Rigid-body transform used to perform garbage-free operations. */
@@ -47,12 +46,12 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * actual size of this polygon.
     * </p>
     * <p>
-    * The vertices composing this polygon are located in the index range [0,
-    * {@link #numberOfVertices}[ in this list.
+    * The vertices composing this polygon are located in the index range [0, {@link #numberOfVertices}[
+    * in this list.
     * </p>
     */
-   private final List<FrameVertex2D> clockwiseOrderedVertices = new ArrayList<>();
-   private final List<FixedFramePoint2DBasics> unmodifiableVertexBuffer = Collections.unmodifiableList(clockwiseOrderedVertices);
+   private final List<FrameVertex2D> vertexBuffer = new ArrayList<>();
+   private final List<FixedFramePoint2DBasics> vertexBufferView = Collections.unmodifiableList(vertexBuffer);
    /**
     * The smallest axis-aligned bounding box that contains all this polygon's vertices.
     * <p>
@@ -69,9 +68,34 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * {@link #update()}.
     * </p>
     */
-   private final Point2D centroid = new Point2D();
-   private final FramePoint2DReadOnly frameCentroid = new FramePoint2DReadOnly()
+   private final FixedFramePoint2DBasics centroid = new FixedFramePoint2DBasics()
    {
+      private double x, y;
+
+      @Override
+      public void setX(double x)
+      {
+         this.x = x;
+      };
+
+      @Override
+      public void setY(double y)
+      {
+         this.y = y;
+      }
+
+      @Override
+      public double getX()
+      {
+         return x;
+      }
+
+      @Override
+      public double getY()
+      {
+         return y;
+      }
+      
       @Override
       public ReferenceFrame getReferenceFrame()
       {
@@ -79,15 +103,9 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       }
 
       @Override
-      public double getX()
+      public String toString()
       {
-         return centroid.getX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return centroid.getY();
+         return EuclidCoreIOTools.getTuple2DString(this) + "-" + referenceFrame;
       }
    };
    /**
@@ -109,43 +127,6 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * </p>
     */
    private boolean isUpToDate = false;
-
-   /** Index of the vertex with the lowest x-coordinate. */
-   private int minX_index = 0;
-   /** Index of the vertex with the highest x-coordinate. */
-   private int maxX_index = 0;
-   /** Index of the vertex with the lowest y-coordinate. */
-   private int minY_index = 0;
-   /** Index of the vertex with the highest y-coordinate. */
-   private int maxY_index = 0;
-   /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
-    * of the candidates.
-    * <p>
-    * Note that the method {@link #update()} will always position this vertex at the index 0, so it
-    * does not need to be updated.
-    * </p>
-    */
-   private final int minXmaxY_index = 0;
-   /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of
-    * the candidates.
-    */
-   private int minXminY_index = 0;
-   /**
-    * Index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of
-    * the candidates.
-    */
-   private int maxXminY_index = 0;
-   /**
-    * Index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
-    * of the candidates.
-    */
-   private int maxXmaxY_index = 0;
 
    private ReferenceFrame referenceFrame;
 
@@ -198,7 +179,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    {
       checkNonEmpty();
       checkIndexInBoundaries(index);
-      return clockwiseOrderedVertices.get(index);
+      return vertexBuffer.get(index);
    }
 
    @Override
@@ -261,7 +242,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       if (isUpToDate)
          return;
 
-      numberOfVertices = EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D(clockwiseOrderedVertices, numberOfVertices);
+      numberOfVertices = EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D(vertexBuffer, numberOfVertices);
       isUpToDate = true;
 
       updateCentroidAndArea();
@@ -269,81 +250,9 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    }
 
    @Override
-   public void updateBoundingBox()
-   {
-      minX_index = 0;
-      maxX_index = 0;
-      minY_index = 0;
-      maxY_index = 0;
-      minXminY_index = 0;
-      maxXmaxY_index = 0;
-      maxXminY_index = 0;
-
-      if (!isEmpty())
-      {
-         Point2DReadOnly firstVertex = getVertex(0);
-         double minX = firstVertex.getX();
-         double minY = firstVertex.getY();
-         double maxX = firstVertex.getX();
-         double maxY = firstVertex.getY();
-
-         Point2DReadOnly p;
-         for (int i = 1; i < numberOfVertices; i++)
-         {
-            p = getVertex(i);
-
-            if (p.getX() < minX)
-            {
-               minX = p.getX();
-               minX_index = i;
-               minXminY_index = i;
-            }
-            else if (p.getX() > maxX)
-            {
-               maxX = p.getX();
-               maxX_index = i;
-               maxXmaxY_index = i;
-               maxXminY_index = i;
-            }
-            else if (p.getX() == getVertex(minXminY_index).getX() && p.getY() < getVertex(minXminY_index).getY())
-            {
-               minXminY_index = i;
-            }
-            else if (p.getX() == getVertex(maxXminY_index).getX()) // any case: getVertex(maxXmaxY_index).x == getVertex(maxXminY_index).x
-            {
-               if (p.getY() < getVertex(maxXminY_index).getY())
-               {
-                  maxXminY_index = i;
-               }
-               else if (p.getY() > getVertex(maxXmaxY_index).getY())
-               {
-                  maxXmaxY_index = i;
-               }
-            }
-
-            if (p.getY() <= minY)
-            {
-               minY = p.getY();
-               minY_index = i;
-            }
-            else if (p.getY() >= maxY)
-            {
-               maxY = p.getY();
-               maxY_index = i;
-            }
-         }
-         boundingBox.set(minX, minY, maxX, maxY);
-      }
-      else
-      {
-         boundingBox.set(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
-      }
-   }
-
-   @Override
    public void updateCentroidAndArea()
    {
-      area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered, centroid);
+      area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
    }
 
    @Override
@@ -356,9 +265,9 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
 
    private void setOrCreate(double x, double y, int i)
    {
-      while (i >= clockwiseOrderedVertices.size())
-         clockwiseOrderedVertices.add(new FrameVertex2D());
-      clockwiseOrderedVertices.get(i).set(x, y);
+      while (i >= vertexBuffer.size())
+         vertexBuffer.add(new FrameVertex2D());
+      vertexBuffer.get(i).set(x, y);
    }
 
    @Override
@@ -373,7 +282,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
          return;
       }
       isUpToDate = false;
-      Collections.swap(clockwiseOrderedVertices, indexOfVertexToRemove, numberOfVertices - 1);
+      Collections.swap(vertexBuffer, indexOfVertexToRemove, numberOfVertices - 1);
       numberOfVertices--;
    }
 
@@ -386,8 +295,8 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
          return;
 
       /*
-       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of
-       * checking both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
+       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of checking
+       * both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
        */
       referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
       applyTransform(transformToDesiredFrame);
@@ -408,15 +317,15 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    }
 
    @Override
-   public List<? extends FramePoint2DReadOnly> getUnmodifiableVertexBuffer()
+   public List<? extends FramePoint2DReadOnly> getVertexBufferView()
    {
-      return unmodifiableVertexBuffer;
+      return vertexBufferView;
    }
 
    @Override
    public FramePoint2DReadOnly getCentroid()
    {
-      return frameCentroid;
+      return centroid;
    }
 
    @Override
@@ -444,81 +353,9 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    }
 
    @Override
-   public BoundingBox2DReadOnly getBoundingBox()
+   public BoundingBox2DBasics getBoundingBox()
    {
       return boundingBox;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinXIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minX_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxXIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxX_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinXMaxYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minXmaxY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinXMinYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minXminY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxXMaxYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxXmaxY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxXMinYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxXminY_index;
    }
 
    @Override

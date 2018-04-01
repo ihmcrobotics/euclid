@@ -79,7 +79,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     *
     * @return a read-only view of this polygon internal vertex buffer.
     */
-   List<? extends Point2DReadOnly> getUnmodifiableVertexBuffer();
+   List<? extends Point2DReadOnly> getVertexBufferView();
 
    /**
     * Gets a read-only view of this polygon vertices.
@@ -93,9 +93,9 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     *
     * @return a read-only view of this polygon vertices.
     */
-   default List<? extends Point2DReadOnly> getUnmodifiablePolygonVertices()
+   default List<? extends Point2DReadOnly> getPolygonVerticesView()
    {
-      return getUnmodifiableVertexBuffer().subList(0, getNumberOfVertices());
+      return getVertexBufferView().subList(0, getNumberOfVertices());
    }
 
    /**
@@ -144,7 +144,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    {
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         if (getUnmodifiableVertexBuffer().get(i).containsNaN())
+         if (getVertexBufferView().get(i).containsNaN())
             return true;
       }
 
@@ -168,7 +168,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
       checkIfUpToDate();
       checkNonEmpty();
       checkIndexInBoundaries(index);
-      return getUnmodifiableVertexBuffer().get(index);
+      return getVertexBufferView().get(index);
    }
 
    /**
@@ -400,7 +400,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     */
    default double getMaxX()
    {
-      return getVertex(getMaxXIndex()).getX();
+      return getBoundingBox().getMaxX();
    }
 
    /**
@@ -413,7 +413,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     */
    default double getMinX()
    {
-      return getVertex(getMinXIndex()).getX();
+      return getBoundingBox().getMinX();
    }
 
    /**
@@ -426,7 +426,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     */
    default double getMaxY()
    {
-      return getVertex(getMaxYIndex()).getY();
+      return getBoundingBox().getMaxY();
    }
 
    /**
@@ -439,96 +439,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     */
    default double getMinY()
    {
-      return getVertex(getMinYIndex()).getY();
+      return getBoundingBox().getMinY();
    }
-
-   /**
-    * Gets the index of the vertex with the lowest x-coordinate.
-    *
-    * @return the index of the vertex located at the minimum x.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMinXIndex();
-
-   /**
-    * Gets the index of the vertex with the highest x-coordinate.
-    *
-    * @return the index of the vertex located at the maximum x.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMaxXIndex();
-
-   /**
-    * Gets the index of the vertex with the lowest y-coordinate.
-    *
-    * @return the index of the vertex located at the minimum y.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMinYIndex();
-
-   /**
-    * Gets the index of the vertex with the highest y-coordinate.
-    *
-    * @return the index of the vertex located at the maximum y.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMaxYIndex();
-
-   /**
-    * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists
-    * in more than one vertex in the list, it is the index of the vertex with the highest
-    * y-coordinate out of the candidates.
-    *
-    * @return the index of the vertex located at the minimum x and maximum y.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMinXMaxYIndex();
-
-   /**
-    * Gets the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists
-    * in more than one vertex in the list, it is the index of the vertex with the lowest
-    * y-coordinate out of the candidates.
-    *
-    * @return the index of the vertex located at the minimum x and minimum y.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMinXMinYIndex();
-
-   /**
-    * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists
-    * in more than one vertex in the list, it is the index of the vertex with the highest
-    * y-coordinate out of the candidates.
-    *
-    * @return the index of the vertex located at the maximum x and maximum y.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMaxXMaxYIndex();
-
-   /**
-    * Gets the index of the vertex with the highest x-coordinate. If the highest x-coordinate exists
-    * in more than one vertex in the list, it is the index of the vertex with the lowest
-    * y-coordinate out of the candidates.
-    *
-    * @return the index of the vertex located at the maximum x and minimum y.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2DBasics#update()} has not been called
-    *            since last time this polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    */
-   int getMaxXMinYIndex();
 
    /**
     * Adds a subset of this polygon's vertices into the given list.
@@ -645,7 +557,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default boolean isPointInside(double x, double y, double epsilon)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(x, y, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(),
+      return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(x, y, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered(),
                                                                        epsilon);
    }
 
@@ -700,7 +612,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default boolean isPointInside(Point2DReadOnly point, double epsilon)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered(),
+      return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(point, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered(),
                                                                        epsilon);
    }
 
@@ -729,7 +641,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default boolean getClosestPointWithRay(Line2DReadOnly ray, Point2DBasics closestPointToPack)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
+      return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getVertexBufferView(),
                                                                           getNumberOfVertices(), isClockwiseOrdered(), closestPointToPack);
    }
 
@@ -759,7 +671,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default Point2DBasics getClosestPointWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
+      return EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D(ray.getPoint(), ray.getDirection(), getVertexBufferView(),
                                                                           getNumberOfVertices(), isClockwiseOrdered());
    }
 
@@ -804,7 +716,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default double signedDistance(Point2DReadOnly point)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
+      return EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D(point, getVertexBufferView(), getNumberOfVertices(),
                                                                                    isClockwiseOrdered());
    }
 
@@ -852,7 +764,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default boolean orthogonalProjection(Point2DReadOnly pointToProject, Point2DBasics projectionToPack)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
+      return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getVertexBufferView(), getNumberOfVertices(),
                                                                               isClockwiseOrdered(), projectionToPack);
    }
 
@@ -878,7 +790,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default Point2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getUnmodifiableVertexBuffer(), getNumberOfVertices(),
+      return EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D(pointToProject, getVertexBufferView(), getNumberOfVertices(),
                                                                               isClockwiseOrdered());
    }
 
@@ -909,7 +821,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int lineOfSightStartIndex(Point2DReadOnly observer)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.lineOfSightStartIndex(observer, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered());
+      return EuclidGeometryPolygonTools.lineOfSightStartIndex(observer, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -939,7 +851,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int lineOfSightEndIndex(Point2DReadOnly observer)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.lineOfSightEndIndex(observer, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered());
+      return EuclidGeometryPolygonTools.lineOfSightEndIndex(observer, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -972,7 +884,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int[] lineOfSightIndices(Point2DReadOnly observer)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.lineOfSightIndices(observer, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered());
+      return EuclidGeometryPolygonTools.lineOfSightIndices(observer, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1172,7 +1084,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default boolean canObserverSeeEdge(int edgeIndex, Point2DReadOnly observer)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.canObserverSeeEdge(edgeIndex, observer, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered());
+      return EuclidGeometryPolygonTools.canObserverSeeEdge(edgeIndex, observer, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1216,7 +1128,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int intersectionWith(Line2DReadOnly line, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(),
+      return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getVertexBufferView(),
                                                                                     getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack,
                                                                                     secondIntersectionToPack);
    }
@@ -1245,7 +1157,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default Point2DBasics[] intersectionWith(Line2DReadOnly line)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(),
+      return EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D(line.getPoint(), line.getDirection(), getVertexBufferView(),
                                                                                     getNumberOfVertices(), isClockwiseOrdered());
    }
 
@@ -1276,7 +1188,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int intersectionWithRay(Line2DReadOnly ray, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
+      return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getVertexBufferView(),
                                                                                    getNumberOfVertices(), isClockwiseOrdered(), firstIntersectionToPack,
                                                                                    secondIntersectionToPack);
    }
@@ -1304,7 +1216,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default Point2DBasics[] intersectionWithRay(Line2DReadOnly ray)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getUnmodifiableVertexBuffer(),
+      return EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D(ray.getPoint(), ray.getDirection(), getVertexBufferView(),
                                                                                    getNumberOfVertices(), isClockwiseOrdered());
    }
 
@@ -1346,7 +1258,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
-                                                                                           getUnmodifiableVertexBuffer(), getNumberOfVertices(),
+                                                                                           getVertexBufferView(), getNumberOfVertices(),
                                                                                            isClockwiseOrdered(), firstIntersectionToPack,
                                                                                            secondIntersectionToPack);
    }
@@ -1385,7 +1297,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    {
       checkIfUpToDate();
       return EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint(),
-                                                                                           getUnmodifiableVertexBuffer(), getNumberOfVertices(),
+                                                                                           getVertexBufferView(), getNumberOfVertices(),
                                                                                            isClockwiseOrdered());
    }
 
@@ -1406,7 +1318,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int getClosestEdgeIndex(Point2DReadOnly point)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.closestEdgeIndexToPoint2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices(), isClockwiseOrdered());
+      return EuclidGeometryPolygonTools.closestEdgeIndexToPoint2D(point, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -1476,7 +1388,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int getClosestVertexIndex(Point2DReadOnly point)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.closestVertexIndexToPoint2D(point, getUnmodifiableVertexBuffer(), getNumberOfVertices());
+      return EuclidGeometryPolygonTools.closestVertexIndexToPoint2D(point, getVertexBufferView(), getNumberOfVertices());
    }
 
    /**
@@ -1545,7 +1457,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
    default int getClosestVertexIndex(Line2DReadOnly line)
    {
       checkIfUpToDate();
-      return EuclidGeometryPolygonTools.closestVertexIndexToLine2D(line.getPoint(), line.getDirection(), getUnmodifiableVertexBuffer(), getNumberOfVertices());
+      return EuclidGeometryPolygonTools.closestVertexIndexToLine2D(line.getPoint(), line.getDirection(), getVertexBufferView(), getNumberOfVertices());
    }
 
    /**
@@ -1650,8 +1562,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
 
       for (int i = 0; i < getNumberOfVertices(); i++)
       {
-         Point2DReadOnly thisVertex = getUnmodifiableVertexBuffer().get(i);
-         Point2DReadOnly otherVertex = other.getUnmodifiableVertexBuffer().get(i);
+         Point2DReadOnly thisVertex = getVertexBufferView().get(i);
+         Point2DReadOnly otherVertex = other.getVertexBufferView().get(i);
          if (!thisVertex.equals(otherVertex))
             return false;
       }
@@ -1677,8 +1589,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
 
       for (int i = 0; i < other.getNumberOfVertices(); i++)
       {
-         Point2DReadOnly thisVertex = getUnmodifiableVertexBuffer().get(i);
-         Point2DReadOnly otherVertex = other.getUnmodifiableVertexBuffer().get(i);
+         Point2DReadOnly thisVertex = getVertexBufferView().get(i);
+         Point2DReadOnly otherVertex = other.getVertexBufferView().get(i);
          if (!thisVertex.epsilonEquals(otherVertex, epsilon))
             return false;
       }
@@ -1717,8 +1629,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
          else
             otherPointIndex = (getNumberOfVertices() + indexOfClosestOtherPoint - thisPointIndex) % getNumberOfVertices();
 
-         Point2DReadOnly thisVertex = getUnmodifiableVertexBuffer().get(thisPointIndex);
-         Point2DReadOnly otherVertex = other.getUnmodifiableVertexBuffer().get(otherPointIndex);
+         Point2DReadOnly thisVertex = getVertexBufferView().get(thisPointIndex);
+         Point2DReadOnly otherVertex = other.getVertexBufferView().get(otherPointIndex);
          if (!thisVertex.geometricallyEquals(otherVertex, epsilon))
             return false;
       }

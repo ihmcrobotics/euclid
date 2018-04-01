@@ -53,8 +53,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * {@link #numberOfVertices}[ in this list.
     * </p>
     */
-   private final List<Point2D> clockwiseOrderedVertices = new ArrayList<>();
-   private final List<Point2D> unmodifiableVertexBuffer = Collections.unmodifiableList(clockwiseOrderedVertices);
+   private final List<Point2D> vertexBuffer = new ArrayList<>();
+   private final List<Point2D> vertexBufferView = Collections.unmodifiableList(vertexBuffer);
    /**
     * The smallest axis-aligned bounding box that contains all this polygon's vertices.
     * <p>
@@ -91,43 +91,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * </p>
     */
    private boolean isUpToDate = false;
-
-   /** Index of the vertex with the lowest x-coordinate. */
-   private int minX_index = 0;
-   /** Index of the vertex with the highest x-coordinate. */
-   private int maxX_index = 0;
-   /** Index of the vertex with the lowest y-coordinate. */
-   private int minY_index = 0;
-   /** Index of the vertex with the highest y-coordinate. */
-   private int maxY_index = 0;
-   /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
-    * of the candidates.
-    * <p>
-    * Note that the method {@link #update()} will always position this vertex at the index 0, so it
-    * does not need to be updated.
-    * </p>
-    */
-   private final int minXmaxY_index = 0;
-   /**
-    * Index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of
-    * the candidates.
-    */
-   private int minXminY_index = 0;
-   /**
-    * Index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the lowest y-coordinate out of
-    * the candidates.
-    */
-   private int maxXminY_index = 0;
-   /**
-    * Index of the vertex with the highest x-coordinate. If the highest x-coordinate exists in more
-    * than one vertex in the list, it is the index of the vertex with the highest y-coordinate out
-    * of the candidates.
-    */
-   private int maxXmaxY_index = 0;
 
    /**
     * Creates an empty convex polygon.
@@ -233,26 +196,26 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
          return;
       }
       isUpToDate = false;
-      Collections.swap(clockwiseOrderedVertices, indexOfVertexToRemove, numberOfVertices - 1);
+      Collections.swap(vertexBuffer, indexOfVertexToRemove, numberOfVertices - 1);
       numberOfVertices--;
    }
 
    /**
     * Method for internal use only.
     * <p>
-    * Sets the {@code i}<sup>th</sup> point in {@link #clockwiseOrderedVertices} to the given point.
+    * Sets the {@code i}<sup>th</sup> point in {@link #vertexBuffer} to the given point.
     * The list is extended if needed.
     * </p>
     *
     * @param x the x-coordinate of the point to copy. Not modified.
     * @param y the y-coordinate of the point to copy. Not modified.
-    * @param i the position in the list {@link #clockwiseOrderedVertices} to copy the given point.
+    * @param i the position in the list {@link #vertexBuffer} to copy the given point.
     */
    private void setOrCreate(double x, double y, int i)
    {
-      while (i >= clockwiseOrderedVertices.size())
-         clockwiseOrderedVertices.add(new Point2D());
-      clockwiseOrderedVertices.get(i).set(x, y);
+      while (i >= vertexBuffer.size())
+         vertexBuffer.add(new Point2D());
+      vertexBuffer.get(i).set(x, y);
    }
 
    /** {@inheritDoc} */
@@ -261,7 +224,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
       if (isUpToDate)
          return;
 
-      numberOfVertices = EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D(clockwiseOrderedVertices, numberOfVertices);
+      numberOfVertices = EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D(vertexBuffer, numberOfVertices);
       isUpToDate = true;
 
       updateCentroidAndArea();
@@ -287,86 +250,12 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /**
-    * Updates the bounding box properties.
-    */
-   public void updateBoundingBox()
-   {
-      minX_index = 0;
-      maxX_index = 0;
-      minY_index = 0;
-      maxY_index = 0;
-      minXminY_index = 0;
-      maxXmaxY_index = 0;
-      maxXminY_index = 0;
-
-      if (!isEmpty())
-      {
-         Point2DReadOnly firstVertex = getVertex(0);
-         double minX = firstVertex.getX();
-         double minY = firstVertex.getY();
-         double maxX = firstVertex.getX();
-         double maxY = firstVertex.getY();
-
-         Point2DReadOnly p;
-         for (int i = 1; i < numberOfVertices; i++)
-         {
-            p = getVertex(i);
-
-            if (p.getX() < minX)
-            {
-               minX = p.getX();
-               minX_index = i;
-               minXminY_index = i;
-            }
-            else if (p.getX() > maxX)
-            {
-               maxX = p.getX();
-               maxX_index = i;
-               maxXmaxY_index = i;
-               maxXminY_index = i;
-            }
-            else if (p.getX() == getVertex(minXminY_index).getX() && p.getY() < getVertex(minXminY_index).getY())
-            {
-               minXminY_index = i;
-            }
-            else if (p.getX() == getVertex(maxXminY_index).getX()) // any case: getVertex(maxXmaxY_index).x == getVertex(maxXminY_index).x
-            {
-               if (p.getY() < getVertex(maxXminY_index).getY())
-               {
-                  maxXminY_index = i;
-               }
-               else if (p.getY() > getVertex(maxXmaxY_index).getY())
-               {
-                  maxXmaxY_index = i;
-               }
-            }
-
-            if (p.getY() <= minY)
-            {
-               minY = p.getY();
-               minY_index = i;
-            }
-            else if (p.getY() >= maxY)
-            {
-               maxY = p.getY();
-               maxY_index = i;
-            }
-         }
-         boundingBox.set(minX, minY, maxX, maxY);
-      }
-      else
-      {
-         boundingBox.set(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
-      }
-   }
-
-   /**
     * Compute centroid and area of this polygon. Formula taken from
     * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
     */
    public void updateCentroidAndArea()
    {
-      area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(clockwiseOrderedVertices, numberOfVertices, clockwiseOrdered, centroid);
+      area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
    }
 
    @Override
@@ -374,7 +263,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    {
       checkNonEmpty();
       checkIndexInBoundaries(index);
-      return clockwiseOrderedVertices.get(index);
+      return vertexBuffer.get(index);
    }
 
    /** {@inheritDoc} */
@@ -413,81 +302,9 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    @Override
-   public List<? extends Point2DReadOnly> getUnmodifiableVertexBuffer()
+   public List<? extends Point2DReadOnly> getVertexBufferView()
    {
-      return unmodifiableVertexBuffer;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinXIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minX_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxXIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxX_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinXMaxYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minXmaxY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMinXMinYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return minXminY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxXMaxYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxXmaxY_index;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public int getMaxXMinYIndex()
-   {
-      checkIfUpToDate();
-      checkNonEmpty();
-      return maxXminY_index;
+      return vertexBufferView;
    }
 
    /**

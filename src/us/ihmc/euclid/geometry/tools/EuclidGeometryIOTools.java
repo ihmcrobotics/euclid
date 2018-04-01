@@ -731,7 +731,7 @@ public class EuclidGeometryIOTools
       if (convexPolygon2D == null)
          return "null";
       else
-         return getConvexPolygon2DString(format, convexPolygon2D.getUnmodifiablePolygonVertices(), convexPolygon2D.getNumberOfVertices());
+         return getConvexPolygon2DString(format, convexPolygon2D.getPolygonVerticesView(), convexPolygon2D.getNumberOfVertices());
    }
 
    /**

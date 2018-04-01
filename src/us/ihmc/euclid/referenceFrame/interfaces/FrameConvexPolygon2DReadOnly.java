@@ -28,13 +28,13 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 {
    /** {@inheritDoc} */
    @Override
-   List<? extends FramePoint2DReadOnly> getUnmodifiableVertexBuffer();
+   List<? extends FramePoint2DReadOnly> getVertexBufferView();
 
    /** {@inheritDoc} */
    @Override
-   default List<? extends FramePoint2DReadOnly> getUnmodifiablePolygonVertices()
+   default List<? extends FramePoint2DReadOnly> getPolygonVerticesView()
    {
-      return getUnmodifiableVertexBuffer().subList(0, getNumberOfVertices());
+      return getVertexBufferView().subList(0, getNumberOfVertices());
    }
 
    /** {@inheritDoc} */

@@ -16,6 +16,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     *
     * @return the reference to the minimum coordinate.
     */
+   @Override
    Point2DBasics getMinPoint();
 
    /**
@@ -23,6 +24,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     *
     * @return the reference to the maximum coordinate.
     */
+   @Override
    Point2DBasics getMaxPoint();
 
    /** {@inheritDoc} */
@@ -237,13 +239,25 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
    }
 
    /**
+    * Updates this bounding box to be the smallest bounding box that includes this and the supplied
+    * points.
+    *
+    * @param vertex2DSupplier the supply of points.
+    */
+   default void updateToIncludePoints(Vertex2DSupplier vertex2DSupplier)
+   {
+      for (int index = 0; index < vertex2DSupplier.getNumberOfVertices(); index++)
+         updateToIncludePoint(vertex2DSupplier.getVertex(index));
+   }
+
+   /**
     * Updates this bounding box to be the smallest bounding box that includes this and the given point.
     *
     * @param point the point to be included in this bounding box. Not modified.
     */
    default void updateToIncludePoint(Point2DReadOnly point)
    {
-      this.updateToIncludePoint(point.getX(), point.getY());
+      updateToIncludePoint(point.getX(), point.getY());
    }
 
    /**

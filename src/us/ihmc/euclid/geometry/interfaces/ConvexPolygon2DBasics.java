@@ -22,6 +22,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearable, Transformable
 {
    /**
+    * Gets the reference to this polygon's axis-aligned bounding box.
+    */
+   @Override
+   BoundingBox2DBasics getBoundingBox();
+
+   /**
     * Notifies the vertices have changed and that this polygon has to be updated.
     */
    void notifyVerticesChanged();
@@ -87,7 +93,13 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    /**
     * Updates the bounding box properties.
     */
-   void updateBoundingBox();
+   default void updateBoundingBox()
+   {
+      if (isEmpty())
+         getBoundingBox().setToNaN();
+      else
+         getBoundingBox().updateToIncludePoints(this);
+   }
 
    /**
     * Compute centroid and area of this polygon. Formula taken from
@@ -98,14 +110,14 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    /**
     * Gets the reference to the {@code index}<sup>th</sup> vertex of this polygon.
     * <p>
-    * WARNING: Through this method, the user can modify the vertices of this polygon without it
-    * being notified of such change. When modifying a vertex, the method
-    * {@link #notifyVerticesChanged()} should be called followed by {@link #update()}. Always prefer
-    * using {@link #getVertex(int)} instead.
+    * WARNING: Through this method, the user can modify the vertices of this polygon without it being
+    * notified of such change. When modifying a vertex, the method {@link #notifyVerticesChanged()}
+    * should be called followed by {@link #update()}. Always prefer using {@link #getVertex(int)}
+    * instead.
     * </p>
     * <p>
-    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the
-    * lowest x-coordinate.
+    * Note that this polygon's vertices are clockwise ordered and that the first vertex has the lowest
+    * x-coordinate.
     * </p>
     *
     * @param index the index of the vertex in the clockwise ordered list.
@@ -203,8 +215,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *
     * @param indexOfVertexToRemove the index of the vertex to remove.
     * @throws EmptyPolygonException if this polygon is empty before calling this method.
-    * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal
-    *            than the polygon's number of vertices.
+    * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal than
+    *            the polygon's number of vertices.
     */
    void removeVertex(int indexOfVertexToRemove);
 
@@ -247,8 +259,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
-    * Sets this polygon such that it represents the smallest convex hull that contains all the
-    * vertices supplied by the two suppliers.
+    * Sets this polygon such that it represents the smallest convex hull that contains all the vertices
+    * supplied by the two suppliers.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
@@ -285,12 +297,12 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    /**
     * Scale this convex polygon about {@code pointToScaleAbout}.
     * <p>
-    * This method effectively modifies the vertices of this polygon such that the scale is applied
-    * on the distance between each vertex and the given {@code pointToScaleAbout}.
+    * This method effectively modifies the vertices of this polygon such that the scale is applied on
+    * the distance between each vertex and the given {@code pointToScaleAbout}.
     * </p>
     * <p>
-    * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this
-    * vertex will remain unmodified.
+    * If {@code pointToScaleAbout} is equal to a vertex of this polygon, the coordinates of this vertex
+    * will remain unmodified.
     * </p>
     *
     * @param pointToScaleAbout the center of the scale transformation. Not modified.
@@ -359,8 +371,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY-plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -372,13 +384,13 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * Transforms this convex polygon using the given homogeneous transformation matrix.
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the given transform represents a transformation in the XY plane.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *           given transform represents a transformation in the XY plane.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
-    *            part of {@code transform} is not a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *            of {@code transform} is not a transformation in the XY plane.
     */
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
@@ -393,15 +405,14 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
-    * Transforms this convex polygon using the inverse of the given homogeneous transformation
-    * matrix.
+    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY-plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY-plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)
@@ -410,17 +421,16 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    }
 
    /**
-    * Transforms this convex polygon using the inverse of the given homogeneous transformation
-    * matrix.
+    * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the given transform represents a transformation in the XY plane.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *           given transform represents a transformation in the XY plane.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
     *            polygon's vertices were edited.
     * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
-    *            part of {@code transform} is not a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *            of {@code transform} is not a transformation in the XY plane.
     */
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
