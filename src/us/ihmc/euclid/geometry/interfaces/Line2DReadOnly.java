@@ -1,6 +1,5 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -126,7 +125,7 @@ public interface Line2DReadOnly
     *         failed or if there is no intersections.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default Point2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
+   default Point2DBasics[] intersectionWith(ConvexPolygon2DReadOnly convexPolygon)
    {
       return convexPolygon.intersectionWith(this);
    }
@@ -154,7 +153,7 @@ public interface Line2DReadOnly
     * @return the number of intersections between this line and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       return convexPolygon.intersectionWith(this, firstIntersectionToPack, secondIntersectionToPack);
    }
@@ -203,7 +202,7 @@ public interface Line2DReadOnly
    default boolean intersectionWith(Line2DReadOnly secondLine, Point2DBasics intersectionToPack)
    {
       return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection(),
-                                                               intersectionToPack);
+            intersectionToPack);
    }
 
    /**
@@ -230,7 +229,7 @@ public interface Line2DReadOnly
    default Point2DBasics intersectionWith(LineSegment2DReadOnly lineSegment)
    {
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
-                                                                           lineSegment.getSecondEndpoint());
+            lineSegment.getSecondEndpoint());
    }
 
    /**
@@ -255,7 +254,7 @@ public interface Line2DReadOnly
    default boolean intersectionWith(LineSegment2DReadOnly lineSegment, Point2DBasics intersectionToPack)
    {
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
-                                                                           lineSegment.getSecondEndpoint(), intersectionToPack);
+            lineSegment.getSecondEndpoint(), intersectionToPack);
    }
 
    /**

@@ -2,7 +2,10 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.Random;
 
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FrameLine2D;
 import us.ihmc.euclid.referenceFrame.FrameLine3D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
@@ -17,7 +20,11 @@ import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -338,8 +345,7 @@ public class EuclidFrameRandomTools
     * @param random the random generator to use.
     * @param rootFrame the base frame from which the tree is to be expanded.
     * @param numberOfReferenceFrames the number of reference frames to be created.
-    * @return the array containing the random reference frame and {@code rootFrame} at the first
-    *         index.
+    * @return the array containing the random reference frame and {@code rootFrame} at the first index.
     * @deprecated Use {@link #nextReferenceFrameTree(String,Random,ReferenceFrame,int)} instead
     */
    @Deprecated
@@ -355,8 +361,7 @@ public class EuclidFrameRandomTools
     * @param random the random generator to use.
     * @param rootFrame the base frame from which the tree is to be expanded.
     * @param numberOfReferenceFrames the number of reference frames to be created.
-    * @return the array containing the random reference frame and {@code rootFrame} at the first
-    *         index.
+    * @return the array containing the random reference frame and {@code rootFrame} at the first index.
     */
    public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames)
    {
@@ -372,14 +377,12 @@ public class EuclidFrameRandomTools
     * @param numberOfReferenceFrames the number of reference frames to be created.
     * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
     *           random frames.
-    * @return the array containing the random reference frame and {@code rootFrame} at the first
-    *         index.
-    * @deprecated Use {@link #nextReferenceFrameTree(String,Random,ReferenceFrame,int,boolean)}
-    *             instead
+    * @return the array containing the random reference frame and {@code rootFrame} at the first index.
+    * @deprecated Use {@link #nextReferenceFrameTree(String,Random,ReferenceFrame,int,boolean)} instead
     */
    @Deprecated
    public static ReferenceFrame[] generateRandomReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames,
-                                                                   boolean use2DTransforms)
+         boolean use2DTransforms)
    {
       return nextReferenceFrameTree(frameNamePrefix, random, rootFrame, numberOfReferenceFrames, use2DTransforms);
    }
@@ -393,11 +396,10 @@ public class EuclidFrameRandomTools
     * @param numberOfReferenceFrames the number of reference frames to be created.
     * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
     *           random frames.
-    * @return the array containing the random reference frame and {@code rootFrame} at the first
-    *         index.
+    * @return the array containing the random reference frame and {@code rootFrame} at the first index.
     */
    public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames,
-                                                         boolean use2DTransforms)
+         boolean use2DTransforms)
    {
       ReferenceFrame[] referenceFrames = new ReferenceFrame[numberOfReferenceFrames + 1];
       referenceFrames[0] = rootFrame;
@@ -546,7 +548,7 @@ public class EuclidFrameRandomTools
     */
    @Deprecated
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY,
-                                                         double maxAbsoluteZ)
+         double maxAbsoluteZ)
    {
       return nextFramePoint3D(random, referenceFrame, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ);
    }
@@ -597,7 +599,7 @@ public class EuclidFrameRandomTools
     */
    @Deprecated
    public static FramePoint3D generateRandomFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
-                                                         double minZ, double maxZ)
+         double minZ, double maxZ)
    {
       return nextFramePoint3D(random, referenceFrame, minX, maxX, minY, maxY, minZ, maxZ);
    }
@@ -622,7 +624,7 @@ public class EuclidFrameRandomTools
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
    public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
-                                               double maxZ)
+         double maxZ)
    {
       return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
@@ -662,14 +664,13 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector.
     * <p>
-    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>;
-    * {@code minMax}<sub>i</sub>].
+    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
     * @param random the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the
-    *           generated frame vector. Not modified.
+    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
+    *           frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     * @deprecated Use {@link #nextFrameVector3D(Random,ReferenceFrame,Tuple3DReadOnly)} instead
@@ -683,14 +684,13 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector.
     * <p>
-    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>;
-    * {@code minMax}<sub>i</sub>].
+    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
     * @param random the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the
-    *           generated frame vector. Not modified.
+    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
+    *           frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -713,8 +713,7 @@ public class EuclidFrameRandomTools
     *           modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
-    * @deprecated Use
-    *             {@link #nextFrameVector3D(Random,ReferenceFrame,Tuple3DReadOnly,Tuple3DReadOnly)}
+    * @deprecated Use {@link #nextFrameVector3D(Random,ReferenceFrame,Tuple3DReadOnly,Tuple3DReadOnly)}
     *             instead
     */
    @Deprecated
@@ -805,7 +804,7 @@ public class EuclidFrameRandomTools
     */
    @Deprecated
    public static FrameVector3D generateRandomFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY,
-                                                           double minZ, double maxZ)
+         double minZ, double maxZ)
    {
       return nextFrameVector3D(random, referenceFrame, minX, maxX, minY, maxY, minZ, maxZ);
    }
@@ -830,7 +829,7 @@ public class EuclidFrameRandomTools
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
    public static FrameVector3D nextFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
-                                                 double maxZ)
+         double maxZ)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
@@ -842,8 +841,7 @@ public class EuclidFrameRandomTools
     * @param referenceFrame the random frame vector's reference frame.
     * @param length the length of the generated frame vector.
     * @return the random frame vector.
-    * @deprecated Use {@link #nextFrameVector3DWithFixedLength(Random,ReferenceFrame,double)}
-    *             instead
+    * @deprecated Use {@link #nextFrameVector3DWithFixedLength(Random,ReferenceFrame,double)} instead
     */
    @Deprecated
    public static FrameVector3D generateRandomFrameVector3DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
@@ -907,7 +905,7 @@ public class EuclidFrameRandomTools
     */
    @Deprecated
    public static FrameVector3D generateRandomOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
-                                                                     boolean normalize)
+         boolean normalize)
    {
       return nextOrthogonalFrameVector3D(random, referenceFrame, vectorToBeOrthogonalTo, normalize);
    }
@@ -922,7 +920,7 @@ public class EuclidFrameRandomTools
     * @return the random frame vector.
     */
    public static FrameVector3D nextOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
-                                                           boolean normalize)
+         boolean normalize)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextOrthogonalVector3D(random, vectorToBeOrthogonalTo, normalize));
    }
@@ -1157,8 +1155,7 @@ public class EuclidFrameRandomTools
     * @param referenceFrame the random frame point's reference frame.
     * @param length the length of the generated frame vector.
     * @return the random frame vector.
-    * @deprecated Use {@link #nextFrameVector2DWithFixedLength(Random,ReferenceFrame,double)}
-    *             instead
+    * @deprecated Use {@link #nextFrameVector2DWithFixedLength(Random,ReferenceFrame,double)} instead
     */
    @Deprecated
    public static FrameVector2D generateRandomFrameVector2DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
@@ -1182,14 +1179,13 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector.
     * <p>
-    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>;
-    * {@code minMax}<sub>i</sub>].
+    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
     * @param random the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the
-    *           generated frame vector. Not modified.
+    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
+    *           frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     * @deprecated Use {@link #nextFrameVector2D(Random,ReferenceFrame,Tuple2DReadOnly)} instead
@@ -1203,14 +1199,13 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector.
     * <p>
-    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>;
-    * {@code minMax}<sub>i</sub>].
+    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
     * @param random the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the
-    *           generated frame vector. Not modified.
+    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
+    *           frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -1233,8 +1228,7 @@ public class EuclidFrameRandomTools
     *           modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
-    * @deprecated Use
-    *             {@link #nextFrameVector2D(Random,ReferenceFrame,Tuple2DReadOnly,Tuple2DReadOnly)}
+    * @deprecated Use {@link #nextFrameVector2D(Random,ReferenceFrame,Tuple2DReadOnly,Tuple2DReadOnly)}
     *             instead
     */
    @Deprecated
@@ -1510,5 +1504,79 @@ public class EuclidFrameRandomTools
    public static FrameLineSegment3D nextFrameLineSegment3D(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameLineSegment3D(referenceFrame, EuclidGeometryRandomTools.nextLineSegment3D(random));
+   }
+
+   /**
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the polygon's reference frame.
+    * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
+    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
+    *           the random convex polygon. The size of the resulting convex polygon will be less than
+    *           {@code numberOfPossiblePoints}.
+    * @return the random convex polygon.
+    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
+    */
+   public static FrameConvexPolygon2D nextFrameConvexPolygon2D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteXY, int numberOfPossiblePoints)
+   {
+      return new FrameConvexPolygon2D(referenceFrame, EuclidGeometryRandomTools.nextConvexPolygon2D(random, maxAbsoluteXY, numberOfPossiblePoints));
+   }
+
+   /**
+    * Generates a fixed-size supplier of random frame vertex 2D.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the reference frame for the vertices.
+    * @param numberOfVertices the supplier's size.
+    * @return the random supplier.
+    */
+   public static FrameVertex2DSupplier nextFrameVertex2DSupplier(Random random, ReferenceFrame referenceFrame, int numberOfVertices)
+   {
+      return new FrameVertex2DSupplier()
+      {
+         Vertex2DSupplier vertex2dSupplier = EuclidGeometryRandomTools.nextVertex2DSupplier(random, numberOfVertices);
+
+         @Override
+         public int getNumberOfVertices()
+         {
+            return vertex2dSupplier.getNumberOfVertices();
+         }
+
+         @Override
+         public FramePoint2DReadOnly getVertex(int index)
+         {
+            return new FramePoint2D(referenceFrame, vertex2dSupplier.getVertex(index));
+         }
+      };
+   }
+
+   /**
+    * Generates a fixed-size supplier of random frame vertex 3D.
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the reference frame for the vertices.
+    * @param numberOfVertices the supplier's size.
+    * @return the random supplier.
+    */
+   public static FrameVertex3DSupplier nextFrameVertex3DSupplier(Random random, ReferenceFrame referenceFrame, int numberOfVertices)
+   {
+      return new FrameVertex3DSupplier()
+      {
+         Vertex3DSupplier vertex2dSupplier = EuclidGeometryRandomTools.nextVertex3DSupplier(random, numberOfVertices);
+
+         @Override
+         public int getNumberOfVertices()
+         {
+            return vertex2dSupplier.getNumberOfVertices();
+         }
+
+         @Override
+         public FramePoint3DReadOnly getVertex(int index)
+         {
+            return new FramePoint3D(referenceFrame, vertex2dSupplier.getVertex(index));
+         }
+      };
    }
 }

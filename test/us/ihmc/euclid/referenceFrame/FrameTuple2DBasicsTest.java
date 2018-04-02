@@ -468,7 +468,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
    @Test
    public void testTuple2DBasicsFeatures() throws Exception
    {
-      Tuple2DBasicsTest<F> tuple3dBasicsTest = new Tuple2DBasicsTest<F>()
+      Tuple2DBasicsTest<F> tuple2dBasicsTest = new Tuple2DBasicsTest<F>()
       {
          @Override
          public F createEmptyTuple()
@@ -495,7 +495,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          }
       };
 
-      for (Method testMethod : tuple3dBasicsTest.getClass().getMethods())
+      for (Method testMethod : tuple2dBasicsTest.getClass().getMethods())
       {
          if (!testMethod.getName().startsWith("test"))
             continue;
@@ -504,7 +504,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          if (Modifier.isStatic(testMethod.getModifiers()))
             continue;
 
-         testMethod.invoke(tuple3dBasicsTest);
+         testMethod.invoke(tuple2dBasicsTest);
       }
    }
 }

@@ -6,10 +6,13 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 
-import us.ihmc.euclid.geometry.BoundingBox2D;
+import java.util.List;
+
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
@@ -201,10 +204,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
-    *           modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
-    *           modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment1DString(String format, double lineSegmentStart, double lineSegmentEnd)
@@ -262,10 +265,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
-    *           modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
-    *           modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment2DString(String format, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
@@ -322,10 +325,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
-    *           modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
-    *           modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
+    *           Not modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment3DString(String format, Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
@@ -344,7 +347,7 @@ public class EuclidGeometryIOTools
     * @param boundingBox2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox2DString(BoundingBox2D boundingBox2D)
+   public static String getBoundingBox2DString(BoundingBox2DReadOnly boundingBox2D)
    {
       return getBoundingBox2DString(DEFAULT_FORMAT, boundingBox2D);
    }
@@ -363,7 +366,7 @@ public class EuclidGeometryIOTools
     * @param boundingBox2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox2DString(String format, BoundingBox2D boundingBox2D)
+   public static String getBoundingBox2DString(String format, BoundingBox2DReadOnly boundingBox2D)
    {
       if (boundingBox2D == null)
          return "null";
@@ -620,7 +623,8 @@ public class EuclidGeometryIOTools
     *
     * @param format the format to use for each number.
     * @param position the position part of the pose to get the {@code String} of. Not modified.
-    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getPose2DString(String format, Point2DReadOnly position, double orientation)
@@ -678,11 +682,84 @@ public class EuclidGeometryIOTools
     *
     * @param format the format to use for each number.
     * @param position the position part of the pose to get the {@code String} of. Not modified.
-    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getPose3DString(String format, Point3DReadOnly position, QuaternionReadOnly orientation)
    {
       return "Pose 3D: position = " + getTuple3DString(format, position) + ", orientation = " + getTuple4DString(format, orientation);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code convexPolygon3D} as follows:
+    *
+    * <pre>
+    * Convex Polygon 2D: vertices = [
+    * ( 0.174, -0.452, -0.222 ),
+    * (-0.052, -0.173, -0.371 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param convexPolygon2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getConvexPolygon2DString(ConvexPolygon2DReadOnly convexPolygon2D)
+   {
+      return getConvexPolygon2DString(DEFAULT_FORMAT, convexPolygon2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code convexPolygon3D} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Convex Polygon 2D: vertices = [
+    * ( 0.174, -0.452, -0.222 ),
+    * (-0.052, -0.173, -0.371 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param convexPolygon2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getConvexPolygon2DString(String format, ConvexPolygon2DReadOnly convexPolygon2D)
+   {
+      if (convexPolygon2D == null)
+         return "null";
+      else
+         return getConvexPolygon2DString(format, convexPolygon2D.getPolygonVerticesView(), convexPolygon2D.getNumberOfVertices());
+   }
+
+   /**
+    * Gets a representative {@code String} of a convex polygon given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Convex Polygon 2D: vertices = [
+    * ( 0.174, -0.452, -0.222 ),
+    * (-0.052, -0.173, -0.371 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param vertices the list of vertices of the polygon to get the string of. Not modifed.
+    * @param numberOfVertices the polygon size.
+    * @return the representative {@code String}.
+    */
+   public static String getConvexPolygon2DString(String format, List<? extends Point2DReadOnly> vertices, int numberOfVertices)
+   {
+      if (numberOfVertices == 0)
+         return "Convex Polygon 2D: vertices = []";
+
+      String string = "Convex Polygon 2D: vertices = [\n";
+      for (int i = 0; i < numberOfVertices - 1; i++)
+         string += getTuple2DString(format, vertices.get(i)) + ",\n";
+      string += getTuple2DString(format, vertices.get(numberOfVertices - 1)) + " ]";
+      return string;
    }
 }
