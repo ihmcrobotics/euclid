@@ -16,6 +16,24 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 public interface Vertex2DSupplier
 {
    /**
+    * A supplier with no vertices.
+    */
+   static final Vertex2DSupplier EMPTY_SUPPLIER = new Vertex2DSupplier()
+   {
+      @Override
+      public Point2DReadOnly getVertex(int index)
+      {
+         return null;
+      }
+
+      @Override
+      public int getNumberOfVertices()
+      {
+         return 0;
+      }
+   };
+
+   /**
     * Gets the vertex corresponding to the given index.
     * 
     * @param index the index of the vertex, {@code index} &in; [0, {@code getNumberOfVertices()}[.
@@ -51,7 +69,8 @@ public interface Vertex2DSupplier
    }
 
    /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an
+    * {@code epsilon}.
     * 
     * @param other the other supplier to compare against this.
     * @param epsilon the tolerance to use.
@@ -67,6 +86,16 @@ public interface Vertex2DSupplier
             return false;
       }
       return true;
+   }
+
+   /**
+    * Gets an empty supplier.
+    * 
+    * @return the supplier.
+    */
+   public static Vertex2DSupplier emptyVertex2DSupplier()
+   {
+      return EMPTY_SUPPLIER;
    }
 
    /**
@@ -94,8 +123,8 @@ public interface Vertex2DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
-    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given array specified by the first
+    * index {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the array by which the supplier will be backed.
     * @param startIndex the first vertex index.
@@ -104,11 +133,11 @@ public interface Vertex2DSupplier
     */
    public static Vertex2DSupplier asVertex2DSupplier(Point2DReadOnly[] vertices, int startIndex, int numberOfVertices)
    {
-      if (startIndex >= numberOfVertices)
-         throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
+      if (numberOfVertices == 0)
+         return emptyVertex2DSupplier();
       if (startIndex + numberOfVertices > vertices.length)
-         throw new IllegalArgumentException(
-               "The array is too small. Array length = " + vertices.length + ", expected minimum length = " + (startIndex + numberOfVertices));
+         throw new IllegalArgumentException("The array is too small. Array length = " + vertices.length + ", expected minimum length = "
+               + (startIndex + numberOfVertices));
 
       return asVertex2DSupplier(Arrays.asList(vertices), startIndex, numberOfVertices);
    }
@@ -138,8 +167,8 @@ public interface Vertex2DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given list specified by the first index
-    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given list specified by the first
+    * index {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the list by which the supplier will be backed.
     * @param startIndex the first vertex index.
@@ -148,11 +177,11 @@ public interface Vertex2DSupplier
     */
    public static Vertex2DSupplier asVertex2DSupplier(List<? extends Point2DReadOnly> vertices, int startIndex, int numberOfVertices)
    {
-      if (startIndex >= numberOfVertices)
-         throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
+      if (numberOfVertices == 0)
+         return emptyVertex2DSupplier();
       if (startIndex + numberOfVertices > vertices.size())
-         throw new IllegalArgumentException(
-               "The list is too small. List size = " + vertices.size() + ", expected minimum size = " + (startIndex + numberOfVertices));
+         throw new IllegalArgumentException("The list is too small. List size = " + vertices.size() + ", expected minimum size = "
+               + (startIndex + numberOfVertices));
 
       return new Vertex2DSupplier()
       {
@@ -189,8 +218,8 @@ public interface Vertex2DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given array starting with the first row
-    * and specified by its length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given array starting with the first
+    * row and specified by its length {@code numberOfVertices}.
     * 
     * @param vertices the array containing the vertices. Each row contains one point whereas the (at
     *           least) two columns contains in order the coordinates x and y. Not modified.
@@ -203,8 +232,8 @@ public interface Vertex2DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
-    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given array specified by the first
+    * index {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the array containing the vertices. Each row contains one point whereas the (at
     *           least) two columns contains in order the coordinates x and y. Not modified.
@@ -214,11 +243,11 @@ public interface Vertex2DSupplier
     */
    public static Vertex2DSupplier asVertex2DSupplier(double[][] vertices, int startIndex, int numberOfVertices)
    {
-      if (startIndex >= numberOfVertices)
-         throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
+      if (numberOfVertices == 0)
+         return emptyVertex2DSupplier();
       if (startIndex + numberOfVertices > vertices.length)
-         throw new IllegalArgumentException(
-               "The array is too small. Array length = " + vertices.length + ", expected minimum length = " + (startIndex + numberOfVertices));
+         throw new IllegalArgumentException("The array is too small. Array length = " + vertices.length + ", expected minimum length = "
+               + (startIndex + numberOfVertices));
 
       return new Vertex2DSupplier()
       {
@@ -230,21 +259,19 @@ public interface Vertex2DSupplier
                @Override
                public double getX()
                {
-                  return vertices[index][0];
+                  return vertices[startIndex + index][0];
                }
 
                @Override
                public double getY()
                {
-                  return vertices[index][1];
+                  return vertices[startIndex + index][1];
                }
 
                @Override
                public String toString()
                {
-                  StringJoiner joiner = new StringJoiner("[", ", ", "]");
-                  Arrays.stream(vertices).forEach(v -> joiner.add(EuclidCoreIOTools.getStringOf("(", ")", ", ", v[0], v[1])));
-                  return "Vertex 2D Supplier: " + joiner;
+                  return EuclidCoreIOTools.getTuple2DString(this);
                }
             };
          }
@@ -253,6 +280,14 @@ public interface Vertex2DSupplier
          public int getNumberOfVertices()
          {
             return numberOfVertices;
+         }
+
+         @Override
+         public String toString()
+         {
+            StringJoiner joiner = new StringJoiner("[", ", ", "]");
+            Arrays.stream(vertices).forEach(v -> joiner.add(EuclidCoreIOTools.getStringOf("(", ")", ", ", v[0], v[1])));
+            return "Vertex 2D Supplier: " + joiner;
          }
       };
    }

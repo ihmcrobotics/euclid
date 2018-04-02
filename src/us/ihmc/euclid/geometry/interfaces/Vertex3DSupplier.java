@@ -14,6 +14,24 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 public interface Vertex3DSupplier
 {
    /**
+    * A supplier with no vertices.
+    */
+   static final Vertex3DSupplier EMPTY_SUPPLIER = new Vertex3DSupplier()
+   {
+      @Override
+      public Point3DReadOnly getVertex(int index)
+      {
+         return null;
+      }
+
+      @Override
+      public int getNumberOfVertices()
+      {
+         return 0;
+      }
+   };
+
+   /**
     * Gets the vertex corresponding to the given index.
     * 
     * @param index the index of the vertex, {@code index} &in; [0, {@code getNumberOfVertices()}[.
@@ -49,7 +67,8 @@ public interface Vertex3DSupplier
    }
 
    /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an
+    * {@code epsilon}.
     * 
     * @param other the other supplier to compare against this.
     * @param epsilon the tolerance to use.
@@ -65,6 +84,16 @@ public interface Vertex3DSupplier
             return false;
       }
       return true;
+   }
+
+   /**
+    * Gets an empty supplier.
+    * 
+    * @return the supplier.
+    */
+   public static Vertex3DSupplier emptyVertex3DSupplier()
+   {
+      return EMPTY_SUPPLIER;
    }
 
    /**
@@ -92,8 +121,8 @@ public interface Vertex3DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
-    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given array specified by the first
+    * index {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the array by which the supplier will be backed.
     * @param startIndex the first vertex index.
@@ -102,11 +131,11 @@ public interface Vertex3DSupplier
     */
    public static Vertex3DSupplier asVertex3DSupplier(Point3DReadOnly[] vertices, int startIndex, int numberOfVertices)
    {
-      if (startIndex >= numberOfVertices)
-         throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
+      if (numberOfVertices == 0)
+         return emptyVertex3DSupplier();
       if (startIndex + numberOfVertices > vertices.length)
-         throw new IllegalArgumentException(
-               "The array is too small. Array length = " + vertices.length + ", expected minimum length = " + (startIndex + numberOfVertices));
+         throw new IllegalArgumentException("The array is too small. Array length = " + vertices.length + ", expected minimum length = "
+               + (startIndex + numberOfVertices));
 
       return asVertex3DSupplier(Arrays.asList(vertices), startIndex, numberOfVertices);
    }
@@ -136,8 +165,8 @@ public interface Vertex3DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given list specified by the first index
-    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given list specified by the first
+    * index {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the list by which the supplier will be backed.
     * @param startIndex the first vertex index.
@@ -146,11 +175,11 @@ public interface Vertex3DSupplier
     */
    public static Vertex3DSupplier asVertex3DSupplier(List<? extends Point3DReadOnly> vertices, int startIndex, int numberOfVertices)
    {
-      if (startIndex >= numberOfVertices)
-         throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
+      if (numberOfVertices == 0)
+         return emptyVertex3DSupplier();
       if (startIndex + numberOfVertices > vertices.size())
-         throw new IllegalArgumentException(
-               "The list is too small. List size = " + vertices.size() + ", expected minimum size = " + (startIndex + numberOfVertices));
+         throw new IllegalArgumentException("The list is too small. List size = " + vertices.size() + ", expected minimum size = "
+               + (startIndex + numberOfVertices));
 
       return new Vertex3DSupplier()
       {
