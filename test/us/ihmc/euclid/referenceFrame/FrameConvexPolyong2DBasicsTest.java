@@ -11,9 +11,10 @@ import java.util.function.Predicate;
 
 import org.junit.Test;
 
-import us.ihmc.euclid.geometry.ConvexPolygon2DTest;
+import us.ihmc.euclid.geometry.ConvexPolygon2DBasicsTest;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
@@ -21,6 +22,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBuilder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 
 public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygon2DBasics> extends FrameConvexPolygon2DReadOnlyTest<F>
@@ -61,7 +63,26 @@ public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygo
    @Test
    public void testConvexPolygon2DBasicsFeatures() throws Exception
    {
-      ConvexPolygon2DTest convexPolygonTest = new ConvexPolygon2DTest();
+      ConvexPolygon2DBasicsTest<FrameConvexPolygon2D> convexPolygonTest = new ConvexPolygon2DBasicsTest<FrameConvexPolygon2D>()
+      {
+         @Override
+         public FrameConvexPolygon2D createEmptyConvexPolygon2D()
+         {
+            return new FrameConvexPolygon2D();
+         }
+
+         @Override
+         public FrameConvexPolygon2D createRandomConvexPolygon2D(Random random)
+         {
+            return EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, ReferenceFrame.getWorldFrame(), 1.0, 50);
+         }
+
+         @Override
+         public FrameConvexPolygon2D createConvexPolygon2D(Vertex2DSupplier supplier)
+         {
+            return new FrameConvexPolygon2D(ReferenceFrame.getWorldFrame(), supplier);
+         }
+      };
 
       for (Method testMethod : convexPolygonTest.getClass().getMethods())
       {
