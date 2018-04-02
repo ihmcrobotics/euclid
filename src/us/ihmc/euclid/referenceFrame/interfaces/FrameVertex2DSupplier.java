@@ -18,6 +18,45 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier
    FramePoint2DReadOnly getVertex(int index);
 
    /**
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal.
+    * 
+    * @param other the other supplier to compare against this.
+    * @return {@code true} if the two suppliers are equal.
+    */
+   default boolean equals(FrameVertex2DSupplier other)
+   {
+      if (other == null)
+         return false;
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).equals(other.getVertex(i)))
+            return false;
+      }
+      return true;
+   }
+
+   /**
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
+    * 
+    * @param other the other supplier to compare against this.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two suppliers are equal.
+    */
+   default boolean epsilonEquals(FrameVertex2DSupplier other, double epsilon)
+   {
+      if (getNumberOfVertices() != other.getNumberOfVertices())
+         return false;
+      for (int i = 0; i < getNumberOfVertices(); i++)
+      {
+         if (!getVertex(i).epsilonEquals(other.getVertex(i), epsilon))
+            return false;
+      }
+      return true;
+   }
+
+   /**
     * Returns a fixed-size supplier backed by the given array.
     * 
     * @param vertices the array by which the supplier will be backed.
