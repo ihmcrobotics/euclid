@@ -185,6 +185,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
       numberOfVertices = 0;
       area = Double.NaN;
       centroid.setToNaN();
+      boundingBox.setToNaN();
       isUpToDate = false;
    }
 

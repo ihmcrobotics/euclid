@@ -13,6 +13,24 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
  */
 public interface FrameVertex3DSupplier extends Vertex3DSupplier
 {
+   /**
+    * A supplier with no vertices.
+    */
+   static final FrameVertex3DSupplier EMPTY_SUPPLIER = new FrameVertex3DSupplier()
+   {
+      @Override
+      public FramePoint3DReadOnly getVertex(int index)
+      {
+         return null;
+      }
+
+      @Override
+      public int getNumberOfVertices()
+      {
+         return 0;
+      }
+   };
+
    /** {@inheritDoc} */
    @Override
    FramePoint3DReadOnly getVertex(int index);
@@ -57,6 +75,16 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
    }
 
    /**
+    * Gets an empty supplier.
+    * 
+    * @return the supplier.
+    */
+   public static FrameVertex3DSupplier emptyFrameVertex3DSupplier()
+   {
+      return EMPTY_SUPPLIER;
+   }
+
+   /**
     * Returns a fixed-size supplier backed by the given array.
     * 
     * @param vertices the array by which the supplier will be backed.
@@ -91,8 +119,8 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
     */
    public static FrameVertex3DSupplier asFrameVertex3DSupplier(FramePoint3DReadOnly[] vertices, int startIndex, int numberOfVertices)
    {
-      if (startIndex >= numberOfVertices)
-         throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
+      if (numberOfVertices == 0)
+         return emptyFrameVertex3DSupplier();
       if (startIndex + numberOfVertices > vertices.length)
          throw new IllegalArgumentException("The array is too small. Array length = " + vertices.length + ", expected minimum length = "
                + (startIndex + numberOfVertices));
@@ -135,8 +163,8 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
     */
    public static FrameVertex3DSupplier asFrameVertex3DSupplier(List<? extends FramePoint3DReadOnly> vertices, int startIndex, int numberOfVertices)
    {
-      if (startIndex >= numberOfVertices)
-         throw new IllegalArgumentException("The starting index cannot be greater or equal than the number of vertices.");
+      if (numberOfVertices == 0)
+         return emptyFrameVertex3DSupplier();
       if (startIndex + numberOfVertices > vertices.size())
          throw new IllegalArgumentException("The list is too small. List size = " + vertices.size() + ", expected minimum size = "
                + (startIndex + numberOfVertices));

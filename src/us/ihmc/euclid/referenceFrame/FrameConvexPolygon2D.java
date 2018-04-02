@@ -278,6 +278,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       numberOfVertices = 0;
       area = Double.NaN;
       centroid.setToNaN();
+      boundingBox.setToNaN();
       isUpToDate = false;
    }
 
