@@ -33,6 +33,22 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    /**
     * Add a vertex to this polygon.
     *
+    * @param referenceFrame the reference frame in which the given vertex is expressed.
+    * @param x the x-coordinate of the new vertex.
+    * @param y the y-coordinate of the new vertex.
+    * @throws ReferenceFrameMismatchException if {@code referenceFrame} and
+    *            {@code this.getReferenceFrame()} are not the same.
+    * @see #addVertex(double, double)
+    */
+   default void addVertex(ReferenceFrame referenceFrame, double x, double y)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      addVertex(x, y);
+   }
+
+   /**
+    * Add a vertex to this polygon.
+    *
     * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
     * @param vertex the new vertex. Not modified.
     * @throws ReferenceFrameMismatchException if {@code referenceFrame} and

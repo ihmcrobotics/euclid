@@ -46,7 +46,7 @@ public class EuclidGeometryPolygonTools
     *
     * @author Sylvain Bertrand
     */
-   public enum Bound
+   public static enum Bound
    {
       /**
        * Refers to lower values, i.e. towards -&infin;.

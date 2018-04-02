@@ -18,6 +18,36 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBasics, FrameChangeable
 {
    /**
+    * Clear this polygon and sets it reference frame.
+    * <p>
+    * After calling this method, the polygon has no vertex, area, or centroid.
+    * </p>
+    * 
+    * @param referenceFrame the new reference frame for this frame convex polygon.
+    * @see #clear()
+    */
+   default void clear(ReferenceFrame referenceFrame)
+   {
+      setReferenceFrame(referenceFrame);
+      clear();
+   }
+
+   /**
+    * Clear this polygon, sets it reference frame.
+    * <p>
+    * After calling this method, the polygon has no vertex, area, or centroid. Use only when an empty polygon is desired.
+    * </p>
+    * 
+    * @param referenceFrame the new reference frame for this frame convex polygon.
+    * @see #clearAndUpdate()
+    */
+   default void clearAndUpdate(ReferenceFrame referenceFrame)
+   {
+      setReferenceFrame(referenceFrame);
+      clearAndUpdate();
+   }
+
+   /**
     * Sets the reference frame of this polygon without updating or modifying the coordinates of its
     * vertices.
     *
