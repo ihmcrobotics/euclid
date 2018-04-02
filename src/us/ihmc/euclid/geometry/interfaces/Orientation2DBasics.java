@@ -3,11 +3,18 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-// TODO
+/**
+ * Write and read interface for a 2D orientation.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, Transformable
 {
    /**
@@ -54,13 +61,13 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
    }
 
    /**
-    * Sets this orientation 2D to the yaw angle of the given {@code quaternion}.
+    * Sets this orientation 2D to the yaw angle of the given {@code orientation3DReadOnly}.
     *
-    * @param quaternionReadOnly the quaternion to get the yaw angle from. Not modified.
+    * @param orientation3DReadOnly the orientation to get the yaw angle from. Not modified.
     */
-   default void set(QuaternionReadOnly quaternionReadOnly)
+   default void set(Orientation3DReadOnly orientation3DReadOnly)
    {
-      setYaw(quaternionReadOnly.getYaw());
+      setYaw(orientation3DReadOnly.getYaw());
    }
 
    /**
@@ -184,8 +191,8 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
     * </p>
     *
     * @param other the other orientation 2D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     */
    default void interpolate(Orientation2DReadOnly other, double alpha)
@@ -215,13 +222,13 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
    /**
     * Transforms this orientation 2D by the given {@code transform}.
     * <p>
-    * This is equivalent to extracting the yaw rotation part from the given transform and adding it
-    * to this.
+    * This is equivalent to extracting the yaw rotation part from the given transform and adding it to
+    * this.
     * </p>
     *
     * @param transform the geometric transform to apply on this orientation 2D. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY plane.
     */
    @Override
    void applyTransform(Transform transform);
@@ -229,13 +236,13 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
    /**
     * Transforms this orientation 2D by the inverse of the given {@code transform}.
     * <p>
-    * This is equivalent to extracting the yaw rotation part from the given transform and
-    * subtracting it to this.
+    * This is equivalent to extracting the yaw rotation part from the given transform and subtracting
+    * it to this.
     * </p>
     *
     * @param transform the geometric transform to apply on this orientation 2D. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY plane.
     */
    @Override
    void applyInverseTransform(Transform transform);

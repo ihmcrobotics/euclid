@@ -7,7 +7,14 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-//TODO
+/**
+ * Read-only interface for a 2D orientation that is expressed in a immutable reference frame.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, ReferenceFrameHolder
 {
    /**
@@ -43,8 +50,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
-    * this.
+    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by this.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -63,8 +69,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -84,8 +90,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -105,8 +111,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -124,8 +130,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -146,8 +152,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -168,8 +174,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
-    * this.
+    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by this.
     *
     * <pre>
     * tupleToTransform = / cos(yaw) -sin(yaw) \ * tupleToTransform
@@ -245,8 +250,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     * tupleTransformed = / cos(yaw) -sin(yaw) \ * tupleOriginal
@@ -266,8 +271,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     * tupleTransformed = / cos(yaw) -sin(yaw) \ * tupleOriginal
@@ -287,8 +292,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
-    * about the z-axis described by this.
+    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation about
+    * the z-axis described by this.
     *
     * <pre>
     *                    / cos(-yaw) -sin(-yaw) 0 \
@@ -412,8 +417,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
    }
 
    /**
-    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
-    * about the z-axis described by this.
+    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation about
+    * the z-axis described by this.
     *
     * <pre>
     * tupleToTransform = / cos(-yaw) -sin(-yaw) \ * tupleToTransform
@@ -579,8 +584,8 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * </p>
     *
     * @param other the other orientation 2D to compare against this. Not modified.
-    * @return {@code true} if the two orientations are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two orientations are exactly equal component-wise and are expressed
+    *         in the same reference frame, {@code false} otherwise.
     */
    default boolean equals(FrameOrientation2DReadOnly other)
    {

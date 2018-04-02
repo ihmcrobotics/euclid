@@ -44,8 +44,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws ReferenceFrameMismatchException if either argument is not expressed in the same
-    *            reference frame as this frame line 3D.
+    * @throws ReferenceFrameMismatchException if either argument is not expressed in the same reference
+    *            frame as this frame line 3D.
     */
    default void get(FixedFramePoint3DBasics pointToPack, FixedFrameVector3DBasics directionToPack)
    {
@@ -76,8 +76,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
     *           Modified.
-    * @throws ReferenceFrameMismatchException if {@code directionToPack} is not expressed in the
-    *            same reference frame as this frame line 3D.
+    * @throws ReferenceFrameMismatchException if {@code directionToPack} is not expressed in the same
+    *            reference frame as this frame line 3D.
     */
    default void get(Point3DBasics pointToPack, FixedFrameVector3DBasics directionToPack)
    {
@@ -171,8 +171,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not expressed
+    *            in the same reference frame.
     */
    default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
@@ -227,9 +227,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
-    * @throws ReferenceFrameMismatchException if {@code this} and
-    *            {@code closestPointOnOtherLineToPack} are not expressed in the same reference
-    *            frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code closestPointOnOtherLineToPack}
+    *            are not expressed in the same reference frame.
     */
    default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, FixedFramePoint3DBasics closestPointOnOtherLineToPack)
    {
@@ -288,8 +287,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not expressed
+    *            in the same reference frame.
     */
    default double closestPointsWith(FrameLine3DReadOnly otherLine, FramePoint3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
@@ -310,8 +309,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code otherLine}, and
-    *            {@code closestPointOnOtherLineToPack} are not expressed in the same reference
-    *            frame.
+    *            {@code closestPointOnOtherLineToPack} are not expressed in the same reference frame.
     */
    default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack,
                                     FixedFramePoint3DBasics closestPointOnOtherLineToPack)
@@ -332,8 +330,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not expressed
+    *            in the same reference frame.
     */
    default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, FramePoint3DBasics closestPointOnOtherLineToPack)
    {
@@ -377,8 +375,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
     *           point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not expressed
+    *            in the same reference frame.
     */
    default double closestPointsWith(FrameLine3DReadOnly otherLine, FramePoint3DBasics closestPointOnThisLineToPack,
                                     FramePoint3DBasics closestPointOnOtherLineToPack)
@@ -437,8 +435,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *
     * @param otherLine the other line to compute the distance from. Not modified.
     * @return the minimum distance between the two lines.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not expressed
+    *            in the same reference frame.
     */
    default double distance(FrameLine3DReadOnly otherLine)
    {
@@ -473,14 +471,14 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
     * @param t the parameter used to calculate the point coordinates.
     * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
+    *            in the same reference frame.
     */
    default void pointOnLineGivenParameter(double t, FixedFramePoint3DBasics pointToPack)
    {
@@ -494,8 +492,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
     * @param t the parameter used to calculate the point coordinates.
@@ -513,8 +511,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
+    * {@code false}.
     * </ul>
     * </p>
     * <p>
@@ -538,14 +536,15 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
+    * {@code false}.
     * </ul>
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
@@ -561,14 +560,15 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
+    * {@code false}.
     * </ul>
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code projectionToPack} are not
     *            expressed in the same reference frame.
     */
@@ -584,14 +584,15 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
+    * {@code false}.
     * </ul>
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, FramePoint3DBasics projectionToPack)
    {
@@ -605,14 +606,15 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
+    * {@code false}.
     * </ul>
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pointToProject}, and
     *            {@code projectionToPack} are not expressed in the same reference frame.
     */
@@ -629,14 +631,15 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and
-    * returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and returns
+    * {@code false}.
     * </ul>
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
@@ -654,18 +657,18 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
-    * @param pointOnLine the coordinates of the 'p' from which the parameter 't' is to be
-    *           calculated. The point has to be on the line. Not modified.
-    * @param epsilon the maximum distance allowed between the given point and this line. If the
-    *           given point is at a distance less than {@code epsilon} from this line, it is
-    *           considered as being located on this line.
+    * @param pointOnLine the coordinates of the 'p' from which the parameter 't' is to be calculated.
+    *           The point has to be on the line. Not modified.
+    * @param epsilon the maximum distance allowed between the given point and this line. If the given
+    *           point is at a distance less than {@code epsilon} from this line, it is considered as
+    *           being located on this line.
     * @return the value of the parameter 't' corresponding to the given point.
-    * @throws RuntimeException if the given point is located at a distance greater than
-    *            {@code epsilon} from this line.
+    * @throws RuntimeException if the given point is located at a distance greater than {@code epsilon}
+    *            from this line.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
@@ -678,8 +681,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    /**
     * Tests if the given is located on this line.
     * <p>
-    * More precisely, the point is assumed to be on this line if it is located at a distance less
-    * than {@code epsilon} from it.
+    * More precisely, the point is assumed to be on this line if it is located at a distance less than
+    * {@code epsilon} from it.
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
@@ -698,8 +701,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstPointOnLineToPack} are
     *            not expressed in the same reference frame.
     */
@@ -713,8 +715,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(FramePoint3DBasics firstPointOnLineToPack, Point3DBasics secondPointOnLineToPack)
    {
@@ -726,10 +727,9 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLineToPack}
-    *            are not expressed in the same reference frame.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLineToPack} are
+    *            not expressed in the same reference frame.
     */
    default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, FixedFramePoint3DBasics secondPointOnLineToPack)
    {
@@ -741,8 +741,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, FramePoint3DBasics secondPointOnLineToPack)
    {
@@ -754,8 +753,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstPointOnLineToPack}, and
     *            {@code secondPointOnLineToPack} are not expressed in the same reference frame.
     */
@@ -770,8 +768,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(FramePoint3DBasics firstPointOnLineToPack, FramePoint3DBasics secondPointOnLineToPack)
    {
@@ -784,8 +781,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
     * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
     * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
-    * lines are physically the same but this method returns {@code false}.
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
+    * are physically the same but this method returns {@code false}.
     * <p>
     * If the two lines have different frames, this method returns {@code false}.
     * </p>
@@ -803,11 +800,10 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -829,8 +825,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param other the other line 3D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two lines are exactly equal component-wise and are expressed in the
+    *         same reference frame, {@code false} otherwise.
     */
    default boolean equals(FrameLine3DReadOnly other)
    {

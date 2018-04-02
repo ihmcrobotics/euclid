@@ -7,8 +7,8 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
  * Write and read interface for a 2D point expressed in a constant reference frame, i.e. this point
  * is always expressed in the same reference frame.
  * <p>
- * In addition to representing a {@link Point2DBasics}, a {@link ReferenceFrame} is associated to
- * a {@code FixedFramePoint2DBasics}. This allows, for instance, to enforce, at runtime, that
+ * In addition to representing a {@link Point2DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FixedFramePoint2DBasics}. This allows, for instance, to enforce, at runtime, that
  * operations on points occur in the same coordinate system.
  * </p>
  * <p>
@@ -21,8 +21,8 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 public interface FixedFramePoint2DBasics extends FramePoint2DReadOnly, FixedFrameTuple2DBasics, Point2DBasics
 {
    /**
-    * Sets this point coordinate to the given {@code referenceFrame}'s origin coordinate in this
-    * frame tuple current frame.
+    * Sets this point coordinate to the given {@code referenceFrame}'s origin coordinate in this frame
+    * tuple current frame.
     *
     * @param referenceFrame the reference frame of interest.
     */

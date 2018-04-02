@@ -31,7 +31,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    /**
     * Sets this frame tuple to {@code tuple3DReadOnly} and checks that its current frame equal
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the coordinate system in which the given {@code tuple3DReadOnly} is
     *           expressed.
     * @param tuple3DReadOnly the geometry object used to update the geometry object in {@code this}.
@@ -47,7 +47,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    /**
     * Sets this frame tuple components to {@code x}, {@code y}, and {@code z} and checks that its
     * current frame equal {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the coordinate system in which the given components ares expressed.
     * @param x the new x component.
     * @param y the new y component.
@@ -66,10 +66,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * <p>
     * The z component remains unchanged.
     * </p>
-    * 
+    *
     * @param frameTuple2DReadOnly the frame tuple to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple2DReadOnly} is not expressed in the
+    *            same frame as {@code this}.
     */
    default void set(FrameTuple2DReadOnly frameTuple2DReadOnly)
    {
@@ -80,11 +80,11 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    /**
     * Sets the x and y components of this frame tuple with the x and y components of the given
     * {@code frameTuple2DReadOnly} and the z-component to the given {@code z}.
-    * 
+    *
     * @param frameTuple2DReadOnly the frame tuple to copy the values from. Not modified.
     * @param z the new z-coordinate for this tuple.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple2DReadOnly} is not expressed in the
+    *            same frame as {@code this}.
     */
    default void set(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)
    {
@@ -94,7 +94,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
 
    /**
     * Sets this frame tuple to {@code other}.
-    * 
+    *
     * @param other the other frame tuple to set this to. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
@@ -103,6 +103,47 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    {
       checkReferenceFrameMatch(other);
       Tuple3DBasics.super.set(other);
+   }
+
+   /**
+    * Sets the x and y components of this frame tuple with the x and y components of the given
+    * {@code frameTuple2DReadOnly} and the z-component to the given {@code z}.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple2DReadOnly, double)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set
+    * with {@code frameTuple2DReadOnly} and {@code z}, and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param frameTuple2DReadOnly the frame tuple to copy the values from. Not modified.
+    * @param z the new z-coordinate for this tuple.
+    */
+   default void setMatchingFrame(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)
+   {
+      Tuple3DBasics.super.set(frameTuple2DReadOnly, z);
+      frameTuple2DReadOnly.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
+    * Sets this frame tuple to {@code other}.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame tuple to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameTuple3DReadOnly other)
+   {
+      Tuple3DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
    /**
@@ -139,10 +180,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void setAndScale(double scaleFactor, FrameTuple3DReadOnly other)
+   default void setAndScale(double scalar, FrameTuple3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      Tuple3DBasics.super.setAndScale(scaleFactor, other);
+      Tuple3DBasics.super.setAndScale(scalar, other);
    }
 
    /**
@@ -212,8 +253,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param frameTuple1 the first frame tuple to sum. Not modified.
     * @param frameTuple2 the second frame tuple to sum. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
+    *            not expressed in the same frame as {@code this}.
     */
    default void add(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
@@ -230,8 +271,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param frameTuple1 the first frame tuple to sum. Not modified.
     * @param tuple2 the second tuple to sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
+    *            as {@code this}.
     */
    default void add(FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
    {
@@ -247,8 +288,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param tuple1 the first tuple to sum. Not modified.
     * @param frameTuple2 the second frame tuple to sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
+    *            as {@code this}.
     */
    default void add(Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {
@@ -280,8 +321,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param frameTuple1 the first frame tuple. Not modified.
     * @param frameTuple2 the second frame tuple to subtract to {@code frameTuple1}. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
+    *            not expressed in the same frame as {@code this}.
     */
    default void sub(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
@@ -298,8 +339,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param tuple1 the first tuple. Not modified.
     * @param frameTuple2 the second frame tuple to subtract to {@code frameTuple1}. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
+    *            as {@code this}.
     */
    default void sub(Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {
@@ -315,8 +356,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param frameTuple1 the first frame tuple. Not modified.
     * @param tuple2 the second tuple to subtract to {@code frameTuple1}. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
+    *            as {@code this}.
     */
    default void sub(FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
    {
@@ -335,10 +376,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple3DReadOnly other)
+   default void scaleAdd(double scalar, FrameTuple3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, other);
+      Tuple3DBasics.super.scaleAdd(scalar, other);
    }
 
    /**
@@ -350,14 +391,14 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param scalar the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the sum. Not modified.
     * @param frameTuple2 the second frame tuple of the sum. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
+    *            not expressed in the same frame as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleAdd(double scalar, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, frameTuple1, frameTuple2);
+      Tuple3DBasics.super.scaleAdd(scalar, frameTuple1, frameTuple2);
    }
 
    /**
@@ -369,13 +410,13 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param scalar the scale factor to use on {@code tuple1}.
     * @param tuple1 the first tuple of the sum. Not modified.
     * @param frameTuple2 the second frame tuple of the sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
+    *            as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleAdd(double scalar, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, tuple1, frameTuple2);
+      Tuple3DBasics.super.scaleAdd(scalar, tuple1, frameTuple2);
    }
 
    /**
@@ -387,13 +428,13 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param scalar the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the sum. Not modified.
     * @param tuple2 the second tuple of the sum. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
+    *            as {@code this}.
     */
-   default void scaleAdd(double scaleFactor, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
+   default void scaleAdd(double scalar, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
-      Tuple3DBasics.super.scaleAdd(scaleFactor, frameTuple1, tuple2);
+      Tuple3DBasics.super.scaleAdd(scalar, frameTuple1, tuple2);
    }
 
    /**
@@ -407,10 +448,10 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
-   default void scaleSub(double scaleFactor, FrameTuple3DReadOnly other)
+   default void scaleSub(double scalar, FrameTuple3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      Tuple3DBasics.super.scaleSub(scaleFactor, other);
+      Tuple3DBasics.super.scaleSub(scalar, other);
    }
 
    /**
@@ -422,14 +463,14 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param scalar the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the difference. Not modified.
     * @param frameTuple2 the second frame tuple of the difference. Not modified.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
+    *            not expressed in the same frame as {@code this}.
     */
-   default void scaleSub(double scaleFactor, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleSub(double scalar, FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleSub(scaleFactor, frameTuple1, frameTuple2);
+      Tuple3DBasics.super.scaleSub(scalar, frameTuple1, frameTuple2);
    }
 
    /**
@@ -441,13 +482,13 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param scalar the scale factor to use on {@code frameTuple1}.
     * @param tuple1 the first tuple of the difference. Not modified.
     * @param frameTuple2 the second frame tuple of the difference. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
+    *            as {@code this}.
     */
-   default void scaleSub(double scaleFactor, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
+   default void scaleSub(double scalar, Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple2);
-      Tuple3DBasics.super.scaleSub(scaleFactor, tuple1, frameTuple2);
+      Tuple3DBasics.super.scaleSub(scalar, tuple1, frameTuple2);
    }
 
    /**
@@ -459,13 +500,13 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param scalar the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the difference. Not modified.
     * @param frameTuple2 the second tuple of the difference. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
+    *            as {@code this}.
     */
-   default void scaleSub(double scaleFactor, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly frameTuple2)
+   default void scaleSub(double scalar, FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly frameTuple2)
    {
       checkReferenceFrameMatch(frameTuple1);
-      Tuple3DBasics.super.scaleSub(scaleFactor, frameTuple1, frameTuple2);
+      Tuple3DBasics.super.scaleSub(scalar, frameTuple1, frameTuple2);
    }
 
    /**
@@ -476,9 +517,9 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * </p>
     *
     * @param other the other frame tuple used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying this frame tuple, while a value of 1 is equivalent to setting this frame
-    *           tuple to {@code other}.
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           this frame tuple, while a value of 1 is equivalent to setting this frame tuple to
+    *           {@code other}.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
     */
@@ -500,8 +541,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           this frame tuple to {@code frameTuple1}, while a value of 1 is equivalent to setting
     *           this frame tuple to {@code frameTuple2}.
-    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2}
-    *            is not expressed in the same frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
+    *            not expressed in the same frame as {@code this}.
     */
    default void interpolate(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2, double alpha)
    {
@@ -511,8 +552,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    }
 
    /**
-    * Performs a linear interpolation from {@code tuple1} to {@code frameTuple2} given the
-    * percentage {@code alpha}.
+    * Performs a linear interpolation from {@code tuple1} to {@code frameTuple2} given the percentage
+    * {@code alpha}.
     * <p>
     * this = (1.0 - alpha) * tuple1 + alpha * frameTuple2
     * </p>
@@ -522,8 +563,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           this frame tuple to {@code tuple1}, while a value of 1 is equivalent to setting this
     *           frame tuple to {@code frameTuple2}.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
+    *            as {@code this}.
     */
    default void interpolate(Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2, double alpha)
    {
@@ -532,8 +573,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    }
 
    /**
-    * Performs a linear interpolation from {@code frameTuple1} to {@code tuple2} given the
-    * percentage {@code alpha}.
+    * Performs a linear interpolation from {@code frameTuple1} to {@code tuple2} given the percentage
+    * {@code alpha}.
     * <p>
     * this = (1.0 - alpha) * frameTuple1 + alpha * tuple2
     * </p>
@@ -543,8 +584,8 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
     *           this frame tuple to {@code frameTuple1}, while a value of 1 is equivalent to setting
     *           this frame tuple to {@code tuple2}.
-    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
+    *            as {@code this}.
     */
    default void interpolate(FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2, double alpha)
    {

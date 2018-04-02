@@ -31,7 +31,7 @@ public class Pose2DTest
       {
          x = random.nextDouble() - random.nextDouble();
          y = random.nextDouble() - random.nextDouble();
-         yaw = Math.PI - (2.0 * Math.PI * random.nextDouble());
+         yaw = Math.PI - 2.0 * Math.PI * random.nextDouble();
 
          allDoubles = new Pose2D(x, y, yaw);
          assertEquals(x, allDoubles.getX(), epsilon);
@@ -202,7 +202,7 @@ public class Pose2DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         angleDiff = Math.PI - (2.0 * Math.PI * random.nextDouble());
+         angleDiff = Math.PI - 2.0 * Math.PI * random.nextDouble();
 
          firstPose = EuclidGeometryRandomTools.nextPose2D(random);
          secondPose = new Pose2D(firstPose);
@@ -231,7 +231,7 @@ public class Pose2DTest
 
       firstPose = new Pose2D(x, y, yaw);
       secondPose = new Pose2D(x, y, yaw);
-      
+
       // Sanity checks
       assertTrue(firstPose.equals(secondPose));
       assertTrue(secondPose.equals(secondPose));
@@ -252,7 +252,7 @@ public class Pose2DTest
 
          assertFalse(firstPose.equals(secondPose));
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Poses are equal if and only if orientation angles are exactly equal
          x = random.nextDouble() - random.nextDouble();

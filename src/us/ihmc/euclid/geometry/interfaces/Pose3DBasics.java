@@ -3,7 +3,8 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
@@ -58,6 +59,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @return the position part of this pose 3D.
     */
+   @Override
    Point3DBasics getPosition();
 
    /**
@@ -65,6 +67,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @return the orientation part of this pose 3D.
     */
+   @Override
    QuaternionBasics getOrientation();
 
    /**
@@ -182,31 +185,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the orientation part of this pose 3D with the given quaternion.
+    * Sets the orientation part of this pose 3D with the given orientation.
     *
-    * @param orientation the quaternion used to set this pose's orientation. Not modified.
+    * @param orientation the orientation used to set this pose's orientation. Not modified.
     */
-   default void setOrientation(QuaternionReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given rotation matrix.
-    *
-    * @param orientation the rotation matrix used to set this pose's orientation. Not modified.
-    */
-   default void setOrientation(RotationMatrixReadOnly orientation)
-   {
-      getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given axis-angle.
-    *
-    * @param orientation the axis-angle used to set this pose's orientation. Not modified.
-    */
-   default void setOrientation(AxisAngleReadOnly orientation)
+   default void setOrientation(Orientation3DReadOnly orientation)
    {
       getOrientation().set(orientation);
    }
@@ -313,8 +296,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Normalizes the quaternion part of this pose to ensure it is a unit-quaternion describing a
-    * proper orientation.
+    * Normalizes the quaternion part of this pose to ensure it is a unit-quaternion describing a proper
+    * orientation.
     * <p>
     * Edge cases:
     * <ul>
@@ -351,8 +334,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * </p>
     *
     * @param other the other pose 3D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     */
    default void interpolate(Pose3DReadOnly other, double alpha)
@@ -372,8 +355,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param pose1 the first pose 3D used in the interpolation. Not modified.
     * @param pose2 the second pose 3D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code pose2}.
+    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting {@code this}
+    *           to {@code pose2}.
     */
    default void interpolate(Pose3DReadOnly pose1, Pose3DReadOnly pose2, double alpha)
    {
@@ -399,11 +382,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Adds the given {@code translation} to this pose 3D assuming it is expressed in the coordinates
-    * in which this pose is expressed.
+    * Adds the given {@code translation} to this pose 3D assuming it is expressed in the coordinates in
+    * which this pose is expressed.
     * <p>
-    * If the {@code translation} is expressed in the local coordinates described by this pose 3D,
-    * use {@link #appendTranslation(Tuple3DReadOnly)}.
+    * If the {@code translation} is expressed in the local coordinates described by this pose 3D, use
+    * {@link #appendTranslation(Tuple3DReadOnly)}.
     * </p>
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
@@ -419,39 +402,15 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param rotation the rotation to prepend to this pose 3D. Not modified.
     */
-   default void prependRotation(QuaternionReadOnly rotation)
+   default void prependRotation(Orientation3DReadOnly rotation)
    {
       rotation.transform(getPosition());
       rotation.transform(getOrientation());
    }
 
    /**
-    * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
-    * orientation part.
-    *
-    * @param rotation the rotation to prepend to this pose 3D. Not modified.
-    */
-   default void prependRotation(RotationMatrixReadOnly rotation)
-   {
-      rotation.transform(getPosition());
-      rotation.transform(getOrientation());
-   }
-
-   /**
-    * Rotates the position part of this pose 3D by the given {@code rotation} and prepends it to the
-    * orientation part.
-    *
-    * @param rotation the rotation to prepend to this pose 3D. Not modified.
-    */
-   default void prependRotation(AxisAngleReadOnly rotation)
-   {
-      rotation.transform(getPosition());
-      rotation.transform(getOrientation());
-   }
-
-   /**
-    * Prepends a rotation about the z-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
+    * Prepends a rotation about the z-axis to this pose 3D: Rotates the position part and prepends the
+    * rotation to the orientation part.
     *
     * @param yaw the angle to rotate about the z-axis.
     */
@@ -462,8 +421,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Prepends a rotation about the y-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
+    * Prepends a rotation about the y-axis to this pose 3D: Rotates the position part and prepends the
+    * rotation to the orientation part.
     *
     * @param pitch the angle to rotate about the y-axis.
     */
@@ -474,8 +433,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Prepends a rotation about the x-axis to this pose 3D: Rotates the position part and prepends
-    * the rotation to the orientation part.
+    * Prepends a rotation about the x-axis to this pose 3D: Rotates the position part and prepends the
+    * rotation to the orientation part.
     *
     * @param roll the angle to rotate about the x-axis.
     */
@@ -514,8 +473,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    /**
     * Rotates, then adds the translation (x, y, z) to this pose 3D.
     * <p>
-    * Use this method if the translation (x, y, z) is expressed in the local coordinates described
-    * by this pose 3D. Otherwise, use {@link #prependTranslation(double, double, double)}.
+    * Use this method if the translation (x, y, z) is expressed in the local coordinates described by
+    * this pose 3D. Otherwise, use {@link #prependTranslation(double, double, double)}.
     * </p>
     *
     * @param x the translation distance along the x-axis.
@@ -548,33 +507,17 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Appends the given rotation to this pose 3D.
+    * Appends the given orientation to this pose 3D.
     * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * {@code this.orientation = this.orientation * rotation}
+    * Only the orientation part of this pose is affected by this operation, for more details see
+    * {@link Orientation3DBasics#append(Orientation3DReadOnly)}.
     * </p>
     *
-    * @param rotation the rotation to append to this pose 3D. Not modified.
+    * @param orientation the orientation to append to this pose 3D. Not modified.
     */
-   default void appendRotation(QuaternionReadOnly rotation)
+   default void appendRotation(Orientation3DReadOnly orientation)
    {
-      getOrientation().multiply(rotation);
-   }
-
-   /**
-    * Appends the given rotation to this pose 3D.
-    * <p>
-    * More precisely, the position part is unchanged while the orientation part is updated as
-    * follows:<br>
-    * {@code this.orientation = this.orientation * rotation}
-    * </p>
-    *
-    * @param rotation the rotation to append to this pose 3D. Not modified.
-    */
-   default void appendRotation(RotationMatrixReadOnly rotation)
-   {
-      getOrientation().multiply(rotation);
+      getOrientation().append(orientation);
    }
 
    /**
@@ -645,7 +588,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    default void appendTransform(RigidBodyTransform transform)
    {
       QuaternionTools.addTransform(getOrientation(), transform.getTranslationVector(), getPosition());
-      getOrientation().multiply(transform.getRotationMatrix());
+      getOrientation().append(transform.getRotationMatrix());
    }
 
    /**

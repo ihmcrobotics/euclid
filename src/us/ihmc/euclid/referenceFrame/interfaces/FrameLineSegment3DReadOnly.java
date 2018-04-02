@@ -16,15 +16,15 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
  * </p>
  * <p>
- * In addition to representing a {@link LineSegment3DReadOnly}, a {@link ReferenceFrame} is associated
- * to a {@code FrameLineSegment3DReadOnly}. This allows, for instance, to enforce, at runtime, that
- * operations on lines occur in the same coordinate system.
+ * In addition to representing a {@link LineSegment3DReadOnly}, a {@link ReferenceFrame} is
+ * associated to a {@code FrameLineSegment3DReadOnly}. This allows, for instance, to enforce, at
+ * runtime, that operations on lines occur in the same coordinate system.
  * </p>
  * <p>
- * Because a {@code FrameLineSegment3DReadOnly} extends {@code LineSegment3DReadOnly}, it is compatible
- * with methods only requiring {@code LineSegment3DReadOnly}. However, these methods do NOT assert
- * that the operation occur in the proper coordinate system. Use this feature carefully and always
- * prefer using methods requiring {@code FrameLineSegment3DReadOnly}.
+ * Because a {@code FrameLineSegment3DReadOnly} extends {@code LineSegment3DReadOnly}, it is
+ * compatible with methods only requiring {@code LineSegment3DReadOnly}. However, these methods do
+ * NOT assert that the operation occur in the proper coordinate system. Use this feature carefully
+ * and always prefer using methods requiring {@code FrameLineSegment3DReadOnly}.
  * </p>
  */
 public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, ReferenceFrameHolder
@@ -49,12 +49,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpointToPack} are
-    *            not expressed in the same reference frame.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpointToPack} are not
+    *            expressed in the same reference frame.
     */
    default void get(FixedFramePoint3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
    {
@@ -66,10 +66,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
     */
    default void get(FramePoint3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
    {
@@ -81,12 +81,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpointToPack} are
-    *            not expressed in the same reference frame.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpointToPack} are not
+    *            expressed in the same reference frame.
     */
    default void get(Point3DBasics firstEndpointToPack, FixedFramePoint3DBasics secondEndpointToPack)
    {
@@ -98,10 +98,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
     */
    default void get(Point3DBasics firstEndpointToPack, FramePoint3DBasics secondEndpointToPack)
    {
@@ -113,10 +113,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstEndpointToPack}, and
     *            {@code secondEndpointToPack} are not expressed in the same reference frame.
     */
@@ -131,10 +131,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first
-    *           endpoint are stored. Modified.
-    * @param secondEndpointToPack point in which the coordinates of this line segment's second
-    *           endpoint are stored. Modified.
+    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
+    *           are stored. Modified.
+    * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
+    *           are stored. Modified.
     */
    default void get(FramePoint3DBasics firstEndpointToPack, FramePoint3DBasics secondEndpointToPack)
    {
@@ -247,9 +247,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     * <p>
@@ -257,8 +256,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
-    * @return the projection of the point onto the line segment or {@code null} if the method
-    *         failed.
+    * @return the projection of the point onto the line segment or {@code null} if the method failed.
     */
    @Override
    default FramePoint3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
@@ -278,9 +276,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     * <p>
@@ -288,8 +285,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
-    * @return the projection of the point onto the line segment or {@code null} if the method
-    *         failed.
+    * @return the projection of the point onto the line segment or {@code null} if the method failed.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
     *            expressed in the same reference frame.
     */
@@ -312,9 +308,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -337,9 +332,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -364,9 +358,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -391,9 +384,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -416,9 +408,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -444,9 +435,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <li>if the length of this line segment is too small, i.e.
     * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
     * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
+    * <li>the projection can not be outside the line segment. When the projection on the corresponding
+    * line is outside the line segment, the result is the closest of the two endpoints.
     * </ul>
     * </p>
     *
@@ -465,8 +455,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints or exactly on an endpoint.
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints or exactly on an endpoint.
     *
     * @param point the query. Not modified.
     * @return {@code true} if the projection of the point is between the endpoints of this line
@@ -481,13 +471,13 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    }
 
    /**
-    * Tests whether the projection of the given point onto this line segment is located between the
-    * two endpoints with a given conservative tolerance {@code epsilon}:
+    * Tests whether the projection of the given point onto this line segment is located between the two
+    * endpoints with a given conservative tolerance {@code epsilon}:
     * <ul>
-    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum
-    * distance of {@code epsilon * this.length()} from the closest endpoint.
-    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance
-    * of {@code -epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon > 0}, the point has to be between the endpoints and at a minimum distance
+    * of {@code epsilon * this.length()} from the closest endpoint.
+    * <li>if {@code epsilon < 0}, the point has to be between the endpoints or at a maximum distance of
+    * {@code -epsilon * this.length()} from the closest endpoint.
     * <li>if {@code epsilon = 0}, the point has to be between the endpoints or equal to one of the
     * endpoints.
     * </ul>
@@ -511,9 +501,9 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * {@code 0.0} representing {@code firstEndpoint}, and {@code 1.0} representing
     * {@code secondEndpoint}.
     * <p>
-    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the
-    * given point is located at the middle of this line segment. The coordinates of the projection
-    * of the point can be computed from the {@code percentage} as follows: </br>
+    * For example, if the returned percentage is {@code 0.5}, it means that the projection of the given
+    * point is located at the middle of this line segment. The coordinates of the projection of the
+    * point can be computed from the {@code percentage} as follows: </br>
     * <code>
     * Point3D projection = new Point3D(); </br>
     * projection.interpolate(lineSegmentStart, lineSegmentEnd, percentage); </br>
@@ -523,14 +513,14 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Edge cases:
     * <ul>
     * <li>if the length of the given line segment is too small, i.e.
-    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails
-    * and returns {@code 0.0}.
+    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method fails and
+    * returns {@code 0.0}.
     * </ul>
     * </p>
     *
     * @param point the query point. Not modified.
-    * @return the computed percentage along the line segment representing where the point projection
-    *         is located.
+    * @return the computed percentage along the line segment representing where the point projection is
+    *         located.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
     *            the same reference frame.
     */
@@ -547,8 +537,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
+    *            in the same reference frame.
     */
    @Override
    default FramePoint3DBasics pointBetweenEndpointsGivenPercentage(double percentage)
@@ -563,8 +553,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
+    *            in the same reference frame.
     */
    default void pointBetweenEndpointsGivenPercentage(double percentage, FixedFramePoint3DBasics pointToPack)
    {
@@ -605,8 +595,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     *
     * @param percentage the percentage along this line segment of the point.
     * @param pointToPack where the result is stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
+    *            in the same reference frame.
     */
    default void pointOnLineGivenPercentage(double percentage, FixedFramePoint3DBasics pointToPack)
    {
@@ -680,16 +670,16 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to
-    * {@code other} with the tolerance {@code epsilon}.
+    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
+    * with the tolerance {@code epsilon}.
     * <p>
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
     *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
-    * @return {@code true} if the two line segments are equal and are expressed in the same
-    *         reference frame, {@code false} otherwise.
+    * @return {@code true} if the two line segments are equal and are expressed in the same reference
+    *         frame, {@code false} otherwise.
     */
    default boolean epsilonEquals(FrameLineSegment3DReadOnly other, double epsilon)
    {
@@ -699,11 +689,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -725,8 +714,8 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </p>
     *
     * @param other the other line segment 3D to compare against this. Not modified.
-    * @return {@code true} if the two line segments are exactly equal component-wise and are
-    *         expressed in the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two line segments are exactly equal component-wise and are expressed
+    *         in the same reference frame, {@code false} otherwise.
     */
    default boolean equals(FrameLineSegment3DReadOnly other)
    {

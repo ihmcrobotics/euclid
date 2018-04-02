@@ -31,7 +31,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
 {
    /**
     * Sets the reference frame of this tuple without updating or modifying its x and y components.
-    * 
+    *
     * @param referenceFrame the new reference frame for this frame tuple.
     */
    void setReferenceFrame(ReferenceFrame referenceFrame);
@@ -39,7 +39,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
    /**
     * Sets all the components of this frame tuple to zero and sets the current reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this tuple.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -49,9 +49,9 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
    }
 
    /**
-    * Sets all the components of this tuple to {@link Double#NaN} and sets the current reference
-    * frame to {@code referenceFrame}.
-    * 
+    * Sets all the components of this tuple to {@link Double#NaN} and sets the current reference frame
+    * to {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame to be associated with this tuple.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -81,10 +81,10 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * @param referenceFrame the new reference frame for this frame tuple.
     * @param tuple2DReadOnly the tuple to copy the values from. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set(tuple);
+      set(tuple2DReadOnly);
    }
 
    /**
@@ -105,8 +105,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double[] tupleArray)
    {
@@ -120,8 +119,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     *
     * @param referenceFrame the new reference frame for this tuple.
     * @param startIndex the first index to start reading from in the array.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startIndex, double[] tupleArray)
    {
@@ -130,37 +128,37 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y} in order from the given column vector
-    * starting to read from its first row index and sets this tuple frame to {@code referenceFrame}.
+    * Sets this tuple's components {@code x}, {@code y} in order from the given column vector starting
+    * to read from its first row index and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(tupleDenseMatrix);
+      set(matrix);
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y} in order from the given column vector
-    * starting to read from {@code startRow} and sets this tuple frame to {@code referenceFrame}.
+    * Sets this tuple's components {@code x}, {@code y} in order from the given column vector starting
+    * to read from {@code startRow} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
     * @param startRow the first row index to start reading in the dense-matrix.
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(startRow, tupleDenseMatrix);
+      set(startRow, matrix);
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y} in order from the given matrix starting to
-    * read from {@code startRow} at the column index {@code column} and sets this tuple frame to
+    * Sets this tuple's components {@code x}, {@code y} in order from the given matrix starting to read
+    * from {@code startRow} at the column index {@code column} and sets this tuple frame to
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
@@ -169,18 +167,17 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(startRow, column, tupleDenseMatrix);
+      set(startRow, column, matrix);
    }
 
    /**
     * Sets this frame tuple from the reference frame, x and y components of the given
     * {@code frameTuple3DReadOnly}.
-    * 
-    * @param frameTuple3DReadOnly the tuple to copy the values and reference frame from. Not
-    *           modified.
+    *
+    * @param frameTuple3DReadOnly the tuple to copy the values and reference frame from. Not modified.
     */
    default void setIncludingFrame(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
@@ -193,9 +190,9 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     *
     * @param other the other frame tuple to copy the values and reference frame from. Not modified.
     */
-   default void setIncludingFrame(FrameTuple2DReadOnly frameTuple2d)
+   default void setIncludingFrame(FrameTuple2DReadOnly other)
    {
-      setReferenceFrame(frameTuple2d.getReferenceFrame());
-      set((Tuple2DReadOnly) frameTuple2d);
+      setReferenceFrame(other.getReferenceFrame());
+      set((Tuple2DReadOnly) other);
    }
 }

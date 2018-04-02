@@ -9,7 +9,13 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
-// TODO
+/**
+ * A {@code FrameOrientation2D} represents an orientation in the XY-plane expressed in a given
+ * reference frame.
+ * 
+ * @author Sylvain Bertrand
+ *
+ */
 public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObject<FrameOrientation2D>
 {
    /** The reference frame is which this orientation is currently expressed. */
@@ -26,25 +32,42 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
       setToZero(ReferenceFrame.getWorldFrame());
    }
 
+   /**
+    * Create a new orientation 2D initialized with its yaw angle to zero in a given reference frame.
+    * 
+    * @param referenceFrame the initial reference frame for this orientation 2D.
+    */
    public FrameOrientation2D(ReferenceFrame referenceFrame)
    {
       setToZero(referenceFrame);
    }
 
+   /**
+    * Creates a new orientation 2D and initializes its yaw angle to the given one, and its reference
+    * frame to {@link ReferenceFrame#getWorldFrame()}.
+    * 
+    * @param yaw the initial yaw angle for this orientation 2D.
+    */
    public FrameOrientation2D(double yaw)
    {
       setIncludingFrame(ReferenceFrame.getWorldFrame(), yaw);
    }
 
+   /**
+    * Creates a new orientation 2D and initializes its yaw angle and reference frame.
+    * 
+    * @param referenceFrame the initial reference frame for this orientation 2D.
+    * @param yaw the initial yaw angle for this orientation 2D.
+    */
    public FrameOrientation2D(ReferenceFrame referenceFrame, double yaw)
    {
       setIncludingFrame(referenceFrame, yaw);
    }
 
    /**
-    * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D}
-    * and its reference frame to {@link ReferenceFrame#getWorldFrame()}.
-    * 
+    * Creates a new frame vector and initializes its orientation to the given {@link Orientation2D} and
+    * its reference frame to {@link ReferenceFrame#getWorldFrame()}.
+    *
     * @param orientation2DReadOnly the orientation this frame orientation will represent. Modified.
     */
    public FrameOrientation2D(Orientation2DReadOnly orientation2DReadOnly)
@@ -55,10 +78,9 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    /**
     * Creates a new frame vector and initializes its orientation components to the given
     * {@link Orientation2DReadOnly} and its reference frame to the given {@link ReferenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial frame for this orientation.
-    * @param orientation2DReadOnly the orientation this frame orientation will represent. Not
-    *           modified.
+    * @param orientation2DReadOnly the orientation this frame orientation will represent. Not modified.
     */
    public FrameOrientation2D(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation2DReadOnly)
    {
@@ -75,6 +97,12 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
       setIncludingFrame(other);
    }
 
+   /**
+    * Creates a new frame orientation 2D and initializes it using a frame quaternion.
+    * 
+    * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame
+    *           from. Not modified.
+    */
    public FrameOrientation2D(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {
       setIncludingFrame(frameQuaternionReadOnly);
@@ -130,18 +158,18 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameOrientation2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameOrientation2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((FrameOrientation2DReadOnly) obj);
+         return equals((FrameOrientation2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

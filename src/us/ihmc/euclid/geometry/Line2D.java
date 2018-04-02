@@ -23,7 +23,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    private final Vector2D direction = new Vector2D();
 
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero.
+    * Default constructor that initializes both {@code point} and {@code direction} to zero.
     */
    public Line2D()
    {
@@ -31,7 +31,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 
    /**
     * Initializes this line to be passing through the given point, with the vector as the direction.
-    * 
+    *
     * @param pointOnLineX the x-coordinate of a point on this line.
     * @param pointOnLineY the y-coordinate of a point on this line.
     * @param lineDirectionX the x-component of the direction of this line.
@@ -64,7 +64,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 
    /**
     * Initializes this line to be passing through the two given points.
-    * 
+    *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     */
@@ -75,7 +75,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 
    /**
     * Initializes this line to be passing through the given point, with the vector as the direction.
-    * 
+    *
     * @param pointOnLine point on this line. Not modified.
     * @param lineDirection direction of this line. Not modified.
     */
@@ -86,7 +86,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 
    /**
     * Sets this line to be the same as the given line.
-    * 
+    *
     * @param other the other line to copy. Not modified.
     */
    @Override
@@ -97,7 +97,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 
    /**
     * Gets the read-only reference to the direction of this line.
-    * 
+    *
     * @return the reference to the direction.
     */
    @Override
@@ -108,7 +108,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
 
    /**
     * Gets the read-only reference to the point through which this line is going.
-    * 
+    *
     * @return the reference to the point.
     */
    @Override
@@ -121,9 +121,9 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
     * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
     * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
-    * lines are physically the same but this method returns {@code false}.
-    * 
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
+    * are physically the same but this method returns {@code false}.
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
@@ -135,11 +135,10 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -153,20 +152,8 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    }
 
    /**
-    * Tests on a per component basis, if this line 2D is exactly equal to {@code other}.
-    *
-    * @param other the other line 2D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   public boolean equals(Line2D other)
-   {
-      return Line2DBasics.super.equals(other);
-   }
-
-   /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param obj the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

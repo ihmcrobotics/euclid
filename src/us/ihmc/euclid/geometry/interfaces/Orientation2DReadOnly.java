@@ -7,7 +7,14 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-// TODO
+/**
+ * Read-only interface for a 2D orientation.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Orientation2DReadOnly
 {
    /**
@@ -19,7 +26,7 @@ public interface Orientation2DReadOnly
 
    /**
     * Tests if this orientation 2D contains {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if this orientation 2D contains a {@link Double#NaN}, {@code false}
     *         otherwise.
     */
@@ -55,8 +62,7 @@ public interface Orientation2DReadOnly
    }
 
    /**
-    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
-    * this.
+    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by this.
     *
     * <pre>
     * tupleToTransform = / cos(yaw) -sin(yaw) \ * tupleToTransform
@@ -71,8 +77,8 @@ public interface Orientation2DReadOnly
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     * tupleTransformed = / cos(yaw) -sin(yaw) \ * tupleOriginal
@@ -88,8 +94,7 @@ public interface Orientation2DReadOnly
    }
 
    /**
-    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by
-    * this.
+    * Transforms the given {@code tupleToTransform} by the rotation about the z-axis described by this.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -105,8 +110,8 @@ public interface Orientation2DReadOnly
    }
 
    /**
-    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this
-    * and stores the result in {@code tupleTransformed}.
+    * Transforms the given {@code tupleOriginal} by the rotation about the z-axis described by this and
+    * stores the result in {@code tupleTransformed}.
     *
     * <pre>
     *                    / cos(yaw) -sin(yaw) 0 \
@@ -123,8 +128,8 @@ public interface Orientation2DReadOnly
    }
 
    /**
-    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
-    * about the z-axis described by this.
+    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation about
+    * the z-axis described by this.
     *
     * <pre>
     * tupleToTransform = / cos(-yaw) -sin(-yaw) \ * tupleToTransform
@@ -156,8 +161,8 @@ public interface Orientation2DReadOnly
    }
 
    /**
-    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation
-    * about the z-axis described by this.
+    * Performs the inverse of the transform to the given {@code tupleToTransform} by the rotation about
+    * the z-axis described by this.
     *
     * <pre>
     *                    / cos(-yaw) -sin(-yaw) 0 \

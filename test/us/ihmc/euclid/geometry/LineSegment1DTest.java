@@ -425,7 +425,7 @@ public class LineSegment1DTest
 
          lineSegment2.set(endpoint1 + 1.01 * EPSILON, endpoint2);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint1 - 1.01 * EPSILON, endpoint2);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
@@ -437,19 +437,19 @@ public class LineSegment1DTest
 
          lineSegment2.set(endpoint1, endpoint2 + 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint1, endpoint2 - 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint1 + 0.99 * EPSILON, endpoint2 + 0.99 * EPSILON);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint1 - 0.99 * EPSILON, endpoint2 - 0.99 * EPSILON);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint1 + 1.01 * EPSILON, endpoint2 + 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint1 - 1.01 * EPSILON, endpoint2 - 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
       }
@@ -472,7 +472,7 @@ public class LineSegment1DTest
 
          lineSegment2.set(endpoint2 + 1.01 * EPSILON, endpoint1);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint2 - 1.01 * EPSILON, endpoint1);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
 
@@ -484,19 +484,19 @@ public class LineSegment1DTest
 
          lineSegment2.set(endpoint2, endpoint1 + 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint2, endpoint1 - 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint2 + 0.99 * EPSILON, endpoint1 + 0.99 * EPSILON);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint2 - 0.99 * EPSILON, endpoint1 - 0.99 * EPSILON);
          assertTrue(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint2 + 1.01 * EPSILON, endpoint1 + 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
-         
+
          lineSegment2.set(endpoint2 - 1.01 * EPSILON, endpoint1 - 1.01 * EPSILON);
          assertFalse(lineSegment1.geometricallyEquals(lineSegment2, EPSILON));
       }

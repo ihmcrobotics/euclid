@@ -41,10 +41,10 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * @param z the z-coordinate of the position.
     * @param yaw the first angle from the yaw-pitch-roll representation, represents a rotation about
     *           the z-axis.
-    * @param pitch the second angle from the yaw-pitch-roll representation, represents a rotation
-    *           about the y-axis.
-    * @param roll the third angle from the yaw-pitch-roll representation, represents a rotation
-    *           about the x-axis.
+    * @param pitch the second angle from the yaw-pitch-roll representation, represents a rotation about
+    *           the y-axis.
+    * @param roll the third angle from the yaw-pitch-roll representation, represents a rotation about
+    *           the x-axis.
     */
    public Pose3D(double x, double y, double z, double yaw, double pitch, double roll)
    {
@@ -54,7 +54,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    /**
     * Creates a new pose 3D and initializes to represent the same pose as the given
     * {@code pose2DReadOnly}.
-    * 
+    *
     * @param pose2DReadOnly the pose 2D used to initialize this pose 3D. Not modified.
     */
    public Pose3D(Pose2DReadOnly pose2DReadOnly)
@@ -120,18 +120,18 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Pose3DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Pose3DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((Pose3DReadOnly) obj);
+         return equals((Pose3DReadOnly) object);
       }
       catch (ClassCastException e)
       {
@@ -154,11 +154,9 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
     * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
     * @param other the pose to compare to. Not modified.

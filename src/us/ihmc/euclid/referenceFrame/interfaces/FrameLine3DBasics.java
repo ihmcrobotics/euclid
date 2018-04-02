@@ -42,9 +42,9 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
-    * Sets the point and direction parts of this line 3D to zero and sets the current reference
-    * frame to {@code referenceFrame}.
-    * 
+    * Sets the point and direction parts of this line 3D to zero and sets the current reference frame
+    * to {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame to be associated with this line 3D.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -56,7 +56,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    /**
     * Sets the point and direction parts of this line 3D to {@link Double#NaN} and sets the current
     * reference frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this line 3D.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -71,8 +71,10 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * @param referenceFrame the new reference frame for this frame line.
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
+    * @param pointOnLineZ the new z-coordinate of the point on this line.
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
+    * @param lineDirectionZ the new z-component of the direction of this line.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX,
                                   double lineDirectionY, double lineDirectionZ)
@@ -88,7 +90,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param other the other line to copy. Not modified.
+    * @param line2DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
    {
@@ -100,7 +102,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * Sets this line to be the same as the given line.
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param other the other line to copy. Not modified.
+    * @param line3DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Line3DReadOnly line3DReadOnly)
    {
@@ -127,7 +129,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * Sets this line to go through the endpoints of the given line segment.
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param lineSegment2DReadOnly the line segment to copy. Not modified.
+    * @param lineSegment3DReadOnly the line segment to copy. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
    {
@@ -165,8 +167,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     * <p>
     * After calling this method this line is in the XY-plane.
     * </p>
@@ -182,8 +183,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param referenceFrame the new reference frame for this frame line.
     * @param firstPointOnLine first point on this line. Not modified.
@@ -201,7 +201,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param other the other line to copy. Not modified.
+    * @param frameLine2DReadOnly the line to copy. Not modified.
     */
    default void setIncludingFrame(FrameLine2DReadOnly frameLine2DReadOnly)
    {
@@ -236,7 +236,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame line.
-    * @param frameLineSegment2DReadOnly the line segment to copy. Not modified.
+    * @param frameLineSegment3DReadOnly the line segment to copy. Not modified.
     */
    default void setIncludingFrame(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
    {
@@ -251,8 +251,8 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are
-    *            not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are not
+    *            expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -293,8 +293,8 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are
-    *            not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code pointOnLine} and {@code lineDirection} are not
+    *            expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
@@ -325,16 +325,15 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     * <p>
     * After calling this method this line is in the XY-plane.
     * </p>
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and
-    *            {@code secondPointOnLine} are not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and {@code secondPointOnLine}
+    *            are not expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -343,8 +342,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     * <p>
     * After calling this method this line is in the XY-plane.
     * </p>
@@ -358,8 +356,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     * <p>
     * After calling this method this line is in the XY-plane.
     * </p>
@@ -373,13 +370,12 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and
-    *            {@code secondPointOnLine} are not expressed in the same reference frame
+    * @throws ReferenceFrameMismatchException if {@code firstPointOnLine} and {@code secondPointOnLine}
+    *            are not expressed in the same reference frame
     */
    default void setIncludingFrame(FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
    {
@@ -388,8 +384,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
@@ -400,8 +395,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    }
 
    /**
-    * Redefines this line such that it goes through the two given points in the given reference
-    * frame.
+    * Redefines this line such that it goes through the two given points in the given reference frame.
     *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.

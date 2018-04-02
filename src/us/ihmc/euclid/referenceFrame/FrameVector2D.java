@@ -47,8 +47,8 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Creates a new frame vector and initializes it components to zero and its reference frame to
-    * the {@code referenceFrame}.
+    * Creates a new frame vector and initializes it components to zero and its reference frame to the
+    * {@code referenceFrame}.
     *
     * @param referenceFrame the initial frame for this frame vector.
     */
@@ -58,8 +58,8 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Creates a new frame vector and initializes it with the given components and the given
-    * reference frame.
+    * Creates a new frame vector and initializes it with the given components and the given reference
+    * frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
     * @param x the x-component.
@@ -71,8 +71,8 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Creates a new frame vector and initializes its component {@code x}, {@code y} in order from
-    * the given array and initializes its reference frame.
+    * Creates a new frame vector and initializes its component {@code x}, {@code y} in order from the
+    * given array and initializes its reference frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
     * @param vectorArray the array containing this vector's components. Not modified.
@@ -130,7 +130,7 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
 
    /**
     * Sets this frame vector to {@code other}.
-    * 
+    *
     * @param other the other frame vector to set this to. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.
@@ -143,7 +143,7 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
 
    /**
     * Sets the reference frame of this vector without updating or modifying its x and y components.
-    * 
+    *
     * @param referenceFrame the new reference frame for this frame vector.
     */
    @Override
@@ -214,8 +214,8 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
          return;
 
       /*
-       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of
-       * checking both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
+       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of checking
+       * both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
        */
       referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
       applyTransform(transformToDesiredFrame);
@@ -236,15 +236,15 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
     * <p>
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if the two vectors are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two vectors are exactly equal component-wise and are expressed in the
+    *         same reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)
@@ -268,8 +268,8 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
     *
     * @param other the other vector to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two vectors are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
+    * @return {@code true} if the two vectors are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(FrameVector2D other, double epsilon)
@@ -280,8 +280,8 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    /**
     * Tests if {@code this} and {@code other} represent the same vector 2D to an {@code epsilon}.
     * <p>
-    * Two vectors are considered geometrically equal if they are at a distance of less than or equal
-    * to {@code epsilon}.
+    * Two vectors are considered geometrically equal if they are at a distance of less than or equal to
+    * {@code epsilon}.
     * </p>
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
@@ -292,8 +292,8 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
     * @param epsilon the maximum distance that the two vectors can be spaced and still considered
     *           equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FrameVector2D other, double epsilon)
@@ -302,8 +302,7 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    }
 
    /**
-    * Provides a {@code String} representation of this frame vector 2D as follows: (x,
-    * y)-worldFrame.
+    * Provides a {@code String} representation of this frame vector 2D as follows: (x, y)-worldFrame.
     *
     * @return the {@code String} representing this frame vector 2D.
     */

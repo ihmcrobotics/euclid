@@ -104,7 +104,6 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
       }
    }
 
-
    @Test
    public void testChangeFrame() throws Exception
    {

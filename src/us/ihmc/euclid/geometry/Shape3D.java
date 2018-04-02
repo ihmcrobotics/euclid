@@ -4,14 +4,13 @@ import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -21,13 +20,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * Base implementation for 3D shapes such as: cylinder, box, sphere, etc.
  *
- * @param <S>
+ * @param <S> the final type of this shape.
  */
 public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 {
@@ -35,6 +32,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    protected final RigidBodyTransform shapePose = new RigidBodyTransform();
 
+   /**
+    * Default constructor for creating a new shape with its local frame aligned with world.
+    */
    public Shape3D()
    {
    }
@@ -50,12 +50,12 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * </ul>
     *
     * @param pointToCheck the coordinates of the query to be evaluated. Not modified.
-    * @param closestPointOnSurfaceToPack the closest point to the query that lies on the shape
-    *           surface. Modified.
+    * @param closestPointOnSurfaceToPack the closest point to the query that lies on the shape surface.
+    *           Modified.
     * @param normalAtClosestPointToPack the surface normal at the closest point to the query. The
     *           normal points toward outside the shape. Modified.
-    * @return {@code true} if the query is inside this shape or exactly on its surface,
-    *         {@code false} otherwise.
+    * @return {@code true} if the query is inside this shape or exactly on its surface, {@code false}
+    *         otherwise.
     */
    public final boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
@@ -86,7 +86,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * <p>
     * Note that if the point is inside this shape, this method returns 0.0.
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @return the value of the distance between the point and this shape.
     */
@@ -100,10 +100,10 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * <p>
     * The returned value is negative if the point is inside the shape.
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
-    * @return the distance between the query and the shape, it is negative if the point is inside
-    *         the shape.
+    * @return the distance between the query and the shape, it is negative if the point is inside the
+    *         shape.
     */
    public final double signedDistance(Point3DReadOnly point)
    {
@@ -115,9 +115,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    }
 
    /**
-    * Tests separately and on a per component basis if the orientation and the position of this
-    * shape's pose and {@code other}'s pose are equal to an {@code epsilon}.
-    * 
+    * Tests separately and on a per component basis if the orientation and the position of this shape's
+    * pose and {@code other}'s pose are equal to an {@code epsilon}.
+    *
     * @param other the other shape which its pose is to be compared against this shape's pose. Not
     *           modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -130,16 +130,16 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Internal generic method used for the public API of any {@code Shape3d}.
-    * 
+    *
     * @param x the x-coordinate of the query expressed in the local coordinates of this shape.
     * @param y the y-coordinate of the query expressed in the local coordinates of this shape.
     * @param z the z-coordinate of the query expressed in the local coordinates of this shape.
-    * @param closestPointOnSurfaceToPack closest point to the query expressed in the local
-    *           coordinates of this shape. Modified. Can be {@code null}.
-    * @param normalAtClosestPointToPack normal of the shape surface at the closest point. Modified.
-    *           Can be {@code null}.
-    * @return the distance from the query to the closest point on the shape surface. The returned
-    *         value is expected to be negative when the query is inside the shape.
+    * @param closestPointOnSurfaceToPack closest point to the query expressed in the local coordinates
+    *           of this shape. Modified. Can be {@code null}.
+    * @param normalAtClosestPointToPack normal of the shape surface at the closest point. Modified. Can
+    *           be {@code null}.
+    * @return the distance from the query to the closest point on the shape surface. The returned value
+    *         is expected to be negative when the query is inside the shape.
     */
    protected abstract double evaluateQuery(double x, double y, double z, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
 
@@ -158,17 +158,16 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * Tests if the {@code query} is located inside this shape given the tolerance {@code epsilon}.
     * <p>
     * <ul>
-    * <li>if {@code epsilon > 0}, the size of this shape is increased by shifting its surface/faces
-    * by a distance of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this shape is reduced by shifting its surface/faces by
-    * a distance of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this shape is increased by shifting its surface/faces by
+    * a distance of {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this shape is reduced by shifting its surface/faces by a
+    * distance of {@code epsilon} toward the inside.
     * </ul>
     * </p>
     *
     * @param query the coordinates of the query. Not modified.
     * @param epsilon the tolerance to use for this test.
-    * @return {@code true} if the query is considered to be inside this shape, {@code false}
-    *         otherwise.
+    * @return {@code true} if the query is considered to be inside this shape, {@code false} otherwise.
     */
    public final boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
@@ -183,19 +182,18 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * Tests if the {@code query} is located inside this shape given the tolerance {@code epsilon}.
     * <p>
     * <ul>
-    * <li>if {@code epsilon > 0}, the size of this shape is increased by shifting its surface/faces
-    * by a distance of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this shape is reduced by shifting its surface/faces by
-    * a distance of {@code epsilon} toward the inside.
+    * <li>if {@code epsilon > 0}, the size of this shape is increased by shifting its surface/faces by
+    * a distance of {@code epsilon} toward the outside.
+    * <li>if {@code epsilon > 0}, the size of this shape is reduced by shifting its surface/faces by a
+    * distance of {@code epsilon} toward the inside.
     * </ul>
     * </p>
-    * 
+    *
     * @param x the x-coordinate of the query expressed in the local coordinates of this shape.
     * @param y the y-coordinate of the query expressed in the local coordinates of this shape.
     * @param z the z-coordinate of the query expressed in the local coordinates of this shape.
     * @param epsilon the tolerance to use for this test.
-    * @return {@code true} if the query is considered to be inside this shape, {@code false}
-    *         otherwise.
+    * @return {@code true} if the query is considered to be inside this shape, {@code false} otherwise.
     */
    protected abstract boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon);
 
@@ -255,39 +253,12 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * <p>
     * This method does not affect the position of this shape.
     * </p>
-    * 
-    * @param axisAngle the axis-angle holding the new orientation for this shape. Not modified.
+    *
+    * @param orientation the new orientation for this shape. Not modified.
     */
-   public final void setOrientation(AxisAngleReadOnly axisAngle)
+   public final void setOrientation(Orientation3DReadOnly orientation)
    {
-      shapePose.setRotation(axisAngle);
-   }
-
-   /**
-    * Sets the orientation of this shape.
-    * <p>
-    * This method does not affect the position of this shape.
-    * </p>
-    * 
-    * @param quaternion the quaternion holding the new orientation for this shape. Not modified.
-    */
-   public final void setOrientation(QuaternionReadOnly quaternion)
-   {
-      shapePose.setRotation(quaternion);
-   }
-
-   /**
-    * Sets the orientation of this shape.
-    * <p>
-    * This method does not affect the position of this shape.
-    * </p>
-    * 
-    * @param rotationMatrix the rotation matrix holding the new orientation for this shape. Not
-    *           modified.
-    */
-   public final void setOrientation(RotationMatrixReadOnly rotationMatrix)
-   {
-      shapePose.setRotation(rotationMatrix);
+      shapePose.setRotation(orientation);
    }
 
    /**
@@ -296,16 +267,16 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * This method does not affect the position of this shape.
     * </p>
     * <p>
-    * The given {@code yaw}, {@code pitch}, and {@code roll} angles are composed into a rotation
-    * matrix as follows:
-    * 
+    * The given {@code yaw}, {@code pitch}, and {@code roll} angles are composed into a rotation matrix
+    * as follows:
+    *
     * <pre>
     *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
     * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
     *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
     * </pre>
     * </p>
-    * 
+    *
     * @param yaw the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll the angle to rotate about the x-axis.
@@ -321,16 +292,16 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * This method does not affect the position of this shape.
     * </p>
     * <p>
-    * The given {@code yaw}, {@code pitch}, and {@code roll} angles are composed into a rotation
-    * matrix as follows:
-    * 
+    * The given {@code yaw}, {@code pitch}, and {@code roll} angles are composed into a rotation matrix
+    * as follows:
+    *
     * <pre>
     *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
     * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
     *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
     * </pre>
     * </p>
-    * 
+    *
     * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
     */
    public final void setOrientationYawPitchRoll(double[] yawPitchRoll)
@@ -340,7 +311,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the pose, i.e. position and orientation, of this shape.
-    * 
+    *
     * @param pose pose holding the new position and orientation for this shape. Not modified.
     */
    public final void setPose(Pose3DReadOnly pose)
@@ -350,9 +321,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the pose, i.e. position and orientation, of this shape.
-    * 
-    * @param rigidBodyTransform rigid-body transform holding the new position and orientation for
-    *           this shape. Not modified.
+    *
+    * @param rigidBodyTransform rigid-body transform holding the new position and orientation for this
+    *           shape. Not modified.
     */
    public final void setPose(RigidBodyTransform rigidBodyTransform)
    {
@@ -361,7 +332,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the pose, i.e. position and orientation, of this shape to the pose of {@code other}.
-    * 
+    *
     * @param other shape holding the pose with the new position and orientation for this shape. Not
     *           modified.
     */
@@ -372,36 +343,13 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the pose, i.e. position and orientation, of this shape.
-    * 
+    *
     * @param position the new position for this shape. Not modified.
-    * @param axisAngle the axis-angle holding the new orientation for this shape. Not modified.
+    * @param orientation the new orientation for this shape. Not modified.
     */
-   public final void setPose(Tuple3DReadOnly position, AxisAngleReadOnly axisAngle)
+   public final void setPose(Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
-      shapePose.set(axisAngle, position);
-   }
-
-   /**
-    * Sets the pose, i.e. position and orientation, of this shape.
-    * 
-    * @param position the new position for this shape. Not modified.
-    * @param quaternion the quaternion holding the new orientation for this shape. Not modified.
-    */
-   public final void setPose(Tuple3DReadOnly position, QuaternionReadOnly quaternion)
-   {
-      shapePose.set(quaternion, position);
-   }
-
-   /**
-    * Sets the pose, i.e. position and orientation, of this shape.
-    * 
-    * @param position the new position for this shape. Not modified.
-    * @param rotationMatrix the rotation matrix holding the new orientation for this shape. Not
-    *           modified.
-    */
-   public final void setPose(Tuple3DReadOnly position, RotationMatrixReadOnly rotationMatrix)
-   {
-      shapePose.set(rotationMatrix, position);
+      shapePose.set(orientation, position);
    }
 
    /**
@@ -409,7 +357,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * <p>
     * This method does not affect the orientation of this shape.
     * </p>
-    * 
+    *
     * @param x the x-coordinate for this shape position.
     * @param y the y-coordinate for this shape position.
     * @param z the z-coordinate for this shape position.
@@ -424,7 +372,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * <p>
     * This method does not affect the orientation of this shape.
     * </p>
-    * 
+    *
     * @param position the new position for this shape. Not modified.
     */
    public final void setPosition(Tuple3DReadOnly position)
@@ -434,7 +382,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the x-coordinate of this shape position.
-    * 
+    *
     * @param x the new x-coordinate for this shape.
     */
    public final void setPositionX(double x)
@@ -444,9 +392,8 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the x and y coordinates of this shape position.
-    * 
-    * @param point2D point holding the new x and y coordinates for this shape position. Not
-    *           modified.
+    *
+    * @param point2D point holding the new x and y coordinates for this shape position. Not modified.
     */
    public final void setPositionXY(Point2DReadOnly point2D)
    {
@@ -456,7 +403,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the y-coordinate of this shape position.
-    * 
+    *
     * @param y the new y-coordinate for this shape.
     */
    public final void setPositionY(double y)
@@ -466,7 +413,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Sets the z-coordinate of this shape position.
-    * 
+    *
     * @param z the new z-coordinate for this shape.
     */
    public final void setPositionZ(double z)
@@ -490,7 +437,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Gets the read-only reference to the orientation of this shape.
-    * 
+    *
     * @return the orientation of this shape.
     */
    public RotationMatrixReadOnly getOrientation()
@@ -501,32 +448,11 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    /**
     * Packs the orientation of this shape into an axis-angle.
     *
-    * @param axisAngleToPack the axis-angle that is set to the orientation of this shape. Modified.
+    * @param orientationToPack used to pack the orientation of this shape. Modified.
     */
-   public final void getOrientation(AxisAngleBasics axisAngleToPack)
+   public final void getOrientation(Orientation3DBasics orientationToPack)
    {
-      shapePose.getRotation(axisAngleToPack);
-   }
-
-   /**
-    * Packs the orientation of this shape into a quaternion.
-    *
-    * @param quaternionToPack the quaternion that is set to the orientation of this shape. Modified.
-    */
-   public final void getOrientation(QuaternionBasics quaternionToPack)
-   {
-      shapePose.getRotation(quaternionToPack);
-   }
-
-   /**
-    * Packs the orientation of this shape into a rotation matrix.
-    *
-    * @param rotationMatrixToPack the matrix in which the orientation of this shape is stored.
-    *           Modified.
-    */
-   public final void getOrientation(RotationMatrix matrixToPack)
-   {
-      shapePose.getRotation(matrixToPack);
+      shapePose.getRotation(orientationToPack);
    }
 
    /**
@@ -590,7 +516,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Packs the pose of this shape into the given {@code poseToPack}.
-    * 
+    *
     * @param poseToPack the pose in which the position and orientation of this shape are stored.
     *           Modified.
     */
@@ -601,7 +527,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Packs the pose of this shape into the given {@code transformToPack}.
-    * 
+    *
     * @param transformToPack the rigid-body transform in which the position and orientation of this
     *           shape are stored. Modified.
     */
@@ -645,7 +571,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Gets the x-coordinate of the position of this shape.
-    * 
+    *
     * @return the x-coordinate of this shape position.
     */
    public final double getPositionX()
@@ -655,7 +581,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Gets the y-coordinate of the position of this shape.
-    * 
+    *
     * @return the y-coordinate of this shape position.
     */
    public final double getPositionY()
@@ -665,7 +591,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Gets the z-coordinate of the position of this shape.
-    * 
+    *
     * @return the z-coordinate of this shape position.
     */
    public final double getPositionZ()
@@ -674,9 +600,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    }
 
    /**
-    * Transforms this shape with a quaternion based transform that is defined in the local
-    * coordinates of this shape.
-    * 
+    * Transforms this shape with a quaternion based transform that is defined in the local coordinates
+    * of this shape.
+    *
     * @param transform the transform to append to this shape pose. Not modified.
     */
    public final void appendTransform(QuaternionBasedTransform transform)
@@ -687,7 +613,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    /**
     * Transforms this shape with a rigid-body transform that is defined in the local coordinates of
     * this shape.
-    * 
+    *
     * @param transform the transform to append to this shape pose. Not modified.
     */
    public final void appendTransform(RigidBodyTransform transform)
@@ -698,7 +624,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    /**
     * Translate this shape with the given (x, y, z) components that are expressed in the local
     * coordinates of this shape.
-    * 
+    *
     * @param x the x-component of the translation to append to this shape pose.
     * @param y the y-component of the translation to append to this shape pose.
     * @param z the z-component of the translation to append to this shape pose.
@@ -721,7 +647,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Rotates this shape by angle of {@code yaw} about the z-axis of this shape local coordinates.
-    * 
+    *
     * @param yaw the angle to rotate about the local z-axis.
     */
    public final void appendYawRotation(double yaw)
@@ -731,7 +657,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Rotates this shape by angle of {@code pitch} about the y-axis of this shape local coordinates.
-    * 
+    *
     * @param pitch the angle to rotate about the local y-axis.
     */
    public final void appendPitchRotation(double pitch)
@@ -741,7 +667,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Rotates this shape by angle of {@code roll} about the x-axis of this shape local coordinates.
-    * 
+    *
     * @param roll the angle to rotate about the local x-axis.
     */
    public final void appendRollRotation(double roll)
@@ -752,7 +678,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    /**
     * Translates this shape with the given (x, y, z) components that are expressed in the world
     * coordinates.
-    * 
+    *
     * @param x the x-component of the translation to prepend to this shape pose.
     * @param y the y-component of the translation to prepend to this shape pose.
     * @param z the z-component of the translation to prepend to this shape pose.
@@ -775,7 +701,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Rotates this shape by angle of {@code yaw} about the z-axis of the world coordinates.
-    * 
+    *
     * @param yaw the angle to rotate about the local z-axis.
     */
    public final void prependYawRotation(double yaw)
@@ -785,7 +711,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Rotates this shape by angle of {@code pitch} about the y-axis of the world coordinates.
-    * 
+    *
     * @param pitch the angle to rotate about the local y-axis.
     */
    public final void prependPitchRotation(double pitch)
@@ -795,7 +721,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
 
    /**
     * Rotates this shape by angle of {@code roll} about the x-axis of the world coordinates.
-    * 
+    *
     * @param roll the angle to rotate about the local x-axis.
     */
    public final void prependRollRotation(double roll)
@@ -804,9 +730,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    }
 
    /**
-    * Changes the given {@code transformable} from being expressed in world to being expressed in
-    * this shape local coordinates.
-    * 
+    * Changes the given {@code transformable} from being expressed in world to being expressed in this
+    * shape local coordinates.
+    *
     * @param transformable the transformable to change the coordinates in which it is expressed.
     *           Modified.
     */
@@ -816,9 +742,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    }
 
    /**
-    * Changes the given {@code transformable} from being expressed in this shape local coordinates
-    * to being expressed in world.
-    * 
+    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
+    * being expressed in world.
+    *
     * @param transformable the transformable to change the coordinates in which it is expressed.
     *           Modified.
     */

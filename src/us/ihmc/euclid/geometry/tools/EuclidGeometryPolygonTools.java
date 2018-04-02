@@ -23,16 +23,56 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
+/**
+ * This class provides a variety of tools to perform operations with polygons.
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidGeometryPolygonTools
 {
    private static final Random random = new Random();
    static final double EPSILON = 1.0e-7;
+
+   /**
+    * Human readable enum that helps defining search criteria for some of the search methods in this
+    * tool class.
+    *
+    * @author Sylvain Bertrand
+    */
+   public static enum Bound
+   {
+      /**
+       * Refers to lower values, i.e. towards -&infin;.
+       */
+      MIN
+      {
+         @Override
+         boolean isFirstBetter(double first, double second)
+         {
+            return first < second;
+         }
+      },
+      /**
+       * Refers to higher values, i.e. towards +&infin;.
+       */
+      MAX
+      {
+         @Override
+         boolean isFirstBetter(double first, double second)
+         {
+            return first > second;
+         }
+      };
+
+      abstract boolean isFirstBetter(double first, double second);
+   };
 
    /**
     * Tests if the polygon defined by the given {@code vertices} is convex at the vertex defined by
@@ -45,7 +85,7 @@ public class EuclidGeometryPolygonTools
     * <li>the method returns {@code false} if the polygon has less than 3 vertices.
     * </ul>
     * </p>
-    * 
+    *
     * @param vertexIndex the index of the vertex to be tested for convexity.
     * @param vertices the list of vertices defining the polygon to test. Not modified.
     * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
@@ -71,7 +111,7 @@ public class EuclidGeometryPolygonTools
     * <li>the method returns {@code false} if the polygon has less than 3 vertices.
     * </ul>
     * </p>
-    * 
+    *
     * @param vertexIndex the index of the vertex to be tested for convexity.
     * @param vertices the list of vertices defining the polygon to test. Not modified.
     * @param numberOfVertices the number of vertices relevant to the polygon.
@@ -103,10 +143,8 @@ public class EuclidGeometryPolygonTools
     * hull are positioned first. The method returns the number of vertices that compose the convex
     * hull.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
-    * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
-    *           will only process the points &in; [0; {@code numberOfVertices}[.
     * @return the size of the convex hull.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
     *            size of the given list of vertices.
@@ -125,7 +163,7 @@ public class EuclidGeometryPolygonTools
     * hull are positioned first. The method returns the number of vertices that compose the convex
     * hull.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
     * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
     *           will only process the points &in; [0; {@code numberOfVertices}[.
@@ -173,7 +211,7 @@ public class EuclidGeometryPolygonTools
             int wrappedIndex = wrap(vertexIndex, numberOfVertices);
             Point2DReadOnly vertex = vertices.get(wrappedIndex);
 
-            if (vertex.epsilonEquals(candidateVertex, EPSILON) || (wrappedIndex != 0 && vertex.epsilonEquals(firstVertex, EPSILON)))
+            if (vertex.epsilonEquals(candidateVertex, EPSILON) || wrappedIndex != 0 && vertex.epsilonEquals(firstVertex, EPSILON))
             { // Remove duplicate vertices
                Collections.swap(vertices, wrappedIndex, --numberOfVertices);
                vertex = vertices.get(wrappedIndex);
@@ -216,7 +254,7 @@ public class EuclidGeometryPolygonTools
     * hull are positioned first. The method returns the number of vertices that compose the convex
     * hull.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
     * @return the size of the convex hull.
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the
@@ -236,7 +274,7 @@ public class EuclidGeometryPolygonTools
     * hull are positioned first. The method returns the number of vertices that compose the convex
     * hull.
     * </p>
-    * 
+    *
     * @param vertices the 2D point cloud from which the convex hull is to be computed. Modified.
     * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
     *           will only process the points &in; [0; {@code numberOfVertices}[.
@@ -275,7 +313,7 @@ public class EuclidGeometryPolygonTools
       while (currentIndex < numberOfVertices)
       {
          if (isPolygon2DConvexAtVertex(currentIndex, vertices, numberOfVertices, true))
-         { // Convex at the current vertex: move on to next. 
+         { // Convex at the current vertex: move on to next.
             currentIndex++;
          }
          else
@@ -308,11 +346,11 @@ public class EuclidGeometryPolygonTools
     * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@link Double#NaN} and
     * {@code centroidToPack} is set to {@link Double#NaN}.
-    * <li>if {@code numberOfVertices < 3}, this method returns {@link 0.0} and
+    * <li>if {@code numberOfVertices < 3}, this method returns {@code 0.0} and
     * {@code centroidToPack} is set to average of the polygon vertices.
     * </ul>
     * </p>
-    * 
+    *
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
@@ -358,7 +396,7 @@ public class EuclidGeometryPolygonTools
                Point2DReadOnly ci = convexPolygon2D.get(i);
                Point2DReadOnly ciMinus1 = convexPolygon2D.get(previous(i, numberOfVertices));
 
-               double weight = (ci.getX() * ciMinus1.getY() - ciMinus1.getX() * ci.getY());
+               double weight = ci.getX() * ciMinus1.getY() - ciMinus1.getX() * ci.getY();
 
                Cx += (ci.getX() + ciMinus1.getX()) * weight;
                Cy += (ci.getY() + ciMinus1.getY()) * weight;
@@ -373,7 +411,7 @@ public class EuclidGeometryPolygonTools
                Point2DReadOnly ci = convexPolygon2D.get(i);
                Point2DReadOnly ciPlus1 = convexPolygon2D.get(next(i, numberOfVertices));
 
-               double weight = (ci.getX() * ciPlus1.getY() - ciPlus1.getX() * ci.getY());
+               double weight = ci.getX() * ciPlus1.getY() - ciPlus1.getX() * ci.getY();
 
                Cx += (ci.getX() + ciPlus1.getX()) * weight;
                Cy += (ci.getY() + ciPlus1.getY()) * weight;
@@ -407,7 +445,7 @@ public class EuclidGeometryPolygonTools
     * <p>
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
-    * 
+    *
     * @param edgeIndex index of the vertex the edge starts from.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -465,8 +503,8 @@ public class EuclidGeometryPolygonTools
     * or if the query is at a distance from the polygon's only edge that is greater than
     * {@code epsilon}, returns {@code true} otherwise.
     * </ul>
-    * 
-    * 
+    *
+    *
     * @param pointX the x-coordinate of the query.
     * @param pointY the y-coordinate of the query.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -506,8 +544,8 @@ public class EuclidGeometryPolygonTools
     * or if the query is at a distance from the polygon's only edge that is greater than
     * {@code epsilon}, returns {@code true} otherwise.
     * </ul>
-    * 
-    * 
+    *
+    *
     * @param point the coordinates of the query. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -542,7 +580,7 @@ public class EuclidGeometryPolygonTools
     * {@code secondIntersectionToPack} remains unmodified.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointOnLine a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -588,7 +626,7 @@ public class EuclidGeometryPolygonTools
     * {@code secondIntersectionToPack} remains unmodified.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointOnLineX the x-coordinate of a point on the line.
     * @param pointOnLineY the y-coordinate of a point on the line.
     * @param lineDirectionX the x-component of the direction of the line.
@@ -690,7 +728,7 @@ public class EuclidGeometryPolygonTools
     * <li>If no intersections exist, this method returns {@code null}.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointOnLine a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -750,7 +788,7 @@ public class EuclidGeometryPolygonTools
     * </ul>
     * </ul>
     * </p>
-    * 
+    *
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -916,7 +954,7 @@ public class EuclidGeometryPolygonTools
     * </ul>
     * </ul>
     * </p>
-    * 
+    *
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -964,7 +1002,7 @@ public class EuclidGeometryPolygonTools
     * {@code secondIntersectionToPack} might be modified.
     * </ul>
     * </p>
-    * 
+    *
     * @param rayOrigin the ray's origin. Not modified.
     * @param rayDirection the ray's direction. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1017,7 +1055,7 @@ public class EuclidGeometryPolygonTools
     * <li>If no intersections exist, this method returns {@code null}.
     * </ul>
     * </p>
-    * 
+    *
     * @param rayOrigin the ray's origin. Not modified.
     * @param rayDirection the ray's direction. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1066,7 +1104,7 @@ public class EuclidGeometryPolygonTools
     * the distance and the line segment defined by the polygon's two vertices.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointX the x-coordinate of the query.
     * @param pointY the y-coordinate of the query.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1129,7 +1167,7 @@ public class EuclidGeometryPolygonTools
     * the distance and the line segment defined by the polygon's two vertices.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -1165,7 +1203,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the ray is parallel to the closest edge, the closest point to the ray origin is chosen.
     * </ul>
     * </p>
-    * 
+    *
     * @param rayOrigin the ray's origin. Not modified.
     * @param rayDirection the ray's direction. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1244,7 +1282,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the ray is parallel to the closest edge, the closest point to the ray origin is chosen.
     * </ul>
     * </p>
-    * 
+    *
     * @param rayOrigin the ray's origin. Not modified.
     * @param rayDirection the ray's direction. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1274,7 +1312,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointOnLineX the x-coordinate of a point located on the line. Not modified.
     * @param pointOnLineY the y-coordinate of a point located on the line. Not modified.
     * @param lineDirectionX the x-coordinate of the direction of the line. Not modified.
@@ -1321,9 +1359,9 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    *
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
@@ -1352,7 +1390,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointOnLine a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1379,7 +1417,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param rayOrigin the ray's origin. Not modified.
     * @param rayDirection the ray's direction. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1425,7 +1463,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -1450,7 +1488,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointX the x-coordinate of the query.
     * @param pointY the y-coordinate of the query.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1492,7 +1530,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has one or no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param pointX the x-coordinate of the query.
     * @param pointY the y-coordinate of the query.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1564,7 +1602,7 @@ public class EuclidGeometryPolygonTools
     * <li>If the polygon has one or no vertices, this method fails and returns {@code -1}.
     * </ul>
     * </p>
-    * 
+    *
     * @param point the coordinates of the query. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -1601,7 +1639,7 @@ public class EuclidGeometryPolygonTools
     * polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observerX the x-coordinate of the observer.
     * @param observerY the y-coordinate of the observer.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1669,7 +1707,7 @@ public class EuclidGeometryPolygonTools
     * polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -1707,7 +1745,7 @@ public class EuclidGeometryPolygonTools
     * polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observerX the x-coordinate of the observer.
     * @param observerY the y-coordinate of the observer.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -1775,7 +1813,7 @@ public class EuclidGeometryPolygonTools
     * polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -1816,7 +1854,7 @@ public class EuclidGeometryPolygonTools
     * equal to the polygon's vertex.
     * </ul>
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
     *           the convex polygon. Not modified.
@@ -1863,7 +1901,7 @@ public class EuclidGeometryPolygonTools
     * the two adjacent edges.
     * </ul>
     * </p>
-    * 
+    *
     * @param previousEdgeIndex refers to the index of the previously found edge intersecting with
     *           the line. To find the first intersecting edge, it should be set to {@code -1}.
     * @param pointOnLine a point located on the line. Not modified.
@@ -1910,7 +1948,7 @@ public class EuclidGeometryPolygonTools
     * the two adjacent edges.
     * </ul>
     * </p>
-    * 
+    *
     * @param previousEdgeIndex refers to the index of the previously found edge intersecting with
     *           the line. To find the first intersecting edge, it should be set to {@code -1}.
     * @param pointOnLineX the x-coordinate of a point located on the line.
@@ -2103,7 +2141,7 @@ public class EuclidGeometryPolygonTools
     * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its end
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
-    * 
+    *
     * @param edgeIndex the vertex index of the start of the edge.
     * @param observer the coordinates of the observer. Not modified.
     * @param convexPolygon2D the list containing in [0, {@code numberOfVertices}[ the vertices of
@@ -2133,7 +2171,7 @@ public class EuclidGeometryPolygonTools
     * The edge is defined by its start {@code convexPolygon2D.get(edgeIndex)} and its end
     * {@code convexPolygon2D.get(edgeIndex + 1)}.
     * </p>
-    * 
+    *
     * @param edgeIndex the vertex index of the start of the edge.
     * @param observerX the x-coordinate of the observer.
     * @param observerY the y-coordinate of the observer.
@@ -2171,7 +2209,7 @@ public class EuclidGeometryPolygonTools
     * The <a href="https://en.wikipedia.org/wiki/Quicksort#Choice_of_pivot">Quicksort algorithm</a>
     * is adapted to the Graham scan application to prevent garbage generation.
     * </p>
-    * 
+    *
     * @param vertices the list of vertices to be sorted. Modified.
     * @param numberOfVertices specifies the number of relevant points in the list. The algorithm
     *           will only process the points &in; [0; {@code numberOfVertices}[.
@@ -2194,8 +2232,15 @@ public class EuclidGeometryPolygonTools
       int pivotIndex = random.nextInt(endIndex - startIndex) + startIndex;
 
       /*
-       * Partitioning: // @formatter:off +------------------------+ | <= pivot | > pivot |
-       * +------------------------+ ^ | pivotIndex // @formatter:on
+       * Partitioning:
+       * @formatter:off
+       * +------------------------+
+       *  | <= pivot | > pivot |
+       * +------------------------+
+       *             ^
+       *             |
+       *         pivotIndex
+       * @formatter:on
        */
       pivotIndex = grahamScanAnglePartition(vertices, minXMaxYVertex, startIndex, endIndex, pivotIndex);
       // Recurse on each side of the pivot
@@ -2205,7 +2250,7 @@ public class EuclidGeometryPolygonTools
 
    /**
     * Partition the list around the pivot:
-    * 
+    *
     * <pre>
     * +------------------------+
     * |  <= pivot  |  > pivot  |
@@ -2221,7 +2266,7 @@ public class EuclidGeometryPolygonTools
       Point2DReadOnly pivot = list.get(pivotIndex);
       // Push the pivot to the endIndex
       Collections.swap(list, pivotIndex, endIndex);
-      // Index where the array is partitioned between smaller and larger elements than the pivot 
+      // Index where the array is partitioned between smaller and larger elements than the pivot
       int partitionIndex = startIndex;
 
       for (int i = startIndex; i < endIndex; i++)
@@ -2254,7 +2299,7 @@ public class EuclidGeometryPolygonTools
    /**
     * Moves the element located at {@code indexOfElementToShift} to {@code listSize - 1} and shifts
     * all the elements located in [{@code indexToRemove + 1}; {@code listSize - 1}] by {@code -1}.
-    * 
+    *
     * @param list the list from which the element is to be moved. Modified.
     * @param indexOfElementToMove the index of the element to move to the end of the list.
     * @param listSize the actual size of the list with relevant information.
@@ -2273,7 +2318,7 @@ public class EuclidGeometryPolygonTools
     * Finds the index of the vertex with the lowest x-coordinate. If the lowest x-coordinate exists
     * in more than one vertex in the list, the vertex with the highest y-coordinate out of the
     * candidates is chosen.
-    * 
+    *
     * @param vertices the list of vertices to search in. Not modified.
     * @param numberOfVertices the number of relevant vertices to search. This method searches in the
     *           range [{@code 0}, {@code numberOfVertices}].
@@ -2307,6 +2352,59 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
+    * Finds the index of a vertex in the specified supplier given search criteria.
+    * 
+    * @param vertex2DSupplier the vertex supplier containing vertices to be search through.
+    * @param isXPriority whether the search should focus first on finding the vertex with the "best"
+    *           x-coordinate, or y-coordinates.
+    * @param xBound the search criterion for the x-coordinate, for instance {@link Bound#MAX} while
+    *           result in searching the vertex with the lowest x value.
+    * @param yBound the search criterion for the Y-coordinate, for instance {@link Bound#MIN} while
+    *           result in searching the vertex with the highest y value.
+    * 
+    * @return the index in the supplier of the best vertex according to the given criteria.
+    */
+   public static int findVertexIndex(Vertex2DSupplier vertex2DSupplier, boolean isXPriority, Bound xBound, Bound yBound)
+   {
+      if (vertex2DSupplier.getNumberOfVertices() == 0)
+         return -1;
+
+      Bound bound1 = isXPriority ? xBound : yBound; // The bound to use for the high-priority coordinate.
+      Bound bound2 = isXPriority ? yBound : xBound; // The bound to use for the low-priority coordinate.
+
+      int coord1 = isXPriority ? 0 : 1; // The high-priority coordinate index (x or y).
+      int coord2 = isXPriority ? 1 : 0; // The low-priority coordinate index (x or y).
+
+      int bestIndex = 0;
+      Point2DReadOnly vertex = vertex2DSupplier.getVertex(bestIndex);
+      double bestCoord1 = vertex.getElement(coord1);
+      double bestCoord2 = vertex.getElement(coord2);
+
+      for (int vertexIndex = 1; vertexIndex < vertex2DSupplier.getNumberOfVertices(); vertexIndex++)
+      {
+         vertex = vertex2DSupplier.getVertex(vertexIndex);
+
+         double candidateCoord1 = vertex.getElement(coord1);
+         double candidateCoord2 = vertex.getElement(coord2);
+
+         if (bound1.isFirstBetter(candidateCoord1, bestCoord1))
+         {
+            bestIndex = vertexIndex;
+            bestCoord1 = candidateCoord1;
+            bestCoord2 = candidateCoord2;
+         }
+         else if (candidateCoord1 == bestCoord1 && bound2.isFirstBetter(candidateCoord2, bestCoord2))
+         {
+            bestIndex = vertexIndex;
+            bestCoord1 = candidateCoord1;
+            bestCoord2 = candidateCoord2;
+         }
+      }
+
+      return bestIndex;
+   }
+
+   /**
     * Recomputes the given {@code index} such that it is &in; [0, {@code listSize}[.
     * <p>
     * The {@code index} remains unchanged if already &in; [0, {@code listSize}[.
@@ -2319,7 +2417,7 @@ public class EuclidGeometryPolygonTools
     * <li>{@code wrap(15, 10)} returns 5.
     * </ul>
     * </p>
-    * 
+    *
     * @param index the index to be wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped index.
@@ -2342,7 +2440,7 @@ public class EuclidGeometryPolygonTools
     * <li>{@code next(15, 10)} returns 6.
     * </ul>
     * </p>
-    * 
+    *
     * @param index the index to be incremented and wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped incremented index.
@@ -2362,7 +2460,7 @@ public class EuclidGeometryPolygonTools
     * <li>{@code next(15, 10)} returns 4.
     * </ul>
     * </p>
-    * 
+    *
     * @param index the index to be decremented and wrapped if necessary.
     * @param listSize the size of the list around which the index is to be wrapped.
     * @return the wrapped decremented index.

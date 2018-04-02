@@ -2048,8 +2048,10 @@ public class EuclidGeometryToolsTest
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
 
-         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
-         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                          lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                          lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2067,8 +2069,10 @@ public class EuclidGeometryToolsTest
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
 
-         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
-         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                           lineSegmentStart, lineSegmentEnd));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                           lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2090,8 +2094,10 @@ public class EuclidGeometryToolsTest
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
 
-         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
-         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                           lineSegmentStart, lineSegmentEnd));
+         assertFalse(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                           lineSegmentEnd, lineSegmentStart));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2111,8 +2117,10 @@ public class EuclidGeometryToolsTest
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentEnd, lineSegmentStart));
 
-         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentStart, lineSegmentEnd));
-         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(), lineSegmentEnd, lineSegmentStart));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                          lineSegmentStart, lineSegmentEnd));
+         assertTrue(EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY(),
+                                                                          lineSegmentEnd, lineSegmentStart));
       }
    }
 

@@ -22,10 +22,9 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
  * {@code FrameLine2D} is a 2D line expressed in a given reference frame.
  * <p>
  * In addition to representing a {@link Line2DBasics}, a {@link ReferenceFrame} is associated to a
- * {@code FrameLine2D}. This allows, for instance, to enforce, at runtime, that operations on
- * lines occur in the same coordinate system. Also, via the method
- * {@link #changeFrame(ReferenceFrame)}, one can easily calculates the value of a point in different
- * reference frames.
+ * {@code FrameLine2D}. This allows, for instance, to enforce, at runtime, that operations on lines
+ * occur in the same coordinate system. Also, via the method {@link #changeFrame(ReferenceFrame)},
+ * one can easily calculates the value of a point in different reference frames.
  * </p>
  * <p>
  * Because a {@code FrameLine2D} extends {@code Line2DBasics}, it is compatible with methods only
@@ -110,8 +109,8 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    };
 
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero and
-    * the reference frame to {@code ReferenceFrame.getWorldFrame()}.
+    * Default constructor that initializes both {@link #point} and {@link #direction} to zero and the
+    * reference frame to {@code ReferenceFrame.getWorldFrame()}.
     */
    public FrameLine2D()
    {
@@ -121,7 +120,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    /**
     * Creates a new line and initializes both {@link #point} and {@link #direction} to zero and the
     * reference frame to the given {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this line.
     */
    public FrameLine2D(ReferenceFrame referenceFrame)
@@ -132,9 +131,8 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    /**
     * Creates a new line, initializes its point and direction from the given line and its reference
     * frame to {@code ReferenceFrame.getWorldFrame()}.
-    * 
-    * @param line2DReadOnly the line used to initialize the point and direction of this. Not
-    *           modified.
+    *
+    * @param line2DReadOnly the line used to initialize the point and direction of this. Not modified.
     */
    public FrameLine2D(Line2DReadOnly line2DReadOnly)
    {
@@ -144,10 +142,9 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    /**
     * Creates a new line, initializes its point and direction from the given line and its reference
     * frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this line.
-    * @param line2DReadOnly the line used to initialize the point and direction of this. Not
-    *           modified.
+    * @param line2DReadOnly the line used to initialize the point and direction of this. Not modified.
     */
    public FrameLine2D(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
    {
@@ -156,7 +153,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line, initializes it to go through the two given points in the given frame.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this line.
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
@@ -168,7 +165,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line, initializes it using the given point and direction in the given frame.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this line.
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
@@ -183,7 +180,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
     * <p>
     * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
     * </p>
-    * 
+    *
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
     */
    public FrameLine2D(LineSegment2DReadOnly lineSegment2DReadOnly)
@@ -193,10 +190,9 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line and initializes it to go through the endpoints of the given line segment.
-    * <p>
-    * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
-    * </p>
-    * 
+    *
+    * @param referenceFrame the reference frame in which the given line segment is expressed. The
+    *           initial frame for this frame line.
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
     */
    public FrameLine2D(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
@@ -206,7 +202,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line and initializes it to other.
-    * 
+    *
     * @param other the other line to copy. Not modified.
     */
    public FrameLine2D(FrameLine2DReadOnly other)
@@ -216,8 +212,8 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line and initializes it to go through the endpoints of the given line segment.
-    * 
-    * @param other the other line to copy. Not modified.
+    *
+    * @param frameLineSegment2DReadOnly the line segment used to. Not modified.
     */
    public FrameLine2D(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
    {
@@ -226,7 +222,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line and initializes it to go through the given points.
-    * 
+    *
     * @param firstPointOnLine first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if the arguments are not expressed in the reference
@@ -239,7 +235,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Creates a new line and initializes it to the given point and direction.
-    * 
+    *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if the arguments are not expressed in the reference
@@ -294,8 +290,8 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
          return;
 
       /*
-       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of
-       * checking both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
+       * By overriding changeFrame, on the transformToDesiredFrame is being checked instead of checking
+       * both referenceFrame.transformToRoot and desiredFrame.transformToRoot.
        */
       referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
       applyTransform(transformToDesiredFrame);
@@ -319,9 +315,9 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
     * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
     * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
     * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
-    * lines are physically the same but this method returns {@code false}.
-    * 
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
+    * are physically the same but this method returns {@code false}.
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
@@ -333,11 +329,10 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -353,18 +348,18 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameLine2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameLine2DReadOnly)}, it returns {@code false} otherwise.
     *
-    * @param obj the object to compare against this. Not modified.
+    * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((FrameLine2DReadOnly) obj);
+         return equals((FrameLine2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

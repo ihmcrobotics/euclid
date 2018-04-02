@@ -232,17 +232,17 @@ public class LineSegment2DTest
          expectedLineSegment.applyTransform(transform);
          EuclidGeometryTestTools.assertLineSegment2DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Test translate(Tuple2DReadOnly translation)
          LineSegment2D originalLineSegment = EuclidGeometryRandomTools.nextLineSegment2D(random, 10.0);
          LineSegment2D translatedLineSegment = new LineSegment2D(originalLineSegment);
          Tuple2DReadOnly translation = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          translatedLineSegment.translate(translation);
-         
+
          assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
          EuclidCoreTestTools.assertTuple2DEquals(originalLineSegment.direction(false), translatedLineSegment.direction(false), EPSILON);
-         
+
          LineSegment2D expectedLineSegment = new LineSegment2D(originalLineSegment);
          RigidBodyTransform transform = new RigidBodyTransform();
          transform.setTranslation(translation.getX(), translation.getY(), 0.0);

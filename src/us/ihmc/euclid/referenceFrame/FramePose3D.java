@@ -124,8 +124,8 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    };
 
    /**
-    * Creates a new pose 3D initialized with its position and orientation set to zero and its
-    * reference frame to {@code ReferenceFrame#getWorldFrame()}.
+    * Creates a new pose 3D initialized with its position and orientation set to zero and its reference
+    * frame to {@code ReferenceFrame#getWorldFrame()}.
     */
    public FramePose3D()
    {
@@ -135,7 +135,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    /**
     * Creates a new pose 3D initialized with its position and orientation set to zero in the given
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the reference frame used to initialize this frame pose.
     */
    public FramePose3D(ReferenceFrame referenceFrame)
@@ -160,9 +160,9 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * @param referenceFrame the initial reference frame in which the given pose is expressed in.
     * @param pose3DReadOnly the pose used to initialize the this frame pose. Not modified.
     */
-   public FramePose3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose)
+   public FramePose3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose3DReadOnly)
    {
-      setIncludingFrame(referenceFrame, pose);
+      setIncludingFrame(referenceFrame, pose3DReadOnly);
    }
 
    /**
@@ -179,7 +179,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
 
    /**
     * Creates a new frame pose and initializes its current reference frame and pose.
-    * 
+    *
     * @param referenceFrame the initial reference frame in which the given pose is expressed in.
     * @param position the tuple used to initialize the position. Not modified.
     * @param orientation the quaternion used to initialize the orientation. Not modified.
@@ -191,7 +191,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
 
    /**
     * Creates a new frame pose and initializes its current reference frame and pose.
-    * 
+    *
     * @param referenceFrame the initial reference frame in which the given pose is expressed in.
     * @param position the tuple used to initialize the position. Not modified.
     * @param orientation the axis-angle used to initialize the orientation. Not modified.
@@ -203,7 +203,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
 
    /**
     * Creates a new pose 3D initialize it from the given position and orientation.
-    * 
+    *
     * @param position the position used to initialize this frame pose. Not modified.
     * @param orientation the orientation used to initialize this frame pose. Not modified.
     * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
@@ -266,8 +266,8 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FramePose3DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FramePose3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
@@ -276,11 +276,11 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return super.equals((FramePose3DReadOnly) obj);
+         return super.equals(object);
       }
       catch (ClassCastException e)
       {
@@ -307,18 +307,16 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
     * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
     * @param other the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FramePose3D other, double epsilon)

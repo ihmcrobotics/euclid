@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
-import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -19,15 +18,15 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
  * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
  * </p>
  * <p>
- * In addition to representing a {@link LineSegment2DReadOnly}, a {@link ReferenceFrame} is associated
- * to a {@code FrameLineSegment2DReadOnly}. This allows, for instance, to enforce, at runtime, that
- * operations on lines occur in the same coordinate system.
+ * In addition to representing a {@link LineSegment2DReadOnly}, a {@link ReferenceFrame} is
+ * associated to a {@code FrameLineSegment2DReadOnly}. This allows, for instance, to enforce, at
+ * runtime, that operations on lines occur in the same coordinate system.
  * </p>
  * <p>
- * Because a {@code FrameLineSegment2DReadOnly} extends {@code LineSegment2DReadOnly}, it is compatible
- * with methods only requiring {@code LineSegment2DReadOnly}. However, these methods do NOT assert
- * that the operation occur in the proper coordinate system. Use this feature carefully and always
- * prefer using methods requiring {@code FrameLineSegment2DReadOnly}.
+ * Because a {@code FrameLineSegment2DReadOnly} extends {@code LineSegment2DReadOnly}, it is
+ * compatible with methods only requiring {@code LineSegment2DReadOnly}. However, these methods do
+ * NOT assert that the operation occur in the proper coordinate system. Use this feature carefully
+ * and always prefer using methods requiring {@code FrameLineSegment2DReadOnly}.
  * </p>
  */
 public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, ReferenceFrameHolder
@@ -146,11 +145,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
    }
 
-   /**
-    * Computes the coordinates of the point located exactly at the middle of this line segment.
-    *
-    * @param midpointToPack point in which the mid-point of this line segment is stored. Modified.
-    */
+   /** {@inheritDoc} */
    @Override
    default FramePoint2DBasics midpoint()
    {
@@ -283,12 +278,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       return LineSegment2DReadOnly.super.isPointOnLeftSideOfLineSegment(point);
    }
 
-   /**
-    * Computes the vector going from the first to the second endpoint of this line segment.
-    *
-    * @param normalize whether the direction vector is to be normalized.
-    * @param directionToPack vector in which the direction is stored. Modified.
-    */
+   /** {@inheritDoc} */
    @Override
    default FrameVector2DBasics direction(boolean normalize)
    {
@@ -598,24 +588,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       return LineSegment2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
-   /**
-    * Computes the orthogonal projection of a 2D point on this 2D line segment.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the length of this line segment is too small, i.e.
-    * {@code this.lengthSquared() < }{@link EuclidGeometryTools#ONE_TRILLIONTH}, this method returns
-    * {@code firstEndpoint}.
-    * <li>the projection can not be outside the line segment. When the projection on the
-    * corresponding line is outside the line segment, the result is the closest of the two
-    * endpoints.
-    * </ul>
-    * </p>
-    *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @return the projection of the point onto this line segment or {@code null} if the method
-    *         failed.
-    */
+   /** {@inheritDoc} */
    @Override
    default FramePoint2DBasics orthogonalProjectionCopy(Point2DReadOnly pointToProject)
    {
@@ -648,25 +621,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       return new FramePoint2D(getReferenceFrame(), LineSegment2DReadOnly.super.orthogonalProjectionCopy(pointToProject));
    }
 
-   /**
-    * Calculates the coordinates of the intersection between this line segment and the given line
-    * and stores the result in {@code intersectionToPack}.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>When this line segment and the line are parallel but not collinear, they do not intersect.
-    * <li>When this line segment and the line are collinear, they are assumed to intersect at
-    * {@code lineSegmentStart}.
-    * <li>When the line intersects this line segment at one of its endpoints, this method returns
-    * {@code true} and the endpoint is the intersection.
-    * </ul>
-    * </p>
-    *
-    * @param line the line that may intersect this line segment. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
-    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default FramePoint2DBasics intersectionWith(Line2DReadOnly line)
    {
@@ -832,7 +787,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param line the line that may intersect this line segment. Not modified.
     * @return the coordinates of the intersection if the line intersects this line segment,
     *         {@code null} otherwise.
-    * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code line} are not expressed in
     *            the same reference frame.
     */
@@ -874,27 +828,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       LineSegment2DReadOnly.super.perpendicular(normalize, perpendicularVectorToPack);
    }
 
-   /**
-    * Computes the intersection between this line segment and the given line segment and returns the
-    * result.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>When the two line segments are parallel but not collinear, the two line segments do not
-    * intersect, this method returns {@code null}.
-    * <li>When the two line segments are collinear, if the two line segments do not overlap do not
-    * have at least one common endpoint, this method returns {@code null}.
-    * <li>When the two line segments have a common endpoint, this method returns the common endpoint
-    * as the intersection.
-    * </ul>
-    * </p>
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @param other the other line segment that may intersect this line segment. Not modified.
-    * @return the intersection point if it exists, {@code null} otherwise.
-    */
+   /** {@inheritDoc} */
    @Override
    default FramePoint2DBasics intersectionWith(LineSegment2DReadOnly other)
    {
@@ -1070,16 +1004,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       return LineSegment2DReadOnly.super.intersectionWith(other, intersectionToPack);
    }
 
-   /**
-    * Computes the coordinates of the point located at a given percentage on this line segment: <br>
-    * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
-    *
-    * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
-    * @param pointToPack where the result is stored. Modified.
-    * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not
-    *            expressed in the same reference frame.
-    */
+   /** {@inheritDoc} */
+   @Override
    default FramePoint2DBasics pointBetweenEndpointsGivenPercentage(double percentage)
    {
       return new FramePoint2D(getReferenceFrame(), LineSegment2DReadOnly.super.pointBetweenEndpointsGivenPercentage(percentage));
@@ -1115,41 +1041,9 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
       LineSegment2DReadOnly.super.pointBetweenEndpointsGivenPercentage(percentage, pointToPack);
    }
 
-   /**
-    * Computes the coordinates of the possible intersection(s) between this line segment and the
-    * given convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * <li>If this line segment is collinear to an edge:
-    * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
-    * </ul>
-    * </ul>
-    * </p>
-    *
-    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
-    *           be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
-    *           be {@code null}. Modified.
-    * @return the number of intersections between this line segment and the polygon.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
-    */
+   /** {@inheritDoc} */
    @Override
-   default FramePoint2DBasics[] intersectionWith(ConvexPolygon2D convexPolygon)
+   default FramePoint2DBasics[] intersectionWith(ConvexPolygon2DReadOnly convexPolygon)
    {
       Point2DBasics[] intersections = LineSegment2DReadOnly.super.intersectionWith(convexPolygon);
       if (intersections == null)
@@ -1166,29 +1060,24 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    }
 
    /**
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
+    * this convex polygon 2D.
+    * 
+    * @param convexPolygon the polygon this line segment may intersect. Not modified.
+    * @return the intersections between the line segment and the polygon.
+    * @throws ReferenceFrameMismatchException if {@code convexPolygon} and {@code this} are not
+    *            expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly)
+    */
+   default FramePoint2DBasics[] intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      return intersectionWith((ConvexPolygon2DReadOnly) convexPolygon);
+   }
+
+   /**
     * Computes the coordinates of the possible intersection(s) between this line segment and the
     * given convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * <li>If this line segment is collinear to an edge:
-    * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
-    * </ul>
-    * </ul>
-    * </p>
     *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
@@ -1196,11 +1085,11 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
     *           be {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstIntersectionToPack}
     *            are not expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(firstIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -1209,27 +1098,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the coordinates of the possible intersection(s) between this line segment and the
     * given convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * <li>If this line segment is collinear to an edge:
-    * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
-    * </ul>
-    * </ul>
-    * </p>
     *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
@@ -1237,9 +1105,31 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
     *           be {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code convexPolygon}, and
+    *            {@code firstIntersectionToPack} are not expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+                                Point2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      checkReferenceFrameMatch(firstIntersectionToPack);
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
+    */
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
       firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -1248,27 +1138,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the coordinates of the possible intersection(s) between this line segment and the
     * given convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * <li>If this line segment is collinear to an edge:
-    * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
-    * </ul>
-    * </ul>
-    * </p>
     *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
@@ -1276,11 +1145,32 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
     *           be {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code convexPolygon} are not
+    *            expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
+    */
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondIntersectionToPack}
     *            are not expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(secondIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -1289,27 +1179,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the coordinates of the possible intersection(s) between this line segment and the
     * given convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * <li>If this line segment is collinear to an edge:
-    * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
-    * </ul>
-    * </ul>
-    * </p>
     *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
@@ -1317,9 +1186,31 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
     *           be {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code convexPolygon}, and
+    *            {@code secondIntersectionToPack} are not expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack,
+                                FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      checkReferenceFrameMatch(secondIntersectionToPack);
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
+    */
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
    {
       secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -1328,27 +1219,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the coordinates of the possible intersection(s) between this line segment and the
     * given convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * <li>If this line segment is collinear to an edge:
-    * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
-    * </ul>
-    * </ul>
-    * </p>
     *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
@@ -1356,11 +1226,32 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
     *           be {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code convexPolygon} are not
+    *            expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
+    */
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstIntersectionToPack}, and
     *            {@code secondIntersectionToPack} are not expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(firstIntersectionToPack);
@@ -1371,27 +1262,6 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the coordinates of the possible intersection(s) between this line segment and the
     * given convex polygon 2D.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the polygon has no vertices, this method behaves as if there is no intersections.
-    * <li>If no intersections exist, this method returns {@code 0} and the two intersection-to-pack
-    * arguments remain unmodified.
-    * <li>If there is only one intersection, this method returns {@code 1} and the coordinates of
-    * the only intersection are stored in {@code firstIntersectionToPack}.
-    * {@code secondIntersectionToPack} remains unmodified.
-    * <li>If this line segment is collinear to an edge:
-    * <ul>
-    * <li>The edge entirely contains this line segment: this method finds two intersections which
-    * are the endpoints of this line segment.
-    * <li>This line segment entirely contains the edge: this method finds two intersections which
-    * are the vertices of the edge.
-    * <li>The edge and this line segment partially overlap: this method finds two intersections
-    * which the polygon's vertex that on this line segment and this line segment's endpoint that is
-    * on the polygon's edge.
-    * </ul>
-    * </ul>
-    * </p>
     *
     * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
     * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
@@ -1399,9 +1269,33 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
     *           be {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
-    * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
+    * @throws ReferenceFrameMismatchException if {@code this}, {@code convexPolygon},
+    *            {@code firstIntersectionToPack}, and {@code secondIntersectionToPack} are not
+    *            expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(ConvexPolygon2D convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+                                FixedFramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(secondIntersectionToPack);
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
+    */
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
    {
       firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
       secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
@@ -1409,12 +1303,50 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    }
 
    /**
-    * Computes the coordinates of the point located on the line this line segment is lying on: <br>
-    * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
     *
-    * @param percentage the percentage along this line segment of the point.
-    * @param pointToPack where the result is stored. Modified.
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code convexPolygon} are not
+    *            expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FramePoint2DBasics firstIntersectionToPack,
+                                FramePoint2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersection(s) between this line segment and the
+    * given convex polygon 2D.
+    *
+    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can
+    *           be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can
+    *           be {@code null}. Modified.
+    * @return the number of intersections between this line segment and the polygon.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code convexPolygon} are not
+    *            expressed in the same reference frame.
+    * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
+    */
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(convexPolygon);
+      return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    default FramePoint2DBasics pointOnLineGivenPercentage(double percentage)
    {
       return new FramePoint2D(getReferenceFrame(), LineSegment2DReadOnly.super.pointOnLineGivenPercentage(percentage));

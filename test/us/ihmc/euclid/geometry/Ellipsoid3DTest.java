@@ -477,7 +477,7 @@ public class Ellipsoid3DTest
          ellipsoid2.setRadii(radius + 1.11 * EPSILON, radius + 1.01 * EPSILON, radius + 0.91 * EPSILON);
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
       }
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       { // The first ellipsoid is a sphere, ensuring that the second is tested before assuming it is also a sphere.
          double radius = random.nextDouble();
@@ -491,7 +491,7 @@ public class Ellipsoid3DTest
          radii.absolute();
          double average = (radii.getX() + radii.getY() + radii.getZ()) / 3.0;
          radii.scale(average / radii.length());
-         
+
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radii.getX(), radii.getY(), radii.getZ());
 
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
@@ -501,7 +501,7 @@ public class Ellipsoid3DTest
          radii.absolute();
          average = (radii.getX() + radii.getY() + radii.getZ()) / 3.0;
          radii.scale(average / radii.length());
-         
+
          ellipsoid2 = new Ellipsoid3D(pose2, radii.getX(), radii.getY(), radii.getZ());
 
          assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));

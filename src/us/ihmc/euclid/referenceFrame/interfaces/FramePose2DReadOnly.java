@@ -33,8 +33,8 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     *
     * @param other the other pose used to measure the distance. Not modified.
     * @return the distance between the position part of the two poses.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default double getPositionDistance(FramePose2DReadOnly other)
    {
@@ -46,8 +46,8 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     *
     * @param point the other point used to measure the distance. Not modified.
     * @return the distance between this pose and the given {@code point}.
-    * @throws ReferenceFrameMismatchException if {@code point} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code point} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default double getPositionDistance(FramePoint2DReadOnly point)
    {
@@ -55,8 +55,8 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Computes the absolute angle difference between the orientation part of this pose 2D and the
-    * give {@code orientation}.
+    * Computes the absolute angle difference between the orientation part of this pose 2D and the give
+    * {@code orientation}.
     *
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
@@ -74,8 +74,8 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * @param other the other pose 2D used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this.orientation} and
     *         {@code other.orientation}.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default double getOrientationDistance(FramePose2DReadOnly other)
    {
@@ -102,18 +102,16 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
     * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically
-    * equal.
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
     * @param other the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default boolean geometricallyEquals(FramePose2DReadOnly other, double epsilon)
    {
@@ -128,8 +126,8 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * </p>
     *
     * @param other the other pose to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal and are expressed in the same
-    *         reference frame, {@code false} otherwise.
+    * @return {@code true} if the two poses are exactly equal and are expressed in the same reference
+    *         frame, {@code false} otherwise.
     */
    default boolean equals(FramePose2DReadOnly other)
    {

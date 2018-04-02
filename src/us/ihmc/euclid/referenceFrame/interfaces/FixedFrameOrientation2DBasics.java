@@ -2,16 +2,23 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-//TODO
+/**
+ * Write and read interface for a 2D orientation that is expressed in a immutable reference frame.
+ * <p>
+ * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnly, Orientation2DBasics
 {
    /**
-    * Sets this orientation 2D to represent the orientation 2D from {@code this.getReferenceFrame()}
-    * to the given {@code referenceFrame}.
+    * Sets this orientation 2D to represent the orientation 2D from {@code this.getReferenceFrame()} to
+    * the given {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame of interest.
     */
@@ -24,9 +31,9 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
    /**
     * Sets this frame orientation to {@code orientation2DReadOnly} and checks that its current frame
     * equals {@code referenceFrame}.
-    * 
-    * @param referenceFrame the coordinate system in which the given {@code orientation2DReadOnly}
-    *           is expressed.
+    *
+    * @param referenceFrame the coordinate system in which the given {@code orientation2DReadOnly} is
+    *           expressed.
     * @param orientation2DReadOnly the orientation 2D to copy the value from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
@@ -36,10 +43,19 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
       set(orientation2DReadOnly);
    }
 
-   default void set(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
+   /**
+    * Sets this frame orientation to the yaw angle of the given {@code orientationReadOnly} and checks
+    * that its current frame equals {@code referenceFrame}.
+    * 
+    * @param referenceFrame the coordinate system in which the given {@code orientation3DReadOnly} is
+    *           expressed.
+    * @param orientation3DReadOnly the orientation to get the yaw angle from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
-      set(quaternionReadOnly);
+      set(orientation3DReadOnly);
    }
 
    /**
@@ -55,6 +71,13 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
       Orientation2DBasics.super.set(other);
    }
 
+   /**
+    * Sets this orientation 2D to the yaw angle of the given {@code frameQuaternionReadOnly}.
+    * 
+    * @param frameQuaternionReadOnly the quaternion to get the yaw angle from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code frameQuaternionReadOnly} is not expressed in
+    *            the same frame as {@code this}.
+    */
    default void set(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {
       checkReferenceFrameMatch(frameQuaternionReadOnly);
@@ -213,8 +236,8 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * </p>
     *
     * @param other the other orientation 2D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *            {@code this}.

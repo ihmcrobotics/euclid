@@ -95,8 +95,8 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to
-    * {@code other} with the tolerance {@code epsilon}.
+    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
+    * with the tolerance {@code epsilon}.
     *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
@@ -128,18 +128,18 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(LineSegment2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(LineSegment2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
       try
       {
-         return equals((LineSegment2DReadOnly) obj);
+         return equals((LineSegment2DReadOnly) object);
       }
       catch (ClassCastException e)
       {

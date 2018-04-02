@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 /**
@@ -20,6 +21,10 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for X, Y, Z
+    * 
+    * @param length the new length value, i.e. along the x-axis.
+    * @param width the new width value, i.e. along the y-axis.
+    * @param height the new height value, i.e. along the z-axis.
     */
    public Size3D(double length, double width, double height)
    {
@@ -30,6 +35,8 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for X
+    * 
+    * @return the length along the x-axis.
     */
    public double getLength()
    {
@@ -38,6 +45,8 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for Y
+    * 
+    * @return the width along the y-axis.
     */
    public double getWidth()
    {
@@ -46,6 +55,8 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for Z
+    * 
+    * @return the height along the z-axis.
     */
    public double getHeight()
    {
@@ -54,6 +65,8 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for X
+    * 
+    * @param length the new length value, i.e. along the x-axis.
     */
    public void setLength(double length)
    {
@@ -62,6 +75,8 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for Y
+    * 
+    * @param width the new width value, i.e. along the y-axis.
     */
    public void setWidth(double width)
    {
@@ -70,6 +85,8 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for Z
+    * 
+    * @param height the new height value, i.e. along the z-axis.
     */
    public void setHeight(double height)
    {
@@ -78,6 +95,10 @@ class Size3D implements Tuple3DBasics
 
    /**
     * Alias for X, Y, Z
+    * 
+    * @param length the new length value, i.e. along the x-axis.
+    * @param width the new width value, i.e. along the y-axis.
+    * @param height the new height value, i.e. along the z-axis.
     */
    public void setLengthWidthHeight(double length, double width, double height)
    {
@@ -124,5 +145,17 @@ class Size3D implements Tuple3DBasics
    public String toString()
    {
       return EuclidCoreIOTools.getTuple3DString(this);
+   }
+
+   @Override
+   public void applyTransform(Transform transform)
+   {
+      throw new UnsupportedOperationException();
+   }
+
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      throw new UnsupportedOperationException();
    }
 }

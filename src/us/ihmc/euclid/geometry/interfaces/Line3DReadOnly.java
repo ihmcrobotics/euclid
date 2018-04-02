@@ -140,14 +140,15 @@ public interface Line3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
     *           Modified.
+    * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
@@ -160,8 +161,8 @@ public interface Line3DReadOnly
     * Edge cases:
     * <ul>
     * <li>if the given line direction is too small, i.e.
-    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this
-    * method fails and returns {@code false}.
+    * {@code lineDirection.lengthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code false}.
     * </ul>
     * </p>
     * <p>
@@ -179,8 +180,8 @@ public interface Line3DReadOnly
    /**
     * Tests if the given is located on this line.
     * <p>
-    * More precisely, the point is assumed to be on this line if it is located at a distance less
-    * than {@code epsilon} from it.
+    * More precisely, the point is assumed to be on this line if it is located at a distance less than
+    * {@code epsilon} from it.
     * </p>
     *
     * @param point the coordinates of the query. Not modified.
@@ -199,18 +200,18 @@ public interface Line3DReadOnly
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
-    * @param pointOnLine the coordinates of the 'p' from which the parameter 't' is to be
-    *           calculated. The point has to be on the line. Not modified.
-    * @param epsilon the maximum distance allowed between the given point and this line. If the
-    *           given point is at a distance less than {@code epsilon} from this line, it is
-    *           considered as being located on this line.
+    * @param pointOnLine the coordinates of the 'p' from which the parameter 't' is to be calculated.
+    *           The point has to be on the line. Not modified.
+    * @param epsilon the maximum distance allowed between the given point and this line. If the given
+    *           point is at a distance less than {@code epsilon} from this line, it is considered as
+    *           being located on this line.
     * @return the value of the parameter 't' corresponding to the given point.
-    * @throws RuntimeException if the given point is located at a distance greater than
-    *            {@code epsilon} from this line.
+    * @throws RuntimeException if the given point is located at a distance greater than {@code epsilon}
+    *            from this line.
     */
    default double parameterGivenPointOnLine(Point3DReadOnly pointOnLine, double epsilon)
    {
@@ -236,8 +237,8 @@ public interface Line3DReadOnly
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     * <p>
     * WARNING: This method generates garbage.
@@ -259,8 +260,8 @@ public interface Line3DReadOnly
     * where n is the unit-vector defining the direction of this line and p<sub>0</sub> is the point
     * defining this line which also corresponds to the point for which t=0.
     * <p>
-    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the
-    * point p<sub>0</sub> defining this line.
+    * Note that the absolute value of 't' is equal to the distance between the point 'p' and the point
+    * p<sub>0</sub> defining this line.
     * </p>
     *
     * @param t the parameter used to calculate the point coordinates.
@@ -275,8 +276,7 @@ public interface Line3DReadOnly
     * Gets the coordinates of two distinct points this line goes through.
     *
     * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
-    * @param secondPointOnLineToPack the coordinates of a second point located on this line.
-    *           Modified.
+    * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, Point3DBasics secondPointOnLineToPack)
    {
@@ -331,9 +331,9 @@ public interface Line3DReadOnly
     * Tests on a per-component basis on the point and vector if this line is equal to {@code other}
     * with the tolerance {@code epsilon}. This method will return {@code false} if the two lines are
     * physically the same but either the point or vector of each line is different. For instance, if
-    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two
-    * lines are physically the same but this method returns {@code false}.
-    * 
+    * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
+    * are physically the same but this method returns {@code false}.
+    *
     * @param other the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
@@ -349,11 +349,10 @@ public interface Line3DReadOnly
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two lines are geometrically
-    * similar.
+    * Compares {@code this} to {@code other} to determine if the two lines are geometrically similar.
     * <p>
-    * Two lines are considered geometrically equal is they are collinear, pointing toward the same
-    * or opposite direction.
+    * Two lines are considered geometrically equal is they are collinear, pointing toward the same or
+    * opposite direction.
     * </p>
     *
     * @param other the line to compare to. Not modified.
@@ -369,8 +368,7 @@ public interface Line3DReadOnly
     * Tests on a per component basis, if this line 3D is exactly equal to {@code other}.
     *
     * @param other the other line 3D to compare against this. Not modified.
-    * @return {@code true} if the two lines are exactly equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two lines are exactly equal component-wise, {@code false} otherwise.
     */
    default boolean equals(Line3DReadOnly other)
    {

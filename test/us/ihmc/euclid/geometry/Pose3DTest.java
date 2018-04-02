@@ -308,7 +308,7 @@ public class Pose3DTest
 
          firstPose = new Pose3D(new Point3D(x, y, z), quaternion);
 
-         quaternion.get(normal);
+         quaternion.getRotationVector(normal);
          orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true);
          normal.applyTransform(new RigidBodyTransform(new AxisAngle(orthogonal, epsilon), new Vector3D()));
 

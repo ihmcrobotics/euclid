@@ -30,9 +30,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
 {
    /**
-    * Sets the reference frame of this tuple without updating or modifying its x, y, and z
-    * components.
-    * 
+    * Sets the reference frame of this tuple without updating or modifying its x, y, and z components.
+    *
     * @param referenceFrame the new reference frame for this frame tuple.
     */
    void setReferenceFrame(ReferenceFrame referenceFrame);
@@ -40,7 +39,7 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
    /**
     * Sets all the components of this frame tuple to zero and sets the current reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this tuple.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -50,9 +49,9 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
    }
 
    /**
-    * Sets all the components of this tuple to {@link Double#NaN} and sets the current reference
-    * frame to {@code referenceFrame}.
-    * 
+    * Sets all the components of this tuple to {@link Double#NaN} and sets the current reference frame
+    * to {@code referenceFrame}.
+    *
     * @param referenceFrame the new reference frame to be associated with this tuple.
     */
    default void setToNaN(ReferenceFrame referenceFrame)
@@ -62,8 +61,8 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
    }
 
    /**
-    * Sets this frame tuple's components to {@code x}, {@code y}, and {@code z} and sets its
-    * reference frame to {@code referenceFrame}.
+    * Sets this frame tuple's components to {@code x}, {@code y}, and {@code z} and sets its reference
+    * frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame tuple.
     * @param x the new value for the x-component of this tuple.
@@ -108,8 +107,7 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double[] tupleArray)
    {
@@ -123,8 +121,7 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     *
     * @param referenceFrame the new reference frame for this tuple.
     * @param startIndex the first index to start reading from in the array.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startIndex, double[] tupleArray)
    {
@@ -141,10 +138,10 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(tupleDenseMatrix);
+      set(matrix);
    }
 
    /**
@@ -157,10 +154,10 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(startRow, tupleDenseMatrix);
+      set(startRow, matrix);
    }
 
    /**
@@ -174,10 +171,10 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *           modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F tupleDenseMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F matrix)
    {
       setReferenceFrame(referenceFrame);
-      set(startRow, column, tupleDenseMatrix);
+      set(startRow, column, matrix);
    }
 
    /**
@@ -185,8 +182,7 @@ public interface FrameTuple3DBasics extends FixedFrameTuple3DBasics
     * z-component to the given {@code z}, and sets the current frame to
     * {@code frameTuple2DReadOnly.getReferenceFrame()}.
     *
-    * @param frameTuple2DReadOnly the tuple to copy the values and reference frame from. Not
-    *           modified.
+    * @param frameTuple2DReadOnly the tuple to copy the values and reference frame from. Not modified.
     * @param z the new z-coordinate for this frame tuple.
     */
    default void setIncludingFrame(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)

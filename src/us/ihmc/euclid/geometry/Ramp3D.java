@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -29,8 +30,8 @@ public class Ramp3D extends Shape3D<Ramp3D>
    /** Length of the slope face of this ramp. */
    private double rampLength;
    /**
-    * Positive angle in [0, <i>pi</i>] representing the angle formed by the bottom face and the
-    * slope face.
+    * Positive angle in [0, <i>pi</i>] representing the angle formed by the bottom face and the slope
+    * face.
     */
    private double angleOfRampIncline;
 
@@ -92,7 +93,7 @@ public class Ramp3D extends Shape3D<Ramp3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Ramp3D(Pose3D pose, double length, double width, double height)
+   public Ramp3D(Pose3DReadOnly pose, double length, double width, double height)
    {
       setPose(pose);
       setSize(length, width, height);
@@ -594,9 +595,9 @@ public class Ramp3D extends Shape3D<Ramp3D>
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two ramps are geometrically
-    * similar, i.e. the difference between their size are less than or equal to {@code epsilon} and
-    * their poses are geometrically similar given {@code epsilon}.
+    * Compares {@code this} and {@code other} to determine if the two ramps are geometrically similar,
+    * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
+    * are geometrically similar given {@code epsilon}.
     *
     * @param other the ramp to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.

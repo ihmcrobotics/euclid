@@ -25,7 +25,8 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
    {
       Random random = new Random(234235L);
 
-      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame, (Line2DReadOnly) line);
+      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame,
+                                                                                                                                   (Line2DReadOnly) line);
       EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextLine2D(random);
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
@@ -36,9 +37,7 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set")
-            && !m.getName().equals("equals")
-            && !m.getName().equals("epsilonEquals")
+      Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("geometricallyEquals");
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLine2D.class, Line2D.class, true, 1, framelessMethodsToIgnore);
    }

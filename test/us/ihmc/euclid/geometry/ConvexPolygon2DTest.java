@@ -12,11 +12,15 @@ import org.junit.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
@@ -41,19 +45,19 @@ public class ConvexPolygon2DTest
       verticesList.add(new Point2D(1.0, 0.0));
       verticesList.add(new Point2D(1.0, 1.0));
 
-      ConvexPolygon2D listInt = new ConvexPolygon2D(verticesList, numberOfVertices);
+      ConvexPolygon2D listInt = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList, numberOfVertices));
       assertEquals("Number of vertices should be 4", 4.0, listInt.getNumberOfVertices(), epsilon);
 
-      ConvexPolygon2D list = new ConvexPolygon2D(verticesList);
+      ConvexPolygon2D list = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList));
       assertEquals("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), epsilon);
 
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
 
-      ConvexPolygon2D doubleInt = new ConvexPolygon2D(verticesArray, numberOfVertices);
+      ConvexPolygon2D doubleInt = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray, numberOfVertices));
       assertEquals("Number of vertices should be four", 4.0, doubleInt.getNumberOfVertices(), epsilon);
       assertTrue(doubleInt.isUpToDate());
 
-      ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
+      ConvexPolygon2D doubles = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
       assertEquals("Number of vertices should be four", 4.0, doubles.getNumberOfVertices(), epsilon);
       assertTrue(doubles.isUpToDate());
 
@@ -87,7 +91,7 @@ public class ConvexPolygon2DTest
       verticesList.add(new Point2D(1.0, 0.0));
       verticesList.add(new Point2D(1.0, 1.0));
 
-      ConvexPolygon2D list = new ConvexPolygon2D(verticesList);
+      ConvexPolygon2D list = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList));
       assertEquals("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), epsilon);
       assertTrue(list.isUpToDate());
       list.clearAndUpdate();
@@ -103,7 +107,7 @@ public class ConvexPolygon2DTest
       ConvexPolygon2D doubleInt = new ConvexPolygon2D();
       int numberOfVertices = 4;
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
-      doubleInt.setAndUpdate(verticesArray, numberOfVertices);
+      doubleInt.set(Vertex2DSupplier.asVertex2DSupplier(verticesArray, numberOfVertices));
       assertEquals("Number of vertices should be 4", 4.0, doubleInt.getNumberOfVertices(), epsilon);
       assertTrue(doubleInt.isUpToDate());
    }
@@ -112,10 +116,10 @@ public class ConvexPolygon2DTest
    public void testGetCentroid()
    {
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
-      ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
+      ConvexPolygon2D doubles = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
       Point2D centroid = new Point2D();
 
-      doubles.getCentroid(centroid);
+      centroid.set(doubles.getCentroid());
       assertEquals("Centroids should be equal", centroid, doubles.getCentroid());
    }
 
@@ -123,7 +127,7 @@ public class ConvexPolygon2DTest
    public void testGetBoundingBox()
    {
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
-      ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
+      ConvexPolygon2D doubles = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
       BoundingBox2D box = doubles.getBoundingBox();
 
       assertEquals("Bounding boxes should be equal", box.getMinPoint().getX(), 0.0, epsilon);
@@ -136,7 +140,7 @@ public class ConvexPolygon2DTest
    public void testGetNextVertexCCWGetPreviousVertexCCW()
    {
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
-      ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
+      ConvexPolygon2D doubles = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
 
       Point2DReadOnly oneNext = doubles.getNextVertexCCW(0); //(1.0, 0.0)
       Point2DReadOnly twoNext = doubles.getNextVertexCCW(1); //(1.0, 1.0)
@@ -160,7 +164,7 @@ public class ConvexPolygon2DTest
       double scaleFactor = 2.0;
       double[][] verticesArray = {{-1.0, 1.0}, {1.0, 1.0}, {1.0, -1.0}, {-1.0, -1.0}};
 
-      ConvexPolygon2D polygon = new ConvexPolygon2D(verticesArray);
+      ConvexPolygon2D polygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
       polygon.scale(scaleFactor);
 
       Point2DReadOnly oneNext = polygon.getNextVertexCCW(0); //(2.0, -2.0)
@@ -184,7 +188,7 @@ public class ConvexPolygon2DTest
    {
       Random random = new Random(4564656L);
       double[][] verticesArray = {{-10.0, 10.0}, {10.0, 10.0}, {10.0, -10.0}, {-10.0, -10.0}};
-      ConvexPolygon2D doubles = new ConvexPolygon2D(verticesArray);
+      ConvexPolygon2D doubles = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
 
       for (int i = 0; i < 10; i++)
       {
@@ -204,7 +208,7 @@ public class ConvexPolygon2DTest
       listOfPoints.add(new Point2D(1.0, 1.0));
       listOfPoints.add(new Point2D(1.0, 0.0));
       listOfPoints.add(new Point2D(0.0, 0.0));
-      ConvexPolygon2D convexPolygon2d = new ConvexPolygon2D(listOfPoints);
+      ConvexPolygon2D convexPolygon2d = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(listOfPoints));
 
       // Above point list contains 3 unique points
       assertEquals(3, convexPolygon2d.getNumberOfVertices());
@@ -322,7 +326,7 @@ public class ConvexPolygon2DTest
       listOfPoints.add(new Point2D(-0.047625, 0.04444999999999999));
       listOfPoints.add(new Point2D(-0.047625, 0.1397));
 
-      ConvexPolygon2D convexPolygon2d = new ConvexPolygon2D(listOfPoints);
+      ConvexPolygon2D convexPolygon2d = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(listOfPoints));
 
       Point2D pont2d = new Point2D(Double.NaN, Double.NaN);
       Vector2D vector2d = new Vector2D(Double.NaN, Double.NaN);
@@ -542,7 +546,7 @@ public class ConvexPolygon2DTest
 
       Point2D testPoint = new Point2D(-0.04907805548171582, 2.6934439541712686E-4);
 
-      ConvexPolygon2D polygon = new ConvexPolygon2D(polygonPoints);
+      ConvexPolygon2D polygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(polygonPoints));
 
       boolean isInside = polygon.isPointInside(testPoint);
 
@@ -685,7 +689,7 @@ public class ConvexPolygon2DTest
       points.add(new Point2D());
       points.add(new Point2D());
       points.add(new Point2D());
-      ConvexPolygon2D test = new ConvexPolygon2D(points);
+      ConvexPolygon2D test = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(points));
       test.distance(new Point2D());
    }
 
@@ -799,14 +803,14 @@ public class ConvexPolygon2DTest
 
       assertFalse(polygon.isPointInside(point));
 
-      LineSegment2D closestEdge = polygon.getClosestEdgeCopy(point);
+      LineSegment2DBasics closestEdge = polygon.getClosestEdgeCopy(point);
 
-      Point2D closestVertex = polygon.getClosestVertexCopy(point);
+      Point2DBasics closestVertex = polygon.getClosestVertexCopy(point);
 
       int otherEdgeVertexIndex = 0;
       boolean isClosestVertexPartOfClosestEdge = false;
 
-      Point2DReadOnly[] segmentVertices = {closestEdge.getFirstEndpoint(), closestEdge.getSecondEndpoint()}; 
+      Point2DReadOnly[] segmentVertices = {closestEdge.getFirstEndpoint(), closestEdge.getSecondEndpoint()};
 
       for (int i = 0; i < 2; i++)
       {
@@ -885,7 +889,7 @@ public class ConvexPolygon2DTest
             {0.12219695435431863, 0.14220652470109518}, {0.12219695435431865, -0.041946248489056696}, {0.12163937361471142, -0.1435447184761526},
             {-0.05107802536335154, -0.14259683121882027}};
 
-      ConvexPolygon2D polygon = new ConvexPolygon2D(polygonPoints);
+      ConvexPolygon2D polygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(polygonPoints));
 
       return polygon;
    }
@@ -907,7 +911,7 @@ public class ConvexPolygon2DTest
             pointList.add(new Point2D(random.nextDouble(), random.nextDouble()));
          }
 
-         convexPolygon = new ConvexPolygon2D(pointList);
+         convexPolygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(pointList));
 
          for (int k = 0; k < 100; k++) // testPoints for isPointInside()
          {
@@ -922,7 +926,7 @@ public class ConvexPolygon2DTest
                }
             }
 
-            Point2D projectedPoint = convexPolygon.orthogonalProjectionCopy(testPoint);
+            Point2DBasics projectedPoint = convexPolygon.orthogonalProjectionCopy(testPoint);
 
             if (convexPolygon.isPointInside(testPoint))
                assertNull(projectedPoint);
@@ -1496,7 +1500,7 @@ public class ConvexPolygon2DTest
 
       numberOfVertices = 3 + random.nextInt(10);
 
-      firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+      firstPolygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices)));
       secondPolygon = new ConvexPolygon2D(firstPolygon);
 
       assertTrue(firstPolygon.geometricallyEquals(secondPolygon, epsilon));
@@ -1508,7 +1512,7 @@ public class ConvexPolygon2DTest
       { // Convex polygons are only equal if all points lie within +- epsilon of each other
          numberOfVertices = 3 + random.nextInt(10);
 
-         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+         firstPolygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices)));
          firstPolygon.scale(10.0);
          secondPolygon = new ConvexPolygon2D(firstPolygon);
 
@@ -1527,7 +1531,7 @@ public class ConvexPolygon2DTest
       { // Convex polygons are equal if translations are equal within +- epsilon and are otherwise the same
          numberOfVertices = 3 + random.nextInt(10);
 
-         firstPolygon = new ConvexPolygon2D(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices));
+         firstPolygon = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5, numberOfVertices)));
          firstPolygon.scale(10.0);
 
          secondPolygon = new ConvexPolygon2D(firstPolygon);
@@ -1544,12 +1548,12 @@ public class ConvexPolygon2DTest
       }
    }
 
-   private static void assertEdgesEqual(LineSegment2D expected, LineSegment2D actual)
+   private static void assertEdgesEqual(LineSegment2DReadOnly expected, LineSegment2DReadOnly actual)
    {
       assertTrue("Edge did not match expected.", expected.epsilonEquals(actual, epsilon) || expected.epsilonEquals(actual.flipDirectionCopy(), epsilon));
    }
 
-   private static void assertPointsEqual(Point2D[] expected, Point2D[] actual, boolean enforceOrder)
+   private static void assertPointsEqual(Point2DReadOnly[] expected, Point2DReadOnly[] actual, boolean enforceOrder)
    {
       if (expected == null || actual == null)
       {
@@ -1577,7 +1581,7 @@ public class ConvexPolygon2DTest
       }
    }
 
-   private static void assertPointsEqual(Point2D expected, Point2D actual)
+   private static void assertPointsEqual(Point2DReadOnly expected, Point2DReadOnly actual)
    {
       if (expected == null && actual == null)
          return;

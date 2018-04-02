@@ -53,8 +53,8 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default void setPoint(FramePoint2DReadOnly pointOnLine)
    {
@@ -66,8 +66,8 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
@@ -104,6 +104,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
    /**
     * Redefines this line with a new point and a new direction vector.
     *
+    * @param referenceFrame the reference frame in which the given coordinates are expressed.
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
     * @param lineDirectionX the new x-component of the direction of this line.
@@ -250,8 +251,8 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * Sets this line to be the same as the given line projected onto the XY-plane.
     *
     * @param frameLine3DReadOnly the line to copy. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLine3DReadOnly} are
-    *            not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLine3DReadOnly} are not
+    *            expressed in the same reference frame.
     */
    default void set(FrameLine3DReadOnly frameLine3DReadOnly)
    {
@@ -300,8 +301,8 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default void set(FramePoint2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -340,8 +341,8 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     *
     * @param pointOnLine new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
+    *            in the same reference frame.
     */
    default void set(FramePoint3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {

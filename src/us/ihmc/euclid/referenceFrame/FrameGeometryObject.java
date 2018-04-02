@@ -33,9 +33,9 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * <p>
     * The reference frame is initialized to {@link ReferenceFrame#getWorldFrame()}.
     * </p>
-    * 
-    * @param geometryObject the geometry object that is to be used internally. Reference saved. Will
-    *           be modified.
+    *
+    * @param geometryObject the geometry object that is to be used internally. Reference saved. Will be
+    *           modified.
     */
    public FrameGeometryObject(G geometryObject)
    {
@@ -48,11 +48,11 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * The given {@code geometryObject}'s reference is saved internally for performing all the future
     * operations with this {@code FrameGeometryObject}.
     * </p>
-    * 
-    * @param referenceFrame the initial reference frame in which the given geometry object is
-    *           expressed in.
-    * @param geometryObject the geometry object that is to be used internally. Reference saved. Will
-    *           be modified.
+    *
+    * @param referenceFrame the initial reference frame in which the given geometry object is expressed
+    *           in.
+    * @param geometryObject the geometry object that is to be used internally. Reference saved. Will be
+    *           modified.
     */
    public FrameGeometryObject(ReferenceFrame referenceFrame, G geometryObject)
    {
@@ -75,7 +75,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    /**
     * Reset the values of the geometry object and changes the current reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with the geometry object.
     */
    public final void setToZero(ReferenceFrame referenceFrame)
@@ -99,7 +99,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    /**
     * Invalidate the geometry object by setting its values to {@link Double#NaN} and changes the
     * current reference frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with the geometry object.
     */
    public final void setToNaN(ReferenceFrame referenceFrame)
@@ -121,15 +121,14 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    }
 
    /**
-    * Copies the values from the given {@code geometryObject} into the geometry object in
-    * {@code this}.
+    * Copies the values from the given {@code geometryObject} into the geometry object in {@code this}.
     * <p>
-    * Note that not reference frame check can be performed. If possible, prefer using other methods
-    * and taking in either a {@code ReferenceFrame} or another {@code FrameGeometryObject}.
+    * Note that not reference frame check can be performed. If possible, prefer using other methods and
+    * taking in either a {@code ReferenceFrame} or another {@code FrameGeometryObject}.
     * </p>
-    * 
-    * @param geometryObject the geometry object used to update the geometry object in {@code this}.
-    *           Not modified.
+    *
+    * @param geometryObject the geometry object used to update the geometry object in {@code this}. Not
+    *           modified.
     */
    public final void set(G geometryObject)
    {
@@ -137,20 +136,18 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    }
 
    /**
-    * Copies the values from the given {@code geometryObject} into the geometry object in
-    * {@code this}.
+    * Copies the values from the given {@code geometryObject} into the geometry object in {@code this}.
     * <p>
-    * The reference frame passed in, represents the coordinate system in which
-    * {@code geometryObject} is expressed. This method ensures that the current reference frame in
-    * {@code this} is equal to {@code referenceFrame}. If the two reference frames differ, this
-    * method throws a {@link ReferenceFrameMismatchException}. If instead of throwing an exception
-    * this object's frame should be changed, use
-    * {@link #setIncludingFrame(ReferenceFrame, GeometryObject)}.
+    * The reference frame passed in, represents the coordinate system in which {@code geometryObject}
+    * is expressed. This method ensures that the current reference frame in {@code this} is equal to
+    * {@code referenceFrame}. If the two reference frames differ, this method throws a
+    * {@link ReferenceFrameMismatchException}. If instead of throwing an exception this object's frame
+    * should be changed, use {@link #setIncludingFrame(ReferenceFrame, GeometryObject)}.
     * </p>
-    * 
+    *
     * @param referenceFrame the coordinate system in which {@code geometryObject} is expressed.
-    * @param geometryObject the geometry object used to update the geometry object in {@code this}.
-    *           Not modified.
+    * @param geometryObject the geometry object used to update the geometry object in {@code this}. Not
+    *           modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    public final void set(ReferenceFrame referenceFrame, G geometryObject)
@@ -160,16 +157,16 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    }
 
    /**
-    * Copies the values from the given {@code geometryObject} into the geometry object in
-    * {@code this} and changes this reference frame to {@code referenceFrame}.
+    * Copies the values from the given {@code geometryObject} into the geometry object in {@code this}
+    * and changes this reference frame to {@code referenceFrame}.
     * <p>
-    * The reference frame passed in, represents the coordinate system in which
-    * {@code geometryObject} is expressed.
+    * The reference frame passed in, represents the coordinate system in which {@code geometryObject}
+    * is expressed.
     * </p>
-    * 
+    *
     * @param referenceFrame the coordinate system in which {@code geometryObject} is expressed.
-    * @param geometryObject the geometry object used to update the geometry object in {@code this}.
-    *           Not modified.
+    * @param geometryObject the geometry object used to update the geometry object in {@code this}. Not
+    *           modified.
     */
    public final void setIncludingFrame(ReferenceFrame referenceFrame, G geometryObject)
    {
@@ -186,9 +183,9 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * throwing an exception this object's frame should be changed, use
     * {@link #setIncludingFrame(FrameGeometryObject)}.
     * </p>
-    * 
-    * @param other the other frame geometry object used to update the geometry object in
-    *           {@code this}. Not modified.
+    *
+    * @param other the other frame geometry object used to update the geometry object in {@code this}.
+    *           Not modified.
     */
    @Override
    public final void set(F other)
@@ -200,7 +197,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    /**
     * Sets both the reference frame and geometry object in {@code this} to {@code other}'s reference
     * frame and geometry object.
-    * 
+    *
     * @param other the other frame geometry object used to update {@code this}. Not modified.
     */
    public final void setIncludingFrame(F other)
@@ -210,14 +207,14 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    }
 
    /**
-    * Sets this frame geometry object to zero to the given reference frame, then changes back to
-    * this frame geometry object's current frame.
+    * Sets this frame geometry object to zero to the given reference frame, then changes back to this
+    * frame geometry object's current frame.
     * <p>
     * Practically, this method can be used to store the transformation information from
     * {@code referenceFrame} to this current reference frame into this geometry object. How the
-    * information is stored depends on the type of the geometry object. For instance, if the
-    * geometry object is a {@code Point3D}, information retained from the transformation is the
-    * translation part only.
+    * information is stored depends on the type of the geometry object. For instance, if the geometry
+    * object is a {@code Point3D}, information retained from the transformation is the translation part
+    * only.
     * </p>
     *
     * @param referenceFrame the reference frame of interest.
@@ -233,11 +230,11 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * This is the main feature of a {@code FrameGeometryObject}:
     * <p>
     * Transforms this geometry object such that the transformation represents the same geometry but
-    * from the perspective of another reference frame: {@code desiredFrame}. Once the geometry
-    * object is transformed, the reference frame is updated to {@code desiredFrame}. In the case,
+    * from the perspective of another reference frame: {@code desiredFrame}. Once the geometry object
+    * is transformed, the reference frame is updated to {@code desiredFrame}. In the case,
     * {@code this.referenceFrame == desiredFrame}, this method does nothing.
     * </p>
-    * 
+    *
     * @param desiredFrame the reference frame in which the geometry object is to be expressed.
     */
    public void changeFrame(ReferenceFrame desiredFrame)
@@ -283,7 +280,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
 
    /**
     * Packs the geometry object in {@code this} into the given {@code geometryToPack}.
-    * 
+    *
     * @param geometryObjectToPack the other geometry object used to stored the current values of the
     *           geometry object in {@code this}. Modified.
     */
@@ -294,7 +291,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
 
    /**
     * Gets the reference to the geometry object held by {@code this}.
-    * 
+    *
     * @return the reference to the geometry object in {@code this}.
     */
    public final G getGeometryObject()
@@ -303,16 +300,15 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    }
 
    /**
-    * Tests on a per component basis if {@code this} and {@code other} are equal to an
-    * {@code epsilon}.
+    * Tests on a per component basis if {@code this} and {@code other} are equal to an {@code epsilon}.
     * <p>
     * First tests if {@code this} and {@code other} are currently expressed in the same reference
-    * frame, if not, this returns {@code false}. Then, tests if {@code this.geometryObject} is equal
-    * to {@code other.geometryObject} to an {@code epsilon}. The test is usually achieved on a per
+    * frame, if not, this returns {@code false}. Then, tests if {@code this.geometryObject} is equal to
+    * {@code other.geometryObject} to an {@code epsilon}. The test is usually achieved on a per
     * component basis. Sometimes a failing test does not necessarily mean that the two objects are
     * different in a geometric way.
     * </p>
-    * 
+    *
     * @param other the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
@@ -332,9 +328,9 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * frame.
     * </p>
     * <p>
-    * The implementation of this test depends on the type of geometry. For instance, two points will
-    * be considered geometrically equal if they are at a distance from each other that is less or
-    * equal than {@code epsilon}.
+    * The implementation of this test depends on the type of geometry. For instance, two points will be
+    * considered geometrically equal if they are at a distance from each other that is less or equal
+    * than {@code epsilon}.
     * </p>
     * <p>
     * Two frame geometries that are geometrically equal are not necessarily epsilon equals and vice
@@ -354,8 +350,8 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameGeometryObject)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameGeometryObject)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -376,10 +372,10 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
 
    /**
     * First, tests if {@code this} and {@code other} are currently expressed in the same reference
-    * frame, if not, this method returns {@code false}. Then, tests if {@code this.geometryObject}
-    * is exactly equal to {@code other.geometryObject}. The test is usually achieved on a per
-    * component basis. Sometimes a failing test does not necessarily mean that the two objects are
-    * different in a geometric way.
+    * frame, if not, this method returns {@code false}. Then, tests if {@code this.geometryObject} is
+    * exactly equal to {@code other.geometryObject}. The test is usually achieved on a per component
+    * basis. Sometimes a failing test does not necessarily mean that the two objects are different in a
+    * geometric way.
     *
     * @param other the other frame geometry object to compare against this. Not modified.
     * @return {@code true} if the two objects are exactly equal component-wise, {@code false}
@@ -405,7 +401,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * The returned {@code String} is the concatenation of the geometry object and reference frame
     * {@code String} representations.
     * </p>
-    * 
+    *
     * @return the {@code String} representation of this frame geometry object.
     */
    @Override

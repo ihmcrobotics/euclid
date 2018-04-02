@@ -29,8 +29,8 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
     *
     * @param other the other vector used for the dot product. Not modified.
     * @return the value of the dot product.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default double dot(FrameTuple4DReadOnly other)
    {
@@ -47,8 +47,8 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
     *
     * @param other the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
+    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
     */
    default boolean epsilonEquals(FrameTuple4DReadOnly other, double epsilon)
    {
@@ -65,8 +65,8 @@ public interface FrameTuple4DReadOnly extends Tuple4DReadOnly, ReferenceFrameHol
     * </p>
     *
     * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two tuples are exactly equal component-wise and are expressed in the
+    *         same reference frame, {@code false} otherwise.
     */
    default boolean equals(FrameTuple4DReadOnly other)
    {

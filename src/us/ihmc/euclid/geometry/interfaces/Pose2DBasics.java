@@ -190,7 +190,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
 
    /**
     * Sets this pose 2D from the given {@code position} and {@code yaw} angle.
-    * 
+    *
     * @param position the tuple used to initialize this pose's position. Not modified.
     * @param yaw the angle used to initialize the pose's orientation.
     */
@@ -231,10 +231,10 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets this pose 2D to match the given rigid-body transform.
     *
     * @param rigidBodyTransform the transform use to set this pose 2D. Not modified.
-    * @param checkIsTransform2D indicates whether or not the method should check that the rotation
-    *           part of the given transform represents a 2D rotation in the XY-plane.
-    * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the
-    *            rotation part of the transform does not represent a 2D transformation.
+    * @param checkIsTransform2D indicates whether or not the method should check that the rotation part
+    *           of the given transform represents a 2D rotation in the XY-plane.
+    * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the rotation
+    *            part of the transform does not represent a 2D transformation.
     */
    default void set(RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
    {
@@ -254,8 +254,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * </p>
     *
     * @param other the other pose 2D used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
     *           {@code other}.
     */
    default void interpolate(Pose2DReadOnly other, double alpha)
@@ -275,8 +275,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param pose1 the first pose 2D used in the interpolation. Not modified.
     * @param pose2 the second pose 2D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code pose2}.
+    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting {@code this}
+    *           to {@code pose2}.
     */
    default void interpolate(Pose2DReadOnly pose1, Pose2DReadOnly pose2, double alpha)
    {
@@ -285,8 +285,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Adds the translation (x, y) to this pose 2D assuming it is expressed in the coordinates in
-    * which this pose is expressed.
+    * Adds the translation (x, y) to this pose 2D assuming it is expressed in the coordinates in which
+    * this pose is expressed.
     * <p>
     * If the translation is expressed in the local coordinates described by this pose 2D, use
     * {@link #appendTranslation(double, double)}.
@@ -301,11 +301,11 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Adds the given {@code translation} to this pose 2D assuming it is expressed in the coordinates
-    * in which this pose is expressed.
+    * Adds the given {@code translation} to this pose 2D assuming it is expressed in the coordinates in
+    * which this pose is expressed.
     * <p>
-    * If the {@code translation} is expressed in the local coordinates described by this pose 2D,
-    * use {@link #appendTranslation(Tuple2DReadOnly)}.
+    * If the {@code translation} is expressed in the local coordinates described by this pose 2D, use
+    * {@link #appendTranslation(Tuple2DReadOnly)}.
     * </p>
     *
     * @param translation tuple containing the translation to apply to this pose 2D. Not modified.
@@ -316,8 +316,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Rotates the position part of this pose 2D by {@code yaw} and adds {@code yaw} to the
-    * orientation part.
+    * Rotates the position part of this pose 2D by {@code yaw} and adds {@code yaw} to the orientation
+    * part.
     * <p>
     * If the rotation should not affect this pose's position, use {@link #appendRotation(double)}.
     * </p>
@@ -331,8 +331,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Rotates the position part of this pose 2D by {@code orientation} and adds {@code orientation}
-    * to the orientation part.
+    * Rotates the position part of this pose 2D by {@code orientation} and adds {@code orientation} to
+    * the orientation part.
     * <p>
     * If the rotation should not affect this pose's position, use
     * {@link #appendRotation(Orientation2DReadOnly)}.
@@ -348,8 +348,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    /**
     * Rotates, then adds the translation (x, y) to this pose 2D.
     * <p>
-    * Use this method if the translation (x, y) is expressed in the local coordinates described by
-    * this pose 2D. Otherwise, use {@link #prependTranslation(double, double)}.
+    * Use this method if the translation (x, y) is expressed in the local coordinates described by this
+    * pose 2D. Otherwise, use {@link #prependTranslation(double, double)}.
     * </p>
     *
     * @param x the translation distance along the x-axis.
@@ -411,8 +411,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Transforms the position and orientation parts of this pose 2D by the given {@code transform}.
     *
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -426,8 +426,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * {@code transform}.
     *
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *            in the XY plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)

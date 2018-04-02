@@ -55,8 +55,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * A secondary unique hash code representing this reference frame that is computed based on
     * {@link #frameName} and the parent frame name if any.
     * <p>
-    * This hash code has the benefit of remaining the same when creating several instances of the
-    * same tree of reference frames, such that it can be used to serialize and deserialize frame
+    * This hash code has the benefit of remaining the same when creating several instances of the same
+    * tree of reference frames, such that it can be used to serialize and deserialize frame
     * information.
     * </p>
     */
@@ -65,22 +65,22 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Additional custom hash code representing this frame.
     * <p>
     * Somewhat of a hack that allows to enforce two frames that are physically the same but with
-    * different names to have the same hash code or to enforce a common frame to have a specific
-    * hash code that can be known without holding on its actual instance.
+    * different names to have the same hash code or to enforce a common frame to have a specific hash
+    * code that can be known without holding on its actual instance.
     * </p>
     */
    private long additionalNameBasedHashCode;
    /**
     * The reference to which this frame is attached to.
     * <p>
-    * The {@link #transformToParent} of this describes the pose of this reference frame with respect
-    * to {@link #parentFrame}.
+    * The {@link #transformToParent} of this describes the pose of this reference frame with respect to
+    * {@link #parentFrame}.
     * </p>
     */
    protected final ReferenceFrame parentFrame;
    /**
-    * Entire from the root frame to this used to efficiently compute the pose of this reference
-    * frame with respect to the root frame.
+    * Entire from the root frame to this used to efficiently compute the pose of this reference frame
+    * with respect to the root frame.
     */
    private final ReferenceFrame[] framesStartingWithRootEndingWithThis;
 
@@ -103,8 +103,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * The current transform from this reference frame to the root frame.
     * <p>
-    * For instance, one can calculate the coordinates in the root frame P<sub>root</sub> of a point
-    * P expressed in this frame as follows:<br>
+    * For instance, one can calculate the coordinates in the root frame P<sub>root</sub> of a point P
+    * expressed in this frame as follows:<br>
     * {@code transformToRoot.transform}(P, P<sub>root</sub>)
     * </p>
     */
@@ -116,14 +116,13 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    private final boolean isAStationaryFrame; // TODO when isAStationaryFrame == true, transformToParent should be immutable.
    /**
-    * Field initialized at construction time that specifies if at all time the z-axis of this
-    * reference frame remains aligned with the z-axis of the root frame.
+    * Field initialized at construction time that specifies if at all time the z-axis of this reference
+    * frame remains aligned with the z-axis of the root frame.
     */
    private final boolean isZupFrame;
 
    /**
-    * {@code worldFrame} is a root reference frame and is most of time the only root reference
-    * frame.
+    * {@code worldFrame} is a root reference frame and is most of time the only root reference frame.
     * <p>
     * It is commonly assumed that its axes are aligned as follows:
     * <ul>
@@ -139,13 +138,13 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Construct a new z-up root reference frame.
     * <p>
-    * Most of the time, {@link #worldFrame} is the only root frame from which children reference
-    * frames are added.
+    * Most of the time, {@link #worldFrame} is the only root frame from which children reference frames
+    * are added.
     * </p>
     * <p>
-    * Note that frames added as children of this root frame belongs to a different reference frame
-    * tree than the tree starting off of {@link #worldFrame}. Transformation across two different
-    * trees of reference frames is forbidden as the transformation between them is undefined.
+    * Note that frames added as children of this root frame belongs to a different reference frame tree
+    * than the tree starting off of {@link #worldFrame}. Transformation across two different trees of
+    * reference frames is forbidden as the transformation between them is undefined.
     * </p>
     * <p>
     * The parent frame and transforms of a root frame are all {@code null}.
@@ -176,8 +175,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
-    * @param transformFromParent the transform that can be used to transform a geometry object from
-    *           the parent frame to this frame. Not modified.
+    * @param transformFromParent the transform that can be used to transform a geometry object from the
+    *           parent frame to this frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
@@ -213,8 +212,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Creates a reference frame with an immutable transform to its parent.
     * <p>
-    * The {@code transformToParent} should describe the pose of the new frame expressed in its
-    * parent frame.
+    * The {@code transformToParent} should describe the pose of the new frame expressed in its parent
+    * frame.
     * </p>
     *
     * @param frameName the name of the new frame.
@@ -241,9 +240,14 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    }
 
    /**
-    * Return the world reference frame that is a root reference frame. If located at (0, 0, 0) and
-    * its coordinate system is such as the z-axis is up, x-axis is forward, and y-axis points to the
-    * left.
+    * Return the world reference frame that is a root reference frame.
+    * <p>
+    * The world reference frame can be used to create child reference frames. It is usually assumed
+    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents the
+    * forward/backward direction and the y-axis represents the transversal direction.
+    * </p>
+    * 
+    * @return the world reference frame.
     */
    public static ReferenceFrame getWorldFrame()
    {
@@ -257,13 +261,13 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * extending this class.
     * </p>
     * <p>
-    * Most of the time, {@link #worldFrame} is the only root frame from which children reference
-    * frames are added.
+    * Most of the time, {@link #worldFrame} is the only root frame from which children reference frames
+    * are added.
     * </p>
     * <p>
-    * Note that frames added as children of this root frame belongs to a different reference frame
-    * tree than the tree starting off of {@link #worldFrame}. Transformation across two different
-    * trees of reference frames is forbidden as the transformation between them is undefined.
+    * Note that frames added as children of this root frame belongs to a different reference frame tree
+    * than the tree starting off of {@link #worldFrame}. Transformation across two different trees of
+    * reference frames is forbidden as the transformation between them is undefined.
     * </p>
     * <p>
     * The parent frame and transforms of a root frame are all {@code null}.
@@ -283,13 +287,12 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
-    * it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
     * </p>
     * <p>
-    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially
-    * moving with respect to the root frame. It is also not expected to have its z-axis aligned at
-    * all time with the z-axis of the root frame.
+    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially moving
+    * with respect to the root frame. It is also not expected to have its z-axis aligned at all time
+    * with the z-axis of the root frame.
     * </p>
     *
     * @param frameName the name of the new frame.
@@ -307,17 +310,15 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
-    * it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
     * </p>
     *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
-    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the
-    *           root frame or moving. If {@code true}, the {@code parentFrame} has to also be
-    *           stationary.
-    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame
-    *           at all time or not.
+    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the root
+    *           frame or moving. If {@code true}, the {@code parentFrame} has to also be stationary.
+    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame at
+    *           all time or not.
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
     *            {@code parentFrame} is not a stationary frame.
     */
@@ -330,21 +331,20 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Creates a new reference frame defined as being a child of the given {@code parentFrame} and
     * initializes the transform to its parent.
     * <p>
-    * The {@code transformFromParent} should describe the pose of the new frame expressed in its
-    * parent frame.
+    * The {@code transformFromParent} should describe the pose of the new frame expressed in its parent
+    * frame.
     * </p>
     * <p>
     * This new reference frame defined in the {@code parentFrame} and moves with it.
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
-    * it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
     * </p>
     * <p>
-    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially
-    * moving with respect to the root frame. It is also not expected to have its z-axis aligned at
-    * all time with the z-axis of the root frame.
+    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially moving
+    * with respect to the root frame. It is also not expected to have its z-axis aligned at all time
+    * with the z-axis of the root frame.
     * </p>
     *
     * @param frameName the name of the new frame.
@@ -361,27 +361,25 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Creates a new reference frame defined as being a child of the given {@code parentFrame} and
     * initializes the transform to its parent.
     * <p>
-    * The {@code transformFromParent} should describe the pose of the new frame expressed in its
-    * parent frame.
+    * The {@code transformFromParent} should describe the pose of the new frame expressed in its parent
+    * frame.
     * </p>
     * <p>
     * This new reference frame defined in the {@code parentFrame} and moves with it.
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
-    * it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
     * </p>
     *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
     *           frame to its parent frame. Not modified.
-    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the
-    *           root frame or moving. If {@code true}, the {@code parentFrame} has to also be
-    *           stationary.
-    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame
-    *           at all time or not.
+    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the root
+    *           frame or moving. If {@code true}, the {@code parentFrame} has to also be stationary.
+    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame at
+    *           all time or not.
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
     *            {@code parentFrame} is not a stationary frame.
     */
@@ -477,11 +475,11 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    /**
     * The user must call update each tick. It will then call
-    * {@link #updateTransformToParent(RigidBodyTransform)} which should be overridden to indicate
-    * how the transform to each frame's parent should be updated.
+    * {@link #updateTransformToParent(RigidBodyTransform)} which should be overridden to indicate how
+    * the transform to each frame's parent should be updated.
     * <p>
-    * Note that it is not necessary to call update on reference frames with an unchanging transform
-    * to parent, even if the parent frame is moving.
+    * Note that it is not necessary to call update on reference frames with an unchanging transform to
+    * parent, even if the parent frame is moving.
     * </p>
     */
    public void update()
@@ -511,8 +509,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Returns the parent frame of this reference frame.
     * <p>
-    * Note that a root frame has no parent frame, such that this method returns {@code null} if this
-    * is a root frame.
+    * Note that a root frame has no parent frame, such that this method returns {@code null} if this is
+    * a root frame.
     * </p>
     *
     * @return the parent frame of this reference frame.
@@ -538,8 +536,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * WARNING: This method generates garbage.
     * </p>
     * <p>
-    * This transform can be applied to a vector defined in this frame in order to obtain the
-    * equivalent vector in the parent frame.
+    * This transform can be applied to a vector defined in this frame in order to obtain the equivalent
+    * vector in the parent frame.
     * </p>
     *
     * @return a copy of the transform to the parent frame.
@@ -555,8 +553,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * packs this reference frame's transform to parent into the given transform
     * {@code transformToPack}.
     * <p>
-    * This transform can be applied to a vector defined in this frame in order to obtain the
-    * equivalent vector in the parent frame.
+    * This transform can be applied to a vector defined in this frame in order to obtain the equivalent
+    * vector in the parent frame.
     * </p>
     *
     * @param transformToPack the transform in which this frame's transform to its parent frame is
@@ -570,8 +568,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Gets the name of this reference frame.
     * <p>
-    * Reference frames usually have a unique name among the reference frames in the same tree but
-    * this is not guaranteed.
+    * Reference frames usually have a unique name among the reference frames in the same tree but this
+    * is not guaranteed.
     * </p>
     *
     * @return this frame's name.
@@ -619,8 +617,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Packs the transform that can be used to transform a geometry object defined in this frame to
     * obtain its equivalent expressed in the {@code desiredFrame} into {@code transformToPack}.
     *
-    * @param transformToPack the transform in which this frame's transform to the
-    *           {@code desiredFrame} is stored. Modified.
+    * @param transformToPack the transform in which this frame's transform to the {@code desiredFrame}
+    *           is stored. Modified.
     * @param desiredFrame the goal frame.
     */
    public void getTransformToDesiredFrame(RigidBodyTransform transformToPack, ReferenceFrame desiredFrame)
@@ -700,13 +698,13 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    }
 
    /**
-    * Transforms the given {@code objectToTransform} by the transform from this reference frame to
-    * the given {@code desiredFrame}.
+    * Transforms the given {@code objectToTransform} by the transform from this reference frame to the
+    * given {@code desiredFrame}.
     * <p>
     * This method can be used to change the reference frame in which {@code objectToTransform} is
     * expressed from {@code this} to {@code desiredFrame}.
     * </P>
-    * 
+    *
     * @param desiredFrame the target frame for the transformation.
     * @param objectToTransform the object to apply the transformation on. Modified.
     */
@@ -940,12 +938,12 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Gets the value of this frame's name based hash code.
     * <p>
-    * This is a secondary unique hash code representing this reference frame that is computed based
-    * on {@link #frameName} and the parent frame name if any.
+    * This is a secondary unique hash code representing this reference frame that is computed based on
+    * {@link #frameName} and the parent frame name if any.
     * </p>
     * <p>
-    * This hash code has the benefit of remaining the same when creating several instances of the
-    * same tree of reference frames, such that it can be used to serialize and deserialize frame
+    * This hash code has the benefit of remaining the same when creating several instances of the same
+    * tree of reference frames, such that it can be used to serialize and deserialize frame
     * information.
     * </p>
     *
@@ -961,9 +959,10 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Gets the value of this frame's custom hash code.
     * <p>
     * Somewhat of a hack that allows to enforce two frames that are physically the same but with
-    * different names to have the same hash code or to enforce a common frame to have a specific
-    * hash code that can be known without holding on its actual instance.
+    * different names to have the same hash code or to enforce a common frame to have a specific hash
+    * code that can be known without holding on its actual instance.
     * </p>
+    * @return the name based hash code for this reference frame.
     */
    public long getAdditionalNameBasedHashCode()
    {
@@ -974,8 +973,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Sets this frame's custom hash code's value.
     * <p>
     * Somewhat of a hack that allows to enforce two frames that are physically the same but with
-    * different names to have the same hash code or to enforce a common frame to have a specific
-    * hash code that can be known without holding on its actual instance.
+    * different names to have the same hash code or to enforce a common frame to have a specific hash
+    * code that can be known without holding on its actual instance.
     * </p>
     *
     * @param additionalNameBasedHashCode the new value of this frame's custom hash code.

@@ -1,11 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.EPSILON;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.canObserverSeeEdge;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestEdgeIndexToPoint2D;
@@ -59,6 +54,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -2266,8 +2263,8 @@ public class EuclidGeometryPolygonToolsTest
          assertNotEquals(-1, lineOfSightEndIndex);
 
          /*
-          * Drawing lines from the observer going through the start/end vertices. Each line should
-          * intersect only once the polygon.
+          * Drawing lines from the observer going through the start/end vertices. Each line should intersect
+          * only once the polygon.
           */
          {
             Point2DReadOnly startVertex = convexPolygon2D.get(lineOfSightStartIndex);
@@ -2293,9 +2290,8 @@ public class EuclidGeometryPolygonToolsTest
          }
 
          /*
-          * Shooting ray from the observer to each vertex of the polygon. If the vertex is in the
-          * line of sight, that means, there should not anything between the observer and the
-          * vertex.
+          * Shooting ray from the observer to each vertex of the polygon. If the vertex is in the line of
+          * sight, that means, there should not anything between the observer and the vertex.
           */
          for (Integer currentIndex = 0; currentIndex < hullSize; currentIndex++)
          {
@@ -3599,6 +3595,68 @@ public class EuclidGeometryPolygonToolsTest
          int actualMinXMaxYIndex = EuclidGeometryPolygonTools.findMinXMaxYVertexIndex(points, numberOfPoints);
 
          assertEquals(expectedMinXMaxYIndex, actualMinXMaxYIndex);
+      }
+   }
+
+   @Test
+   public void testFindVertexIndex() throws Exception
+   {
+      Random random = new Random(23524);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // 1: x-first, 2: x max
+         Vertex2DSupplier supplier = EuclidGeometryRandomTools.nextVertex2DSupplier(random, 200);
+         boolean isXPriority = true;
+         Bound xBound = Bound.MAX;
+         Bound yBound = random.nextBoolean() ? Bound.MIN : Bound.MAX;
+         int bestIndex = EuclidGeometryPolygonTools.findVertexIndex(supplier, isXPriority, xBound, yBound);
+
+         for (int index = 0; index < supplier.getNumberOfVertices(); index++)
+         {
+            assertTrue(supplier.getVertex(index).getX() <= supplier.getVertex(bestIndex).getX());
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // 1: x-first, 2: x min
+         Vertex2DSupplier supplier = EuclidGeometryRandomTools.nextVertex2DSupplier(random, 200);
+         boolean isXPriority = true;
+         Bound xBound = Bound.MIN;
+         Bound yBound = random.nextBoolean() ? Bound.MIN : Bound.MAX;
+         int bestIndex = EuclidGeometryPolygonTools.findVertexIndex(supplier, isXPriority, xBound, yBound);
+
+         for (int index = 0; index < supplier.getNumberOfVertices(); index++)
+         {
+            assertTrue(supplier.getVertex(index).getX() >= supplier.getVertex(bestIndex).getX());
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // 1: y-first, 2: y max
+         Vertex2DSupplier supplier = EuclidGeometryRandomTools.nextVertex2DSupplier(random, 200);
+         boolean isXPriority = false;
+         Bound xBound = random.nextBoolean() ? Bound.MIN : Bound.MAX;
+         Bound yBound = Bound.MAX;
+         int bestIndex = EuclidGeometryPolygonTools.findVertexIndex(supplier, isXPriority, xBound, yBound);
+
+         for (int index = 0; index < supplier.getNumberOfVertices(); index++)
+         {
+            assertTrue(supplier.getVertex(index).getY() <= supplier.getVertex(bestIndex).getY());
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // 1: y-first, 2: y min
+         Vertex2DSupplier supplier = EuclidGeometryRandomTools.nextVertex2DSupplier(random, 200);
+         boolean isXPriority = false;
+         Bound xBound = random.nextBoolean() ? Bound.MIN : Bound.MAX;
+         Bound yBound = Bound.MIN;
+         int bestIndex = EuclidGeometryPolygonTools.findVertexIndex(supplier, isXPriority, xBound, yBound);
+
+         for (int index = 0; index < supplier.getNumberOfVertices(); index++)
+         {
+            assertTrue(supplier.getVertex(index).getY() >= supplier.getVertex(bestIndex).getY());
+         }
       }
    }
 }

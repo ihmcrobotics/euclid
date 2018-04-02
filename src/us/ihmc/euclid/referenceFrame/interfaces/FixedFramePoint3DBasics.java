@@ -7,8 +7,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
  * Write and read interface for a 3D point expressed in a constant reference frame, i.e. this point
  * is always expressed in the same reference frame.
  * <p>
- * In addition to representing a {@link Point3DBasics}, a {@link ReferenceFrame} is associated to
- * a {@code FixedFramePoint3DBasics}. This allows, for instance, to enforce, at runtime, that
+ * In addition to representing a {@link Point3DBasics}, a {@link ReferenceFrame} is associated to a
+ * {@code FixedFramePoint3DBasics}. This allows, for instance, to enforce, at runtime, that
  * operations on points occur in the same coordinate system.
  * </p>
  * <p>
@@ -21,8 +21,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 public interface FixedFramePoint3DBasics extends FramePoint3DReadOnly, FixedFrameTuple3DBasics, Point3DBasics
 {
    /**
-    * Sets this point coordinate to the given {@code referenceFrame}'s origin coordinate in this
-    * frame tuple current frame.
+    * Sets this point coordinate to the given {@code referenceFrame}'s origin coordinate in this frame
+    * tuple current frame.
     *
     * @param referenceFrame the reference frame of interest.
     */
