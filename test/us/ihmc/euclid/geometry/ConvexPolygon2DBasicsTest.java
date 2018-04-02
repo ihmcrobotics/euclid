@@ -68,6 +68,13 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       assertTrue(list.isUpToDate());
       list.clear();
       assertFalse(list.isUpToDate());
+      list.clearAndUpdate();
+      assertTrue(list.isUpToDate());
+
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(list.getBoundingBox().getMinPoint());
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(list.getBoundingBox().getMaxPoint());
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(list.getCentroid());
+      assertTrue(Double.isNaN(list.getArea()));
    }
 
    @Test
