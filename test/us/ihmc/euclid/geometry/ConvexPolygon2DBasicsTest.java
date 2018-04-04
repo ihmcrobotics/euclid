@@ -1,11 +1,9 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
@@ -38,6 +36,61 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
    public abstract T createRandomConvexPolygon2D(Random random);
 
    public abstract T createConvexPolygon2D(Vertex2DSupplier supplier);
+
+   @Test
+   public void testUpdateBoundingBox() throws Exception
+   {
+      Random random = new Random(432536);
+
+      {
+         T polygon = createEmptyConvexPolygon2D();
+         Point2DBasics maxPoint = polygon.getBoundingBox().getMaxPoint();
+         Point2DBasics minPoint = polygon.getBoundingBox().getMinPoint();
+
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(maxPoint);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(minPoint);
+
+         polygon.addVertex(new Point2D());
+         polygon.update();
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(maxPoint);
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(minPoint);
+
+         polygon.addVertex(new Point2D(1.0, 1.0));
+         polygon.update();
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(minPoint);
+         EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, 1.0), maxPoint, EPSILON);
+
+         polygon.translate(1.0, 1.0);
+         EuclidCoreTestTools.assertTuple2DEquals(new Point2D(1.0, 1.0), minPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(new Point2D(2.0, 2.0), maxPoint, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T polygon = createEmptyConvexPolygon2D();
+         List<Point2D> points = EuclidGeometryRandomTools.nextPointCloud2D(random, 0.0, 1.0, 100);
+         polygon.set(Vertex2DSupplier.asVertex2DSupplier(points));
+         for (Point2D point : points)
+         {
+            assertTrue(polygon.getBoundingBox().isInsideInclusive(point));
+         }
+         polygon.translate(10.0, 10.0);
+         for (Point2D point : points)
+         {
+            assertFalse(polygon.getBoundingBox().isInsideInclusive(point));
+         }
+         polygon.clearAndUpdate();
+
+         Point2DBasics maxPoint = polygon.getBoundingBox().getMaxPoint();
+         Point2DBasics minPoint = polygon.getBoundingBox().getMinPoint();
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(maxPoint);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(minPoint);
+         polygon.clear();
+         polygon.update();
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(maxPoint);
+         EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(minPoint);
+      }
+   }
 
    @Test
    public void testTranslate()
