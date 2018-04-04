@@ -95,10 +95,9 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     */
    default void updateBoundingBox()
    {
-      if (isEmpty())
-         getBoundingBox().setToNaN();
-      else
-         getBoundingBox().updateToIncludePoints(this);
+      BoundingBox2DBasics boundingBox = getBoundingBox();
+      boundingBox.setToNaN();
+      boundingBox.updateToIncludePoints(this);
    }
 
    /**
