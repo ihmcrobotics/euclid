@@ -9,8 +9,6 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.utils.NameBasedHashCodeHolder;
-import us.ihmc.euclid.utils.NameBasedHashCodeTools;
 
 /**
  * {@code ReferenceFrame} represents a reference coordinate frame.
@@ -50,20 +48,31 @@ import us.ihmc.euclid.utils.NameBasedHashCodeTools;
  * express a geometry in a different frame.
  * </p>
  */
-public abstract class ReferenceFrame implements NameBasedHashCodeHolder
+public abstract class ReferenceFrame
 {
+   /** A string used to separate frame names in the {@link #uniqueId} of the reference frame */
+   private static final String SEPARATOR = ":";
+
    /** The name of this reference frame. The name should preferably be unique. */
    private final String frameName;
+
    /**
-    * A secondary unique hash code representing this reference frame that is computed based on
-    * {@link #frameName} and the parent frame name if any.
+    * A unique string that can be used to identify the {@link ReferenceFrame}. It contains the name
+    * of the frame itself and all parents up to the root frame.
     * <p>
-    * This hash code has the benefit of remaining the same when creating several instances of the same
+    * This id has the benefit of remaining the same when creating several instances of the same
     * tree of reference frames, such that it can be used to serialize and deserialize frame
     * information.
     * </p>
     */
-   private final long nameBasedHashCode;
+   protected final String uniqueId;
+
+   /**
+    * The has code of this reference frame is based on the {@link #uniqueId} of this frame and is
+    * pre-computed at construction time for efficiency.
+    */
+   private final int hashCode;
+
    /**
     * Additional custom hash code representing this frame.
     * <p>
@@ -394,6 +403,11 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransform transformToParent, boolean isAStationaryFrame, boolean isZupFrame)
    {
+      if (frameName.contains(SEPARATOR))
+      {
+         throw new RuntimeException("A reference frame name can not contain '" + SEPARATOR + "'. Tried to construct a frame with name " + frameName + ".");
+      }
+
       this.frameName = frameName;
       this.parentFrame = parentFrame;
       framesStartingWithRootEndingWithThis = constructFramesStartingWithRootEndingWithThis(this);
@@ -401,7 +415,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
       if (parentFrame == null)
       { // Setting up this ReferenceFrame as a root frame.
          transformToRootID = 0;
-         nameBasedHashCode = NameBasedHashCodeTools.computeStringHashCode(frameName);
+         uniqueId = frameName;
 
          transformToRoot = null;
          this.transformToParent = null;
@@ -411,7 +425,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
       }
       else
       {
-         nameBasedHashCode = NameBasedHashCodeTools.combineHashCodes(frameName, parentFrame.getName());
+         uniqueId = parentFrame.uniqueId + SEPARATOR + frameName;
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -438,6 +452,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
          parentFrame.children.add(this);
       }
+
+      hashCode = uniqueId.hashCode();
    }
 
    private static ReferenceFrame[] constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
@@ -954,24 +970,20 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
       }
    }
 
-   /**
-    * Gets the value of this frame's name based hash code.
-    * <p>
-    * This is a secondary unique hash code representing this reference frame that is computed based on
-    * {@link #frameName} and the parent frame name if any.
-    * </p>
-    * <p>
-    * This hash code has the benefit of remaining the same when creating several instances of the same
-    * tree of reference frames, such that it can be used to serialize and deserialize frame
-    * information.
-    * </p>
-    *
-    * @return this frame's name based hash code.
-    */
    @Override
-   public long getNameBasedHashCode()
+   public int hashCode()
    {
-      return nameBasedHashCode;
+      return hashCode;
+   }
+
+   @Override
+   public boolean equals(Object other)
+   {
+      if (other instanceof ReferenceFrame)
+      {
+         return ((ReferenceFrame) other).uniqueId.equals(uniqueId);
+      }
+      return false;
    }
 
    /**
