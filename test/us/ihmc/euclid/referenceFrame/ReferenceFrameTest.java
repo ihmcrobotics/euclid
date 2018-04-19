@@ -34,7 +34,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant0" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant", world, expected);
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -49,7 +49,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant1" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -468,7 +468,7 @@ public class ReferenceFrameTest
          Point3D expected = new Point3D(original);
          Point3D actual = new Point3D(expected);
 
-         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree("randomFrames_" + i + "_", random);
+         ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame desiredFrame = referenceFrames[random.nextInt(referenceFrames.length)];
