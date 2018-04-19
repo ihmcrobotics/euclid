@@ -243,6 +243,19 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Creates a tree structure of 20 random reference frames starting off
+    * {@code ReferenceFrame.getWorldFrame()}.
+    *
+    * @param frameNamePrefix prefix to use when creating each random reference frame.
+    * @param random the random generator to use.
+    * @return the array containing the random reference frame and {@code rootFrame} at the first index.
+    */
+   public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random)
+   {
+      return nextReferenceFrameTree(frameNamePrefix, random, ReferenceFrame.getWorldFrame(), 20, false);
+   }
+
+   /**
     * Creates a tree structure of 20 random reference frames start off
     * {@link ReferenceFrame#getWorldFrame()}.
     * 

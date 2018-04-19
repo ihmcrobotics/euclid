@@ -1,5 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -78,6 +81,12 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * </p>
     */
    protected final ReferenceFrame parentFrame;
+
+   /**
+    * A list of the reference frames children.
+    */
+   protected Collection<ReferenceFrame> children = new ArrayList<>();
+
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
     * with respect to the root frame.
@@ -418,6 +427,16 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
          this.isAStationaryFrame = isAStationaryFrame;
          this.isZupFrame = isZupFrame;
+
+         for (ReferenceFrame sibling : parentFrame.children)
+         {
+            if (sibling.getName().equals(frameName))
+            {
+               throw new RuntimeException("The parent frame already has a child with the name " + frameName + ".");
+            }
+         }
+
+         parentFrame.children.add(this);
       }
    }
 
