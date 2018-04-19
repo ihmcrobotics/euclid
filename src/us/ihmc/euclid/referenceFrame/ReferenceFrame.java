@@ -442,12 +442,9 @@ public abstract class ReferenceFrame
          this.isAStationaryFrame = isAStationaryFrame;
          this.isZupFrame = isZupFrame;
 
-         for (ReferenceFrame sibling : parentFrame.children)
+         if (hasChild(frameName, parentFrame))
          {
-            if (sibling.getName().equals(frameName))
-            {
-               throw new RuntimeException("The parent frame already has a child with the name " + frameName + ".");
-            }
+            throw new RuntimeException("The parent frame already has a child with the name " + frameName + ".");
          }
 
          parentFrame.children.add(this);
@@ -1013,5 +1010,18 @@ public abstract class ReferenceFrame
    public void setAdditionalNameBasedHashCode(long additionalNameBasedHashCode)
    {
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
+   }
+
+   /**
+    * A convenience method that allows for checking whether a frame has a child frame with a given
+    * name. If that is the case this method will return true.
+    * 
+    * @param childName the name to check for in the list of children of {@code frame}
+    * @param frame is the frame to check the children of
+    * @return whether {@code frame} has a child frame with name {@code childName}
+    */
+   public static boolean hasChild(String childName, ReferenceFrame frame)
+   {
+      return frame.children.stream().anyMatch(child -> child.getName().equals(childName));
    }
 }

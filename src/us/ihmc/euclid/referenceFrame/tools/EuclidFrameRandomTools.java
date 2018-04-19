@@ -211,7 +211,8 @@ public class EuclidFrameRandomTools
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform2D(random);
       else
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
+      String uniqueFrameName = createValidChildName(frameName, parentFrame, random);
+      return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(uniqueFrameName, parentFrame, transformFromParent);
    }
 
    /**
@@ -1578,5 +1579,20 @@ public class EuclidFrameRandomTools
             return new FramePoint3D(referenceFrame, vertex2dSupplier.getVertex(index));
          }
       };
+   }
+   
+   private static String createValidChildName(String namePrefix, ReferenceFrame parent, Random random)
+   {
+      if (!ReferenceFrame.hasChild(namePrefix, parent))
+      {
+         return namePrefix;
+      }
+      
+      int number = random.nextInt();
+      while (ReferenceFrame.hasChild(namePrefix + number, parent))
+      {
+         number = random.nextInt();
+      }
+      return namePrefix + number;
    }
 }
