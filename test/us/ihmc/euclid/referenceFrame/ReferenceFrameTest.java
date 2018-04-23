@@ -1,10 +1,12 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
@@ -509,6 +511,31 @@ public class ReferenceFrameTest
       }
       catch (RuntimeException e)
       {
+      }
+   }
+
+   @Test
+   public void testUniqueFrameIndex()
+   {
+      Random random = new Random(84358345L);
+      List<Long> existingIds = new ArrayList<>();
+      assertEquals(0L, ReferenceFrame.getWorldFrame().getFrameIndex());
+      existingIds.add(0L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         for (ReferenceFrame referenceFrame : frameTree)
+         {
+            if (referenceFrame == ReferenceFrame.getWorldFrame())
+            {
+               continue;
+            }
+
+            long frameIndex = referenceFrame.getFrameIndex();
+            assertFalse("Already has ID " + frameIndex, existingIds.contains(frameIndex));
+            existingIds.add(frameIndex);
+         }
       }
    }
 }

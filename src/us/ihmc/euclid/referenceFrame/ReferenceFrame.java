@@ -74,6 +74,18 @@ public abstract class ReferenceFrame
    private final int hashCode;
 
    /**
+    * An ID that can be used to identify a frame inside a tree of reference frames. Each frame inside
+    * a tree will have a frame ID that is different from all other frames inside the tree. This ID
+    * allows differentiating two frames in a tree that might have the same name and parent.
+    */
+   private final long frameIndex;
+
+   /**
+    * A counter for the number of frames in the reference frame tree that starts at this frame.
+    */
+   private long treeSizeBelowThisFrame = 0L;
+
+   /**
     * Additional custom hash code representing this frame.
     * <p>
     * Somewhat of a hack that allows to enforce two frames that are physically the same but with
@@ -416,6 +428,7 @@ public abstract class ReferenceFrame
       { // Setting up this ReferenceFrame as a root frame.
          transformToRootID = 0;
          uniqueId = frameName;
+         frameIndex = 0L;
 
          transformToRoot = null;
          this.transformToParent = null;
@@ -426,6 +439,7 @@ public abstract class ReferenceFrame
       else
       {
          uniqueId = parentFrame.uniqueId + SEPARATOR + frameName;
+         frameIndex = parentFrame.incrementTreeSize();
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -451,6 +465,20 @@ public abstract class ReferenceFrame
       }
 
       hashCode = uniqueId.hashCode();
+   }
+
+   private long incrementTreeSize()
+   {
+      treeSizeBelowThisFrame++;
+
+      if (parentFrame == null)
+      {
+         return treeSizeBelowThisFrame;
+      }
+      else
+      {
+         return parentFrame.incrementTreeSize();
+      }
    }
 
    private static ReferenceFrame[] constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
@@ -981,6 +1009,11 @@ public abstract class ReferenceFrame
          return ((ReferenceFrame) other).uniqueId.equals(uniqueId);
       }
       return false;
+   }
+
+   public long getFrameIndex()
+   {
+      return frameIndex;
    }
 
    /**
