@@ -22,7 +22,7 @@ public class ReferenceFrameTest
    private static final int ITERATIONS = 1000;
 
    private static final double EPSILON = 1.0e-12;
-   
+
    /**
     * Test for the issue: <a href="https://github.com/ihmcrobotics/euclid/issues/12">Issue 12</a>.
     */
@@ -31,13 +31,12 @@ public class ReferenceFrameTest
    {
       Random random = new Random(43563);
       ReferenceFrame world = ReferenceFrame.getWorldFrame();
-      int count = 0;
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant" + count++, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant", world, expected);
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -52,7 +51,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant" + count++, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -495,23 +494,6 @@ public class ReferenceFrameTest
          {
             // good
          }
-      }
-   }
-
-   @Test
-   public void testUniqueIdentifier()
-   {
-      Random random = new Random(84358345L);
-      ReferenceFrame rootFrame = ReferenceFrame.getWorldFrame();
-      ReferenceFrame frame = EuclidFrameRandomTools.nextReferenceFrame("child", random, rootFrame);
-
-      try
-      {
-         ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frame.getName(), rootFrame, new RigidBodyTransform());
-         fail("Should have thrown a RuntimeException");
-      }
-      catch (RuntimeException e)
-      {
       }
    }
 

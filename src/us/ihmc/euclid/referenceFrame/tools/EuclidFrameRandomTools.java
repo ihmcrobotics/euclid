@@ -41,9 +41,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidFrameRandomTools
 {
-   /** A internal counter used to create unique frame names */
-   private static long count = 0L;
-
    /**
     * Generates a reference frame with a random transform to world frame.
     *
@@ -214,7 +211,7 @@ public class EuclidFrameRandomTools
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform2D(random);
       else
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frameName + count++, parentFrame, transformFromParent);
+      return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
    }
 
    /**
@@ -248,7 +245,7 @@ public class EuclidFrameRandomTools
    /**
     * Creates a tree structure of 20 random reference frames start off
     * {@link ReferenceFrame#getWorldFrame()}.
-    * 
+    *
     * @param random the random generator to use.
     * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
     *           random frames.
@@ -265,7 +262,7 @@ public class EuclidFrameRandomTools
    /**
     * Creates a tree structure of 20 random reference frames start off
     * {@link ReferenceFrame#getWorldFrame()}.
-    * 
+    *
     * @param random the random generator to use.
     * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
     *           random frames.
@@ -1394,7 +1391,7 @@ public class EuclidFrameRandomTools
     * The rotation magnitude described by the orientation part of the generated pose is in
     * [-{@code orientationMinMax}; {@code orientationMinMax}].
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @param referenceFrame the random frame pose reference frame.
     * @param positionMinMax the maximum absolute value of each position coordinate.
@@ -1449,7 +1446,7 @@ public class EuclidFrameRandomTools
     * The rotation magnitude described by the orientation part of the generated pose is in
     * [-{@code orientationMinMax}; {@code orientationMinMax}].
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @param referenceFrame the random frame pose's reference frame.
     * @param positionMinMax the maximum absolute value of each position coordinate.
@@ -1512,7 +1509,7 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
-    * 
+    *
     * @param random the random generator to use.
     * @param referenceFrame the polygon's reference frame.
     * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
@@ -1529,7 +1526,7 @@ public class EuclidFrameRandomTools
 
    /**
     * Generates a fixed-size supplier of random frame vertex 2D.
-    * 
+    *
     * @param random the random generator to use.
     * @param referenceFrame the reference frame for the vertices.
     * @param numberOfVertices the supplier's size.
@@ -1557,7 +1554,7 @@ public class EuclidFrameRandomTools
 
    /**
     * Generates a fixed-size supplier of random frame vertex 3D.
-    * 
+    *
     * @param random the random generator to use.
     * @param referenceFrame the reference frame for the vertices.
     * @param numberOfVertices the supplier's size.

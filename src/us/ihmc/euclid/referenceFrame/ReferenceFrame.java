@@ -1,8 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -58,25 +55,24 @@ public abstract class ReferenceFrame
 
    /**
     * A unique string that can be used to identify the {@link ReferenceFrame}. It contains the name
-    * of the frame itself and all parents up to the root frame.
+    * of the frame itself and all parents up to the root frame and is used for the {@link #hashCode()}
+    * and {@link #equals()} methods.
     * <p>
-    * This id has the benefit of remaining the same when creating several instances of the same
-    * tree of reference frames, such that it can be used to serialize and deserialize frame
-    * information.
+    * In contrast to the {@link #frameIndex} this is a name based identifier that is only dependent on
+    * names of frames. Note, that this means that two frames with the same name will be considered equal
+    * even though they might be in different locations.
     * </p>
     */
    protected final String uniqueId;
 
    /**
-    * The has code of this reference frame is based on the {@link #uniqueId} of this frame and is
-    * pre-computed at construction time for efficiency.
-    */
-   private final int hashCode;
-
-   /**
     * An ID that can be used to identify a frame inside a tree of reference frames. Each frame inside
-    * a tree will have a frame ID that is different from all other frames inside the tree. This ID
-    * allows differentiating two frames in a tree that might have the same name and parent.
+    * a tree will have a frame ID that is different from all other frames inside the tree.
+    * <p>
+    * It is more reliably then a hash code since there will be no collisions within a single
+    * frame tree. The disadvantage is that it is dependent on the order of construction of frames
+    * such that this index can change from run to run even if the name of the frame remains unchanged.
+    * </p>
     */
    private final long frameIndex;
 
@@ -102,11 +98,6 @@ public abstract class ReferenceFrame
     * </p>
     */
    protected final ReferenceFrame parentFrame;
-
-   /**
-    * A list of the names of all the children of this frame.
-    */
-   protected Collection<String> childrensNames = new ArrayList<>();
 
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
@@ -455,16 +446,7 @@ public abstract class ReferenceFrame
 
          this.isAStationaryFrame = isAStationaryFrame;
          this.isZupFrame = isZupFrame;
-
-         if (hasChild(frameName, parentFrame))
-         {
-            throw new RuntimeException("The parent frame already has a child with the name " + frameName + ".");
-         }
-
-         parentFrame.childrensNames.add(frameName);
       }
-
-      hashCode = uniqueId.hashCode();
    }
 
    private long incrementTreeSize()
@@ -995,12 +977,29 @@ public abstract class ReferenceFrame
       }
    }
 
+   /**
+    * The hash code of a reference frame is based on the {@link #uniqueId} of the frame. This
+    * means that the hash code will be equal for two distinct frames that have the same name.
+    * To differentiate all frames in a tree regardless of their name use the
+    * {@link #getFrameIndex()} method.
+    *
+    * @return the hash code of the {@link #uniqueId} of this frame.
+    */
    @Override
    public int hashCode()
    {
-      return hashCode;
+      return uniqueId.hashCode();
    }
 
+   /**
+    * This method will return true if the provided object is a reference frame with the same
+    * {@link #uniqueId} as this frame. This means that two distinct frames with the same name
+    * are considered equal. To differentiate all frames in a tree regardless of their name use
+    * the {@link #getFrameIndex()} method.
+    *
+    * @return {@code true} if the provided object is of type {@link ReferenceFrame} and its
+    * {@link #uniqueId} matches this.
+    */
    @Override
    public boolean equals(Object other)
    {
@@ -1011,6 +1010,13 @@ public abstract class ReferenceFrame
       return false;
    }
 
+   /**
+    * Gets the {@link #frameIndex} of this reference frame. The frame index is a unique number
+    * that identifies each reference frame within a reference frame tree. No two frames inside
+    * a frame tree can have the same index.
+    *
+    * @return the frame index that is unique in the frame tree that this frame is part of.
+    */
    public long getFrameIndex()
    {
       return frameIndex;
@@ -1043,18 +1049,5 @@ public abstract class ReferenceFrame
    public void setAdditionalNameBasedHashCode(long additionalNameBasedHashCode)
    {
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
-   }
-
-   /**
-    * A convenience method that allows for checking whether a frame has a child frame with a given
-    * name. If that is the case this method will return true.
-    * 
-    * @param childName the name to check for in the list of children of {@code frame}
-    * @param frame is the frame to check the children of
-    * @return whether {@code frame} has a child frame with name {@code childName}
-    */
-   public static boolean hasChild(String childName, ReferenceFrame frame)
-   {
-      return frame.childrensNames.stream().anyMatch(child -> child.equals(childName));
    }
 }
