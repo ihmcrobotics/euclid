@@ -31,12 +31,13 @@ public class ReferenceFrameTest
    {
       Random random = new Random(43563);
       ReferenceFrame world = ReferenceFrame.getWorldFrame();
+      int count = 0;
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant0" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant" + count++, world, expected);
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -51,7 +52,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant1" + i, world, expected);
+         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant" + count++, world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -502,11 +503,11 @@ public class ReferenceFrameTest
    {
       Random random = new Random(84358345L);
       ReferenceFrame rootFrame = ReferenceFrame.getWorldFrame();
-      EuclidFrameRandomTools.nextReferenceFrame("child", random, rootFrame);
+      ReferenceFrame frame = EuclidFrameRandomTools.nextReferenceFrame("child", random, rootFrame);
 
       try
       {
-         ReferenceFrame.constructFrameWithUnchangingTransformFromParent("child", rootFrame, new RigidBodyTransform());
+         ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frame.getName(), rootFrame, new RigidBodyTransform());
          fail("Should have thrown a RuntimeException");
       }
       catch (RuntimeException e)

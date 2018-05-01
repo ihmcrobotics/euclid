@@ -41,6 +41,9 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidFrameRandomTools
 {
+   /** A internal counter used to create unique frame names */
+   private static long count = 0L;
+
    /**
     * Generates a reference frame with a random transform to world frame.
     *
@@ -211,8 +214,7 @@ public class EuclidFrameRandomTools
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform2D(random);
       else
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      String uniqueFrameName = createValidChildName(frameName, parentFrame, random);
-      return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(uniqueFrameName, parentFrame, transformFromParent);
+      return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frameName + count++, parentFrame, transformFromParent);
    }
 
    /**
@@ -1579,20 +1581,5 @@ public class EuclidFrameRandomTools
             return new FramePoint3D(referenceFrame, vertex2dSupplier.getVertex(index));
          }
       };
-   }
-   
-   private static String createValidChildName(String namePrefix, ReferenceFrame parent, Random random)
-   {
-      if (!ReferenceFrame.hasChild(namePrefix, parent))
-      {
-         return namePrefix;
-      }
-      
-      int number = random.nextInt();
-      while (ReferenceFrame.hasChild(namePrefix + number, parent))
-      {
-         number = random.nextInt();
-      }
-      return namePrefix + number;
    }
 }
