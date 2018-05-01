@@ -47,14 +47,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  */
 public abstract class ReferenceFrame
 {
-   /** A string used to separate frame names in the {@link #uniqueId} of the reference frame */
+   /** A string used to separate frame names in the {@link #nameId} of the reference frame */
    private static final String SEPARATOR = ":";
 
    /** The name of this reference frame. The name should preferably be unique. */
    private final String frameName;
 
    /**
-    * A unique string that can be used to identify the {@link ReferenceFrame}. It contains the name
+    * A string that can be used to identify the {@link ReferenceFrame}. It contains the name
     * of the frame itself and all parents up to the root frame and is used for the {@link #hashCode()}
     * and {@link #equals()} methods.
     * <p>
@@ -63,7 +63,7 @@ public abstract class ReferenceFrame
     * even though they might be in different locations.
     * </p>
     */
-   protected final String uniqueId;
+   protected final String nameId;
 
    /**
     * An ID that can be used to identify a frame inside a tree of reference frames. Each frame inside
@@ -417,7 +417,7 @@ public abstract class ReferenceFrame
       if (parentFrame == null)
       { // Setting up this ReferenceFrame as a root frame.
          transformToRootID = 0;
-         uniqueId = frameName;
+         nameId = frameName;
          frameIndex = 0L;
 
          transformToRoot = null;
@@ -428,7 +428,7 @@ public abstract class ReferenceFrame
       }
       else
       {
-         uniqueId = parentFrame.uniqueId + SEPARATOR + frameName;
+         nameId = parentFrame.nameId + SEPARATOR + frameName;
          frameIndex = parentFrame.incrementTreeSize();
 
          transformToRoot = new RigidBodyTransform();
@@ -977,34 +977,34 @@ public abstract class ReferenceFrame
    }
 
    /**
-    * The hash code of a reference frame is based on the {@link #uniqueId} of the frame. This
+    * The hash code of a reference frame is based on the {@link #nameId} of the frame. This
     * means that the hash code will be equal for two distinct frames that have the same name.
     * To differentiate all frames in a tree regardless of their name use the
     * {@link #getFrameIndex()} method.
     *
-    * @return the hash code of the {@link #uniqueId} of this frame.
+    * @return the hash code of the {@link #nameId} of this frame.
     */
    @Override
    public int hashCode()
    {
-      return uniqueId.hashCode();
+      return nameId.hashCode();
    }
 
    /**
     * This method will return true if the provided object is a reference frame with the same
-    * {@link #uniqueId} as this frame. This means that two distinct frames with the same name
+    * {@link #nameId} as this frame. This means that two distinct frames with the same name
     * are considered equal. To differentiate all frames in a tree regardless of their name use
     * the {@link #getFrameIndex()} method.
     *
     * @return {@code true} if the provided object is of type {@link ReferenceFrame} and its
-    * {@link #uniqueId} matches this.
+    * {@link #nameId} matches this.
     */
    @Override
    public boolean equals(Object other)
    {
       if (other instanceof ReferenceFrame)
       {
-         return ((ReferenceFrame) other).uniqueId.equals(uniqueId);
+         return ((ReferenceFrame) other).nameId.equals(nameId);
       }
       return false;
    }
