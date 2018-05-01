@@ -98,7 +98,6 @@ public abstract class ReferenceFrame
     * </p>
     */
    protected final ReferenceFrame parentFrame;
-
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
     * with respect to the root frame.
