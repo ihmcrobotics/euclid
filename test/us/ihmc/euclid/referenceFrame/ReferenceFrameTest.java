@@ -20,9 +20,9 @@ import us.ihmc.euclid.tuple3D.Point3D;
 public class ReferenceFrameTest
 {
    private static final int ITERATIONS = 1000;
-   
-   private static final double EPSILON = 1.0e-12;
 
+   private static final double EPSILON = 1.0e-12;
+   
    /**
     * Test for the issue: <a href="https://github.com/ihmcrobotics/euclid/issues/12">Issue 12</a>.
     */
