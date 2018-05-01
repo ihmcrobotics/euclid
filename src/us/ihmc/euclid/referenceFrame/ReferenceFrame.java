@@ -104,9 +104,9 @@ public abstract class ReferenceFrame
    protected final ReferenceFrame parentFrame;
 
    /**
-    * A list of the reference frames children.
+    * A list of the names of all the children of this frame.
     */
-   protected Collection<ReferenceFrame> children = new ArrayList<>();
+   protected Collection<String> childrensNames = new ArrayList<>();
 
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
@@ -461,7 +461,7 @@ public abstract class ReferenceFrame
             throw new RuntimeException("The parent frame already has a child with the name " + frameName + ".");
          }
 
-         parentFrame.children.add(this);
+         parentFrame.childrensNames.add(frameName);
       }
 
       hashCode = uniqueId.hashCode();
@@ -1055,6 +1055,6 @@ public abstract class ReferenceFrame
     */
    public static boolean hasChild(String childName, ReferenceFrame frame)
    {
-      return frame.children.stream().anyMatch(child -> child.getName().equals(childName));
+      return frame.childrensNames.stream().anyMatch(child -> child.equals(childName));
    }
 }
