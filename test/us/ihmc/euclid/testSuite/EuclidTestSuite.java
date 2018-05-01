@@ -47,6 +47,9 @@ import us.ihmc.euclid.referenceFrame.FrameVector2DTest;
 import us.ihmc.euclid.referenceFrame.FrameVector3DTest;
 import us.ihmc.euclid.referenceFrame.FrameVector4DTest;
 import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestToolsTest;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameToolsTest;
+import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -69,6 +72,8 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrameTest;
       FramePoint3DTest.class, FrameVector3DTest.class, FramePose3DTest.class, FrameLineSegment3DTest.class, FrameLine3DTest.class,
       // 4D
       FrameQuaternionTest.class, FrameVector4DTest.class,
+      // Tools tests
+      EuclidFrameToolsTest.class, NameBasedHashCodeToolsTest.class, EuclidFrameTestToolsTest.class,
       // Exceptions tests
       BoundingBoxExceptionTest.class,
       // Axis test
