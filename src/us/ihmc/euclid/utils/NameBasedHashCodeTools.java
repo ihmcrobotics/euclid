@@ -8,6 +8,7 @@ package us.ihmc.euclid.utils;
  * calculated using the same algorithm.
  * </p>
  */
+@Deprecated
 public class NameBasedHashCodeTools
 {
    /** Smallest prime number used as the base for computing name based hash codes. */
