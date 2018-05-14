@@ -509,6 +509,7 @@ public abstract class ReferenceFrame
     */
    public boolean isWorldFrame()
    {
+      checkIfRemoved();
       return this == worldFrame;
    }
 
@@ -520,6 +521,7 @@ public abstract class ReferenceFrame
     */
    public boolean isAStationaryFrame()
    {
+      checkIfRemoved();
       return isAStationaryFrame;
    }
 
@@ -530,6 +532,7 @@ public abstract class ReferenceFrame
     */
    public boolean isZupFrame()
    {
+      checkIfRemoved();
       return isZupFrame;
    }
 
@@ -579,6 +582,7 @@ public abstract class ReferenceFrame
     */
    public ReferenceFrame getParent()
    {
+      checkIfRemoved();
       return parentFrame;
    }
 
@@ -589,6 +593,7 @@ public abstract class ReferenceFrame
     */
    public ReferenceFrame getRootFrame()
    {
+      checkIfRemoved();
       return framesStartingWithRootEndingWithThis[0];
    }
 
@@ -625,7 +630,6 @@ public abstract class ReferenceFrame
    public void getTransformToParent(RigidBodyTransform transformToPack)
    {
       checkIfRemoved();
-
       transformToPack.set(transformToParent);
    }
 
@@ -640,6 +644,7 @@ public abstract class ReferenceFrame
     */
    public String getName()
    {
+      checkIfRemoved();
       return frameName;
    }
 
@@ -733,6 +738,7 @@ public abstract class ReferenceFrame
     */
    public boolean isParentFrame(ReferenceFrame frame)
    {
+      checkIfRemoved();
       return frame == parentFrame;
    }
 
@@ -744,6 +750,7 @@ public abstract class ReferenceFrame
     */
    public boolean isChildFrame(ReferenceFrame frame)
    {
+      checkIfRemoved();
       return frame.isParentFrame(this);
    }
 
@@ -866,6 +873,7 @@ public abstract class ReferenceFrame
    @Override
    public String toString()
    {
+      checkIfRemoved();
       return frameName; // + "\nTransform to Parent = " + this.transformToParent;
    }
 
@@ -891,6 +899,7 @@ public abstract class ReferenceFrame
     */
    public void checkReferenceFrameMatch(ReferenceFrame referenceFrame) throws ReferenceFrameMismatchException
    {
+      checkIfRemoved();
       if (this != referenceFrame)
       {
          String msg = "Argument's frame " + referenceFrame + " does not match " + this;
@@ -906,6 +915,7 @@ public abstract class ReferenceFrame
     */
    public void checkIsWorldFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isWorldFrame())
       {
          throw new RuntimeException("Frame " + this + " is not world frame.");
@@ -919,6 +929,7 @@ public abstract class ReferenceFrame
     */
    public void checkIsAStationaryFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isAStationaryFrame())
       {
          throw new RuntimeException("Frame " + this + " is not a stationary frame.");
@@ -932,6 +943,7 @@ public abstract class ReferenceFrame
     */
    public void checkIsAZUpFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isZupFrame())
       {
          throw new RuntimeException("Frame " + this + " is not a z-up frame.");
@@ -1014,6 +1026,7 @@ public abstract class ReferenceFrame
    @Override
    public int hashCode()
    {
+      checkIfRemoved();
       return nameId.hashCode();
    }
 
@@ -1029,6 +1042,7 @@ public abstract class ReferenceFrame
    @Override
    public boolean equals(Object other)
    {
+      checkIfRemoved();
       if (other instanceof ReferenceFrame)
       {
          return ((ReferenceFrame) other).nameId.equals(nameId);
@@ -1045,6 +1059,7 @@ public abstract class ReferenceFrame
     */
    public long getFrameIndex()
    {
+      checkIfRemoved();
       return frameIndex;
    }
 
@@ -1059,6 +1074,7 @@ public abstract class ReferenceFrame
     */
    public long getAdditionalNameBasedHashCode()
    {
+      checkIfRemoved();
       return additionalNameBasedHashCode;
    }
 
@@ -1074,6 +1090,7 @@ public abstract class ReferenceFrame
     */
    public void setAdditionalNameBasedHashCode(long additionalNameBasedHashCode)
    {
+      checkIfRemoved();
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
    }
 
@@ -1092,7 +1109,7 @@ public abstract class ReferenceFrame
 
    public static void removeFrame(ReferenceFrame frame)
    {
-      if (frame.parentFrame != null)
+      if (frame.parentFrame != null && !frame.hasBeenRemoved)
       {
          frame.parentFrame.children.remove(frame);
          disableRecursivly(frame);

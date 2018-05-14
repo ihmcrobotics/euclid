@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,7 +24,7 @@ public class ReferenceFrameTest
    private static final int ITERATIONS = 1000;
 
    private static final double EPSILON = 1.0e-12;
-   
+
    /**
     * Test for the issue: <a href="https://github.com/ihmcrobotics/euclid/issues/12">Issue 12</a>.
     */
@@ -527,6 +529,94 @@ public class ReferenceFrameTest
          }
 
          ReferenceFrame.removeFrames(frameTree);
+      }
+   }
+
+   @Test
+   public void testUniqueNaming()
+   {
+      Random random = new Random(13L);
+      ReferenceFrame someFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+      String frameName = someFrame.getName();
+      ReferenceFrame parent = someFrame.getParent();
+
+      try
+      {
+         ReferenceFrame.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      ReferenceFrame.removeFrame(someFrame);
+      someFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+
+      ReferenceFrame.clearFrameTree(someFrame);
+      someFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+
+      ReferenceFrame.clearWorldFrameTree();
+      ReferenceFrame.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+   }
+
+   @Test
+   public void testDisabeling() throws InstantiationException, IllegalAccessException
+   {
+      Random random = new Random(314114L);
+      ReferenceFrame[] someFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+      ReferenceFrame frameToDisable = someFrames[random.nextInt(someFrames.length - 1) + 1];
+      ReferenceFrame[] moreChildren = EuclidFrameRandomTools.nextReferenceFrameTree("AdditionalChild", random, frameToDisable, 10);
+
+      ReferenceFrame.removeFrame(frameToDisable);
+      checkDisabled(frameToDisable);
+      for (ReferenceFrame child : moreChildren)
+      {
+         checkDisabled(child);
+      }
+   }
+
+   private static void checkDisabled(ReferenceFrame frame) throws InstantiationException, IllegalAccessException
+   {
+      Method[] methods = ReferenceFrame.class.getMethods();
+      for (Method method : methods)
+      {
+         if (Modifier.isStatic(method.getModifiers()))
+         {
+            continue;
+         }
+         if (method.getDeclaringClass() != ReferenceFrame.class)
+         {
+            continue;
+         }
+
+         Object[] parameters = new Object[method.getParameterTypes().length];
+         for (int paramIdx = 0; paramIdx < method.getParameterTypes().length; paramIdx++)
+         {
+            Class<?> parameterClass = method.getParameterTypes()[paramIdx];
+            if (parameterClass.isPrimitive())
+            {
+               // Only works for some primitive types. If we add a public method that takes a boolean for example we will need to update this.
+               parameters[paramIdx] = 0;
+            }
+         }
+
+         try
+         {
+            method.invoke(frame, parameters);
+            fail("Should have thrown a RuntimeException on " + method.getName());
+         }
+         catch (Exception e)
+         {
+            if (e.getCause() instanceof RuntimeException)
+            {
+               continue;
+            }
+            else
+            {
+               fail("There was an exception in " + method.getName() + " but expected a RuntimeException.");
+            }
+         }
       }
    }
 }
