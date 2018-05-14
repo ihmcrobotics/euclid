@@ -63,6 +63,7 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
       Random random = new Random(621541L);
       double epsilon = 0.0;
 
+      clearFrames();
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
       ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 
@@ -95,6 +96,7 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
 
       Random random = new Random(621541L);
 
+      clearFrames();
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
       ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 

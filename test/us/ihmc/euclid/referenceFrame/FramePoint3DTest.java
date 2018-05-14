@@ -166,6 +166,7 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
+         ReferenceFrame.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -200,6 +201,7 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
+         ReferenceFrame.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];

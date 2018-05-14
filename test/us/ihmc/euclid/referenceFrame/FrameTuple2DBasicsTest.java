@@ -43,6 +43,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+         ReferenceFrame.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple2DBasics expected = createRandomFramelessTuple(random);
@@ -82,6 +83,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, double x, double y)
+         ReferenceFrame.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple2DBasics expected = createRandomFramelessTuple(random);
@@ -389,6 +391,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
+         ReferenceFrame.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple2DBasics expectedGeometryObject = createRandomFramelessTuple(random);
@@ -419,6 +422,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
+         ReferenceFrame.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];

@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
@@ -26,6 +27,12 @@ public class EuclidFrameTestToolsTest
 {
    private static final double EPSILON = 0.0001;
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
+
+   @Before
+   public void clearFrames()
+   {
+      ReferenceFrame.clearWorldFrameTree();
+   }
 
    @Test
    public void testAssertRotationFrameVectorGeometricallyEquals() throws Throwable

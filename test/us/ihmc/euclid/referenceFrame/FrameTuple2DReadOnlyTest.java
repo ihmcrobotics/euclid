@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
@@ -17,6 +18,12 @@ public abstract class FrameTuple2DReadOnlyTest<F extends FrameTuple2DReadOnly>
 {
    public static final int NUMBER_OF_ITERATIONS = Tuple2DReadOnlyTest.NUMBER_OF_ITERATIONS;
    public static final double EPSILON = 1.0e-15;
+
+   @Before
+   public void clearFrames()
+   {
+      ReferenceFrame.clearWorldFrameTree();
+   }
 
    public F createEmptyFrameTuple()
    {
