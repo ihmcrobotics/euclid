@@ -45,6 +45,8 @@ public class ReferenceFrameTest
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+
+         ReferenceFrame.removeFrame(constantFrame);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -61,6 +63,8 @@ public class ReferenceFrameTest
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+
+         ReferenceFrame.removeFrame(constantFrame);
       }
    }
 
@@ -494,6 +498,8 @@ public class ReferenceFrameTest
          {
             // good
          }
+
+         ReferenceFrame.removeFrames(referenceFrames);
       }
    }
 
@@ -519,6 +525,8 @@ public class ReferenceFrameTest
             assertFalse("Already has ID " + frameIndex, existingIds.contains(frameIndex));
             existingIds.add(frameIndex);
          }
+
+         ReferenceFrame.removeFrames(frameTree);
       }
    }
 }

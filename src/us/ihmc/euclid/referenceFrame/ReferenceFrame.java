@@ -1,5 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -77,9 +80,12 @@ public abstract class ReferenceFrame
    private final long frameIndex;
 
    /**
-    * A counter for the number of frames in the reference frame tree that starts at this frame.
+    * A counter for the number of frames in the reference frame tree that starts at this frame. Note,
+    * that this counter does not account for frames that might be removed from the frame tree. It is
+    * meant to account all frames that were ever added to this frame tree to provide a unique number
+    * Identifier for each frame.
     */
-   private long treeSizeBelowThisFrame = 0L;
+   private long framesAddedToTree = 0L;
 
    /**
     * Additional custom hash code representing this frame.
@@ -98,6 +104,11 @@ public abstract class ReferenceFrame
     * </p>
     */
    protected final ReferenceFrame parentFrame;
+
+   private final Collection<ReferenceFrame> children = new ArrayList<>();
+
+   private boolean hasBeenRemoved = false;
+
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
     * with respect to the root frame.
@@ -266,7 +277,7 @@ public abstract class ReferenceFrame
     * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents the
     * forward/backward direction and the y-axis represents the transversal direction.
     * </p>
-    * 
+    *
     * @return the world reference frame.
     */
    public static ReferenceFrame getWorldFrame()
@@ -428,8 +439,16 @@ public abstract class ReferenceFrame
       }
       else
       {
+         parentFrame.checkIfRemoved();
+
          nameId = parentFrame.nameId + SEPARATOR + frameName;
-         frameIndex = parentFrame.incrementTreeSize();
+         frameIndex = parentFrame.incrementFramesAdded();
+
+         if (hasChildWithName(parentFrame, frameName))
+         {
+            throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
+         }
+         parentFrame.children.add(this);
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -448,17 +467,17 @@ public abstract class ReferenceFrame
       }
    }
 
-   private long incrementTreeSize()
+   private long incrementFramesAdded()
    {
-      treeSizeBelowThisFrame++;
+      framesAddedToTree++;
 
       if (parentFrame == null)
       {
-         return treeSizeBelowThisFrame;
+         return framesAddedToTree;
       }
       else
       {
-         return parentFrame.incrementTreeSize();
+         return parentFrame.incrementFramesAdded();
       }
    }
 
@@ -525,6 +544,8 @@ public abstract class ReferenceFrame
     */
    public void update()
    {
+      checkIfRemoved();
+
       if (parentFrame == null)
       {
          return;
@@ -603,6 +624,8 @@ public abstract class ReferenceFrame
     */
    public void getTransformToParent(RigidBodyTransform transformToPack)
    {
+      checkIfRemoved();
+
       transformToPack.set(transformToParent);
    }
 
@@ -751,6 +774,8 @@ public abstract class ReferenceFrame
     */
    public void transformFromThisToDesiredFrame(ReferenceFrame desiredFrame, Transformable objectToTransform)
    {
+      checkIfRemoved();
+
       // Check for the trivial case: the geometry is already expressed in the desired frame.
       if (desiredFrame == this)
          return;
@@ -789,6 +814,8 @@ public abstract class ReferenceFrame
 
    private void efficientComputeTransform()
    {
+      checkIfRemoved();
+
       int chainLength = framesStartingWithRootEndingWithThis.length;
 
       boolean updateFromHereOnOut = false;
@@ -1048,5 +1075,71 @@ public abstract class ReferenceFrame
    public void setAdditionalNameBasedHashCode(long additionalNameBasedHashCode)
    {
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
+   }
+
+   private void checkIfRemoved()
+   {
+      if (hasBeenRemoved)
+      {
+         throw new RuntimeException("Can not use frame that was removed from the frame tree.");
+      }
+   }
+
+   public static boolean hasChildWithName(ReferenceFrame frame, String childName)
+   {
+      return frame.children.stream().anyMatch(child -> child.getName().equals(childName));
+   }
+
+   public static void removeFrame(ReferenceFrame frame)
+   {
+      if (frame.parentFrame != null)
+      {
+         frame.parentFrame.children.remove(frame);
+         disableRecursivly(frame);
+      }
+   }
+
+   private static void disableRecursivly(ReferenceFrame frame)
+   {
+      frame.hasBeenRemoved = true;
+      frame.children.forEach(child -> disableRecursivly(child));
+   }
+
+   public static void removeFrames(ReferenceFrame[] frames)
+   {
+      for (int frameIdx = 0; frameIdx < frames.length; frameIdx++)
+      {
+         removeFrame(frames[frameIdx]);
+      }
+   }
+
+   public static void clearFrameTree(ReferenceFrame frame)
+   {
+      clearChildren(frame.getRootFrame());
+   }
+
+   public static void clearWorldFrameTree()
+   {
+      clearChildren(worldFrame);
+   }
+
+   public static void clearChildren(ReferenceFrame frame)
+   {
+      frame.children.forEach(child -> disableRecursivly(child));
+      frame.children.clear();
+   }
+
+   public static Collection<ReferenceFrame> getAllFramesInTree(ReferenceFrame frame)
+   {
+      Collection<ReferenceFrame> frames = new ArrayList<>();
+      frames.add(frame.getRootFrame());
+      getAllChildren(frame.getRootFrame(), frames);
+      return frames;
+   }
+
+   private static void getAllChildren(ReferenceFrame frame, Collection<ReferenceFrame> collectionToPack)
+   {
+      collectionToPack.addAll(frame.children);
+      frame.children.forEach(childFrame -> getAllChildren(childFrame, collectionToPack));
    }
 }
