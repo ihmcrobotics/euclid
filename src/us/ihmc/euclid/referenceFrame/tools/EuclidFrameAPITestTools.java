@@ -56,6 +56,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.ReferenceFrameUtils;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
@@ -140,7 +141,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * These tools are still experimental and are improved through heavy internal usage for building
  * Euclid's test suite. The objective it to make this class usable for third party classes.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidFrameAPITestTools
@@ -633,7 +634,7 @@ public class EuclidFrameAPITestTools
 
       for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
       {
-         ReferenceFrame.clearWorldFrameTree();
+         ReferenceFrameUtils.clearWorldFrameTree();
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
@@ -842,7 +843,7 @@ public class EuclidFrameAPITestTools
 
       for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
       {
-         ReferenceFrame.clearWorldFrameTree();
+         ReferenceFrameUtils.clearWorldFrameTree();
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 

@@ -25,7 +25,7 @@ public abstract class FrameTuple3DReadOnlyTest<F extends FrameTuple3DReadOnly>
    @Before
    public void clearFrames()
    {
-      ReferenceFrame.clearWorldFrameTree();
+      ReferenceFrameUtils.clearWorldFrameTree();
    }
 
    public final F createEmptyFrameTuple()

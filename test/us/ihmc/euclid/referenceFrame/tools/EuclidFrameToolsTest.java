@@ -15,6 +15,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.ReferenceFrameUtils;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -131,7 +132,7 @@ public class EuclidFrameToolsTest
          {
             List<FramePoint3D> points = new ArrayList<>();
 
-            ReferenceFrame.clearWorldFrameTree();
+            ReferenceFrameUtils.clearWorldFrameTree();
             ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
             ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
 

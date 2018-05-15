@@ -143,7 +143,7 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         ReferenceFrame.clearWorldFrameTree();
+         ReferenceFrameUtils.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random, true);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
          ReferenceFrame anotherFrame = referenceFrames[random.nextInt(referenceFrames.length)];
