@@ -141,7 +141,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * These tools are still experimental and are improved through heavy internal usage for building
  * Euclid's test suite. The objective it to make this class usable for third party classes.
  * </p>
- *
+ * 
  * @author Sylvain Bertrand
  */
 public class EuclidFrameAPITestTools

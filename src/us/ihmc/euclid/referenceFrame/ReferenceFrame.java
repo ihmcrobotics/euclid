@@ -106,8 +106,17 @@ public abstract class ReferenceFrame
     */
    protected final ReferenceFrame parentFrame;
 
+   /**
+    * A collection of all children of this reference frame. Frames are removed from the reference frame
+    * tree using the {@link #remove()} method. This will remove the frame from this collection. Do not
+    * remove frames in a different way as this will not properly deactivate them.
+    */
    protected final Collection<ReferenceFrame> children = new ArrayList<>();
 
+   /**
+    * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree.
+    * In this case all references to the frame should be dropped so it can be garbage collected.
+    */
    protected boolean hasBeenRemoved = false;
 
    /**
