@@ -887,6 +887,17 @@ public abstract class ReferenceFrame
       }
    }
 
+   /**
+    * Will remove this frame from the frame tree.
+    * <p>
+    * This will disable the frame and cause the frame tree to loose all references to the frame and it's children. Note,
+    * that you can not use the frame after this method is called. This method is meant to allow the JVM to collect the
+    * frame as garbage and all future method calls on this frame will throw exceptions.
+    * </p>
+    * <p>
+    * This recursively disables all children of this frame also.
+    * </p>
+    */
    public void remove()
    {
       checkIfRemoved();

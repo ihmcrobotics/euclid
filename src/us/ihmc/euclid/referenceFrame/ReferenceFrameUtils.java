@@ -162,11 +162,24 @@ public class ReferenceFrameUtils
       return ret;
    }
 
-   public static boolean hasChildWithName(ReferenceFrame frame, String childName)
+   protected static boolean hasChildWithName(ReferenceFrame frame, String childName)
    {
       return frame.children.stream().anyMatch(child -> child.getName().equals(childName));
    }
 
+   /**
+    * Will remove the provided frame from the frame tree.
+    * <p>
+    * This will disable the frame and cause the frame tree to loose all references to the frame and it's children. Note,
+    * that you can not use the frame after this method is called. This method is meant to allow the JVM to collect the
+    * frame as garbage and all future method calls on this frame will throw exceptions.
+    * </p>
+    * <p>
+    * This recursively disables all children of this frame also. If the provided frame is a root frame or it has been
+    * disabled already this method will do nothing.
+    * </p>
+    * @param frame is the {@link ReferenceFrame} that will be removed from the tree.
+    */
    public static void removeFrame(ReferenceFrame frame)
    {
       if (!frame.hasBeenRemoved && frame.getParent() != null)
@@ -182,6 +195,11 @@ public class ReferenceFrameUtils
       frame.children.forEach(child -> disableRecursivly(child));
    }
 
+   /**
+    * Will remove all provided frames from the frame tree.
+    * @param frames to be removed and disabled.
+    * @see ReferenceFrameUtils#removeFrame(ReferenceFrame)
+    */
    public static void removeFrames(ReferenceFrame[] frames)
    {
       for (int frameIdx = 0; frameIdx < frames.length; frameIdx++)
@@ -190,22 +208,41 @@ public class ReferenceFrameUtils
       }
    }
 
+   /**
+    * Will clear the entire frame tree that this frame is part of leaving only the root frame
+    * enabled. All other frames in the tree will be removed and disabled.
+    * @param frame in the frame tree that will be cleared.
+    */
    public static void clearFrameTree(ReferenceFrame frame)
    {
       clearChildren(frame.getRootFrame());
    }
 
+   /**
+    * Will clear the entire frame tree of the {@link ReferenceFrameUtils#worldFrame} tree.
+    */
    public static void clearWorldFrameTree()
    {
       clearChildren(worldFrame);
    }
 
+   /**
+    * Will remove and disable all children of the provided frame.
+    * @param frame whose children should be removed from the frame tree.
+    * @see #removeFrame(ReferenceFrame)
+    */
    public static void clearChildren(ReferenceFrame frame)
    {
       frame.children.forEach(child -> disableRecursivly(child));
       frame.children.clear();
    }
 
+   /**
+    * Will create a collection of all reference frames in the frame tree that the provided frame
+    * is part of.
+    * @param frame in the reference frame tree of interest
+    * @return all frames in the reference frame tree
+    */
    public static Collection<ReferenceFrame> getAllFramesInTree(ReferenceFrame frame)
    {
       Collection<ReferenceFrame> frames = new ArrayList<>();
