@@ -913,8 +913,10 @@ public abstract class ReferenceFrame
       ReferenceFrameUtils.removeFrame(this);
    }
 
-   /** Use {@link ReferenceFrameUtils#getWorldFrame()} instead. */
-   @Deprecated
+   /**
+    * @return the root frame of the world reference frame tree.
+    * @see ReferenceFrameUtils#getWorldFrame()
+    */
    public static ReferenceFrame getWorldFrame()
    {
       return ReferenceFrameUtils.getWorldFrame();
