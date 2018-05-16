@@ -141,7 +141,7 @@ public abstract class ReferenceFrame
    // These need to be longs instead of integers or they'll role over too soon. With longs, you get at least 100 years of runtime.
    static long nextTransformToRootID = 1;
 
-   protected long transformToRootID = Long.MIN_VALUE;
+   long transformToRootID = Long.MIN_VALUE;
 
    /**
     * The current transform from this reference frame to the root frame.
