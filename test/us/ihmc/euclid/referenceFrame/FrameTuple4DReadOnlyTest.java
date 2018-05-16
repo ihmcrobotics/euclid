@@ -25,7 +25,7 @@ public abstract class FrameTuple4DReadOnlyTest<F extends FrameTuple4DReadOnly>
    @Before
    public void clearFrames()
    {
-      ReferenceFrameUtils.clearWorldFrameTree();
+      ReferenceFrameTools.clearWorldFrameTree();
    }
 
    public final F createEmptyFrameTuple()

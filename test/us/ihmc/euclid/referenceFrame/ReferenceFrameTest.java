@@ -32,13 +32,13 @@ public class ReferenceFrameTest
    public void testIssue12()
    {
       Random random = new Random(43563);
-      ReferenceFrame world = ReferenceFrameUtils.getWorldFrame();
+      ReferenceFrame world = ReferenceFrameTools.getWorldFrame();
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent("constant", world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constant", world, expected);
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -55,7 +55,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameUtils.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -90,7 +90,7 @@ public class ReferenceFrameTest
       // frame3   frame4        frame6  frame7                            frame10 frame11
       // frame5                frame8
 
-      root = ReferenceFrameUtils.constructARootFrame("root");
+      root = ReferenceFrameTools.constructARootFrame("root");
 
       // Some are randomly changing and some are random but unchanging:
       frame1 = constructRandomUnchangingFrame("frame1", root);
@@ -102,7 +102,7 @@ public class ReferenceFrameTest
       frame7 = constructRandomUnchangingFrame("frame7", root);
       frame8 = new RandomlyChangingFrame("frame8", frame7);
 
-      root2 = ReferenceFrameUtils.constructARootFrame("root2");
+      root2 = ReferenceFrameTools.constructARootFrame("root2");
       frame9 = constructRandomUnchangingFrame("frame9", root2);
       frame10 = new RandomlyChangingFrame("frame10", frame9);
       frame11 = constructRandomUnchangingFrame("frame11", frame9);
@@ -137,7 +137,7 @@ public class ReferenceFrameTest
    {
       RigidBodyTransform randomTransformToParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       transformsForVerification.put(nameOfFrame, new RigidBodyTransform(randomTransformToParent));
-      ReferenceFrame ret = ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent(nameOfFrame, parentOfFrame, randomTransformToParent);
+      ReferenceFrame ret = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(nameOfFrame, parentOfFrame, randomTransformToParent);
 
       return ret;
 
@@ -561,7 +561,7 @@ public class ReferenceFrameTest
          desiredFrame.transformFromThisToDesiredFrame(initialFrame, actual);
          EuclidCoreTestTools.assertTuple3DEquals(original, actual, EPSILON);
 
-         ReferenceFrame differentRootFrame = ReferenceFrameUtils.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             initialFrame.transformFromThisToDesiredFrame(differentRootFrame, actual);
@@ -572,7 +572,7 @@ public class ReferenceFrameTest
             // good
          }
 
-         ReferenceFrameUtils.removeFrames(referenceFrames);
+         ReferenceFrameTools.removeFrames(referenceFrames);
       }
    }
 
@@ -581,7 +581,7 @@ public class ReferenceFrameTest
    {
       Random random = new Random(84358345L);
       List<Long> existingIds = new ArrayList<>();
-      assertEquals(0L, ReferenceFrameUtils.getWorldFrame().getFrameIndex());
+      assertEquals(0L, ReferenceFrameTools.getWorldFrame().getFrameIndex());
       existingIds.add(0L);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -589,7 +589,7 @@ public class ReferenceFrameTest
          ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          for (ReferenceFrame referenceFrame : frameTree)
          {
-            if (referenceFrame == ReferenceFrameUtils.getWorldFrame())
+            if (referenceFrame == ReferenceFrameTools.getWorldFrame())
             {
                continue;
             }
@@ -599,7 +599,7 @@ public class ReferenceFrameTest
             existingIds.add(frameIndex);
          }
 
-         ReferenceFrameUtils.removeFrames(frameTree);
+         ReferenceFrameTools.removeFrames(frameTree);
       }
    }
 
@@ -613,7 +613,7 @@ public class ReferenceFrameTest
 
       try
       {
-         ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+         ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
          fail("Should have thrown a RuntimeException");
       }
       catch (RuntimeException e)
@@ -621,17 +621,17 @@ public class ReferenceFrameTest
          // good
       }
 
-      ReferenceFrameUtils.removeFrame(someFrame);
-      someFrame = ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+      ReferenceFrameTools.removeFrame(someFrame);
+      someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
 
       someFrame.remove();
-      someFrame = ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+      someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
 
-      ReferenceFrameUtils.clearFrameTree(someFrame);
-      someFrame = ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+      ReferenceFrameTools.clearFrameTree(someFrame);
+      someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
 
-      ReferenceFrameUtils.clearWorldFrameTree();
-      ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+      ReferenceFrameTools.clearWorldFrameTree();
+      ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
    }
 
    @Test

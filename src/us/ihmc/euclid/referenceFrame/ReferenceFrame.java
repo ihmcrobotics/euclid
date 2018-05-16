@@ -303,7 +303,7 @@ public abstract class ReferenceFrame
 
       this.frameName = frameName;
       this.parentFrame = parentFrame;
-      framesStartingWithRootEndingWithThis = ReferenceFrameUtils.constructFramesStartingWithRootEndingWithThis(this);
+      framesStartingWithRootEndingWithThis = ReferenceFrameTools.constructFramesStartingWithRootEndingWithThis(this);
 
       if (parentFrame == null)
       { // Setting up this ReferenceFrame as a root frame.
@@ -324,7 +324,7 @@ public abstract class ReferenceFrame
          nameId = parentFrame.nameId + SEPARATOR + frameName;
          frameIndex = parentFrame.incrementFramesAdded();
 
-         if (ReferenceFrameUtils.hasChildWithName(parentFrame, frameName))
+         if (ReferenceFrameTools.hasChildWithName(parentFrame, frameName))
          {
             throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
          }
@@ -369,7 +369,7 @@ public abstract class ReferenceFrame
    public boolean isWorldFrame()
    {
       checkIfRemoved();
-      return this == ReferenceFrameUtils.worldFrame;
+      return this == ReferenceFrameTools.worldFrame;
    }
 
    /**
@@ -537,7 +537,7 @@ public abstract class ReferenceFrame
    public RigidBodyTransform getTransformToWorldFrame()
    {
       RigidBodyTransform ret = new RigidBodyTransform();
-      getTransformToDesiredFrame(ret, ReferenceFrameUtils.worldFrame);
+      getTransformToDesiredFrame(ret, ReferenceFrameTools.worldFrame);
       return ret;
    }
 
@@ -910,46 +910,46 @@ public abstract class ReferenceFrame
    public void remove()
    {
       checkIfRemoved();
-      ReferenceFrameUtils.removeFrame(this);
+      ReferenceFrameTools.removeFrame(this);
    }
 
    /**
     * @return the root frame of the world reference frame tree.
-    * @see ReferenceFrameUtils#getWorldFrame()
+    * @see ReferenceFrameTools#getWorldFrame()
     */
    public static ReferenceFrame getWorldFrame()
    {
-      return ReferenceFrameUtils.getWorldFrame();
+      return ReferenceFrameTools.getWorldFrame();
    }
 
-   /** Use {@link ReferenceFrameUtils#constructARootFrame(String)} instead. */
+   /** Use {@link ReferenceFrameTools#constructARootFrame(String)} instead. */
    @Deprecated
    public static ReferenceFrame constructARootFrame(String frameName)
    {
-      return ReferenceFrameUtils.constructARootFrame(frameName);
+      return ReferenceFrameTools.constructARootFrame(frameName);
    }
 
-   /** Use {@link ReferenceFrameUtils#constructFrameWithUnchangingTransformFromParent(String, ReferenceFrame, RigidBodyTransform)} instead. */
+   /** Use {@link ReferenceFrameTools#constructFrameWithUnchangingTransformFromParent(String, ReferenceFrame, RigidBodyTransform)} instead. */
    @Deprecated
    public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
                                                                                 RigidBodyTransform transformFromParent)
    {
-      return ReferenceFrameUtils.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
+      return ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
    }
 
-   /** Use {@link ReferenceFrameUtils#constructFrameWithUnchangingTranslationFromParent(String, ReferenceFrame, Tuple3DReadOnly)} instead. */
+   /** Use {@link ReferenceFrameTools#constructFrameWithUnchangingTranslationFromParent(String, ReferenceFrame, Tuple3DReadOnly)} instead. */
    @Deprecated
    public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
                                                                                   Tuple3DReadOnly translationOffsetFromParent)
    {
-      return ReferenceFrameUtils.constructFrameWithUnchangingTranslationFromParent(frameName, parentFrame, translationOffsetFromParent);
+      return ReferenceFrameTools.constructFrameWithUnchangingTranslationFromParent(frameName, parentFrame, translationOffsetFromParent);
    }
 
-   /** Use {@link ReferenceFrameUtils#constructFrameWithUnchangingTransformToParent(String, ReferenceFrame, RigidBodyTransform)} instead. */
+   /** Use {@link ReferenceFrameTools#constructFrameWithUnchangingTransformToParent(String, ReferenceFrame, RigidBodyTransform)} instead. */
    @Deprecated
    public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
                                                                               RigidBodyTransform transformToParent)
    {
-      return ReferenceFrameUtils.constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
+      return ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
    }
 }

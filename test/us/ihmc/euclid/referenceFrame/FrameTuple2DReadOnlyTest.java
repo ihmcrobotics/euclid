@@ -22,7 +22,7 @@ public abstract class FrameTuple2DReadOnlyTest<F extends FrameTuple2DReadOnly>
    @Before
    public void clearFrames()
    {
-      ReferenceFrameUtils.clearWorldFrameTree();
+      ReferenceFrameTools.clearWorldFrameTree();
    }
 
    public F createEmptyFrameTuple()

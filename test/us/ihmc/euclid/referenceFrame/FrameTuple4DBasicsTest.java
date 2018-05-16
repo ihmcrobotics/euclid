@@ -66,7 +66,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
-         ReferenceFrameUtils.clearWorldFrameTree();
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple4DBasics expected = createRandomFramelessTuple(random);
@@ -106,7 +106,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, double x, double y, double z)
-         ReferenceFrameUtils.clearWorldFrameTree();
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple4DBasics expected = createRandomFramelessTuple(random);
@@ -152,7 +152,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         ReferenceFrameUtils.clearWorldFrameTree();
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple4DBasics expectedGeometryObject = createRandomFramelessTuple(random);
@@ -183,7 +183,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         ReferenceFrameUtils.clearWorldFrameTree();
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];

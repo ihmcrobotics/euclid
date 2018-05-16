@@ -56,7 +56,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.ReferenceFrameUtils;
+import us.ihmc.euclid.referenceFrame.ReferenceFrameTools;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
@@ -634,7 +634,7 @@ public class EuclidFrameAPITestTools
 
       for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
       {
-         ReferenceFrameUtils.clearWorldFrameTree();
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
@@ -843,7 +843,7 @@ public class EuclidFrameAPITestTools
 
       for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
       {
-         ReferenceFrameUtils.clearWorldFrameTree();
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 

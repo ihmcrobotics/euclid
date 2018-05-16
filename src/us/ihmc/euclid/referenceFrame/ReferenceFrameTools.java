@@ -6,7 +6,7 @@ import java.util.Collection;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
-public class ReferenceFrameUtils
+public class ReferenceFrameTools
 {
    /**
     * {@code worldFrame} is a root reference frame and is most of time the only root reference frame.
@@ -198,7 +198,7 @@ public class ReferenceFrameUtils
    /**
     * Will remove all provided frames from the frame tree.
     * @param frames to be removed and disabled.
-    * @see ReferenceFrameUtils#removeFrame(ReferenceFrame)
+    * @see ReferenceFrameTools#removeFrame(ReferenceFrame)
     */
    public static void removeFrames(ReferenceFrame[] frames)
    {
@@ -219,7 +219,7 @@ public class ReferenceFrameUtils
    }
 
    /**
-    * Will clear the entire frame tree of the {@link ReferenceFrameUtils#worldFrame} tree.
+    * Will clear the entire frame tree of the {@link ReferenceFrameTools#worldFrame} tree.
     */
    public static void clearWorldFrameTree()
    {
