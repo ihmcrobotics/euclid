@@ -104,26 +104,26 @@ public abstract class ReferenceFrame
     * {@link #parentFrame}.
     * </p>
     */
-   protected final ReferenceFrame parentFrame;
+   final ReferenceFrame parentFrame;
 
    /**
     * A collection of all children of this reference frame. Frames are removed from the reference frame
     * tree using the {@link #remove()} method. This will remove the frame from this collection. Do not
     * remove frames in a different way as this will not properly deactivate them.
     */
-   protected final Collection<ReferenceFrame> children = new ArrayList<>();
+   final Collection<ReferenceFrame> children = new ArrayList<>();
 
    /**
     * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree.
     * In this case all references to the frame should be dropped so it can be garbage collected.
     */
-   protected boolean hasBeenRemoved = false;
+   boolean hasBeenRemoved = false;
 
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
     * with respect to the root frame.
     */
-   protected final ReferenceFrame[] framesStartingWithRootEndingWithThis;
+   final ReferenceFrame[] framesStartingWithRootEndingWithThis;
 
    /**
     * The pose of this transform with respect to its parent.
@@ -139,7 +139,7 @@ public abstract class ReferenceFrame
    private final RigidBodyTransform transformToParent;
 
    // These need to be longs instead of integers or they'll role over too soon. With longs, you get at least 100 years of runtime.
-   protected static long nextTransformToRootID = 1;
+   static long nextTransformToRootID = 1;
 
    protected long transformToRootID = Long.MIN_VALUE;
 
