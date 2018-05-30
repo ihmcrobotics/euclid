@@ -2,11 +2,14 @@ package us.ihmc.euclid.referenceFrame;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -104,26 +107,27 @@ public abstract class ReferenceFrame
     * {@link #parentFrame}.
     * </p>
     */
-   final ReferenceFrame parentFrame;
+   private final ReferenceFrame parentFrame;
 
    /**
     * A collection of all children of this reference frame. Frames are removed from the reference frame
     * tree using the {@link #remove()} method. This will remove the frame from this collection. Do not
     * remove frames in a different way as this will not properly deactivate them.
     */
-   final Collection<ReferenceFrame> children = new ArrayList<>();
+   private final Collection<ReferenceFrame> children = new ArrayList<>();
+   private final Collection<ReferenceFrame> childrenReadOnly = Collections.unmodifiableCollection(children);
 
    /**
     * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree.
     * In this case all references to the frame should be dropped so it can be garbage collected.
     */
-   boolean hasBeenRemoved = false;
+   private boolean hasBeenRemoved = false;
 
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
     * with respect to the root frame.
     */
-   final ReferenceFrame[] framesStartingWithRootEndingWithThis;
+   private final List<ReferenceFrame> framesStartingWithRootEndingWithThis;
 
    /**
     * The pose of this transform with respect to its parent.
@@ -324,7 +328,7 @@ public abstract class ReferenceFrame
          nameId = parentFrame.nameId + SEPARATOR + frameName;
          frameIndex = parentFrame.incrementFramesAdded();
 
-         if (ReferenceFrameTools.hasChildWithName(parentFrame, frameName))
+         if (parentFrame.hasChildWithName(frameName))
          {
             throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
          }
@@ -369,7 +373,7 @@ public abstract class ReferenceFrame
    public boolean isWorldFrame()
    {
       checkIfRemoved();
-      return this == ReferenceFrameTools.worldFrame;
+      return this == ReferenceFrameTools.getWorldFrame();
    }
 
    /**
@@ -453,7 +457,7 @@ public abstract class ReferenceFrame
    public ReferenceFrame getRootFrame()
    {
       checkIfRemoved();
-      return framesStartingWithRootEndingWithThis[0];
+      return framesStartingWithRootEndingWithThis.get(0);
    }
 
    /**
@@ -537,7 +541,7 @@ public abstract class ReferenceFrame
    public RigidBodyTransform getTransformToWorldFrame()
    {
       RigidBodyTransform ret = new RigidBodyTransform();
-      getTransformToDesiredFrame(ret, ReferenceFrameTools.worldFrame);
+      getTransformToDesiredFrame(ret, ReferenceFrameTools.getWorldFrame());
       return ret;
    }
 
@@ -682,14 +686,14 @@ public abstract class ReferenceFrame
    {
       checkIfRemoved();
 
-      int chainLength = framesStartingWithRootEndingWithThis.length;
+      int chainLength = framesStartingWithRootEndingWithThis.size();
 
       boolean updateFromHereOnOut = false;
       long previousUpdateId = 0;
 
       for (int i = 0; i < chainLength; i++)
       {
-         ReferenceFrame referenceFrame = framesStartingWithRootEndingWithThis[i];
+         ReferenceFrame referenceFrame = framesStartingWithRootEndingWithThis.get(i);
 
          if (!updateFromHereOnOut)
          {
@@ -909,8 +913,57 @@ public abstract class ReferenceFrame
     */
    public void remove()
    {
+      if (!hasBeenRemoved && parentFrame != null)
+      {
+         parentFrame.children.remove(this);
+         disableRecursivly();
+      }
+   }
+
+   private boolean hasChildWithName(String childName)
+   {
+      return children.stream().anyMatch(child -> child.getName().equals(childName));
+   }
+
+   /**
+    * Will remove and disable all children of the provided frame.
+    * @param frame whose children should be removed from the frame tree.
+    * @see #removeFrame(ReferenceFrame)
+    */
+   public void clearChildren()
+   {
       checkIfRemoved();
-      ReferenceFrameTools.removeFrame(this);
+      children.forEach(child -> child.disableRecursivly());
+      children.clear();
+   }
+
+   private void disableRecursivly()
+   {
+      hasBeenRemoved = true;
+      children.forEach(child -> child.disableRecursivly());
+   }
+
+   /**
+    * Getter for the read only view of all reference frames starting with the root frame
+    * of this frame tree all the way to this frame.
+    *
+    * @return the list of frames from the root frame to this.
+    */
+   public List<ReferenceFrame> getFramesStartingWithRootEndingWithThis()
+   {
+      checkIfRemoved();
+      return framesStartingWithRootEndingWithThis;
+   }
+
+   /**
+    * Getter for the read only view of the children of this reference frame.
+    *
+    * @return children frames of this frame.
+    */
+   public Collection<ReferenceFrame> getChildren()
+   {
+      checkIfRemoved();
+      return childrenReadOnly;
    }
 
    /**

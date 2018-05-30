@@ -1,8 +1,11 @@
-package us.ihmc.euclid.referenceFrame;
+package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -20,7 +23,7 @@ public class ReferenceFrameTools
     * </ul>
     * </p>
     */
-   protected static final ReferenceFrame worldFrame = constructARootFrame("World");
+   private static final ReferenceFrame worldFrame = constructARootFrame("World");
 
    /**
     * Construct a new z-up root reference frame.
@@ -141,30 +144,18 @@ public class ReferenceFrameTools
       return ret;
    }
 
-   protected static ReferenceFrame[] constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
+   public static List<ReferenceFrame> constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
    {
       ReferenceFrame parentFrame = thisFrame.getParent();
       if (parentFrame == null)
       {
-         return new ReferenceFrame[] {thisFrame};
+         return Collections.singletonList(thisFrame);
       }
 
-      int size = parentFrame.framesStartingWithRootEndingWithThis.length + 1;
-      ReferenceFrame[] ret = new ReferenceFrame[size];
+      List<ReferenceFrame> ret = new ArrayList<>(parentFrame.getFramesStartingWithRootEndingWithThis());
+      ret.add(thisFrame);
 
-      for (int i = 0; i < size - 1; i++)
-      {
-         ret[i] = parentFrame.framesStartingWithRootEndingWithThis[i];
-      }
-
-      ret[size - 1] = thisFrame;
-
-      return ret;
-   }
-
-   protected static boolean hasChildWithName(ReferenceFrame frame, String childName)
-   {
-      return frame.children.stream().anyMatch(child -> child.getName().equals(childName));
+      return Collections.unmodifiableList(ret);
    }
 
    /**
@@ -175,24 +166,14 @@ public class ReferenceFrameTools
     * frame as garbage and all future method calls on this frame will throw exceptions.
     * </p>
     * <p>
-    * This recursively disables all children of this frame also. If the provided frame is a root frame or it has been
-    * disabled already this method will do nothing.
+    * This recursively disables all children of this frame also. If the provided frame is a root frame this method will
+    * do nothing.
     * </p>
     * @param frame is the {@link ReferenceFrame} that will be removed from the tree.
     */
    public static void removeFrame(ReferenceFrame frame)
    {
-      if (!frame.hasBeenRemoved && frame.getParent() != null)
-      {
-         frame.getParent().children.remove(frame);
-         disableRecursivly(frame);
-      }
-   }
-
-   private static void disableRecursivly(ReferenceFrame frame)
-   {
-      frame.hasBeenRemoved = true;
-      frame.children.forEach(child -> disableRecursivly(child));
+      frame.remove();
    }
 
    /**
@@ -215,7 +196,7 @@ public class ReferenceFrameTools
     */
    public static void clearFrameTree(ReferenceFrame frame)
    {
-      clearChildren(frame.getRootFrame());
+      frame.getRootFrame().clearChildren();
    }
 
    /**
@@ -223,18 +204,7 @@ public class ReferenceFrameTools
     */
    public static void clearWorldFrameTree()
    {
-      clearChildren(worldFrame);
-   }
-
-   /**
-    * Will remove and disable all children of the provided frame.
-    * @param frame whose children should be removed from the frame tree.
-    * @see #removeFrame(ReferenceFrame)
-    */
-   public static void clearChildren(ReferenceFrame frame)
-   {
-      frame.children.forEach(child -> disableRecursivly(child));
-      frame.children.clear();
+      worldFrame.clearChildren();
    }
 
    /**
@@ -253,7 +223,7 @@ public class ReferenceFrameTools
 
    private static void getAllChildren(ReferenceFrame frame, Collection<ReferenceFrame> collectionToPack)
    {
-      collectionToPack.addAll(frame.children);
-      frame.children.forEach(childFrame -> getAllChildren(childFrame, collectionToPack));
+      collectionToPack.addAll(frame.getChildren());
+      frame.getChildren().forEach(childFrame -> getAllChildren(childFrame, collectionToPack));
    }
 }

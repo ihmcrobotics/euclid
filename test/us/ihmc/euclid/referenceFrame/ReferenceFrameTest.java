@@ -14,6 +14,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -201,7 +202,9 @@ public class ReferenceFrameTest
 
    private void checkRepInvariants(ReferenceFrame frame)
    {
-      if (frame.framesStartingWithRootEndingWithThis[frame.framesStartingWithRootEndingWithThis.length - 1] != frame)
+      List<ReferenceFrame> framesStartingWithRootEndingWithThis = frame.getFramesStartingWithRootEndingWithThis();
+      int branchLength = framesStartingWithRootEndingWithThis.size();
+      if (framesStartingWithRootEndingWithThis.get(branchLength - 1) != frame)
       {
          fail("This must be the last frame in the chain.");
       }
@@ -209,7 +212,7 @@ public class ReferenceFrameTest
       ReferenceFrame parent = frame.getParent();
       if (parent == null)
       {
-         if (frame.framesStartingWithRootEndingWithThis.length != 1)
+         if (branchLength != 1)
          {
             fail("If the parentFrame is null, then this must be a root frame, in which there should be only one frame in the chain.");
          }
@@ -238,16 +241,16 @@ public class ReferenceFrameTest
       }
       else
       {
-         if (frame.framesStartingWithRootEndingWithThis[frame.framesStartingWithRootEndingWithThis.length - 2] != parent)
+         if (framesStartingWithRootEndingWithThis.get(branchLength - 2) != parent)
          {
             fail("The parent must be the second to last frame in the chain.");
          }
 
          long maxIdSoFar = 0;
          RigidBodyTransform computedTransformToRoot = new RigidBodyTransform();
-         for (int i = 1; i < frame.framesStartingWithRootEndingWithThis.length; i++)
+         for (int i = 1; i < branchLength; i++)
          {
-            ReferenceFrame frameInTree = frame.framesStartingWithRootEndingWithThis[i];
+            ReferenceFrame frameInTree = framesStartingWithRootEndingWithThis.get(i);
             computedTransformToRoot.multiply(frameInTree.getTransformToParent());
 
             long id = frameInTree.transformToRootID;
@@ -663,9 +666,14 @@ public class ReferenceFrameTest
          {
             continue;
          }
+         int numberOfParameters = method.getParameterTypes().length;
+         if (method.getName().equals("remove") && numberOfParameters == 0)
+         {
+            continue;
+         }
 
-         Object[] parameters = new Object[method.getParameterTypes().length];
-         for (int paramIdx = 0; paramIdx < method.getParameterTypes().length; paramIdx++)
+         Object[] parameters = new Object[numberOfParameters];
+         for (int paramIdx = 0; paramIdx < numberOfParameters; paramIdx++)
          {
             Class<?> parameterClass = method.getParameterTypes()[paramIdx];
             if (parameterClass.isPrimitive())

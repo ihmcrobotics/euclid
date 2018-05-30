@@ -14,6 +14,7 @@ import org.junit.Test;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tuple3D.Tuple3DReadOnlyTest;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
