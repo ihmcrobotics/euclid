@@ -141,6 +141,25 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
    }
 
    /**
+    * Sets this pose 2D to be the same as the given one expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FramePose2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame pose 2D to set this to. Not modified.
+    */
+   default void setMatchingFrame(FramePose2DReadOnly other)
+   {
+      Pose2DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this frame pose 2D to the x, y, and yaw components of the given {@code framePose3DReadOnly}.
     *
     * @param framePose3DReadOnly the other frame pose 3D. Not modified.

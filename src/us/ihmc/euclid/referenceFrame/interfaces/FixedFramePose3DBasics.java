@@ -172,6 +172,25 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    }
 
    /**
+    * Sets this pose 3D to be the same as the given one expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FramePose3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame pose 3D to set this to. Not modified.
+    */
+   default void setMatchingFrame(FramePose3DReadOnly other)
+   {
+      Pose3DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets both position and orientation.
     *
     * @param position the tuple with the new position coordinates. Not modified.

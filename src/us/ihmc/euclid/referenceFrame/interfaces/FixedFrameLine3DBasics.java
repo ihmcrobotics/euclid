@@ -225,6 +225,25 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    }
 
    /**
+    * Sets this line to be the same as the given line expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameLine3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame line to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameLine3DReadOnly other)
+   {
+      Line3DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this line from the given {@code frameLineSegment2DReadOnly}.
     * <p>
     * After calling this method this line is in the XY-plane.

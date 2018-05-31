@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameConvexPolygon2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
@@ -83,6 +86,28 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
          expected.set(newVertex);
 
          EuclidFrameTestTools.assertFramePoint2DGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
+      }
+   }
+
+   @Test
+   public void testSetMatchingFrame() throws Exception
+   {
+      Random random = new Random(544354);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         FrameConvexPolygon2DReadOnly source = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, sourceFrame, 1.0, 10);
+         FixedFrameConvexPolygon2DBasics actual = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, destinationFrame, 1.0, 10);
+
+         actual.setMatchingFrame(source, true);
+
+         FrameConvexPolygon2D expected = new FrameConvexPolygon2D(source);
+         expected.changeFrame(destinationFrame);
+
+         Assert.assertTrue(expected.epsilonEquals((FrameConvexPolygon2D) actual, EPSILON));
       }
    }
 }
