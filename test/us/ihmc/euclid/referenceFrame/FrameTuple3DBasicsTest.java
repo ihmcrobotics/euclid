@@ -24,6 +24,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -43,6 +44,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple3DBasics expected = createRandomFramelessTuple(random);
@@ -82,6 +84,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, double x, double y, double z)
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple3DBasics expected = createRandomFramelessTuple(random);
@@ -394,6 +397,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple3DBasics expectedGeometryObject = createRandomFramelessTuple(random);
@@ -424,6 +428,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
+         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];

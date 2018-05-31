@@ -1,9 +1,15 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -63,7 +69,7 @@ public abstract class ReferenceFrame
     * even though they might be in different locations.
     * </p>
     */
-   protected final String nameId;
+   private final String nameId;
 
    /**
     * An ID that can be used to identify a frame inside a tree of reference frames. Each frame inside
@@ -77,9 +83,12 @@ public abstract class ReferenceFrame
    private final long frameIndex;
 
    /**
-    * A counter for the number of frames in the reference frame tree that starts at this frame.
+    * A counter for the number of frames in the reference frame tree that starts at this frame. Note,
+    * that this counter does not account for frames that might be removed from the frame tree. It is
+    * meant to account all frames that were ever added to this frame tree to provide a unique number
+    * Identifier for each frame.
     */
-   private long treeSizeBelowThisFrame = 0L;
+   private long framesAddedToTree = 0L;
 
    /**
     * Additional custom hash code representing this frame.
@@ -90,6 +99,7 @@ public abstract class ReferenceFrame
     * </p>
     */
    private long additionalNameBasedHashCode;
+
    /**
     * The reference to which this frame is attached to.
     * <p>
@@ -97,12 +107,27 @@ public abstract class ReferenceFrame
     * {@link #parentFrame}.
     * </p>
     */
-   protected final ReferenceFrame parentFrame;
+   private final ReferenceFrame parentFrame;
+
+   /**
+    * A collection of all children of this reference frame. Frames are removed from the reference frame
+    * tree using the {@link #remove()} method. This will remove the frame from this collection. Do not
+    * remove frames in a different way as this will not properly deactivate them.
+    */
+   private final Collection<ReferenceFrame> children = new ArrayList<>();
+   private final Collection<ReferenceFrame> childrenReadOnly = Collections.unmodifiableCollection(children);
+
+   /**
+    * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree.
+    * In this case all references to the frame should be dropped so it can be garbage collected.
+    */
+   private boolean hasBeenRemoved = false;
+
    /**
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
     * with respect to the root frame.
     */
-   private final ReferenceFrame[] framesStartingWithRootEndingWithThis;
+   private final List<ReferenceFrame> framesStartingWithRootEndingWithThis;
 
    /**
     * The pose of this transform with respect to its parent.
@@ -118,8 +143,10 @@ public abstract class ReferenceFrame
    private final RigidBodyTransform transformToParent;
 
    // These need to be longs instead of integers or they'll role over too soon. With longs, you get at least 100 years of runtime.
-   protected static long nextTransformToRootID = 1;
-   private long transformToRootID = Long.MIN_VALUE;
+   static long nextTransformToRootID = 1;
+
+   long transformToRootID = Long.MIN_VALUE;
+
    /**
     * The current transform from this reference frame to the root frame.
     * <p>
@@ -135,144 +162,12 @@ public abstract class ReferenceFrame
     * stationary frame, i.e. a non-moving frame, with respect to the root reference frame.
     */
    private final boolean isAStationaryFrame; // TODO when isAStationaryFrame == true, transformToParent should be immutable.
+
    /**
     * Field initialized at construction time that specifies if at all time the z-axis of this reference
     * frame remains aligned with the z-axis of the root frame.
     */
    private final boolean isZupFrame;
-
-   /**
-    * {@code worldFrame} is a root reference frame and is most of time the only root reference frame.
-    * <p>
-    * It is commonly assumed that its axes are aligned as follows:
-    * <ul>
-    * <li>The x-axis is usually referred to as the forward axis.
-    * <li>With the x-axis referring forward, the y-axis points to the left.
-    * <li>The z-axis points upward and usually points to the opposite direction to the gravitational
-    * acceleration.
-    * </ul>
-    * </p>
-    */
-   private static final ReferenceFrame worldFrame = constructARootFrame("World");
-
-   /**
-    * Construct a new z-up root reference frame.
-    * <p>
-    * Most of the time, {@link #worldFrame} is the only root frame from which children reference frames
-    * are added.
-    * </p>
-    * <p>
-    * Note that frames added as children of this root frame belongs to a different reference frame tree
-    * than the tree starting off of {@link #worldFrame}. Transformation across two different trees of
-    * reference frames is forbidden as the transformation between them is undefined.
-    * </p>
-    * <p>
-    * The parent frame and transforms of a root frame are all {@code null}.
-    * </p>
-    *
-    * @param frameName the name of the new world frame.
-    * @return the new non-moving z-up root reference frame.
-    */
-   public static ReferenceFrame constructARootFrame(String frameName)
-   {
-      ReferenceFrame ret = new ReferenceFrame(frameName)
-      {
-         @Override
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
-         {
-         }
-      };
-
-      return ret;
-   }
-
-   /**
-    * Creates a reference frame with an immutable transform from its parent.
-    * <p>
-    * The {@code transformFromParent} should describe the pose of the parent frame expressed in this
-    * new frame.
-    * </p>
-    *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
-    * @param transformFromParent the transform that can be used to transform a geometry object from the
-    *           parent frame to this frame. Not modified.
-    * @return the new reference frame.
-    */
-   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                RigidBodyTransform transformFromParent)
-   {
-      RigidBodyTransform transformToParent = new RigidBodyTransform(transformFromParent);
-      transformToParent.invert();
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
-   }
-
-   /**
-    * Creates a reference frame with an immutable translation offset from its parent.
-    * <p>
-    * The new reference frame has the same orientation as its parent frame.
-    * </p>
-    *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
-    * @param translationOffsetFromParent describes the position of the new reference frame's origin
-    *           expressed in the parent frame. Not modified.
-    * @return the new reference frame.
-    */
-   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                  Tuple3DReadOnly translationOffsetFromParent)
-   {
-      RigidBodyTransform transformToParent = new RigidBodyTransform();
-      transformToParent.setTranslation(translationOffsetFromParent);
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
-   }
-
-   /**
-    * Creates a reference frame with an immutable transform to its parent.
-    * <p>
-    * The {@code transformToParent} should describe the pose of the new frame expressed in its parent
-    * frame.
-    * </p>
-    *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
-    * @param transformToParent the transform that can be used to transform a geometry object the new
-    *           frame to its parent frame. Not modified.
-    * @return the new reference frame.
-    */
-   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
-                                                                              RigidBodyTransform transformToParent)
-   {
-      boolean isZupFrame = parentFrame.isZupFrame && transformToParent.isRotation2D();
-      boolean isAStationaryFrame = parentFrame.isAStationaryFrame;
-
-      ReferenceFrame ret = new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
-      {
-         @Override
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
-         {
-         }
-      };
-
-      return ret;
-   }
-
-   /**
-    * Return the world reference frame that is a root reference frame.
-    * <p>
-    * The world reference frame can be used to create child reference frames. It is usually assumed
-    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents the
-    * forward/backward direction and the y-axis represents the transversal direction.
-    * </p>
-    * 
-    * @return the world reference frame.
-    */
-   public static ReferenceFrame getWorldFrame()
-   {
-      return worldFrame;
-   }
 
    /**
     * Creates a new root reference frame.
@@ -412,7 +307,7 @@ public abstract class ReferenceFrame
 
       this.frameName = frameName;
       this.parentFrame = parentFrame;
-      framesStartingWithRootEndingWithThis = constructFramesStartingWithRootEndingWithThis(this);
+      framesStartingWithRootEndingWithThis = ReferenceFrameTools.constructFramesStartingWithRootEndingWithThis(this);
 
       if (parentFrame == null)
       { // Setting up this ReferenceFrame as a root frame.
@@ -428,8 +323,16 @@ public abstract class ReferenceFrame
       }
       else
       {
+         parentFrame.checkIfRemoved();
+
          nameId = parentFrame.nameId + SEPARATOR + frameName;
-         frameIndex = parentFrame.incrementTreeSize();
+         frameIndex = parentFrame.incrementFramesAdded();
+
+         if (parentFrame.hasChildWithName(frameName))
+         {
+            throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
+         }
+         parentFrame.children.add(this);
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -448,39 +351,18 @@ public abstract class ReferenceFrame
       }
    }
 
-   private long incrementTreeSize()
+   private long incrementFramesAdded()
    {
-      treeSizeBelowThisFrame++;
+      framesAddedToTree++;
 
       if (parentFrame == null)
       {
-         return treeSizeBelowThisFrame;
+         return framesAddedToTree;
       }
       else
       {
-         return parentFrame.incrementTreeSize();
+         return parentFrame.incrementFramesAdded();
       }
-   }
-
-   private static ReferenceFrame[] constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
-   {
-      ReferenceFrame parentFrame = thisFrame.parentFrame;
-      if (parentFrame == null)
-      {
-         return new ReferenceFrame[] {thisFrame};
-      }
-
-      int size = parentFrame.framesStartingWithRootEndingWithThis.length + 1;
-      ReferenceFrame[] ret = new ReferenceFrame[size];
-
-      for (int i = 0; i < size - 1; i++)
-      {
-         ret[i] = parentFrame.framesStartingWithRootEndingWithThis[i];
-      }
-
-      ret[size - 1] = thisFrame;
-
-      return ret;
    }
 
    /**
@@ -490,7 +372,8 @@ public abstract class ReferenceFrame
     */
    public boolean isWorldFrame()
    {
-      return this == worldFrame;
+      checkIfRemoved();
+      return this == ReferenceFrameTools.getWorldFrame();
    }
 
    /**
@@ -501,6 +384,7 @@ public abstract class ReferenceFrame
     */
    public boolean isAStationaryFrame()
    {
+      checkIfRemoved();
       return isAStationaryFrame;
    }
 
@@ -511,6 +395,7 @@ public abstract class ReferenceFrame
     */
    public boolean isZupFrame()
    {
+      checkIfRemoved();
       return isZupFrame;
    }
 
@@ -525,6 +410,8 @@ public abstract class ReferenceFrame
     */
    public void update()
    {
+      checkIfRemoved();
+
       if (parentFrame == null)
       {
          return;
@@ -558,6 +445,7 @@ public abstract class ReferenceFrame
     */
    public ReferenceFrame getParent()
    {
+      checkIfRemoved();
       return parentFrame;
    }
 
@@ -568,7 +456,8 @@ public abstract class ReferenceFrame
     */
    public ReferenceFrame getRootFrame()
    {
-      return framesStartingWithRootEndingWithThis[0];
+      checkIfRemoved();
+      return framesStartingWithRootEndingWithThis.get(0);
    }
 
    /**
@@ -603,6 +492,7 @@ public abstract class ReferenceFrame
     */
    public void getTransformToParent(RigidBodyTransform transformToPack)
    {
+      checkIfRemoved();
       transformToPack.set(transformToParent);
    }
 
@@ -617,6 +507,7 @@ public abstract class ReferenceFrame
     */
    public String getName()
    {
+      checkIfRemoved();
       return frameName;
    }
 
@@ -650,7 +541,7 @@ public abstract class ReferenceFrame
    public RigidBodyTransform getTransformToWorldFrame()
    {
       RigidBodyTransform ret = new RigidBodyTransform();
-      getTransformToDesiredFrame(ret, worldFrame);
+      getTransformToDesiredFrame(ret, ReferenceFrameTools.getWorldFrame());
       return ret;
    }
 
@@ -710,6 +601,7 @@ public abstract class ReferenceFrame
     */
    public boolean isParentFrame(ReferenceFrame frame)
    {
+      checkIfRemoved();
       return frame == parentFrame;
    }
 
@@ -721,6 +613,7 @@ public abstract class ReferenceFrame
     */
    public boolean isChildFrame(ReferenceFrame frame)
    {
+      checkIfRemoved();
       return frame.isParentFrame(this);
    }
 
@@ -751,6 +644,8 @@ public abstract class ReferenceFrame
     */
    public void transformFromThisToDesiredFrame(ReferenceFrame desiredFrame, Transformable objectToTransform)
    {
+      checkIfRemoved();
+
       // Check for the trivial case: the geometry is already expressed in the desired frame.
       if (desiredFrame == this)
          return;
@@ -789,14 +684,16 @@ public abstract class ReferenceFrame
 
    private void efficientComputeTransform()
    {
-      int chainLength = framesStartingWithRootEndingWithThis.length;
+      checkIfRemoved();
+
+      int chainLength = framesStartingWithRootEndingWithThis.size();
 
       boolean updateFromHereOnOut = false;
       long previousUpdateId = 0;
 
       for (int i = 0; i < chainLength; i++)
       {
-         ReferenceFrame referenceFrame = framesStartingWithRootEndingWithThis[i];
+         ReferenceFrame referenceFrame = framesStartingWithRootEndingWithThis.get(i);
 
          if (!updateFromHereOnOut)
          {
@@ -839,6 +736,7 @@ public abstract class ReferenceFrame
    @Override
    public String toString()
    {
+      checkIfRemoved();
       return frameName; // + "\nTransform to Parent = " + this.transformToParent;
    }
 
@@ -864,6 +762,7 @@ public abstract class ReferenceFrame
     */
    public void checkReferenceFrameMatch(ReferenceFrame referenceFrame) throws ReferenceFrameMismatchException
    {
+      checkIfRemoved();
       if (this != referenceFrame)
       {
          String msg = "Argument's frame " + referenceFrame + " does not match " + this;
@@ -879,6 +778,7 @@ public abstract class ReferenceFrame
     */
    public void checkIsWorldFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isWorldFrame())
       {
          throw new RuntimeException("Frame " + this + " is not world frame.");
@@ -892,6 +792,7 @@ public abstract class ReferenceFrame
     */
    public void checkIsAStationaryFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isAStationaryFrame())
       {
          throw new RuntimeException("Frame " + this + " is not a stationary frame.");
@@ -905,74 +806,10 @@ public abstract class ReferenceFrame
     */
    public void checkIsAZUpFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isZupFrame())
       {
          throw new RuntimeException("Frame " + this + " is not a z-up frame.");
-      }
-   }
-
-   void checkRepInvariants()
-   {
-      if (framesStartingWithRootEndingWithThis[framesStartingWithRootEndingWithThis.length - 1] != this)
-      {
-         throw new RuntimeException("This must be the last frame in the chain.");
-      }
-
-      if (parentFrame == null)
-      {
-         if (framesStartingWithRootEndingWithThis.length != 1)
-         {
-            throw new RuntimeException("If the parentFrame is null, then this must be a root frame, in which there should be only one frame in the chain.");
-         }
-
-         if (transformToParent != null)
-         {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
-         }
-
-         if (transformToRoot != null)
-         {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
-         }
-
-         if (transformToRootID != 0)
-         {
-            System.err.println("this ReferenceFrame = " + this);
-
-            throw new RuntimeException("transformToRootID = " + transformToRootID + ", Root frames must not be updated.");
-         }
-      }
-      else
-      {
-         if (framesStartingWithRootEndingWithThis[framesStartingWithRootEndingWithThis.length - 2] != parentFrame)
-         {
-            throw new RuntimeException("The parent must be the second to last frame in the chain.");
-         }
-
-         long maxIdSoFar = 0;
-         RigidBodyTransform computedTransformToRoot = new RigidBodyTransform();
-         for (int i = 1; i < framesStartingWithRootEndingWithThis.length; i++)
-         {
-            ReferenceFrame frame = framesStartingWithRootEndingWithThis[i];
-            computedTransformToRoot.multiply(frame.transformToParent);
-
-            long id = frame.transformToRootID;
-            if (id < maxIdSoFar)
-            {
-               // Only need to make sure things are consistent down to where the
-               break;
-            }
-
-            maxIdSoFar = id;
-
-            if (!frame.transformToRoot.epsilonEquals(computedTransformToRoot, 1e-5))
-            {
-               System.err.println("frame.transformToRoot = " + frame.transformToRoot + ", computedTransformToRoot = " + computedTransformToRoot);
-               System.err.println("this = " + this + " frame = " + frame);
-
-               throw new RuntimeException("transformToRoot is inconsistent!!");
-            }
-         }
       }
    }
 
@@ -987,6 +824,7 @@ public abstract class ReferenceFrame
    @Override
    public int hashCode()
    {
+      checkIfRemoved();
       return nameId.hashCode();
    }
 
@@ -1002,6 +840,7 @@ public abstract class ReferenceFrame
    @Override
    public boolean equals(Object other)
    {
+      checkIfRemoved();
       if (other instanceof ReferenceFrame)
       {
          return ((ReferenceFrame) other).nameId.equals(nameId);
@@ -1018,6 +857,7 @@ public abstract class ReferenceFrame
     */
    public long getFrameIndex()
    {
+      checkIfRemoved();
       return frameIndex;
    }
 
@@ -1032,6 +872,7 @@ public abstract class ReferenceFrame
     */
    public long getAdditionalNameBasedHashCode()
    {
+      checkIfRemoved();
       return additionalNameBasedHashCode;
    }
 
@@ -1047,6 +888,121 @@ public abstract class ReferenceFrame
     */
    public void setAdditionalNameBasedHashCode(long additionalNameBasedHashCode)
    {
+      checkIfRemoved();
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
+   }
+
+   private void checkIfRemoved()
+   {
+      if (hasBeenRemoved)
+      {
+         throw new RuntimeException("Can not use frame that was removed from the frame tree.");
+      }
+   }
+
+   /**
+    * Will remove this frame from the frame tree.
+    * <p>
+    * This will disable the frame and cause the frame tree to loose all references to the frame and it's children. Note,
+    * that you can not use the frame after this method is called. This method is meant to allow the JVM to collect the
+    * frame as garbage and all future method calls on this frame will throw exceptions.
+    * </p>
+    * <p>
+    * This recursively disables all children of this frame also.
+    * </p>
+    */
+   public void remove()
+   {
+      if (!hasBeenRemoved && parentFrame != null)
+      {
+         parentFrame.children.remove(this);
+         disableRecursivly();
+      }
+   }
+
+   private boolean hasChildWithName(String childName)
+   {
+      return children.stream().anyMatch(child -> child.getName().equals(childName));
+   }
+
+   /**
+    * Will remove and disable all children of the provided frame.
+    * @param frame whose children should be removed from the frame tree.
+    * @see #removeFrame(ReferenceFrame)
+    */
+   public void clearChildren()
+   {
+      checkIfRemoved();
+      children.forEach(child -> child.disableRecursivly());
+      children.clear();
+   }
+
+   private void disableRecursivly()
+   {
+      hasBeenRemoved = true;
+      children.forEach(child -> child.disableRecursivly());
+   }
+
+   /**
+    * Getter for the read only view of all reference frames starting with the root frame
+    * of this frame tree all the way to this frame.
+    *
+    * @return the list of frames from the root frame to this.
+    */
+   public List<ReferenceFrame> getFramesStartingWithRootEndingWithThis()
+   {
+      checkIfRemoved();
+      return framesStartingWithRootEndingWithThis;
+   }
+
+   /**
+    * Getter for the read only view of the children of this reference frame.
+    *
+    * @return children frames of this frame.
+    */
+   public Collection<ReferenceFrame> getChildren()
+   {
+      checkIfRemoved();
+      return childrenReadOnly;
+   }
+
+   /**
+    * @return the root frame of the world reference frame tree.
+    * @see ReferenceFrameTools#getWorldFrame()
+    */
+   public static ReferenceFrame getWorldFrame()
+   {
+      return ReferenceFrameTools.getWorldFrame();
+   }
+
+   /** Use {@link ReferenceFrameTools#constructARootFrame(String)} instead. */
+   @Deprecated
+   public static ReferenceFrame constructARootFrame(String frameName)
+   {
+      return ReferenceFrameTools.constructARootFrame(frameName);
+   }
+
+   /** Use {@link ReferenceFrameTools#constructFrameWithUnchangingTransformFromParent(String, ReferenceFrame, RigidBodyTransform)} instead. */
+   @Deprecated
+   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
+                                                                                RigidBodyTransform transformFromParent)
+   {
+      return ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
+   }
+
+   /** Use {@link ReferenceFrameTools#constructFrameWithUnchangingTranslationFromParent(String, ReferenceFrame, Tuple3DReadOnly)} instead. */
+   @Deprecated
+   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
+                                                                                  Tuple3DReadOnly translationOffsetFromParent)
+   {
+      return ReferenceFrameTools.constructFrameWithUnchangingTranslationFromParent(frameName, parentFrame, translationOffsetFromParent);
+   }
+
+   /** Use {@link ReferenceFrameTools#constructFrameWithUnchangingTransformToParent(String, ReferenceFrame, RigidBodyTransform)} instead. */
+   @Deprecated
+   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
+                                                                              RigidBodyTransform transformToParent)
+   {
+      return ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
    }
 }

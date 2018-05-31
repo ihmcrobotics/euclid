@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -22,7 +25,7 @@ public class ReferenceFrameTest
    private static final int ITERATIONS = 1000;
 
    private static final double EPSILON = 1.0e-12;
-   
+
    /**
     * Test for the issue: <a href="https://github.com/ihmcrobotics/euclid/issues/12">Issue 12</a>.
     */
@@ -30,13 +33,13 @@ public class ReferenceFrameTest
    public void testIssue12()
    {
       Random random = new Random(43563);
-      ReferenceFrame world = ReferenceFrame.getWorldFrame();
+      ReferenceFrame world = ReferenceFrameTools.getWorldFrame();
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformToParent("constant", world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constant", world, expected);
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -45,13 +48,15 @@ public class ReferenceFrameTest
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+
+         constantFrame.remove();
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrame.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -61,6 +66,8 @@ public class ReferenceFrameTest
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+
+         constantFrame.remove();
       }
    }
 
@@ -84,7 +91,7 @@ public class ReferenceFrameTest
       // frame3   frame4        frame6  frame7                            frame10 frame11
       // frame5                frame8
 
-      root = ReferenceFrame.constructARootFrame("root");
+      root = ReferenceFrameTools.constructARootFrame("root");
 
       // Some are randomly changing and some are random but unchanging:
       frame1 = constructRandomUnchangingFrame("frame1", root);
@@ -96,7 +103,7 @@ public class ReferenceFrameTest
       frame7 = constructRandomUnchangingFrame("frame7", root);
       frame8 = new RandomlyChangingFrame("frame8", frame7);
 
-      root2 = ReferenceFrame.constructARootFrame("root2");
+      root2 = ReferenceFrameTools.constructARootFrame("root2");
       frame9 = constructRandomUnchangingFrame("frame9", root2);
       frame10 = new RandomlyChangingFrame("frame10", frame9);
       frame11 = constructRandomUnchangingFrame("frame11", frame9);
@@ -131,7 +138,7 @@ public class ReferenceFrameTest
    {
       RigidBodyTransform randomTransformToParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       transformsForVerification.put(nameOfFrame, new RigidBodyTransform(randomTransformToParent));
-      ReferenceFrame ret = ReferenceFrame.constructFrameWithUnchangingTransformToParent(nameOfFrame, parentOfFrame, randomTransformToParent);
+      ReferenceFrame ret = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(nameOfFrame, parentOfFrame, randomTransformToParent);
 
       return ret;
 
@@ -178,7 +185,7 @@ public class ReferenceFrameTest
 
       for (ReferenceFrame frame : allFramesTogether)
       {
-         frame.checkRepInvariants();
+         checkRepInvariants(frame);
 
          ReferenceFrame parent = frame.getParent();
          if (parent != null)
@@ -191,6 +198,79 @@ public class ReferenceFrameTest
          }
       }
       tearDown();
+   }
+
+   private void checkRepInvariants(ReferenceFrame frame)
+   {
+      List<ReferenceFrame> framesStartingWithRootEndingWithThis = frame.getFramesStartingWithRootEndingWithThis();
+      int branchLength = framesStartingWithRootEndingWithThis.size();
+      if (framesStartingWithRootEndingWithThis.get(branchLength - 1) != frame)
+      {
+         fail("This must be the last frame in the chain.");
+      }
+
+      ReferenceFrame parent = frame.getParent();
+      if (parent == null)
+      {
+         if (branchLength != 1)
+         {
+            fail("If the parentFrame is null, then this must be a root frame, in which there should be only one frame in the chain.");
+         }
+
+         try
+         {
+            frame.getTransformToParent();
+            fail("Root frames don't have transformToParent or transformToRoot defined.");
+         }
+         catch (NullPointerException e)
+         {
+            // Expected for the root frame.
+         }
+
+         if (frame.getTransformToRoot() != null)
+         {
+            fail("Root frames don't have transformToParent or transformToRoot defined.");
+         }
+
+         if (frame.transformToRootID != 0)
+         {
+            System.err.println("this ReferenceFrame = " + this);
+
+            fail("transformToRootID = " + frame.transformToRootID + ", Root frames must not be updated.");
+         }
+      }
+      else
+      {
+         if (framesStartingWithRootEndingWithThis.get(branchLength - 2) != parent)
+         {
+            fail("The parent must be the second to last frame in the chain.");
+         }
+
+         long maxIdSoFar = 0;
+         RigidBodyTransform computedTransformToRoot = new RigidBodyTransform();
+         for (int i = 1; i < branchLength; i++)
+         {
+            ReferenceFrame frameInTree = framesStartingWithRootEndingWithThis.get(i);
+            computedTransformToRoot.multiply(frameInTree.getTransformToParent());
+
+            long id = frameInTree.transformToRootID;
+            if (id < maxIdSoFar)
+            {
+               // Only need to make sure things are consistent down to where the
+               break;
+            }
+
+            maxIdSoFar = id;
+
+            if (!frameInTree.getTransformToRoot().epsilonEquals(computedTransformToRoot, 1e-5))
+            {
+               System.err.println("frame.transformToRoot = " + frameInTree.getTransformToRoot() + ", computedTransformToRoot = " + computedTransformToRoot);
+               System.err.println("this = " + this + " frame = " + frameInTree);
+
+               fail("transformToRoot is inconsistent!!");
+            }
+         }
+      }
    }
 
    @Test
@@ -484,7 +564,7 @@ public class ReferenceFrameTest
          desiredFrame.transformFromThisToDesiredFrame(initialFrame, actual);
          EuclidCoreTestTools.assertTuple3DEquals(original, actual, EPSILON);
 
-         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             initialFrame.transformFromThisToDesiredFrame(differentRootFrame, actual);
@@ -494,6 +574,8 @@ public class ReferenceFrameTest
          {
             // good
          }
+
+         ReferenceFrameTools.removeFrames(referenceFrames);
       }
    }
 
@@ -502,7 +584,7 @@ public class ReferenceFrameTest
    {
       Random random = new Random(84358345L);
       List<Long> existingIds = new ArrayList<>();
-      assertEquals(0L, ReferenceFrame.getWorldFrame().getFrameIndex());
+      assertEquals(0L, ReferenceFrameTools.getWorldFrame().getFrameIndex());
       existingIds.add(0L);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -510,7 +592,7 @@ public class ReferenceFrameTest
          ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          for (ReferenceFrame referenceFrame : frameTree)
          {
-            if (referenceFrame == ReferenceFrame.getWorldFrame())
+            if (referenceFrame == ReferenceFrameTools.getWorldFrame())
             {
                continue;
             }
@@ -518,6 +600,104 @@ public class ReferenceFrameTest
             long frameIndex = referenceFrame.getFrameIndex();
             assertFalse("Already has ID " + frameIndex, existingIds.contains(frameIndex));
             existingIds.add(frameIndex);
+         }
+
+         ReferenceFrameTools.removeFrames(frameTree);
+      }
+   }
+
+   @Test
+   public void testUniqueNaming()
+   {
+      Random random = new Random(13L);
+      ReferenceFrame someFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+      String frameName = someFrame.getName();
+      ReferenceFrame parent = someFrame.getParent();
+
+      try
+      {
+         ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+         fail("Should have thrown a RuntimeException");
+      }
+      catch (RuntimeException e)
+      {
+         // good
+      }
+
+      ReferenceFrameTools.removeFrame(someFrame);
+      someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+
+      someFrame.remove();
+      someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+
+      ReferenceFrameTools.clearFrameTree(someFrame);
+      someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+
+      ReferenceFrameTools.clearWorldFrameTree();
+      ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
+   }
+
+   @Test
+   public void testDisabeling() throws InstantiationException, IllegalAccessException
+   {
+      Random random = new Random(314114L);
+      ReferenceFrame[] someFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+      ReferenceFrame frameToDisable = someFrames[random.nextInt(someFrames.length - 1) + 1];
+      ReferenceFrame[] moreChildren = EuclidFrameRandomTools.nextReferenceFrameTree("AdditionalChild", random, frameToDisable, 10);
+
+      frameToDisable.remove();
+      checkDisabled(frameToDisable);
+      for (ReferenceFrame child : moreChildren)
+      {
+         checkDisabled(child);
+      }
+   }
+
+   private static void checkDisabled(ReferenceFrame frame) throws InstantiationException, IllegalAccessException
+   {
+      Method[] methods = ReferenceFrame.class.getMethods();
+      for (Method method : methods)
+      {
+         if (Modifier.isStatic(method.getModifiers()))
+         {
+            continue;
+         }
+         if (method.getDeclaringClass() != ReferenceFrame.class)
+         {
+            continue;
+         }
+         int numberOfParameters = method.getParameterTypes().length;
+         if (method.getName().equals("remove") && numberOfParameters == 0)
+         {
+            continue;
+         }
+
+         Object[] parameters = new Object[numberOfParameters];
+         for (int paramIdx = 0; paramIdx < numberOfParameters; paramIdx++)
+         {
+            Class<?> parameterClass = method.getParameterTypes()[paramIdx];
+            if (parameterClass.isPrimitive())
+            {
+               // Only works for some primitive types. If we add a public method that takes a boolean for example we will need to update this.
+               parameters[paramIdx] = 0;
+            }
+         }
+
+         try
+         {
+            method.invoke(frame, parameters);
+            fail("Should have thrown a RuntimeException on " + method.getName());
+         }
+         catch (Exception e)
+         {
+            if (e.getCause() instanceof RuntimeException)
+            {
+               continue;
+            }
+            else
+            {
+               fail("There was an exception in " + method.getName() + " but expected a RuntimeException.");
+            }
          }
       }
    }
