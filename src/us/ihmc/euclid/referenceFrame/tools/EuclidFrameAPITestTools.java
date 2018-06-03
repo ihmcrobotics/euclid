@@ -48,6 +48,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -162,6 +163,8 @@ public class EuclidFrameAPITestTools
       HashSet<Class<?>> modifiableSet = new HashSet<>();
       modifiableSet.add(RotationMatrixReadOnly.class);
       modifiableSet.add(RotationMatrix.class);
+      modifiableSet.add(RotationScaleMatrixReadOnly.class);
+      modifiableSet.add(RotationScaleMatrix.class);
       modifiableSet.add(AxisAngleReadOnly.class);
       modifiableSet.add(AxisAngleBasics.class);
       framelessTypesWithoutFrameEquivalent = Collections.unmodifiableSet(modifiableSet);
