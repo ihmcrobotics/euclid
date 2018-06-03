@@ -38,7 +38,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    /**
-    * Creates a new frame point and initializes it coordinates to zero and its reference frame to
+    * Creates a new frame point and initializes its coordinates to zero and its reference frame to
     * {@link ReferenceFrame#getWorldFrame()}.
     */
    public FramePoint2D()
@@ -47,7 +47,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
    }
 
    /**
-    * Creates a new frame point and initializes it coordinates to zero and its reference frame to the
+    * Creates a new frame point and initializes its coordinates to zero and its reference frame to the
     * {@code referenceFrame}.
     *
     * @param referenceFrame the initial frame for this frame point.
@@ -141,6 +141,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
       FramePoint2DBasics.super.set(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
