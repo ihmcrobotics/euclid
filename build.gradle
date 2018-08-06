@@ -43,6 +43,27 @@ task sourceJar(type: Jar, dependsOn: classes) {
    from sourceSets.main.allJava
 }
 
+// Task to generate javadocs into relevant website directory
+task genJavadocs(type: Javadoc, dependsOn: sourceJar) {
+	source = sourceSets.main.allJava
+	classpath = configurations.compile
+	destinationDir = file('websitedocs/website/static/javadocs')
+	setFailOnError(false)
+}
+
+//Ensure the replacestyles.sh script is run before the following task:
+
+// Task to rename the javadocs directory with the version number
+task javadocsVersion (dependsOn: genJavadocs) {
+	file('websitedocs/website/static/javadocs').renameTo(file('websitedocs/website/static/javadocs' + '-' + version))
+}
+
+//Task to create a new version in docusaurus
+task docsVersion (type: Exec, dependsOn: javadocsVersion) {
+	workingDir 'websitedocs/website'
+	commandLine 'yarn', 'run', 'version', version
+}
+
 publishing {
    publications {
       mavenJava(MavenPublication) {
@@ -50,7 +71,7 @@ publishing {
          artifactId project.ext.publicationName
          version "$version"
          from components.java
-		 
+
 		 pom.withXml {
              asNode().children().last() + {
                  resolveStrategy = Closure.DELEGATE_FIRST
