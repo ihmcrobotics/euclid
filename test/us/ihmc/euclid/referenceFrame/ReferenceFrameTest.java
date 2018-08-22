@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
@@ -202,7 +203,7 @@ public class ReferenceFrameTest
 
    private void checkRepInvariants(ReferenceFrame frame)
    {
-      List<ReferenceFrame> framesStartingWithRootEndingWithThis = frame.getFramesStartingWithRootEndingWithThis();
+      List<ReferenceFrame> framesStartingWithRootEndingWithThis = Arrays.asList(frame.getFramesStartingWithRootEndingWithThis());
       int branchLength = framesStartingWithRootEndingWithThis.size();
       if (framesStartingWithRootEndingWithThis.get(branchLength - 1) != frame)
       {

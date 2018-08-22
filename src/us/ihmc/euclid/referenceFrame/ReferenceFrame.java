@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -127,7 +126,7 @@ public abstract class ReferenceFrame
     * Entire from the root frame to this used to efficiently compute the pose of this reference frame
     * with respect to the root frame.
     */
-   private final List<ReferenceFrame> framesStartingWithRootEndingWithThis;
+   private final ReferenceFrame[] framesStartingWithRootEndingWithThis;
 
    /**
     * The pose of this transform with respect to its parent.
@@ -457,7 +456,7 @@ public abstract class ReferenceFrame
    public ReferenceFrame getRootFrame()
    {
       checkIfRemoved();
-      return framesStartingWithRootEndingWithThis.get(0);
+      return framesStartingWithRootEndingWithThis[0];
    }
 
    /**
@@ -686,14 +685,14 @@ public abstract class ReferenceFrame
    {
       checkIfRemoved();
 
-      int chainLength = framesStartingWithRootEndingWithThis.size();
+      int chainLength = framesStartingWithRootEndingWithThis.length;
 
       boolean updateFromHereOnOut = false;
       long previousUpdateId = 0;
 
       for (int i = 0; i < chainLength; i++)
       {
-         ReferenceFrame referenceFrame = framesStartingWithRootEndingWithThis.get(i);
+         ReferenceFrame referenceFrame = framesStartingWithRootEndingWithThis[i];
 
          if (!updateFromHereOnOut)
          {
@@ -949,7 +948,7 @@ public abstract class ReferenceFrame
     *
     * @return the list of frames from the root frame to this.
     */
-   public List<ReferenceFrame> getFramesStartingWithRootEndingWithThis()
+   public ReferenceFrame[] getFramesStartingWithRootEndingWithThis()
    {
       checkIfRemoved();
       return framesStartingWithRootEndingWithThis;
