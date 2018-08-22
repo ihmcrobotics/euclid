@@ -554,34 +554,51 @@ public abstract class ReferenceFrame
     */
    public void getTransformToDesiredFrame(RigidBodyTransform transformToPack, ReferenceFrame desiredFrame)
    {
+      checkIfRemoved();
+
       try
       {
-         verifySameRoots(desiredFrame);
-
-         efficientComputeTransform();
-         desiredFrame.efficientComputeTransform();
-
-         if (desiredFrame.transformToRoot != null)
+         if (this == desiredFrame)
          {
-            if (transformToRoot != null)
-            {
-               transformToPack.setAndInvert(desiredFrame.transformToRoot);
-               transformToPack.multiply(transformToRoot);
-            }
-            else
-            {
-               transformToPack.setAndInvert(desiredFrame.transformToRoot);
-            }
+            transformToPack.setIdentity();
+         }
+         else if (desiredFrame == parentFrame)
+         {
+            transformToPack.set(transformToParent);
+         }
+         else if (this == desiredFrame.parentFrame)
+         {
+            transformToPack.setAndInvert(desiredFrame.transformToParent);
          }
          else
          {
-            if (transformToRoot != null)
+            verifySameRoots(desiredFrame);
+            
+            efficientComputeTransform();
+            desiredFrame.efficientComputeTransform();
+            
+            if (desiredFrame.transformToRoot != null)
             {
-               transformToPack.set(transformToRoot);
+               if (transformToRoot != null)
+               {
+                  transformToPack.setAndInvert(desiredFrame.transformToRoot);
+                  transformToPack.multiply(transformToRoot);
+               }
+               else
+               {
+                  transformToPack.setAndInvert(desiredFrame.transformToRoot);
+               }
             }
             else
             {
-               transformToPack.setIdentity();
+               if (transformToRoot != null)
+               {
+                  transformToPack.set(transformToRoot);
+               }
+               else
+               {
+                  transformToPack.setIdentity();
+               }
             }
          }
       }
@@ -647,22 +664,34 @@ public abstract class ReferenceFrame
 
       // Check for the trivial case: the geometry is already expressed in the desired frame.
       if (desiredFrame == this)
+      {
          return;
-
-      verifySameRoots(desiredFrame);
-
-      RigidBodyTransform thisTransformToRoot = getTransformToRoot();
-
-      if (thisTransformToRoot != null)
-      {
-         objectToTransform.applyTransform(thisTransformToRoot);
       }
-
-      RigidBodyTransform desiredFrameTransformToRoot = desiredFrame.getTransformToRoot();
-
-      if (desiredFrameTransformToRoot != null)
+      else if (desiredFrame == parentFrame)
       {
-         objectToTransform.applyInverseTransform(desiredFrameTransformToRoot);
+         objectToTransform.applyTransform(transformToParent);
+      }
+      else if (this == desiredFrame.parentFrame)
+      {
+         objectToTransform.applyInverseTransform(desiredFrame.transformToParent);
+      }
+      else
+      {
+         verifySameRoots(desiredFrame);
+         
+         RigidBodyTransform thisTransformToRoot = getTransformToRoot();
+         
+         if (thisTransformToRoot != null)
+         {
+            objectToTransform.applyTransform(thisTransformToRoot);
+         }
+         
+         RigidBodyTransform desiredFrameTransformToRoot = desiredFrame.getTransformToRoot();
+         
+         if (desiredFrameTransformToRoot != null)
+         {
+            objectToTransform.applyInverseTransform(desiredFrameTransformToRoot);
+         }
       }
    }
 
