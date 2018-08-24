@@ -1,9 +1,8 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -12,7 +11,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 public class ReferenceFrameTools
 {
    /**
-    * {@code worldFrame} is a root reference frame and is most of time the only root reference frame.
+    * {@code worldFrame} is a root reference frame and is most of time the only root reference
+    * frame.
     * <p>
     * It is commonly assumed that its axes are aligned as follows:
     * <ul>
@@ -28,13 +28,13 @@ public class ReferenceFrameTools
    /**
     * Construct a new z-up root reference frame.
     * <p>
-    * Most of the time, {@link #worldFrame} is the only root frame from which children reference frames
-    * are added.
+    * Most of the time, {@link #worldFrame} is the only root frame from which children reference
+    * frames are added.
     * </p>
     * <p>
-    * Note that frames added as children of this root frame belongs to a different reference frame tree
-    * than the tree starting off of {@link #worldFrame}. Transformation across two different trees of
-    * reference frames is forbidden as the transformation between them is undefined.
+    * Note that frames added as children of this root frame belongs to a different reference frame
+    * tree than the tree starting off of {@link #worldFrame}. Transformation across two different
+    * trees of reference frames is forbidden as the transformation between them is undefined.
     * </p>
     * <p>
     * The parent frame and transforms of a root frame are all {@code null}.
@@ -60,8 +60,8 @@ public class ReferenceFrameTools
     * Return the world reference frame that is a root reference frame.
     * <p>
     * The world reference frame can be used to create child reference frames. It is usually assumed
-    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents the
-    * forward/backward direction and the y-axis represents the transversal direction.
+    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents
+    * the forward/backward direction and the y-axis represents the transversal direction.
     * </p>
     *
     * @return the world reference frame.
@@ -80,8 +80,8 @@ public class ReferenceFrameTools
     *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
-    * @param transformFromParent the transform that can be used to transform a geometry object from the
-    *           parent frame to this frame. Not modified.
+    * @param transformFromParent the transform that can be used to transform a geometry object from
+    *           the parent frame to this frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
@@ -117,8 +117,8 @@ public class ReferenceFrameTools
    /**
     * Creates a reference frame with an immutable transform to its parent.
     * <p>
-    * The {@code transformToParent} should describe the pose of the new frame expressed in its parent
-    * frame.
+    * The {@code transformToParent} should describe the pose of the new frame expressed in its
+    * parent frame.
     * </p>
     *
     * @param frameName the name of the new frame.
@@ -144,31 +144,33 @@ public class ReferenceFrameTools
       return ret;
    }
 
-   public static List<ReferenceFrame> constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
+   public static ReferenceFrame[] constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
    {
       ReferenceFrame parentFrame = thisFrame.getParent();
       if (parentFrame == null)
       {
-         return Collections.singletonList(thisFrame);
+         return new ReferenceFrame[] {thisFrame};
       }
 
-      List<ReferenceFrame> ret = new ArrayList<>(parentFrame.getFramesStartingWithRootEndingWithThis());
-      ret.add(thisFrame);
-
-      return Collections.unmodifiableList(ret);
+      int newLength = parentFrame.getFramesStartingWithRootEndingWithThis().length + 1;
+      ReferenceFrame[] ret = Arrays.copyOf(parentFrame.getFramesStartingWithRootEndingWithThis(), newLength);
+      ret[newLength - 1] = thisFrame;
+      return ret;
    }
 
    /**
     * Will remove the provided frame from the frame tree.
     * <p>
-    * This will disable the frame and cause the frame tree to loose all references to the frame and it's children. Note,
-    * that you can not use the frame after this method is called. This method is meant to allow the JVM to collect the
-    * frame as garbage and all future method calls on this frame will throw exceptions.
+    * This will disable the frame and cause the frame tree to loose all references to the frame and
+    * it's children. Note, that you can not use the frame after this method is called. This method
+    * is meant to allow the JVM to collect the frame as garbage and all future method calls on this
+    * frame will throw exceptions.
     * </p>
     * <p>
-    * This recursively disables all children of this frame also. If the provided frame is a root frame this method will
-    * do nothing.
+    * This recursively disables all children of this frame also. If the provided frame is a root
+    * frame this method will do nothing.
     * </p>
+    * 
     * @param frame is the {@link ReferenceFrame} that will be removed from the tree.
     */
    public static void removeFrame(ReferenceFrame frame)
@@ -178,6 +180,7 @@ public class ReferenceFrameTools
 
    /**
     * Will remove all provided frames from the frame tree.
+    * 
     * @param frames to be removed and disabled.
     * @see ReferenceFrameTools#removeFrame(ReferenceFrame)
     */
@@ -192,6 +195,7 @@ public class ReferenceFrameTools
    /**
     * Will clear the entire frame tree that this frame is part of leaving only the root frame
     * enabled. All other frames in the tree will be removed and disabled.
+    * 
     * @param frame in the frame tree that will be cleared.
     */
    public static void clearFrameTree(ReferenceFrame frame)
@@ -208,8 +212,9 @@ public class ReferenceFrameTools
    }
 
    /**
-    * Will create a collection of all reference frames in the frame tree that the provided frame
-    * is part of.
+    * Will create a collection of all reference frames in the frame tree that the provided frame is
+    * part of.
+    * 
     * @param frame in the reference frame tree of interest
     * @return all frames in the reference frame tree
     */
