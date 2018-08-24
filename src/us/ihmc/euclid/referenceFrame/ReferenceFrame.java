@@ -335,7 +335,8 @@ public abstract class ReferenceFrame
 
          if (parentFrame.hasChildWithName(frameName))
          {
-            throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
+            // TODO We need to enable unique frames at some point.
+//            throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
          }
          parentFrame.children.add(this);
 
@@ -686,7 +687,12 @@ public abstract class ReferenceFrame
     * <p>
     * This method can be used to change the reference frame in which {@code objectToTransform} is
     * expressed from {@code this} to {@code desiredFrame}.
-    * </P>
+    * </p>
+    * <p>
+    * <b>The given implementation of the given {@code Transformable} should check for
+    * {@link RigidBodyTransform#hasRotation()} and {@link RigidBodyTransform#hasTranslation()} to
+    * perform the transformation efficiently.</b>
+    * </p>
     *
     * @param desiredFrame the target frame for the transformation.
     * @param objectToTransform the object to apply the transformation on. Modified.
