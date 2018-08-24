@@ -182,7 +182,7 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
          assertTrue(anotherFrame == framePoint.getReferenceFrame());
          EuclidCoreTestTools.assertTuple3DEquals(expectedPoint, framePoint, EPSILON);
 
-         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             framePoint.changeFrame(differentRootFrame);

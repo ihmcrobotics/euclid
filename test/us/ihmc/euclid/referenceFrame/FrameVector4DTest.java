@@ -127,7 +127,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          assertTrue(anotherFrame == actual.getReferenceFrame());
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPSILON);
 
-         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             actual.changeFrame(differentRootFrame);

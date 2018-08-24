@@ -451,7 +451,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          assertTrue(anotherFrame == quaternion.getReferenceFrame());
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, quaternion, EPSILON);
 
-         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             quaternion.changeFrame(differentRootFrame);
