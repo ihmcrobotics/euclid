@@ -248,6 +248,25 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
    }
 
    /**
+    * Sets this line to be the same as the given line expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameTuple2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame line to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameLine2DReadOnly other)
+   {
+      Line2DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this line to be the same as the given line projected onto the XY-plane.
     *
     * @param frameLine3DReadOnly the line to copy. Not modified.

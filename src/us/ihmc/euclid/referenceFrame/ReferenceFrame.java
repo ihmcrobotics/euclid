@@ -1,13 +1,16 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.utils.NameBasedHashCodeHolder;
-import us.ihmc.euclid.utils.NameBasedHashCodeTools;
 
 /**
  * {@code ReferenceFrame} represents a reference coordinate frame.
@@ -47,40 +50,81 @@ import us.ihmc.euclid.utils.NameBasedHashCodeTools;
  * express a geometry in a different frame.
  * </p>
  */
-public abstract class ReferenceFrame implements NameBasedHashCodeHolder
+public abstract class ReferenceFrame
 {
+   /** A string used to separate frame names in the {@link #nameId} of the reference frame */
+   private static final String SEPARATOR = ":";
+
    /** The name of this reference frame. The name should preferably be unique. */
    private final String frameName;
+
    /**
-    * A secondary unique hash code representing this reference frame that is computed based on
-    * {@link #frameName} and the parent frame name if any.
+    * A string that can be used to identify the {@link ReferenceFrame}. It contains the name of the
+    * frame itself and all parents up to the root frame and is used for the {@link #hashCode()} and
+    * {@link #equals()} methods.
     * <p>
-    * This hash code has the benefit of remaining the same when creating several instances of the same
-    * tree of reference frames, such that it can be used to serialize and deserialize frame
-    * information.
+    * In contrast to the {@link #frameIndex} this is a name based identifier that is only dependent
+    * on names of frames. Note, that this means that two frames with the same name will be
+    * considered equal even though they might be in different locations.
     * </p>
     */
-   private final long nameBasedHashCode;
+   private final String nameId;
+
+   /**
+    * An ID that can be used to identify a frame inside a tree of reference frames. Each frame
+    * inside a tree will have a frame ID that is different from all other frames inside the tree.
+    * <p>
+    * It is more reliably then a hash code since there will be no collisions within a single frame
+    * tree. The disadvantage is that it is dependent on the order of construction of frames such
+    * that this index can change from run to run even if the name of the frame remains unchanged.
+    * </p>
+    */
+   private final long frameIndex;
+
+   /**
+    * A counter for the number of frames in the reference frame tree that starts at this frame.
+    * Note, that this counter does not account for frames that might be removed from the frame tree.
+    * It is meant to account all frames that were ever added to this frame tree to provide a unique
+    * number Identifier for each frame.
+    */
+   private long framesAddedToTree = 0L;
+
    /**
     * Additional custom hash code representing this frame.
     * <p>
     * Somewhat of a hack that allows to enforce two frames that are physically the same but with
-    * different names to have the same hash code or to enforce a common frame to have a specific hash
-    * code that can be known without holding on its actual instance.
+    * different names to have the same hash code or to enforce a common frame to have a specific
+    * hash code that can be known without holding on its actual instance.
     * </p>
     */
    private long additionalNameBasedHashCode;
+
    /**
     * The reference to which this frame is attached to.
     * <p>
-    * The {@link #transformToParent} of this describes the pose of this reference frame with respect to
-    * {@link #parentFrame}.
+    * The {@link #transformToParent} of this describes the pose of this reference frame with respect
+    * to {@link #parentFrame}.
     * </p>
     */
-   protected final ReferenceFrame parentFrame;
+   private final ReferenceFrame parentFrame;
+
    /**
-    * Entire from the root frame to this used to efficiently compute the pose of this reference frame
-    * with respect to the root frame.
+    * A collection of all children of this reference frame. Frames are removed from the reference
+    * frame tree using the {@link #remove()} method. This will remove the frame from this
+    * collection. Do not remove frames in a different way as this will not properly deactivate them.
+    */
+   private final Collection<ReferenceFrame> children = new ArrayList<>();
+   private final Collection<ReferenceFrame> childrenReadOnly = Collections.unmodifiableCollection(children);
+
+   /**
+    * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree.
+    * In this case all references to the frame should be dropped so it can be garbage collected.
+    */
+   private boolean hasBeenRemoved = false;
+
+   /**
+    * Entire from the root frame to this used to efficiently compute the pose of this reference
+    * frame with respect to the root frame.
     */
    private final ReferenceFrame[] framesStartingWithRootEndingWithThis;
 
@@ -98,13 +142,15 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    private final RigidBodyTransform transformToParent;
 
    // These need to be longs instead of integers or they'll role over too soon. With longs, you get at least 100 years of runtime.
-   protected static long nextTransformToRootID = 1;
-   private long transformToRootID = Long.MIN_VALUE;
+   static long nextTransformToRootID = 1;
+
+   long transformToRootID = Long.MIN_VALUE;
+
    /**
     * The current transform from this reference frame to the root frame.
     * <p>
-    * For instance, one can calculate the coordinates in the root frame P<sub>root</sub> of a point P
-    * expressed in this frame as follows:<br>
+    * For instance, one can calculate the coordinates in the root frame P<sub>root</sub> of a point
+    * P expressed in this frame as follows:<br>
     * {@code transformToRoot.transform}(P, P<sub>root</sub>)
     * </p>
     */
@@ -115,144 +161,12 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * stationary frame, i.e. a non-moving frame, with respect to the root reference frame.
     */
    private final boolean isAStationaryFrame; // TODO when isAStationaryFrame == true, transformToParent should be immutable.
+
    /**
-    * Field initialized at construction time that specifies if at all time the z-axis of this reference
-    * frame remains aligned with the z-axis of the root frame.
+    * Field initialized at construction time that specifies if at all time the z-axis of this
+    * reference frame remains aligned with the z-axis of the root frame.
     */
    private final boolean isZupFrame;
-
-   /**
-    * {@code worldFrame} is a root reference frame and is most of time the only root reference frame.
-    * <p>
-    * It is commonly assumed that its axes are aligned as follows:
-    * <ul>
-    * <li>The x-axis is usually referred to as the forward axis.
-    * <li>With the x-axis referring forward, the y-axis points to the left.
-    * <li>The z-axis points upward and usually points to the opposite direction to the gravitational
-    * acceleration.
-    * </ul>
-    * </p>
-    */
-   private static final ReferenceFrame worldFrame = constructARootFrame("World");
-
-   /**
-    * Construct a new z-up root reference frame.
-    * <p>
-    * Most of the time, {@link #worldFrame} is the only root frame from which children reference frames
-    * are added.
-    * </p>
-    * <p>
-    * Note that frames added as children of this root frame belongs to a different reference frame tree
-    * than the tree starting off of {@link #worldFrame}. Transformation across two different trees of
-    * reference frames is forbidden as the transformation between them is undefined.
-    * </p>
-    * <p>
-    * The parent frame and transforms of a root frame are all {@code null}.
-    * </p>
-    *
-    * @param frameName the name of the new world frame.
-    * @return the new non-moving z-up root reference frame.
-    */
-   public static ReferenceFrame constructARootFrame(String frameName)
-   {
-      ReferenceFrame ret = new ReferenceFrame(frameName)
-      {
-         @Override
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
-         {
-         }
-      };
-
-      return ret;
-   }
-
-   /**
-    * Creates a reference frame with an immutable transform from its parent.
-    * <p>
-    * The {@code transformFromParent} should describe the pose of the parent frame expressed in this
-    * new frame.
-    * </p>
-    *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
-    * @param transformFromParent the transform that can be used to transform a geometry object from the
-    *           parent frame to this frame. Not modified.
-    * @return the new reference frame.
-    */
-   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                RigidBodyTransform transformFromParent)
-   {
-      RigidBodyTransform transformToParent = new RigidBodyTransform(transformFromParent);
-      transformToParent.invert();
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
-   }
-
-   /**
-    * Creates a reference frame with an immutable translation offset from its parent.
-    * <p>
-    * The new reference frame has the same orientation as its parent frame.
-    * </p>
-    *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
-    * @param translationOffsetFromParent describes the position of the new reference frame's origin
-    *           expressed in the parent frame. Not modified.
-    * @return the new reference frame.
-    */
-   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                  Tuple3DReadOnly translationOffsetFromParent)
-   {
-      RigidBodyTransform transformToParent = new RigidBodyTransform();
-      transformToParent.setTranslation(translationOffsetFromParent);
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
-   }
-
-   /**
-    * Creates a reference frame with an immutable transform to its parent.
-    * <p>
-    * The {@code transformToParent} should describe the pose of the new frame expressed in its parent
-    * frame.
-    * </p>
-    *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
-    * @param transformToParent the transform that can be used to transform a geometry object the new
-    *           frame to its parent frame. Not modified.
-    * @return the new reference frame.
-    */
-   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
-                                                                              RigidBodyTransform transformToParent)
-   {
-      boolean isZupFrame = parentFrame.isZupFrame && transformToParent.isRotation2D();
-      boolean isAStationaryFrame = parentFrame.isAStationaryFrame;
-
-      ReferenceFrame ret = new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
-      {
-         @Override
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
-         {
-         }
-      };
-
-      return ret;
-   }
-
-   /**
-    * Return the world reference frame that is a root reference frame.
-    * <p>
-    * The world reference frame can be used to create child reference frames. It is usually assumed
-    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents the
-    * forward/backward direction and the y-axis represents the transversal direction.
-    * </p>
-    * 
-    * @return the world reference frame.
-    */
-   public static ReferenceFrame getWorldFrame()
-   {
-      return worldFrame;
-   }
 
    /**
     * Creates a new root reference frame.
@@ -261,13 +175,13 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * extending this class.
     * </p>
     * <p>
-    * Most of the time, {@link #worldFrame} is the only root frame from which children reference frames
-    * are added.
+    * Most of the time, {@link #worldFrame} is the only root frame from which children reference
+    * frames are added.
     * </p>
     * <p>
-    * Note that frames added as children of this root frame belongs to a different reference frame tree
-    * than the tree starting off of {@link #worldFrame}. Transformation across two different trees of
-    * reference frames is forbidden as the transformation between them is undefined.
+    * Note that frames added as children of this root frame belongs to a different reference frame
+    * tree than the tree starting off of {@link #worldFrame}. Transformation across two different
+    * trees of reference frames is forbidden as the transformation between them is undefined.
     * </p>
     * <p>
     * The parent frame and transforms of a root frame are all {@code null}.
@@ -287,12 +201,13 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
+    * it.
     * </p>
     * <p>
-    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially moving
-    * with respect to the root frame. It is also not expected to have its z-axis aligned at all time
-    * with the z-axis of the root frame.
+    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially
+    * moving with respect to the root frame. It is also not expected to have its z-axis aligned at
+    * all time with the z-axis of the root frame.
     * </p>
     *
     * @param frameName the name of the new frame.
@@ -310,15 +225,17 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
+    * it.
     * </p>
     *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
-    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the root
-    *           frame or moving. If {@code true}, the {@code parentFrame} has to also be stationary.
-    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame at
-    *           all time or not.
+    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the
+    *           root frame or moving. If {@code true}, the {@code parentFrame} has to also be
+    *           stationary.
+    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame
+    *           at all time or not.
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
     *            {@code parentFrame} is not a stationary frame.
     */
@@ -331,20 +248,21 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Creates a new reference frame defined as being a child of the given {@code parentFrame} and
     * initializes the transform to its parent.
     * <p>
-    * The {@code transformFromParent} should describe the pose of the new frame expressed in its parent
-    * frame.
+    * The {@code transformFromParent} should describe the pose of the new frame expressed in its
+    * parent frame.
     * </p>
     * <p>
     * This new reference frame defined in the {@code parentFrame} and moves with it.
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
+    * it.
     * </p>
     * <p>
-    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially moving
-    * with respect to the root frame. It is also not expected to have its z-axis aligned at all time
-    * with the z-axis of the root frame.
+    * This new reference frame is not a stationary frame, i.e. it is assumed to be potentially
+    * moving with respect to the root frame. It is also not expected to have its z-axis aligned at
+    * all time with the z-axis of the root frame.
     * </p>
     *
     * @param frameName the name of the new frame.
@@ -361,38 +279,46 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Creates a new reference frame defined as being a child of the given {@code parentFrame} and
     * initializes the transform to its parent.
     * <p>
-    * The {@code transformFromParent} should describe the pose of the new frame expressed in its parent
-    * frame.
+    * The {@code transformFromParent} should describe the pose of the new frame expressed in its
+    * parent frame.
     * </p>
     * <p>
     * This new reference frame defined in the {@code parentFrame} and moves with it.
     * </p>
     * <p>
     * Its pose with respect to the {@code parentFrame} can be modified at runtime by changing the
-    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
+    * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding
+    * it.
     * </p>
     *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
     *           frame to its parent frame. Not modified.
-    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the root
-    *           frame or moving. If {@code true}, the {@code parentFrame} has to also be stationary.
-    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame at
-    *           all time or not.
+    * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the
+    *           root frame or moving. If {@code true}, the {@code parentFrame} has to also be
+    *           stationary.
+    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame
+    *           at all time or not.
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
     *            {@code parentFrame} is not a stationary frame.
     */
    public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransform transformToParent, boolean isAStationaryFrame, boolean isZupFrame)
    {
+      if (frameName.contains(SEPARATOR))
+      {
+         throw new RuntimeException("A reference frame name can not contain '" + SEPARATOR + "'. Tried to construct a frame with name " + frameName + ".");
+      }
+
       this.frameName = frameName;
       this.parentFrame = parentFrame;
-      framesStartingWithRootEndingWithThis = constructFramesStartingWithRootEndingWithThis(this);
+      framesStartingWithRootEndingWithThis = ReferenceFrameTools.constructFramesStartingWithRootEndingWithThis(this);
 
       if (parentFrame == null)
       { // Setting up this ReferenceFrame as a root frame.
          transformToRootID = 0;
-         nameBasedHashCode = NameBasedHashCodeTools.computeStringHashCode(frameName);
+         nameId = frameName;
+         frameIndex = 0L;
 
          transformToRoot = null;
          this.transformToParent = null;
@@ -402,7 +328,17 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
       }
       else
       {
-         nameBasedHashCode = NameBasedHashCodeTools.combineHashCodes(frameName, parentFrame.getName());
+         parentFrame.checkIfRemoved();
+
+         nameId = parentFrame.nameId + SEPARATOR + frameName;
+         frameIndex = parentFrame.incrementFramesAdded();
+
+         if (parentFrame.hasChildWithName(frameName))
+         {
+            // TODO We need to enable unique frames at some point.
+//            throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
+         }
+         parentFrame.children.add(this);
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -421,25 +357,18 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
       }
    }
 
-   private static ReferenceFrame[] constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
+   private long incrementFramesAdded()
    {
-      ReferenceFrame parentFrame = thisFrame.parentFrame;
+      framesAddedToTree++;
+
       if (parentFrame == null)
       {
-         return new ReferenceFrame[] {thisFrame};
+         return framesAddedToTree;
       }
-
-      int size = parentFrame.framesStartingWithRootEndingWithThis.length + 1;
-      ReferenceFrame[] ret = new ReferenceFrame[size];
-
-      for (int i = 0; i < size - 1; i++)
+      else
       {
-         ret[i] = parentFrame.framesStartingWithRootEndingWithThis[i];
+         return parentFrame.incrementFramesAdded();
       }
-
-      ret[size - 1] = thisFrame;
-
-      return ret;
    }
 
    /**
@@ -449,7 +378,14 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public boolean isWorldFrame()
    {
-      return this == worldFrame;
+      checkIfRemoved();
+      return this == ReferenceFrameTools.getWorldFrame();
+   }
+
+   public boolean isRootFrame()
+   {
+      checkIfRemoved();
+      return parentFrame == null;
    }
 
    /**
@@ -460,6 +396,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public boolean isAStationaryFrame()
    {
+      checkIfRemoved();
       return isAStationaryFrame;
    }
 
@@ -470,20 +407,23 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public boolean isZupFrame()
    {
+      checkIfRemoved();
       return isZupFrame;
    }
 
    /**
     * The user must call update each tick. It will then call
-    * {@link #updateTransformToParent(RigidBodyTransform)} which should be overridden to indicate how
-    * the transform to each frame's parent should be updated.
+    * {@link #updateTransformToParent(RigidBodyTransform)} which should be overridden to indicate
+    * how the transform to each frame's parent should be updated.
     * <p>
-    * Note that it is not necessary to call update on reference frames with an unchanging transform to
-    * parent, even if the parent frame is moving.
+    * Note that it is not necessary to call update on reference frames with an unchanging transform
+    * to parent, even if the parent frame is moving.
     * </p>
     */
    public void update()
    {
+      checkIfRemoved();
+
       if (parentFrame == null)
       {
          return;
@@ -509,14 +449,15 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    /**
     * Returns the parent frame of this reference frame.
     * <p>
-    * Note that a root frame has no parent frame, such that this method returns {@code null} if this is
-    * a root frame.
+    * Note that a root frame has no parent frame, such that this method returns {@code null} if this
+    * is a root frame.
     * </p>
     *
     * @return the parent frame of this reference frame.
     */
    public ReferenceFrame getParent()
    {
+      checkIfRemoved();
       return parentFrame;
    }
 
@@ -527,6 +468,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public ReferenceFrame getRootFrame()
    {
+      checkIfRemoved();
       return framesStartingWithRootEndingWithThis[0];
    }
 
@@ -536,8 +478,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * WARNING: This method generates garbage.
     * </p>
     * <p>
-    * This transform can be applied to a vector defined in this frame in order to obtain the equivalent
-    * vector in the parent frame.
+    * This transform can be applied to a vector defined in this frame in order to obtain the
+    * equivalent vector in the parent frame.
     * </p>
     *
     * @return a copy of the transform to the parent frame.
@@ -553,8 +495,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * packs this reference frame's transform to parent into the given transform
     * {@code transformToPack}.
     * <p>
-    * This transform can be applied to a vector defined in this frame in order to obtain the equivalent
-    * vector in the parent frame.
+    * This transform can be applied to a vector defined in this frame in order to obtain the
+    * equivalent vector in the parent frame.
     * </p>
     *
     * @param transformToPack the transform in which this frame's transform to its parent frame is
@@ -562,20 +504,22 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public void getTransformToParent(RigidBodyTransform transformToPack)
    {
+      checkIfRemoved();
       transformToPack.set(transformToParent);
    }
 
    /**
     * Gets the name of this reference frame.
     * <p>
-    * Reference frames usually have a unique name among the reference frames in the same tree but this
-    * is not guaranteed.
+    * Reference frames usually have a unique name among the reference frames in the same tree but
+    * this is not guaranteed.
     * </p>
     *
     * @return this frame's name.
     */
    public String getName()
    {
+      checkIfRemoved();
       return frameName;
    }
 
@@ -609,7 +553,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    public RigidBodyTransform getTransformToWorldFrame()
    {
       RigidBodyTransform ret = new RigidBodyTransform();
-      getTransformToDesiredFrame(ret, worldFrame);
+      getTransformToDesiredFrame(ret, ReferenceFrameTools.getWorldFrame());
       return ret;
    }
 
@@ -617,41 +561,79 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Packs the transform that can be used to transform a geometry object defined in this frame to
     * obtain its equivalent expressed in the {@code desiredFrame} into {@code transformToPack}.
     *
-    * @param transformToPack the transform in which this frame's transform to the {@code desiredFrame}
-    *           is stored. Modified.
+    * @param transformToPack the transform in which this frame's transform to the
+    *           {@code desiredFrame} is stored. Modified.
     * @param desiredFrame the goal frame.
     */
    public void getTransformToDesiredFrame(RigidBodyTransform transformToPack, ReferenceFrame desiredFrame)
    {
+      checkIfRemoved();
+
       try
       {
+         if (this == desiredFrame)
+         { // Check for trivial case
+            transformToPack.setIdentity();
+            return;
+         }
+
          verifySameRoots(desiredFrame);
 
-         efficientComputeTransform();
-         desiredFrame.efficientComputeTransform();
-
-         if (desiredFrame.transformToRoot != null)
+         // The general approach is:
+         // transformToPack = (desiredFrame.transformToRoot)^-1 * this.transformToRoot
+         // As this requires a transform multiplication, we first check for simpler cases:
+         if (isRootFrame())
          {
-            if (transformToRoot != null)
-            {
-               transformToPack.setAndInvert(desiredFrame.transformToRoot);
-               transformToPack.multiply(transformToRoot);
-            }
-            else
-            {
-               transformToPack.setAndInvert(desiredFrame.transformToRoot);
-            }
+            /*
+             * If this is the root frame, desiredFrame cannot be the root frame, i.e. it would have
+             * triggered the previous condition as there can be only one root per frame tree. Thus:
+             * this.transformToRoot is the identity, no need for a multiplication here.
+             */
+            transformToPack.setAndInvert(desiredFrame.getTransformToRoot());
+         }
+         else if (desiredFrame.isRootFrame())
+         {
+            /*
+             * If desiredFrame is the root frame, this cannot be the root frame, i.e. it would have
+             * triggered the previous condition as there can be only one root per frame tree. Thus:
+             * desiredFrame.transformToRoot is the identity, no need for a multiplication here.
+             */
+            transformToPack.set(getTransformToRoot());
+         }
+         else if (isParentFrame(desiredFrame))
+         { // Test direct connection between the frames:
+            transformToPack.set(transformToParent);
+         }
+         else if (desiredFrame.isParentFrame(this))
+         { // Test direct connection between the frames:
+            transformToPack.setAndInvert(desiredFrame.transformToParent);
+         }
+         else if (parentFrame == desiredFrame.parentFrame)
+         {
+            /*
+             * Common parentFrame. Here the multiplication is needed but the transforms involved
+             * will often be simple (rotation only or translation only) whereas the transformToRoot
+             * of most frame is a complex transform.
+             */
+            transformToPack.setAndInvert(desiredFrame.transformToParent);
+            transformToPack.multiply(transformToParent);
+         }
+         else if (parentFrame.parentFrame == desiredFrame)
+         { // Look at a distance of 2, which would involve the multiplication of 2 transforms that will often be simple (rotation only or translation only).
+            transformToPack.set(transformToParent);
+            if (!parentFrame.isRootFrame()) // If it is the root, then parentFrame.transformToParent is identity.
+               transformToPack.preMultiply(parentFrame.transformToParent);
+         }
+         else if (this == desiredFrame.parentFrame.parentFrame)
+         { // Look at a distance of 2, which would involve the multiplication of 2 transforms that will often be simple (rotation only or translation only).
+            transformToPack.setAndInvert(desiredFrame.transformToParent);
+            if (!desiredFrame.parentFrame.isRootFrame()) // If it is the root, then desiredFrame.parentFrame.transformToParent is identity.
+               transformToPack.multiplyInvertOther(desiredFrame.parentFrame.transformToParent);
          }
          else
-         {
-            if (transformToRoot != null)
-            {
-               transformToPack.set(transformToRoot);
-            }
-            else
-            {
-               transformToPack.setIdentity();
-            }
+         { // This is the general scenario:
+            transformToPack.setAndInvert(desiredFrame.getTransformToRoot());
+            transformToPack.multiply(getTransformToRoot());
          }
       }
       catch (NotARotationMatrixException e)
@@ -669,6 +651,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public boolean isParentFrame(ReferenceFrame frame)
    {
+      checkIfRemoved();
       return frame == parentFrame;
    }
 
@@ -680,6 +663,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public boolean isChildFrame(ReferenceFrame frame)
    {
+      checkIfRemoved();
       return frame.isParentFrame(this);
    }
 
@@ -698,36 +682,91 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    }
 
    /**
-    * Transforms the given {@code objectToTransform} by the transform from this reference frame to the
-    * given {@code desiredFrame}.
+    * Transforms the given {@code objectToTransform} by the transform from this reference frame to
+    * the given {@code desiredFrame}.
     * <p>
     * This method can be used to change the reference frame in which {@code objectToTransform} is
     * expressed from {@code this} to {@code desiredFrame}.
-    * </P>
+    * </p>
+    * <p>
+    * <b>The given implementation of the given {@code Transformable} should check for
+    * {@link RigidBodyTransform#hasRotation()} and {@link RigidBodyTransform#hasTranslation()} to
+    * perform the transformation efficiently.</b>
+    * </p>
     *
     * @param desiredFrame the target frame for the transformation.
     * @param objectToTransform the object to apply the transformation on. Modified.
     */
    public void transformFromThisToDesiredFrame(ReferenceFrame desiredFrame, Transformable objectToTransform)
    {
-      // Check for the trivial case: the geometry is already expressed in the desired frame.
-      if (desiredFrame == this)
+      checkIfRemoved();
+
+      if (this == desiredFrame)
+      { // Check for trivial case
          return;
+      }
 
       verifySameRoots(desiredFrame);
 
-      RigidBodyTransform thisTransformToRoot = getTransformToRoot();
-
-      if (thisTransformToRoot != null)
+      // The general approach is:
+      // objectToTransform = (desired.transformToRoot)^-1 * this.transformToRoot * objectToTransform
+      // Or code-wise:
+      // 1- objectToTransform.applyTransform(transformToRoot);
+      // 2- objectToTransform.applyInverseTransform(desiredFrame.transformToRoot);
+      // As this requires 2 transformations, we first check for simpler cases:
+      if (isRootFrame())
       {
-         objectToTransform.applyTransform(thisTransformToRoot);
+         /*
+          * If this is the root frame, desiredFrame cannot be the root frame, i.e. it would have
+          * triggered the previous condition as there can be only one root per frame tree. Thus:
+          * this.transformToRoot is the identity, only 1 transformation here.
+          */
+         objectToTransform.applyInverseTransform(desiredFrame.getTransformToRoot());
       }
-
-      RigidBodyTransform desiredFrameTransformToRoot = desiredFrame.getTransformToRoot();
-
-      if (desiredFrameTransformToRoot != null)
+      else if (desiredFrame.isRootFrame())
       {
-         objectToTransform.applyInverseTransform(desiredFrameTransformToRoot);
+         /*
+          * If desiredFrame is the root frame, this cannot be the root frame, i.e. it would have
+          * triggered the previous condition as there can be only one root per frame tree. Thus:
+          * desiredFrame.transformToRoot is the identity, only 1 transformation here.
+          */
+         objectToTransform.applyTransform(getTransformToRoot());
+      }
+      else if (isParentFrame(desiredFrame))
+      { // Test direct connection between the frames:
+         objectToTransform.applyTransform(transformToParent);
+      }
+      else if (desiredFrame.isParentFrame(this))
+      { // Test direct connection between the frames:
+         objectToTransform.applyInverseTransform(desiredFrame.transformToParent);
+      }
+      else if (parentFrame == desiredFrame.parentFrame)
+      {
+         /*
+          * Common parentFrame. Here 2 transformations are needed but the transforms involved will
+          * often be simple (rotation only or translation only) whereas the transformToRoot of most
+          * frame is a complex transform.
+          */
+         objectToTransform.applyTransform(transformToParent);
+         objectToTransform.applyInverseTransform(desiredFrame.transformToParent);
+      }
+      else if (parentFrame.parentFrame == desiredFrame)
+      { // Look at a distance of 2, which involves 2 transformations with transforms that will often be simple (rotation only or translation only).
+
+         objectToTransform.applyTransform(transformToParent);
+         if (!parentFrame.isRootFrame()) // If it is the root, then parentFrame.transformToParent is identity.
+            objectToTransform.applyTransform(parentFrame.transformToParent);
+      }
+      else if (this == desiredFrame.parentFrame.parentFrame)
+      { // Look at a distance of 2, which involves 2 transformations with transforms that will often be simple (rotation only or translation only).
+         if (!desiredFrame.parentFrame.isRootFrame()) // If it is the root, then desiredFrame.parentFrame.transformToParent is identity.
+            objectToTransform.applyInverseTransform(desiredFrame.parentFrame.transformToParent);
+         objectToTransform.applyInverseTransform(desiredFrame.transformToParent);
+      }
+      else
+      { // This is the general scenario:
+         objectToTransform.applyTransform(getTransformToRoot());
+         objectToTransform.applyInverseTransform(desiredFrame.getTransformToRoot());
       }
    }
 
@@ -748,6 +787,8 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
 
    private void efficientComputeTransform()
    {
+      checkIfRemoved();
+
       int chainLength = framesStartingWithRootEndingWithThis.length;
 
       boolean updateFromHereOnOut = false;
@@ -798,6 +839,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
    @Override
    public String toString()
    {
+      checkIfRemoved();
       return frameName; // + "\nTransform to Parent = " + this.transformToParent;
    }
 
@@ -823,6 +865,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public void checkReferenceFrameMatch(ReferenceFrame referenceFrame) throws ReferenceFrameMismatchException
    {
+      checkIfRemoved();
       if (this != referenceFrame)
       {
          String msg = "Argument's frame " + referenceFrame + " does not match " + this;
@@ -838,6 +881,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public void checkIsWorldFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isWorldFrame())
       {
          throw new RuntimeException("Frame " + this + " is not world frame.");
@@ -851,6 +895,7 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public void checkIsAStationaryFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isAStationaryFrame())
       {
          throw new RuntimeException("Frame " + this + " is not a stationary frame.");
@@ -864,108 +909,74 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     */
    public void checkIsAZUpFrame() throws RuntimeException
    {
+      checkIfRemoved();
       if (!isZupFrame())
       {
          throw new RuntimeException("Frame " + this + " is not a z-up frame.");
       }
    }
 
-   void checkRepInvariants()
+   /**
+    * The hash code of a reference frame is based on the {@link #nameId} of the frame. This means
+    * that the hash code will be equal for two distinct frames that have the same name. To
+    * differentiate all frames in a tree regardless of their name use the {@link #getFrameIndex()}
+    * method.
+    *
+    * @return the hash code of the {@link #nameId} of this frame.
+    */
+   @Override
+   public int hashCode()
    {
-      if (framesStartingWithRootEndingWithThis[framesStartingWithRootEndingWithThis.length - 1] != this)
-      {
-         throw new RuntimeException("This must be the last frame in the chain.");
-      }
-
-      if (parentFrame == null)
-      {
-         if (framesStartingWithRootEndingWithThis.length != 1)
-         {
-            throw new RuntimeException("If the parentFrame is null, then this must be a root frame, in which there should be only one frame in the chain.");
-         }
-
-         if (transformToParent != null)
-         {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
-         }
-
-         if (transformToRoot != null)
-         {
-            throw new RuntimeException("Root frames don't have transformToParent or transformToRoot defined.");
-         }
-
-         if (transformToRootID != 0)
-         {
-            System.err.println("this ReferenceFrame = " + this);
-
-            throw new RuntimeException("transformToRootID = " + transformToRootID + ", Root frames must not be updated.");
-         }
-      }
-      else
-      {
-         if (framesStartingWithRootEndingWithThis[framesStartingWithRootEndingWithThis.length - 2] != parentFrame)
-         {
-            throw new RuntimeException("The parent must be the second to last frame in the chain.");
-         }
-
-         long maxIdSoFar = 0;
-         RigidBodyTransform computedTransformToRoot = new RigidBodyTransform();
-         for (int i = 1; i < framesStartingWithRootEndingWithThis.length; i++)
-         {
-            ReferenceFrame frame = framesStartingWithRootEndingWithThis[i];
-            computedTransformToRoot.multiply(frame.transformToParent);
-
-            long id = frame.transformToRootID;
-            if (id < maxIdSoFar)
-            {
-               // Only need to make sure things are consistent down to where the
-               break;
-            }
-
-            maxIdSoFar = id;
-
-            if (!frame.transformToRoot.epsilonEquals(computedTransformToRoot, 1e-5))
-            {
-               System.err.println("frame.transformToRoot = " + frame.transformToRoot + ", computedTransformToRoot = " + computedTransformToRoot);
-               System.err.println("this = " + this + " frame = " + frame);
-
-               throw new RuntimeException("transformToRoot is inconsistent!!");
-            }
-         }
-      }
+      checkIfRemoved();
+      return nameId.hashCode();
    }
 
    /**
-    * Gets the value of this frame's name based hash code.
-    * <p>
-    * This is a secondary unique hash code representing this reference frame that is computed based on
-    * {@link #frameName} and the parent frame name if any.
-    * </p>
-    * <p>
-    * This hash code has the benefit of remaining the same when creating several instances of the same
-    * tree of reference frames, such that it can be used to serialize and deserialize frame
-    * information.
-    * </p>
+    * This method will return true if the provided object is a reference frame with the same
+    * {@link #nameId} as this frame. This means that two distinct frames with the same name are
+    * considered equal. To differentiate all frames in a tree regardless of their name use the
+    * {@link #getFrameIndex()} method.
     *
-    * @return this frame's name based hash code.
+    * @return {@code true} if the provided object is of type {@link ReferenceFrame} and its
+    *         {@link #nameId} matches this.
     */
    @Override
-   public long getNameBasedHashCode()
+   public boolean equals(Object other)
    {
-      return nameBasedHashCode;
+      checkIfRemoved();
+      if (other instanceof ReferenceFrame)
+      {
+         return ((ReferenceFrame) other).nameId.equals(nameId);
+      }
+      return false;
+   }
+
+   /**
+    * Gets the {@link #frameIndex} of this reference frame. The frame index is a unique number that
+    * identifies each reference frame within a reference frame tree. No two frames inside a frame
+    * tree can have the same index.
+    *
+    * @return the frame index that is unique in the frame tree that this frame is part of.
+    */
+   public long getFrameIndex()
+   {
+      checkIfRemoved();
+      return frameIndex;
    }
 
    /**
     * Gets the value of this frame's custom hash code.
     * <p>
     * Somewhat of a hack that allows to enforce two frames that are physically the same but with
-    * different names to have the same hash code or to enforce a common frame to have a specific hash
-    * code that can be known without holding on its actual instance.
+    * different names to have the same hash code or to enforce a common frame to have a specific
+    * hash code that can be known without holding on its actual instance.
     * </p>
+    * 
     * @return the name based hash code for this reference frame.
     */
    public long getAdditionalNameBasedHashCode()
    {
+      checkIfRemoved();
       return additionalNameBasedHashCode;
    }
 
@@ -973,14 +984,143 @@ public abstract class ReferenceFrame implements NameBasedHashCodeHolder
     * Sets this frame's custom hash code's value.
     * <p>
     * Somewhat of a hack that allows to enforce two frames that are physically the same but with
-    * different names to have the same hash code or to enforce a common frame to have a specific hash
-    * code that can be known without holding on its actual instance.
+    * different names to have the same hash code or to enforce a common frame to have a specific
+    * hash code that can be known without holding on its actual instance.
     * </p>
     *
     * @param additionalNameBasedHashCode the new value of this frame's custom hash code.
     */
    public void setAdditionalNameBasedHashCode(long additionalNameBasedHashCode)
    {
+      checkIfRemoved();
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
+   }
+
+   private void checkIfRemoved()
+   {
+      if (hasBeenRemoved)
+      {
+         throw new RuntimeException("Can not use frame that was removed from the frame tree.");
+      }
+   }
+
+   /**
+    * Will remove this frame from the frame tree.
+    * <p>
+    * This will disable the frame and cause the frame tree to loose all references to the frame and
+    * it's children. Note, that you can not use the frame after this method is called. This method
+    * is meant to allow the JVM to collect the frame as garbage and all future method calls on this
+    * frame will throw exceptions.
+    * </p>
+    * <p>
+    * This recursively disables all children of this frame also.
+    * </p>
+    */
+   public void remove()
+   {
+      if (!hasBeenRemoved && parentFrame != null)
+      {
+         parentFrame.children.remove(this);
+         disableRecursivly();
+      }
+   }
+
+   private boolean hasChildWithName(String childName)
+   {
+      return children.stream().anyMatch(child -> child.getName().equals(childName));
+   }
+
+   /**
+    * Will remove and disable all children of the provided frame.
+    * 
+    * @param frame whose children should be removed from the frame tree.
+    * @see #removeFrame(ReferenceFrame)
+    */
+   public void clearChildren()
+   {
+      checkIfRemoved();
+      children.forEach(child -> child.disableRecursivly());
+      children.clear();
+   }
+
+   private void disableRecursivly()
+   {
+      hasBeenRemoved = true;
+      children.forEach(child -> child.disableRecursivly());
+   }
+
+   /**
+    * Getter for the read only view of all reference frames starting with the root frame of this
+    * frame tree all the way to this frame.
+    *
+    * @return the list of frames from the root frame to this.
+    */
+   public ReferenceFrame[] getFramesStartingWithRootEndingWithThis()
+   {
+      checkIfRemoved();
+      return framesStartingWithRootEndingWithThis;
+   }
+
+   /**
+    * Getter for the read only view of the children of this reference frame.
+    *
+    * @return children frames of this frame.
+    */
+   public Collection<ReferenceFrame> getChildren()
+   {
+      checkIfRemoved();
+      return childrenReadOnly;
+   }
+
+   /**
+    * @return the root frame of the world reference frame tree.
+    * @see ReferenceFrameTools#getWorldFrame()
+    */
+   public static ReferenceFrame getWorldFrame()
+   {
+      return ReferenceFrameTools.getWorldFrame();
+   }
+
+   /** Use {@link ReferenceFrameTools#constructARootFrame(String)} instead. */
+   @Deprecated
+   public static ReferenceFrame constructARootFrame(String frameName)
+   {
+      return ReferenceFrameTools.constructARootFrame(frameName);
+   }
+
+   /**
+    * Use
+    * {@link ReferenceFrameTools#constructFrameWithUnchangingTransformFromParent(String, ReferenceFrame, RigidBodyTransform)}
+    * instead.
+    */
+   @Deprecated
+   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
+                                                                                RigidBodyTransform transformFromParent)
+   {
+      return ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
+   }
+
+   /**
+    * Use
+    * {@link ReferenceFrameTools#constructFrameWithUnchangingTranslationFromParent(String, ReferenceFrame, Tuple3DReadOnly)}
+    * instead.
+    */
+   @Deprecated
+   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
+                                                                                  Tuple3DReadOnly translationOffsetFromParent)
+   {
+      return ReferenceFrameTools.constructFrameWithUnchangingTranslationFromParent(frameName, parentFrame, translationOffsetFromParent);
+   }
+
+   /**
+    * Use
+    * {@link ReferenceFrameTools#constructFrameWithUnchangingTransformToParent(String, ReferenceFrame, RigidBodyTransform)}
+    * instead.
+    */
+   @Deprecated
+   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
+                                                                              RigidBodyTransform transformToParent)
+   {
+      return ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
    }
 }

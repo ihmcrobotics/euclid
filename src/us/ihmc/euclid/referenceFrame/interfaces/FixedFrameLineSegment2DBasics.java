@@ -217,7 +217,26 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
    }
 
    /**
-    * Sets this line segment to be same as the given line segment.
+    * Sets this line segment to be same as the given line segment expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameLineSegment2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame line segment to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameLineSegment2DReadOnly other)
+   {
+      LineSegment2DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
+    * Sets this line segment to be same as the given line segment projected on the XY-plane.
     *
     * @param other the other line segment to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in

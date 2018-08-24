@@ -131,6 +131,7 @@ public class EuclidFrameToolsTest
          {
             List<FramePoint3D> points = new ArrayList<>();
 
+            ReferenceFrameTools.clearWorldFrameTree();
             ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
             ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
 

@@ -72,6 +72,25 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
    }
 
    /**
+    * Sets this orientation to be the same as the given one expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameOrientation2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other orientation 2D to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameOrientation2DReadOnly other)
+   {
+      Orientation2DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Sets this orientation 2D to the yaw angle of the given {@code frameQuaternionReadOnly}.
     * 
     * @param frameQuaternionReadOnly the quaternion to get the yaw angle from. Not modified.

@@ -15,6 +15,7 @@ package us.ihmc.euclid.utils;
  * to sent the reference to the object to be used.
  * </p>
  */
+@Deprecated
 public interface NameBasedHashCodeHolder
 {
    /**

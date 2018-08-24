@@ -11,11 +11,18 @@ import org.junit.Test;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 {
+   public static final int NUMBER_OF_ITERATIONS = 1000;
+   public static final double EPSILON = 1.0e-15;
+
    @Override
    public FramePose3D createFramePose(ReferenceFrame referenceFrame, Pose3DReadOnly pose)
    {
@@ -48,5 +55,27 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Pose3D.class, Double.TYPE});
       framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Pose3D.class, Double.TYPE});
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FramePose3D.class, Pose3D.class, true, 1, framelessMethodsToIgnore);
+   }
+
+   @Test
+   public void testSetMatchingFrame() throws Exception
+   {
+      Random random = new Random(544354);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
+
+         FramePose3DReadOnly source = EuclidFrameRandomTools.nextFramePose3D(random, sourceFrame);
+         FixedFramePose3DBasics actual = EuclidFrameRandomTools.nextFramePose3D(random, destinationFrame);
+
+         actual.setMatchingFrame(source);
+
+         FramePose3D expected = new FramePose3D(source);
+         expected.changeFrame(destinationFrame);
+
+         EuclidGeometryTestTools.assertPose3DEquals(expected, actual, EPSILON);
+      }
    }
 }

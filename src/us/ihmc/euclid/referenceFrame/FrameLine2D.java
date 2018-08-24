@@ -369,7 +369,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /**
     * Provides a {@code String} representation of this frame line 2D as follows:<br>
-    * Line 3D: point = (x, y), direction = (x, y)-worldFrame
+    * Line 2D: point = (x, y), direction = (x, y)-worldFrame
     *
     * @return the {@code String} representing this line 2D.
     */

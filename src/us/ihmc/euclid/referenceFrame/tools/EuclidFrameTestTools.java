@@ -1,20 +1,7 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertPoint2DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertPoint3DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertQuaternionGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertRotationVectorEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertRotationVectorGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple2DEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple3DEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple4DEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector2DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector3DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector4DGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
@@ -36,96 +23,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 public class EuclidFrameTestTools
 {
    private static final String DEFAULT_FORMAT = getStringFormat(15, 12);
-
-   /**
-    * Asserts on a per component basis that the two rotation frame vectors are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @deprecated Use
-    *             {@link #assertRotationFrameVectorGeometricallyEquals(FrameVector3DReadOnly, FrameVector3DReadOnly, double)}
-    *             instead. This method will be removed in a future version.
-    *
-    * @param expected the expected rotation frame vector. Not modified.
-    * @param actual the actual rotation frame vector. Not modified.
-    * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two rotation vectors are not equal or not expressed in the same
-    *            reference frame. If only one of the arguments is equal to {@code null}.
-    */
-   @Deprecated
-   public static void assertRotationFrameVectorEquals(FrameVector3DReadOnly expected, FrameVector3DReadOnly actual, double epsilon)
-   {
-      assertRotationFrameVectorEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two rotation frame vectors are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @deprecated Use
-    *             {@link #assertRotationFrameVectorGeometricallyEquals(String, FrameVector3DReadOnly, FrameVector3DReadOnly, double)}
-    *             instead. This method will be removed in a future version.
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected rotation frame vector. Not modified.
-    * @param actual the actual rotation frame vector. Not modified.
-    * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two rotation frame vectors are not equal or not expressed in the
-    *            reference frame. If only one of the arguments is equal to {@code null}.
-    */
-   @Deprecated
-   public static void assertRotationFrameVectorEquals(String messagePrefix, FrameVector3DReadOnly expected, FrameVector3DReadOnly actual, double epsilon)
-   {
-      assertRotationFrameVectorEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two rotation frame vectors are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @deprecated Use
-    *             {@link #assertRotationFrameVectorGeometricallyEquals(String, FrameVector3DReadOnly, FrameVector3DReadOnly, double, String)}
-    *             instead. This method will be removed in a future version.
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected the expected rotation frame vector. Not modified.
-    * @param actual the actual rotation frame vector. Not modified.
-    * @param epsilon the tolerance to use.
-    * @param format the format to use for printing each component when an {@code AssertionError} is
-    *           thrown.
-    * @throws AssertionError if the two rotation frame vectors are not equal or not expressed in the
-    *            reference frame. If only one of the arguments is equal to {@code null}.
-    */
-   @Deprecated
-   public static void assertRotationFrameVectorEquals(String messagePrefix, FrameVector3DReadOnly expected, FrameVector3DReadOnly actual, double epsilon,
-                                                      String format)
-   {
-      if (expected.getReferenceFrame() != actual.getReferenceFrame())
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
-      assertRotationVectorEquals(expected, actual, epsilon);
-   }
 
    /**
     * Asserts on a per component basis that the two rotation frame vectors represent the same geometry

@@ -13,7 +13,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.8
-version = '0.8.2'
+version = '0.9.0'
+group = "us.ihmc"
 
 project.ext.fullVersion = version
 project.ext.vcsUrl = "https://github.com/ihmcrobotics/euclid"
@@ -42,6 +43,27 @@ task sourceJar(type: Jar, dependsOn: classes) {
    from sourceSets.main.allJava
 }
 
+// Task to generate javadocs into relevant website directory
+task genJavadocs(type: Javadoc, dependsOn: sourceJar) {
+	source = sourceSets.main.allJava
+	classpath = configurations.compile
+	destinationDir = file('websitedocs/website/static/javadocs')
+	setFailOnError(false)
+}
+
+//Ensure the replacestyles.sh script is run before the following task:
+
+// Task to rename the javadocs directory with the version number
+task javadocsVersion (dependsOn: genJavadocs) {
+	file('websitedocs/website/static/javadocs').renameTo(file('websitedocs/website/static/javadocs' + '-' + version))
+}
+
+//Task to create a new version in docusaurus
+task docsVersion (type: Exec, dependsOn: javadocsVersion) {
+	workingDir 'websitedocs/website'
+	commandLine 'yarn', 'run', 'version', version
+}
+
 publishing {
    publications {
       mavenJava(MavenPublication) {
@@ -49,7 +71,7 @@ publishing {
          artifactId project.ext.publicationName
          version "$version"
          from components.java
-		 
+
 		 pom.withXml {
              asNode().children().last() + {
                  resolveStrategy = Closure.DELEGATE_FIRST
@@ -122,9 +144,9 @@ repositories {
 }
 
 dependencies {
-    compile group: 'us.ihmc', name: 'euclid-core', version: '0.5.1'
+    compile group: 'us.ihmc', name: 'euclid-core', version: '0.6.0'
 
-    testCompile group: 'us.ihmc', name: 'euclid-core', version: '0.5.1', classifier: 'test'
+    testCompile group: 'us.ihmc', name: 'euclid-core', version: '0.6.0', classifier: 'test'
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.pitest', name: 'pitest', version: '1.2.0'
     testCompile group: 'org.pitest', name: 'pitest-command-line', version: '1.2.0'

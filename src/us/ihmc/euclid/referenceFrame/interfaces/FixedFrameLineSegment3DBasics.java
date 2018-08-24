@@ -80,6 +80,25 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
    }
 
    /**
+    * Sets this line segment to be the same as the given line segment expressed in the reference frame of this.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameLineSegment3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param other the other frame line segment to set this to. Not modified.
+    */
+   default void setMatchingFrame(FrameLineSegment3DReadOnly other)
+   {
+      LineSegment3DBasics.super.set(other);
+      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
     * Redefines this line segment with new endpoints.
     *
     * @param firstEndpoint new endpoint of this line segment. Not modified

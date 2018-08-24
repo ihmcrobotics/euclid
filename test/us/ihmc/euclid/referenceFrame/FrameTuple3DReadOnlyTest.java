@@ -8,11 +8,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tuple3D.Tuple3DReadOnlyTest;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -20,6 +22,12 @@ public abstract class FrameTuple3DReadOnlyTest<F extends FrameTuple3DReadOnly>
 {
    public static final int NUMBER_OF_ITERATIONS = Tuple3DReadOnlyTest.NUMBER_OF_ITERATIONS;
    public static final double EPSILON = 1.0e-15;
+
+   @Before
+   public void clearFrames()
+   {
+      ReferenceFrameTools.clearWorldFrameTree();
+   }
 
    public final F createEmptyFrameTuple()
    {
