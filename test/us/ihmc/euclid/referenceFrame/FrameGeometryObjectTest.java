@@ -13,6 +13,7 @@ import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
@@ -341,7 +342,7 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          assertTrue(anotherFrame == frameGeometry.getReferenceFrame());
          assertTrue(expectedGeometry.epsilonEquals(frameGeometry.getGeometryObject(), EPSILON));
 
-         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             frameGeometry.changeFrame(differentRootFrame);

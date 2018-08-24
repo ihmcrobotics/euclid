@@ -181,7 +181,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          assertTrue(anotherFrame == actual.getReferenceFrame());
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
 
-         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             actual.changeFrame(differentRootFrame);

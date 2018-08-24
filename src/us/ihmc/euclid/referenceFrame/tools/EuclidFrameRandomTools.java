@@ -211,7 +211,7 @@ public class EuclidFrameRandomTools
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform2D(random);
       else
          transformFromParent = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      return ReferenceFrame.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
+      return ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
    }
 
    /**

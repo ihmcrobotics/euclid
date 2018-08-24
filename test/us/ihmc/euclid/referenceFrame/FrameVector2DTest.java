@@ -159,7 +159,7 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
          assertTrue(anotherFrame == actual.getReferenceFrame());
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPSILON);
 
-         ReferenceFrame differentRootFrame = ReferenceFrame.constructARootFrame("anotherRootFrame");
+         ReferenceFrame differentRootFrame = ReferenceFrameTools.constructARootFrame("anotherRootFrame");
          try
          {
             actual.changeFrame(differentRootFrame);
