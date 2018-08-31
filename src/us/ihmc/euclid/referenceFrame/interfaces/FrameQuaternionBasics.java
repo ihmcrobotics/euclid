@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
@@ -27,29 +26,16 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, FrameTuple4DBasics, FrameChangeable
 {
    /**
-    * Sets this frame quaternion to the same orientation described by the given {@code axisAngle} and
+    * Sets this frame quaternion to the same orientation described by the given {@code orientation3DReadOnly} and
     * sets the frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame quaternion.
-    * @param axisAngle the axis-angle used to set this quaternion. Not modified.
+    * @param orientation3DReadOnly the orientation used to set this quaternion. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, AxisAngleReadOnly axisAngle)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set(axisAngle);
-   }
-
-   /**
-    * Sets this frame quaternion to the same orientation described by the given {@code rotationMatrix}
-    * and sets the frame to the given {@code referenceFrame}.
-    *
-    * @param referenceFrame the new reference frame for this frame quaternion.
-    * @param rotationMatrix the rotation matrix used to set this quaternion. Not modified.
-    */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrix)
-   {
-      setReferenceFrame(referenceFrame);
-      set(rotationMatrix);
+      set(orientation3DReadOnly);
    }
 
    /**
@@ -162,5 +148,15 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
    {
       setReferenceFrame(referenceFrame);
       setEuler(rotX, rotY, rotZ);
+   }
+
+   /**
+    * Sets this frame tuple to {@code other}.
+    *
+    * @param other the other frame tuple to copy the values and reference frame from. Not modified.
+    */
+   default void setIncludingFrame(FrameQuaternionReadOnly other)
+   {
+      setIncludingFrame(other.getReferenceFrame(), other);
    }
 }
