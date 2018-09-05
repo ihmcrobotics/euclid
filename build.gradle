@@ -13,7 +13,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.8
-version = '0.9.0'
+version = '0.9.1'
 group = "us.ihmc"
 
 project.ext.fullVersion = version
