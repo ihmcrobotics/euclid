@@ -333,11 +333,11 @@ public abstract class ReferenceFrame
          nameId = parentFrame.nameId + SEPARATOR + frameName;
          frameIndex = parentFrame.incrementFramesAdded();
 
-         if (parentFrame.hasChildWithName(frameName))
-         {
-            // TODO We need to enable unique frames at some point.
-//            throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
-         }
+         // TODO We need to enable unique frames at some point.
+         // if (parentFrame.hasChildWithName(frameName))
+         // {
+         //    throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
+         // }
          parentFrame.children.add(this);
 
          transformToRoot = new RigidBodyTransform();
