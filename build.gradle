@@ -8,12 +8,12 @@ repositories {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: "java"
+apply plugin: "maven-publish"
+apply plugin: "com.jfrog.bintray"
 
 sourceCompatibility = 1.8
-version = '0.9.1'
+version = "0.9.1"
 group = "us.ihmc"
 
 project.ext.fullVersion = version
@@ -39,7 +39,7 @@ jar {
 }
 
 task sourceJar(type: Jar, dependsOn: classes) {
-   classifier = 'sources'
+   classifier = "sources"
    from sourceSets.main.allJava
 }
 
@@ -47,7 +47,7 @@ task sourceJar(type: Jar, dependsOn: classes) {
 task genJavadocs(type: Javadoc, dependsOn: sourceJar) {
 	source = sourceSets.main.allJava
 	classpath = configurations.compile
-	destinationDir = file('websitedocs/website/static/javadocs')
+	destinationDir = file("websitedocs/website/static/javadocs")
 	setFailOnError(false)
 }
 
@@ -55,13 +55,13 @@ task genJavadocs(type: Javadoc, dependsOn: sourceJar) {
 
 // Task to rename the javadocs directory with the version number
 task javadocsVersion (dependsOn: genJavadocs) {
-	file('websitedocs/website/static/javadocs').renameTo(file('websitedocs/website/static/javadocs' + '-' + version))
+	file("websitedocs/website/static/javadocs").renameTo(file("websitedocs/website/static/javadocs" + "-" + version))
 }
 
 //Task to create a new version in docusaurus
 task docsVersion (type: Exec, dependsOn: javadocsVersion) {
-	workingDir 'websitedocs/website'
-	commandLine 'yarn', 'run', 'version', version
+	workingDir "websitedocs/website"
+	commandLine "yarn", "run", "version", version
 }
 
 publishing {
@@ -76,20 +76,20 @@ publishing {
              asNode().children().last() + {
                  resolveStrategy = Closure.DELEGATE_FIRST
                  name project.name
-                 description 'Euclid is library providing a variety of geometries and useful math.'
+                 description "Euclid is library providing a variety of geometries and useful math."
                  url project.ext.vcsUrl
                  licenses {
                      license {
                          name project.ext.licenseName
                          url project.ext.licenseURL
-                         distribution 'repo'
+                         distribution "repo"
                      }
                  }
                  developers {
                      developer {
-                         id 'sbertrand'
-                         name 'Sylvain Bertrand'
-                         email 'sbertrand@ihmc.us'
+                         id "sbertrand"
+                         name "Sylvain Bertrand"
+                         email "sbertrand@ihmc.us"
                      }
                  }
              }
@@ -117,7 +117,7 @@ bintray {
    pkg {
       repo = "maven-release"
       name = project.ext.publicationName
-      userOrg = 'ihmcrobotics'
+      userOrg = "ihmcrobotics"
       desc = "IHMC Open Robotics Software Project ${project.name}"
 
       websiteUrl = project.ext.vcsUrl
@@ -125,7 +125,7 @@ bintray {
       vcsUrl = "${project.ext.vcsUrl}.git"
 
       licenses = [project.ext.bintrayLicenseName]
-      labels = ['ihmc', 'java', 'geometry', 'vector', 'math', 'shape']
+      labels = ["ihmc", "java", "geometry", "vector", "math", "shape"]
       publicDownloadNumbers = true
 
       version {
@@ -144,10 +144,10 @@ repositories {
 }
 
 dependencies {
-    compile group: 'us.ihmc', name: 'euclid-core', version: '0.6.0'
+    compile group: "us.ihmc", name: "euclid-core", version: "0.6.0"
 
-    testCompile group: 'us.ihmc', name: 'euclid-core', version: '0.6.0', classifier: 'test'
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile group: 'org.pitest', name: 'pitest', version: '1.2.0'
-    testCompile group: 'org.pitest', name: 'pitest-command-line', version: '1.2.0'
+    testCompile group: "us.ihmc", name: "euclid-core", version: "0.6.0", classifier: "test"
+    testCompile group: "junit", name: "junit", version: "4.11"
+    testCompile group: "org.pitest", name: "pitest", version: "1.2.0"
+    testCompile group: "org.pitest", name: "pitest-command-line", version: "1.2.0"
 }
