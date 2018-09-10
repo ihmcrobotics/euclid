@@ -822,6 +822,7 @@ public abstract class ReferenceFrame
                }
 
                referenceFrame.transformToRoot.multiply(referenceFrame.transformToParent);
+               referenceFrame.transformToRoot.normalizeRotationPart();
 
                referenceFrame.transformToRootID = nextTransformToRootID;
             }
