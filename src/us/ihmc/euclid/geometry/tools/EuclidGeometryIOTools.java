@@ -1,10 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringOf;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import java.util.List;
 
@@ -20,6 +16,8 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -692,12 +690,12 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code convexPolygon3D} as follows:
+    * Gets a representative {@code String} of {@code convexPolygon2D} as follows:
     *
     * <pre>
     * Convex Polygon 2D: vertices = [
-    * ( 0.174, -0.452, -0.222 ),
-    * (-0.052, -0.173, -0.371 ) ]
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
     * </pre>
     * </p>
     *
@@ -710,15 +708,15 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code convexPolygon3D} given a specific format to
+    * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to
     * use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
     * Convex Polygon 2D: vertices = [
-    * ( 0.174, -0.452, -0.222 ),
-    * (-0.052, -0.173, -0.371 ) ]
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
     * </pre>
     * </p>
     *
@@ -741,8 +739,8 @@ public class EuclidGeometryIOTools
     *
     * <pre>
     * Convex Polygon 2D: vertices = [
-    * ( 0.174, -0.452, -0.222 ),
-    * (-0.052, -0.173, -0.371 ) ]
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
     * </pre>
     * </p>
     *
@@ -760,6 +758,106 @@ public class EuclidGeometryIOTools
       for (int i = 0; i < numberOfVertices - 1; i++)
          string += getTuple2DString(format, vertices.get(i)) + ",\n";
       string += getTuple2DString(format, vertices.get(numberOfVertices - 1)) + " ]";
+      return string;
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code vertex2DSupplier} as follows:
+    *
+    * <pre>
+    * Vertex 2D supplier: vertices = [
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param vertex2DSupplier the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getVertex2DSupplierString(Vertex2DSupplier vertex2DSupplier)
+   {
+      return getVertex2DSupplierString(DEFAULT_FORMAT, vertex2DSupplier);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code vertex2DSupplier} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Vertex 2D supplier: vertices = [
+    * ( 0.174, -0.452 ),
+    * (-0.052, -0.173 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param vertex2DSupplier the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getVertex2DSupplierString(String format, Vertex2DSupplier vertex2DSupplier)
+   {
+      if (vertex2DSupplier == null)
+         return "null";
+
+      if (vertex2DSupplier.getNumberOfVertices() == 0)
+         return "Vertex 2D supplier: vertices = []";
+
+      String string = "Vertex 2D supplier: vertices = [\n";
+      for (int i = 0; i < vertex2DSupplier.getNumberOfVertices() - 1; i++)
+         string += getTuple2DString(format, vertex2DSupplier.getVertex(i)) + ",\n";
+      string += getTuple2DString(format, vertex2DSupplier.getVertex(vertex2DSupplier.getNumberOfVertices() - 1)) + " ]";
+      return string;
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code vertex3DSupplier} as follows:
+    *
+    * <pre>
+    * Vertex 3D supplier: vertices = [
+    * ( 0.174, -0.452, -0.222 ),
+    * (-0.052, -0.173, -0.371 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param vertex3DSupplier the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getVertex3DSupplierString(Vertex3DSupplier vertex3DSupplier)
+   {
+      return getVertex3DSupplierString(DEFAULT_FORMAT, vertex3DSupplier);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code vertex3DSupplier} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Vertex 3D supplier: vertices = [
+    * ( 0.174, -0.452, -0.222 ),
+    * (-0.052, -0.173, -0.371 ) ]
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param vertex3DSupplier the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getVertex3DSupplierString(String format, Vertex3DSupplier vertex3DSupplier)
+   {
+      if (vertex3DSupplier == null)
+         return "null";
+
+      if (vertex3DSupplier.getNumberOfVertices() == 0)
+         return "Vertex 3D supplier: vertices = []";
+
+      String string = "Vertex 3D supplier: vertices = [\n";
+      for (int i = 0; i < vertex3DSupplier.getNumberOfVertices() - 1; i++)
+         string += getTuple3DString(format, vertex3DSupplier.getVertex(i)) + ",\n";
+      string += getTuple3DString(format, vertex3DSupplier.getVertex(vertex3DSupplier.getNumberOfVertices() - 1)) + " ]";
       return string;
    }
 }
