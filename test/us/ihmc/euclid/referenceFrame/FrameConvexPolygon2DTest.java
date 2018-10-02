@@ -1,5 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static org.junit.Assert.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -57,7 +59,68 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
 
          ReferenceFrameTools.clearWorldFrameTree();
       }
+   }
 
+   @Test
+   public void testIssue17() throws Exception
+   {
+      Random random = new Random(3453);
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame frame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         FramePoint2D pointA = EuclidFrameRandomTools.nextFramePoint2D(random, frame, 10.0);
+         FramePoint2D pointB = EuclidFrameRandomTools.nextFramePoint2D(random, frame, 10.0);
+         FrameConvexPolygon2D polygon = new FrameConvexPolygon2D(frame);
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointB);
+         polygon.addVertex(pointB);
+
+         assertFalse(pointA.epsilonEquals(pointB, 1.0e-7));
+
+         polygon.update();
+
+         assertEquals(2, polygon.getNumberOfVertices());
+         if (polygon.getVertex(0).equals(pointA))
+         {
+            assertEquals(polygon.getVertex(1), pointB);
+         }
+         else
+         {
+            assertEquals(polygon.getVertex(0), pointB);
+            assertEquals(polygon.getVertex(1), pointA);
+         }
+         ReferenceFrameTools.clearWorldFrameTree();
+      }
+
+      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      {
+         ReferenceFrame frame = EuclidFrameRandomTools.nextReferenceFrame(random);
+         FramePoint2D pointA = EuclidFrameRandomTools.nextFramePoint2D(random, frame, 10.0);
+         FramePoint2D pointB = EuclidFrameRandomTools.nextFramePoint2D(random, frame, 10.0);
+         FrameConvexPolygon2D polygon = new FrameConvexPolygon2D(frame);
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointB);
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointB);
+
+         assertFalse(pointA.epsilonEquals(pointB, 1.0e-7));
+
+         polygon.update();
+
+         assertEquals(2, polygon.getNumberOfVertices());
+         if (polygon.getVertex(0).equals(pointA))
+         {
+            assertEquals(polygon.getVertex(1), pointB);
+         }
+         else
+         {
+            assertEquals(polygon.getVertex(0), pointB);
+            assertEquals(polygon.getVertex(1), pointA);
+         }
+         ReferenceFrameTools.clearWorldFrameTree();
+      }
    }
 
    @Override
