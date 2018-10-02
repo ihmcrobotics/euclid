@@ -49,6 +49,16 @@ public interface Vertex2DSupplier
    public int getNumberOfVertices();
 
    /**
+    * Tests whether this supplier is empty or not.
+    * 
+    * @return {@code true} if this supplier has no vertices, {@code false} if it has at one vertex.
+    */
+   default boolean isEmpty()
+   {
+      return getNumberOfVertices() == 0;
+   }
+
+   /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal.
     * 
     * @param other the other supplier to compare against this.

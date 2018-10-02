@@ -14,6 +14,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
+import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 
 public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<FrameConvexPolygon2D>
 {
@@ -21,6 +22,42 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
    public FrameConvexPolygon2D createFrameConvexPolygon2D(ReferenceFrame referenceFrame, Vertex2DSupplier vertex2DSupplier)
    {
       return new FrameConvexPolygon2D(referenceFrame, vertex2DSupplier);
+   }
+
+   /**
+    * {@link FrameConvexPolygon2D#setIncludingFrame(us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier)}
+    * given an empty polygon does actually not set the frame.
+    */
+   @Test
+   public void testIssue16()
+   {
+      Random random = new Random(342);
+
+      {
+         ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
+         ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
+
+         FrameConvexPolygon2D firstPolygon = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, frameA, 1.0, 10);
+         FrameConvexPolygon2D secondPolygon = new FrameConvexPolygon2D(frameB);
+         firstPolygon.setIncludingFrame(secondPolygon);
+
+         EuclidFrameTestTools.assertFrameConvexPolygon2DEquals(firstPolygon, secondPolygon, EPSILON);
+         ReferenceFrameTools.clearWorldFrameTree();
+      }
+
+      {
+         ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
+         ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
+
+         FrameConvexPolygon2D firstPolygon = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, frameA, 1.0, 10);
+         FrameConvexPolygon2D secondPolygon = new FrameConvexPolygon2D(frameB);
+         FrameConvexPolygon2D thirdPolygon = new FrameConvexPolygon2D(frameB);
+         firstPolygon.setIncludingFrame(secondPolygon, thirdPolygon);
+         EuclidFrameTestTools.assertFrameConvexPolygon2DEquals(firstPolygon, secondPolygon, EPSILON);
+
+         ReferenceFrameTools.clearWorldFrameTree();
+      }
+
    }
 
    @Override
