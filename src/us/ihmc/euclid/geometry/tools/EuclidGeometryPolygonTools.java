@@ -108,7 +108,7 @@ public class EuclidGeometryPolygonTools
     * <ul>
     * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
     * line.
-    * <li>the method returns {@code false} if the polygon has less than 3 vertices.
+    * <li>the method returns {@code true} if the polygon has less than 3 vertices.
     * </ul>
     * </p>
     *
@@ -127,6 +127,10 @@ public class EuclidGeometryPolygonTools
    public static boolean isPolygon2DConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
    {
       checkNumberOfVertices(vertices, numberOfVertices);
+
+      if (numberOfVertices <= 2)
+         return true;
+
       Point2DReadOnly vertex = vertices.get(vertexIndex);
       Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
       Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));

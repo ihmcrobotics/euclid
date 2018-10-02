@@ -205,17 +205,17 @@ public class EuclidGeometryPolygonToolsTest
          }
       }
 
-      assertFalse(isPolygon2DConvexAtVertex(0, Collections.singletonList(nextPoint2D(random, 10.0)), true));
-      assertFalse(isPolygon2DConvexAtVertex(0, Collections.singletonList(nextPoint2D(random, 10.0)), false));
+      assertTrue(isPolygon2DConvexAtVertex(0, Collections.singletonList(nextPoint2D(random, 10.0)), true));
+      assertTrue(isPolygon2DConvexAtVertex(0, Collections.singletonList(nextPoint2D(random, 10.0)), false));
 
       List<Point2D> points = new ArrayList<>();
       points.add(nextPoint2D(random, 10.0));
       points.add(nextPoint2D(random, 10.0));
 
-      assertFalse(isPolygon2DConvexAtVertex(0, points, true));
-      assertFalse(isPolygon2DConvexAtVertex(1, points, true));
-      assertFalse(isPolygon2DConvexAtVertex(0, points, false));
-      assertFalse(isPolygon2DConvexAtVertex(1, points, false));
+      assertTrue(isPolygon2DConvexAtVertex(0, points, true));
+      assertTrue(isPolygon2DConvexAtVertex(1, points, true));
+      assertTrue(isPolygon2DConvexAtVertex(0, points, false));
+      assertTrue(isPolygon2DConvexAtVertex(1, points, false));
    }
 
    @Test
