@@ -210,7 +210,7 @@ public class EuclidGeometryPolygonTools
                return numberOfVertices;
          }
 
-         for (int vertexIndex = lastHullVertexIndex + 2; vertexIndex <= numberOfVertices; vertexIndex++)
+         for (int vertexIndex = lastHullVertexIndex + 2; vertexIndex <= numberOfVertices;)
          {
             int wrappedIndex = wrap(vertexIndex, numberOfVertices);
             Point2DReadOnly vertex = vertices.get(wrappedIndex);
@@ -218,7 +218,11 @@ public class EuclidGeometryPolygonTools
             if (vertex.epsilonEquals(candidateVertex, EPSILON) || wrappedIndex != 0 && vertex.epsilonEquals(firstVertex, EPSILON))
             { // Remove duplicate vertices
                Collections.swap(vertices, wrappedIndex, --numberOfVertices);
-               vertex = vertices.get(wrappedIndex);
+               /*
+                * Restart iteration without incrementing the vertexIndex, so the wrappedIndex can be
+                * updated properly as the numberOfVertices just changed.
+                */
+               continue;
             }
 
             if (isPoint2DOnLeftSideOfLine2D(vertex, lastHullVertex, candidateVertex))
@@ -226,6 +230,8 @@ public class EuclidGeometryPolygonTools
                candidateIndex = wrappedIndex;
                candidateVertex = vertex;
             }
+
+            vertexIndex++;
          }
 
          if (candidateIndex == 0)
@@ -316,6 +322,15 @@ public class EuclidGeometryPolygonTools
 
       while (currentIndex < numberOfVertices)
       {
+         if (vertices.get(currentIndex).epsilonEquals(vertices.get(previous(currentIndex, numberOfVertices)), EPSILON))
+         {
+            // Removing duplicate vertices
+            moveElementToEnd(vertices, currentIndex, numberOfVertices);
+            numberOfVertices--;
+            // Restart the iteration
+            continue;
+         }
+
          if (isPolygon2DConvexAtVertex(currentIndex, vertices, numberOfVertices, true))
          { // Convex at the current vertex: move on to next.
             currentIndex++;
@@ -325,7 +340,7 @@ public class EuclidGeometryPolygonTools
             moveElementToEnd(vertices, currentIndex, numberOfVertices);
             numberOfVertices--; // The vertex is not part of the convex hull.
 
-            if (numberOfVertices == 1)
+            if (numberOfVertices <= 2)
                return numberOfVertices;
 
             /*
