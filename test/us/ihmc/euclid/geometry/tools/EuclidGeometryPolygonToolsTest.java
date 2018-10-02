@@ -1,47 +1,10 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static org.junit.Assert.*;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.EPSILON;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.canObserverSeeEdge;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestEdgeIndexToPoint2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToPoint2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.computeConvexPolyong2DArea;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.edgeNormal;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.grahamScanAngleCompare;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightEndIndex;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightStartIndex;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.nextEdgeIndexIntersectingWithLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.wrap;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextPointCloud2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.averagePoint2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenTwoLine2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DInFrontOfRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnRightSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.perpendicularVector2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.triangleArea;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +19,7 @@ import org.junit.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -70,6 +34,86 @@ public class EuclidGeometryPolygonToolsTest
    private static interface ConvexHullAlgorithm
    {
       int process(List<? extends Point2DReadOnly> vertices, int numberOfVertices);
+   }
+
+   @Test
+   public void testIssue17() throws Exception
+   {
+      Random random = new Random(3453);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D pointA = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         Point2D pointB = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         List<Point2D> points = new ArrayList<>();
+         points.add(pointA);
+         points.add(pointA);
+         points.add(pointB);
+         points.add(pointB);
+
+         assertFalse(pointA.epsilonEquals(pointB, EuclidGeometryPolygonTools.EPSILON));
+
+         int actualHullSize = EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D(points, 4);
+         assertEquals(2, actualHullSize);
+         if (points.get(0).equals(pointA))
+         {
+            assertEquals(points.get(1), pointB);
+         }
+         else
+         {
+            assertEquals(points.get(0), pointB);
+            assertEquals(points.get(1), pointA);
+         }
+
+         actualHullSize = EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D(points, 4);
+         assertEquals(2, actualHullSize);
+         if (points.get(0).equals(pointA))
+         {
+            assertEquals(points.get(1), pointB);
+         }
+         else
+         {
+            assertEquals(points.get(0), pointB);
+            assertEquals(points.get(1), pointA);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D pointA = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         Point2D pointB = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         List<Point2D> points = new ArrayList<>();
+         points.add(pointA);
+         points.add(pointB);
+         points.add(pointA);
+         points.add(pointB);
+
+         assertFalse(pointA.epsilonEquals(pointB, EuclidGeometryPolygonTools.EPSILON));
+
+         int actualHullSize = EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D(points, 4);
+         assertEquals(2, actualHullSize);
+         if (points.get(0).equals(pointA))
+         {
+            assertEquals(points.get(1), pointB);
+         }
+         else
+         {
+            assertEquals(points.get(0), pointB);
+            assertEquals(points.get(1), pointA);
+         }
+
+         actualHullSize = EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D(points, 4);
+         assertEquals(2, actualHullSize);
+         if (points.get(0).equals(pointA))
+         {
+            assertEquals(points.get(1), pointB);
+         }
+         else
+         {
+            assertEquals(points.get(0), pointB);
+            assertEquals(points.get(1), pointA);
+         }
+      }
    }
 
    @Test
