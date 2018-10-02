@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 
 /**
  * Implement this interface to create a custom supplier of 3D frame vertices or use the static
@@ -11,7 +12,7 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
  * 
  * @author Sylvain Bertrand
  */
-public interface FrameVertex3DSupplier extends Vertex3DSupplier
+public interface FrameVertex3DSupplier extends Vertex3DSupplier, ReferenceFrameHolder
 {
    /**
     * A supplier with no vertices.
@@ -36,6 +37,16 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
    FramePoint3DReadOnly getVertex(int index);
 
    /**
+    * Gets the reference frame of the first vertex or returns {@code null} if this supplier is
+    * empty.
+    */
+   @Override
+   default ReferenceFrame getReferenceFrame()
+   {
+      return isEmpty() ? null : getVertex(0).getReferenceFrame();
+   }
+
+   /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal.
     * 
     * @param other the other supplier to compare against this.
@@ -56,7 +67,8 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
    }
 
    /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an
+    * {@code epsilon}.
     * 
     * @param other the other supplier to compare against this.
     * @param epsilon the tolerance to use.
@@ -109,8 +121,8 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
-    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given array specified by the first
+    * index {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the array by which the supplier will be backed.
     * @param startIndex the first vertex index.
@@ -153,8 +165,8 @@ public interface FrameVertex3DSupplier extends Vertex3DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given list specified by the first index
-    * {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given list specified by the first
+    * index {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the list by which the supplier will be backed.
     * @param startIndex the first vertex index.

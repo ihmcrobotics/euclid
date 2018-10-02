@@ -35,7 +35,8 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
    /**
     * Clear this polygon, sets it reference frame.
     * <p>
-    * After calling this method, the polygon has no vertex, area, or centroid. Use only when an empty polygon is desired.
+    * After calling this method, the polygon has no vertex, area, or centroid. Use only when an
+    * empty polygon is desired.
     * </p>
     * 
     * @param referenceFrame the new reference frame for this frame convex polygon.
@@ -153,14 +154,16 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     */
    default void setIncludingFrame(FrameVertex2DSupplier frameVertex2DSupplier)
    {
-      if (frameVertex2DSupplier.getNumberOfVertices() == 0)
+      if (frameVertex2DSupplier.isEmpty())
       {
-         clearAndUpdate();
-         return;
+         if (frameVertex2DSupplier.getReferenceFrame() != null)
+            clearAndUpdate(frameVertex2DSupplier.getReferenceFrame());
+         else
+            clearAndUpdate();
       }
       else
       {
-         setReferenceFrame(frameVertex2DSupplier.getVertex(0).getReferenceFrame());
+         setReferenceFrame(frameVertex2DSupplier.getReferenceFrame());
          set(frameVertex2DSupplier);
       }
    }
@@ -183,14 +186,16 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     */
    default void setIncludingFrame(FrameVertex3DSupplier frameVertex3DSupplier)
    {
-      if (frameVertex3DSupplier.getNumberOfVertices() == 0)
+      if (frameVertex3DSupplier.isEmpty())
       {
-         clearAndUpdate();
-         return;
+         if (frameVertex3DSupplier.getReferenceFrame() != null)
+            clearAndUpdate(frameVertex3DSupplier.getReferenceFrame());
+         else
+            clearAndUpdate();
       }
       else
       {
-         setReferenceFrame(frameVertex3DSupplier.getVertex(0).getReferenceFrame());
+         setReferenceFrame(frameVertex3DSupplier.getReferenceFrame());
          set(frameVertex3DSupplier);
       }
    }
@@ -211,14 +216,14 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     */
    default void setIncludingFrame(FrameVertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)
    {
-      if (firstVertex2DSupplier.getNumberOfVertices() > 0)
+      if (firstVertex2DSupplier.getReferenceFrame() != null)
       {
-         setReferenceFrame(firstVertex2DSupplier.getVertex(0).getReferenceFrame());
+         setReferenceFrame(firstVertex2DSupplier.getReferenceFrame());
          set(firstVertex2DSupplier, secondVertex2DSupplier);
       }
-      else if (secondVertex2DSupplier.getNumberOfVertices() > 0)
+      else if (secondVertex2DSupplier.getReferenceFrame() != null)
       {
-         setReferenceFrame(secondVertex2DSupplier.getVertex(0).getReferenceFrame());
+         setReferenceFrame(secondVertex2DSupplier.getReferenceFrame());
          set(firstVertex2DSupplier, secondVertex2DSupplier);
       }
       else

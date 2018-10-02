@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,6 +9,7 @@ import org.junit.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 
 public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon2D>
@@ -30,6 +30,64 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
    public ConvexPolygon2D createConvexPolygon2D(Vertex2DSupplier supplier)
    {
       return new ConvexPolygon2D(supplier);
+   }
+
+   @Test
+   public void testIssue17() throws Exception
+   {
+      Random random = new Random(3453);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D pointA = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         Point2D pointB = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         ConvexPolygon2D polygon = new ConvexPolygon2D();
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointB);
+         polygon.addVertex(pointB);
+
+         assertFalse(pointA.epsilonEquals(pointB, 1.0e-7));
+
+         polygon.update();
+
+         assertEquals(2, polygon.getNumberOfVertices());
+         if (polygon.getVertex(0).equals(pointA))
+         {
+            assertEquals(polygon.getVertex(1), pointB);
+         }
+         else
+         {
+            assertEquals(polygon.getVertex(0), pointB);
+            assertEquals(polygon.getVertex(1), pointA);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D pointA = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         Point2D pointB = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         ConvexPolygon2D polygon = new ConvexPolygon2D();
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointB);
+         polygon.addVertex(pointA);
+         polygon.addVertex(pointB);
+
+         assertFalse(pointA.epsilonEquals(pointB, 1.0e-7));
+
+         polygon.update();
+
+         assertEquals(2, polygon.getNumberOfVertices());
+         if (polygon.getVertex(0).equals(pointA))
+         {
+            assertEquals(polygon.getVertex(1), pointB);
+         }
+         else
+         {
+            assertEquals(polygon.getVertex(0), pointB);
+            assertEquals(polygon.getVertex(1), pointA);
+         }
+      }
    }
 
    @Test

@@ -108,7 +108,7 @@ public class EuclidGeometryPolygonTools
     * <ul>
     * <li>the method returns {@code false} if the vertex, next and previous vertices lie on the same
     * line.
-    * <li>the method returns {@code false} if the polygon has less than 3 vertices.
+    * <li>the method returns {@code true} if the polygon has less than 3 vertices.
     * </ul>
     * </p>
     *
@@ -127,6 +127,10 @@ public class EuclidGeometryPolygonTools
    public static boolean isPolygon2DConvexAtVertex(int vertexIndex, List<? extends Point2DReadOnly> vertices, int numberOfVertices, boolean clockwiseOrdered)
    {
       checkNumberOfVertices(vertices, numberOfVertices);
+
+      if (numberOfVertices <= 2)
+         return true;
+
       Point2DReadOnly vertex = vertices.get(vertexIndex);
       Point2DReadOnly previousVertex = vertices.get(previous(vertexIndex, numberOfVertices));
       Point2DReadOnly nextVertex = vertices.get(next(vertexIndex, numberOfVertices));
@@ -206,7 +210,7 @@ public class EuclidGeometryPolygonTools
                return numberOfVertices;
          }
 
-         for (int vertexIndex = lastHullVertexIndex + 2; vertexIndex <= numberOfVertices; vertexIndex++)
+         for (int vertexIndex = lastHullVertexIndex + 2; vertexIndex <= numberOfVertices;)
          {
             int wrappedIndex = wrap(vertexIndex, numberOfVertices);
             Point2DReadOnly vertex = vertices.get(wrappedIndex);
@@ -214,7 +218,11 @@ public class EuclidGeometryPolygonTools
             if (vertex.epsilonEquals(candidateVertex, EPSILON) || wrappedIndex != 0 && vertex.epsilonEquals(firstVertex, EPSILON))
             { // Remove duplicate vertices
                Collections.swap(vertices, wrappedIndex, --numberOfVertices);
-               vertex = vertices.get(wrappedIndex);
+               /*
+                * Restart iteration without incrementing the vertexIndex, so the wrappedIndex can be
+                * updated properly as the numberOfVertices just changed.
+                */
+               continue;
             }
 
             if (isPoint2DOnLeftSideOfLine2D(vertex, lastHullVertex, candidateVertex))
@@ -222,6 +230,8 @@ public class EuclidGeometryPolygonTools
                candidateIndex = wrappedIndex;
                candidateVertex = vertex;
             }
+
+            vertexIndex++;
          }
 
          if (candidateIndex == 0)
@@ -312,6 +322,15 @@ public class EuclidGeometryPolygonTools
 
       while (currentIndex < numberOfVertices)
       {
+         if (vertices.get(currentIndex).epsilonEquals(vertices.get(previous(currentIndex, numberOfVertices)), EPSILON))
+         {
+            // Removing duplicate vertices
+            moveElementToEnd(vertices, currentIndex, numberOfVertices);
+            numberOfVertices--;
+            // Restart the iteration
+            continue;
+         }
+
          if (isPolygon2DConvexAtVertex(currentIndex, vertices, numberOfVertices, true))
          { // Convex at the current vertex: move on to next.
             currentIndex++;
@@ -321,7 +340,7 @@ public class EuclidGeometryPolygonTools
             moveElementToEnd(vertices, currentIndex, numberOfVertices);
             numberOfVertices--; // The vertex is not part of the convex hull.
 
-            if (numberOfVertices == 1)
+            if (numberOfVertices <= 2)
                return numberOfVertices;
 
             /*
@@ -2354,13 +2373,13 @@ public class EuclidGeometryPolygonTools
    /**
     * Finds the index of a vertex in the specified supplier given search criteria.
     * 
-    * @param vertex2DSupplier the vertex supplier containing vertices to be search through.
+    * @param vertex2DSupplier the vertex supplier containing vertices to search through.
     * @param isXPriority whether the search should focus first on finding the vertex with the "best"
-    *           x-coordinate, or y-coordinates.
-    * @param xBound the search criterion for the x-coordinate, for instance {@link Bound#MAX} while
-    *           result in searching the vertex with the lowest x value.
-    * @param yBound the search criterion for the Y-coordinate, for instance {@link Bound#MIN} while
-    *           result in searching the vertex with the highest y value.
+    *           x or y coordinate.
+    * @param xBound the search criterion for the x-coordinate, for instance {@link Bound#MAX} will
+    *           result in searching the vertex with the highest x value.
+    * @param yBound the search criterion for the Y-coordinate, for instance {@link Bound#MIN} will
+    *           result in searching the vertex with the lowest y value.
     * 
     * @return the index in the supplier of the best vertex according to the given criteria.
     */
