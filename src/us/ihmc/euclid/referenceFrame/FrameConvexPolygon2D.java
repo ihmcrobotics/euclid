@@ -14,6 +14,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -524,6 +525,26 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       public ReferenceFrame getReferenceFrame()
       {
          return referenceFrame;
+      }
+
+      /**
+       * Tests if the given {@code object}'s class is the same as this, in which case the method
+       * returns {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
+       * <p>
+       * If the two points have different frames, this method returns {@code false}.
+       * </p>
+       *
+       * @param object the object to compare against this. Not modified.
+       * @return {@code true} if the two points are exactly equal component-wise and are expressed
+       *         in the same reference frame, {@code false} otherwise.
+       */
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof FramePoint2DReadOnly)
+            return equals((FramePoint2DReadOnly) object);
+         else
+            return false;
       }
 
       @Override
