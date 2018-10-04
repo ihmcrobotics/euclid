@@ -74,6 +74,51 @@ public class ReferenceFrameTest
       }
    }
 
+   @Test
+   public void testChildrenFramesAreGarbageCollected() throws Exception
+   {
+      boolean verbose = false;
+      Random random = new Random(543);
+      Runtime runtime = Runtime.getRuntime();
+      int numberOfTests = 10;
+      double averageUsedMemoryInMB = 0.0;
+
+      runGarbageCollector();
+
+      for (int i = 0; i < numberOfTests; i++)
+      {
+         runGarbageCollector();
+         long usedMemoryStart = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+
+         EuclidFrameRandomTools.nextReferenceFrameTree(random, 100000);
+         runGarbageCollector();
+
+         long usedMemoryEnd = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+         long difference = usedMemoryEnd - usedMemoryStart;
+         if (verbose)
+         {
+            System.out.println("(In MB) usedMemoryStart: " + usedMemoryStart + ", usedMemoryEnd: " + usedMemoryEnd + ", used: " + difference);
+         }
+         averageUsedMemoryInMB += difference;
+      }
+
+      averageUsedMemoryInMB /= numberOfTests;
+      assertTrue(averageUsedMemoryInMB < 1.0);
+   }
+
+   private static void runGarbageCollector()
+   {
+      System.gc();
+      System.runFinalization();
+      try
+      {
+         Thread.sleep(100);
+      }
+      catch (InterruptedException e)
+      {
+      }
+   }
+
    private static RandomlyChangingFrame[] nextRandomlyChangingFrameTree(Random random, int numberOfReferenceFrames)
    {
       return nextRandomlyChangingFrameTree("randomFrame", random, numberOfReferenceFrames);
