@@ -1,8 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -113,8 +113,7 @@ public abstract class ReferenceFrame
     * frame tree using the {@link #remove()} method. This will remove the frame from this
     * collection. Do not remove frames in a different way as this will not properly deactivate them.
     */
-   private final Collection<ReferenceFrame> children = new ArrayList<>();
-   private final Collection<ReferenceFrame> childrenReadOnly = Collections.unmodifiableCollection(children);
+   private final List<WeakReference<ReferenceFrame>> children = new ArrayList<>();
 
    /**
     * Indicated if a frame is deactivated. This happens if the frame is removed from the frame tree.
@@ -338,7 +337,7 @@ public abstract class ReferenceFrame
          // {
          //    throw new RuntimeException("The parent frame '" + parentFrame.getName() + "' already has a child with name '" + frameName + "'.");
          // }
-         parentFrame.children.add(this);
+         parentFrame.children.add(new WeakReference<>(this));
 
          transformToRoot = new RigidBodyTransform();
          this.transformToParent = new RigidBodyTransform();
@@ -1026,9 +1025,19 @@ public abstract class ReferenceFrame
       }
    }
 
+   private void updateChildren()
+   {
+      for (int i = children.size() - 1; i >= 0; i--)
+      {
+         if (children.get(i).get() == null)
+            children.remove(i);
+      }
+   }
+
    private boolean hasChildWithName(String childName)
    {
-      return children.stream().anyMatch(child -> child.getName().equals(childName));
+      updateChildren();
+      return children.stream().map(WeakReference::get).anyMatch(child -> child.getName().equals(childName));
    }
 
    /**
@@ -1040,19 +1049,30 @@ public abstract class ReferenceFrame
    public void clearChildren()
    {
       checkIfRemoved();
-      children.forEach(child -> child.disableRecursivly());
+      children.forEach(child -> child.get().disableRecursivly());
       children.clear();
    }
 
    private void disableRecursivly()
    {
       hasBeenRemoved = true;
-      children.forEach(child -> child.disableRecursivly());
+      children.forEach(child -> child.get().disableRecursivly());
+   }
+
+   public int getNumberOfChildren()
+   {
+      updateChildren();
+      return children.size();
+   }
+
+   public ReferenceFrame getChild(int index)
+   {
+      return children.get(index).get();
    }
 
    /**
-    * Getter for the read only view of all reference frames starting with the root frame of this
-    * frame tree all the way to this frame.
+    * Getter for the read only view of all reference frames starting with the root frame of this frame
+    * tree all the way to this frame.
     *
     * @return the list of frames from the root frame to this.
     */
@@ -1060,17 +1080,6 @@ public abstract class ReferenceFrame
    {
       checkIfRemoved();
       return framesStartingWithRootEndingWithThis;
-   }
-
-   /**
-    * Getter for the read only view of the children of this reference frame.
-    *
-    * @return children frames of this frame.
-    */
-   public Collection<ReferenceFrame> getChildren()
-   {
-      checkIfRemoved();
-      return childrenReadOnly;
    }
 
    /**
