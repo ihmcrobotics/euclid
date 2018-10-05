@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +70,6 @@ public class EuclidFrameToolsTest
          {
             List<FramePoint2D> points = new ArrayList<>();
 
-            ReferenceFrameTools.clearWorldFrameTree();
             ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
             ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
 
@@ -132,7 +130,6 @@ public class EuclidFrameToolsTest
          {
             List<FramePoint3D> points = new ArrayList<>();
 
-            ReferenceFrameTools.clearWorldFrameTree();
             ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
             ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
 
