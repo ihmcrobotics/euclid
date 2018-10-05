@@ -2,7 +2,9 @@ package us.ihmc.euclid.referenceFrame;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -109,9 +111,8 @@ public abstract class ReferenceFrame
    private final ReferenceFrame parentFrame;
 
    /**
-    * A collection of all children of this reference frame. Frames are removed from the reference
-    * frame tree using the {@link #remove()} method. This will remove the frame from this
-    * collection. Do not remove frames in a different way as this will not properly deactivate them.
+    * A collection of all children of this reference frame. The use of {@code WeakReference} allows the
+    * garbage collector to dispose of the children that are not referenced outside this class.
     */
    private final List<WeakReference<ReferenceFrame>> children = new ArrayList<>();
 
@@ -996,6 +997,7 @@ public abstract class ReferenceFrame
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
    }
 
+   @Deprecated
    private void checkIfRemoved()
    {
       if (hasBeenRemoved)
@@ -1007,20 +1009,26 @@ public abstract class ReferenceFrame
    /**
     * Will remove this frame from the frame tree.
     * <p>
-    * This will disable the frame and cause the frame tree to loose all references to the frame and
-    * it's children. Note, that you can not use the frame after this method is called. This method
-    * is meant to allow the JVM to collect the frame as garbage and all future method calls on this
-    * frame will throw exceptions.
-    * </p>
-    * <p>
     * This recursively disables all children of this frame also.
     * </p>
+    *
+    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
+    *             exists.
+    * @since 0.9.4
     */
+   @Deprecated
    public void remove()
    {
       if (!hasBeenRemoved && parentFrame != null)
       {
-         parentFrame.children.remove(this);
+         for (int i = 0; i < parentFrame.children.size(); i++)
+         {
+            if (parentFrame.children.get(i).get() == this)
+            {
+               parentFrame.children.remove(i);
+               break;
+            }
+         }
          disableRecursivly();
       }
    }
@@ -1037,37 +1045,71 @@ public abstract class ReferenceFrame
    private boolean hasChildWithName(String childName)
    {
       updateChildren();
-      return children.stream().map(WeakReference::get).anyMatch(child -> child.getName().equals(childName));
+      return children.stream().map(WeakReference::get).filter(child -> child != null).anyMatch(child -> child.getName().equals(childName));
    }
 
    /**
-    * Will remove and disable all children of the provided frame.
-    * 
-    * @param frame whose children should be removed from the frame tree.
-    * @see #removeFrame(ReferenceFrame)
+    * Removes and disables all the children of {@code this}.
+    *
+    * @see #remove()
+    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
+    *             exists.
+    * @since 0.9.4
     */
+   @Deprecated
    public void clearChildren()
    {
       checkIfRemoved();
-      children.forEach(child -> child.get().disableRecursivly());
+      children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
       children.clear();
    }
 
+   @Deprecated
    private void disableRecursivly()
    {
       hasBeenRemoved = true;
-      children.forEach(child -> child.get().disableRecursivly());
+      children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
    }
 
+   /**
+    * Gets the number of children attached to this frame.
+    * 
+    * @return the number of children.
+    */
    public int getNumberOfChildren()
    {
+      checkIfRemoved();
       updateChildren();
       return children.size();
    }
 
+   /**
+    * Gets the <tt>index</tt><sup>th</sup> child attached to this frame.
+    * <p>
+    * Although very unlikely, note that it is possible that the return frame is {@code null}.
+    * </p>
+    * 
+    * @param index the index of the frame to retrieve.
+    * @return the child frame attached to {@code this}.
+    * @see #getNumberOfChildren()
+    */
    public ReferenceFrame getChild(int index)
    {
+      checkIfRemoved();
       return children.get(index).get();
+   }
+
+   /**
+    * Getter for the read only view of the children of this reference frame.
+    *
+    * @return children frames of this frame.
+    * @deprecated Use {@link #getNumberOfChildren()} and {@link #getChild(int)} instead.
+    */
+   @Deprecated
+   public Collection<ReferenceFrame> getChildren()
+   {
+      checkIfRemoved();
+      return children.stream().map(WeakReference::get).filter(frame -> frame != null).collect(Collectors.toList());
    }
 
    /**

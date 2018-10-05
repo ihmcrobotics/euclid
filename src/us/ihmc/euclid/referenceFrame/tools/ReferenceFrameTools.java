@@ -161,18 +161,16 @@ public class ReferenceFrameTools
    /**
     * Will remove the provided frame from the frame tree.
     * <p>
-    * This will disable the frame and cause the frame tree to loose all references to the frame and
-    * it's children. Note, that you can not use the frame after this method is called. This method
-    * is meant to allow the JVM to collect the frame as garbage and all future method calls on this
-    * frame will throw exceptions.
-    * </p>
-    * <p>
-    * This recursively disables all children of this frame also. If the provided frame is a root
-    * frame this method will do nothing.
+    * This recursively disables all children of this frame also. If the provided frame is a root frame
+    * this method will do nothing.
     * </p>
     * 
     * @param frame is the {@link ReferenceFrame} that will be removed from the tree.
+    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
+    *             exists.
+    * @since 0.9.4
     */
+   @Deprecated
    public static void removeFrame(ReferenceFrame frame)
    {
       frame.remove();
@@ -183,7 +181,11 @@ public class ReferenceFrameTools
     * 
     * @param frames to be removed and disabled.
     * @see ReferenceFrameTools#removeFrame(ReferenceFrame)
+    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
+    *             exists.
+    * @since 0.9.4
     */
+   @Deprecated
    public static void removeFrames(ReferenceFrame[] frames)
    {
       for (int frameIdx = 0; frameIdx < frames.length; frameIdx++)
@@ -197,6 +199,9 @@ public class ReferenceFrameTools
     * enabled. All other frames in the tree will be removed and disabled.
     * 
     * @param frame in the frame tree that will be cleared.
+    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
+    *             exists.
+    * @since 0.9.4
     */
    public static void clearFrameTree(ReferenceFrame frame)
    {
@@ -205,6 +210,10 @@ public class ReferenceFrameTools
 
    /**
     * Will clear the entire frame tree of the {@link ReferenceFrameTools#worldFrame} tree.
+    * 
+    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
+    *             exists.
+    * @since 0.9.4
     */
    public static void clearWorldFrameTree()
    {
@@ -228,7 +237,14 @@ public class ReferenceFrameTools
 
    private static void getAllChildren(ReferenceFrame frame, Collection<ReferenceFrame> collectionToPack)
    {
-      collectionToPack.addAll(frame.getChildren());
-      frame.getChildren().forEach(childFrame -> getAllChildren(childFrame, collectionToPack));
+      for (int i = 0; i < frame.getNumberOfChildren(); i++)
+      {
+         ReferenceFrame child = frame.getChild(i);
+         if (child != null)
+         {
+            collectionToPack.add(child);
+            getAllChildren(child, collectionToPack);
+         }
+      }
    }
 }
