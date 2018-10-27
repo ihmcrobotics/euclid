@@ -42,7 +42,7 @@ public class ReferenceFrameTest
       { // Test with constructFrameWithUnchangingTransformToParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constant", world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("constant" + i, world, expected);
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToDesiredFrame(world), EPSILON);
@@ -51,15 +51,13 @@ public class ReferenceFrameTest
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
-
-         constantFrame.remove();
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with constructFrameWithUnchangingTransformFromParent
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constant", world, expected);
+         ReferenceFrame constantFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent("constant" + i, world, expected);
          expected.invert();
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, constantFrame.getTransformToParent(), EPSILON);
@@ -69,8 +67,51 @@ public class ReferenceFrameTest
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
          constantFrame.getTransformToDesiredFrame(actual, world);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPSILON);
+      }
+   }
 
-         constantFrame.remove();
+   @Test
+   public void testChildrenFramesAreGarbageCollected() throws Exception
+   {
+      boolean verbose = false;
+      Random random = new Random(543);
+      Runtime runtime = Runtime.getRuntime();
+      int numberOfTests = 10;
+      double averageUsedMemoryInMB = 0.0;
+
+      runGarbageCollector();
+
+      for (int i = 0; i < numberOfTests; i++)
+      {
+         runGarbageCollector();
+         long usedMemoryStart = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+
+         EuclidFrameRandomTools.nextReferenceFrameTree(random, 100000);
+         runGarbageCollector();
+
+         long usedMemoryEnd = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+         long difference = usedMemoryEnd - usedMemoryStart;
+         if (verbose)
+         {
+            System.out.println("(In MB) usedMemoryStart: " + usedMemoryStart + ", usedMemoryEnd: " + usedMemoryEnd + ", used: " + difference);
+         }
+         averageUsedMemoryInMB += difference;
+      }
+
+      averageUsedMemoryInMB /= numberOfTests;
+      assertTrue(averageUsedMemoryInMB < 1.0);
+   }
+
+   private static void runGarbageCollector()
+   {
+      System.gc();
+      System.runFinalization();
+      try
+      {
+         Thread.sleep(100);
+      }
+      catch (InterruptedException e)
+      {
       }
    }
 
@@ -138,8 +179,6 @@ public class ReferenceFrameTest
          shouldBeIdentity.multiply(frameA.getTransformToDesiredFrame(frameB));
 
          EuclidCoreTestTools.assertRigidBodyTransformEquals(new RigidBodyTransform(), shouldBeIdentity, EPSILON);
-
-         worldFrame.clearChildren();
       }
    }
 
@@ -166,8 +205,6 @@ public class ReferenceFrameTest
             transformToParentThree.invert();
             EuclidCoreTestTools.assertRigidBodyTransformEquals(transformToParentOne, transformToParentThree, EPSILON);
          }
-
-         worldFrame.clearChildren();
       }
    }
 
@@ -256,7 +293,6 @@ public class ReferenceFrameTest
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToRootOne = frame.getTransformToDesiredFrame(worldFrame);
          verifyTransformToRootByClimbingTree(frame, transformToRootOne);
-         worldFrame.clearChildren();
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -268,7 +304,6 @@ public class ReferenceFrameTest
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToRootOne = frame.getTransformToDesiredFrame(anotherRoot);
          verifyTransformToRootByClimbingTree(frame, transformToRootOne);
-         anotherRoot.clearChildren();
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -285,7 +320,6 @@ public class ReferenceFrameTest
          {
             verifyTransformToRootByClimbingTree(frame, frame.getTransformToRoot());
          }
-         worldFrame.clearChildren();
       }
    }
 
@@ -300,7 +334,6 @@ public class ReferenceFrameTest
          ReferenceFrame frame = treeFrame[random.nextInt(treeFrame.length)];
          RigidBodyTransform transformToSelf = frame.getTransformToDesiredFrame(frame);
          EuclidCoreTestTools.assertRigidBodyTransformEquals(new RigidBodyTransform(), transformToSelf, EPSILON);
-         worldFrame.clearChildren();
       }
    }
 
@@ -339,8 +372,6 @@ public class ReferenceFrameTest
          transformFive.set(frame3.getTransformToDesiredFrame(frame2));
          transformFive.multiply(frame1.getTransformToDesiredFrame(frame3));
          EuclidCoreTestTools.assertRigidBodyTransformEquals(transformOne, transformFive, EPSILON);
-
-         worldFrame.clearChildren();
       }
    }
 
@@ -414,8 +445,6 @@ public class ReferenceFrameTest
          {
             // good
          }
-
-         ReferenceFrameTools.removeFrames(referenceFrames);
       }
    }
 
@@ -441,8 +470,6 @@ public class ReferenceFrameTest
             assertFalse("Already has ID " + frameIndex, existingIds.contains(frameIndex));
             existingIds.add(frameIndex);
          }
-
-         ReferenceFrameTools.removeFrames(frameTree);
       }
    }
 
@@ -479,6 +506,7 @@ public class ReferenceFrameTest
       ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
    }
 
+   @Deprecated
    @Test
    public void testDisabeling() throws InstantiationException, IllegalAccessException
    {
