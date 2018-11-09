@@ -638,7 +638,7 @@ public abstract class ReferenceFrame
       }
       catch (NotARotationMatrixException e)
       {
-         throw new NotARotationMatrixException("Caught exception, this frame: " + frameName + ", other frame: " + desiredFrame.getName() + ", exception:/n"
+         throw new NotARotationMatrixException("Caught exception, this frame: " + frameName + ", other frame: " + desiredFrame.getName() + ", exception:\n"
                + e.getMessage());
       }
    }
