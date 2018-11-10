@@ -1,14 +1,7 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
+import static org.junit.Assert.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
 import java.util.List;

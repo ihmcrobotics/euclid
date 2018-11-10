@@ -1,9 +1,7 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static org.junit.Assert.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
