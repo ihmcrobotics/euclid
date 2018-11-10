@@ -23,11 +23,11 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * using methods requiring {@code FrameQuaternionBasics}.
  * </p>
  */
-public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, FrameTuple4DBasics, FrameChangeable
+public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, FrameTuple4DBasics, FrameOrientation3DBasics, FrameChangeable
 {
    /**
-    * Sets this frame quaternion to the same orientation described by the given {@code orientation3DReadOnly} and
-    * sets the frame to the given {@code referenceFrame}.
+    * Sets this frame quaternion to the same orientation described by the given
+    * {@code orientation3DReadOnly} and sets the frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame quaternion.
     * @param orientation3DReadOnly the orientation used to set this quaternion. Not modified.

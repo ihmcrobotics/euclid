@@ -23,7 +23,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * using methods requiring {@code FixedFrameQuaternionBasics}.
  * </p>
  */
-public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, FixedFrameTuple4DBasics, QuaternionBasics
+public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, FixedFrameTuple4DBasics, FixedFrameOrientation3DBasics, QuaternionBasics
 {
    /**
     * Sets this quaternion to represent the orientation from {@code this.getReferenceFrame()} to the
@@ -53,8 +53,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    }
 
    /**
-    * Sets this frame quaternion to {@code quaternionReadOnly} and checks that its current frame
-    * equals {@code referenceFrame}.
+    * Sets this frame quaternion to {@code quaternionReadOnly} and checks that its current frame equals
+    * {@code referenceFrame}.
     *
     * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
     *           expressed.
@@ -71,9 +71,9 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * Sets this frame quaternion to the same orientation described by the given rotation vector
     * {@code rotationVector}.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotationVector vector the rotation vector used to set this quaternion. Not modified.
@@ -90,8 +90,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * Sets this frame quaternion to {@code other}.
     *
     * @param other the other quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void set(FrameQuaternionReadOnly other)
    {
@@ -106,8 +106,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * {@link #set(FrameQuaternionReadOnly)}.
     * </p>
     * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set
-    * to {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
     *
     * @param other the other quaternion to copy the values from. Not modified.
@@ -122,8 +122,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * Sets this frame quaternion to {@code other} and then calls {@link #negate()}.
     *
     * @param other the other frame quaternion to set to. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void setAndNegate(FrameQuaternionReadOnly other)
    {
@@ -142,8 +142,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </pre>
     *
     * @param other the other frame quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void setAndConjugate(FrameQuaternionReadOnly other)
    {
@@ -155,8 +155,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * Sets this frame quaternion to the inverse of {@code other}.
     *
     * @param other the other frame quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     * @deprecated Use {@link #setAndInvert(FrameQuaternionReadOnly)} instead
     */
    default void setAndInverse(FrameQuaternionReadOnly other)
@@ -168,8 +168,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * Sets this frame quaternion to the inverse of {@code other}.
     *
     * @param other the other frame quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void setAndInvert(FrameQuaternionReadOnly other)
    {
@@ -181,8 +181,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * Sets this frame quaternion to {@code other} and then calls {@link #normalize()}.
     *
     * @param other the other frame quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void setAndNormalize(FrameQuaternionReadOnly other)
    {
@@ -217,9 +217,9 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param qf the other frame quaternion used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying this frame quaternion, while a value of 1 is equivalent to setting this
-    *           frame quaternion to {@code qf}.
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *           this frame quaternion, while a value of 1 is equivalent to setting this frame
+    *           quaternion to {@code qf}.
     * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same reference
     *            frame as {@code this}.
     */
@@ -240,8 +240,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * @param q0 the first frame quaternion used in the interpolation. Not modified.
     * @param qf the second quaternion used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame quaternion to {@code q0}, while a value of 1 is equivalent to setting
-    *           this frame quaternion to {@code qf}.
+    *           this frame quaternion to {@code q0}, while a value of 1 is equivalent to setting this
+    *           frame quaternion to {@code qf}.
     * @throws ReferenceFrameMismatchException if {@code q0} is not expressed in the same reference
     *            frame as {@code this}.
     */
@@ -262,8 +262,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * @param q0 the first quaternion used in the interpolation. Not modified.
     * @param qf the second frame quaternion used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame quaternion to {@code q0}, while a value of 1 is equivalent to setting
-    *           this frame quaternion to {@code qf}.
+    *           this frame quaternion to {@code q0}, while a value of 1 is equivalent to setting this
+    *           frame quaternion to {@code qf}.
     * @throws ReferenceFrameMismatchException if {@code qf} is not expressed in the same reference
     *            frame as {@code this}.
     */
@@ -303,8 +303,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void multiply(FrameQuaternionReadOnly other)
    {
@@ -319,8 +319,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void append(FrameQuaternionReadOnly other)
    {
@@ -439,8 +439,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void multiplyConjugateOther(FrameQuaternionReadOnly other)
    {
@@ -455,8 +455,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void appendInvertOther(FrameQuaternionReadOnly other)
    {
@@ -472,8 +472,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void multiplyConjugateThis(FrameQuaternionReadOnly other)
    {
@@ -489,8 +489,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void appendInvertThis(FrameQuaternionReadOnly other)
    {
@@ -506,8 +506,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void multiplyConjugateBoth(FrameQuaternionReadOnly other)
    {
@@ -523,8 +523,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void appendInvertBoth(FrameQuaternionReadOnly other)
    {
@@ -539,8 +539,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void preMultiply(FrameQuaternionReadOnly other)
    {
@@ -555,8 +555,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void prepend(FrameQuaternionReadOnly other)
    {
@@ -572,8 +572,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void preMultiplyConjugateOther(FrameQuaternionReadOnly other)
    {
@@ -589,8 +589,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void prependInvertOther(FrameQuaternionReadOnly other)
    {
@@ -606,8 +606,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void preMultiplyConjugateThis(FrameQuaternionReadOnly other)
    {
@@ -623,8 +623,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void prependInvertThis(FrameQuaternionReadOnly other)
    {
@@ -640,8 +640,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void preMultiplyConjugateBoth(FrameQuaternionReadOnly other)
    {
@@ -657,8 +657,8 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     * </p>
     *
     * @param other the other frame quaternion to multiply this with. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
-    *            reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *            frame as {@code this}.
     */
    default void prependInvertBoth(FrameQuaternionReadOnly other)
    {

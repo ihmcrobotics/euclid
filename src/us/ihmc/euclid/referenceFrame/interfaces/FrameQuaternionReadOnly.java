@@ -30,7 +30,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * using methods requiring {@code FrameQuaternionReadOnly}.
  * </p>
  */
-public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, QuaternionReadOnly
+public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrientation3DReadOnly, QuaternionReadOnly
 {
    /**
     * Computes and returns the distance from this quaternion to {@code other}.
