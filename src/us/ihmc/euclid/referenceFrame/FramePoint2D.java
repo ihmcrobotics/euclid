@@ -245,14 +245,10 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameTuple2DReadOnly)
          return equals((FrameTuple2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

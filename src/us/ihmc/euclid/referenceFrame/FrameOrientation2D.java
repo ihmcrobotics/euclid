@@ -167,14 +167,10 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameOrientation2DReadOnly)
          return equals((FrameOrientation2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

@@ -426,14 +426,10 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameLine3DReadOnly)
          return equals((FrameLine3DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

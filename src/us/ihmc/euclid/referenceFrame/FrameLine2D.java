@@ -357,14 +357,10 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameLine2DReadOnly)
          return equals((FrameLine2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

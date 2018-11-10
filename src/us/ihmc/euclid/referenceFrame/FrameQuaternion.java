@@ -286,14 +286,10 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameTuple4DReadOnly)
          return equals((FrameTuple4DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**
