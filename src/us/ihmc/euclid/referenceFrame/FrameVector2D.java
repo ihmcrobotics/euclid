@@ -249,14 +249,10 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameTuple2DReadOnly)
          return equals((FrameTuple2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

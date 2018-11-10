@@ -10,6 +10,7 @@ import us.ihmc.euclid.referenceFrame.FrameLine2D;
 import us.ihmc.euclid.referenceFrame.FrameLine3D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
+import us.ihmc.euclid.referenceFrame.FrameMatrix3D;
 import us.ihmc.euclid.referenceFrame.FrameOrientation2D;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -19,6 +20,7 @@ import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
+import us.ihmc.euclid.referenceFrame.FrameYawPitchRoll;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
@@ -189,7 +191,8 @@ public class EuclidFrameRandomTools
     * @param random the random generator to use.
     * @param rootFrame the base frame from which the tree is to be expanded.
     * @param numberOfReferenceFrames the number of reference frames to be created.
-    * @return the array containing the random reference frames and {@code rootFrame} at the first index.
+    * @return the array containing the random reference frames and {@code rootFrame} at the first
+    *         index.
     */
    public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames)
    {
@@ -205,10 +208,11 @@ public class EuclidFrameRandomTools
     * @param numberOfReferenceFrames the number of reference frames to be created.
     * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
     *           random frames.
-    * @return the array containing the random reference frames and {@code rootFrame} at the first index.
+    * @return the array containing the random reference frames and {@code rootFrame} at the first
+    *         index.
     */
    public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames,
-         boolean use2DTransforms)
+                                                         boolean use2DTransforms)
    {
       ReferenceFrame[] referenceFrames = new ReferenceFrame[numberOfReferenceFrames + 1];
       referenceFrames[0] = rootFrame;
@@ -319,7 +323,7 @@ public class EuclidFrameRandomTools
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
    public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
-         double maxZ)
+                                               double maxZ)
    {
       return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
@@ -415,7 +419,7 @@ public class EuclidFrameRandomTools
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
    public static FrameVector3D nextFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
-         double maxZ)
+                                                 double maxZ)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
    }
@@ -456,7 +460,7 @@ public class EuclidFrameRandomTools
     * @return the random frame vector.
     */
    public static FrameVector3D nextOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
-         boolean normalize)
+                                                           boolean normalize)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextOrthogonalVector3D(random, vectorToBeOrthogonalTo, normalize));
    }
@@ -615,6 +619,67 @@ public class EuclidFrameRandomTools
    public static FrameVector2D nextFrameVector2D(Random random, ReferenceFrame referenceFrame, Tuple2DReadOnly min, Tuple2DReadOnly max)
    {
       return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2D(random, min, max));
+   }
+
+   /**
+    * Generates random a yaw-pitch-roll orientation.
+    * <p>
+    * <ul>
+    * <li>yaw &in; [-<i>pi</i>; <i>pi</i>],
+    * <li>pitch &in; [-<i>pi</i>/2.0; <i>pi</i>/2.0],
+    * <li>roll &in; [-<i>pi</i>; <i>pi</i>],
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame yaw-pitch-roll reference frame.
+    * @return the random frame yaw-pitch-roll orientation.
+    */
+   public static FrameYawPitchRoll nextFrameYawPitchRoll(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameYawPitchRoll(referenceFrame, EuclidCoreRandomTools.nextYawPitchRoll(random));
+   }
+
+   /**
+    * Generates random a yaw-pitch-roll orientation.
+    * <p>
+    * <ul>
+    * <li>yaw &in; [-{@code minMaxYaw}; {@code minMaxYaw}],
+    * <li>pitch &in; [-{@code minMaxPitch}; {@code minMaxPitch}],
+    * <li>roll &in; [-{@code minMaxRoll}; {@code minMaxRoll}],
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame yaw-pitch-roll reference frame.
+    * @param minMaxYaw the maximum absolute angle for the generated yaw angle.
+    * @param minMaxPitch the maximum absolute angle for the generated pitch angle.
+    * @param minMaxRoll the maximum absolute angle for the generated roll angle.
+    * @return the random frame yaw-pitch-roll orientation.
+    * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
+    *            {@code minMaxRoll < 0}.
+    */
+   public static FrameYawPitchRoll nextFrameYawPitchRoll(Random random, ReferenceFrame referenceFrame, double minMaxYaw, double minMaxPitch, double minMaxRoll)
+   {
+      return new FrameYawPitchRoll(referenceFrame, EuclidCoreRandomTools.nextYawPitchRoll(random, minMaxYaw, minMaxPitch, minMaxRoll));
+   }
+
+   /**
+    * Generates a random yaw-pitch-roll orientation uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated orientation is in [-{@code minMaxAngle};
+    * {@code minMaxAngle}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame yaw-pitch-roll reference frame.
+    * @param minMaxAngle the maximum absolute angle described by the generated orientation.
+    * @return the random frame yaw-pitch-roll orientation.
+    * @throws RuntimeException if {@code minMaxAngle < 0}.
+    */
+   public static FrameYawPitchRoll nextFrameYawPitchRollUniform(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
+   {
+      return new FrameYawPitchRoll(referenceFrame, EuclidCoreRandomTools.nextYawPitchRollUniform(random, minMaxAngle));
    }
 
    /**
@@ -884,5 +949,117 @@ public class EuclidFrameRandomTools
             return new FramePoint3D(referenceFrame, vertex2dSupplier.getVertex(index));
          }
       };
+   }
+
+   /**
+    * Generates a random 3-by-3 frame matrix.
+    * <p>
+    * {@code matrix}<sub>ij</sub> &in; [-1.0; 1.0].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the frame in which the generated matrix is to be created.
+    * @return the random frame matrix.
+    */
+   public static FrameMatrix3D nextFrameMatrix3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextMatrix3D(random));
+   }
+
+   /**
+    * Generates a random 3-by-3 frame matrix.
+    * <p>
+    * {@code matrix}<sub>ij</sub> &in; [-{@code minMaxValue}; {@code minMaxValue}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMaxValue the maximum absolute value for each element.
+    * @param referenceFrame the frame in which the generated matrix is to be created.
+    * @return the random frame matrix.
+    * @throws RuntimeException if {@code minMaxValue < 0}.
+    */
+   public static FrameMatrix3D nextFrameMatrix3D(Random random, ReferenceFrame referenceFrame, double minMaxValue)
+   {
+      return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextMatrix3D(random, minMaxValue));
+   }
+
+   /**
+    * Generates a random 3-by-3 frame matrix.
+    * <p>
+    * {@code matrix}<sub>ij</sub> &in; [{@code minValue}; {@code maxValue}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minValue the minimum value for each element.
+    * @param maxValue the maximum value for each element.
+    * @param referenceFrame the frame in which the generated matrix is to be created.
+    * @return the random frame matrix.
+    * @throws RuntimeException if {@code minValue > maxValue}.
+    */
+   public static FrameMatrix3D nextFrameMatrix3D(Random random, ReferenceFrame referenceFrame, double minValue, double maxValue)
+   {
+      return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextMatrix3D(random, minValue, maxValue));
+   }
+
+   /**
+    * Generates a random diagonal 3-by-3 frame matrix.
+    * <p>
+    * <ul>
+    * <li>{@code matrix.getM00()} &in; [-1.0; 1.0].
+    * <li>{@code matrix.getM11()} &in; [-1.0; 1.0].
+    * <li>{@code matrix.getM22()} &in; [-1.0; 1.0].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the frame in which the generated matrix is to be created.
+    * @return the random diagonal frame matrix.
+    */
+   public static FrameMatrix3D nextDiagonalFrameMatrix3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextDiagonalMatrix3D(random));
+   }
+
+   /**
+    * Generates a random diagonal 3-by-3 frame matrix.
+    * <p>
+    * <ul>
+    * <li>{@code matrix.getM00()} &in; [-{@code minMaxValue}; {@code minMaxValue}].
+    * <li>{@code matrix.getM11()} &in; [-{@code minMaxValue}; {@code minMaxValue}].
+    * <li>{@code matrix.getM22()} &in; [-{@code minMaxValue}; {@code minMaxValue}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMaxValue the maximum absolute value for each diagonal element.
+    * @param referenceFrame the frame in which the generated matrix is to be created.
+    * @return the random diagonal frame matrix.
+    * @throws RuntimeException if {@code minMaxValue < 0}.
+    */
+   public static FrameMatrix3D nextDiagonalFrameMatrix3D(Random random, ReferenceFrame referenceFrame, double minMaxValue)
+   {
+      return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextDiagonalMatrix3D(random, minMaxValue));
+   }
+
+   /**
+    * Generates a random diagonal 3-by-3 matrix.
+    * <p>
+    * <ul>
+    * <li>{@code matrix.getM00()} &in; [{@code minValue}; {@code maxValue}].
+    * <li>{@code matrix.getM11()} &in; [{@code minValue}; {@code maxValue}].
+    * <li>{@code matrix.getM22()} &in; [{@code minValue}; {@code maxValue}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minValue the minimum value of each diagonal element.
+    * @param maxValue the maximum value of each diagonal element.
+    * @param referenceFrame the frame in which the generated matrix is to be created.
+    * @return the random diagonal frame matrix.
+    * @throws RuntimeException if {@code minValue > maxValue}.
+    */
+   public static FrameMatrix3D nextDiagonalFrameMatrix3D(Random random, ReferenceFrame referenceFrame, double minValue, double maxValue)
+   {
+      return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextDiagonalMatrix3D(random, minValue, maxValue));
    }
 }

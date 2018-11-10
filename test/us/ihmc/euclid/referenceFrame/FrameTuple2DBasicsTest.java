@@ -1,8 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -24,7 +22,6 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
-import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Tuple2DBasicsTest;
@@ -44,7 +41,6 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
-         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple2DBasics expected = createRandomFramelessTuple(random);
@@ -84,7 +80,6 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, double x, double y)
-         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple2DBasics expected = createRandomFramelessTuple(random);
@@ -392,7 +387,6 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          Tuple2DBasics expectedGeometryObject = createRandomFramelessTuple(random);
@@ -423,7 +417,6 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
       {
-         ReferenceFrameTools.clearWorldFrameTree();
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];

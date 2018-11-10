@@ -278,14 +278,10 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
-         return super.equals(object);
-      }
-      catch (ClassCastException e)
-      {
+      if (object instanceof FramePose3DReadOnly)
+         return equals((FramePose3DReadOnly) object);
+      else
          return false;
-      }
    }
 
    /**

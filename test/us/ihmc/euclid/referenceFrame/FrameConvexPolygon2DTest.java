@@ -16,7 +16,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
-import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 
 public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<FrameConvexPolygon2D>
 {
@@ -44,7 +43,6 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
          firstPolygon.setIncludingFrame(secondPolygon);
 
          EuclidFrameTestTools.assertFrameConvexPolygon2DEquals(firstPolygon, secondPolygon, EPSILON);
-         ReferenceFrameTools.clearWorldFrameTree();
       }
 
       {
@@ -56,8 +54,6 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
          FrameConvexPolygon2D thirdPolygon = new FrameConvexPolygon2D(frameB);
          firstPolygon.setIncludingFrame(secondPolygon, thirdPolygon);
          EuclidFrameTestTools.assertFrameConvexPolygon2DEquals(firstPolygon, secondPolygon, EPSILON);
-
-         ReferenceFrameTools.clearWorldFrameTree();
       }
    }
 
@@ -91,7 +87,6 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
             assertEquals(polygon.getVertex(0), pointB);
             assertEquals(polygon.getVertex(1), pointA);
          }
-         ReferenceFrameTools.clearWorldFrameTree();
       }
 
       for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
@@ -119,7 +114,6 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
             assertEquals(polygon.getVertex(0), pointB);
             assertEquals(polygon.getVertex(1), pointA);
          }
-         ReferenceFrameTools.clearWorldFrameTree();
       }
    }
 

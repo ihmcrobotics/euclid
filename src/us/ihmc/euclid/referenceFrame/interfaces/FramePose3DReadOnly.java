@@ -34,12 +34,12 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * Gets the position and orientation.
     *
     * @param positionToPack the tuple used to store the position. Modified.
-    * @param orientationToPack the quaternion used to store the orientation. Modified.
+    * @param orientationToPack the orientation used to store the orientation. Modified.
     * @throws ReferenceFrameMismatchException if {@code positionToPack} and/or
     *            {@code orientationToPack} are not expressed in the same reference frame as this frame
     *            pose.
     */
-   default void get(FixedFrameTuple3DBasics positionToPack, FixedFrameQuaternionBasics orientationToPack)
+   default void get(FixedFrameTuple3DBasics positionToPack, FixedFrameOrientation3DBasics orientationToPack)
    {
       positionToPack.set(getPosition());
       orientationToPack.set(getOrientation());
@@ -49,9 +49,9 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * Gets the position and orientation.
     *
     * @param positionToPack the tuple used to store the position. Modified.
-    * @param orientationToPack the quaternion used to store the orientation. Modified.
+    * @param orientationToPack the orientation used to store the orientation. Modified.
     */
-   default void get(FrameTuple3DBasics positionToPack, FrameQuaternionBasics orientationToPack)
+   default void get(FrameTuple3DBasics positionToPack, FrameOrientation3DBasics orientationToPack)
    {
       positionToPack.setIncludingFrame(getPosition());
       orientationToPack.setIncludingFrame(getOrientation());
@@ -87,11 +87,11 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * Gets the position and orientation.
     *
     * @param positionToPack the tuple used to store the position. Modified.
-    * @param orientationToPack the quaternion used to store the orientation. Modified.
+    * @param orientationToPack the orientation used to store the orientation. Modified.
     * @throws ReferenceFrameMismatchException if {@code orientationToPack} is not expressed in the same
     *            reference frame as this frame pose.
     */
-   default void get(Tuple3DBasics positionToPack, FixedFrameQuaternionBasics orientationToPack)
+   default void get(Tuple3DBasics positionToPack, FixedFrameOrientation3DBasics orientationToPack)
    {
       positionToPack.set(getPosition());
       orientationToPack.set(getOrientation());
@@ -101,9 +101,9 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     * Gets the position and orientation.
     *
     * @param positionToPack the tuple used to store the position. Modified.
-    * @param orientationToPack the quaternion used to store the orientation. Modified.
+    * @param orientationToPack the orientation used to store the orientation. Modified.
     */
-   default void get(Tuple3DBasics positionToPack, FrameQuaternionBasics orientationToPack)
+   default void get(Tuple3DBasics positionToPack, FrameOrientation3DBasics orientationToPack)
    {
       positionToPack.set(getPosition());
       orientationToPack.setIncludingFrame(getOrientation());

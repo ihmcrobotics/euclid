@@ -2,9 +2,8 @@ package us.ihmc.euclid.referenceFrame;
 
 import org.ejml.data.DenseMatrix64F;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
@@ -127,26 +126,14 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
 
    /**
     * Creates a new frame quaternion and initializes such that it represents the same orientation as
-    * the given {@code rotationMatrix} and initializes its reference frame.
+    * the given {@code orientation3DReadOnly} and initializes its reference frame.
     *
     * @param referenceFrame the initial frame for this frame quaternion.
-    * @param rotationMatrix the rotation matrix to initialize this quaternion. Not modified.
+    * @param orientation3DReadOnly the orientation to initialize this quaternion. Not modified.
     */
-   public FrameQuaternion(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrix)
+   public FrameQuaternion(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
    {
-      setIncludingFrame(referenceFrame, rotationMatrix);
-   }
-
-   /**
-    * Creates a new frame quaternion and initializes such that it represents the same orientation as
-    * the given {@code axisAngle} and initializes its reference frame.
-    *
-    * @param referenceFrame the initial frame for this frame quaternion.
-    * @param axisAngle the axis-angle to initialize this quaternion. Not modified.
-    */
-   public FrameQuaternion(ReferenceFrame referenceFrame, AxisAngleReadOnly axisAngle)
-   {
-      setIncludingFrame(referenceFrame, axisAngle);
+      setIncludingFrame(referenceFrame, orientation3DReadOnly);
    }
 
    /**
@@ -163,7 +150,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
    {
-      setIncludingFrame(referenceFrame, rotationVector);
+      setRotationVectorIncludingFrame(referenceFrame, rotationVector);
    }
 
    /**
@@ -299,14 +286,10 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameTuple4DReadOnly)
          return equals((FrameTuple4DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

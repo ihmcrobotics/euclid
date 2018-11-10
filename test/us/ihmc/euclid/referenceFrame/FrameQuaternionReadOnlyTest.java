@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 import java.util.Random;
@@ -63,7 +62,6 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
       Random random = new Random(621541L);
       double epsilon = 0.0;
 
-      clearFrames();
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
       ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 
@@ -96,7 +94,6 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
 
       Random random = new Random(621541L);
 
-      clearFrames();
       ReferenceFrame frame1 = ReferenceFrame.getWorldFrame();
       ReferenceFrame frame2 = EuclidFrameRandomTools.nextReferenceFrame(random);
 
