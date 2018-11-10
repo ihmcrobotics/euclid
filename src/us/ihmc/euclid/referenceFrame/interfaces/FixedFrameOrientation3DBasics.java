@@ -2,10 +2,23 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
 public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnly, Orientation3DBasics
 {
+   /**
+    * Sets this orientation to represent the orientation from {@code this.getReferenceFrame()} to the
+    * given {@code referenceFrame}.
+    *
+    * @param referenceFrame the reference frame of interest.
+    */
+   default void setFromReferenceFrame(ReferenceFrame referenceFrame)
+   {
+      setToZero();
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
    /**
     * Sets this orientation to represent the same orientation as the given {@code rotationVector}.
     * <p>

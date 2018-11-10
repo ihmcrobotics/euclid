@@ -26,18 +26,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, FixedFrameTuple4DBasics, FixedFrameOrientation3DBasics, QuaternionBasics
 {
    /**
-    * Sets this quaternion to represent the orientation from {@code this.getReferenceFrame()} to the
-    * given {@code referenceFrame}.
-    *
-    * @param referenceFrame the reference frame of interest.
-    */
-   default void setFromReferenceFrame(ReferenceFrame referenceFrame)
-   {
-      setToZero();
-      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
-   }
-
-   /**
     * Sets this frame quaternion to {@code orientation3DReadOnly} and checks that its current frame
     * equals {@code referenceFrame}.
     *
