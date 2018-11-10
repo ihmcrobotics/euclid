@@ -5,7 +5,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
-public interface FixedFrameYawPitchRollBasics extends FixedFrameOrientation3DBasics, YawPitchRollBasics
+public interface FixedFrameYawPitchRollBasics extends FrameYawPitchRollReadOnly, FixedFrameOrientation3DBasics, YawPitchRollBasics
 {
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
