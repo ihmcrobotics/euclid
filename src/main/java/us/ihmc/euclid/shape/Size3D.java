@@ -1,4 +1,4 @@
-package us.ihmc.euclid.geometry;
+package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;

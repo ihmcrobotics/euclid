@@ -1,4 +1,4 @@
-package us.ihmc.euclid.geometry;
+package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;

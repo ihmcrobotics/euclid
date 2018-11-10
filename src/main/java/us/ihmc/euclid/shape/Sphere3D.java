@@ -1,4 +1,4 @@
-package us.ihmc.euclid.geometry;
+package us.ihmc.euclid.shape;
 
 import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 

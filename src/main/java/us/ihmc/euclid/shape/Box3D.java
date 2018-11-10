@@ -1,9 +1,10 @@
-package us.ihmc.euclid.geometry;
+package us.ihmc.euclid.shape;
 
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
 import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
 
+import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;

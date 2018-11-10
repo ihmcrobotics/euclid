@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Random;
 
+import us.ihmc.euclid.shape.Shape3D;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
