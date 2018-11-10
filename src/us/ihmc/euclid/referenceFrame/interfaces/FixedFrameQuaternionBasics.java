@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
@@ -25,21 +24,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, FixedFrameTuple4DBasics, FixedFrameOrientation3DBasics, QuaternionBasics
 {
-   /**
-    * Sets this frame quaternion to {@code orientation3DReadOnly} and checks that its current frame
-    * equals {@code referenceFrame}.
-    *
-    * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
-    *           expressed.
-    * @param orientation3DReadOnly the orientation to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
-    */
-   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
-   {
-      checkReferenceFrameMatch(referenceFrame);
-      set(orientation3DReadOnly);
-   }
-
    /**
     * Sets this frame quaternion to {@code quaternionReadOnly} and checks that its current frame equals
     * {@code referenceFrame}.

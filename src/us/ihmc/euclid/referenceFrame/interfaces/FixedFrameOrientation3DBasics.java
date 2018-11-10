@@ -8,6 +8,21 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnly, Orientation3DBasics
 {
    /**
+    * Sets this frame quaternion to {@code orientation3DReadOnly} and checks that its current frame
+    * equals {@code referenceFrame}.
+    *
+    * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
+    *           expressed.
+    * @param orientation3DReadOnly the orientation to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(orientation3DReadOnly);
+   }
+
+   /**
     * Sets this orientation to represent the orientation from {@code this.getReferenceFrame()} to the
     * given {@code referenceFrame}.
     *
