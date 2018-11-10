@@ -13,7 +13,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
  * <p>
  * In addition to representing a {@link Matrix3DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FixedFrameMatrix3DBasics}. This allows, for instance, to enforce, at runtime, that
- * operations on points occur in the same coordinate system.
+ * operations on matrices occur in the same coordinate system.
  * </p>
  * <p>
  * Because a {@code FixedFrameMatrix3DBasics} extends {@code Matrix3DBasics}, it is compatible with

@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * <p>
  * In addition to representing a {@link Matrix3DReadOnly}, a {@link ReferenceFrame} is associated to
  * a {@code FrameMatrix3DReadOnly}. This allows, for instance, to enforce, at runtime, that
- * operations on points occur in the same coordinate system.
+ * operations on matrices occur in the same coordinate system.
  * </p>
  * <p>
  * Because a {@code FrameMatrix3DReadOnly} extends {@code Matrix3DReadOnly}, it is compatible with

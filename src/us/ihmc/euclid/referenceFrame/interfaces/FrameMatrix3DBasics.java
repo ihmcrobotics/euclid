@@ -12,7 +12,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
  * <p>
  * In addition to representing a {@link Matrix3DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FrameMatrix3DBasics}. This allows, for instance, to enforce, at runtime, that operations
- * on points occur in the same coordinate system.
+ * on matrices occur in the same coordinate system.
  * </p>
  * <p>
  * Because a {@code FrameMatrix3DBasics} extends {@code Matrix3DBasics}, it is compatible with
