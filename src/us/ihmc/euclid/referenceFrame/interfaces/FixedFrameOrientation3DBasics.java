@@ -8,18 +8,18 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnly, Orientation3DBasics
 {
    /**
-    * Sets this frame quaternion to {@code orientation3DReadOnly} and checks that its current frame
+    * Sets this frame quaternion to {@code orientation} and checks that its current frame
     * equals {@code referenceFrame}.
     *
     * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
     *           expressed.
-    * @param orientation3DReadOnly the orientation to copy the values from. Not modified.
+    * @param orientation the orientation to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
-   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
+   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(referenceFrame);
-      set(orientation3DReadOnly);
+      set(orientation);
    }
 
    /**
@@ -32,6 +32,25 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
    {
       setToZero();
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
+    * Sets this frame orientation to {@code orientation}.
+    * <p>
+    * If {@code orientation} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(FrameOrientation3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code orientation} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code orientation} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param orientation the other orientation to copy the values from. Not modified.
+    */
+   default void setMatchingFrame(FrameOrientation3DReadOnly orientation)
+   {
+      set((Orientation3DReadOnly) orientation);
+      orientation.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
    /**
@@ -73,42 +92,42 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
 
    /**
     * Converts, if necessary, and sets this orientation to represents the same orientation as
-    * {@code orientation3DReadOnly}.
+    * {@code orientation}.
     *
-    * @param orientation3DReadOnly the new orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code orientation3DReadOnly} is not expressed in the
+    * @param orientation the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the
     *            same reference frame as {@code this}.
     */
-   default void set(FrameOrientation3DReadOnly orientation3DReadOnly)
+   default void set(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation3DReadOnly);
-      set((Orientation3DReadOnly) orientation3DReadOnly);
+      checkReferenceFrameMatch(orientation);
+      set((Orientation3DReadOnly) orientation);
    }
 
    /**
     * Converts, if necessary, and sets this orientation to represents the same orientation as
-    * {@code orientation3DReadOnly} and then normalize this orientation.
+    * {@code orientation} and then normalize this orientation.
     *
-    * @param other the new orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code orientation3DReadOnly} is not expressed in the
+    * @param orientation the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the
     *            same reference frame as {@code this}.
     */
-   default void setAndNormalize(FrameOrientation3DReadOnly orientation3DReadOnly)
+   default void setAndNormalize(FrameOrientation3DReadOnly orientation)
    {
-      set(orientation3DReadOnly);
+      set(orientation);
       normalize();
    }
 
    /**
-    * Sets this orientation to represent the inverse of the given {@code orientation3DReadOnly}.
+    * Sets this orientation to represent the inverse of the given {@code orientation}.
     *
-    * @param other the new orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code orientation3DReadOnly} is not expressed in the
+    * @param orientation the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the
     *            same reference frame as {@code this}.
     */
-   default void setAndInvert(FrameOrientation3DReadOnly orientation3DReadOnly)
+   default void setAndInvert(FrameOrientation3DReadOnly orientation)
    {
-      set(orientation3DReadOnly);
+      set(orientation);
       invert();
    }
 
@@ -131,13 +150,13 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation to append to this orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void append(FrameOrientation3DReadOnly other)
+   default void append(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      append((Orientation3DReadOnly) other);
+      checkReferenceFrameMatch(orientation);
+      append((Orientation3DReadOnly) orientation);
    }
 
    /**
@@ -159,13 +178,13 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
     *           modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void appendInvertOther(FrameOrientation3DReadOnly other)
+   default void appendInvertOther(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      appendInvertOther((Orientation3DReadOnly) other);
+      checkReferenceFrameMatch(orientation);
+      appendInvertOther((Orientation3DReadOnly) orientation);
    }
 
    /**
@@ -186,13 +205,13 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation to append to the inverse of this orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void appendInvertThis(FrameOrientation3DReadOnly other)
+   default void appendInvertThis(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      Orientation3DBasics.super.appendInvertThis(other);
+      checkReferenceFrameMatch(orientation);
+      Orientation3DBasics.super.appendInvertThis(orientation);
    }
 
    /**
@@ -214,13 +233,13 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
     *           modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void appendInvertBoth(FrameOrientation3DReadOnly other)
+   default void appendInvertBoth(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      Orientation3DBasics.super.appendInvertBoth(other);
+      checkReferenceFrameMatch(orientation);
+      Orientation3DBasics.super.appendInvertBoth(orientation);
    }
 
    /**
@@ -242,13 +261,13 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation to prepend to this orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void prepend(FrameOrientation3DReadOnly other)
+   default void prepend(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      prepend((Orientation3DReadOnly) other);
+      checkReferenceFrameMatch(orientation);
+      prepend((Orientation3DReadOnly) orientation);
    }
 
    /**
@@ -270,13 +289,13 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
     *           modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void prependInvertOther(FrameOrientation3DReadOnly other)
+   default void prependInvertOther(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      prependInvertOther((Orientation3DReadOnly) other);
+      checkReferenceFrameMatch(orientation);
+      prependInvertOther((Orientation3DReadOnly) orientation);
    }
 
    /**
@@ -297,13 +316,13 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation to append to the inverse of this orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void prependInvertThis(FrameOrientation3DReadOnly other)
+   default void prependInvertThis(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      Orientation3DBasics.super.prependInvertThis(other);
+      checkReferenceFrameMatch(orientation);
+      Orientation3DBasics.super.prependInvertThis(orientation);
    }
 
    /**
@@ -325,12 +344,12 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
     *           modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same reference
     *            frame as {@code this}.
     */
-   default void prependInvertBoth(FrameOrientation3DReadOnly other)
+   default void prependInvertBoth(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      Orientation3DBasics.super.prependInvertBoth(other);
+      checkReferenceFrameMatch(orientation);
+      Orientation3DBasics.super.prependInvertBoth(orientation);
    }
 }
