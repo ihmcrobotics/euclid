@@ -1,4 +1,4 @@
-package us.ihmc.euclid.geometry;
+package us.ihmc.euclid.shape;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

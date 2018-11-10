@@ -3,7 +3,6 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -848,8 +847,6 @@ public interface Line2DReadOnly
     * @param other the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
     */
    default boolean geometricallyEquals(Line2DReadOnly other, double epsilon)
    {
