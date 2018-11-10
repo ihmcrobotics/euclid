@@ -68,7 +68,7 @@ public class EuclidFrameToolsTest
 
          for (int index = 0; index < size; index++)
          {
-            List<FramePoint2D> points = new ArrayList<>();
+            List<FramePoint2D> points = new ArrayList<>(size);
 
             ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
             ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -98,8 +98,8 @@ public class EuclidFrameToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test functionality
-         List<FramePoint2D> points = new ArrayList<>();
          int size = random.nextInt(50);
+         List<FramePoint2D> points = new ArrayList<>(size);
 
          ReferenceFrame referenceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
 
