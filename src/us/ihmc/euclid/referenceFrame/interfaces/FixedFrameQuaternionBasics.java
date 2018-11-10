@@ -118,6 +118,19 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    }
 
    /**
+    * Sets this frame quaternion to {@code other} and then calls {@link #normalize()}.
+    *
+    * @param other the other frame quaternion to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same
+    *            reference frame as {@code this}.
+    */
+   default void setAndNormalize(FrameQuaternionReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      QuaternionBasics.super.setAndNormalize(other);
+   }
+
+   /**
     * Performs a linear interpolation in SO(3) from {@code this} to {@code qf} given the percentage
     * {@code alpha}.
     * <p>

@@ -4,6 +4,8 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -103,13 +105,13 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    }
 
    /**
-    * Sets the orientation from the given frame quaternion.
+    * Sets the orientation from the given frame orientation.
     *
-    * @param orientation the quaternion to set the orientation part of this frame pose. Not modified.
+    * @param orientation the orientation to set the orientation part of this frame pose. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *            in the same reference frame.
     */
-   default void setOrientation(FrameQuaternionReadOnly orientation)
+   default void setOrientation(FrameOrientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
       Pose3DBasics.super.setOrientation(orientation);
@@ -272,8 +274,9 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param rotation the rotation to prepend to this pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code rotation} are not expressed in
     *            the same reference frame.
+    * @see Orientation3DBasics#prepend(Orientation3DReadOnly)
     */
-   default void prependRotation(FrameQuaternionReadOnly rotation)
+   default void prependRotation(FrameOrientation3DReadOnly rotation)
    {
       checkReferenceFrameMatch(rotation);
       Pose3DBasics.super.prependRotation(rotation);
@@ -307,8 +310,9 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param rotation the rotation to append to this pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code rotation} are not expressed in
     *            the same reference frame.
+    * @see Orientation3DBasics#append(Orientation3DReadOnly)
     */
-   default void appendRotation(FrameQuaternionReadOnly rotation)
+   default void appendRotation(FrameOrientation3DReadOnly rotation)
    {
       checkReferenceFrameMatch(rotation);
       Pose3DBasics.super.appendRotation(rotation);
