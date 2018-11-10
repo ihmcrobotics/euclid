@@ -163,7 +163,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
    {
-      setIncludingFrame(referenceFrame, rotationVector);
+      setRotationVectorIncludingFrame(referenceFrame, rotationVector);
    }
 
    /**

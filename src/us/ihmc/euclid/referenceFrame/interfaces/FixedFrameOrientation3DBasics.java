@@ -6,7 +6,6 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
 public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnly, Orientation3DBasics
 {
-
    /**
     * Sets this orientation to represent the same orientation as the given {@code rotationVector}.
     * <p>
