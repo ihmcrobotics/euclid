@@ -16,6 +16,23 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
+/**
+ * Read-only interface for any implementation of an orientation 3D expressed in a given reference
+ * frame.
+ * <p>
+ * Even though the representation used is unknown at this level of abstraction, this interface
+ * allows to enforce a minimum set of features that all representations of an orientation should
+ * provide, such as transformation functions.
+ * </p>
+ * <p>
+ * Because a {@code FrameOrientation3DReadOnly} extends {@code Orientation3DReadOnly}, it is
+ * compatible with methods only requiring {@code Orientation3DReadOnly}. However, these methods do
+ * NOT assert that the operation occur in the proper coordinate system. Use this feature carefully
+ * and always prefer using methods requiring {@code FrameOrientation3DReadOnly}.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, ReferenceFrameHolder
 {
    /**

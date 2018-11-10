@@ -5,6 +5,34 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
+/**
+ * Write and read interface for a yaw-pitch-roll object expressed in a constant reference frame,
+ * i.e. this quaternion is always expressed in the same reference frame.
+ * <p>
+ * In addition to representing a {@link YawPitchRollBasics}, a {@link ReferenceFrame} is associated
+ * to a {@code FixedFrameYawPitchRollBasics}. This allows, for instance, to enforce, at runtime,
+ * that operations on yaw-pitch-rolls occur in the same coordinate system. Also, via the method
+ * {@link FrameChangeable#changeFrame(ReferenceFrame)}, one can easily calculates the value of a
+ * yaw-pitch-roll in different reference frames.
+ * </p>
+ * <p>
+ * Because a {@code FixedFrameYawPitchRollBasics} extends {@code YawPitchRollBasics}, it is
+ * compatible with methods only requiring {@code YawPitchRollBasics}. However, these methods do NOT
+ * assert that the operation occur in the proper coordinate system. Use this feature carefully and
+ * always prefer using methods requiring {@code FixedFrameYawPitchRollBasics}.
+ * </p>
+ * <p>
+ * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
+ *
+ * <pre>
+ *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
+ * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
+ *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
+ * </pre>
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public interface FixedFrameYawPitchRollBasics extends FrameYawPitchRollReadOnly, FixedFrameOrientation3DBasics, YawPitchRollBasics
 {
    /**

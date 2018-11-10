@@ -5,6 +5,23 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
+/**
+ * Write and read interface for a 3D orientation expressed in a changeable reference frame, i.e. the
+ * reference frame in which this quaternion is expressed can be changed.
+ * <p>
+ * Even though the representation used is unknown at this level of abstraction, this interface
+ * allows to enforce a minimum set of features that all representations of an orientation should
+ * provide, such as appending and prepending orientations to each other.
+ * </p>
+ * <p>
+ * Because a {@code FrameOrientation3DBasics} extends {@code Orientation3DBasics}, it is compatible
+ * with methods only requiring {@code Orientation3DBasics}. However, these methods do NOT assert
+ * that the operation occur in the proper coordinate system. Use this feature carefully and always
+ * prefer using methods requiring {@code FrameOrientation3DBasics}.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics, FrameChangeable
 {
    /**

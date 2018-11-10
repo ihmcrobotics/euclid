@@ -3,11 +3,40 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
+/**
+ * {@code FrameQuaternion} is a quaternion expressed in a given reference frame.
+ * <p>
+ * In addition to representing a {@link YawPitchRollBasics}, a {@link ReferenceFrame} is associated
+ * to a {@code FrameYawPitchRollBasics}. This allows, for instance, to enforce, at runtime, that
+ * operations on yaw-pitch-rolls occur in the same coordinate system. Also, via the method
+ * {@link FrameChangeable#changeFrame(ReferenceFrame)}, one can easily calculates the value of a
+ * yaw-pitch-roll in different reference frames.
+ * </p>
+ * <p>
+ * Because a {@code FrameYawPitchRoll} extends {@code YawPitchRollBasics}, it is compatible with
+ * methods only requiring {@code YawPitchRollBasics}. However, these methods do NOT assert that the
+ * operation occur in the proper coordinate system. Use this feature carefully and always prefer
+ * using methods requiring {@code FrameYawPitchRoll}.
+ * </p>
+ * <p>
+ * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
+ *
+ * <pre>
+ *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
+ * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
+ *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
+ * </pre>
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObject<FrameYawPitchRoll>
 {
    /** The reference frame is which this yaw-pitch-roll is currently expressed. */
