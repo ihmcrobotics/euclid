@@ -8,11 +8,13 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
+/**
+ * This class provides generic tools as well factories for reference frames.
+ */
 public class ReferenceFrameTools
 {
    /**
-    * {@code worldFrame} is a root reference frame and is most of time the only root reference
-    * frame.
+    * {@code worldFrame} is a root reference frame and is most of time the only root reference frame.
     * <p>
     * It is commonly assumed that its axes are aligned as follows:
     * <ul>
@@ -28,13 +30,13 @@ public class ReferenceFrameTools
    /**
     * Construct a new z-up root reference frame.
     * <p>
-    * Most of the time, {@link #worldFrame} is the only root frame from which children reference
-    * frames are added.
+    * Most of the time, {@link #worldFrame} is the only root frame from which children reference frames
+    * are added.
     * </p>
     * <p>
-    * Note that frames added as children of this root frame belongs to a different reference frame
-    * tree than the tree starting off of {@link #worldFrame}. Transformation across two different
-    * trees of reference frames is forbidden as the transformation between them is undefined.
+    * Note that frames added as children of this root frame belongs to a different reference frame tree
+    * than the tree starting off of {@link #worldFrame}. Transformation across two different trees of
+    * reference frames is forbidden as the transformation between them is undefined.
     * </p>
     * <p>
     * The parent frame and transforms of a root frame are all {@code null}.
@@ -60,8 +62,8 @@ public class ReferenceFrameTools
     * Return the world reference frame that is a root reference frame.
     * <p>
     * The world reference frame can be used to create child reference frames. It is usually assumed
-    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents
-    * the forward/backward direction and the y-axis represents the transversal direction.
+    * that the z-axis represents the up/down direction (parallel to gravity), the x-axis represents the
+    * forward/backward direction and the y-axis represents the transversal direction.
     * </p>
     *
     * @return the world reference frame.
@@ -80,8 +82,8 @@ public class ReferenceFrameTools
     *
     * @param frameName the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
-    * @param transformFromParent the transform that can be used to transform a geometry object from
-    *           the parent frame to this frame. Not modified.
+    * @param transformFromParent the transform that can be used to transform a geometry object from the
+    *           parent frame to this frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
@@ -117,8 +119,8 @@ public class ReferenceFrameTools
    /**
     * Creates a reference frame with an immutable transform to its parent.
     * <p>
-    * The {@code transformToParent} should describe the pose of the new frame expressed in its
-    * parent frame.
+    * The {@code transformToParent} should describe the pose of the new frame expressed in its parent
+    * frame.
     * </p>
     *
     * @param frameName the name of the new frame.
@@ -144,17 +146,24 @@ public class ReferenceFrameTools
       return ret;
    }
 
-   public static ReferenceFrame[] constructFramesStartingWithRootEndingWithThis(ReferenceFrame thisFrame)
+   /**
+    * Creates an array containing all the reference frames starting from the root and ending at the
+    * given {@code referenceFrame}.
+    * 
+    * @param referenceFrame the reference frame to which the path ends. Not modified.
+    * @return the path from root to {@code referenceFrame}.
+    */
+   public static ReferenceFrame[] createPathFromRoot(ReferenceFrame referenceFrame)
    {
-      ReferenceFrame parentFrame = thisFrame.getParent();
+      ReferenceFrame parentFrame = referenceFrame.getParent();
       if (parentFrame == null)
       {
-         return new ReferenceFrame[] {thisFrame};
+         return new ReferenceFrame[] {referenceFrame};
       }
 
       int newLength = parentFrame.getFramesStartingWithRootEndingWithThis().length + 1;
       ReferenceFrame[] ret = Arrays.copyOf(parentFrame.getFramesStartingWithRootEndingWithThis(), newLength);
-      ret[newLength - 1] = thisFrame;
+      ret[newLength - 1] = referenceFrame;
       return ret;
    }
 
@@ -195,8 +204,8 @@ public class ReferenceFrameTools
    }
 
    /**
-    * Will clear the entire frame tree that this frame is part of leaving only the root frame
-    * enabled. All other frames in the tree will be removed and disabled.
+    * Will clear the entire frame tree that this frame is part of leaving only the root frame enabled.
+    * All other frames in the tree will be removed and disabled.
     * 
     * @param frame in the frame tree that will be cleared.
     * @deprecated Reference frames are automatically disposed of by the GC when no external reference

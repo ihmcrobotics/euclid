@@ -312,7 +312,7 @@ public abstract class ReferenceFrame
 
       this.frameName = frameName;
       this.parentFrame = parentFrame;
-      framesStartingWithRootEndingWithThis = ReferenceFrameTools.constructFramesStartingWithRootEndingWithThis(this);
+      framesStartingWithRootEndingWithThis = ReferenceFrameTools.createPathFromRoot(this);
 
       if (parentFrame == null)
       { // Setting up this ReferenceFrame as a root frame.
