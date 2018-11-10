@@ -239,14 +239,10 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameTuple3DReadOnly)
          return equals((FrameTuple3DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

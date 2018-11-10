@@ -286,14 +286,10 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameLineSegment2DReadOnly)
          return equals((FrameLineSegment2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

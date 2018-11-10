@@ -263,14 +263,10 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameLineSegment3DReadOnly)
          return equals((FrameLineSegment3DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

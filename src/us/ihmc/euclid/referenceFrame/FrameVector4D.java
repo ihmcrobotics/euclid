@@ -236,14 +236,10 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof FrameTuple4DReadOnly)
          return equals((FrameTuple4DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

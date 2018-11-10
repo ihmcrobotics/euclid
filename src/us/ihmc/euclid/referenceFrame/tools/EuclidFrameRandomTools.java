@@ -20,6 +20,7 @@ import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
+import us.ihmc.euclid.referenceFrame.FrameYawPitchRoll;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
@@ -190,7 +191,8 @@ public class EuclidFrameRandomTools
     * @param random the random generator to use.
     * @param rootFrame the base frame from which the tree is to be expanded.
     * @param numberOfReferenceFrames the number of reference frames to be created.
-    * @return the array containing the random reference frames and {@code rootFrame} at the first index.
+    * @return the array containing the random reference frames and {@code rootFrame} at the first
+    *         index.
     */
    public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames)
    {
@@ -206,7 +208,8 @@ public class EuclidFrameRandomTools
     * @param numberOfReferenceFrames the number of reference frames to be created.
     * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
     *           random frames.
-    * @return the array containing the random reference frames and {@code rootFrame} at the first index.
+    * @return the array containing the random reference frames and {@code rootFrame} at the first
+    *         index.
     */
    public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames,
                                                          boolean use2DTransforms)
@@ -343,14 +346,13 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector.
     * <p>
-    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>;
-    * {@code minMax}<sub>i</sub>].
+    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
     * @param random the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the
-    *           generated frame vector. Not modified.
+    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
+    *           frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -584,14 +586,13 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector.
     * <p>
-    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>;
-    * {@code minMax}<sub>i</sub>].
+    * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
     * @param random the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the
-    *           generated frame vector. Not modified.
+    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
+    *           frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -618,6 +619,67 @@ public class EuclidFrameRandomTools
    public static FrameVector2D nextFrameVector2D(Random random, ReferenceFrame referenceFrame, Tuple2DReadOnly min, Tuple2DReadOnly max)
    {
       return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2D(random, min, max));
+   }
+
+   /**
+    * Generates random a yaw-pitch-roll orientation.
+    * <p>
+    * <ul>
+    * <li>yaw &in; [-<i>pi</i>; <i>pi</i>],
+    * <li>pitch &in; [-<i>pi</i>/2.0; <i>pi</i>/2.0],
+    * <li>roll &in; [-<i>pi</i>; <i>pi</i>],
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame yaw-pitch-roll reference frame.
+    * @return the random frame yaw-pitch-roll orientation.
+    */
+   public static FrameYawPitchRoll nextFrameYawPitchRoll(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameYawPitchRoll(referenceFrame, EuclidCoreRandomTools.nextYawPitchRoll(random));
+   }
+
+   /**
+    * Generates random a yaw-pitch-roll orientation.
+    * <p>
+    * <ul>
+    * <li>yaw &in; [-{@code minMaxYaw}; {@code minMaxYaw}],
+    * <li>pitch &in; [-{@code minMaxPitch}; {@code minMaxPitch}],
+    * <li>roll &in; [-{@code minMaxRoll}; {@code minMaxRoll}],
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame yaw-pitch-roll reference frame.
+    * @param minMaxYaw the maximum absolute angle for the generated yaw angle.
+    * @param minMaxPitch the maximum absolute angle for the generated pitch angle.
+    * @param minMaxRoll the maximum absolute angle for the generated roll angle.
+    * @return the random frame yaw-pitch-roll orientation.
+    * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
+    *            {@code minMaxRoll < 0}.
+    */
+   public static FrameYawPitchRoll nextFrameYawPitchRoll(Random random, ReferenceFrame referenceFrame, double minMaxYaw, double minMaxPitch, double minMaxRoll)
+   {
+      return new FrameYawPitchRoll(referenceFrame, EuclidCoreRandomTools.nextYawPitchRoll(random, minMaxYaw, minMaxPitch, minMaxRoll));
+   }
+
+   /**
+    * Generates a random yaw-pitch-roll orientation uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated orientation is in [-{@code minMaxAngle};
+    * {@code minMaxAngle}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame yaw-pitch-roll reference frame.
+    * @param minMaxAngle the maximum absolute angle described by the generated orientation.
+    * @return the random frame yaw-pitch-roll orientation.
+    * @throws RuntimeException if {@code minMaxAngle < 0}.
+    */
+   public static FrameYawPitchRoll nextFrameYawPitchRollUniform(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
+   {
+      return new FrameYawPitchRoll(referenceFrame, EuclidCoreRandomTools.nextYawPitchRollUniform(random, minMaxAngle));
    }
 
    /**
@@ -816,15 +878,15 @@ public class EuclidFrameRandomTools
    }
 
    /**
-    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices
-    * and the size of the point cloud from which it is generated.
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
     * 
     * @param random the random generator to use.
     * @param referenceFrame the polygon's reference frame.
     * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
-    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for
-    *           computing the random convex polygon. The size of the resulting convex polygon will
-    *           be less than {@code numberOfPossiblePoints}.
+    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
+    *           the random convex polygon. The size of the resulting convex polygon will be less than
+    *           {@code numberOfPossiblePoints}.
     * @return the random convex polygon.
     * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
     */

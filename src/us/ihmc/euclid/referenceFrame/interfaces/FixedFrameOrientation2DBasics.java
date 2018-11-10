@@ -91,16 +91,16 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
    }
 
    /**
-    * Sets this orientation 2D to the yaw angle of the given {@code frameQuaternionReadOnly}.
+    * Sets this orientation 2D to the yaw angle of the given {@code frameOrientation3DReadOnly}.
     * 
-    * @param frameQuaternionReadOnly the quaternion to get the yaw angle from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code frameQuaternionReadOnly} is not expressed in
+    * @param frameOrientation3DReadOnly the orientation to get the yaw angle from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code frameOrientation3DReadOnly} is not expressed in
     *            the same frame as {@code this}.
     */
-   default void set(FrameQuaternionReadOnly frameQuaternionReadOnly)
+   default void set(FrameOrientation3DReadOnly frameOrientation3DReadOnly)
    {
-      checkReferenceFrameMatch(frameQuaternionReadOnly);
-      Orientation2DBasics.super.set(frameQuaternionReadOnly);
+      checkReferenceFrameMatch(frameOrientation3DReadOnly);
+      Orientation2DBasics.super.set(frameOrientation3DReadOnly);
    }
 
    /**
