@@ -263,7 +263,10 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameVector4DBasics.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
       modifiableMap.put(FrameQuaternionReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
       modifiableMap.put(FrameQuaternionBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-      // TODO add builders for orientation 3D and yaw-pitch-roll
+      modifiableMap.put(FrameYawPitchRollReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameYawPitchRoll(random, frame));
+      modifiableMap.put(FrameYawPitchRollBasics.class, frame ->   EuclidFrameRandomTools.nextFrameYawPitchRoll(random, frame));
+      modifiableMap.put(FrameOrientation3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
+      modifiableMap.put(FrameOrientation3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
 
       modifiableMap.put(FrameOrientation2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameOrientation2D(random, frame));
       modifiableMap.put(FrameOrientation2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameOrientation2D(random, frame));
@@ -326,6 +329,8 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(RotationScaleMatrixReadOnly.class, () -> EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0));
       modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
       modifiableMap.put(QuaternionBasics.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
+      modifiableMap.put(YawPitchRollReadOnly.class, () -> EuclidCoreRandomTools.nextYawPitchRoll(random));
+      modifiableMap.put(YawPitchRollBasics.class, () ->   EuclidCoreRandomTools.nextYawPitchRoll(random));
 
       modifiableMap.put(Orientation2DReadOnly.class, () -> EuclidGeometryRandomTools.nextOrientation2D(random));
       modifiableMap.put(Orientation2DBasics.class, () -> EuclidGeometryRandomTools.nextOrientation2D(random));
