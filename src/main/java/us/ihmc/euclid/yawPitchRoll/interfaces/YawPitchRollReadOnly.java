@@ -121,6 +121,18 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     */
    default boolean isZero(double epsilon)
    {
+      return isZeroOrientation(epsilon);
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * A yaw-pitch-roll is a zero orientation when all the three angles are equal to zero.
+    * </p>
+    */
+   @Override
+   default boolean isZeroOrientation(double epsilon)
+   {
       return YawPitchRollTools.isZero(getYaw(), getPitch(), getRoll(), epsilon);
    }
 

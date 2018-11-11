@@ -27,6 +27,20 @@ public abstract class QuaternionTools
    static final double EPS = 1.0e-12;
 
    /**
+    * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
+    * basis.
+    * 
+    * @param quaternion the query. Not modified.
+    * @param epsilon the tolerance used for the comparison.
+    * @return {@code true} if the quaternion equal to the neutral quaternion, {@code false} otherwise.
+    */
+   public static boolean isNeutralQuaternion(QuaternionReadOnly quaternion, double epsilon)
+   {
+      return EuclidCoreTools.epsilonEquals(1.0, quaternion.getS(), epsilon) && Math.abs(quaternion.getX()) <= epsilon && Math.abs(quaternion.getY()) <= epsilon
+            && Math.abs(quaternion.getZ()) <= epsilon;
+   }
+
+   /**
     * Performs the multiplication of {@code q1} and {@code q2} and stores the result in
     * {@code quaternionToPack}.
     * <p>
