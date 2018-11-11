@@ -36,6 +36,13 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  */
 public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DReadOnly
 {
+   /** {@inheritDoc} */
+   @Override
+   default boolean containsNaN()
+   {
+      return Matrix3DReadOnly.super.containsNaN();
+   }
+
    /**
     * {@inheritDoc}
     * <p>

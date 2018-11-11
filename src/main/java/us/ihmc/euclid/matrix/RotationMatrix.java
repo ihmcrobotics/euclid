@@ -184,6 +184,13 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       setUnsafe(Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN);
    }
 
+   /** {@inheritDoc} */
+   @Override
+   public boolean containsNaN()
+   {
+      return CommonMatrix3DBasics.super.containsNaN();
+   }
+
    /**
     * Orthonormalization of the rotation matrix using the
     * <a href="https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process"> Gram-Schmidt method</a>.

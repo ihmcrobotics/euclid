@@ -454,6 +454,17 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
    }
 
    /**
+    * Sets the rotation part to the {@code orientation} and resets the scales.
+    *
+    * @param orientation the orientation used to set the rotation part to. Not modified.
+    */
+   public void set(Orientation3DReadOnly orientation)
+   {
+      setRotation(orientation);
+      resetScale();
+   }
+
+   /**
     * Sets the rotation part to the {@code orientation} and all three scale factors to {@code scale}.
     *
     * @param orientation the orientation used to set the rotation part to. Not modified.

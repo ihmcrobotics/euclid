@@ -8,8 +8,6 @@ import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -17,22 +15,17 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
@@ -57,7 +50,7 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  *
  * @author Sylvain Bertrand
  */
-public class QuaternionBasedTransform implements Transform, EpsilonComparable<QuaternionBasedTransform>, GeometricallyComparable<QuaternionBasedTransform>,
+public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, EpsilonComparable<QuaternionBasedTransform>, GeometricallyComparable<QuaternionBasedTransform>,
       Settable<QuaternionBasedTransform>, Clearable
 {
    /** The rotation part of this transform. */
@@ -77,21 +70,11 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
    }
 
    /**
-    * Creates a quaternion-based new transform and initializes it to {@code other}.
-    *
-    * @param other the other quaternion-based transform to copy. Not modified.
-    */
-   public QuaternionBasedTransform(QuaternionBasedTransform other)
-   {
-      set(other);
-   }
-
-   /**
     * Creates a new quaternion-based transform and initializes to the given rigid-body transform.
     *
     * @param rigidBodyTransform the rigid-body transform to copy. Not modified.
     */
-   public QuaternionBasedTransform(RigidBodyTransform rigidBodyTransform)
+   public QuaternionBasedTransform(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       set(rigidBodyTransform);
    }
@@ -316,8 +299,7 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
    @Override
    public void set(QuaternionBasedTransform other)
    {
-      quaternion.set(other.quaternion);
-      translationVector.set(other.translationVector);
+      set((RigidBodyTransformReadOnly) other);
    }
 
    /**
@@ -325,10 +307,10 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     *
     * @param rigidBodyTransform the rigid-body transform to copy the values from. Not modified.
     */
-   public void set(RigidBodyTransform rigidBodyTransform)
+   public void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      quaternion.set(rigidBodyTransform.getRotationMatrix());
-      translationVector.set(rigidBodyTransform.getTranslationVector());
+      quaternion.set(rigidBodyTransform.getRotation());
+      translationVector.set(rigidBodyTransform.getTranslation());
    }
 
    /**
@@ -755,26 +737,10 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void multiply(QuaternionBasedTransform other)
+   public void multiply(RigidBodyTransformReadOnly other)
    {
-      QuaternionTools.addTransform(quaternion, other.getTranslationVector(), translationVector);
-      quaternion.multiply(other.getQuaternion());
-   }
-
-   /**
-    * Performs the multiplication of this transform with {@code rigidBodyTransform}.
-    * <p>
-    * this = this * Q(rigidBodyTransform) <br>
-    * where Q(rigidBodyTransform) is the function that converts a 4-by-4 transformation matrix into a
-    * quaternion-based transform.
-    * </p>
-    *
-    * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
-    */
-   public void multiply(RigidBodyTransform rigidBodyTransform)
-   {
-      QuaternionTools.addTransform(quaternion, rigidBodyTransform.getTranslationVector(), translationVector);
-      quaternion.append(rigidBodyTransform.getRotationMatrix());
+      QuaternionTools.addTransform(quaternion, other.getTranslation(), translationVector);
+      quaternion.append(other.getRotation());
    }
 
    /**
@@ -805,11 +771,11 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void multiplyInvertThis(QuaternionBasedTransform other)
+   public void multiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      translationVector.sub(other.getTranslationVector(), translationVector);
+      translationVector.sub(rigidBodyTransform.getTranslation(), translationVector);
       quaternion.inverseTransform(translationVector, translationVector);
-      quaternion.multiplyConjugateThis(other.quaternion);
+      quaternion.appendInvertThis(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -820,43 +786,10 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void multiplyInvertOther(QuaternionBasedTransform other)
+   public void multiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      quaternion.multiplyConjugateOther(other.getQuaternion());
-      QuaternionTools.subTransform(quaternion, other.getTranslationVector(), translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of this transform with {@code rigidBodyTransform}.
-    * <p>
-    * this = this<sup>-1</sup> * Q(rigidBodyTransform) <br>
-    * where Q(rigidBodyTransform) is the function that converts a 4-by-4 transformation matrix into a
-    * quaternion-based transform.
-    * </p>
-    *
-    * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
-    */
-   public void multiplyInvertThis(RigidBodyTransform rigidBodyTransform)
-   {
-      translationVector.sub(rigidBodyTransform.getTranslationVector(), translationVector);
-      quaternion.inverseTransform(translationVector, translationVector);
-      quaternion.appendInvertThis(rigidBodyTransform.getRotationMatrix());
-   }
-
-   /**
-    * Performs the multiplication of this transform with the inverse of {@code rigidBodyTransform}.
-    * <p>
-    * this = this * Q(rigidBodyTransform)<sup>-1</sup> <br>
-    * where Q(rigidBodyTransform) is the function that converts a 4-by-4 transformation matrix into a
-    * quaternion-based transform.
-    * </p>
-    *
-    * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
-    */
-   public void multiplyInvertOther(RigidBodyTransform rigidBodyTransform)
-   {
-      quaternion.appendInvertOther(rigidBodyTransform.getRotationMatrix());
-      QuaternionTools.subTransform(quaternion, rigidBodyTransform.getTranslationVector(), translationVector);
+      quaternion.appendInvertOther(rigidBodyTransform.getRotation());
+      QuaternionTools.subTransform(quaternion, rigidBodyTransform.getTranslation(), translationVector);
    }
 
    /**
@@ -1007,28 +940,11 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void preMultiply(QuaternionBasedTransform other)
-   {
-      QuaternionTools.transform(other.getQuaternion(), translationVector, translationVector);
-      translationVector.add(other.getTranslationVector());
-      quaternion.preMultiply(other.getQuaternion());
-   }
-
-   /**
-    * Performs the multiplication of {@code rigidBodyTransform} with this transform.
-    * <p>
-    * this = Q(rigidBodyTransform) * this <br>
-    * where Q(rigidBodyTransform) is the function that converts a 4-by-4 transformation matrix into a
-    * quaternion-based transform.
-    * </p>
-    *
-    * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
-    */
-   public void preMultiply(RigidBodyTransform rigidBodyTransform)
+   public void preMultiply(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       rigidBodyTransform.transform(translationVector);
-      translationVector.add(rigidBodyTransform.getTranslationVector());
-      quaternion.prepend(rigidBodyTransform.getRotationMatrix());
+      translationVector.add(rigidBodyTransform.getTranslation());
+      quaternion.prepend(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -1060,11 +976,11 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void preMultiplyInvertThis(QuaternionBasedTransform other)
+   public void preMultiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      quaternion.preMultiplyConjugateThis(other.getQuaternion());
+      quaternion.prependInvertThis(rigidBodyTransform.getRotation());
       quaternion.transform(translationVector);
-      translationVector.sub(other.getTranslationVector(), translationVector);
+      translationVector.sub(rigidBodyTransform.getTranslation(), translationVector);
    }
 
    /**
@@ -1075,45 +991,11 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void preMultiplyInvertOther(QuaternionBasedTransform other)
+   public void preMultiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      translationVector.sub(other.getTranslationVector());
-      other.getQuaternion().inverseTransform(translationVector);
-      quaternion.preMultiplyConjugateOther(other.getQuaternion());
-   }
-
-   /**
-    * Performs the multiplication of {@code rigidBodyTransform} with the inverse of this transform.
-    * <p>
-    * this = Q(rigidBodyTransform) * this<sup>-1</sup> <br>
-    * where Q(rigidBodyTransform) is the function that converts a 4-by-4 transformation matrix into a
-    * quaternion-based transform.
-    * </p>
-    *
-    * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
-    */
-   public void preMultiplyInvertThis(RigidBodyTransform rigidBodyTransform)
-   {
-      quaternion.prependInvertThis(rigidBodyTransform.getRotationMatrix());
-      quaternion.transform(translationVector);
-      translationVector.sub(rigidBodyTransform.getTranslationVector(), translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of {@code rigidBodyTransform} with this transform.
-    * <p>
-    * this = Q(rigidBodyTransform)<sup>-1</sup> * this <br>
-    * where Q(rigidBodyTransform) is the function that converts a 4-by-4 transformation matrix into a
-    * quaternion-based transform.
-    * </p>
-    *
-    * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
-    */
-   public void preMultiplyInvertOther(RigidBodyTransform rigidBodyTransform)
-   {
-      translationVector.sub(rigidBodyTransform.getTranslationVector());
-      rigidBodyTransform.getRotationMatrix().inverseTransform(translationVector);
-      quaternion.prependInvertOther(rigidBodyTransform.getRotationMatrix());
+      translationVector.sub(rigidBodyTransform.getTranslation());
+      rigidBodyTransform.getRotation().inverseTransform(translationVector);
+      quaternion.prependInvertOther(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -1288,165 +1170,6 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
       quaternion.prependRollRotation(roll);
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Point3DReadOnly pointOriginal, Point3DBasics pointTransformed)
-   {
-      quaternion.transform(pointOriginal, pointTransformed);
-      pointTransformed.add(translationVector);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Vector3DReadOnly vectorOriginal, Vector3DBasics vectorTransformed)
-   {
-      quaternion.transform(vectorOriginal, vectorTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
-   {
-      quaternion.transform(orientationOriginal, orientationTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
-   {
-      quaternion.transform(vectorOriginal, vectorTransformed);
-      vectorTransformed.addX(vectorTransformed.getS() * translationVector.getX());
-      vectorTransformed.addY(vectorTransformed.getS() * translationVector.getY());
-      vectorTransformed.addZ(vectorTransformed.getS() * translationVector.getZ());
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
-   {
-      quaternion.transform(matrixOriginal, matrixTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Point2DReadOnly pointOriginal, Point2DBasics pointTransformed, boolean checkIfTransformInXYPlane)
-   {
-      quaternion.transform(pointOriginal, pointTransformed, checkIfTransformInXYPlane);
-      pointTransformed.add(translationVector.getX(), translationVector.getY());
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Vector2DReadOnly vectorOriginal, Vector2DBasics vectorTransformed, boolean checkIfTransformInXYPlane)
-   {
-      quaternion.transform(vectorOriginal, vectorTransformed, checkIfTransformInXYPlane);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(RigidBodyTransform original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(AffineTransform original, AffineTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Point3DReadOnly pointOriginal, Point3DBasics pointTransformed)
-   {
-      pointTransformed.set(pointOriginal);
-      pointTransformed.sub(translationVector);
-      quaternion.inverseTransform(pointTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Vector3DReadOnly vectorOriginal, Vector3DBasics vectorTransformed)
-   {
-      quaternion.inverseTransform(vectorOriginal, vectorTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
-   {
-      quaternion.inverseTransform(orientationOriginal, orientationTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
-   {
-      vectorTransformed.set(vectorOriginal);
-      vectorTransformed.subX(vectorTransformed.getS() * translationVector.getX());
-      vectorTransformed.subY(vectorTransformed.getS() * translationVector.getY());
-      vectorTransformed.subZ(vectorTransformed.getS() * translationVector.getZ());
-      quaternion.inverseTransform(vectorTransformed, vectorTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
-   {
-      quaternion.inverseTransform(matrixOriginal, matrixTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Point2DReadOnly pointOriginal, Point2DBasics pointTransformed, boolean checkIfTransformInXYPlane)
-   {
-      pointTransformed.set(pointOriginal);
-      pointTransformed.sub(translationVector.getX(), translationVector.getY());
-      quaternion.inverseTransform(pointTransformed, checkIfTransformInXYPlane);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Vector2DReadOnly vectorOriginal, Vector2DBasics vectorTransformed, boolean checkIfTransformInXYPlane)
-   {
-      quaternion.inverseTransform(vectorOriginal, vectorTransformed, checkIfTransformInXYPlane);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(RigidBodyTransform original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(AffineTransform original, AffineTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
-   }
-
    /**
     * Packs this quaternion-based transform in a column vector.
     *
@@ -1561,130 +1284,34 @@ public class QuaternionBasedTransform implements Transform, EpsilonComparable<Qu
     * Get the read-only reference to the quaternion of this transform.
     *
     * @return the quaternion of this transform.
+    * @deprecated Use {@link #getRotation()} instead.
     */
    public QuaternionReadOnly getQuaternion()
    {
       return quaternion;
    }
 
-   /**
-    * Packs the rotation part of this affine transform.
-    *
-    * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *           Modified.
-    */
-   public void getRotation(RotationMatrix rotationMatrixToPack)
+   @Override
+   public QuaternionReadOnly getRotation()
    {
-      rotationMatrixToPack.set(quaternion);
-   }
-
-   /**
-    * Packs the rotation part of this affine transform.
-    *
-    * @param orientationToPack the orientation that is set to the rotation part of this transform.
-    *           Modified.
-    */
-   public void getRotation(Orientation3DBasics orientationToPack)
-   {
-      orientationToPack.set(quaternion);
-   }
-
-   /**
-    * Packs the rotation part of this affine transform as a rotation vector.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVectorToPack the rotation vector that is set to the rotation part of this
-    *           transform. Modified.
-    */
-   public void getRotation(Vector3DBasics rotationVectorToPack)
-   {
-      quaternion.getRotationVector(rotationVectorToPack);
-   }
-
-   /**
-    * Computes and packs the orientation described by the rotation part of this transform as the
-    * yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #getRotation(Orientation3DBasics)}.
-    */
-   public void getRotationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      quaternion.getYawPitchRoll(yawPitchRollToPack);
-   }
-
-   /**
-    * Computes and packs the orientation described by the rotation part of this transform as the Euler
-    * angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
-    */
-   public void getRotationEuler(Vector3DBasics eulerAnglesToPack)
-   {
-      quaternion.getEuler(eulerAnglesToPack);
+      return quaternion;
    }
 
    /**
     * Gets the read-only reference of the translation part of this affine transform.
     *
     * @return the translation part of this transform.
+    * @deprecated Use {@link #getTranslation()} instead.
     */
    public Vector3DReadOnly getTranslationVector()
    {
       return translationVector;
    }
 
-   /**
-    * Packs the translation part of this affine transform.
-    *
-    * @param translationToPack the tuple in which the translation part of this transform is stored.
-    *           Modified.
-    */
-   public void getTranslation(Tuple3DBasics translationToPack)
+   @Override
+   public Vector3DReadOnly getTranslation()
    {
-      translationToPack.set(translationVector);
-   }
-
-   /**
-    * Gets the x-component of the translation part of this transform.
-    *
-    * @return the x-component of the translation part.
-    */
-   public double getTranslationX()
-   {
-      return translationVector.getX();
-   }
-
-   /**
-    * Gets the y-component of the translation part of this transform.
-    *
-    * @return the y-component of the translation part.
-    */
-   public double getTranslationY()
-   {
-      return translationVector.getY();
-   }
-
-   /**
-    * Gets the z-component of the translation part of this transform.
-    *
-    * @return the z-component of the translation part.
-    */
-   public double getTranslationZ()
-   {
-      return translationVector.getZ();
+      return translationVector;
    }
 
    /**

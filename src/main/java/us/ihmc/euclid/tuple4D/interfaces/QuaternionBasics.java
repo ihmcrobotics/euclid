@@ -35,6 +35,13 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
     */
    public static final double EPS_POW = 1.0e-12;
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean containsNaN()
+   {
+      return QuaternionReadOnly.super.containsNaN();
+   }
+
    /**
     * Sets the four components of this quaternion without normalizing.
     * <p>

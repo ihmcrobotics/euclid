@@ -39,6 +39,9 @@ public interface Orientation3DReadOnly
     */
    static final double ORIENTATION_2D_EPSILON = 1.0e-8;
 
+   /** {@inheritDoc} */
+   boolean containsNaN();
+
    /**
     * Tests if this orientation 3D actually represents a rotation strictly around the z-axis.
     * <p>

@@ -487,7 +487,7 @@ public interface Transform
     * @param original the rigid-body transform to transform. Not modified.
     * @param transformed the rigid-body transform in which the result is stored. Modified.
     */
-   void transform(RigidBodyTransform original, RigidBodyTransform transformed);
+   void transform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed);
 
    /**
     * Transforms the given {@code quaternionBasedTransformToTransform} by this transform.
@@ -873,7 +873,7 @@ public interface Transform
     * @param original the rigid-body transform to transform. Not modified.
     * @param transformed the rigid-body transform in which the result is stored. Modified.
     */
-   void inverseTransform(RigidBodyTransform original, RigidBodyTransform transformed);
+   void inverseTransform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed);
 
    /**
     * Performs the inverse of the transform on the given

@@ -44,6 +44,13 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    /** Default tolerance used to verify that this quaternion is a unit-quaternion. */
    public static final double EPS_UNITARY = 1.0e-7;
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean containsNaN()
+   {
+      return Tuple4DReadOnly.super.containsNaN();
+   }
+
    /**
     * Tests if this quaternion has a norm equal to 1+/-{@code epsilon}.
     *

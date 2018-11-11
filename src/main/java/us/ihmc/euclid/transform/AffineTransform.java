@@ -21,6 +21,7 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -108,7 +109,7 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the rigid-body transform to copy. Not modified.
     */
-   public AffineTransform(RigidBodyTransform rigidBodyTransform)
+   public AffineTransform(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       set(rigidBodyTransform);
    }
@@ -278,9 +279,11 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the rigid-body transform to copy the values from. Not modified.
     */
-   public void set(RigidBodyTransform rigidBodyTransform)
+   public void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      rigidBodyTransform.get(rotationScaleMatrix, translationVector);
+      rotationScaleMatrix.setRotation(rigidBodyTransform.getRotation());
+      rotationScaleMatrix.resetScale();
+      translationVector.set(rigidBodyTransform.getTranslation());
    }
 
    /**
@@ -934,10 +937,10 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
     */
-   public void multiply(RigidBodyTransform rigidBodyTransform)
+   public void multiply(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      Matrix3DTools.addTransform(getRotationMatrix(), rigidBodyTransform.getTranslationVector(), translationVector);
-      rotationScaleMatrix.append(rigidBodyTransform.getRotationMatrix());
+      Matrix3DTools.addTransform(getRotationMatrix(), rigidBodyTransform.getTranslation(), translationVector);
+      rotationScaleMatrix.append(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -1010,11 +1013,11 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
     */
-   public void multiplyInvertThis(RigidBodyTransform rigidBodyTransform)
+   public void multiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      translationVector.sub(rigidBodyTransform.getTranslationVector(), translationVector);
+      translationVector.sub(rigidBodyTransform.getTranslation(), translationVector);
       getRotationMatrix().inverseTransform(translationVector, translationVector);
-      rotationScaleMatrix.appendInvertThis(rigidBodyTransform.getRotationMatrix());
+      rotationScaleMatrix.appendInvertThis(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -1029,10 +1032,10 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
     */
-   public void multiplyInvertOther(RigidBodyTransform rigidBodyTransform)
+   public void multiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      rotationScaleMatrix.appendInvertOther(rigidBodyTransform.getRotationMatrix());
-      Matrix3DTools.subTransform(getRotationMatrix(), rigidBodyTransform.getTranslationVector(), translationVector);
+      rotationScaleMatrix.appendInvertOther(rigidBodyTransform.getRotation());
+      Matrix3DTools.subTransform(getRotationMatrix(), rigidBodyTransform.getTranslation(), translationVector);
    }
 
    /**
@@ -1221,11 +1224,11 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the other transform to multiply this with. Not modified.
     */
-   public void preMultiply(RigidBodyTransform rigidBodyTransform)
+   public void preMultiply(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       rigidBodyTransform.transform(translationVector);
-      translationVector.add(rigidBodyTransform.getTranslationVector());
-      rotationScaleMatrix.prepend(rigidBodyTransform.getRotationMatrix());
+      translationVector.add(rigidBodyTransform.getTranslation());
+      rotationScaleMatrix.prepend(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -1299,11 +1302,11 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
     */
-   public void preMultiplyInvertThis(RigidBodyTransform rigidBodyTransform)
+   public void preMultiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      rotationScaleMatrix.prependInvertThis(rigidBodyTransform.getRotationMatrix());
+      rotationScaleMatrix.prependInvertThis(rigidBodyTransform.getRotation());
       getRotationMatrix().transform(translationVector);
-      translationVector.sub(rigidBodyTransform.getTranslationVector(), translationVector);
+      translationVector.sub(rigidBodyTransform.getTranslation(), translationVector);
    }
 
    /**
@@ -1317,11 +1320,11 @@ public class AffineTransform
     *
     * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
     */
-   public void preMultiplyInvertOther(RigidBodyTransform rigidBodyTransform)
+   public void preMultiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      translationVector.sub(rigidBodyTransform.getTranslationVector());
-      rigidBodyTransform.getRotationMatrix().inverseTransform(translationVector);
-      rotationScaleMatrix.prependInvertOther(rigidBodyTransform.getRotationMatrix());
+      translationVector.sub(rigidBodyTransform.getTranslation());
+      rigidBodyTransform.getRotation().inverseTransform(translationVector);
+      rotationScaleMatrix.prependInvertOther(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -1542,7 +1545,7 @@ public class AffineTransform
 
    /** {@inheritDoc} */
    @Override
-   public void transform(RigidBodyTransform original, RigidBodyTransform transformed)
+   public void transform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed)
    {
       transformed.set(original);
       transformed.preMultiply(this);
@@ -1623,7 +1626,7 @@ public class AffineTransform
 
    /** {@inheritDoc} */
    @Override
-   public void inverseTransform(RigidBodyTransform original, RigidBodyTransform transformed)
+   public void inverseTransform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed)
    {
       transformed.set(original);
       transformed.preMultiplyInvertOther(this);

@@ -1,10 +1,7 @@
 package us.ihmc.euclid.transform;
 
-import java.util.Arrays;
-
 import org.ejml.data.DenseMatrix64F;
 
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -13,7 +10,6 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
@@ -21,24 +17,18 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
@@ -68,8 +58,8 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  *
  * @author Sylvain Bertrand
  */
-public class RigidBodyTransform
-      implements Transform, EpsilonComparable<RigidBodyTransform>, GeometricallyComparable<RigidBodyTransform>, Settable<RigidBodyTransform>, Clearable
+public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonComparable<RigidBodyTransform>, GeometricallyComparable<RigidBodyTransform>,
+      Settable<RigidBodyTransform>, Clearable
 {
    private static final double EPS_CHECK_IDENTITY = 1.0e-10;
    private boolean hasRotation = false;
@@ -95,19 +85,9 @@ public class RigidBodyTransform
     *
     * @param other the other rigid-body transform to copy. Not modified.
     */
-   public RigidBodyTransform(RigidBodyTransform other)
+   public RigidBodyTransform(RigidBodyTransformReadOnly other)
    {
       set(other);
-   }
-
-   /**
-    * Creates a new rigid-body transform and sets it to {@code quaternionBasedTransform}.
-    *
-    * @param quaternionBasedTransform the {@link QuaternionBasedTransform} to initialize to.
-    */
-   public RigidBodyTransform(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      set(quaternionBasedTransform);
    }
 
    /**
@@ -294,34 +274,16 @@ public class RigidBodyTransform
    @Override
    public boolean containsNaN()
    {
-      return rotationMatrix.containsNaN() || translationVector.containsNaN();
-   }
-
-   /**
-    * Tests if the rotation part of this transform describes a transformation in the XY plane.
-    * <p>
-    * The rotation part is considered to be a 2D transformation in the XY plane if:
-    * <ul>
-    * <li>the last diagonal coefficient m22 is equal to 1.0 +/- {@link Matrix3DFeatures#EPS_CHECK_2D},
-    * <li>the coefficients {@code m20}, {@code m02}, {@code m21}, and {@code m12} are equal to 0.0 +/-
-    * {@link Matrix3DFeatures#EPS_CHECK_2D}.
-    * </ul>
-    * </p>
-    *
-    * @return {@code true} if the rotation part describes a 2D transformation in the XY plane,
-    *         {@code false} otherwise.
-    */
-   public boolean isRotation2D()
-   {
-      return !hasRotation || rotationMatrix.isMatrix2D();
+      return RigidBodyTransformReadOnly.super.containsNaN();
    }
 
    /**
     * Requests whether this transform has a non-zero rotation or not.
-    * 
+    *
     * @return {@code true} if the rotation part is not zero, {@code false} if the rotation part is zero
     *         and can be ignore when transforming an object.
     */
+   @Override
    public boolean hasRotation()
    {
       return hasRotation;
@@ -329,32 +291,14 @@ public class RigidBodyTransform
 
    /**
     * Requests whether this transform has a non-zero translation or not.
-    * 
+    *
     * @return {@code true} if the translation part is not zero, {@code false} if the translation part
     *         is zero and can be ignore when transforming an object.
     */
+   @Override
    public boolean hasTranslation()
    {
       return hasTranslation;
-   }
-
-   /**
-    * Asserts that the rotation part of this transform describes a transformation in the XY plane.
-    * <p>
-    * The rotation part is considered to be a 2D transformation in the XY plane if:
-    * <ul>
-    * <li>the last diagonal coefficient m22 is equal to 1.0 +/- {@link Matrix3DFeatures#EPS_CHECK_2D},
-    * <li>the coefficients {@code m20}, {@code m02}, {@code m21}, and {@code m12} are equal to 0.0 +/-
-    * {@link Matrix3DFeatures#EPS_CHECK_2D}.
-    * </ul>
-    * </p>
-    *
-    * @throws NotAMatrix2DException if the rotation part represents a 3D transformation.
-    */
-   public void checkIfRotation2D()
-   {
-      if (hasRotation)
-         rotationMatrix.checkIfMatrix2D();
    }
 
    /**
@@ -443,10 +387,20 @@ public class RigidBodyTransform
    @Override
    public void set(RigidBodyTransform other)
    {
-      rotationMatrix.set(other.rotationMatrix);
-      translationVector.set(other.translationVector);
-      hasRotation = other.hasRotation;
-      hasTranslation = other.hasTranslation;
+      set(other);
+   }
+
+   /**
+    * Sets this rigid-body transform to {@code other}.
+    *
+    * @param other the other rigid-body transform to copy the values from. Not modified.
+    */
+   public void set(RigidBodyTransformReadOnly other)
+   {
+      rotationMatrix.set(other.getRotation());
+      translationVector.set(other.getTranslation());
+      hasRotation = other.hasRotation();
+      hasTranslation = other.hasTranslation();
    }
 
    /**
@@ -454,7 +408,7 @@ public class RigidBodyTransform
     *
     * @param other the other rigid-body transform to copy the values from. Not modified.
     */
-   public void setAndInvert(RigidBodyTransform other)
+   public void setAndInvert(RigidBodyTransformReadOnly other)
    {
       set(other);
       invert();
@@ -988,6 +942,7 @@ public class RigidBodyTransform
     * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
     * @deprecated Use {@link YawPitchRoll} with {@link #setRotation(Orientation3DReadOnly)}.
     */
+   @Deprecated
    public void setRotationYawPitchRoll(double[] yawPitchRoll)
    {
       setRotationYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
@@ -1201,8 +1156,10 @@ public class RigidBodyTransform
     * </pre>
     *
     * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #setRotationAndZeroTranslation(Orientation3DReadOnly)}.
+    * @deprecated Use {@link YawPitchRoll} with
+    *             {@link #setRotationAndZeroTranslation(Orientation3DReadOnly)}.
     */
+   @Deprecated
    public void setRotationYawPitchRollAndZeroTranslation(double[] yawPitchRoll)
    {
       setRotationYawPitchRoll(yawPitchRoll);
@@ -1401,50 +1358,31 @@ public class RigidBodyTransform
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void multiply(RigidBodyTransform other)
+   public void multiply(RigidBodyTransformReadOnly other)
    {
-      if (other.hasTranslation)
+      if (other.hasTranslation())
       {
          if (hasRotation)
-            Matrix3DTools.addTransform(rotationMatrix, other.translationVector, translationVector);
+            Matrix3DTools.addTransform(rotationMatrix, other.getTranslation(), translationVector);
          else
-            translationVector.add(other.translationVector);
+            translationVector.add(other.getTranslation());
 
          hasTranslation = !hasTranslation || !isTupleZero(translationVector);
       }
 
-      if (other.hasRotation)
+      if (other.hasRotation())
       {
          if (hasRotation)
          {
-            rotationMatrix.multiply(other.rotationMatrix);
+            rotationMatrix.append(other.getRotation());
             hasRotation = !isRotationZero(rotationMatrix);
          }
          else
          {
-            rotationMatrix.set(other.rotationMatrix);
+            rotationMatrix.set(other.getRotation());
             hasRotation = true;
          }
       }
-   }
-
-   /**
-    * Performs the multiplication of this transform with {@code quaternionBasedTransform}.
-    * <p>
-    * this = this * H(quaternionBasedTransform) <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void multiply(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      Matrix3DTools.addTransform(rotationMatrix, quaternionBasedTransform.getTranslationVector(), translationVector);
-      rotationMatrix.append(quaternionBasedTransform.getQuaternion());
-      hasRotation = !isRotationZero(rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -1477,27 +1415,27 @@ public class RigidBodyTransform
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void multiplyInvertThis(RigidBodyTransform other)
+   public void multiplyInvertThis(RigidBodyTransformReadOnly other)
    {
-      translationVector.sub(other.translationVector, translationVector);
+      translationVector.sub(other.getTranslation(), translationVector);
 
       if (hasRotation)
       {
          rotationMatrix.invert();
          rotationMatrix.transform(translationVector);
 
-         if (other.hasRotation)
+         if (other.hasRotation())
          {
-            rotationMatrix.multiply(other.rotationMatrix);
+            rotationMatrix.append(other.getRotation());
             hasRotation = !isRotationZero(rotationMatrix);
          }
       }
-      else if (other.hasRotation)
+      else if (other.hasRotation())
       {
-         rotationMatrix.set(other.rotationMatrix);
+         rotationMatrix.set(other.getRotation());
          hasRotation = true;
       }
-      hasTranslation = (hasTranslation ^ other.hasTranslation) || !isTupleZero(translationVector);
+      hasTranslation = hasTranslation ^ other.hasTranslation() || !isTupleZero(translationVector);
    }
 
    /**
@@ -1508,71 +1446,30 @@ public class RigidBodyTransform
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void multiplyInvertOther(RigidBodyTransform other)
+   public void multiplyInvertOther(RigidBodyTransformReadOnly other)
    {
       if (hasRotation)
       {
-         if (other.hasRotation)
+         if (other.hasRotation())
          {
-            rotationMatrix.multiplyTransposeOther(other.rotationMatrix);
+            rotationMatrix.appendInvertOther(other.getRotation());
             hasRotation = !isRotationZero(rotationMatrix);
          }
       }
-      else if (other.hasRotation)
+      else if (other.hasRotation())
       {
-         rotationMatrix.setAndTranspose(other.rotationMatrix);
+         rotationMatrix.setAndInvert(other.getRotation());
          hasRotation = true;
       }
 
-      if (other.hasTranslation)
+      if (other.hasTranslation())
       {
          if (hasRotation)
-            Matrix3DTools.subTransform(rotationMatrix, other.getTranslationVector(), translationVector);
+            Matrix3DTools.subTransform(rotationMatrix, other.getTranslation(), translationVector);
          else
-            translationVector.sub(other.translationVector);
+            translationVector.sub(other.getTranslation());
          hasTranslation = !hasTranslation || !isTupleZero(translationVector);
       }
-   }
-
-   /**
-    * Performs the multiplication of the inverse of this transform with
-    * {@code quaternionBasedTransform}.
-    * <p>
-    * this = this<sup>-1</sup> * H(quaternionBasedTransform) <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void multiplyInvertThis(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      translationVector.sub(quaternionBasedTransform.getTranslationVector(), translationVector);
-      rotationMatrix.inverseTransform(translationVector, translationVector);
-      rotationMatrix.appendInvertThis(quaternionBasedTransform.getQuaternion());
-      hasRotation = !isRotationZero(rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of this transform with the inverse of
-    * {@code quaternionBasedTransform}.
-    * <p>
-    * this = this * H(quaternionBasedTransform)<sup>-1</sup> <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void multiplyInvertOther(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      rotationMatrix.appendInvertOther(quaternionBasedTransform.getQuaternion());
-      Matrix3DTools.subTransform(rotationMatrix, quaternionBasedTransform.getTranslationVector(), translationVector);
-      hasRotation = !isRotationZero(rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -1687,7 +1584,7 @@ public class RigidBodyTransform
    public void appendYawRotation(double yaw)
    {
       rotationMatrix.appendYawRotation(yaw);
-      hasRotation = (hasRotation ^ !isZero(yaw)) || !isRotationZero(rotationMatrix);
+      hasRotation = hasRotation ^ !isZero(yaw) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1707,7 +1604,7 @@ public class RigidBodyTransform
    public void appendPitchRotation(double pitch)
    {
       rotationMatrix.appendPitchRotation(pitch);
-      hasRotation = (hasRotation ^ !isZero(pitch)) || !isRotationZero(rotationMatrix);
+      hasRotation = hasRotation ^ !isZero(pitch) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1727,7 +1624,7 @@ public class RigidBodyTransform
    public void appendRollRotation(double roll)
    {
       rotationMatrix.appendRollRotation(roll);
-      hasRotation = (hasRotation ^ !isZero(roll)) || !isRotationZero(rotationMatrix);
+      hasRotation = hasRotation ^ !isZero(roll) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1738,57 +1635,37 @@ public class RigidBodyTransform
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void preMultiply(RigidBodyTransform other)
+   public void preMultiply(RigidBodyTransformReadOnly other)
    {
       if (hasTranslation)
       {
-         if (other.hasRotation)
-            other.rotationMatrix.transform(translationVector);
-         if (other.hasTranslation)
+         if (other.hasRotation())
+            other.getRotation().transform(translationVector);
+         if (other.hasTranslation())
          {
-            translationVector.add(other.translationVector);
+            translationVector.add(other.getTranslation());
             hasTranslation = !isTupleZero(translationVector);
          }
       }
-      else if (other.hasTranslation)
+      else if (other.hasTranslation())
       {
-         translationVector.set(other.translationVector);
+         translationVector.set(other.getTranslation());
          hasTranslation = true;
       }
 
-      if (other.hasRotation)
+      if (other.hasRotation())
       {
          if (hasRotation)
          {
-            rotationMatrix.preMultiply(other.rotationMatrix);
+            rotationMatrix.prepend(other.getRotation());
             hasRotation = !isRotationZero(rotationMatrix);
          }
          else
          {
-            rotationMatrix.set(other.rotationMatrix);
+            rotationMatrix.set(other.getRotation());
             hasRotation = true;
          }
       }
-   }
-
-   /**
-    * Performs the multiplication of {@code quaternionBasedTransform} with this transform.
-    * <p>
-    * this = H(quaternionBasedTransform) * this <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void preMultiply(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      quaternionBasedTransform.getQuaternion().transform(translationVector);
-      translationVector.add(quaternionBasedTransform.getTranslationVector());
-      rotationMatrix.prepend(quaternionBasedTransform.getQuaternion());
-      hasRotation = !isRotationZero(rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -1822,27 +1699,27 @@ public class RigidBodyTransform
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void preMultiplyInvertThis(RigidBodyTransform other)
+   public void preMultiplyInvertThis(RigidBodyTransformReadOnly other)
    {
       if (hasRotation)
       {
          rotationMatrix.invert();
-         if (other.hasRotation)
+         if (other.hasRotation())
          {
-            rotationMatrix.preMultiply(other.rotationMatrix);
+            rotationMatrix.prepend(other.getRotation());
             hasRotation = !isRotationZero(rotationMatrix);
          }
       }
-      else if (other.hasRotation)
+      else if (other.hasRotation())
       {
-         rotationMatrix.set(other.rotationMatrix);
+         rotationMatrix.set(other.getRotation());
          hasRotation = true;
       }
 
       if (hasRotation && hasTranslation)
          rotationMatrix.transform(translationVector);
-      translationVector.sub(other.translationVector, translationVector);
-      hasTranslation = (hasTranslation ^ other.hasTranslation) || !isTupleZero(translationVector);
+      translationVector.sub(other.getTranslation(), translationVector);
+      hasTranslation = hasTranslation ^ other.hasTranslation() || !isTupleZero(translationVector);
    }
 
    /**
@@ -1853,75 +1730,33 @@ public class RigidBodyTransform
     *
     * @param other the other transform to multiply this with. Not modified.
     */
-   public void preMultiplyInvertOther(RigidBodyTransform other)
+   public void preMultiplyInvertOther(RigidBodyTransformReadOnly other)
    {
-      if (other.hasTranslation)
+      if (other.hasTranslation())
       {
-         translationVector.sub(other.translationVector);
+         translationVector.sub(other.getTranslation());
          hasTranslation = !hasTranslation || !isTupleZero(translationVector);
       }
 
       if (hasTranslation)
       {
-         if (other.hasRotation)
-            other.rotationMatrix.inverseTransform(translationVector);
+         if (other.hasRotation())
+            other.getRotation().inverseTransform(translationVector);
       }
 
-      if (other.hasRotation)
+      if (other.hasRotation())
       {
          if (hasRotation)
          {
-            rotationMatrix.preMultiplyTransposeOther(other.rotationMatrix);
+            rotationMatrix.prependInvertOther(other.getRotation());
             hasRotation = !isRotationZero(rotationMatrix);
          }
          else
          {
-            rotationMatrix.setAndTranspose(other.rotationMatrix);
+            rotationMatrix.setAndInvert(other.getRotation());
             hasRotation = true;
          }
       }
-   }
-
-   /**
-    * Performs the multiplication of {@code quaternionBasedTransform} with the inverse of this
-    * transform.
-    * <p>
-    * this = H(quaternionBasedTransform) * this<sup>-1</sup> <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void preMultiplyInvertThis(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      rotationMatrix.prependInvertThis(quaternionBasedTransform.getQuaternion());
-      rotationMatrix.transform(translationVector);
-      translationVector.sub(quaternionBasedTransform.getTranslationVector(), translationVector);
-      hasRotation = !isRotationZero(rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of {@code quaternionBasedTransform} with this
-    * transform.
-    * <p>
-    * this = H(quaternionBasedTransform)<sup>-1</sup> * this <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void preMultiplyInvertOther(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      translationVector.sub(quaternionBasedTransform.getTranslationVector());
-      quaternionBasedTransform.getQuaternion().inverseTransform(translationVector);
-      rotationMatrix.prependInvertOther(quaternionBasedTransform.getQuaternion());
-      hasRotation = !isRotationZero(rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -2034,7 +1869,7 @@ public class RigidBodyTransform
    {
       RotationMatrixTools.applyYawRotation(yaw, translationVector, translationVector);
       rotationMatrix.prependYawRotation(yaw);
-      hasRotation = (hasRotation ^ !isZero(yaw)) || !isRotationZero(rotationMatrix);
+      hasRotation = hasRotation ^ !isZero(yaw) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -2057,7 +1892,7 @@ public class RigidBodyTransform
    {
       RotationMatrixTools.applyPitchRotation(pitch, translationVector, translationVector);
       rotationMatrix.prependPitchRotation(pitch);
-      hasRotation = (hasRotation ^ !isZero(pitch)) || !isRotationZero(rotationMatrix);
+      hasRotation = hasRotation ^ !isZero(pitch) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -2080,13 +1915,13 @@ public class RigidBodyTransform
    {
       RotationMatrixTools.applyRollRotation(roll, translationVector, translationVector);
       rotationMatrix.prependRollRotation(roll);
-      hasRotation = (hasRotation ^ !isZero(roll)) || !isRotationZero(rotationMatrix);
+      hasRotation = hasRotation ^ !isZero(roll) || !isRotationZero(rotationMatrix);
    }
 
    /**
     * Performs a linear interpolation from {@code this} to {@code other} given the percentage
     * {@code alpha}.
-    * 
+    *
     * <pre>
     * this.translationVector = (1.0 - alpha) * this.translationVector + alpha * other.translationVector
     * this.rotationMatrix = (1.0 - alpha) * this.rotationMatrix + alpha * other.rotationMatrix
@@ -2105,7 +1940,7 @@ public class RigidBodyTransform
    /**
     * Performs a linear interpolation from {@code transform1} to {@code transform2} given the
     * percentage {@code alpha}.
-    * 
+    *
     * <pre>
     * this.translationVector = (1.0 - alpha) * transform1.translationVector + alpha *
     * transform2.translationVector
@@ -2129,213 +1964,6 @@ public class RigidBodyTransform
          translationVector.interpolate(transform1.translationVector, transform2.translationVector, alpha);
       else
          translationVector.setToZero();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Point3DReadOnly pointOriginal, Point3DBasics pointTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.transform(pointOriginal, pointTransformed);
-      else
-         pointTransformed.set(pointOriginal);
-
-      if (hasTranslation)
-         pointTransformed.add(translationVector);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Vector3DReadOnly vectorOriginal, Vector3DBasics vectorTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.transform(vectorOriginal, vectorTransformed);
-      else
-         vectorTransformed.set(vectorOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.transform(orientationOriginal, orientationTransformed);
-      else
-         orientationTransformed.set(orientationOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.transform(vectorOriginal, vectorTransformed);
-      else
-         vectorTransformed.set(vectorOriginal);
-
-      if (hasTranslation)
-      {
-         vectorTransformed.addX(vectorTransformed.getS() * translationVector.getX());
-         vectorTransformed.addY(vectorTransformed.getS() * translationVector.getY());
-         vectorTransformed.addZ(vectorTransformed.getS() * translationVector.getZ());
-      }
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Point2DReadOnly point2DOriginal, Point2DBasics point2DTransformed, boolean checkIfTransformInXYPlane)
-   {
-      if (hasRotation)
-         rotationMatrix.transform(point2DOriginal, point2DTransformed, checkIfTransformInXYPlane);
-      else
-         point2DTransformed.set(point2DOriginal);
-      if (hasTranslation)
-         point2DTransformed.add(translationVector.getX(), translationVector.getY());
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Vector2DReadOnly vector2DOriginal, Vector2DBasics vector2DTransformed, boolean checkIfTransformInXYPlane)
-   {
-      if (hasRotation)
-         rotationMatrix.transform(vector2DOriginal, vector2DTransformed, checkIfTransformInXYPlane);
-      else
-         vector2DTransformed.set(vector2DOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.transform(matrixOriginal, matrixTransformed);
-      else
-         matrixTransformed.set(matrixOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(RigidBodyTransform original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(AffineTransform original, AffineTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Point3DReadOnly pointOriginal, Point3DBasics pointTransformed)
-   {
-      pointTransformed.set(pointOriginal);
-      if (hasTranslation)
-         pointTransformed.sub(translationVector);
-      if (hasRotation)
-         rotationMatrix.inverseTransform(pointTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Vector3DReadOnly vectorOriginal, Vector3DBasics vectorTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.inverseTransform(vectorOriginal, vectorTransformed);
-      else
-         vectorTransformed.set(vectorOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.inverseTransform(orientationOriginal, orientationTransformed);
-      else
-         orientationTransformed.set(orientationOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
-   {
-      vectorTransformed.set(vectorOriginal);
-      if (hasTranslation)
-      {
-         vectorTransformed.subX(vectorTransformed.getS() * translationVector.getX());
-         vectorTransformed.subY(vectorTransformed.getS() * translationVector.getY());
-         vectorTransformed.subZ(vectorTransformed.getS() * translationVector.getZ());
-      }
-      if (hasRotation)
-         rotationMatrix.inverseTransform(vectorTransformed, vectorTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Point2DReadOnly point2DOriginal, Point2DBasics point2DTransformed, boolean checkIfTransformInXYPlane)
-   {
-      point2DTransformed.set(point2DOriginal);
-      if (hasTranslation)
-         point2DTransformed.sub(translationVector.getX(), translationVector.getY());
-      if (hasRotation)
-         rotationMatrix.inverseTransform(point2DTransformed, checkIfTransformInXYPlane);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Vector2DReadOnly vector2DOriginal, Vector2DBasics vector2DTransformed, boolean checkIfTransformInXYPlane)
-   {
-      if (hasRotation)
-         rotationMatrix.inverseTransform(vector2DOriginal, vector2DTransformed, checkIfTransformInXYPlane);
-      else
-         vector2DTransformed.set(vector2DOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
-   {
-      if (hasRotation)
-         rotationMatrix.inverseTransform(matrixOriginal, matrixTransformed);
-      else
-         matrixTransformed.set(matrixOriginal);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(RigidBodyTransform original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(AffineTransform original, AffineTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
    }
 
    /**
@@ -2528,8 +2156,16 @@ public class RigidBodyTransform
     * Gets the read-only reference to the rotation part of this transform.
     *
     * @return the rotation part of this transform.
+    * @deprecated Use {@link #getRotation()} instead.
     */
+   @Deprecated
    public RotationMatrixReadOnly getRotationMatrix()
+   {
+      return rotationMatrix;
+   }
+
+   @Override
+   public RotationMatrixReadOnly getRotation()
    {
       return rotationMatrix;
    }
@@ -2541,28 +2177,6 @@ public class RigidBodyTransform
     *           Modified.
     */
    public void getRotation(CommonMatrix3DBasics rotationMatrixToPack)
-   {
-      rotationMatrixToPack.set(rotationMatrix);
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *           Modified.
-    */
-   public void getRotation(RotationMatrix rotationMatrixToPack)
-   {
-      rotationMatrixToPack.set(rotationMatrix);
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the rotation-scale matrix that is set to this transform's rotation.
-    *           The scale part is reset. Modified.
-    */
-   public void getRotation(RotationScaleMatrix rotationMatrixToPack)
    {
       rotationMatrixToPack.set(rotationMatrix);
    }
@@ -2590,124 +2204,21 @@ public class RigidBodyTransform
    }
 
    /**
-    * Packs the rotation part of this rigid-body transform as a quaternion.
-    *
-    * @param orientationToPack the orientation that is set to the rotation part of this transform.
-    *           Modified.
-    */
-   public void getRotation(Orientation3DBasics orientationToPack)
-   {
-      if (hasRotation)
-         orientationToPack.set(rotationMatrix);
-      else
-         orientationToPack.setToZero();
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform as a rotation vector.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVectorToPack the rotation vector that is set to the rotation part of this
-    *           transform. Modified.
-    */
-   public void getRotation(Vector3DBasics rotationVectorToPack)
-   {
-      if (hasRotation)
-         rotationMatrix.getRotationVector(rotationVectorToPack);
-      else
-         rotationVectorToPack.setToZero();
-   }
-
-   /**
-    * Computes and packs the orientation described by the rotation part of this transform as the
-    * yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #getRotation(Orientation3DBasics)}.
-    */
-   public void getRotationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      if (hasRotation)
-         rotationMatrix.getYawPitchRoll(yawPitchRollToPack);
-      else
-         Arrays.fill(yawPitchRollToPack, 0, 3, 0.0);
-   }
-
-   /**
-    * Computes and packs the orientation described by the rotation part of this transform as the Euler
-    * angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
-    */
-   public void getRotationEuler(Vector3DBasics eulerAnglesToPack)
-   {
-      if (hasRotation)
-         rotationMatrix.getEuler(eulerAnglesToPack);
-      else
-         eulerAnglesToPack.setToZero();
-   }
-
-   /**
     * Gets the read-only reference of the translation part of this rigid-body transform.
     *
     * @return the translation part of this transform.
+    * @deprecated Use {@link #getTranslation()} instead.
     */
+   @Deprecated
    public Vector3DReadOnly getTranslationVector()
    {
       return translationVector;
    }
 
-   /**
-    * Packs the translation part of this rigid-body transform.
-    *
-    * @param translationToPack the tuple in which the translation part of this transform is stored.
-    *           Modified.
-    */
-   public void getTranslation(Tuple3DBasics translationToPack)
+   @Override
+   public Tuple3DReadOnly getTranslation()
    {
-      translationToPack.set(translationVector);
-   }
-
-   /**
-    * Gets the x-component of the translation part of this transform.
-    *
-    * @return the x-component of the translation part.
-    */
-   public double getTranslationX()
-   {
-      return translationVector.getX();
-   }
-
-   /**
-    * Gets the y-component of the translation part of this transform.
-    *
-    * @return the y-component of the translation part.
-    */
-   public double getTranslationY()
-   {
-      return translationVector.getY();
-   }
-
-   /**
-    * Gets the z-component of the translation part of this transform.
-    *
-    * @return the z-component of the translation part.
-    */
-   public double getTranslationZ()
-   {
-      return translationVector.getZ();
+      return translationVector;
    }
 
    /**
