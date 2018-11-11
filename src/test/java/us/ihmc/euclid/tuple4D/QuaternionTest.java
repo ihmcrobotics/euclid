@@ -3,7 +3,6 @@ package us.ihmc.euclid.tuple4D;
 import static org.junit.Assert.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -170,9 +169,7 @@ public class QuaternionTest extends QuaternionBasicsTest<Quaternion>
    {
       Quaternion quaternion = new Quaternion();
       quaternion.setYawPitchRoll(0.5 * Math.PI, 0.0, 1e-9 - 0.5 * Math.PI);
-      System.out.println(quaternion);
       double[] yawPitchRoll = new double[3];
       quaternion.getYawPitchRoll(yawPitchRoll);
-      System.out.println(Arrays.toString(yawPitchRoll));
    }
 }
