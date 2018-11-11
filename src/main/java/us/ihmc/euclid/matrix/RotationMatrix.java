@@ -61,6 +61,9 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    /** The 3rd row 3rd column coefficient of this matrix. */
    private double m22;
 
+   private boolean dirty = false;
+   private boolean isIdentity = true;
+
    /**
     * Create a new rotation matrix initialized to identity.
     */
@@ -182,6 +185,8 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    public void setToNaN()
    {
       setUnsafe(Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN);
+      isIdentity = false;
+      dirty = false;
    }
 
    /** {@inheritDoc} */
@@ -200,7 +205,18 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void normalize()
    {
-      Matrix3DTools.normalize(this);
+      if (isIdentity)
+         setIdentity();
+      else
+         Matrix3DTools.normalize(this);
+   }
+
+   @Override
+   public boolean isIdentity()
+   {
+      if (dirty)
+         isIdentity = RotationMatrixReadOnly.super.isIdentity();
+      return isIdentity;
    }
 
    /**
@@ -255,6 +271,13 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       this.m20 = m20;
       this.m21 = m21;
       this.m22 = m22;
+
+      markAsDirty();
+   }
+
+   public void markAsDirty()
+   {
+      dirty = true;
    }
 
    /**
@@ -266,7 +289,8 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
       setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      checkIfRotationMatrix();
+      if (!isIdentity())
+         checkIfRotationMatrix();
    }
 
    /**
@@ -285,19 +309,11 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void setRows(Tuple3DReadOnly firstRow, Tuple3DReadOnly secondRow, Tuple3DReadOnly thirdRow)
    {
-      m00 = firstRow.getX();
-      m01 = firstRow.getY();
-      m02 = firstRow.getZ();
+      set(firstRow.getX(), firstRow.getY(), firstRow.getZ(),
 
-      m10 = secondRow.getX();
-      m11 = secondRow.getY();
-      m12 = secondRow.getZ();
+          secondRow.getX(), secondRow.getY(), secondRow.getZ(),
 
-      m20 = thirdRow.getX();
-      m21 = thirdRow.getY();
-      m22 = thirdRow.getZ();
-
-      checkIfRotationMatrix();
+          thirdRow.getX(), thirdRow.getY(), thirdRow.getZ());
    }
 
    /**
@@ -316,19 +332,11 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void setColumns(Tuple3DReadOnly firstColumn, Tuple3DReadOnly secondColumn, Tuple3DReadOnly thirdColumn)
    {
-      m00 = firstColumn.getX();
-      m10 = firstColumn.getY();
-      m20 = firstColumn.getZ();
+      set(firstColumn.getX(), secondColumn.getX(), thirdColumn.getX(),
 
-      m01 = secondColumn.getX();
-      m11 = secondColumn.getY();
-      m21 = secondColumn.getZ();
+          firstColumn.getY(), secondColumn.getY(), thirdColumn.getY(),
 
-      m02 = thirdColumn.getX();
-      m12 = thirdColumn.getY();
-      m22 = thirdColumn.getZ();
-
-      checkIfRotationMatrix();
+          firstColumn.getZ(), secondColumn.getZ(), thirdColumn.getZ());
    }
 
    /**
@@ -378,6 +386,8 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       m20 = other.getM20();
       m21 = other.getM21();
       m22 = other.getM22();
+
+      markAsDirty();
    }
 
    @Override
@@ -403,6 +413,8 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       m20 = matrix.getM20();
       m21 = matrix.getM21();
       m22 = matrix.getM22();
+
+      markAsDirty();
       normalize();
    }
 
@@ -579,13 +591,19 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void multiply(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiply(this, other, this);
+      if (isIdentity())
+         set(other);
+      else
+         RotationMatrixTools.multiply(this, other, this);
    }
 
    @Override
    public void append(Orientation3DReadOnly orientation)
    {
-      RotationMatrixTools.multiply(this, false, orientation, false, this);
+      if (isIdentity())
+         set(orientation);
+      else
+         RotationMatrixTools.multiply(this, false, orientation, false, this);
    }
 
    /**
@@ -598,7 +616,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void multiplyTransposeThis(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiplyTransposeLeft(this, other, this);
+      if (isIdentity())
+         set(other);
+      else
+         RotationMatrixTools.multiplyTransposeLeft(this, other, this);
    }
 
    /**
@@ -611,13 +632,19 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void multiplyTransposeOther(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiplyTransposeRight(this, other, this);
+      if (isIdentity())
+         setAndTranspose(other);
+      else
+         RotationMatrixTools.multiplyTransposeRight(this, other, this);
    }
 
    @Override
    public void appendInvertOther(Orientation3DReadOnly orientation)
    {
-      RotationMatrixTools.multiply(this, false, orientation, true, this);
+      if (isIdentity())
+         setAndInvert(orientation);
+      else
+         RotationMatrixTools.multiply(this, false, orientation, true, this);
    }
 
    /**
@@ -630,7 +657,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void multiplyTransposeBoth(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiplyTransposeBoth(this, other, this);
+      if (isIdentity())
+         setAndTranspose(other);
+      else
+         RotationMatrixTools.multiplyTransposeBoth(this, other, this);
    }
 
    /**
@@ -647,7 +677,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void appendYawRotation(double yaw)
    {
-      RotationMatrixTools.appendYawRotation(this, yaw, this);
+      if (isIdentity())
+         setToYawMatrix(yaw);
+      else
+         RotationMatrixTools.appendYawRotation(this, yaw, this);
    }
 
    /**
@@ -664,16 +697,19 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void appendPitchRotation(double pitch)
    {
-      RotationMatrixTools.appendPitchRotation(this, pitch, this);
+      if (isIdentity())
+         setToPitchMatrix(pitch);
+      else
+         RotationMatrixTools.appendPitchRotation(this, pitch, this);
    }
 
    /**
     * Append a rotation about the x-axis to this rotation matrix.
     *
     * <pre>
-    *               /  cos(pitch) 0 sin(pitch) \
-    * this = this * |      0      1     0      |
-    *               \ -sin(pitch) 0 cos(pitch) /
+    *               / 1     0          0     \
+    * this = this * | 0 cos(roll) -sin(roll) |
+    *               \ 0 sin(roll)  cos(roll) /
     * </pre>
     *
     * @param roll the angle to rotate about the x-axis.
@@ -681,7 +717,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void appendRollRotation(double roll)
    {
-      RotationMatrixTools.appendRollRotation(this, roll, this);
+      if (isIdentity())
+         setToRollMatrix(roll);
+      else
+         RotationMatrixTools.appendRollRotation(this, roll, this);
    }
 
    /**
@@ -694,13 +733,19 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void preMultiply(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiply(other, this, this);
+      if (isIdentity())
+         set(other);
+      else
+         RotationMatrixTools.multiply(other, this, this);
    }
 
    @Override
    public void prepend(Orientation3DReadOnly orientation)
    {
-      RotationMatrixTools.multiply(orientation, false, this, false, this);
+      if (isIdentity())
+         set(orientation);
+      else
+         RotationMatrixTools.multiply(orientation, false, this, false, this);
    }
 
    /**
@@ -713,7 +758,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void preMultiplyTransposeThis(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiplyTransposeRight(other, this, this);
+      if (isIdentity())
+         setAndTranspose(other);
+      else
+         RotationMatrixTools.multiplyTransposeRight(other, this, this);
    }
 
    /**
@@ -726,13 +774,19 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void preMultiplyTransposeOther(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiplyTransposeLeft(other, this, this);
+      if (isIdentity())
+         set(other);
+      else
+         RotationMatrixTools.multiplyTransposeLeft(other, this, this);
    }
 
    @Override
    public void prependInvertOther(Orientation3DReadOnly orientation)
    {
-      RotationMatrixTools.multiply(orientation, true, this, false, this);
+      if (isIdentity())
+         set(orientation);
+      else
+         RotationMatrixTools.multiply(orientation, true, this, false, this);
    }
 
    /**
@@ -745,7 +799,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     */
    public void preMultiplyTransposeBoth(RotationMatrixReadOnly other)
    {
-      RotationMatrixTools.multiplyTransposeBoth(other, this, this);
+      if (isIdentity())
+         setAndTranspose(other);
+      else
+         RotationMatrixTools.multiplyTransposeBoth(other, this, this);
    }
 
    /**
@@ -762,7 +819,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void prependYawRotation(double yaw)
    {
-      RotationMatrixTools.prependYawRotation(yaw, this, this);
+      if (isIdentity())
+         setToYawMatrix(yaw);
+      else
+         RotationMatrixTools.prependYawRotation(yaw, this, this);
    }
 
    /**
@@ -779,16 +839,19 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void prependPitchRotation(double pitch)
    {
-      RotationMatrixTools.prependPitchRotation(pitch, this, this);
+      if (isIdentity())
+         setToPitchMatrix(pitch);
+      else
+         RotationMatrixTools.prependPitchRotation(pitch, this, this);
    }
 
    /**
     * Append a rotation about the x-axis to this rotation matrix.
     *
     * <pre>
-    *        /  cos(pitch) 0 sin(pitch) \
-    * this = |      0      1     0      | * this
-    *        \ -sin(pitch) 0 cos(pitch) /
+    *        / 1     0          0     \
+    * this = | 0 cos(roll) -sin(roll) | * this
+    *        \ 0 sin(roll)  cos(roll) /
     * </pre>
     *
     * @param roll the angle to rotate about the x-axis.
@@ -796,7 +859,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void prependRollRotation(double roll)
    {
-      RotationMatrixTools.prependRollRotation(roll, this, this);
+      if (isIdentity())
+         setToRollMatrix(roll);
+      else
+         RotationMatrixTools.prependRollRotation(roll, this, this);
    }
 
    /**
