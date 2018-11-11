@@ -323,7 +323,7 @@ public class CyclingConversionTest
             YawPitchRollConversion.convertRotationVectorToYawPitchRoll((Vector3DReadOnly) rotationHolder, yawPitchRoll);
             break;
          case YAW_PITCH_ROLL:
-            System.arraycopy(rotationHolder, 0, yawPitchRoll, 0, 3);
+            yawPitchRoll.set((YawPitchRollReadOnly) rotationHolder);
             break;
          default:
             throw exception(this);
