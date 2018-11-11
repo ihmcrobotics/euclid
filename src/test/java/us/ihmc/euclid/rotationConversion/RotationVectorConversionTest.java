@@ -2,6 +2,7 @@ package us.ihmc.euclid.rotationConversion;
 
 import static java.lang.Math.*;
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -18,7 +19,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 public class RotationVectorConversionTest
 {
    private static final double EPSILON = 1.0e-12;
-   public static final int NUMBER_OF_ITERATIONS = 10000;
 
    @Test
    public void testAxisAngleToRotationVector() throws Exception
@@ -26,7 +26,7 @@ public class RotationVectorConversionTest
       Random random = new Random(4591L);
       double minMaxAngleRange = 2.0 * Math.PI;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random, minMaxAngleRange);
          Vector3D rotationVector = new Vector3D();

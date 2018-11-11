@@ -1,6 +1,7 @@
 package us.ihmc.euclid.yawPitchRoll;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 

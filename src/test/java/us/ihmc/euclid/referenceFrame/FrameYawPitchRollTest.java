@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.lang.reflect.Method;
@@ -46,7 +47,6 @@ public class FrameYawPitchRollTest
 {
    public static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    public static final double EPSILON = 1e-10;
-   private static final int NUMBER_OF_ITERATIONS = 1000;
 
    @Test
    public void testConstructors() throws Exception
@@ -61,7 +61,7 @@ public class FrameYawPitchRollTest
          assertTrue(frameYawPitchRoll.getRoll() == 0.0);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(ReferenceFrame referenceFrame)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameYawPitchRoll frameYawPitchRoll = new FrameYawPitchRoll(randomFrame);
@@ -71,7 +71,7 @@ public class FrameYawPitchRollTest
          assertTrue(frameYawPitchRoll.getRoll() == 0.0);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(ReferenceFrame referenceFrame, double[] yawPitchRollArray)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
@@ -82,7 +82,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(randomYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(ReferenceFrame referenceFrame, YawPitchRollReadOnly yawPitchRollReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          YawPitchRollReadOnly randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
@@ -91,7 +91,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(randomYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrix)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          RotationMatrixReadOnly randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -100,7 +100,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(ReferenceFrame referenceFrame, AxisAngleReadOnly axisAngle)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          AxisAngleReadOnly randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
@@ -109,7 +109,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector3DReadOnly randomRotationVector = EuclidCoreRandomTools.nextVector3D(random);
@@ -118,7 +118,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(ReferenceFrame referenceFrame, double yaw, double pitch, double roll)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -129,7 +129,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(expectedYawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameYawPitchRoll(FrameYawPitchRollReadOnly other)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameYawPitchRoll randomFrameYawPitchRoll = EuclidFrameRandomTools.nextFrameYawPitchRoll(random, randomFrame);
@@ -144,7 +144,7 @@ public class FrameYawPitchRollTest
    {
       Random random = new Random(3225);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setMatchingFrame(FrameYawPitchRollReadOnly other)
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -166,7 +166,7 @@ public class FrameYawPitchRollTest
 
       ReferenceFrame initialFrame = ReferenceFrame.getWorldFrame();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation)
          Orientation3DReadOnly orientation = EuclidCoreRandomTools.nextAxisAngle(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -179,7 +179,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setRotationVectorIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
          Vector3DReadOnly rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -192,7 +192,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setRotationVectorIncludingFrame(FrameVector3DReadOnly rotationVector)
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector3DReadOnly rotationVector = new FrameVector3D(newFrame, EuclidCoreRandomTools.nextRotationVector(random));
@@ -205,7 +205,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double yaw, double pitch, double roll)
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
          double pitch = EuclidCoreRandomTools.nextDouble(random, YawPitchRollConversion.MAX_SAFE_PITCH_ANGLE);
@@ -220,7 +220,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setEulerIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly eulerAngles)
          Vector3D eulerAngles = EuclidCoreRandomTools.nextRotationVector(random);
          eulerAngles.setY(EuclidCoreTools.clamp(eulerAngles.getY(), YawPitchRollConversion.MAX_SAFE_PITCH_ANGLE));
@@ -234,7 +234,7 @@ public class FrameYawPitchRollTest
          EuclidCoreTestTools.assertYawPitchRollEquals(yawPitchRoll, frameYawPitchRoll, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setEulerIncludingFrame(ReferenceFrame referenceFrame, double rotX, double rotY, double rotZ)
          double rotX = EuclidCoreRandomTools.nextDouble(random, Math.PI);
          double rotY = EuclidCoreRandomTools.nextDouble(random, YawPitchRollConversion.MAX_SAFE_PITCH_ANGLE);
@@ -296,7 +296,7 @@ public class FrameYawPitchRollTest
    {
       Random random = new Random(43563);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -330,7 +330,7 @@ public class FrameYawPitchRollTest
    {
       Random random = new Random(3452);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -375,7 +375,7 @@ public class FrameYawPitchRollTest
    {
       Random random = new Random(6572);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -396,7 +396,7 @@ public class FrameYawPitchRollTest
    {
       Random random = new Random(32120);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          FrameYawPitchRoll frameYawPitchRoll1 = EuclidFrameRandomTools.nextFrameYawPitchRoll(random, worldFrame);
          FrameYawPitchRoll frameYawPitchRoll2 = new FrameYawPitchRoll(worldFrame);
@@ -424,7 +424,7 @@ public class FrameYawPitchRollTest
    {
       Random random = new Random(763);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
          FrameYawPitchRoll actual = new FrameYawPitchRoll(worldFrame, expected);

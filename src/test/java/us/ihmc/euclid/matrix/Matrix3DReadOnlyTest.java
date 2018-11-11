@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -22,7 +23,6 @@ import us.ihmc.euclid.tuple4D.Vector4D;
 public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
 {
    public static final double SMALL_EPS = 1.0e-12;
-   public static final int NUMBER_OF_ITERATIONS = 100;
 
    public abstract T createEmptyMatrix();
 
@@ -248,7 +248,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
 
       T matrix;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = createRandomMatrix(random);
          double actualDeterminant = matrix.determinant();
@@ -362,7 +362,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
    {
       Random random = new Random(43535L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Tuple3DBasics tupleToTransform)
          Vector3D original = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D actual = new Vector3D();
@@ -376,7 +376,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          Vector3D original = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D actual = new Vector3D();
@@ -389,7 +389,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // addTransform(Tuple3DBasics tupleToTransform)
          Vector3D original = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D actual = new Vector3D();
@@ -404,7 +404,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          Vector3D original = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D actual = EuclidCoreRandomTools.nextVector3D(random);
@@ -417,7 +417,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Tuple2DBasics tupleToTransform)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -438,7 +438,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
                                                      NotAnOrientation2DException.class);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -458,7 +458,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
                                                      NotAnOrientation2DException.class);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Tuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -485,7 +485,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -511,7 +511,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Matrix3D matrixToTransform)
          Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D actual = new Matrix3D();
@@ -525,7 +525,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Matrix3DReadOnly matrixOriginal, Matrix3D matrixTransformed)
          Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D actual = new Matrix3D();
@@ -538,7 +538,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, 10.0 * SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Vector4DBasics vectorToTransform)
          Vector4D original = EuclidCoreRandomTools.nextVector4D(random);
          Vector4D actual = new Vector4D();
@@ -552,7 +552,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // transform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
          Vector4D original = EuclidCoreRandomTools.nextVector4D(random);
          Vector4D actual = new Vector4D();
@@ -572,13 +572,16 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
       Random random = new Random(43535L);
       double epsilonMatrix = 1.0e-7;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Tuple3DBasics tupleToTransform)
          Vector3D original = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D actual = new Vector3D();
          Vector3D expected = new Vector3D();
 
          T matrix = createRandomMatrix(random);
+
+         while (Math.abs(matrix.determinant()) < 1.0e-3)
+            matrix = createRandomMatrix(random);
 
          Matrix3DTools.inverseTransform(matrix, original, expected);
          actual.set(original);
@@ -591,7 +594,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          Vector3D original = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D actual = new Vector3D();
@@ -609,7 +612,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Tuple2DBasics tupleToTransform)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -635,7 +638,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
                                                      NotAnOrientation2DException.class);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -660,7 +663,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
                                                      NotAnOrientation2DException.class);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Tuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -692,7 +695,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
          Vector2D actual = new Vector2D();
@@ -723,13 +726,16 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Matrix3D matrixToTransform)
          Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D actual = new Matrix3D();
          Matrix3D expected = new Matrix3D();
 
          T matrix = createRandomMatrix(random);
+
+         while (Math.abs(matrix.determinant()) < 1.0e-3)
+            matrix = createRandomMatrix(random);
 
          Matrix3DTools.inverseTransform(matrix, original, expected);
          actual.set(original);
@@ -742,13 +748,16 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, epsilonMatrix);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3D matrixTransformed)
          Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D actual = new Matrix3D();
          Matrix3D expected = new Matrix3D();
 
          T matrix = createRandomMatrix(random);
+
+         while (Math.abs(matrix.determinant()) < 1.0e-3)
+            matrix = createRandomMatrix(random);
 
          Matrix3DTools.inverseTransform(matrix, original, expected);
          matrix.inverseTransform(original, actual);
@@ -760,7 +769,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, epsilonMatrix);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Vector4DBasics vectorToTransform)
          Vector4D original = EuclidCoreRandomTools.nextVector4D(random);
          Vector4D actual = new Vector4D();
@@ -779,7 +788,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
          Vector4D original = EuclidCoreRandomTools.nextVector4D(random);
          Vector4D actual = new Vector4D();

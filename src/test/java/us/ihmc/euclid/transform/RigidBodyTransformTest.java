@@ -1,6 +1,7 @@
 package us.ihmc.euclid.transform;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -31,7 +32,6 @@ import us.ihmc.euclid.tuple4D.Vector4D;
 public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 {
    private static final double EPS = 1.0e-14;
-   public static final int NUMBER_OF_ITERATIONS = 100;
 
    @Test
    public void testConstructors() throws Exception
@@ -1187,7 +1187,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    {
       Random random = new Random(35454L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendTranslation(double x, double y, double z)
          RigidBodyTransform expected = new RigidBodyTransform();
          RigidBodyTransform actual = new RigidBodyTransform();
@@ -1232,7 +1232,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actual.hasTranslation());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendTranslation(Tuple3DReadOnly translation)
          RigidBodyTransform expected = new RigidBodyTransform();
          RigidBodyTransform actual = new RigidBodyTransform();
@@ -1281,7 +1281,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RigidBodyTransform expected = new RigidBodyTransform();
       RigidBodyTransform actual = new RigidBodyTransform();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendYawRotation(double yaw)
          RotationMatrix expectedRotation = new RotationMatrix();
 
@@ -1320,7 +1320,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actual.hasRotation());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendPitchRotation(double pitch)
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RotationMatrix expectedRotation = new RotationMatrix(original.getRotationMatrix());
@@ -1357,7 +1357,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actual.hasRotation());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendRollRotation(double roll)
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RotationMatrix expectedRotation = new RotationMatrix(original.getRotationMatrix());
@@ -1403,7 +1403,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RigidBodyTransform expected = new RigidBodyTransform();
       RigidBodyTransform actual = new RigidBodyTransform();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependTranslation(double x, double y, double z)
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform translationTransform = new RigidBodyTransform();
@@ -1444,7 +1444,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actual.hasTranslation());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependTranslation(Tuple3DReadOnly translation)
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform translationTransform = new RigidBodyTransform();
@@ -1492,7 +1492,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RigidBodyTransform expected = new RigidBodyTransform();
       RigidBodyTransform actual = new RigidBodyTransform();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependYawRotation(double yaw)
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform yawTransform = new RigidBodyTransform();
@@ -1531,7 +1531,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actual.hasRotation());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependPitchRotation(double pitch)
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pitchTransform = new RigidBodyTransform();
@@ -1569,7 +1569,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actual.hasRotation());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependRollRotation(double roll)
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform rollTransform = new RigidBodyTransform();
@@ -2212,7 +2212,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    {
       Random random = new Random(3453L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          DenseMatrix64F denseMatrix = new DenseMatrix64F(4, 4);
@@ -2224,7 +2224,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
                assertEquals(denseMatrix.get(row, column), transform.getElement(row, column), EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RotationMatrix expectedRotationPart = new RotationMatrix(transform.getRotationMatrix());
@@ -2233,7 +2233,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          EuclidCoreTestTools.assertTuple3DEquals(expectedTranslationPart, transform.getTranslationVector(), EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform expectedTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actualTransform = new RigidBodyTransform();
@@ -2249,7 +2249,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against invert
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform inverse = new RigidBodyTransform(transform);
@@ -2274,7 +2274,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Test against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform t1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform t2 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2282,7 +2282,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Try different combinations with/without translation/rotation
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
          RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
@@ -2387,7 +2387,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2422,7 +2422,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2458,7 +2458,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2485,7 +2485,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Try different combinations with/without translation/rotation
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform expected = new RigidBodyTransform();
          RigidBodyTransform actual = new RigidBodyTransform();
@@ -2594,7 +2594,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2622,7 +2622,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Try different combinations with/without translation/rotation
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform expected = new RigidBodyTransform();
          RigidBodyTransform actual = new RigidBodyTransform();
@@ -2744,7 +2744,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2778,7 +2778,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2813,7 +2813,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2848,7 +2848,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2884,7 +2884,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against invert
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform inverse = new RigidBodyTransform(transform);
@@ -2909,7 +2909,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Test against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform t1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform t2 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -2929,7 +2929,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Try different combinations with/without translation/rotation
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform expected = new RigidBodyTransform();
          RigidBodyTransform actual = new RigidBodyTransform();
@@ -3044,7 +3044,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -3079,7 +3079,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -3115,7 +3115,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -3142,7 +3142,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Try different combinations with/without translation/rotation
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform expected = new RigidBodyTransform();
          RigidBodyTransform actual = new RigidBodyTransform();
@@ -3256,7 +3256,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -3284,7 +3284,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       // Try different combinations with/without translation/rotation
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform expected = new RigidBodyTransform();
          RigidBodyTransform actual = new RigidBodyTransform();
@@ -3395,7 +3395,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -3430,7 +3430,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -3461,7 +3461,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -3506,7 +3506,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       actual.interpolate(t0, tf, 1.0);
       EuclidCoreTestTools.assertRigidBodyTransformEquals(tf, actual, EPS);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double alpha = EuclidCoreRandomTools.nextDouble(random, 10.0);
          Vector3D interpolatedVector = new Vector3D();
@@ -3531,7 +3531,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Random random = new Random(465416L);
 
       // Test against multiply(RigidBodyTransform)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -4097,7 +4097,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RigidBodyTransform rigbodA;
       RigidBodyTransform rigbodB;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          rigbodA = createRandomTransform(random);
@@ -4113,7 +4113,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertTrue(rigbodB.geometricallyEquals(rigbodA, epsilon));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          rigbodA = createRandomTransform(random);
@@ -4129,7 +4129,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(rigbodB.geometricallyEquals(rigbodA, epsilon));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          rigbodA = createRandomTransform(random);
@@ -4176,7 +4176,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(rigbodB.geometricallyEquals(rigbodA, epsilon));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          rigbodA = createRandomTransform(random);
@@ -4208,7 +4208,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       previousHashCode = rbt.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          rotation = EuclidCoreRandomTools.nextRotationMatrix(random);
          translation = EuclidCoreRandomTools.nextVector3D(random);
@@ -4227,7 +4227,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RigidBodyTransform rbtA;
       RigidBodyTransform rbtB;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          rbtA = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          rbtB = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -4235,7 +4235,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertNotEquals(rbtA.toString(), rbtB.toString());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          rbtA = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          rbtB = new RigidBodyTransform(rbtA);

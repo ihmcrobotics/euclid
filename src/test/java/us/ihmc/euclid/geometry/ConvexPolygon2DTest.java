@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
 import java.util.Random;

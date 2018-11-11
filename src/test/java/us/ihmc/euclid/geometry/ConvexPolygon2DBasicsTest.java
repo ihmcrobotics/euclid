@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 {
    public static final boolean VERBOSE = false;
-   public static final int ITERATIONS = 1000;
    public static final double EPSILON = 1.0e-10;
 
    public abstract T createEmptyConvexPolygon2D();

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
          Assert.assertTrue(0 == vector.getZ());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector(double x, double y, double z)
          double newX = random.nextDouble();
          double newY = random.nextDouble();
@@ -37,7 +38,7 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
          Assert.assertTrue(newZ == vector.getZ());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector(double[] vectorArray)
          double[] randomVectorArray = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          Vector3D vectorArray = new Vector3D(randomVectorArray);
@@ -47,7 +48,7 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
          Assert.assertTrue(randomVectorArray[2] == vectorArray.getZ());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector(TupleBasics tuple)
          Vector3D vector2 = new Vector3D();
          vector2.setX(random.nextDouble());
@@ -74,7 +75,7 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
 
       previousHashCode = tuple1.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tuple1.setElement(i % 3, random.nextDouble());
          newHashCode = tuple1.hashCode();

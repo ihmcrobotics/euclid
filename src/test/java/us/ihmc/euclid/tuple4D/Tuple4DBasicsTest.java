@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -20,7 +21,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
    public void testSetToNaN() throws Exception
    {
       Random random = new Random(621541L);
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T tuple = createTuple(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple.setToNaN();
@@ -35,7 +36,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
    {
       Random random = new Random(312310L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test normalize()
          T tuple1 = createRandomTuple(random);
          tuple1.normalize();
@@ -57,7 +58,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
             assertTrue(Double.isNaN(tuple1.getElement(index)));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setAndNormalize(Tuple4DReadOnly other)
          T tuple1 = createRandomTuple(random);
          T tuple2 = createEmptyTuple();
@@ -178,21 +179,21 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
       T tuple1 = createEmptyTuple();
       T tuple2 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(T other)
          tuple2 = createRandomTuple(random);
          tuple1.set(tuple2);
          EuclidCoreTestTools.assertTuple4DEquals(tuple1, tuple2, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(Tuple3DReadOnly tupleReadOnly)
          tuple2 = createRandomTuple(random);
          tuple1.set(tuple2);
          EuclidCoreTestTools.assertTuple4DEquals(tuple1, tuple2, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(double[] tupleArray);
          double[] tupleArray = new double[10];
          tuple2 = createRandomTuple(random);
@@ -201,7 +202,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
          EuclidCoreTestTools.assertTuple4DEquals(tuple1, tuple2, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(double[] tupleArray, int startIndex);
          double[] tupleArray = new double[10];
          tuple2 = createRandomTuple(random);
@@ -210,7 +211,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
          EuclidCoreTestTools.assertTuple4DEquals(tuple1, tuple2, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(float[] tupleArray);
          float[] tupleArray = new float[10];
          tuple2 = createRandomTuple(random);
@@ -220,7 +221,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
             assertEquals(tuple2.getElement32(index), tuple1.getElement32(index), Math.max(getEpsilon(), 1.0e-6));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(float[] tupleArray, int startIndex);
          float[] tupleArray = new float[10];
          tuple2 = createRandomTuple(random);
@@ -230,7 +231,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
             assertEquals(tuple2.getElement32(index), tuple1.getElement32(index), Math.max(getEpsilon(), 1.0e-6));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(DenseMatrix64F matrix);
          DenseMatrix64F matrix = new DenseMatrix64F(5, 4);
          tuple2 = createRandomTuple(random);
@@ -239,7 +240,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
          EuclidCoreTestTools.assertTuple4DEquals(tuple1, tuple2, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(DenseMatrix64F matrix, int startRow);
          DenseMatrix64F matrix = new DenseMatrix64F(10, 4);
          tuple2 = createRandomTuple(random);
@@ -248,7 +249,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
          EuclidCoreTestTools.assertTuple4DEquals(tuple1, tuple2, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(DenseMatrix64F matrix, int startRow, int column);
          DenseMatrix64F matrix = new DenseMatrix64F(10, 4);
          tuple2 = createRandomTuple(random);

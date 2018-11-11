@@ -2,6 +2,7 @@ package us.ihmc.euclid.rotationConversion;
 
 import static java.lang.Math.*;
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -19,7 +20,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 public class RotationMatrixConversionTest
 {
    private static final double EPSILON = 1.0e-12;
-   public static final int NUMBER_OF_ITERATIONS = 2000;
 
    @Test
    public void testYawPitchRollToMatrix() throws Exception
@@ -116,7 +116,7 @@ public class RotationMatrixConversionTest
       RotationMatrix actualMatrix = new RotationMatrix();
       RotationMatrix expectedMatrix = new RotationMatrix();
 
-      for (int i = 0; i < RotationMatrixConversionTest.NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          EuclidCoreRandomTools.randomizeAxisAngle(random, minMaxAngleRange, expectedAxisAngle);
          double ux = expectedAxisAngle.getX();
@@ -192,7 +192,7 @@ public class RotationMatrixConversionTest
       RotationMatrix actualMatrix = new RotationMatrix();
       RotationMatrix expectedMatrix = new RotationMatrix();
 
-      for (int i = 0; i < RotationMatrixConversionTest.NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          expectedQuaternion = EuclidCoreRandomTools.nextQuaternion(random, minMaxAngleRange);
          RotationMatrixConversion.convertQuaternionToMatrix(expectedQuaternion, actualMatrix);
@@ -253,7 +253,7 @@ public class RotationMatrixConversionTest
       RotationMatrix expectedMatrix = new RotationMatrix();
       RotationMatrix actualMatrix = new RotationMatrix();
 
-      for (int i = 0; i < RotationMatrixConversionTest.NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random, minMaxAngleRange);
          double rx = axisAngle.getX() * axisAngle.getAngle();

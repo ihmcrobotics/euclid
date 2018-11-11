@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 public class EuclidGeometryToolsTest
 {
-   private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
    private static final double LARGE_EPSILON = 2.0e-9;
 

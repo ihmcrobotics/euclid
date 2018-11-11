@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -14,8 +15,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class Sphere3DTest
 {
-   private static final int ITERATIONS = 100;
-
    @Test
    public void testCommonShape3dFunctionality()
    {

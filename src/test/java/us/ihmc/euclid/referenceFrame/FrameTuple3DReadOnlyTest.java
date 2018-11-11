@@ -17,7 +17,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public abstract class FrameTuple3DReadOnlyTest<F extends FrameTuple3DReadOnly>
 {
-   public static final int NUMBER_OF_ITERATIONS = Tuple3DReadOnlyTest.NUMBER_OF_ITERATIONS;
    public static final double EPSILON = 1.0e-15;
 
    public final F createEmptyFrameTuple()

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.rotationConversion;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -18,7 +19,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 public class QuaternionConversionTest
 {
    private static final double EPSILON = 1.0e-12;
-   public static final int NUMBER_OF_ITERATIONS = 2000;
 
    @Test
    public void testAxisAngleToQuaternion() throws Exception
@@ -28,7 +28,7 @@ public class QuaternionConversionTest
       Quaternion expectedQuaternion = new Quaternion();
       Quaternion actualQuaternion = new Quaternion();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random, minMaxAngleRange);
          double angle = axisAngle.getAngle();
@@ -102,7 +102,7 @@ public class QuaternionConversionTest
       double minMaxAngleRange = Math.PI;
       double m00, m01, m02, m10, m11, m12, m20, m21, m22;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          expectedQuaternion = EuclidCoreRandomTools.nextQuaternion(random, minMaxAngleRange);
          double qx = expectedQuaternion.getX();
@@ -132,7 +132,7 @@ public class QuaternionConversionTest
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D randomVector = EuclidCoreRandomTools.nextVector3D(random);
          randomVector.normalize();
@@ -431,7 +431,7 @@ public class QuaternionConversionTest
       Quaternion expectedQuaternion = new Quaternion();
       Quaternion actualQuaternion = new Quaternion();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random, minMaxAngleRange);
          double rx = axisAngle.getX() * axisAngle.getAngle();

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -24,7 +25,6 @@ import us.ihmc.euclid.tuple4D.Vector4D;
 public class QuaternionToolsTest
 {
    private static final double EPSILON = 1.0e-12;
-   private static final int NUMBER_OF_ITERATIONS = 50;
 
    @Test
    public void testMultiply() throws Exception
@@ -34,7 +34,7 @@ public class QuaternionToolsTest
       Quaternion qActual = new Quaternion();
 
       // Test that q times the neutral quaternion equals q
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q = EuclidCoreRandomTools.nextQuaternion(random);
          EuclidCoreTestTools.assertQuaternionIsUnitary(q, EPSILON);
@@ -52,7 +52,7 @@ public class QuaternionToolsTest
       }
 
       // Test that q * q^-1 = qNeutral
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q = EuclidCoreRandomTools.nextQuaternion(random);
          EuclidCoreTestTools.assertQuaternionIsUnitary(q, EPSILON);
@@ -70,7 +70,7 @@ public class QuaternionToolsTest
 
       // Simplify the multiplication by making q1 and q2 describe rotation of different angle but around the same axis.
       // So the multiplication basically adds up the two angles and is also commutable.
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle1 = EuclidCoreRandomTools.nextDouble(random, 1.0);
          double angle2 = EuclidCoreRandomTools.nextDouble(random, 1.0);
@@ -93,7 +93,7 @@ public class QuaternionToolsTest
       }
 
       // Check that we can do in-place multiplication
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle = EuclidCoreRandomTools.nextDouble(random, 1.0);
          Vector3D axis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
@@ -116,7 +116,7 @@ public class QuaternionToolsTest
       Quaternion qActual = new Quaternion();
 
       // Test that: conj(qNeutral) * q = q and that: conj(q) * qNeutral = conj(q)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q = EuclidCoreRandomTools.nextQuaternion(random);
          EuclidCoreTestTools.assertQuaternionIsUnitary(q, EPSILON);
@@ -137,7 +137,7 @@ public class QuaternionToolsTest
       }
 
       // Test that conj(q^-1) * q = q * q and that conj(q) * q^-1 = (q * q)^-1
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q = new Quaternion();
          double angle = EuclidCoreRandomTools.nextDouble(random, 1.0);
@@ -162,7 +162,7 @@ public class QuaternionToolsTest
 
       // Simplify the multiplication by making q1 and q2 describe rotation of different angle but around the same axis.
       // So the multiplication (with left term conjugated) basically subtracts up the two angles.
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle1 = EuclidCoreRandomTools.nextDouble(random, 1.0);
          double angle2 = EuclidCoreRandomTools.nextDouble(random, 1.0);
@@ -186,7 +186,7 @@ public class QuaternionToolsTest
       }
 
       // Check that we can do in-place multiplication, so we test that: conj(q) * q = qNeutral
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle = EuclidCoreRandomTools.nextDouble(random, 1.0);
          Vector3D axis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
@@ -208,7 +208,7 @@ public class QuaternionToolsTest
       Quaternion qActual = new Quaternion();
 
       // Test that: qNeutral * conj(q) = conj(q) and that: q * conj(qNeutral) = q
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q = EuclidCoreRandomTools.nextQuaternion(random);
          EuclidCoreTestTools.assertQuaternionIsUnitary(q, EPSILON);
@@ -229,7 +229,7 @@ public class QuaternionToolsTest
       }
 
       // Test that q^-1 * conj(q) = (q * q)^-1 and that q * conj(q^-1) = q * q
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q = new Quaternion();
          double angle = EuclidCoreRandomTools.nextDouble(random, 1.0);
@@ -253,7 +253,7 @@ public class QuaternionToolsTest
 
       // Simplify the multiplication by making q1 and q2 describe rotation of different angle but around the same axis.
       // So the multiplication (with right term conjugated) basically subtracts up the two angles.
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle1 = EuclidCoreRandomTools.nextDouble(random, 1.0);
          double angle2 = EuclidCoreRandomTools.nextDouble(random, 1.0);
@@ -277,7 +277,7 @@ public class QuaternionToolsTest
       }
 
       // Check that we can do in-place multiplication, so we test that: q * conj(q) = qNeutral
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle = EuclidCoreRandomTools.nextDouble(random, 1.0);
          Vector3D axis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
@@ -300,7 +300,7 @@ public class QuaternionToolsTest
 
       // multiply(Tuple4DReadOnly q, Tuple4DReadOnly v, Vector4DBasics vectorToPack)
       // Test against the multiplication with quaternions
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion q2 = EuclidCoreRandomTools.nextQuaternion(random);
@@ -316,7 +316,7 @@ public class QuaternionToolsTest
 
       // multiplyConjugateLeft(Tuple4DReadOnly q, Tuple4DReadOnly v, Vector4DBasics vectorToPack)
       // Test against the multiplication with quaternions
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion q2 = EuclidCoreRandomTools.nextQuaternion(random);
@@ -332,7 +332,7 @@ public class QuaternionToolsTest
 
       // multiplyConjugateRight(Tuple4DReadOnly q, Tuple4DReadOnly v, Vector4DBasics vectorToPack)
       // Test against the multiplication with quaternions
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion q2 = EuclidCoreRandomTools.nextQuaternion(random);
@@ -355,7 +355,7 @@ public class QuaternionToolsTest
       Quaternion qActual = new Quaternion();
 
       // Test that in the range [-Pi, Pi] normalizeAndLimitToMinusPiToPi() is the same as normalize().
-      for (int i = 0; i < 10 * NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < 10 * ITERATIONS; i++)
       {
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random, Math.PI);
          QuaternionConversion.convertAxisAngleToQuaternion(axisAngle, qExpected);
@@ -371,7 +371,7 @@ public class QuaternionToolsTest
       }
 
       // Test that outside the range [-Pi, Pi] normalizedAndLimitToMinusPiToPi actually limits the angle described by the quaternion to interval [-Pi, Pi].
-      for (int i = 0; i < 10 * NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < 10 * ITERATIONS; i++)
       {
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          double sign = random.nextBoolean() ? -1.0 : 1.0;
@@ -471,7 +471,7 @@ public class QuaternionToolsTest
       EuclidCoreTestTools.assertTuple3DEquals(tupleExpected, tupleActual, EPSILON);
 
       // Test against a second way of transforming, by using multiply with a pure quaternion
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          tupleOriginal = EuclidCoreRandomTools.nextRotationVector(random);
@@ -572,7 +572,7 @@ public class QuaternionToolsTest
       EuclidCoreTestTools.assertTuple3DEquals(tupleExpected, tupleActual, EPSILON);
 
       // Test against a second way of transforming, by using multiply with a pure quaternion
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          tupleOriginal = EuclidCoreRandomTools.nextRotationVector(random);
@@ -592,7 +592,7 @@ public class QuaternionToolsTest
       }
 
       // Test that inverseTransform(transform(tuple)) == tuple and transform(inverseTransform(tuple)) == tuple
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          tupleExpected = EuclidCoreRandomTools.nextRotationVector(random);
@@ -636,7 +636,7 @@ public class QuaternionToolsTest
       Tuple3DBasics tupleActual = new Vector3D();
 
       // Test that addTransform(tupleOriginal, tupleTransformed) == tupleTransformed + transform(tupleOriginal)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Tuple3DReadOnly tupleOriginal = EuclidCoreRandomTools.nextRotationVector(random);
@@ -658,7 +658,7 @@ public class QuaternionToolsTest
       }
 
       // Test transforming in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          tupleActual = EuclidCoreRandomTools.nextVector3D(random);
@@ -686,7 +686,7 @@ public class QuaternionToolsTest
       Tuple3DBasics tupleActual = new Vector3D();
 
       // Test that addTransform(tupleOriginal, tupleTransformed) == tupleTransformed + transform(tupleOriginal)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Tuple3DReadOnly tupleOriginal = EuclidCoreRandomTools.nextRotationVector(random);
@@ -708,7 +708,7 @@ public class QuaternionToolsTest
       }
 
       // Test transforming in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          tupleActual = EuclidCoreRandomTools.nextVector3D(random);
@@ -797,7 +797,7 @@ public class QuaternionToolsTest
          fail("Should have thrown a NotAnOrientation2DException.");
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DReadOnly tupleOriginalCopy = new Vector2D(tupleOriginal);
@@ -895,7 +895,7 @@ public class QuaternionToolsTest
       }
 
       // Simply check that inverseTransform(transform(tuple2D)) == tuple2D and that transform(inverseTransform(tuple2D)) == tuple2D
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -929,7 +929,7 @@ public class QuaternionToolsTest
       Vector4D vectorExpected = new Vector4D();
 
       // Test against transform with Tuple and check that v = inverseTransform(transform(v))
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          vectorOriginal = EuclidCoreRandomTools.nextVector4D(random);
@@ -974,7 +974,7 @@ public class QuaternionToolsTest
       Quaternion quaternionActual = new Quaternion();
 
       // Test with the multiply: qTransformed = q * qOriginal and check that  q = inverseTransform(transform(q))
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          quaternionOriginal = EuclidCoreRandomTools.nextQuaternion(random);
@@ -1008,7 +1008,7 @@ public class QuaternionToolsTest
       Matrix3D matrixActual = new Matrix3D();
 
       // Test against the matrix multiplication: mTransformed = R * mOriginal * R^T
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          matrix.set(quaternion);
@@ -1059,7 +1059,7 @@ public class QuaternionToolsTest
       RotationMatrix matrixActual = new RotationMatrix();
 
       // Test against the matrix multiplication: mTransformed = R * mOriginal
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          matrix.set(quaternion);
@@ -1099,7 +1099,7 @@ public class QuaternionToolsTest
       Quaternion quaternionActual = new Quaternion();
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(QuaternionReadOnly quaternion, false, RotationMatrixReadOnly matrix, false, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -1118,7 +1118,7 @@ public class QuaternionToolsTest
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(QuaternionReadOnly quaternion, true, RotationMatrixReadOnly matrix, false, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion conjugate = new Quaternion(quaternion);
@@ -1131,7 +1131,7 @@ public class QuaternionToolsTest
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(QuaternionReadOnly quaternion, false, RotationMatrixReadOnly matrix, true, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -1144,7 +1144,7 @@ public class QuaternionToolsTest
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(QuaternionReadOnly quaternion, true, RotationMatrixReadOnly matrix, true, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion conjugate = new Quaternion(quaternion);
@@ -1170,7 +1170,7 @@ public class QuaternionToolsTest
       Quaternion quaternionActual = new Quaternion();
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(RotationMatrixReadOnly matrix, false, QuaternionReadOnly quaternion, false, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -1189,7 +1189,7 @@ public class QuaternionToolsTest
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(RotationMatrixReadOnly matrix, false, QuaternionReadOnly quaternion, true, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion conjugate = new Quaternion(quaternion);
@@ -1202,7 +1202,7 @@ public class QuaternionToolsTest
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(RotationMatrixReadOnly matrix, true, QuaternionReadOnly quaternion, false, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -1215,7 +1215,7 @@ public class QuaternionToolsTest
       }
 
       // Simply test against the multiply(quaternion, quaternion, quaternion)
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // multiply(RotationMatrixReadOnly matrix, true, QuaternionReadOnly quaternion, true, QuaternionBasics quaternionToPack)
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion conjugate = new Quaternion(quaternion);

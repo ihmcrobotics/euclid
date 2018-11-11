@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -23,7 +24,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public class LineSegment3DTest
 {
    private static final double EPSILON = EuclidGeometryTools.ONE_TRILLIONTH;
-   private static final int ITERATIONS = 1000;
 
    @Test
    public void testConstructors() throws Exception

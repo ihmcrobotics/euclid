@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.Random;
@@ -14,7 +15,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class AxisAngleToolsTest
 {
-   private static final int NUMBER_OF_ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-14;
 
    @Test
@@ -22,7 +22,7 @@ public class AxisAngleToolsTest
    {
       Random random = new Random(32434L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AxisAngleReadOnly aa1 = nextAxisAngle(random);
          AxisAngleReadOnly aa2 = nextAxisAngle(random);
@@ -36,7 +36,7 @@ public class AxisAngleToolsTest
          assertEquals(0.0, aa1.distance(aa1), EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D u1 = nextVector3DWithFixedLength(random, nextDouble(random, 0.1, 1.0));
          Vector3D u2 = nextVector3DWithFixedLength(random, nextDouble(random, 0.1, 1.0));
@@ -52,7 +52,7 @@ public class AxisAngleToolsTest
          assertEquals(0.0, aa1.distance(aa1), EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D u1 = nextVector3DWithFixedLength(random, nextDouble(random, 0.0, 0.9 * AxisAngleTools.EPS));
          Vector3D u2 = nextVector3DWithFixedLength(random, nextDouble(random, 0.1, 1.0));
@@ -63,7 +63,7 @@ public class AxisAngleToolsTest
          assertTrue(Double.isNaN(distance));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D u1 = nextVector3DWithFixedLength(random, nextDouble(random, 0.1, 1.0));
          Vector3D u2 = nextVector3DWithFixedLength(random, nextDouble(random, 0.0, 0.9 * AxisAngleTools.EPS));

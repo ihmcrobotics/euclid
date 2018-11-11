@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -16,8 +17,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class Plane3DTest
 {
-   private static final int ITERATIONS = 1000;
-
    @Test
    public void test()
    {

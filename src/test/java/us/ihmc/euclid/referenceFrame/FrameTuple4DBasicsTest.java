@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -61,7 +62,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    {
       Random random = new Random(234234L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -100,7 +101,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, double x, double y, double z)
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -145,7 +146,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    {
       Random random = new Random(234234L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -175,7 +176,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    {
       Random random = new Random(574);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -204,7 +205,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
 
       ReferenceFrame initialFrame = ReferenceFrame.getWorldFrame();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double x, double y, double z, double s)
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -220,7 +221,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          EuclidCoreTestTools.assertTuple4DEquals(tuple, frameTuple, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
          Tuple4DReadOnly input = EuclidCoreRandomTools.nextQuaternion(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -233,7 +234,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          EuclidCoreTestTools.assertTuple4DEquals(tuple, frameTuple, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double[] tupleArray)
          double[] input = new double[random.nextInt(20)];
          for (int j = 0; j < input.length; j++)
@@ -275,7 +276,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startIndex, double[] tupleArray)
          int startIndex = random.nextInt(10);
          double[] input = new double[random.nextInt(20)];
@@ -318,7 +319,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -354,7 +355,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
          int startRow = random.nextInt(10);
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
@@ -391,7 +392,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F tupleDenseMatrix)
          int startRow = random.nextInt(10);
          int column = random.nextInt(10);
@@ -429,7 +430,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(FrameTuple4DReadOnly other)
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);

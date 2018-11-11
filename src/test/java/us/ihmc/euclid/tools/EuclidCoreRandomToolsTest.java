@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -14,13 +15,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 public class EuclidCoreRandomToolsTest
 {
-   private static final int INTERATIONS = 10000;
    private static final double EPSILON = 1.0e-12;
 
    @Test
    public void testNextVector3D()
    {
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Random random = new Random(16451L);
 
@@ -61,7 +61,7 @@ public class EuclidCoreRandomToolsTest
          Tuple3DBasics previousValue = new Point3D();
          previousValue.setToNaN();
 
-         for (int i = 0; i < INTERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             EuclidCoreRandomTools.randomizeTuple3D(random, tupleToRandomize);
 
@@ -77,7 +77,7 @@ public class EuclidCoreRandomToolsTest
          }
       }
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test randomize(Random random, TupleBasics minMax, TupleBasics tupleToRandomize)
          Tuple3DBasics minMax = new Point3D();
 
@@ -99,7 +99,7 @@ public class EuclidCoreRandomToolsTest
          Tuple3DBasics min = new Point3D();
          Tuple3DBasics max = new Point3D();
 
-         for (int i = 0; i < INTERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             min.setX(random.nextDouble());
             min.setY(random.nextDouble());
@@ -133,7 +133,7 @@ public class EuclidCoreRandomToolsTest
 
       axisAnglePrevious.setToNaN();
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          EuclidCoreRandomTools.randomizeAxisAngle(random, minMax, axisAngle);
          assertTrue(Math.abs(axisAngle.getAngle()) < minMax);
@@ -159,7 +159,7 @@ public class EuclidCoreRandomToolsTest
 
       axisAnglePrevious.setToNaN();
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          EuclidCoreRandomTools.randomizeAxisAngle(random, axisAngle);
          assertTrue(Math.abs(axisAngle.getAngle()) < Math.PI);
@@ -183,7 +183,7 @@ public class EuclidCoreRandomToolsTest
    {
       Random random = new Random(23452);
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test nextMatrix3D(Random random)
          Matrix3D matrix3D = EuclidCoreRandomTools.nextMatrix3D(random);
 
@@ -199,7 +199,7 @@ public class EuclidCoreRandomToolsTest
          }
       }
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test nextMatrix3D(Random random, double minMaxValue)
          double minMaxValue = EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
          Matrix3D matrix3D = EuclidCoreRandomTools.nextMatrix3D(random, minMaxValue);
@@ -216,7 +216,7 @@ public class EuclidCoreRandomToolsTest
          }
       }
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test nextMatrix3D(Random random, double minValue, double maxValue)
          double minValue = EuclidCoreRandomTools.nextDouble(random, 100.0);
          double maxValue = EuclidCoreRandomTools.nextDouble(random, minValue, 100.0);
@@ -271,7 +271,7 @@ public class EuclidCoreRandomToolsTest
    {
       Random random = new Random(23452);
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test nextDiagonalMatrix3D(Random random)
          Matrix3D matrix3D = EuclidCoreRandomTools.nextDiagonalMatrix3D(random);
 
@@ -292,7 +292,7 @@ public class EuclidCoreRandomToolsTest
          }
       }
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test nextDiagonalMatrix3D(Random random, double minMaxValue)
          double minMaxValue = EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
          Matrix3D matrix3D = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, minMaxValue);
@@ -314,7 +314,7 @@ public class EuclidCoreRandomToolsTest
          }
       }
 
-      for (int i = 0; i < INTERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test nextDiagonalMatrix3D(Random random, double minValue, double maxValue)
          double minValue = EuclidCoreRandomTools.nextDouble(random, 100.0);
          double maxValue = EuclidCoreRandomTools.nextDouble(random, minValue, 100.0);

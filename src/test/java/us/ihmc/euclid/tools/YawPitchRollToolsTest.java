@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
 
 import java.util.Random;
@@ -29,7 +30,6 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 public class YawPitchRollToolsTest
 {
    public static final double EPSILON = 1.0e-12;
-   public static final int ITERATIONS = 1000;
 
    @Test
    public void testIsZero()

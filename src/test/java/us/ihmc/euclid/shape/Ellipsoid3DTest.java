@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -16,7 +17,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 public class Ellipsoid3DTest
 {
    private static final double EPSILON = 1.0e-10; // This epsilon is meant small changes in coordinates. Use Ellipsoid3d's DEFAULT_EPSILON for error handling.
-   private static final int ITERATIONS = 1000;
 
    @Test
    public void testCommonShape3dFunctionality()

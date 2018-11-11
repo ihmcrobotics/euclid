@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -11,8 +12,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 {
-   public static final int NUMBER_OF_ITERATIONS = 100;
-
    public abstract T createEmptyTuple();
 
    public abstract T createTuple(double x, double y, double z);
@@ -27,7 +26,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
       Random random = new Random(621541L);
       T tuple = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test getX(), getY()
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -39,7 +38,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertEquals(tuple.getZ(), z, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test getX32(), getY32()
          float x = random.nextFloat();
          float y = random.nextFloat();
@@ -51,7 +50,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertEquals(tuple.getZ32(), z, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int index)
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -91,7 +90,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get32(int index)
          float x = random.nextFloat();
          float y = random.nextFloat();
@@ -131,7 +130,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack)
          tuple = createRandomTuple(random);
          double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
@@ -142,7 +141,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertTrue(tuple.getZ() == tupleArray[2]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
          tuple = createRandomTuple(random);
          double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
@@ -153,7 +152,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertTrue(tuple.getZ() == tupleArray[4]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(float[] tupleArrayToPack)
          tuple = createRandomTuple(random);
          float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
@@ -164,7 +163,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertTrue(tuple.getZ32() == tupleArray[2]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
          tuple = createRandomTuple(random);
          float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
@@ -175,7 +174,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertTrue(tuple.getZ32() == tupleArray[4]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(DenseMatrix64F tupleMatrixToPack)
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -187,7 +186,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertTrue(tuple.getZ() == matrix.get(2, 0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int startRow, DenseMatrix64F tupleMatrixToPack)
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -199,7 +198,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          assertTrue(tuple.getZ() == matrix.get(4, 0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int startRow, int startColumn, DenseMatrix64F tupleMatrixToPack)
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)

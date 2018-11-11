@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 public class EuclidFrameToolsTest
 {
    private static final Class<?> d = Double.TYPE;
-   private static final int ITERATIONS = 500;
    private static final double EPSILON = 1.0e-12;
 
    @Test

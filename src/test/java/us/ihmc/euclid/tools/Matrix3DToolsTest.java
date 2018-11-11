@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -24,7 +25,6 @@ import us.ihmc.euclid.tuple4D.Vector4D;
 
 public class Matrix3DToolsTest
 {
-   public static final int NUMBER_OF_ITERATIONS = 100;
    private static final double EPS = 1.0e-10;
 
    @Test
@@ -66,7 +66,7 @@ public class Matrix3DToolsTest
          assertEquals(identity, inverse);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test the inverse of a rotation matrix
          RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix expected = new RotationMatrix();
@@ -83,7 +83,7 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Finally test against EJML
          Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D expected = new Matrix3D();
@@ -114,7 +114,7 @@ public class Matrix3DToolsTest
       Matrix3D matrixActual = new Matrix3D();
 
       // Test that m times the identity equals m
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D m = EuclidCoreRandomTools.nextMatrix3D(random);
          // Fill some random data in matrixActual
@@ -135,7 +135,7 @@ public class Matrix3DToolsTest
       }
 
       // Test that m * m^-1 = identity
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D m = EuclidCoreRandomTools.nextMatrix3D(random);
          // Fill some random data in matrixActual
@@ -159,7 +159,7 @@ public class Matrix3DToolsTest
 
       // Assert that multiplying two matrices describing two rotations around the same axis is equivalent to adding the angles of these
       // two rotations. TODO move out to RotationMatrixToolsTest
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle1 = EuclidCoreRandomTools.nextDouble(random, 1.0);
          double angle2 = EuclidCoreRandomTools.nextDouble(random, 1.0);
@@ -181,7 +181,7 @@ public class Matrix3DToolsTest
       }
 
       // Check that we can do in-place multiplication TODO move out to RotationMatrixToolsTest
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle = EuclidCoreRandomTools.nextDouble(random, 1.0);
          Vector3D axis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
@@ -200,7 +200,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
 
       // Finally check against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D m2 = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -224,7 +224,7 @@ public class Matrix3DToolsTest
       Matrix3D matrixActual = new Matrix3D();
 
       // Test against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -250,7 +250,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
 
       // Finally check against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D m2 = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -286,7 +286,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a generic matrix against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -308,7 +308,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a rotation matrix against multiply TODO move
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          RotationMatrix rotationMatrixActual = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -334,7 +334,7 @@ public class Matrix3DToolsTest
       Matrix3D matrixActual = new Matrix3D();
 
       // Test against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -358,7 +358,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
 
       // Finally check against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D m2 = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -394,7 +394,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a generic matrix against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -414,7 +414,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a rotation matrix against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -430,7 +430,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a rotation scale matrix against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -454,7 +454,7 @@ public class Matrix3DToolsTest
       Matrix3D matrixActual = new Matrix3D();
 
       // Test against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -478,7 +478,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
 
       // Finally check against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D m2 = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -514,7 +514,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a generic matrix against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -534,7 +534,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a rotation matrix against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -550,7 +550,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with a rotation scale matrix against multiply
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          // Fill some random data in matrixActual
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
@@ -582,7 +582,7 @@ public class Matrix3DToolsTest
       }
 
       // Test that normalizing a proper rotation matrix does not change it.
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrixExpected.set(EuclidCoreRandomTools.nextRotationMatrix(random));
          matrixActual.set(matrixExpected);
@@ -595,7 +595,7 @@ public class Matrix3DToolsTest
       Vector3D vector2 = new Vector3D();
 
       // Test that it actually makes a random matrix ortho-normal
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random, 1.0, 2.0);
          Matrix3DTools.normalize(matrixActual);
@@ -654,7 +654,7 @@ public class Matrix3DToolsTest
       }
 
       // Test some random scaling
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 1.0, 10.0);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -671,7 +671,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
 
       // Test against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -686,7 +686,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transforming in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -730,7 +730,7 @@ public class Matrix3DToolsTest
       }
 
       // Test some random scaling
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 1.0, 10.0);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -749,7 +749,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
 
       // Test against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -766,7 +766,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transforming in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleActual = EuclidCoreRandomTools.nextVector3D(random);
@@ -810,7 +810,7 @@ public class Matrix3DToolsTest
       }
 
       // Test some random scaling
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 1.0, 10.0);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -829,7 +829,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
 
       // Test against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -846,7 +846,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transforming in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleActual = EuclidCoreRandomTools.nextVector3D(random);
@@ -888,7 +888,7 @@ public class Matrix3DToolsTest
       }
 
       // Test some random scaling
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 1.0, 10.0);
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
@@ -904,7 +904,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(2, 1);
 
       // Test against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
@@ -922,7 +922,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transforming in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
@@ -992,7 +992,7 @@ public class Matrix3DToolsTest
       }
 
       // Test that the math does not change with checkIfTransformInXYPlane set to true.
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          matrix.setColumn(2, 0.0, 0.0, 1.0);
@@ -1017,7 +1017,7 @@ public class Matrix3DToolsTest
       Quaternion qExpected = new Quaternion();
       Quaternion qActual = new Quaternion();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          qOriginal = EuclidCoreRandomTools.nextQuaternion(random);
@@ -1061,7 +1061,7 @@ public class Matrix3DToolsTest
       }
 
       // Test some random scaling
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 1.0, 10.0);
          vectorOriginal = EuclidCoreRandomTools.nextVector4D(random);
@@ -1079,7 +1079,7 @@ public class Matrix3DToolsTest
       DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
 
       // Test against EJML
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          vectorOriginal = EuclidCoreRandomTools.nextVector4D(random);
@@ -1097,7 +1097,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transforming in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          vectorOriginal = EuclidCoreRandomTools.nextVector4D(random);
@@ -1175,7 +1175,7 @@ public class Matrix3DToolsTest
       }
 
       // Test against transform
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3DTools.invert(matrix, matrixInverse);
@@ -1187,7 +1187,7 @@ public class Matrix3DToolsTest
       }
 
       // Test that: tuple == inverseTransform(transform(tuple))
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -1199,7 +1199,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with rotation matrix
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          matrix.set(rotationMatrix);
@@ -1211,7 +1211,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with rotation scale matrix
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RotationScaleMatrixReadOnly rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
          matrix.set(rotationScaleMatrix);
@@ -1223,7 +1223,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transform in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -1258,7 +1258,7 @@ public class Matrix3DToolsTest
       }
 
       // Test against transform
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          matrix.setRow(2, 0.0, 0.0, 1.0);
@@ -1272,7 +1272,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with rotation matrix
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RotationMatrix rotationMatrix = new RotationMatrix();
          rotationMatrix.setToYawMatrix(2.0 * Math.PI * random.nextDouble());
@@ -1285,7 +1285,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with rotation scale matrix
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
          rotationScaleMatrix.setToYawMatrix(2.0 * Math.PI * random.nextDouble());
@@ -1299,7 +1299,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transform in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
@@ -1368,7 +1368,7 @@ public class Matrix3DToolsTest
       }
 
       // Test against transform
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3DTools.invert(matrix, matrixInverse);
@@ -1380,7 +1380,7 @@ public class Matrix3DToolsTest
       }
 
       // Test that: tuple == inverseTransform(transform(tuple))
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          vectorOriginal = EuclidCoreRandomTools.nextVector4D(random);
@@ -1392,7 +1392,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with rotation matrix
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          matrix.set(rotationMatrix);
@@ -1404,7 +1404,7 @@ public class Matrix3DToolsTest
       }
 
       // Test with rotation scale matrix
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RotationScaleMatrixReadOnly rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
          matrix.set(rotationScaleMatrix);
@@ -1416,7 +1416,7 @@ public class Matrix3DToolsTest
       }
 
       // Test transform in-place
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          vectorOriginal = EuclidCoreRandomTools.nextVector4D(random);

@@ -160,8 +160,8 @@ public class EuclidFrameAPITestTools
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private static final boolean DEBUG = false;
-   private final static int FRAME_CHECK_ITERATIONS = 100;
-   private final static int FUNCTIONALITY_ITERATIONS = 500;
+   private final static int FRAME_CHECK_ITERATIONS = 10;
+   private final static int FUNCTIONALITY_ITERATIONS = 50;
    private final static Random random = new Random(345345);
    private final static double epsilon = 1.0e-12;
 

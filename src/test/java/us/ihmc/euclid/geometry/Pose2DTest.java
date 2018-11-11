@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -13,8 +14,7 @@ import us.ihmc.euclid.tuple2D.Vector2D;
 
 public class Pose2DTest
 {
-   private double epsilon = 1e-7;
-   private int ITERATIONS = 1000;
+   private static final double epsilon = 1e-7;
 
    @Test
    public void testConstructors()

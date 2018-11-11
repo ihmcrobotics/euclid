@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
          Assert.assertTrue(0 == point.getZ());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point(double x, double y, double z)
          double newX = random.nextDouble();
          double newY = random.nextDouble();
@@ -37,7 +38,7 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
          Assert.assertTrue(newZ == point.getZ());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point(double[] pointArray)
          double[] randomPointArray = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          double[] copyRandomPointArray = new double[3];
@@ -56,7 +57,7 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
          Assert.assertTrue(copyRandomPointArray[2] == randomPointArray[2]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point(TupleBasics tuple)
          Point3D point2 = new Point3D();
          point2.setX(random.nextDouble());
@@ -87,7 +88,7 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
 
       previousHashCode = tuple1.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tuple1.setElement(i % 3, random.nextDouble());
          newHashCode = tuple1.hashCode();
@@ -143,6 +144,6 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
    @Override
    public double getEpsilon()
    {
-      return 1.0e-15;
+      return 1.0e-14;
    }
 }

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -51,7 +52,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          assertTrue(frameVector4D.getS() == 0.0);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector4D(ReferenceFrame referenceFrame)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector4D frameVector4D = new FrameVector4D(randomFrame);
@@ -62,7 +63,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          assertTrue(frameVector4D.getS() == 0.0);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector4D(ReferenceFrame referenceFrame, double x, double y, double z, double s)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector4D randomTuple = EuclidCoreRandomTools.nextVector4D(random);
@@ -71,7 +72,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector4D(ReferenceFrame referenceFrame, double[] pointArray)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector4D randomTuple = EuclidCoreRandomTools.nextVector4D(random);
@@ -82,7 +83,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector4D(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple3DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector4D randomTuple = EuclidCoreRandomTools.nextVector4D(random);
@@ -91,7 +92,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector4D(FrameTuple4DReadOnly other)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector4D randomTuple = EuclidFrameRandomTools.nextFrameVector4D(random, randomFrame);
@@ -107,7 +108,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
    {
       Random random = new Random(43563);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -141,7 +142,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
    {
       Random random = new Random(32120);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          FrameVector4D frameVector1 = EuclidFrameRandomTools.nextFrameVector4D(random, worldFrame);
          FrameVector4D frameVector2 = new FrameVector4D(worldFrame);
@@ -165,7 +166,7 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
    {
       Random random = new Random(763);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector4D expected = EuclidCoreRandomTools.nextVector4D(random);
          expected.scale(1.0e15);

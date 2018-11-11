@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -17,7 +18,6 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G>, G extends GeometryObject<G>>
 {
    public static final double EPSILON = 1.0e-12;
-   public static final int ITERATIONS = 100;
 
    public abstract G createEmptyGeometryObject();
 

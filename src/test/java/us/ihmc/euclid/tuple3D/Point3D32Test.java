@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -28,7 +29,7 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
          Assert.assertTrue(0 == point.getZ());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point32(float x, float y, float z)
          Point3D32 point;
 
@@ -43,7 +44,7 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
          Assert.assertTrue(newZ == point.getZ32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point32(float[] pointArray)
          float[] randomPoint32Array = {random.nextFloat(), random.nextFloat(), random.nextFloat()};
 
@@ -54,7 +55,7 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
          Assert.assertTrue(randomPoint32Array[2] == point.getZ32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point32(TupleBasics tuple)
          Point3D32 point;
          Point3D32 point2 = EuclidCoreRandomTools.nextPoint3D32(random);
@@ -71,21 +72,21 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       Random random = new Random(621541L);
       Point3D32 tuple1 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
          assertEquals(tuple1.getX32(), x, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
          assertEquals(tuple1.getY32(), y, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(float z)
          float z = random.nextFloat();
          tuple1.setZ(z);
@@ -105,7 +106,7 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
 
       previousHashCode = tuple1.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tuple1.setElement(i % 3, random.nextFloat());
          newHashCode = tuple1.hashCode();
@@ -161,6 +162,6 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
    @Override
    public double getEpsilon()
    {
-      return 2.0e-7;
+      return 1.0e-6;
    }
 }

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -25,7 +26,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(312310L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T vector1 = createRandomTuple(random);
          double length1 = vector1.length();
@@ -43,7 +44,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(312310L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T vector1 = createRandomTuple(random);
          double length1 = vector1.length();
@@ -61,7 +62,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(56461L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T vector1 = createRandomTuple(random);
          double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -81,7 +82,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(56461L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T vector1 = createRandomTuple(random);
          double expectedAngle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -101,7 +102,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(56461L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // cross(Vector2DReadOnly other)
          T vector1 = createRandomTuple(random);
          double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -114,7 +115,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          assertEquals(expectedDot, actualDot, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // cross(Vector2DReadOnly v1, Vector2DReadOnly v2)
          T vector1 = createRandomTuple(random);
          double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -135,7 +136,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(312310L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test normalize()
          T vector1 = createRandomTuple(random);
          vector1.normalize();
@@ -151,7 +152,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          EuclidCoreTestTools.assertTuple2DEquals(vector1, vector2, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test normalize(Vector2D vector)
          T vector1 = createRandomTuple(random);
          T vector2 = createEmptyTuple();
@@ -176,7 +177,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(234234);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test with maxLength > EPS_MAX_LENGTH
          double maxLength = EuclidCoreRandomTools.nextDouble(random, Vector3DBasics.EPS_MAX_LENGTH, 10.0);
          double vectorLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
@@ -200,7 +201,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          EuclidCoreTestTools.assertTuple2DEquals("Iteration: " + i + ", maxLength: " + maxLength, expectedVector, actualVector, 5.0 * getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test with maxLength < EPS_MAX_LENGTH
          double maxLength = EuclidCoreRandomTools.nextDouble(random, 0.0, Vector3DBasics.EPS_MAX_LENGTH);
          double vectorLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
@@ -219,7 +220,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T original = createRandomTuple(random);
          T actual = createEmptyTuple();
@@ -281,7 +282,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T original = createRandomTuple(random);
          T actual = createEmptyTuple();

@@ -18,7 +18,6 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
 {
-   public static final int NUMBER_OF_ITERATIONS = 1000;
    public static final double EPSILON = 1.0e-15;
 
    @Override

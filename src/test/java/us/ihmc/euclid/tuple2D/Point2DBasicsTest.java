@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -23,7 +24,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(654135L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
@@ -31,7 +32,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistance = p1.distance(p2);
-         assertEquals(expectedDistance, actualDistance, 5.0 * getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -40,7 +41,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(654135L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
@@ -48,7 +49,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistanceSquared = p1.distanceSquared(p2);
-         assertEquals(expectedDistanceSquared, actualDistanceSquared, 10.0 * getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistanceSquared, getEpsilon());
       }
    }
 
@@ -57,7 +58,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(654135L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
@@ -65,7 +66,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          Point3D p2 = new Point3D(p1.getX() + translation.getX(), p1.getY() + translation.getY(), random.nextDouble());
          double actualDistance = p1.distanceXY(p2);
-         assertEquals(expectedDistance, actualDistance, 5.0 * getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -74,7 +75,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(654135L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
@@ -82,7 +83,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          Point3D p2 = new Point3D(p1.getX() + translation.getX(), p1.getY() + translation.getY(), random.nextDouble());
          double actualDistance = p1.distanceXYSquared(p2);
-         assertEquals(expectedDistanceSquared, actualDistance, 5.0 * getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
       }
    }
 
@@ -91,14 +92,14 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(654135L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
          translation.scale(expectedDistance);
          T p = createTuple(translation.getX(), translation.getY());
          double actualDistance = p.distanceFromOrigin();
-         assertEquals(expectedDistance, actualDistance, 5.0 * getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -107,14 +108,14 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(654135L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
          translation.scale(Math.sqrt(expectedDistanceSquared));
          T p = createTuple(translation.getX(), translation.getY());
          double actualDistance = p.distanceFromOriginSquared();
-         assertEquals(expectedDistanceSquared, actualDistance, 5.0 * getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
       }
    }
 
@@ -124,7 +125,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T original = createRandomTuple(random);
          T actual = createEmptyTuple();
@@ -186,7 +187,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T original = createRandomTuple(random);
          T actual = createEmptyTuple();

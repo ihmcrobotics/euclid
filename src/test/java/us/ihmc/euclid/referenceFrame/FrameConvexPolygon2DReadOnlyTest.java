@@ -15,7 +15,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 public abstract class FrameConvexPolygon2DReadOnlyTest<F extends FrameConvexPolygon2DReadOnly>
 {
-   public static final int NUMBER_OF_ITERATIONS = 100;
    public static final double EPSILON = 1.0e-15;
 
    public F createEmptyFrameConvexPolygon2D()

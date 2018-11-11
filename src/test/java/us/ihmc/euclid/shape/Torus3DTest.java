@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -19,7 +20,6 @@ public class Torus3DTest
 {
    private static final double MIN_THICKNESS = 0.005;
    private static final double EPSILON = 0.0001;
-   private static final int ITERATIONS = 1000;
 
    @Test
    public void testExapleUsage()

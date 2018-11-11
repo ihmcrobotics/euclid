@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -13,8 +14,6 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
 {
-   public static final int NUMBER_OF_ITERATIONS = 100;
-
    public abstract T createEmptyTuple();
 
    public abstract T createTuple(double x, double y, double z, double s);
@@ -29,7 +28,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
       Random random = new Random(621541L);
       T tuple = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test getX(), getY()
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -43,7 +42,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertEquals(tuple.getS(), s, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test getX32(), getY32()
          float x = random.nextFloat();
          float y = random.nextFloat();
@@ -57,7 +56,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertEquals(tuple.getS32(), s, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int index)
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -99,7 +98,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get32(int index)
          float x = random.nextFloat();
          float y = random.nextFloat();
@@ -141,7 +140,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack)
          tuple = createRandomTuple(random);
          double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
@@ -153,7 +152,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertTrue(tuple.getS() == tupleArray[3]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
          tuple = createRandomTuple(random);
          double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
@@ -165,7 +164,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertTrue(tuple.getS() == tupleArray[5]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(float[] tupleArrayToPack)
          tuple = createRandomTuple(random);
          float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
@@ -177,7 +176,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertTrue(tuple.getS32() == tupleArray[3]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
          tuple = createRandomTuple(random);
          float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
@@ -189,7 +188,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertTrue(tuple.getS32() == tupleArray[5]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(DenseMatrix64F tupleMatrixToPack)
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -202,7 +201,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertTrue(tuple.getS() == matrix.get(3, 0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int startRow, DenseMatrix64F tupleMatrixToPack)
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -215,7 +214,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          assertTrue(tuple.getS() == matrix.get(5, 0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int startRow, int startColumn, DenseMatrix64F tupleMatrixToPack)
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -244,7 +243,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
    {
       Random random = new Random(312310L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T tuple1 = createRandomTuple(random);
          double length1 = tuple1.norm();
@@ -261,7 +260,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
    {
       Random random = new Random(312310L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T tuple1 = createRandomTuple(random);
          double length1 = tuple1.norm();
@@ -286,7 +285,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
    {
       Random random = new Random(5461L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T p = createRandomTuple(random);
          T q = createRandomTuple(random);

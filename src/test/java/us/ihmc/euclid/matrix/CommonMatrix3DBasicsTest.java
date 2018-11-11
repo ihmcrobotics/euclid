@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -62,7 +63,7 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // set(Matrix3DReadOnly other)
          RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          T actualMatrix = createEmptyMatrix();
@@ -70,7 +71,7 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
          EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // set(double[] matrixArray)
          RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          double[] array = new double[40];
@@ -80,7 +81,7 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
          EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // set(int startIndex, double[] matrixArray)
          RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          double[] array = new double[40];
@@ -91,7 +92,7 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
          EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // set(DenseMatrix64F matrix)
          RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          DenseMatrix64F denseMatrix = new DenseMatrix64F(30, 30);
@@ -101,7 +102,7 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
          EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // set(int startRow, int startColumn, DenseMatrix64F matrix)
          RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          DenseMatrix64F denseMatrix = new DenseMatrix64F(30, 30);

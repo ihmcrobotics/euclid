@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
    {
       Random random = new Random(3453);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame frame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FramePoint2D pointA = EuclidFrameRandomTools.nextFramePoint2D(random, frame, 10.0);
@@ -89,7 +90,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame frame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FramePoint2D pointA = EuclidFrameRandomTools.nextFramePoint2D(random, frame, 10.0);
@@ -133,7 +134,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
    {
       Random random = new Random(23423);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // addVertexMatchingFrame(ReferenceFrame referenceFrame, Point2DReadOnly vertex)
          boolean useTransform2D = random.nextBoolean();
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random, useTransform2D);
@@ -150,7 +151,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
          EuclidFrameTestTools.assertFramePoint2DGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // addVertexMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly vertex)
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -166,7 +167,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
          EuclidFrameTestTools.assertFramePoint2DGeometricallyEquals(expected, polygon.getVertexUnsafe(0), EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // addVertexMatchingFrame(FramePoint3DReadOnly vertex)
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame(random);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -188,7 +189,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
    {
       Random random = new Random(544354);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
          ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);

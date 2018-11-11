@@ -1,5 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +22,6 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
 {
-   public static final int NUMBER_OF_ITERATIONS = 1000;
    public static final double EPSILON = 1.0e-15;
 
    @Override
@@ -62,7 +63,7 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
    {
       Random random = new Random(544354);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random);

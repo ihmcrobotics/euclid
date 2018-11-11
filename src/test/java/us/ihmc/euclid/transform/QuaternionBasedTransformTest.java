@@ -1,6 +1,7 @@
 package us.ihmc.euclid.transform;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -26,7 +27,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedTransform>
 {
    private static final double EPS = 1.0e-10;
-   public static final int NUMBER_OF_ITERATIONS = 100;
 
    @Test
    public void testConstructors() throws Exception
@@ -654,7 +654,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       actual.interpolate(q0, qf, 1.0);
       EuclidCoreTestTools.assertQuaternionBasedTransformEquals(qf, actual, EPS);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double alpha = EuclidCoreRandomTools.nextDouble(random, 10.0);
          Vector3D interpolatedVector = new Vector3D();
@@ -681,7 +681,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       QuaternionBasedTransform expected = new QuaternionBasedTransform();
       QuaternionBasedTransform actual = new QuaternionBasedTransform();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendTranslation(double x, double y, double z)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform translationTransform = new QuaternionBasedTransform();
@@ -698,7 +698,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendTranslation(Tuple3DReadOnly translation)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform translationTransform = new QuaternionBasedTransform();
@@ -722,7 +722,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       QuaternionBasedTransform expected = new QuaternionBasedTransform();
       QuaternionBasedTransform actual = new QuaternionBasedTransform();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendYawRotation(double yaw)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          RotationMatrix expectedRotation = new RotationMatrix(original.getQuaternion());
@@ -736,7 +736,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendPitchRotation(double pitch)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          RotationMatrix expectedRotation = new RotationMatrix(original.getQuaternion());
@@ -750,7 +750,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendRollRotation(double roll)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          RotationMatrix expectedRotation = new RotationMatrix(original.getQuaternion());
@@ -773,7 +773,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       QuaternionBasedTransform expected = new QuaternionBasedTransform();
       QuaternionBasedTransform actual = new QuaternionBasedTransform();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependTranslation(double x, double y, double z)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform translationTransform = new QuaternionBasedTransform();
@@ -790,7 +790,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependTranslation(Tuple3DReadOnly translation)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform translationTransform = new QuaternionBasedTransform();
@@ -814,7 +814,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       QuaternionBasedTransform expected = new QuaternionBasedTransform();
       QuaternionBasedTransform actual = new QuaternionBasedTransform();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependYawRotation(double yaw)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform yawTransform = new QuaternionBasedTransform();
@@ -831,7 +831,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependPitchRotation(double pitch)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform pitchTransform = new QuaternionBasedTransform();
@@ -848,7 +848,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependRollRotation(double roll)
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform rollTransform = new QuaternionBasedTransform();
@@ -872,7 +872,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -897,7 +897,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -922,7 +922,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -947,7 +947,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -972,7 +972,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -997,7 +997,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1022,7 +1022,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1047,7 +1047,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1072,7 +1072,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1097,7 +1097,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1122,7 +1122,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1147,7 +1147,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1172,7 +1172,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1197,7 +1197,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1222,7 +1222,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1247,7 +1247,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1272,7 +1272,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1297,7 +1297,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(2342L);
 
       // Test against RigidBodyTransform.multiply()
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          QuaternionBasedTransform expected = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1782,7 +1782,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       QuaternionBasedTransform qbtA;
       QuaternionBasedTransform qbtB;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          qbtA = createRandomTransform(random);
@@ -1798,7 +1798,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          assertTrue(qbtB.geometricallyEquals(qbtA, epsilon));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          qbtA = createRandomTransform(random);
@@ -1814,7 +1814,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          assertFalse(qbtB.geometricallyEquals(qbtA, epsilon));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          qbtA = createRandomTransform(random);
@@ -1861,7 +1861,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          assertFalse(qbtB.geometricallyEquals(qbtA, epsilon));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          qbtA = createRandomTransform(random);
@@ -1893,7 +1893,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
 
       previousHashCode = qbt.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          translation = EuclidCoreRandomTools.nextVector3D(random);
@@ -1913,7 +1913,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       QuaternionBasedTransform quaternionA;
       QuaternionBasedTransform quaternionB;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          quaternionA = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          quaternionB = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
@@ -1921,7 +1921,7 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          assertNotEquals(quaternionA.toString(), quaternionB.toString());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          quaternionA = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          quaternionB = new QuaternionBasedTransform(quaternionA);

@@ -129,6 +129,8 @@ import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
 
 public class EuclidTestSuite
 {
+   public static final int ITERATIONS = 1000;
+
    public static void main(String[] args) throws URISyntaxException, IOException
    {
       String targetTests = EuclidTestSuite.class.getName();

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -49,7 +50,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(65445L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T q1 = createRandomTuple(random);
 
@@ -59,7 +60,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          q1 = createTuple(q2.getX(), q2.getY(), q2.getZ(), q2.getS());
          assertTrue(q1.isUnitary(getEpsilon()));
 
-         double delta = 2.0 * Math.sqrt(getEpsilon());
+         double delta = 6.0 * Math.sqrt(getEpsilon());
 
          q1 = createTuple(delta + q2.getX(), q2.getY(), q2.getZ(), q2.getS());
          assertFalse(q1.isUnitary(getEpsilon()));
@@ -77,7 +78,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(23905872L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double qx = random.nextDouble();
          double qy = random.nextDouble();
@@ -109,7 +110,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(23905872L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double qx = random.nextDouble();
          double qy = random.nextDouble();
@@ -174,14 +175,20 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Random random = new Random(1651L);
       Quaternion qDiff = new Quaternion();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionReadOnly q1 = createRandomTuple(random);
 
-         for (int j = 0; j < NUMBER_OF_ITERATIONS; j++)
+         for (int j = 0; j < ITERATIONS; j++)
          {
-            QuaternionReadOnly q2 = createRandomTuple(random);
+            QuaternionReadOnly q2 = createRandomTuple(random);;
             qDiff.difference(q1, q2);
+
+            while (qDiff.getAngle() < 0.01)
+            {
+               q2 = createRandomTuple(random);
+               qDiff.difference(q1, q2);
+            }
             double expectedAngle = qDiff.getAngle();
             double actualAngle = q1.distance(q2);
             assertEquals(expectedAngle, actualAngle, 75.0 * getEpsilon());
@@ -189,13 +196,13 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionReadOnly q1 = createRandomTuple(random);
 
-         for (int j = 0; j < NUMBER_OF_ITERATIONS; j++)
+         for (int j = 0; j < ITERATIONS; j++)
          {
-            double expectedAngle = random.nextDouble();
+            double expectedAngle = EuclidCoreRandomTools.nextDouble(random, 1.0e-3, 1.0);
             AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), expectedAngle);
             T q2 = createEmptyTuple();
             q2.set(aa);
@@ -211,11 +218,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(1651L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionReadOnly q1 = createRandomTuple(random);
 
-         for (int j = 0; j < NUMBER_OF_ITERATIONS; j++)
+         for (int j = 0; j < ITERATIONS; j++)
          {
             double expectedAngle = random.nextDouble();
             AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), expectedAngle);
@@ -252,7 +259,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(23423L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T quaternion = createRandomTuple(random);
          Vector3D expectedRotationVector = new Vector3D();
@@ -269,7 +276,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(654651351L);
       T quaternion;
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = createRandomTuple(random);
 
@@ -317,7 +324,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Random random = new Random(6787L);
       T quaternion = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple3DBasics tupleToTransform)
          Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DBasics actualTuple = new Vector3D(tuple);
@@ -330,7 +337,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DBasics actualTuple = new Vector3D(tuple);
@@ -343,7 +350,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test addTransform(Tuple3DBasics tupleToTransform)
          Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DBasics actualTuple = new Vector3D(tuple);
@@ -356,7 +363,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DBasics actualTuple = EuclidCoreRandomTools.nextVector3D(random);
@@ -369,7 +376,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple2DBasics tupleToTransform)
          Tuple2DReadOnly tuple = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DBasics actualTuple = new Vector2D(tuple);
@@ -390,7 +397,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
          Tuple2DReadOnly tuple = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DBasics actualTuple = new Vector2D(tuple);
@@ -469,7 +476,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          fail("Should have thrown a NotAnOrientation2DException.");
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {// Test transform quaternion
          quaternion = createRandomTuple(random);
 
@@ -487,7 +494,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {// Test transform Vector4D
          quaternion = createRandomTuple(random);
 
@@ -505,7 +512,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform Matrix3D
          quaternion = createRandomTuple(random);
 
@@ -523,7 +530,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform RotationMatrix
          quaternion = createRandomTuple(random);
 
@@ -548,7 +555,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Random random = new Random(6787L);
       T quaternion = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple3DBasics tupleToTransform)
          Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DBasics actualTuple = new Vector3D(tuple);
@@ -561,7 +568,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DBasics actualTuple = new Vector3D(tuple);
@@ -574,7 +581,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple2DBasics tupleToTransform)
          Tuple2DReadOnly tuple = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DBasics actualTuple = new Vector2D(tuple);
@@ -595,7 +602,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple2DBasics tupleOriginal, Tuple2DBasics tupleTransformed)
          Tuple2DReadOnly tuple = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DBasics actualTuple = new Vector2D(tuple);
@@ -674,7 +681,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          fail("Should have thrown a NotAnOrientation2DException.");
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(QuaternionBasics quaternionToTransform)
          QuaternionReadOnly original = EuclidCoreRandomTools.nextQuaternion(random);
          QuaternionBasics actual = new Quaternion(original);
@@ -686,7 +693,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(QuaternionReadOnly quaternionOriginal, QuaternionBasics quaternionTransformed)
          QuaternionReadOnly original = EuclidCoreRandomTools.nextQuaternion(random);
          QuaternionBasics actual = new Quaternion(original);
@@ -698,7 +705,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(Vector4DBasics vectorToTransform)
          Vector4DReadOnly original = EuclidCoreRandomTools.nextVector4D(random);
          Vector4DBasics actual = new Vector4D(original);
@@ -710,7 +717,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
          Vector4DReadOnly original = EuclidCoreRandomTools.nextVector4D(random);
          Vector4DBasics actual = new Vector4D(original);
@@ -722,7 +729,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(Matrix3D matrixToTransform)
          Matrix3DReadOnly original = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D actual = new Matrix3D(original);
@@ -734,7 +741,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3D matrixTransformed)
          Matrix3DReadOnly original = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D actual = new Matrix3D(original);
@@ -746,7 +753,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(RotationMatrix matrixToTransform)
          RotationMatrixReadOnly original = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix actual = new RotationMatrix(original);
@@ -758,7 +765,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
          RotationMatrixReadOnly original = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix actual = new RotationMatrix(original);
@@ -861,7 +868,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T quaternion;
       T quaternionCopy = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = createRandomTuple(random);
          quaternionCopy.set(quaternion);
@@ -976,7 +983,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, getEpsilon());
 
       // Test that the quaternion is kept within [-Pi, Pi]
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          theta = EuclidCoreRandomTools.nextDouble(random, Math.PI, 2.0 * Math.PI);
          sinHalfTheta = Math.sin(theta / 2.0);
@@ -1008,7 +1015,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(541651L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasics original = createRandomTuple(random);
          double alpha = EuclidCoreRandomTools.nextDouble(random, 2.0);
@@ -1029,7 +1036,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Random random = new Random(621541L);
       T quaternion = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(double x, double y, double z, double s);
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -1062,7 +1069,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T expectedQuaternion = createEmptyTuple();
       AxisAngle axisAngle;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(AxisAngleReadOnly axisAngle)
          axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
 
@@ -1081,7 +1088,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T expectedQuaternion = createEmptyTuple();
       RotationMatrix rotationMatrix;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(RotationMatrixReadOnly rotationMatrix)
          rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
 
@@ -1100,7 +1107,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T expectedQuaternion = createEmptyTuple();
       Vector3D rotationVector;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(Vector3DReadOnly rotationVector)
          rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
 
@@ -1119,7 +1126,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T expectedQuaternion = createEmptyTuple();
       double[] yawPitchRoll;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setYawPitchRoll(double[] yawPitchRoll)
          yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
 
@@ -1142,7 +1149,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T expectedQuaternion = createEmptyTuple();
       Vector3D eulerAngles;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setEuler(Vector3DReadOnly eulerAngles)
          eulerAngles = EuclidCoreRandomTools.nextRotationVector(random);
 
@@ -1164,7 +1171,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T actualQuaternion = createEmptyTuple();
       T expectedQuaternion = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setToYawQuaternion(double yaw)
          double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
 
@@ -1181,7 +1188,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T actualQuaternion = createEmptyTuple();
       T expectedQuaternion = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setToPitchQuaternion(double pitch)
          double pitch = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
 
@@ -1198,7 +1205,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T actualQuaternion = createEmptyTuple();
       T expectedQuaternion = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setToRollQuaternion(double roll)
          double roll = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
 
@@ -1215,7 +1222,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T diff = createEmptyTuple();
       T expected = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T q1 = createRandomTuple(random);
          T q2 = createRandomTuple(random);
@@ -1232,7 +1239,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(65445L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T qOther1 = createRandomTuple(random);
          T qOther2 = createRandomTuple(random);
@@ -1262,7 +1269,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(65445L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T qOther1 = createRandomTuple(random);
          T qOther2 = createRandomTuple(random);
@@ -1302,7 +1309,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T expected = createEmptyTuple();
       T actual = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendYawRotation(double yaw)
          T original = createRandomTuple(random);
          T yawRotation = createEmptyTuple();
@@ -1317,7 +1324,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertQuaternionEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendPitchRotation(double pitch)
          T original = createRandomTuple(random);
          T pitchRotation = createEmptyTuple();
@@ -1332,7 +1339,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertQuaternionEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // appendRollRotation(double roll)
          T original = createRandomTuple(random);
          T rollRotation = createEmptyTuple();
@@ -1356,7 +1363,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       T expected = createEmptyTuple();
       T actual = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependYawRotation(double yaw)
          T original = createRandomTuple(random);
          T yawRotation = createEmptyTuple();
@@ -1371,7 +1378,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertQuaternionEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependPitchRotation(double pitch)
          T original = createRandomTuple(random);
          T pitchRotation = createEmptyTuple();
@@ -1386,7 +1393,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertQuaternionEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // prependRollRotation(double roll)
          T original = createRandomTuple(random);
          T rollRotation = createEmptyTuple();
@@ -1407,7 +1414,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(65445L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T qOther1 = createRandomTuple(random);
          T qOther2 = createRandomTuple(random);
@@ -1430,7 +1437,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(65445L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T qOther1 = createRandomTuple(random);
          T qOther2 = createRandomTuple(random);
@@ -1473,7 +1480,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       double epsilon = 10.0 * getEpsilon();
 
       // Check that interpolating with two zero angle quaternions, we obtain a zero angle quaternion.
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double alpha = EuclidCoreRandomTools.nextDouble(random, 10.0);
          qActual.interpolate(q0, qf, alpha);
@@ -1491,7 +1498,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       }
 
       // Check that when q0 == qf, qActual == q0 == qf
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          q0 = createRandomTuple(random);
          qf.set(q0);
@@ -1508,7 +1515,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
       // Simplify the interpolation by making q0 and qf describe rotation of different angle but around the same axis.
       // Such that the interpolation becomes a simple interpolation over the angle.
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double angle0 = EuclidCoreRandomTools.nextDouble(random, 1.0);
          double anglef = EuclidCoreRandomTools.nextDouble(random, 1.0);
@@ -1528,7 +1535,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       }
 
       // Test when swapping q0 and qf and 'inverting' alpha
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          q0 = createRandomTuple(random);
          qf = createRandomTuple(random);
@@ -1543,7 +1550,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       }
 
       // Test with a different algorithm
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          q0 = createRandomTuple(random);
          qf = createRandomTuple(random);
@@ -1580,7 +1587,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(23523L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          T original = createRandomTuple(random);
@@ -1594,7 +1601,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          T original = createRandomTuple(random);
@@ -1608,7 +1615,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          T original = createRandomTuple(random);
@@ -1628,7 +1635,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(23523L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          T original = createRandomTuple(random);
@@ -1642,7 +1649,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          T original = createRandomTuple(random);
@@ -1656,7 +1663,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          T original = createRandomTuple(random);
@@ -1679,7 +1686,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Quaternion quaternionC = new Quaternion();
       Random random = new Random(621541L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          quaternionA = createRandomTuple(random);
          quaternionB = createRandomTuple(random);
@@ -1698,7 +1705,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 100.0, 1000.0) * getEpsilon();
          quaternionA = createRandomTuple(random);
@@ -1717,7 +1724,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 100.0, 1000.0) * getEpsilon();
          quaternionA = createRandomTuple(random);
@@ -1736,7 +1743,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0 * Math.PI);
          quaternionA = createRandomTuple(random);
@@ -1755,7 +1762,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, Math.PI / 1.02); // Make sure to not go over Math.PI
          quaternionA = createRandomTuple(random);
@@ -1774,7 +1781,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // If epsilon >= Math.PI, any pair of two quaternions will be equal
          double epsilon = EuclidCoreRandomTools.nextDouble(random, Math.PI, 2.0 * Math.PI);
          quaternionA = createRandomTuple(random);

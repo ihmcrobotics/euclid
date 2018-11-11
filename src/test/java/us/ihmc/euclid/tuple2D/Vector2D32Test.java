@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -23,7 +24,7 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
          Assert.assertTrue(0 == vector.getY32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector2D32(float x, float y, float z)
          float newX = random.nextFloat();
          float newY = random.nextFloat();
@@ -34,7 +35,7 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
          Assert.assertTrue(newY == vector.getY32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector2D32(float[] vectorArray)
          float[] randomVector2DArray = {random.nextFloat(), random.nextFloat()};
 
@@ -44,7 +45,7 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
          Assert.assertTrue(randomVector2DArray[1] == vectorArray.getY32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector2D32(TupleBasics tuple)
          Vector2D32 vector2 = EuclidCoreRandomTools.nextVector2D32(random);
          vector = new Vector2D32(vector2);
@@ -62,14 +63,14 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
       Random random = new Random(621541L);
       Vector2D32 tuple1 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
          assertEquals(tuple1.getX32(), x, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
@@ -89,7 +90,7 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
 
       previousHashCode = point.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          point.setElement(i % 2, random.nextFloat());
          newHashCode = point.hashCode();

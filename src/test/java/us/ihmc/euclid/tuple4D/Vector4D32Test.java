@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -96,7 +97,7 @@ public class Vector4D32Test extends Vector4DBasicsTest<Vector4D32>
 
       previousHashCode = vector.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          vector.setElement(i % 4, random.nextDouble());
          newHashCode = vector.hashCode();

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.axisAngle;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -17,7 +18,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
 {
-   public static final int NUMBER_OF_ITERATIONS = 100;
    public static final double EPS = 1e-15;
 
    @Test
@@ -33,7 +33,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(AxisAngleBasics other)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             axisAngle = expected = EuclidCoreRandomTools.nextAxisAngle(random);
 
@@ -45,7 +45,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(double x, double y, double z, double angle)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             expected = EuclidCoreRandomTools.nextAxisAngle(random);
             axisAngle = new AxisAngle(expected.getX(), expected.getY(), expected.getZ(), expected.getAngle());
@@ -55,7 +55,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(double[] axisAngleArray)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             expected = EuclidCoreRandomTools.nextAxisAngle(random);
             double[] axisAngleArray;
@@ -72,7 +72,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(VectorBasics axis, double angle)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             Vector3D vectorAxis, vectorAxisCopy;
             vectorAxis = vectorAxisCopy = EuclidCoreRandomTools.nextVector3D(random);
@@ -93,7 +93,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(QuaternionBasics quaternion)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             Quaternion quaternion, quaternionCopy;
             quaternion = quaternionCopy = EuclidCoreRandomTools.nextQuaternion(random);
@@ -108,7 +108,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(RotationMatrix rotationMatrix)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             RotationMatrix matrix, matrixCopy;
             matrix = matrixCopy = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -130,7 +130,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(VectorBasics rotationVector)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             Vector3D rotationVector, rotationVectorCopy;
             rotationVector = rotationVectorCopy = EuclidCoreRandomTools.nextRotationVector(random);
@@ -145,7 +145,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       }
 
       { // Test AxisAngle(double yaw, double pitch, double roll)
-         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+         for (int i = 0; i < ITERATIONS; i++)
          {
             double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
 
@@ -170,7 +170,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
 
       previousHashCode = axisAngle.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          axisAngle.setElement(random.nextInt(4), random.nextDouble());
          newHashCode = axisAngle.hashCode();
@@ -190,7 +190,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       AxisAngle aabA;
       AxisAngle aabB;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
          aabA = EuclidCoreRandomTools.nextAxisAngle(random);

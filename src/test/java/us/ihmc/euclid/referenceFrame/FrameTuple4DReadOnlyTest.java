@@ -17,7 +17,6 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 public abstract class FrameTuple4DReadOnlyTest<F extends FrameTuple4DReadOnly>
 {
-   public static final int NUMBER_OF_ITERATIONS = Tuple4DReadOnlyTest.NUMBER_OF_ITERATIONS;
    public static final double EPSILON = 1.0e-15;
 
    public final F createEmptyFrameTuple()

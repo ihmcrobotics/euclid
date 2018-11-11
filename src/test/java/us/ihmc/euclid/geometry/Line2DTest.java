@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,7 +27,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class Line2DTest
 {
-   private static final int ITERATIONS = 1000;
    private static final double maxRandomValue = 1.0e5;
 
    private double randomDouble(Random random, double maxRandomValue)

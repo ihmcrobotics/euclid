@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
          Assert.assertTrue(0 == vector.getZ32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector32(float x, float y, float z)
          float newX = random.nextFloat();
          float newY = random.nextFloat();
@@ -37,7 +38,7 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
          Assert.assertTrue(newZ == vector.getZ32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector32(float[] vectorArray)
          float[] randomVector32Array = {random.nextFloat(), random.nextFloat(), random.nextFloat()};
          float[] copyRandomVector32Array = new float[3];
@@ -56,7 +57,7 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
          Assert.assertTrue(copyRandomVector32Array[2] == randomVector32Array[2]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector32(TupleBasics tuple)
          Vector3D32 vector2 = EuclidCoreRandomTools.nextVector3D32(random);
 
@@ -76,21 +77,21 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
       Random random = new Random(621541L);
       Vector3D32 tuple1 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
          assertEquals(tuple1.getX32(), x, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
          assertEquals(tuple1.getY32(), y, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(float z)
          float z = random.nextFloat();
          tuple1.setZ(z);
@@ -110,7 +111,7 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
 
       previousHashCode = tuple1.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tuple1.setElement(i % 3, random.nextFloat());
          newHashCode = tuple1.hashCode();

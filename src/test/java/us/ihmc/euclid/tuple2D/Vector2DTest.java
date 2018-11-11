@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
          Assert.assertTrue(0 == vector.getY());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector2D(double x, double y, double z)
          double newX = random.nextDouble();
          double newY = random.nextDouble();
@@ -35,7 +36,7 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
          Assert.assertTrue(newY == vector.getY());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector2D(double[] vectorArray)
          double[] randomVector2DArray = {random.nextDouble(), random.nextDouble()};
          double[] copyRandomVector2DArray = new double[2];
@@ -51,7 +52,7 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
          Assert.assertTrue(copyRandomVector2DArray[1] == randomVector2DArray[1]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector2D(Tuple2DReadOnly tuple)
          Vector2D vector2 = EuclidCoreRandomTools.nextVector2D(random);
          vector = new Vector2D(vector2);
@@ -60,7 +61,7 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
          Assert.assertTrue(vector.getY() == vector2.getY());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Vector2D(Tuple3DReadOnly tuple)
          Vector3D vector2 = EuclidCoreRandomTools.nextVector3D(random);
          vector = new Vector2D(vector2);
@@ -82,7 +83,7 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
 
       previousHashCode = tuple1.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tuple1.setElement(i % 2, random.nextDouble());
          newHashCode = tuple1.hashCode();

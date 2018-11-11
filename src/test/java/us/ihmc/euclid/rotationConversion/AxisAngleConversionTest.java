@@ -2,6 +2,7 @@ package us.ihmc.euclid.rotationConversion;
 
 import static java.lang.Math.*;
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -19,7 +20,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 public class AxisAngleConversionTest
 {
    private static final double EPSILON = 1.0e-12;
-   public static final int NUMBER_OF_ITERATIONS = 2000;
 
    @Test
    public void testQuaternionToAxisAngle() throws Exception
@@ -28,7 +28,7 @@ public class AxisAngleConversionTest
       AxisAngle axisAngle = new AxisAngle();
       Quaternion quaternion = new Quaternion();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double ux = EuclidCoreRandomTools.nextDouble(random);
          double uy = EuclidCoreRandomTools.nextDouble(random);
@@ -59,7 +59,7 @@ public class AxisAngleConversionTest
          EuclidCoreTestTools.assertAxisUnitary(axisAngle, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AxisAngle originalAxisAngle = new AxisAngle();
          EuclidCoreRandomTools.randomizeAxisAngle(random, 2.0 * Math.PI, originalAxisAngle);
@@ -134,7 +134,7 @@ public class AxisAngleConversionTest
       AxisAngle actualAxisAngle = new AxisAngle();
       double minMaxAngleRange = 2.0 * Math.PI;
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          EuclidCoreRandomTools.randomizeAxisAngle(random, minMaxAngleRange, expectedAxisAngle);
          double rx = expectedAxisAngle.getX() * expectedAxisAngle.getAngle();
@@ -183,7 +183,7 @@ public class AxisAngleConversionTest
       double m00, m01, m02, m10, m11, m12, m20, m21, m22;
       RotationMatrix rotationMatrix = new RotationMatrix();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          EuclidCoreRandomTools.randomizeAxisAngle(random, minMaxAngleRange, expectedAxisAngle);
          double ux = expectedAxisAngle.getX();
@@ -213,7 +213,7 @@ public class AxisAngleConversionTest
          EuclidCoreTestTools.assertAxisUnitary(actualAxisAngle, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          expectedAxisAngle.setAngle(Math.PI);
          Vector3D randomVector = EuclidCoreRandomTools.nextVector3D(random);

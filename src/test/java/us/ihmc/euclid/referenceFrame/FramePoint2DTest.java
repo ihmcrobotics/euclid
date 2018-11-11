@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          EuclidCoreTestTools.assertTuple2DIsSetToZero(framePoint2D);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FramePoint2D(ReferenceFrame referenceFrame)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FramePoint2D framePoint2D = new FramePoint2D(randomFrame);
@@ -56,7 +57,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          EuclidCoreTestTools.assertTuple2DIsSetToZero(framePoint2D);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FramePoint2D(ReferenceFrame referenceFrame, double x, double y)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Point2D randomTuple = EuclidCoreRandomTools.nextPoint2D(random);
@@ -65,7 +66,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          EuclidCoreTestTools.assertTuple2DEquals(randomTuple, framePoint2D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FramePoint2D(ReferenceFrame referenceFrame, double[] pointArray)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Point2D randomTuple = EuclidCoreRandomTools.nextPoint2D(random);
@@ -76,7 +77,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          EuclidCoreTestTools.assertTuple2DEquals(randomTuple, framePoint2D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FramePoint2D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Point2D randomTuple = EuclidCoreRandomTools.nextPoint2D(random);
@@ -85,7 +86,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          EuclidCoreTestTools.assertTuple2DEquals(randomTuple, framePoint2D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FramePoint2D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Point3D randomTuple3D = EuclidCoreRandomTools.nextPoint3D(random);
@@ -94,7 +95,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          EuclidCoreTestTools.assertTuple2DEquals(new Point2D(randomTuple3D), framePoint2D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FramePoint3D(FrameTuple3DReadOnly frameTuple3DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FramePoint3D randomFrameTuple3D = EuclidFrameRandomTools.nextFramePoint3D(random, randomFrame);
@@ -103,7 +104,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
          EuclidCoreTestTools.assertTuple2DEquals(new Point2D(randomFrameTuple3D), framePoint2D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FramePoint2D(FrameTuple2DReadOnly other)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FramePoint2D randomTuple = EuclidFrameRandomTools.nextFramePoint2D(random, randomFrame);
@@ -119,7 +120,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    {
       Random random = new Random(544354);
       
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setMatchingFrame(FrameTuple2DReadOnly other)
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
          ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
@@ -141,7 +142,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    {
       Random random = new Random(43563);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random, true);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -175,7 +176,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    {
       Random random = new Random(345345);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame initialFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -196,7 +197,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    {
       Random random = new Random(6572);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random, true);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -217,7 +218,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    {
       Random random = new Random(32120);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          FramePoint2D framePoint1 = EuclidFrameRandomTools.nextFramePoint2D(random, worldFrame);
          FramePoint2D framePoint2 = new FramePoint2D(worldFrame);
@@ -239,7 +240,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    {
       Random random = new Random(763);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Point2D expected = EuclidCoreRandomTools.nextPoint2D(random, -1.0e15, 1.0e15);
          FramePoint2D actual = new FramePoint2D(worldFrame, expected);

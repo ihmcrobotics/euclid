@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          EuclidCoreTestTools.assertTuple3DIsSetToZero(frameVector3D);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector3D frameVector3D = new FrameVector3D(randomFrame);
@@ -56,7 +57,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          EuclidCoreTestTools.assertTuple3DIsSetToZero(frameVector3D);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, double x, double y, double z)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector3D randomTuple = EuclidCoreRandomTools.nextVector3D(random);
@@ -65,7 +66,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, double[] pointArray)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector3D randomTuple = EuclidCoreRandomTools.nextVector3D(random);
@@ -76,7 +77,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector3D randomTuple = EuclidCoreRandomTools.nextVector3D(random);
@@ -85,7 +86,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          EuclidCoreTestTools.assertTuple3DEquals(randomTuple, frameVector3D, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector3D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Vector2D randomTuple2D = EuclidCoreRandomTools.nextVector2D(random);
@@ -95,7 +96,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          assertTrue(frameVector3D.getZ() == 0.0);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector3D(FrameTuple2DReadOnly frameTuple2DReadOnly)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector2D randomFrameTuple2D = EuclidFrameRandomTools.nextFrameVector2D(random, randomFrame);
@@ -105,7 +106,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          assertTrue(frameVector3D.getZ() == 0.0);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test FrameVector3D(FrameTuple3DReadOnly other)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameVector3D randomTuple = EuclidFrameRandomTools.nextFrameVector3D(random, randomFrame);
@@ -121,7 +122,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    {
       Random random = new Random(544354);
       
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setMatchingFrame(FrameTuple3DReadOnly other)
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
          ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
@@ -137,7 +138,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
          EuclidFrameTestTools.assertFrameTuple3DEquals(expected, actual, EPSILON);
       }
       
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setMatchingFrame(FrameTuple2DReadOnly other, double z)
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
          ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
@@ -161,7 +162,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    {
       Random random = new Random(43563);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
          ReferenceFrame initialFrame = referenceFrames[random.nextInt(referenceFrames.length)];
@@ -195,7 +196,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    {
       Random random = new Random(32120);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          FrameVector3D frameVector1 = EuclidFrameRandomTools.nextFrameVector3D(random, worldFrame);
          FrameVector3D frameVector2 = new FrameVector3D(worldFrame);
@@ -217,7 +218,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    {
       Random random = new Random(763);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random, -1.0e15, 1.0e15);
          FrameVector3D actual = new FrameVector3D(worldFrame, expected);

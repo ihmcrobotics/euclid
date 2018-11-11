@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -23,7 +24,7 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
          Assert.assertTrue(0f == point.getY32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point2D32(float x, float y)
          float newX = random.nextFloat();
          float newY = random.nextFloat();
@@ -34,7 +35,7 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
          Assert.assertTrue(newY == point.getY32());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point2D32(float[] pointArray)
          float[] randomPoint2D32Array = {random.nextFloat(), random.nextFloat()};
          float[] copyRandomPoint2D32Array = new float[2];
@@ -50,7 +51,7 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
          Assert.assertTrue(copyRandomPoint2D32Array[1] == randomPoint2D32Array[1]);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point2D32(TupleBasics tuple)
          Point2D32 point2 = EuclidCoreRandomTools.nextPoint2D32(random);
 
@@ -69,14 +70,14 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
       Random random = new Random(621541L);
       Point2D32 tuple1 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
          assertEquals(tuple1.getX32(), x, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
@@ -97,7 +98,7 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
 
       previousHashCode = point.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          point.setElement(i % 2, random.nextFloat());
          newHashCode = point.hashCode();

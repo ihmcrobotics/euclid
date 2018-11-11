@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,7 +22,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 public class Box3DTest
 {
    private static final double EPSILON = 1.0e-12;
-   private static final int NUM_ITERATIONS = 1000;
 
    @Test
    public void testCommonShape3dFunctionality()
@@ -431,7 +431,7 @@ public class Box3DTest
    {
       Random random = new Random(89725L);
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Test with identical boxes
          double lengthX = random.nextDouble();
          double widthY = random.nextDouble();
@@ -455,7 +455,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box2.geometricallyEquals(box2, EPSILON));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Test 2 boxes with same pose and different size - Method 1
          RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          double length1 = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
@@ -474,7 +474,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, epsilon) == size1.geometricallyEquals(size2, epsilon));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Test 2 boxes with same pose and different size - Method 2
          double epsilon = random.nextDouble();
          RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -491,7 +491,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, epsilon) == size1.geometricallyEquals(size2, epsilon));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Test 2 boxes with same orientation, same size, but different position
          double epsilon = random.nextDouble();
          Vector3D size = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
@@ -513,7 +513,7 @@ public class Box3DTest
          assertFalse("Iteration: " + i, box1.geometricallyEquals(box2, epsilon));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Test 2 boxes with same position, same size, but different orientation
          Quaternion orientation1 = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion orientation2 = EuclidCoreRandomTools.nextQuaternion(random);
@@ -527,7 +527,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON) == orientation1.geometricallyEquals(orientation2, EPSILON));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Test 180 degree flips around the x, y, or z axis
          RigidBodyTransform pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          double lengthX = random.nextDouble();
@@ -574,7 +574,7 @@ public class Box3DTest
          assertFalse("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the size components and adding a 90-degree rotation such that the two boxes should represent the same geometry
         // Swapping X <-> Y and adding a 90-degree rotation around Z
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -590,7 +590,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the size components and adding a 90-degree rotation such that the two boxes should represent the same geometry
         // Swapping X <-> Z and adding a 90-degree rotation around Y
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -606,7 +606,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Swapping two of the size components and adding a 90-degree rotation such that the two boxes should represent the same geometry
         // Swapping Y <-> Z and adding a 90-degree rotation around X
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -622,7 +622,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Permuting the three size components and adding a 90-degree rotations such that the two boxes should represent the same geometry
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);
@@ -638,7 +638,7 @@ public class Box3DTest
          assertTrue("Iteration: " + i, box1.geometricallyEquals(box2, EPSILON));
       }
 
-      for (int i = 0; i < NUM_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       { // Permuting the three size components and adding a 90-degree rotations such that the two boxes should represent the same geometry
          RigidBodyTransform pose1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform pose2 = new RigidBodyTransform(pose1);

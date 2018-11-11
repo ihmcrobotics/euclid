@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import java.util.Arrays;
@@ -10,8 +11,6 @@ import org.junit.Test;
 
 public class EuclidCoreToolsTest
 {
-   private static final int ITERATIONS = 10000;
-
    @Test
    public void testFastSquareRoot() throws Exception
    {

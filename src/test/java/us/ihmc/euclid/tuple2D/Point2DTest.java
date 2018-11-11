@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
          Assert.assertTrue(0 == point.getY());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point2D(double x, double y)
          double newX = random.nextDouble();
          double newY = random.nextDouble();
@@ -35,7 +36,7 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
          Assert.assertTrue(newY == point.getY());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point2D(double[] pointArray)
          double[] randomPoint2DArray = {random.nextDouble(), random.nextDouble()};
          Point2D pointArray = new Point2D(randomPoint2DArray);
@@ -44,7 +45,7 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
          Assert.assertTrue(randomPoint2DArray[1] == pointArray.getY());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point2D(Tuple2DReadOnly tuple)
          Point2D point2 = createRandomTuple(random);
          point = new Point2D(point2);
@@ -53,7 +54,7 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
          Assert.assertTrue(point.getY() == point2.getY());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test Point2D(Tuple3DReadOnly tuple)
          Point3D point2 = EuclidCoreRandomTools.nextPoint3D(random);
          point = new Point2D(point2);
@@ -75,7 +76,7 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
 
       previousHashCode = tuple1.hashCode();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          tuple1.setElement(i % 2, random.nextDouble());
          newHashCode = tuple1.hashCode();
@@ -113,7 +114,7 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
    @Override
    public double getEpsilon()
    {
-      return 1.0e-15;
+      return 1.0e-14;
    }
 
    @Override

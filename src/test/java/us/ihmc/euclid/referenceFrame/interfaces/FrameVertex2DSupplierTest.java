@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class FrameVertex2DSupplierTest
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    public static final double EPSILON = 1.0e-12;
-   public static final int ITERATIONS = 1000;
 
    @Test
    public void testCreatingEmptySupplier()

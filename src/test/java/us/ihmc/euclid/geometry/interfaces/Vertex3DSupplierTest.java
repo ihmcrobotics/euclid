@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
@@ -19,8 +20,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 public class Vertex3DSupplierTest
 {
    public static final double EPSILON = 1.0e-12;
-   public static final int ITERATIONS = 1000;
-
    @Test
    public void testCreatingEmptySupplier()
    {

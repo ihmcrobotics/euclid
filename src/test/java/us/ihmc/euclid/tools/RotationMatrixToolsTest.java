@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -18,7 +19,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class RotationMatrixToolsTest
 {
-   private static final int ITERATIONS = 1000;
    private static final double EPS = 1.0e-12;
 
    @Test

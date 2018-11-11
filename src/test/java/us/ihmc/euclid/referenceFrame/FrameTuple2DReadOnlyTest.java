@@ -9,12 +9,10 @@ import org.junit.Test;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
-import us.ihmc.euclid.tuple2D.Tuple2DReadOnlyTest;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public abstract class FrameTuple2DReadOnlyTest<F extends FrameTuple2DReadOnly>
 {
-   public static final int NUMBER_OF_ITERATIONS = Tuple2DReadOnlyTest.NUMBER_OF_ITERATIONS;
    public static final double EPSILON = 1.0e-15;
 
    public F createEmptyFrameTuple()

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -20,7 +21,6 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 public class Ramp3DTest
 {
    private static final boolean DEBUG = false;
-   private static final int ITERATIONS = 1000;
 
    /**
     * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface normal

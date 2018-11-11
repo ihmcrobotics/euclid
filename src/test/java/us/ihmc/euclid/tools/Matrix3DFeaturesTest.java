@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -16,7 +17,6 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 
 public class Matrix3DFeaturesTest
 {
-   public static final int NUMBER_OF_ITERATIONS = 100;
    private static final double EPS = 1.0e-10;
 
    @Test
@@ -60,7 +60,7 @@ public class Matrix3DFeaturesTest
       testAllCheckIfRotationMatrixAndIsRotationMatrixMethods(matrix, false);
 
       // Let's first test that it returns true for an actual rotation matrix
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix = new Matrix3D(EuclidCoreRandomTools.nextRotationMatrix(random));
          testAllCheckIfRotationMatrixAndIsRotationMatrixMethods(matrix, true);
@@ -312,7 +312,7 @@ public class Matrix3DFeaturesTest
       matrix.setToNaN();
       testCheckIfMatrix2DAndIsMatrix2DMethods(matrix, false);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D randomMatrix = EuclidCoreRandomTools.nextMatrix3D(random);
          randomMatrix.setM02(0.0);
@@ -453,7 +453,7 @@ public class Matrix3DFeaturesTest
          assertEquals(1.0, Matrix3DFeatures.determinant(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0), EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test that the determinant of a random rotation matrix is also equal to 1.0
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          assertEquals(1.0, rotationMatrix.determinant(), EPS);
@@ -470,7 +470,7 @@ public class Matrix3DFeaturesTest
       }
 
       // Check det == 0.0 when a column is zero
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          int zeroColumn = random.nextInt(3);
          double[] row0 = new double[3];
@@ -489,7 +489,7 @@ public class Matrix3DFeaturesTest
       }
 
       // Check that row swap negates the determinant
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double[] column0 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          double[] column1 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
@@ -516,7 +516,7 @@ public class Matrix3DFeaturesTest
       }
 
       // Check that column swap negates the determinant
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double[] row0 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          double[] row1 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
@@ -542,7 +542,7 @@ public class Matrix3DFeaturesTest
       }
 
       // Check that scaling a row scales the determinant
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double[] column0 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          double[] column1 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
@@ -563,7 +563,7 @@ public class Matrix3DFeaturesTest
       }
 
       // Check that scaling a column scales the determinant
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double[] row0 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          double[] row1 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
@@ -583,7 +583,7 @@ public class Matrix3DFeaturesTest
       }
 
       // Check that det(M) == 0 when M has two equal rows
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double[] column0 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          double[] column1 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
@@ -601,7 +601,7 @@ public class Matrix3DFeaturesTest
       }
 
       // Check that det(M) == 0 when M has two equal columns
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double[] row0 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          double[] row1 = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
@@ -618,7 +618,7 @@ public class Matrix3DFeaturesTest
          assertEquals(0.0, det, EPS);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Finally test against EJML
          Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          matrix.get(denseMatrix);
@@ -654,7 +654,7 @@ public class Matrix3DFeaturesTest
       matrix.setIdentity();
       testAllIsIdentityMethods(matrix, true);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          double delta = random.nextBoolean() ? 1.0 : -1.0;
          delta *= random.nextDouble();
@@ -730,7 +730,7 @@ public class Matrix3DFeaturesTest
       matrix.setToNaN();
       testAllIsMatrixSkewSymmetrixMethods(matrix, false);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          matrix.setToZero();
          matrix.setM01(EuclidCoreRandomTools.nextDouble(random));
@@ -815,7 +815,7 @@ public class Matrix3DFeaturesTest
       Matrix3D m2 = new Matrix3D();
       Matrix3D delta = new Matrix3D();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          m1 = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
          double epsilon = random.nextDouble();
@@ -857,7 +857,7 @@ public class Matrix3DFeaturesTest
       assertFalse(Matrix3DFeatures.equals(null, m2));
       assertFalse(Matrix3DFeatures.equals(new RotationMatrix(), m2));
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          m1 = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
 

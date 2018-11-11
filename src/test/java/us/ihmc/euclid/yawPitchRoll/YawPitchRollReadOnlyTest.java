@@ -1,6 +1,7 @@
 package us.ihmc.euclid.yawPitchRoll;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
 
 import java.util.Random;
@@ -41,8 +42,6 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
 {
-   public static final int ITERATIONS = 1000;
-
    public abstract T createEmptyYawPitchRoll();
 
    public abstract T createYawPitchRoll(Orientation3DReadOnly orientation3D);

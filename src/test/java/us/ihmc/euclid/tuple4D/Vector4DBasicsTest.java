@@ -1,11 +1,13 @@
 package us.ihmc.euclid.tuple4D;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
 import org.junit.Test;
 
+import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -24,7 +26,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       Random random = new Random(621541L);
       T vector = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(double x, double y, double z, double s);
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -43,7 +45,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
    public void testSetToZero() throws Exception
    {
       Random random = new Random(621541L);
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T tuple = createEmptyTuple();
          tuple.setX(random.nextDouble());
@@ -64,7 +66,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
    {
       Random random = new Random(4325234L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T tuple = createEmptyTuple();
          Point3D point3D = EuclidCoreRandomTools.nextPoint3D(random);
@@ -74,7 +76,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertTrue(tuple.getS() == 1.0);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          T tuple = createEmptyTuple();
          Vector3D vector3D = EuclidCoreRandomTools.nextVector3D(random);
@@ -91,35 +93,35 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       Random random = new Random(621541L);
       T vector = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setX(double x)
          double x = random.nextDouble();
          vector.setX(x);
          assertEquals(vector.getX(), x, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(double y)
          double y = random.nextDouble();
          vector.setY(y);
          assertEquals(vector.getY(), y, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(double z)
          double z = random.nextDouble();
          vector.setZ(z);
          assertEquals(vector.getZ(), z, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test setS(double s)
          double s = random.nextDouble();
          vector.setS(s);
          assertEquals(vector.getS(), s, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test set(int index, double value)
          try
          {
@@ -172,7 +174,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       T tuple1 = createEmptyTuple();
       T tuple2 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test clipToMax(double max)
          double max = random.nextDouble();
          tuple1.setX(max + random.nextDouble());
@@ -195,7 +197,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertTrue(tuple1.equals(tuple2));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test clipToMax(double max, TupleBasics other)
          double max = random.nextDouble();
          tuple1.setX(random.nextDouble());
@@ -221,7 +223,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertTrue(tuple1.equals(tuple2));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test clipToMin(double min)
          double min = random.nextDouble();
          tuple1.setX(min - random.nextDouble());
@@ -244,7 +246,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertTrue(tuple1.equals(tuple2));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test clipToMin(double min, TupleBasics other)
          double min = random.nextDouble();
          tuple1.setX(random.nextDouble());
@@ -270,7 +272,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertTrue(tuple1.equals(tuple2));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test clipToMinMax(double min, double max)
          double min = random.nextDouble() - 0.5;
          double max = random.nextDouble() + 0.5;
@@ -306,7 +308,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertTrue(tuple1.equals(tuple2));
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test clipToMinMax(double min, double max, TupleBasics other)
          double min = random.nextDouble() - 0.5;
          double max = random.nextDouble() + 0.5;
@@ -363,7 +365,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       T tuple2 = createEmptyTuple();
       T tuple3 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test addX, addY, addZ, addS
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -388,7 +390,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld + s, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test add(double x, double y)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -410,7 +412,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld + s, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test add(TupleBasics other)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -432,7 +434,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld + tuple2.getS(), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test add(TupleBasics other)
          tuple1.setX(random.nextDouble());
          tuple1.setY(random.nextDouble());
@@ -463,7 +465,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       T tuple2 = createEmptyTuple();
       T tuple3 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test subX, subY, subZ, subS
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -488,7 +490,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld - s, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test sub(double x, double y)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -507,7 +509,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld - s, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test sub(TupleBasics other)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -529,7 +531,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld - tuple2.getS(), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test sub(TupleBasics tuple1, TupleBasics tuple2)
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -551,7 +553,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       T tuple2 = createEmptyTuple();
       T tuple3 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scale(double scalarX, double scalarY)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -567,7 +569,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld * scale, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scale(double scalarX, double scalarY)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -586,7 +588,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld * scaleS, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scale(double scalar, TupleBasics other)
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -599,7 +601,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), tuple2.getS() * scale, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scaleAdd(double scalar, TupleBasics other)
          double scale = random.nextDouble();
          double xOld = random.nextDouble();
@@ -622,7 +624,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld * scale + tuple2.getS(), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scaleAdd(double scalar, TupleBasics tuple1, TupleBasics tuple2)
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -636,7 +638,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), tuple2.getS() * scale + tuple3.getS(), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scaleAdd(double scalar, TupleBasics tuple1, TupleBasics tuple2) with tuple2 == this
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -650,7 +652,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), tuple2.getS() * scale + tuple3.getS(), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scaleSub(double scalar, TupleBasics other)
          double scale = random.nextDouble();
          double xOld = random.nextDouble();
@@ -673,7 +675,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), sOld * scale - tuple2.getS(), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scaleSub(double scalar, TupleBasics tuple1, TupleBasics tuple2)
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -687,7 +689,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), tuple2.getS() * scale - tuple3.getS(), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test scaleSub(double scalar, TupleBasics tuple1, TupleBasics tuple2) with tuple2 == this
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -710,7 +712,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       T tuple2 = createEmptyTuple();
       T tuple3 = createEmptyTuple();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test interpolate(TupleBasics other, double alpha)
          double alpha = random.nextDouble();
          double xOld = random.nextDouble();
@@ -733,7 +735,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          assertEquals(tuple1.getS(), EuclidCoreTools.interpolate(sOld, tuple2.getS(), alpha), getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test interpolate(TupleBasics tuple1, TupleBasics tuple2, double alpha)
          double alpha = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -753,7 +755,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
    {
       Random random = new Random(23523L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          T original = createRandomTuple(random);
@@ -767,7 +769,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          T original = createRandomTuple(random);
@@ -781,7 +783,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          T original = createRandomTuple(random);
@@ -801,7 +803,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
    {
       Random random = new Random(23523L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          T original = createRandomTuple(random);
@@ -815,7 +817,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          T original = createRandomTuple(random);
@@ -829,9 +831,11 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+         AffineTransform transform = new AffineTransform(new RotationScaleMatrix(EuclidCoreRandomTools.nextRotationMatrix(random),
+                                                                                 EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0)),
+                                                         EuclidCoreRandomTools.nextPoint3D(random, 10.0));
          T original = createRandomTuple(random);
          T expected = createEmptyTuple();
          T actual = createEmptyTuple();
@@ -851,7 +855,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       Vector4DBasics vectorB;
       Random random = new Random(621541L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          vectorA = EuclidCoreRandomTools.nextVector4D(random);
          vectorB = EuclidCoreRandomTools.nextVector4D(random);

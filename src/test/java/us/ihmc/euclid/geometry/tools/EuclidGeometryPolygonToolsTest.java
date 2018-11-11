@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
@@ -29,8 +30,6 @@ public class EuclidGeometryPolygonToolsTest
 {
    private static final double SMALL_EPSILON = 1.0e-9;
    private static final double SMALLEST_EPSILON = 1.0e-12;
-   private static final int ITERATIONS = 1000;
-
    private static interface ConvexHullAlgorithm
    {
       int process(List<? extends Point2DReadOnly> vertices, int numberOfVertices);

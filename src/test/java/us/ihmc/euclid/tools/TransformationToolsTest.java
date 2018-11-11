@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tools;
 
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+
 import java.util.Random;
 
 import org.junit.Test;
@@ -21,7 +23,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public class TransformationToolsTest
 {
-   private static final int NUMBER_OF_ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
 
    @Test
@@ -29,7 +30,7 @@ public class TransformationToolsTest
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D matrix3D = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
          Tuple3DReadOnly tupleOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -57,7 +58,7 @@ public class TransformationToolsTest
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionReadOnly quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Tuple3DReadOnly tupleOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -85,7 +86,7 @@ public class TransformationToolsTest
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test for Point3DReadOnly
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Point3DReadOnly pointOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -107,7 +108,7 @@ public class TransformationToolsTest
          EuclidCoreTestTools.assertTuple3DEquals(pointExpected, pointActual, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test for Vector3DReadOnly
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3DReadOnly vectorOriginal = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
@@ -135,7 +136,7 @@ public class TransformationToolsTest
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test for Point3DReadOnly
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          Point3DReadOnly pointOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -157,7 +158,7 @@ public class TransformationToolsTest
          EuclidCoreTestTools.assertTuple3DEquals(pointExpected, pointActual, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test for Vector3DReadOnly
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          Vector3DReadOnly vectorOriginal = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
@@ -185,7 +186,7 @@ public class TransformationToolsTest
    {
       Random random = new Random(2342L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test for Point3DReadOnly
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          Point3DReadOnly pointOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -205,7 +206,7 @@ public class TransformationToolsTest
          EuclidCoreTestTools.assertTuple3DEquals(pointExpected, pointActual, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test for Vector3DReadOnly
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          Vector3DReadOnly vectorOriginal = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);

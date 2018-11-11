@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -19,7 +20,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 public class LineSegment2DTest
 {
-   private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-11;
 
    @Test

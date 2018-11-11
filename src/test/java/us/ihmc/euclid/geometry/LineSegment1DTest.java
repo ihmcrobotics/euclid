@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -15,7 +16,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 public class LineSegment1DTest
 {
    private static final double EPSILON = 1.0e-12;
-   private static final int ITERATIONS = 1000;
 
    @Test
    public void lineBoundariesTest()

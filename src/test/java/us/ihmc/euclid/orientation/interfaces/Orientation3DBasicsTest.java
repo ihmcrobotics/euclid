@@ -1,6 +1,7 @@
 package us.ihmc.euclid.orientation.interfaces;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -19,8 +20,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 public abstract class Orientation3DBasicsTest
 {
-   public static final int ITERATIONS = 1000;
-
    public abstract Orientation3DBasics createEmptyOrientation3DBasics();
 
    private Orientation3DBasics createRandomOrientation3DBasics(Random random)

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
@@ -10,8 +11,6 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 
 public class Orientation2DTest
 {
-   private static final int ITERATIONS = 1000;
-
    @Test
    public void testGeometricallyEquals()
    {

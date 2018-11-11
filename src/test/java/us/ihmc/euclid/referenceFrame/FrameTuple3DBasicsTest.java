@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.Assert.*;
+import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -39,7 +40,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
    {
       Random random = new Random(5472);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -78,7 +79,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests set(ReferenceFrame referenceFrame, double x, double y, double z)
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -125,7 +126,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
 
       ReferenceFrame initialFrame = ReferenceFrame.getWorldFrame();
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double x, double y, double z)
          double x = random.nextDouble();
          double y = random.nextDouble();
@@ -140,7 +141,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly, double z)
          Tuple2DReadOnly input = EuclidCoreRandomTools.nextPoint2D(random);
          double z = random.nextDouble();
@@ -154,7 +155,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
          Tuple3DReadOnly input = EuclidCoreRandomTools.nextPoint3D(random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -167,7 +168,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, double[] tupleArray)
          double[] input = new double[random.nextInt(20)];
          for (int j = 0; j < input.length; j++)
@@ -208,7 +209,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startIndex, double[] tupleArray)
          int startIndex = random.nextInt(10);
          double[] input = new double[random.nextInt(20)];
@@ -242,12 +243,12 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
@@ -278,12 +279,12 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
          int startRow = random.nextInt(10);
          DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
@@ -315,12 +316,12 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F tupleDenseMatrix)
          int startRow = random.nextInt(10);
          int column = random.nextInt(10);
@@ -353,11 +354,11 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || !e.getMessage().equals(expectedException.getMessage()))
+            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(FrameTuple2DReadOnly frameTuple2DReadOnly, double z)
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameTuple2DReadOnly input = EuclidFrameRandomTools.nextFramePoint2D(random, newFrame);
@@ -371,7 +372,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
          EuclidCoreTestTools.assertTuple3DEquals(tuple, frameTuple, EPSILON);
       }
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(FrameTuple3DReadOnly other)
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          FrameTuple3DReadOnly input = EuclidFrameRandomTools.nextFramePoint3D(random, newFrame);
@@ -390,7 +391,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
    {
       Random random = new Random(234234L);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
@@ -420,7 +421,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
    {
       Random random = new Random(574);
 
-      for (int i = 0; i < NUMBER_OF_ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
