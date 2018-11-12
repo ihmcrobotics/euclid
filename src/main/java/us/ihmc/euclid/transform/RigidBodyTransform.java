@@ -386,7 +386,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    @Override
    public void set(RigidBodyTransform other)
    {
-      set(other);
+      set((RigidBodyTransformReadOnly) other);
    }
 
    /**
@@ -411,20 +411,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       set(other);
       invert();
-   }
-
-   /**
-    * Sets this rigid-body transform to the given {@code quaternionBasedTransform}.
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to copy the values from. Not
-    *           modified.
-    */
-   public void set(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      rotationMatrix.set(quaternionBasedTransform.getQuaternion());
-      translationVector.set(quaternionBasedTransform.getTranslationVector());
-      hasRotation = !isRotationZero(rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
