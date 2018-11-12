@@ -100,7 +100,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    @Override
    default void get(RotationMatrix rotationMatrixToPack)
    {
-      rotationMatrixToPack.setRotationMatrix(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+      rotationMatrixToPack.set(this);
    }
 
    /** {@inheritDoc} */
