@@ -18,6 +18,7 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -2241,17 +2242,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
    private static boolean isTupleZero(Tuple3DReadOnly tupleToTest)
    {
-      return areComponentsAllZero(tupleToTest.getX(), tupleToTest.getY(), tupleToTest.getZ());
-   }
-
-   private static boolean areComponentsAllZero(double x, double y, double z)
-   {
-      return isZero(x) && isZero(y) && isZero(z);
-   }
-
-   private static boolean isZero(double value)
-   {
-      return Math.abs(value) <= EPS_CHECK_IDENTITY;
+      return TupleTools.isTupleZero(tupleToTest, EPS_CHECK_IDENTITY);
    }
 
    /**
