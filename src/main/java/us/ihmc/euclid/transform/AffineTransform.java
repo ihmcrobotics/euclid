@@ -21,6 +21,7 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -1545,15 +1546,7 @@ public class AffineTransform
 
    /** {@inheritDoc} */
    @Override
-   public void transform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void transform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
+   public void transform(RigidBodyTransformReadOnly original, RigidBodyTransformBasics transformed)
    {
       transformed.set(original);
       transformed.preMultiply(this);
@@ -1626,15 +1619,7 @@ public class AffineTransform
 
    /** {@inheritDoc} */
    @Override
-   public void inverseTransform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void inverseTransform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
+   public void inverseTransform(RigidBodyTransformReadOnly original, RigidBodyTransformBasics transformed)
    {
       transformed.set(original);
       transformed.preMultiplyInvertOther(this);

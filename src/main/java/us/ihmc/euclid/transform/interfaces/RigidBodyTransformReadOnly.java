@@ -12,8 +12,6 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.AffineTransform;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -193,15 +191,7 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /** {@inheritDoc} */
    @Override
-   default void transform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiply(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void transform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
+   default void transform(RigidBodyTransformReadOnly original, RigidBodyTransformBasics transformed)
    {
       transformed.set(original);
       transformed.preMultiply(this);
@@ -294,15 +284,7 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /** {@inheritDoc} */
    @Override
-   default void inverseTransform(RigidBodyTransformReadOnly original, RigidBodyTransform transformed)
-   {
-      transformed.set(original);
-      transformed.preMultiplyInvertOther(this);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void inverseTransform(QuaternionBasedTransform original, QuaternionBasedTransform transformed)
+   default void inverseTransform(RigidBodyTransformReadOnly original, RigidBodyTransformBasics transformed)
    {
       transformed.set(original);
       transformed.preMultiplyInvertOther(this);
