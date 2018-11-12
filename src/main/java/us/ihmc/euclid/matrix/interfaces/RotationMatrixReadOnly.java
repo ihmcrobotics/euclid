@@ -183,6 +183,37 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
          Matrix3DReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
    }
 
+   /**
+    * Transforms the given tuple by this matrix and subtracts the result to the tuple.
+    * <p>
+    * tupleToTransform = tupleToTransform - this * tupleToTransform
+    * </p>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void subTransform(Tuple3DBasics tupleToTransform)
+   {
+      addTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and subtracts the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = tupleTransformed - this * tupleOriginal
+    * </p>
+    *
+    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to add the result to. Modified.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      if (isIdentity())
+         tupleTransformed.sub(tupleOriginal);
+      else
+         Matrix3DTools.subTransform(this, tupleOriginal, tupleTransformed);
+   }
+
    /** {@inheritDoc} */
    @Override
    default void transform(Tuple3DBasics tupleToTransform)
