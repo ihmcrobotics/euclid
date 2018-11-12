@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
+import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;

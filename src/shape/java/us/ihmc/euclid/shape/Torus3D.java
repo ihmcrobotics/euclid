@@ -1,11 +1,11 @@
 package us.ihmc.euclid.shape;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
+import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -74,7 +74,7 @@ public class Torus3D extends Shape3D<Torus3D>
     * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
     *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
-   public Torus3D(RigidBodyTransform pose, double radius, double tubeRadius)
+   public Torus3D(RigidBodyTransformReadOnly pose, double radius, double tubeRadius)
    {
       set(pose, radius, tubeRadius);
    }
@@ -130,7 +130,7 @@ public class Torus3D extends Shape3D<Torus3D>
     * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
     *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
-   public void set(RigidBodyTransform pose, double radius, double tubeRadius)
+   public void set(RigidBodyTransformReadOnly pose, double radius, double tubeRadius)
    {
       setPose(pose);
       setRadii(radius, tubeRadius);

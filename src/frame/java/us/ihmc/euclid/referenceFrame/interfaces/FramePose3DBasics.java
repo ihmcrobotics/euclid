@@ -6,7 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -90,7 +90,7 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
     * @param referenceFrame the new reference frame.
     * @param rigidBodyTransform the transform used to set the pose. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform)
    {
       setReferenceFrame(referenceFrame);
       set(rigidBodyTransform);

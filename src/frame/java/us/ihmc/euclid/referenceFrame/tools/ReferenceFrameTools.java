@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -87,7 +88,7 @@ public class ReferenceFrameTools
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                RigidBodyTransform transformFromParent)
+                                                                                RigidBodyTransformReadOnly transformFromParent)
    {
       RigidBodyTransform transformToParent = new RigidBodyTransform(transformFromParent);
       transformToParent.invert();
@@ -130,7 +131,7 @@ public class ReferenceFrameTools
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
-                                                                              RigidBodyTransform transformToParent)
+                                                                              RigidBodyTransformReadOnly transformToParent)
    {
       boolean isZupFrame = parentFrame.isZupFrame() && transformToParent.isRotation2D();
       boolean isAStationaryFrame = parentFrame.isAStationaryFrame();

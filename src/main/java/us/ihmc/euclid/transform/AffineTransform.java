@@ -945,27 +945,6 @@ public class AffineTransform
    }
 
    /**
-    * Performs the multiplication of this with the given {@code quaternionBasedTransform}.
-    * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
-    * this = this * H(quaternionBasedTransform) <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void multiply(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      Matrix3DTools.addTransform(getRotationMatrix(), quaternionBasedTransform.getTranslation(), translationVector);
-      rotationScaleMatrix.append(quaternionBasedTransform.getRotation());
-   }
-
-   /**
     * Performs the multiplication of the inverse of this with the given {@code other}.
     * <p>
     * Note: the scale part of the either affine transform is not used when performing the
@@ -1037,51 +1016,6 @@ public class AffineTransform
    {
       rotationScaleMatrix.appendInvertOther(rigidBodyTransform.getRotation());
       Matrix3DTools.subTransform(getRotationMatrix(), rigidBodyTransform.getTranslation(), translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of this transform with
-    * {@code quaternionBasedTransform}.
-    * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
-    * this = this<sup>-1</sup> * H(quaternionBasedTransform) <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void multiplyInvertThis(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      translationVector.sub(quaternionBasedTransform.getTranslation(), translationVector);
-      getRotationMatrix().inverseTransform(translationVector, translationVector);
-      rotationScaleMatrix.appendInvertThis(quaternionBasedTransform.getRotation());
-   }
-
-   /**
-    * Performs the multiplication of this transform with the inverse of
-    * {@code quaternionBasedTransform}.
-    * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
-    * this = this * H(quaternionBasedTransform)<sup>-1</sup> <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void multiplyInvertOther(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      rotationScaleMatrix.appendInvertOther(quaternionBasedTransform.getRotation());
-      Matrix3DTools.subTransform(getRotationMatrix(), quaternionBasedTransform.getTranslation(), translationVector);
    }
 
    /**
@@ -1233,27 +1167,6 @@ public class AffineTransform
    }
 
    /**
-    * Performs the multiplication of {@code rigidBodyTransform} with this transform.
-    * <p>
-    * Note: this operation does not affect the scale of this transform.
-    * </p>
-    * <p>
-    * this = H(quaternionBasedTransform) * this <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void preMultiply(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      quaternionBasedTransform.transform(translationVector);
-      translationVector.add(quaternionBasedTransform.getTranslation());
-      rotationScaleMatrix.prepend(quaternionBasedTransform.getRotation());
-   }
-
-   /**
     * Performs the multiplication of {@code other} with the inverse of this transform.
     * <p>
     * Note: the scale part of either affine transform is not used when performing the multiplication.
@@ -1326,51 +1239,6 @@ public class AffineTransform
       translationVector.sub(rigidBodyTransform.getTranslation());
       rigidBodyTransform.getRotation().inverseTransform(translationVector);
       rotationScaleMatrix.prependInvertOther(rigidBodyTransform.getRotation());
-   }
-
-   /**
-    * Performs the multiplication of {@code quaternionBasedTransform} with the inverse of this
-    * transform.
-    * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
-    * this = H(quaternionBasedTransform) * this<sup>-1</sup> <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void preMultiplyInvertThis(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      rotationScaleMatrix.prependInvertThis(quaternionBasedTransform.getRotation());
-      getRotationMatrix().transform(translationVector);
-      translationVector.sub(quaternionBasedTransform.getTranslation(), translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of {@code quaternionBasedTransform} with this
-    * transform.
-    * <p>
-    * Note: this operation does not affect the scale of this transform.
-    * </p>
-    * <p>
-    * this = H(quaternionBasedTransform)<sup>-1</sup> * this <br>
-    * where H(q) is the function converting a quaternion-based transform into a 4-by-4 transformation
-    * matrix.
-    * </p>
-    *
-    * @param quaternionBasedTransform the quaternion-based transform to multiply this with. Not
-    *           modified.
-    */
-   public void preMultiplyInvertOther(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      translationVector.sub(quaternionBasedTransform.getTranslation());
-      quaternionBasedTransform.getRotation().inverseTransform(translationVector);
-      rotationScaleMatrix.prependInvertOther(quaternionBasedTransform.getRotation());
    }
 
    /**
@@ -1639,7 +1507,7 @@ public class AffineTransform
     * @param rigidBodyTransformToPack the transform in which the rotation and translation parts of this
     *           affine transform are stored. Modified.
     */
-   public void getRigidBodyTransform(RigidBodyTransform rigidBodyTransformToPack)
+   public void getRigidBodyTransform(RigidBodyTransformBasics rigidBodyTransformToPack)
    {
       rigidBodyTransformToPack.setRotation(rotationScaleMatrix.getRotationMatrix());
       rigidBodyTransformToPack.setTranslation(translationVector);
