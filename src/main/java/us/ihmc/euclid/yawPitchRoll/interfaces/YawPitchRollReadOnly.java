@@ -30,7 +30,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * However, there is no algebra directly accessible for manipulating orientations represented as
  * yaw-pitch-roll making it highly computationally expensive when compared to rotation matrices or
  * quaternions. In addition, yaw-pitch-roll representation is sensitive to gimbal lock which happens
- * when the pitch angle is in the neighborhood of either <i>pi</i> or -<i>pi</i>. When close to such
+ * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to such
  * configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes lead
  * to unexpected results.
  * </p>
