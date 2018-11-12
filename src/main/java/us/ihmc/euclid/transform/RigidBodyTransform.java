@@ -280,7 +280,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    @Override
    public boolean hasRotation()
    {
-      return getRotation().isZeroOrientation();
+      return !getRotation().isZeroOrientation();
    }
 
    /**
