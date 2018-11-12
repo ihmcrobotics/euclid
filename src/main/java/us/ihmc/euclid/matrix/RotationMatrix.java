@@ -205,7 +205,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void normalize()
    {
-      if (isIdentity)
+      if (isIdentity())
          setIdentity();
       else
          Matrix3DTools.normalize(this);

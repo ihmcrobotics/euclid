@@ -1866,12 +1866,13 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 1.0e-11);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-11, 1.0e-10);
          mA = createRandomMatrix(random);
          double angleDiff = 1.01 * epsilon;
          AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), angleDiff);
+         RotationMatrix rDiff = new RotationMatrix(aa);
 
-         mB = new RotationMatrix(aa);
+         mB = new RotationMatrix(rDiff);
          mB.preMultiply(mA);
 
          assertFalse(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
