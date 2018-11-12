@@ -175,6 +175,14 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       setIdentity();
    }
 
+   @Override
+   public void setIdentity()
+   {
+      setUnsafe(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+      isIdentity = true;
+      dirty = false;
+   }
+
    /**
     * {@inheritDoc}
     * <p>

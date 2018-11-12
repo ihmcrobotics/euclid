@@ -1,7 +1,5 @@
 package us.ihmc.euclid.transform.interfaces;
 
-import java.util.Arrays;
-
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
@@ -63,7 +61,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     */
    default boolean hasTranslation()
    {
-      return TupleTools.isTupleZero(getTranslation(), EPS_ZERO_TRANSLATION);
+      return !TupleTools.isTupleZero(getTranslation(), EPS_ZERO_TRANSLATION);
    }
 
    /**
@@ -328,10 +326,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     */
    default void getRotation(Orientation3DBasics orientationToPack)
    {
-      if (hasRotation())
-         orientationToPack.set(getRotation());
-      else
-         orientationToPack.setToZero();
+      orientationToPack.set(getRotation());
    }
 
    /**
@@ -347,10 +342,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     */
    default void getRotation(Vector3DBasics rotationVectorToPack)
    {
-      if (hasRotation())
-         getRotation().getRotationVector(rotationVectorToPack);
-      else
-         rotationVectorToPack.setToZero();
+      getRotation().getRotationVector(rotationVectorToPack);
    }
 
    /**
@@ -367,10 +359,7 @@ public interface RigidBodyTransformReadOnly extends Transform
    @Deprecated
    default void getRotationYawPitchRoll(double[] yawPitchRollToPack)
    {
-      if (hasRotation())
-         getRotation().getYawPitchRoll(yawPitchRollToPack);
-      else
-         Arrays.fill(yawPitchRollToPack, 0, 3, 0.0);
+      getRotation().getYawPitchRoll(yawPitchRollToPack);
    }
 
    /**
@@ -385,10 +374,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     */
    default void getRotationEuler(Vector3DBasics eulerAnglesToPack)
    {
-      if (hasRotation())
-         getRotation().getEuler(eulerAnglesToPack);
-      else
-         eulerAnglesToPack.setToZero();
+      getRotation().getEuler(eulerAnglesToPack);
    }
 
    /**

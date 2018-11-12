@@ -239,7 +239,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotation(RotationMatrixReadOnly rotationMatrix)
    {
-      this.getRotation().set(rotationMatrix);
+      getRotation().set(rotationMatrix);
    }
 
    /**
@@ -757,8 +757,8 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    default void multiplyInvertThis(AffineTransform affineTransform)
    {
       getTranslation().sub(affineTransform.getTranslationVector(), getTranslation());
-      getRotation().inverseTransform(getTranslation(), getTranslation());
-      getRotation().inverseTransform(affineTransform.getRotationMatrix(), getRotation());
+      getRotation().inverseTransform(getTranslation());
+      getRotation().appendInvertThis(affineTransform.getRotationMatrix());
    }
 
    /**
