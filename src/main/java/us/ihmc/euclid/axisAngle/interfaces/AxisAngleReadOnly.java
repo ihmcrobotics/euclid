@@ -359,13 +359,6 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
-   {
-      AxisAngleTools.addTransform(this, tupleOriginal, tupleTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfOrientation2D)
    {
       AxisAngleTools.transform(this, tupleOriginal, tupleTransformed, checkIfOrientation2D);

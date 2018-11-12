@@ -314,7 +314,51 @@ public interface Orientation3DReadOnly
     * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     */
-   void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed);
+   default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      double x = tupleTransformed.getX();
+      double y = tupleTransformed.getY();
+      double z = tupleTransformed.getZ();
+      transform(tupleOriginal, tupleTransformed);
+      tupleTransformed.add(x, y, z);
+   }
+
+   /**
+    * Transforms the given tuple by this orientation and subtracts the result to the tuple.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleToTransform the 3D tuple to be transformed. Modified.
+    */
+   default void subTransform(Tuple3DBasics tupleToTransform)
+   {
+      subTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      double x = tupleTransformed.getX();
+      double y = tupleTransformed.getY();
+      double z = tupleTransformed.getZ();
+      transform(tupleOriginal, tupleTransformed);
+      tupleTransformed.sub(x, y, z);
+      tupleTransformed.negate();
+   }
 
    /**
     * Transforms the given tuple by this orientation.
