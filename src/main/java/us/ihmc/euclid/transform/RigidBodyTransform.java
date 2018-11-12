@@ -13,7 +13,6 @@ import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -2088,65 +2087,10 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    /**
     * Packs the rotation matrix and translation vector of this rigid-body transform.
     *
-    * @param orientationToPack the orientation to set to the rotation of this transform. Modified.
-    * @param translationToPack the tuple to set to the translation of this transform. Modified.
-    */
-   public void get(Orientation3DBasics orientationToPack, Tuple3DBasics translationToPack)
-   {
-      orientationToPack.set(rotationMatrix);
-      translationToPack.set(translationVector);
-   }
-
-   /**
-    * Packs the rotation matrix and translation vector of this rigid-body transform.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVectorToPack the rotation vector to set to the rotation of this transform.
-    *           Modified.
-    * @param translationToPack the tuple to set to the translation of this transform. Modified.
-    */
-   public void get(Vector3DBasics rotationVectorToPack, Tuple3DBasics translationToPack)
-   {
-      rotationMatrix.getRotationVector(rotationVectorToPack);
-      translationToPack.set(translationVector);
-   }
-
-   /**
-    * Packs the rotation matrix and translation vector of this rigid-body transform.
-    *
     * @param rotationMarixToPack the matrix to set to the rotation of this transform. Modified.
     * @param translationToPack the tuple to set to the translation of this transform. Modified.
     */
    public void get(CommonMatrix3DBasics rotationMarixToPack, Tuple3DBasics translationToPack)
-   {
-      rotationMarixToPack.set(rotationMatrix);
-      translationToPack.set(translationVector);
-   }
-
-   /**
-    * Packs the rotation matrix and translation vector of this rigid-body transform.
-    *
-    * @param rotationMarixToPack the matrix to set to the rotation of this transform. Modified.
-    * @param translationToPack the tuple to set to the translation of this transform. Modified.
-    */
-   public void get(RotationMatrix rotationMarixToPack, Tuple3DBasics translationToPack)
-   {
-      rotationMarixToPack.set(rotationMatrix);
-      translationToPack.set(translationVector);
-   }
-
-   /**
-    * Packs the rotation matrix and translation vector of this rigid-body transform.
-    *
-    * @param rotationMarixToPack the matrix to set to the rotation of this transform. The scale part is
-    *           reset. Modified.
-    * @param translationToPack the tuple to set to the translation of this transform. Modified.
-    */
-   public void get(RotationScaleMatrix rotationMarixToPack, Tuple3DBasics translationToPack)
    {
       rotationMarixToPack.set(rotationMatrix);
       translationToPack.set(translationVector);
@@ -2442,7 +2386,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
    private static boolean isRotationZero(RotationMatrixReadOnly rotationMatrixToTest)
    {
-      return rotationMatrixToTest.isIdentity(EPS_CHECK_IDENTITY);
+      return rotationMatrixToTest.isZeroOrientation();
    }
 
    private static boolean isTupleZero(Tuple3DReadOnly tupleToTest)

@@ -446,4 +446,59 @@ public interface RigidBodyTransformReadOnly extends Transform
    {
       return getTranslation().getZ();
    }
+
+   /**
+    * Packs the rotation matrix and translation vector of this rigid-body transform.
+    *
+    * @param orientationToPack the orientation to set to the rotation of this transform. Modified.
+    * @param translationToPack the tuple to set to the translation of this transform. Modified.
+    */
+   default void get(Orientation3DBasics orientationToPack, Tuple3DBasics translationToPack)
+   {
+      orientationToPack.set(getRotation());
+      translationToPack.set(getTranslation());
+   }
+
+   /**
+    * Packs the rotation matrix and translation vector of this rigid-body transform.
+    * <p>
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
+    * </p>
+    *
+    * @param rotationVectorToPack the rotation vector to set to the rotation of this transform.
+    *           Modified.
+    * @param translationToPack the tuple to set to the translation of this transform. Modified.
+    */
+   default void get(Vector3DBasics rotationVectorToPack, Tuple3DBasics translationToPack)
+   {
+      getRotation().getRotationVector(rotationVectorToPack);
+      translationToPack.set(getTranslation());
+   }
+
+   /**
+    * Packs the rotation matrix and translation vector of this rigid-body transform.
+    *
+    * @param rotationMarixToPack the matrix to set to the rotation of this transform. Modified.
+    * @param translationToPack the tuple to set to the translation of this transform. Modified.
+    */
+   default void get(RotationMatrix rotationMarixToPack, Tuple3DBasics translationToPack)
+   {
+      rotationMarixToPack.set(getRotation());
+      translationToPack.set(getTranslation());
+   }
+
+   /**
+    * Packs the rotation matrix and translation vector of this rigid-body transform.
+    *
+    * @param rotationMarixToPack the matrix to set to the rotation of this transform. The scale part is
+    *           reset. Modified.
+    * @param translationToPack the tuple to set to the translation of this transform. Modified.
+    */
+   default void get(RotationScaleMatrix rotationMarixToPack, Tuple3DBasics translationToPack)
+   {
+      rotationMarixToPack.set(getRotation());
+      translationToPack.set(getTranslation());
+   }
 }
