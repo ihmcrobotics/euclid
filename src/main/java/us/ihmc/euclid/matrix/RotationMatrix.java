@@ -387,6 +387,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       m21 = other.getM21();
       m22 = other.getM22();
 
+      // TODO Need to copy the dirty and isIdentity bits over.
       markAsDirty();
    }
 
