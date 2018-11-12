@@ -12,7 +12,7 @@ import org.ejml.ops.RandomMatrices;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
@@ -300,7 +300,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertEquals(0.0, vector1.dot(vector2), EPS);
       }
 
-      corruptionFactor = 0.9e-10;
+      corruptionFactor = 0.9e-12;
       m00 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
       m01 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
       m02 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
@@ -1026,10 +1026,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          transform.checkIfRotation2D();
          fail("Should have thrown a NotAMatrix2DException.");
       }
-      catch (NotAMatrix2DException e)
+      catch (NotAnOrientation2DException e)
       {
          // good
-         assertTrue(e.getMessage().equals("The matrix is not in XY plane: \n" + transform.getRotation()));
+         assertTrue(e.getMessage().equals("The orientation is not in XY plane: \n" + transform.getRotation()));
       }
 
       transform.setRotationUnsafe(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
