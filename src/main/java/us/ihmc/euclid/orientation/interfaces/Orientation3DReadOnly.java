@@ -38,11 +38,30 @@ public interface Orientation3DReadOnly
     * XY-plane.
     */
    static final double ORIENTATION_2D_EPSILON = 1.0e-8;
+   /**
+    * Default tolerance used when testing if this is a zero orientation.
+    */
    static final double ZERO_EPSILON = 1.0e-8;
 
-   /** {@inheritDoc} */
+   /**
+    * Tests if at least one of this orientation's component contains {@link Double#NaN}.
+    * 
+    * @return if this orientation has at least one component being {@link Double#NaN}.
+    */
    boolean containsNaN();
 
+   /**
+    * Test if this orientation 3D represents a zero orientation.
+    * <p>
+    * A zero orientation when used as a transform, leaves a the transformed geometry unchanged.
+    * </p>
+    * <p>
+    * Equivalent to calling {@link #isZeroOrientation(double)} with {@link #ZERO_EPSILON}.
+    * </p>
+    * 
+    * @param epsilon the tolerance used for the test.
+    * @return {@code true} if this is equal to a zero orientation, {@code false} otherwise.
+    */
    default boolean isZeroOrientation()
    {
       return isZeroOrientation(ZERO_EPSILON);
