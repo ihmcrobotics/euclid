@@ -302,6 +302,59 @@ public class EuclidCoreToolsTest
    }
 
    @Test
+   public void testAngleGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(35635);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with angle that are close-ish to each other
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 0.5);
+         double angleA = EuclidCoreRandomTools.nextDouble(random, 10.0 * Math.PI);
+         double angleNotEqual = angleA + (random.nextBoolean() ? -1.01 : 1.01) * epsilon;
+         double angleEqual = angleA + (random.nextBoolean() ? -0.99 : 0.99) * epsilon;
+
+         assertFalse(EuclidCoreTools.angleGeometricallyEquals(angleA, angleNotEqual, epsilon));
+         assertTrue(EuclidCoreTools.angleGeometricallyEquals(angleA, angleEqual, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with angle that are far-ish to each other
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 0.5);
+         double angleA = EuclidCoreRandomTools.nextDouble(random, 10.0 * Math.PI);
+         double twoPIMutiple = random.nextInt(15) * 2.0 * Math.PI;
+         if (random.nextBoolean())
+            twoPIMutiple = -twoPIMutiple;
+         double angleNotEqual = angleA + (random.nextBoolean() ? -1.01 : 1.01) * epsilon + twoPIMutiple;
+         double angleEqual = angleA + (random.nextBoolean() ? -0.99 : 0.99) * epsilon + twoPIMutiple;
+
+         assertFalse(EuclidCoreTools.angleGeometricallyEquals(angleA, angleNotEqual, epsilon));
+         assertTrue(EuclidCoreTools.angleGeometricallyEquals(angleA, angleEqual, epsilon));
+      }
+   }
+
+   @Test
+   public void testIsZeroAngle() throws Exception
+   {
+      Random random = new Random(35635);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 0.5);
+         double twoPIMutiple = random.nextInt(15) * 2.0 * Math.PI;
+         double zeroAngle = 0.99 * EuclidCoreRandomTools.nextDouble(random, epsilon);
+         double nonZeroAngle = EuclidCoreRandomTools.nextDouble(random, 1.01 * epsilon, Math.PI);
+         if (random.nextBoolean())
+            nonZeroAngle = -nonZeroAngle;
+
+         assertTrue(EuclidCoreTools.isZeroAngle(zeroAngle, epsilon));
+         assertTrue(EuclidCoreTools.isZeroAngle(zeroAngle + twoPIMutiple, epsilon));
+
+         assertFalse(EuclidCoreTools.isZeroAngle(nonZeroAngle, epsilon));
+         assertFalse(EuclidCoreTools.isZeroAngle(nonZeroAngle + twoPIMutiple, epsilon));
+      }
+   }
+
+   @Test
    public void testMax() throws Exception
    {
       Random random = new Random(45645L);

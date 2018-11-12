@@ -386,6 +386,42 @@ public class EuclidCoreTools
    }
 
    /**
+    * Tests whether the to angles represent the same physical angle to an {@code epsilon}.
+    * <p>
+    * If any of the two angles is equal to {@link Double#NaN}, this method fails and returns
+    * {@code false}.
+    * </p>
+    * 
+    * @param expectedAngle the first angle in the comparison.
+    * @param actualAngle the second angle in the comparison.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if the two angles are considered to be geometrically equal, {@code false}
+    *         otherwise.
+    */
+   public static boolean angleGeometricallyEquals(double expectedAngle, double actualAngle, double epsilon)
+   {
+      return Math.abs(angleDifferenceMinusPiToPi(expectedAngle, actualAngle)) <= epsilon;
+   }
+
+   /**
+    * Tests whether the angle is geometrically equal to the zero angle to an epsilon.
+    * <p>
+    * This is equivalent to {@code angleGeometricallyEquals(angle, 0.0, epsilon)}.
+    * </p>
+    * 
+    * @param angle the query.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if the angle can be considered zero, {@code false} otherwise.
+    */
+   public static boolean isZeroAngle(double angle, double epsilon)
+   {
+      angle = Math.abs(angle) % TwoPI;
+      if (angle > Math.PI)
+         angle -= TwoPI;
+      return Math.abs(angle) <= epsilon;
+   }
+
+   /**
     * Clamps value to the given range, defined by {@code -minMax} and {@code minMax}, inclusive.
     *
     * @param value value
