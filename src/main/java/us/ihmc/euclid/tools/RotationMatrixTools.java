@@ -314,8 +314,42 @@ public abstract class RotationMatrixTools
       multiplyImpl(a00, a01, a02, a10, a11, a12, a20, a21, a22, inverse1, b00, b01, b02, b10, b11, b12, b20, b21, b22, inverse2, matrixToPack);
    }
 
+   /**
+    * Performs the multiplication of {@code a} and {@code b} and stores the
+    * result in {@code matrixToPack}.
+    * <p>
+    * All three arguments can be the same object for in place operations.
+    * </p>
+    * 
+    * @param a the first rotation matrix in the multiplication. Not modified.
+    * @param transposeA whether the first matrix should be transposed in the multiplication.
+    * @param b the second rotation matrix in the multiplication. Not modified.
+    * @param transposeB whether the second matrix should be transposed in the multiplication.
+    * @param matrixToPack the rotation matrix in which the result is stored. Modified.
+    */
    private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB, RotationMatrix matrixToPack)
    {
+      if (a.isZeroOrientation())
+      {
+         if (b.isZeroOrientation())
+            matrixToPack.setToZero();
+         else if (transposeB)
+            matrixToPack.setAndInvert(b);
+         else
+            matrixToPack.set(b);
+
+         return;
+      }
+      else if (b.isZeroOrientation())
+      {
+         if (transposeA)
+            matrixToPack.setAndInvert(a);
+         else
+            matrixToPack.set(a);
+
+         return;
+      }
+
       multiplyImpl(a.getM00(), a.getM01(), a.getM02(), a.getM10(), a.getM11(), a.getM12(), a.getM20(), a.getM21(), a.getM22(), transposeA, b.getM00(),
                    b.getM01(), b.getM02(), b.getM10(), b.getM11(), b.getM12(), b.getM20(), b.getM21(), b.getM22(), transposeB, matrixToPack);
    }
