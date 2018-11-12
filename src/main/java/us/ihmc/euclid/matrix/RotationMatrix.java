@@ -211,12 +211,32 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
          Matrix3DTools.normalize(this);
    }
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * The state of this rotation matrix is saved for performance improvement. It updated only when this
+    * matrix is marked as dirty which can be set by calling {@link #markAsDirty()}. The matrix is
+    * marked as dirty whenever its elements are updated.
+    * </p>
+    */
    @Override
    public boolean isIdentity()
    {
       if (dirty)
          isIdentity = RotationMatrixReadOnly.super.isIdentity();
       return isIdentity;
+   }
+
+   /**
+    * Marks this rotation matrix as dirty.
+    * <p>
+    * When a rotation matrix is marked as dirty, {@link #isIdentity()} will perform a thorough test to
+    * update the state of this matrix.
+    * </p>
+    */
+   public void markAsDirty()
+   {
+      dirty = true;
    }
 
    /**
@@ -273,11 +293,6 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       this.m22 = m22;
 
       markAsDirty();
-   }
-
-   public void markAsDirty()
-   {
-      dirty = true;
    }
 
    /**
