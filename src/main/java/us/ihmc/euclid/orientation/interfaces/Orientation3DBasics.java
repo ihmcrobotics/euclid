@@ -207,6 +207,12 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
       setYawPitchRoll(rotZ, rotY, rotX);
    }
 
+   void setToYawOrientation(double yaw);
+
+   void setToPitchOrientation(double pitch);
+
+   void setToRollOrientation(double roll);
+
    /**
     * Converts, if necessary, and sets this orientation to represents the same orientation as
     * {@code orientation3DReadOnly}.

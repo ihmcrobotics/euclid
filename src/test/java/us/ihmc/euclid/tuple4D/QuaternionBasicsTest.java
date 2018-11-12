@@ -1174,7 +1174,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       { // Test setToYawQuaternion(double yaw)
          double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
 
-         actualQuaternion.setToYawQuaternion(yaw);
+         actualQuaternion.setToYawOrientation(yaw);
          expectedQuaternion.set(new AxisAngle(0.0, 0.0, 1.0, yaw));
          EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, getEpsilon());
       }
@@ -1191,7 +1191,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       { // Test setToPitchQuaternion(double pitch)
          double pitch = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
 
-         actualQuaternion.setToPitchQuaternion(pitch);
+         actualQuaternion.setToPitchOrientation(pitch);
          expectedQuaternion.set(new AxisAngle(0.0, 1.0, 0.0, pitch));
          EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, getEpsilon());
       }
@@ -1208,7 +1208,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       { // Test setToRollQuaternion(double roll)
          double roll = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
 
-         actualQuaternion.setToRollQuaternion(roll);
+         actualQuaternion.setToRollOrientation(roll);
          expectedQuaternion.set(new AxisAngle(1.0, 0.0, 0.0, roll));
          EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, getEpsilon());
       }
@@ -1314,7 +1314,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          T yawRotation = createEmptyTuple();
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         yawRotation.setToYawQuaternion(yaw);
+         yawRotation.setToYawOrientation(yaw);
          QuaternionTools.multiply(original, yawRotation, expected);
 
          actual.set(original);
@@ -1329,7 +1329,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          T pitchRotation = createEmptyTuple();
          double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         pitchRotation.setToPitchQuaternion(pitch);
+         pitchRotation.setToPitchOrientation(pitch);
          QuaternionTools.multiply(original, pitchRotation, expected);
 
          actual.set(original);
@@ -1344,7 +1344,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          T rollRotation = createEmptyTuple();
          double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         rollRotation.setToRollQuaternion(roll);
+         rollRotation.setToRollOrientation(roll);
          QuaternionTools.multiply(original, rollRotation, expected);
 
          actual.set(original);
@@ -1368,7 +1368,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          T yawRotation = createEmptyTuple();
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         yawRotation.setToYawQuaternion(yaw);
+         yawRotation.setToYawOrientation(yaw);
          QuaternionTools.multiply(yawRotation, original, expected);
 
          actual.set(original);
@@ -1383,7 +1383,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          T pitchRotation = createEmptyTuple();
          double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         pitchRotation.setToPitchQuaternion(pitch);
+         pitchRotation.setToPitchOrientation(pitch);
          QuaternionTools.multiply(pitchRotation, original, expected);
 
          actual.set(original);
@@ -1398,7 +1398,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          T rollRotation = createEmptyTuple();
          double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         rollRotation.setToRollQuaternion(roll);
+         rollRotation.setToRollOrientation(roll);
          QuaternionTools.multiply(rollRotation, original, expected);
 
          actual.set(original);

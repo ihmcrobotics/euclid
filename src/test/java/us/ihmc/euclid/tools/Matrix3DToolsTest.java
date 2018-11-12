@@ -1275,7 +1275,7 @@ public class Matrix3DToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          RotationMatrix rotationMatrix = new RotationMatrix();
-         rotationMatrix.setToYawMatrix(2.0 * Math.PI * random.nextDouble());
+         rotationMatrix.setToYawOrientation(2.0 * Math.PI * random.nextDouble());
          matrix.set(rotationMatrix);
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
 

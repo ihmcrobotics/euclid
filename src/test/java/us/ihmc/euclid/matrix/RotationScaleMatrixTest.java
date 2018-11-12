@@ -1243,7 +1243,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
       double pitch = 2.0 * Math.PI * random.nextDouble();
-      rotationMatrix.setToPitchMatrix(pitch);
+      rotationMatrix.setToPitchOrientation(pitch);
       rotationScaleMatrix.setToPitchMatrix(pitch);
       EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationScaleMatrix, EPS);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 1.0, 1.0), rotationScaleMatrix.getScale(), EPS);
@@ -1257,7 +1257,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
       double roll = 2.0 * Math.PI * random.nextDouble();
-      rotationMatrix.setToRollMatrix(roll);
+      rotationMatrix.setToRollOrientation(roll);
       rotationScaleMatrix.setToRollMatrix(roll);
       EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationScaleMatrix, EPS);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 1.0, 1.0), rotationScaleMatrix.getScale(), EPS);
@@ -1271,7 +1271,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
       double yaw = 2.0 * Math.PI * random.nextDouble();
-      rotationMatrix.setToYawMatrix(yaw);
+      rotationMatrix.setToYawOrientation(yaw);
       rotationScaleMatrix.setToYawMatrix(yaw);
       EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationScaleMatrix, EPS);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 1.0, 1.0), rotationScaleMatrix.getScale(), EPS);

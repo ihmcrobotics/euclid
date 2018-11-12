@@ -677,7 +677,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationYaw(double yaw)
    {
-      rotationMatrix.setToYawMatrix(yaw);
+      rotationMatrix.setToYawOrientation(yaw);
    }
 
    /**
@@ -694,7 +694,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationPitch(double pitch)
    {
-      rotationMatrix.setToPitchMatrix(pitch);
+      rotationMatrix.setToPitchOrientation(pitch);
    }
 
    /**
@@ -711,7 +711,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationRoll(double roll)
    {
-      rotationMatrix.setToRollMatrix(roll);
+      rotationMatrix.setToRollOrientation(roll);
    }
 
    /**

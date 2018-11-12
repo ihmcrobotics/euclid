@@ -540,8 +540,28 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * </pre>
     *
     * @param yaw the angle to rotate about the z-axis.
+    * @deprecated Use {@link #setToYawOrientation(double)} instead
     */
+   @Deprecated
    public void setToYawMatrix(double yaw)
+   {
+      setToYawOrientation(yaw);
+   }
+
+   /**
+    * Sets this rotation matrix to represent a counter clockwise rotation around the z-axis of an angle
+    * {@code yaw}.
+    *
+    * <pre>
+    *        / cos(yaw) -sin(yaw) 0 \
+    * this = | sin(yaw)  cos(yaw) 0 |
+    *        \    0         0     1 /
+    * </pre>
+    *
+    * @param yaw the angle to rotate about the z-axis.
+    */
+   @Override
+   public void setToYawOrientation(double yaw)
    {
       RotationMatrixConversion.computeYawMatrix(yaw, this);
    }
@@ -557,8 +577,28 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * </pre>
     *
     * @param pitch the angle to rotate about the y-axis.
+    * @deprecated Use {@link #setToPitchOrientation(double)} instead
     */
+   @Deprecated
    public void setToPitchMatrix(double pitch)
+   {
+      setToPitchOrientation(pitch);
+   }
+
+   /**
+    * Sets this rotation matrix to represent a counter clockwise rotation around the y-axis of an angle
+    * {@code pitch}.
+    *
+    * <pre>
+    *        /  cos(pitch) 0 sin(pitch) \
+    * this = |      0      1     0      |
+    *        \ -sin(pitch) 0 cos(pitch) /
+    * </pre>
+    *
+    * @param pitch the angle to rotate about the y-axis.
+    */
+   @Override
+   public void setToPitchOrientation(double pitch)
    {
       RotationMatrixConversion.computePitchMatrix(pitch, this);
    }
@@ -574,8 +614,28 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * </pre>
     *
     * @param roll the angle to rotate about the x-axis.
+    * @deprecated Use {@link #setToRollOrientation(double)} instead
     */
+   @Deprecated
    public void setToRollMatrix(double roll)
+   {
+      setToRollOrientation(roll);
+   }
+
+   /**
+    * Sets this rotation matrix to represent a counter clockwise rotation around the x-axis of an angle
+    * {@code roll}.
+    *
+    * <pre>
+    *        / 1     0          0     \
+    * this = | 0 cos(roll) -sin(roll) |
+    *        \ 0 sin(roll)  cos(roll) /
+    * </pre>
+    *
+    * @param roll the angle to rotate about the x-axis.
+    */
+   @Override
+   public void setToRollOrientation(double roll)
    {
       RotationMatrixConversion.computeRollMatrix(roll, this);
    }

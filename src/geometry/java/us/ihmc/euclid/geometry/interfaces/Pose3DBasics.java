@@ -180,7 +180,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void setOrientation(Orientation2DReadOnly orientation)
    {
-      getOrientation().setToYawQuaternion(orientation.getYaw());
+      getOrientation().setToYawOrientation(orientation.getYaw());
    }
 
    /**

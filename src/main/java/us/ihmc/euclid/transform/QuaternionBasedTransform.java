@@ -2,7 +2,6 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DenseMatrix64F;
 
-import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
@@ -15,6 +14,7 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -25,6 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
@@ -50,8 +51,8 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  *
  * @author Sylvain Bertrand
  */
-public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, EpsilonComparable<QuaternionBasedTransform>, GeometricallyComparable<QuaternionBasedTransform>,
-      Settable<QuaternionBasedTransform>, Clearable
+public class QuaternionBasedTransform implements RigidBodyTransformBasics, EpsilonComparable<QuaternionBasedTransform>, GeometricallyComparable<QuaternionBasedTransform>,
+      Settable<QuaternionBasedTransform>
 {
    /** The rotation part of this transform. */
    private final Quaternion quaternion = new Quaternion();
@@ -461,7 +462,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     */
    public void setRotationYaw(double yaw)
    {
-      quaternion.setToYawQuaternion(yaw);
+      quaternion.setToYawOrientation(yaw);
    }
 
    /**
@@ -482,7 +483,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     */
    public void setRotationPitch(double pitch)
    {
-      quaternion.setToPitchQuaternion(pitch);
+      quaternion.setToPitchOrientation(pitch);
    }
 
    /**
@@ -503,7 +504,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     */
    public void setRotationRoll(double roll)
    {
-      quaternion.setToRollQuaternion(roll);
+      quaternion.setToRollOrientation(roll);
    }
 
    /**
@@ -1292,7 +1293,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
    }
 
    @Override
-   public QuaternionReadOnly getRotation()
+   public QuaternionBasics getRotation()
    {
       return quaternion;
    }
@@ -1309,7 +1310,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
    }
 
    @Override
-   public Vector3DReadOnly getTranslation()
+   public Vector3DBasics getTranslation()
    {
       return translationVector;
    }

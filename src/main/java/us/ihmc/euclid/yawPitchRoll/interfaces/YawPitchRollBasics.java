@@ -18,9 +18,9 @@ import us.ihmc.euclid.tools.YawPitchRollTools;
  * However, there is no algebra directly accessible for manipulating orientations represented as
  * yaw-pitch-roll making it highly computationally expensive when compared to rotation matrices or
  * quaternions. In addition, yaw-pitch-roll representation is sensitive to gimbal lock which happens
- * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to such
- * configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes lead
- * to unexpected results.
+ * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to
+ * such configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes
+ * lead to unexpected results.
  * </p>
  * <p>
  * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
@@ -248,6 +248,24 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    default void setYawPitchRoll(double yaw, double pitch, double roll)
    {
       set(yaw, pitch, roll);
+   }
+
+   @Override
+   default void setToYawOrientation(double yaw)
+   {
+      set(yaw, 0.0, 0.0);
+   }
+
+   @Override
+   default void setToPitchOrientation(double pitch)
+   {
+      set(0.0, pitch, 0.0);
+   }
+
+   @Override
+   default void setToRollOrientation(double roll)
+   {
+      set(0.0, 0.0, roll);
    }
 
    /** {@inheritDoc} */

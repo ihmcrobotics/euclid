@@ -30,7 +30,7 @@ public class RotationMatrixToolsTest
       { // test applyYawRotation(double yaw, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          RotationMatrix rotationMatrix = new RotationMatrix();
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         rotationMatrix.setToYawMatrix(yaw);
+         rotationMatrix.setToYawOrientation(yaw);
 
          Tuple3DReadOnly tupleOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
@@ -50,7 +50,7 @@ public class RotationMatrixToolsTest
       { // test applyYawRotation(double yaw, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
          RotationMatrix rotationMatrix = new RotationMatrix();
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         rotationMatrix.setToYawMatrix(yaw);
+         rotationMatrix.setToYawOrientation(yaw);
 
          Tuple2DReadOnly tupleOriginal = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
 
@@ -76,7 +76,7 @@ public class RotationMatrixToolsTest
       { // test applyPitchRotation(double pitch, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          RotationMatrix rotationMatrix = new RotationMatrix();
          double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         rotationMatrix.setToPitchMatrix(pitch);
+         rotationMatrix.setToPitchOrientation(pitch);
 
          Tuple3DReadOnly tupleOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
@@ -102,7 +102,7 @@ public class RotationMatrixToolsTest
       { // test applyRollRotation(double roll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
          RotationMatrix rotationMatrix = new RotationMatrix();
          double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         rotationMatrix.setToRollMatrix(roll);
+         rotationMatrix.setToRollOrientation(roll);
 
          Tuple3DReadOnly tupleOriginal = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 

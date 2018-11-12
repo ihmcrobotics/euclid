@@ -249,7 +249,7 @@ public class Torus3DTest
          RotationMatrix rotation = new RotationMatrix();
 
          // test rotation about x-axis of pi/2
-         rotation.setToRollMatrix(Math.PI / 2);
+         rotation.setToRollOrientation(Math.PI / 2);
          transform.setRotation(rotation);
          torus3d.setPose(transform);
 
@@ -260,7 +260,7 @@ public class Torus3DTest
          assertTrue(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, -radius)));
 
          // test rotation about y-axis of pi/2
-         rotation.setToPitchMatrix(Math.PI / 2);
+         rotation.setToPitchOrientation(Math.PI / 2);
          transform.setRotation(rotation);
          torus3d.setPose(transform);
 
@@ -317,12 +317,12 @@ public class Torus3DTest
             {
                if (i == 0)
                {
-                  rotation.setToRollMatrix(angle);
+                  rotation.setToRollOrientation(angle);
                   //                  System.out.println("Rotating " + angle + " rads about X");
                }
                if (i == 1)
                {
-                  rotation.setToPitchMatrix(angle);
+                  rotation.setToPitchOrientation(angle);
                   //                  System.out.println("Rotating " + angle + " rads about Y");
                }
 

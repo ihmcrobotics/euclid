@@ -307,8 +307,22 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
     * {@code yaw}.
     *
     * @param yaw the angle to rotate about the z-axis.
+    * @deprecated Use {@link #setToYawOrientation(double)} instead
     */
+   @Deprecated
    default void setToYawQuaternion(double yaw)
+   {
+      setToYawOrientation(yaw);
+   }
+
+   /**
+    * Sets this quaternion to represent a counter clockwise rotation around the z-axis of an angle
+    * {@code yaw}.
+    *
+    * @param yaw the angle to rotate about the z-axis.
+    */
+   @Override
+   default void setToYawOrientation(double yaw)
    {
       QuaternionConversion.computeYawQuaternion(yaw, this);
    }
@@ -318,8 +332,22 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
     * {@code pitch}.
     *
     * @param pitch the angle to rotate about the y-axis.
+    * @deprecated Use {@link #setToPitchOrientation(double)} instead
     */
+   @Deprecated
    default void setToPitchQuaternion(double pitch)
+   {
+      setToPitchOrientation(pitch);
+   }
+
+   /**
+    * Sets this quaternion to represent a counter clockwise rotation around the y-axis of an angle
+    * {@code pitch}.
+    *
+    * @param pitch the angle to rotate about the y-axis.
+    */
+   @Override
+   default void setToPitchOrientation(double pitch)
    {
       QuaternionConversion.computePitchQuaternion(pitch, this);
    }
@@ -329,8 +357,22 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
     * {@code roll}.
     *
     * @param roll the angle to rotate about the x-axis.
+    * @deprecated Use {@link #setToRollOrientation(double)} instead
     */
+   @Deprecated
    default void setToRollQuaternion(double roll)
+   {
+      setToRollOrientation(roll);
+   }
+
+   /**
+    * Sets this quaternion to represent a counter clockwise rotation around the x-axis of an angle
+    * {@code roll}.
+    *
+    * @param roll the angle to rotate about the x-axis.
+    */
+   @Override
+   default void setToRollOrientation(double roll)
    {
       QuaternionConversion.computeRollQuaternion(roll, this);
    }
