@@ -1687,7 +1687,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       { // Test setRotationYaw(double yaw)
-         expectedRotation.setToYawMatrix(yawPitchRoll[0]);
+         expectedRotation.setToYawOrientation(yawPitchRoll[0]);
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D expectedTranslation = new Vector3D();
          actualTransform.getTranslation(expectedTranslation);
@@ -1702,7 +1702,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       { // Test setRotationPitch(double pitch)
-         expectedRotation.setToPitchMatrix(yawPitchRoll[1]);
+         expectedRotation.setToPitchOrientation(yawPitchRoll[1]);
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D expectedTranslation = new Vector3D();
          actualTransform.getTranslation(expectedTranslation);
@@ -1717,7 +1717,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       { // Test setRotationRoll(double roll)
-         expectedRotation.setToRollMatrix(yawPitchRoll[2]);
+         expectedRotation.setToRollOrientation(yawPitchRoll[2]);
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D expectedTranslation = new Vector3D();
          actualTransform.getTranslation(expectedTranslation);
@@ -1732,7 +1732,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       { // Test setRotationYawAndZeroTranslation(double yaw)
-         expectedRotation.setToYawMatrix(yawPitchRoll[0]);
+         expectedRotation.setToYawOrientation(yawPitchRoll[0]);
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          actualTransform.setRotationYawAndZeroTranslation(yawPitchRoll[0]);
          assertTrue(actualTransform.hasRotation());
@@ -1745,7 +1745,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       { // Test setRotationPitchAndZeroTranslation(double pitch)
-         expectedRotation.setToPitchMatrix(yawPitchRoll[1]);
+         expectedRotation.setToPitchOrientation(yawPitchRoll[1]);
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          actualTransform.setRotationPitchAndZeroTranslation(yawPitchRoll[1]);
          assertTrue(actualTransform.hasRotation());
@@ -1758,7 +1758,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       }
 
       { // Test setRotationRollAndZeroTranslation(double roll)
-         expectedRotation.setToRollMatrix(yawPitchRoll[2]);
+         expectedRotation.setToRollOrientation(yawPitchRoll[2]);
          actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          actualTransform.setRotationRollAndZeroTranslation(yawPitchRoll[2]);
          assertTrue(actualTransform.hasRotation());

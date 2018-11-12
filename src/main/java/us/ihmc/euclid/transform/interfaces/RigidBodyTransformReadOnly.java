@@ -10,6 +10,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -29,6 +30,8 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public interface RigidBodyTransformReadOnly extends Transform
 {
+   static final double EPS_ZERO_TRANSLATION = 1.0e-10;
+
    /**
     * Gets the read-only reference to the rotation part of this transform.
     *
@@ -51,7 +54,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     */
    default boolean hasRotation()
    {
-      return true;
+      return !getRotation().isZeroOrientation();
    }
 
    /**
@@ -62,7 +65,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     */
    default boolean hasTranslation()
    {
-      return true;
+      return TupleTools.isTupleZero(getTranslation(), EPS_ZERO_TRANSLATION);
    }
 
    /**

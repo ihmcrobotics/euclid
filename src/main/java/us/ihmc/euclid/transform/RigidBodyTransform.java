@@ -3,22 +3,18 @@ package us.ihmc.euclid.transform;
 import org.ejml.data.DenseMatrix64F;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
-import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
-import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.tools.TupleTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -29,7 +25,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * A {@code RigidBodyTransform} represents a 4-by-4 transformation matrix that can rotate and
@@ -58,12 +53,9 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  *
  * @author Sylvain Bertrand
  */
-public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonComparable<RigidBodyTransform>, GeometricallyComparable<RigidBodyTransform>,
-      Settable<RigidBodyTransform>, Clearable
+public class RigidBodyTransform
+      implements RigidBodyTransformBasics, EpsilonComparable<RigidBodyTransform>, GeometricallyComparable<RigidBodyTransform>, Settable<RigidBodyTransform>
 {
-   private static final double EPS_CHECK_IDENTITY = 1.0e-10;
-   private boolean hasTranslation = false;
-
    /** The rotation part of this transform. */
    private final RotationMatrix rotationMatrix = new RotationMatrix();
    /** The translation part of this transform. */
@@ -192,116 +184,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
     */
    public void setIdentity()
    {
-      rotationMatrix.setIdentity();
-      translationVector.setToZero();
-      hasTranslation = false;
-   }
-
-   /**
-    * Resets this rigid-body transform to identity.
-    * <p>
-    * When set to identity, this transform has no effect when transforming a geometry object.
-    * </p>
-    */
-   @Override
-   public void setToZero()
-   {
-      setIdentity();
-   }
-
-   /**
-    * Sets the rotation part to represent a 'zero' rotation.
-    */
-   public void setRotationToZero()
-   {
-      rotationMatrix.setIdentity();
-   }
-
-   /**
-    * Sets the translation part to zero.
-    */
-   public void setTranslationToZero()
-   {
-      translationVector.setToZero();
-      hasTranslation = false;
-   }
-
-   /**
-    * Sets all the components of this affine transform making it invalid.
-    */
-   @Override
-   public void setToNaN()
-   {
-      rotationMatrix.setToNaN();
-      translationVector.setToNaN();
-      hasTranslation = true;
-   }
-
-   /**
-    * Sets all the components of the rotation matrix to {@link Double#NaN}.
-    * <p>
-    * See {@link RotationScaleMatrix#setToNaN()}.
-    * </p>
-    */
-   public void setRotationToNaN()
-   {
-      rotationMatrix.setToNaN();
-   }
-
-   /**
-    * Sets all the components of the translation vector to {@link Double#NaN}.
-    * <p>
-    * See {@link Vector3D#setToNaN()}.
-    * </p>
-    */
-   public void setTranslationToNaN()
-   {
-      translationVector.setToNaN();
-      hasTranslation = true;
-   }
-
-   /**
-    * Tests if at least one element of this transform is equal to {@linkplain Double#NaN}.
-    *
-    * @return {@code true} if at least one element of this transform is equal to
-    *         {@linkplain Double#NaN}, {@code false} otherwise.
-    */
-   @Override
-   public boolean containsNaN()
-   {
-      return RigidBodyTransformReadOnly.super.containsNaN();
-   }
-
-   /**
-    * Requests whether this transform has a non-zero rotation or not.
-    *
-    * @return {@code true} if the rotation part is not zero, {@code false} if the rotation part is zero
-    *         and can be ignore when transforming an object.
-    */
-   @Override
-   public boolean hasRotation()
-   {
-      return !getRotation().isZeroOrientation();
-   }
-
-   /**
-    * Requests whether this transform has a non-zero translation or not.
-    *
-    * @return {@code true} if the translation part is not zero, {@code false} if the translation part
-    *         is zero and can be ignore when transforming an object.
-    */
-   @Override
-   public boolean hasTranslation()
-   {
-      return hasTranslation;
-   }
-
-   /**
-    * Normalize the rotation part of this transform.
-    */
-   public void normalizeRotationPart()
-   {
-      rotationMatrix.normalize();
+      RigidBodyTransformBasics.super.setToZero();
    }
 
    /**
@@ -337,7 +220,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -366,7 +248,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -378,29 +259,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void set(RigidBodyTransform other)
    {
       set((RigidBodyTransformReadOnly) other);
-   }
-
-   /**
-    * Sets this rigid-body transform to {@code other}.
-    *
-    * @param other the other rigid-body transform to copy the values from. Not modified.
-    */
-   public void set(RigidBodyTransformReadOnly other)
-   {
-      rotationMatrix.set(other.getRotation());
-      translationVector.set(other.getTranslation());
-      hasTranslation = other.hasTranslation();
-   }
-
-   /**
-    * Sets this rigid-body transform to {@code other} and then inverts it.
-    *
-    * @param other the other rigid-body transform to copy the values from. Not modified.
-    */
-   public void setAndInvert(RigidBodyTransformReadOnly other)
-   {
-      set(other);
-      invert();
    }
 
    /**
@@ -431,7 +289,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(matrix);
       translationVector.set(0, 3, matrix);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -464,7 +321,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(startRow, startColumn, matrix);
       translationVector.set(startRow, startColumn + 3, matrix);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -509,7 +365,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -554,7 +409,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -599,7 +453,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -644,7 +497,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -658,51 +510,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       this.rotationMatrix.set(rotationMatrix);
       translationVector.set(translation);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the rotation and translation parts of this transform separately.
-    *
-    * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
-    */
-   public void set(RotationMatrixReadOnly rotationMatrix, Tuple3DReadOnly translation)
-   {
-      this.rotationMatrix.set(rotationMatrix);
-      translationVector.set(translation);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the rotation and translation parts of this transform separately.
-    * <p>
-    * Only the rotation matrix from {@code rotationScaleMatrix} is used to set the rotation part of
-    * this transform.
-    * </p>
-    *
-    * @param rotationScaleMatrix the matrix used to set the rotation part of this transform. Not
-    *           modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
-    */
-   public void set(RotationScaleMatrixReadOnly rotationScaleMatrix, Tuple3DReadOnly translation)
-   {
-      rotationMatrix.set(rotationScaleMatrix.getRotationMatrix());
-      translationVector.set(translation);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the rotation and translation parts of this transform separately.
-    *
-    * @param orientation the orientation used to set the rotation part of this transform. Not modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
-    */
-   public void set(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
-   {
-      rotationMatrix.set(orientation);
-      translationVector.set(translation);
-      hasTranslation = !isTupleZero(translationVector);
    }
 
    /**
@@ -748,38 +555,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    }
 
    /**
-    * Sets the rotation part of this transform to the given axis-angle.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param orientation the orientation used to set the rotation part of this transform. Not modified.
-    */
-   public void setRotation(Orientation3DReadOnly orientation)
-   {
-      rotationMatrix.set(orientation);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given rotation vector.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVector the rotation vector used to set the rotation part of this transform. Not
-    *           modified.
-    */
-   public void setRotation(Vector3DReadOnly rotationVector)
-   {
-      rotationMatrix.setRotationVector(rotationVector);
-   }
-
-   /**
     * Sets the rotation part of this transform to the given matrix.
     * <p>
     * This method does not affect the translation part of this transform.
@@ -808,216 +583,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    }
 
    /**
-    * Sets the rotation part of this transform to the given matrix.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
-    */
-   public void setRotation(RotationMatrixReadOnly rotationMatrix)
-   {
-      this.rotationMatrix.set(rotationMatrix);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * z-axis of an angle {@code yaw}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \
-    * R = | sin(yaw)  cos(yaw) 0 |
-    *     \    0         0     1 /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   public void setRotationYaw(double yaw)
-   {
-      rotationMatrix.setToYawMatrix(yaw);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * y-axis of an angle {@code pitch}.
-    *
-    * <pre>
-    *     /  cos(pitch) 0 sin(pitch) \
-    * R = |      0      1     0      |
-    *     \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   public void setRotationPitch(double pitch)
-   {
-      rotationMatrix.setToPitchMatrix(pitch);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * x-axis of an angle {@code roll}.
-    *
-    * <pre>
-    *     / 1     0          0     \
-    * R = | 0 cos(roll) -sin(roll) |
-    *     \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void setRotationRoll(double roll)
-   {
-      rotationMatrix.setToRollMatrix(roll);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #setRotation(Orientation3DReadOnly)}.
-    */
-   @Deprecated
-   public void setRotationYawPitchRoll(double[] yawPitchRoll)
-   {
-      setRotationYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void setRotationYawPitchRoll(double yaw, double pitch, double roll)
-   {
-      rotationMatrix.setYawPitchRoll(yaw, pitch, roll);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given Euler
-    * angles {@code eulerAngles}.
-    *
-    * <pre>
-    *     / cos(eulerAngles.z) -sin(eulerAngles.z) 0 \   /  cos(eulerAngles.y) 0 sin(eulerAngles.y) \   / 1         0                   0          \
-    * R = | sin(eulerAngles.z)  cos(eulerAngles.z) 0 | * |          0          1         0          | * | 0 cos(eulerAngles.x) -sin(eulerAngles.x) |
-    *     \         0                   0          1 /   \ -sin(eulerAngles.y) 0 cos(eulerAngles.y) /   \ 0 sin(eulerAngles.x)  cos(eulerAngles.x) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    * <p>
-    * This is equivalent to
-    * {@code this.setRotationYawPitchRoll(eulerAngles.getZ(), eulerAngles.getY(), eulerAngles.getX())}.
-    * </p>
-    *
-    * @param eulerAngles the Euler angles to copy the orientation from. Not modified.
-    */
-   public void setRotationEuler(Vector3DReadOnly eulerAngles)
-   {
-      setRotationEuler(eulerAngles.getX(), eulerAngles.getY(), eulerAngles.getZ());
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given Euler
-    * angles {@code rotX}, {@code rotY}, and {@code rotZ}.
-    *
-    * <pre>
-    *     / cos(rotZ) -sin(rotZ) 0 \   /  cos(rotY) 0 sin(rotY) \   / 1     0          0     \
-    * R = | sin(rotZ)  cos(rotZ) 0 | * |      0     1     0     | * | 0 cos(rotX) -sin(rotX) |
-    *     \     0          0     1 /   \ -sin(rotY) 0 cos(rotY) /   \ 0 sin(rotX)  cos(rotX) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    * <p>
-    * This is equivalent to {@code this.setRotationYawPitchRoll(rotZ, rotY, rotX)}.
-    * </p>
-    *
-    * @param rotX the angle to rotate about the x-axis.
-    * @param rotY the angle to rotate about the y-axis.
-    * @param rotZ the angle to rotate about the z-axis.
-    */
-   public void setRotationEuler(double rotX, double rotY, double rotZ)
-   {
-      rotationMatrix.setEuler(rotX, rotY, rotZ);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given orientation and sets the translation part
-    * to zero.
-    *
-    * @param orientation the orientation used to set the rotation part of this transform. Not modified.
-    */
-   public void setRotationAndZeroTranslation(Orientation3DReadOnly orientation)
-   {
-      setRotation(orientation);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given orientation and sets the translation part
-    * to zero.
-    *
-    * @param rotationMatrix the rotation matrix used to set the rotation part of this transform. Not
-    *           modified.
-    */
-   public void setRotationAndZeroTranslation(RotationMatrixReadOnly rotationMatrix)
-   {
-      setRotation(rotationMatrix);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given rotation vector and sets the translation
-    * part to zero.
-    * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
-    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
-    * same axis-angle.
-    * </p>
-    *
-    * @param rotationVector the rotation vector used to set the rotation part of this transform. Not
-    *           modified.
-    */
-   public void setRotationAndZeroTranslation(Vector3DReadOnly rotationVector)
-   {
-      setRotation(rotationVector);
-      setTranslationToZero();
-   }
-
-   /**
     * Sets the rotation part of this transform to the given matrix and sets the translation part to
     * zero.
     *
@@ -1041,739 +606,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       setRotation(rotationMatrix);
       setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * z-axis of an angle {@code yaw} and sets the translation part to zero.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \
-    * R = | sin(yaw)  cos(yaw) 0 |
-    *     \    0         0     1 /
-    * </pre>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   public void setRotationYawAndZeroTranslation(double yaw)
-   {
-      setRotationYaw(yaw);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * y-axis of an angle {@code pitch} and sets the translation part to zero.
-    *
-    * <pre>
-    *        /  cos(pitch) 0 sin(pitch) \
-    * this = |      0      1     0      |
-    *        \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   public void setRotationPitchAndZeroTranslation(double pitch)
-   {
-      setRotationPitch(pitch);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent a counter clockwise rotation around the
-    * x-axis of an angle {@code roll} and sets the translation part to zero.
-    *
-    * <pre>
-    *        / 1     0          0     \
-    * this = | 0 cos(roll) -sin(roll) |
-    *        \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void setRotationRollAndZeroTranslation(double roll)
-   {
-      setRotationRoll(roll);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll} and sets the translation part
-    * to zero.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link YawPitchRoll} with
-    *             {@link #setRotationAndZeroTranslation(Orientation3DReadOnly)}.
-    */
-   @Deprecated
-   public void setRotationYawPitchRollAndZeroTranslation(double[] yawPitchRoll)
-   {
-      setRotationYawPitchRoll(yawPitchRoll);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll} and sets the translation part
-    * to zero.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void setRotationYawPitchRollAndZeroTranslation(double yaw, double pitch, double roll)
-   {
-      setRotationYawPitchRoll(yaw, pitch, roll);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given Euler
-    * angles {@code eulerAngles} and sets the translation part to zero.
-    *
-    * <pre>
-    *     / cos(eulerAngles.z) -sin(eulerAngles.z) 0 \   /  cos(eulerAngles.y) 0 sin(eulerAngles.y) \   / 1         0                   0          \
-    * R = | sin(eulerAngles.z)  cos(eulerAngles.z) 0 | * |          0          1         0          | * | 0 cos(eulerAngles.x) -sin(eulerAngles.x) |
-    *     \         0                   0          1 /   \ -sin(eulerAngles.y) 0 cos(eulerAngles.y) /   \ 0 sin(eulerAngles.x)  cos(eulerAngles.x) /
-    * </pre>
-    * <p>
-    * This is equivalent to
-    * {@code this.setRotationYawPitchRollAndZeroTranslation(eulerAngles.getZ(), eulerAngles.getY(), eulerAngles.getX())}.
-    * </p>
-    *
-    * @param eulerAngles the Euler angles to copy the orientation from. Not modified.
-    */
-   public void setRotationEulerAndZeroTranslation(Vector3DReadOnly eulerAngles)
-   {
-      setRotationEuler(eulerAngles);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given Euler
-    * angles {@code rotX}, {@code rotY}, and {@code rotZ} and sets the translation part to zero.
-    *
-    * <pre>
-    *     / cos(rotZ) -sin(rotZ) 0 \   /  cos(rotY) 0 sin(rotY) \   / 1     0          0     \
-    * R = | sin(rotZ)  cos(rotZ) 0 | * |      0     1     0     | * | 0 cos(rotX) -sin(rotX) |
-    *     \     0          0     1 /   \ -sin(rotY) 0 cos(rotY) /   \ 0 sin(rotX)  cos(rotX) /
-    * </pre>
-    * <p>
-    * This is equivalent to {@code this.setRotationYawPitchRollAndZeroTranslation(rotZ, rotY, rotX)}.
-    * </p>
-    *
-    * @param rotX the angle to rotate about the x-axis.
-    * @param rotY the angle to rotate about the y-axis.
-    * @param rotZ the angle to rotate about the z-axis.
-    */
-   public void setRotationEulerAndZeroTranslation(double rotX, double rotY, double rotZ)
-   {
-      setRotationEuler(rotX, rotY, rotZ);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the x-component of the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param x the x-component of the translation part.
-    */
-   public void setTranslationX(double x)
-   {
-      translationVector.setX(x);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the y-component of the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param y the y-component of the translation part.
-    */
-   public void setTranslationY(double y)
-   {
-      translationVector.setY(y);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the z-component of the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param z the z-component of the translation part.
-    */
-   public void setTranslationZ(double z)
-   {
-      translationVector.setZ(z);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param x the x-component of the translation part.
-    * @param y the y-component of the translation part.
-    * @param z the z-component of the translation part.
-    */
-   public void setTranslation(double x, double y, double z)
-   {
-      translationVector.set(x, y, z);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the translation part of this transform.
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param translation tuple used to set the translation part of this transform. Not modified.
-    */
-   public void setTranslation(Tuple3DReadOnly translation)
-   {
-      translationVector.set(translation);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Sets the translation part of this transform and sets the rotation part to identity.
-    *
-    * @param x the x-component of the translation part.
-    * @param y the y-component of the translation part.
-    * @param z the z-component of the translation part.
-    */
-   public void setTranslationAndIdentityRotation(double x, double y, double z)
-   {
-      setTranslation(x, y, z);
-      setRotationToZero();
-   }
-
-   /**
-    * Sets the translation part of this transform and sets the rotation part to identity.
-    *
-    * @param translation tuple used to set the translation part of this transform. Not modified.
-    */
-   public void setTranslationAndIdentityRotation(Tuple3DReadOnly translation)
-   {
-      setTranslation(translation);
-      setRotationToZero();
-   }
-
-   /**
-    * Inverts this rigid-body transform.
-    */
-   public void invert()
-   {
-      rotationMatrix.invert();
-      if (hasTranslation)
-         rotationMatrix.transform(translationVector);
-      translationVector.negate();
-   }
-
-   /**
-    * Inverts only the rotation part of this transform, the translation remains unchanged.
-    */
-   public void invertRotation()
-   {
-      rotationMatrix.invert();
-   }
-
-   /**
-    * Performs the multiplication of this transform with {@code other}.
-    * <p>
-    * this = this * other
-    * </p>
-    *
-    * @param other the other transform to multiply this with. Not modified.
-    */
-   public void multiply(RigidBodyTransformReadOnly other)
-   {
-      if (other.hasTranslation())
-      {
-         rotationMatrix.addTransform(other.getTranslation(), translationVector);
-         hasTranslation = !hasTranslation || !isTupleZero(translationVector);
-      }
-
-      rotationMatrix.append(other.getRotation());
-   }
-
-   /**
-    * Performs the multiplication of this transform with {@code affineTransform}.
-    * <p>
-    * Note: the scale part of the given affine transform is not used when performing the multiplication
-    * to conserve a proper rigid-body transform describing only a rotation and a translation.
-    * </p>
-    * <p>
-    * this = this * S(affineTransform) <br>
-    * where S(affineTransform) is the function selecting only the rotation and translation parts of the
-    * affine transform.
-    * </p>
-    *
-    * @param affineTransform the affine transform to multiply this with. Not modified.
-    */
-   public void multiply(AffineTransform affineTransform)
-   {
-      rotationMatrix.addTransform(affineTransform.getTranslationVector(), translationVector);
-      rotationMatrix.multiply(affineTransform.getRotationMatrix());
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of this transform with {@code other}.
-    * <p>
-    * this = this<sup>-1</sup> * other
-    * </p>
-    *
-    * @param other the other transform to multiply this with. Not modified.
-    */
-   public void multiplyInvertThis(RigidBodyTransformReadOnly other)
-   {
-      translationVector.sub(other.getTranslation(), translationVector);
-
-      rotationMatrix.invert();
-      rotationMatrix.transform(translationVector);
-      rotationMatrix.append(other.getRotation());
-
-      hasTranslation = hasTranslation ^ other.hasTranslation() || !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of this transform with the inverse of {@code other}.
-    * <p>
-    * this = this * other<sup>-1</sup>
-    * </p>
-    *
-    * @param other the other transform to multiply this with. Not modified.
-    */
-   public void multiplyInvertOther(RigidBodyTransformReadOnly other)
-   {
-      rotationMatrix.appendInvertOther(other.getRotation());
-
-      if (other.hasTranslation())
-      {
-         rotationMatrix.subTransform(other.getTranslation(), translationVector);
-         hasTranslation = !hasTranslation || !isTupleZero(translationVector);
-      }
-   }
-
-   /**
-    * Performs the multiplication of the inverse of this transform with {@code affineTransform}.
-    * <p>
-    * Note: the scale part of the given affine transform is not used when performing the multiplication
-    * to conserve a proper rigid-body transform describing only a rotation and a translation.
-    * </p>
-    * <p>
-    * this = this<sup>-1</sup> * S(affineTransform) <br>
-    * where S(affineTransform) is the function selecting only the rotation and translation parts of the
-    * affine transform.
-    * </p>
-    *
-    * @param affineTransform the affine transform to multiply this with. Not modified.
-    */
-   public void multiplyInvertThis(AffineTransform affineTransform)
-   {
-      translationVector.sub(affineTransform.getTranslationVector(), translationVector);
-      rotationMatrix.inverseTransform(translationVector, translationVector);
-      rotationMatrix.inverseTransform(affineTransform.getRotationMatrix(), rotationMatrix);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of this transform with the inverse of {@code affineTransform}.
-    * <p>
-    * Note: the scale part of the given affine transform is not used when performing the multiplication
-    * to conserve a proper rigid-body transform describing only a rotation and a translation.
-    * </p>
-    * <p>
-    * this = this * S(affineTransform)<sup>-1</sup> <br>
-    * where S(affineTransform) is the function selecting only the rotation and translation parts of the
-    * affine transform.
-    * </p>
-    *
-    * @param affineTransform the affine transform to multiply this with. Not modified.
-    */
-   public void multiplyInvertOther(AffineTransform affineTransform)
-   {
-      rotationMatrix.multiplyTransposeOther(affineTransform.getRotationMatrix());
-      rotationMatrix.subTransform(affineTransform.getTranslationVector(), translationVector);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Append a translation transform to this transform.
-    *
-    * <pre>
-    *               / 1 0 0 translation.x \
-    * this = this * | 0 1 0 translation.y |
-    *               | 0 0 1 translation.z |
-    *               \ 0 0 0      1        /
-    * </pre>
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param translation the translation to append to this transform. Not modified.
-    */
-   public void appendTranslation(Tuple3DReadOnly translation)
-   {
-      rotationMatrix.addTransform(translation, translationVector);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Append a translation transform to this transform.
-    *
-    * <pre>
-    *               / 1 0 0 x \
-    * this = this * | 0 1 0 y |
-    *               | 0 0 1 z |
-    *               \ 0 0 0 1 /
-    * </pre>
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param x the translation along the x-axis to apply.
-    * @param y the translation along the y-axis to apply.
-    * @param z the translation along the z-axis to apply.
-    */
-   public void appendTranslation(double x, double y, double z)
-   {
-      double thisX = translationVector.getX();
-      double thisY = translationVector.getY();
-      double thisZ = translationVector.getZ();
-
-      translationVector.set(x, y, z);
-      rotationMatrix.transform(translationVector);
-      translationVector.add(thisX, thisY, thisZ);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Append a rotation about the z-axis to the rotation part of this transform.
-    *
-    * <pre>
-    *         / cos(yaw) -sin(yaw) 0 \
-    * R = R * | sin(yaw)  cos(yaw) 0 |
-    *         \    0         0     1 /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   public void appendYawRotation(double yaw)
-   {
-      rotationMatrix.appendYawRotation(yaw);
-   }
-
-   /**
-    * Append a rotation about the y-axis to the rotation part of this transform.
-    *
-    * <pre>
-    *         /  cos(pitch) 0 sin(pitch) \
-    * R = R * |      0      1     0      |
-    *         \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   public void appendPitchRotation(double pitch)
-   {
-      rotationMatrix.appendPitchRotation(pitch);
-   }
-
-   /**
-    * Append a rotation about the x-axis to the rotation part of this transform.
-    *
-    * <pre>
-    *         / 1     0          0     \
-    * R = R * | 0 cos(roll) -sin(roll) |
-    *         \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void appendRollRotation(double roll)
-   {
-      rotationMatrix.appendRollRotation(roll);
-   }
-
-   /**
-    * Performs the multiplication of {@code other} with this transform.
-    * <p>
-    * this = other * this
-    * </p>
-    *
-    * @param other the other transform to multiply this with. Not modified.
-    */
-   public void preMultiply(RigidBodyTransformReadOnly other)
-   {
-      if (hasTranslation)
-      {
-         other.getRotation().transform(translationVector);
-
-         if (other.hasTranslation())
-         {
-            translationVector.add(other.getTranslation());
-            hasTranslation = !isTupleZero(translationVector);
-         }
-      }
-      else if (other.hasTranslation())
-      {
-         translationVector.set(other.getTranslation());
-         hasTranslation = true;
-      }
-
-      rotationMatrix.prepend(other.getRotation());
-   }
-
-   /**
-    * Performs the multiplication of {@code affineTransform} with this transform.
-    * <p>
-    * Note: the scale part of the given affine transform is not used when performing the multiplication
-    * to conserve a proper rigid-body transform describing only a rotation and a translation.
-    * </p>
-    * <p>
-    * this = S(affineTransform) * this <br>
-    * where S(affineTransform) is the function selecting only the rotation and translation parts of the
-    * affine transform.
-    * </p>
-    *
-    * @param affineTransform the affine transform to multiply this with. Not modified.
-    */
-   public void preMultiply(AffineTransform affineTransform)
-   {
-      affineTransform.getRotationMatrix().transform(translationVector);
-      translationVector.add(affineTransform.getTranslationVector());
-      rotationMatrix.preMultiply(affineTransform.getRotationMatrix());
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of {@code other} with the inverse of this transform.
-    * <p>
-    * this = other * this<sup>-1</sup>
-    * </p>
-    *
-    * @param other the other transform to multiply this with. Not modified.
-    */
-   public void preMultiplyInvertThis(RigidBodyTransformReadOnly other)
-   {
-      rotationMatrix.invert();
-      rotationMatrix.prepend(other.getRotation());
-
-      if (hasTranslation)
-         rotationMatrix.transform(translationVector);
-      translationVector.sub(other.getTranslation(), translationVector);
-      hasTranslation = hasTranslation ^ other.hasTranslation() || !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of {@code other} with this transform.
-    * <p>
-    * this = other<sup>-1</sup> * this
-    * </p>
-    *
-    * @param other the other transform to multiply this with. Not modified.
-    */
-   public void preMultiplyInvertOther(RigidBodyTransformReadOnly other)
-   {
-      if (other.hasTranslation())
-      {
-         translationVector.sub(other.getTranslation());
-         hasTranslation = !hasTranslation || !isTupleZero(translationVector);
-      }
-
-      if (hasTranslation)
-      {
-         other.getRotation().inverseTransform(translationVector);
-      }
-
-      rotationMatrix.prependInvertOther(other.getRotation());
-   }
-
-   /**
-    * Performs the multiplication of {@code affineTransform} with the inverse of this transform.
-    * <p>
-    * Note: the scale part of the given affine transform is not used when performing the multiplication
-    * to conserve a proper rigid-body transform describing only a rotation and a translation.
-    * </p>
-    * <p>
-    * this = S(affineTransform) * this<sup>-1</sup> <br>
-    * where S(affineTransform) is the function selecting only the rotation and translation parts of the
-    * affine transform.
-    * </p>
-    *
-    * @param affineTransform the affine transform to multiply this with. Not modified.
-    */
-   public void preMultiplyInvertThis(AffineTransform affineTransform)
-   {
-      rotationMatrix.preMultiplyTransposeThis(affineTransform.getRotationMatrix());
-      rotationMatrix.transform(translationVector);
-      translationVector.sub(affineTransform.getTranslationVector(), translationVector);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Performs the multiplication of the inverse of {@code affineTransform} with this transform.
-    * <p>
-    * Note: the scale part of the given affine transform is not used when performing the multiplication
-    * to conserve a proper rigid-body transform describing only a rotation and a translation.
-    * </p>
-    * <p>
-    * this = S(affineTransform)<sup>-1</sup> * this <br>
-    * where S(affineTransform) is the function selecting only the rotation and translation parts of the
-    * affine transform.
-    * </p>
-    *
-    * @param affineTransform the affine transform to multiply this with. Not modified.
-    */
-   public void preMultiplyInvertOther(AffineTransform affineTransform)
-   {
-      translationVector.sub(affineTransform.getTranslationVector());
-      affineTransform.getRotationMatrix().inverseTransform(translationVector);
-      rotationMatrix.preMultiplyTransposeOther(affineTransform.getRotationMatrix());
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Prepend a translation transform to this transform.
-    *
-    * <pre>
-    *        / 1 0 0 translation.x \
-    * this = | 0 1 0 translation.y | * this
-    *        | 0 0 1 translation.z |
-    *        \ 0 0 0      1        /
-    * </pre>
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param translation the translation to prepend to this transform. Not modified.
-    */
-   public void prependTranslation(Tuple3DReadOnly translation)
-   {
-      translationVector.add(translation);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Prepend a translation transform to this transform.
-    *
-    * <pre>
-    *        / 1 0 0 x \
-    * this = | 0 1 0 y | * this
-    *        | 0 0 1 z |
-    *        \ 0 0 0 1 /
-    * </pre>
-    * <p>
-    * This method does not affect the rotation part of this transform.
-    * </p>
-    *
-    * @param x the translation along the x-axis to apply.
-    * @param y the translation along the y-axis to apply.
-    * @param z the translation along the z-axis to apply.
-    */
-   public void prependTranslation(double x, double y, double z)
-   {
-      translationVector.add(x, y, z);
-      hasTranslation = !isTupleZero(translationVector);
-   }
-
-   /**
-    * Prepend a rotation about the z-axis to this transform.
-    * <p>
-    * This method first rotates the translation part and then prepend the yaw-rotation to the rotation
-    * part of this transform.
-    * </p>
-    *
-    * <pre>
-    *        / cos(yaw) -sin(yaw)  0   0 \
-    * this = | sin(yaw)  cos(yaw)  0   0 | * this
-    *        |    0         0      1   0 |
-    *        \    0         0      0   1 /
-    * </pre>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   public void prependYawRotation(double yaw)
-   {
-      RotationMatrixTools.applyYawRotation(yaw, translationVector, translationVector);
-      rotationMatrix.prependYawRotation(yaw);
-   }
-
-   /**
-    * Prepend a rotation about the y-axis to this transform.
-    * <p>
-    * This method first rotates the translation part and then prepend the pitch-rotation to the
-    * rotation part of this transform.
-    * </p>
-    *
-    * <pre>
-    *        /  cos(pitch) 0 sin(pitch)  0 \
-    * this = |      0      1     0       0 | * this
-    *        | -sin(pitch) 0 cos(pitch)  0 |
-    *        \      0      0     0       1 /
-    * </pre>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   public void prependPitchRotation(double pitch)
-   {
-      RotationMatrixTools.applyPitchRotation(pitch, translationVector, translationVector);
-      rotationMatrix.prependPitchRotation(pitch);
-   }
-
-   /**
-    * Prepend a rotation about the x-axis to this transform.
-    * <p>
-    * This method first rotates the translation part and then prepend the roll-rotation to the rotation
-    * part of this transform.
-    * </p>
-    *
-    * <pre>
-    *        / 1     0          0     0 \
-    * this = | 0 cos(roll) -sin(roll) 0 | * this
-    *        | 0 sin(roll)  cos(roll) 0 |
-    *        \ 0     0          0     1 /
-    * </pre>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    */
-   public void prependRollRotation(double roll)
-   {
-      RotationMatrixTools.applyRollRotation(roll, translationVector, translationVector);
-      rotationMatrix.prependRollRotation(roll);
    }
 
    /**
@@ -1815,10 +647,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void interpolate(RigidBodyTransform transform1, RigidBodyTransform transform2, double alpha)
    {
       rotationMatrix.interpolate(transform1.rotationMatrix, transform2.rotationMatrix, alpha);
-      if (transform1.hasTranslation || transform2.hasTranslation)
-         translationVector.interpolate(transform1.translationVector, transform2.translationVector, alpha);
-      else
-         translationVector.setToZero();
+      translationVector.interpolate(transform1.translationVector, transform2.translationVector, alpha);
    }
 
    /**
@@ -1965,7 +794,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    }
 
    @Override
-   public RotationMatrixReadOnly getRotation()
+   public RotationMatrix getRotation()
    {
       return rotationMatrix;
    }
@@ -2016,7 +845,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    }
 
    @Override
-   public Vector3DReadOnly getTranslation()
+   public Vector3DBasics getTranslation()
    {
       return translationVector;
    }
@@ -2238,11 +1067,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public double getM33()
    {
       return 1.0;
-   }
-
-   private static boolean isTupleZero(Tuple3DReadOnly tupleToTest)
-   {
-      return TupleTools.isTupleZero(tupleToTest, EPS_CHECK_IDENTITY);
    }
 
    /**
