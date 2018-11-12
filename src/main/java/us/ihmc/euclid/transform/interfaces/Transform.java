@@ -863,7 +863,7 @@ public interface Transform
     * Performs the inverse of the transform on the given {@code original} and stores the result in
     * {@code transformed}.
     * <p>
-    * This is equivalent to calling {@link #transform(RigidBodyTransform, RigidBodyTransform)} with
+    * This is equivalent to calling {@link #transform(RigidBodyTransformReadOnly, RigidBodyTransform)} with
     * the inverse of this transform.
     * </p>
     * <p>
