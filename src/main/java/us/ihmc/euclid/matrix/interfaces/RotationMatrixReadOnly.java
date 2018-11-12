@@ -50,6 +50,18 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * </p>
     */
    @Override
+   default boolean isZeroOrientation()
+   {
+      return isIdentity();
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * A rotation matrix is a zero orientation when it is equal to the identity matrix.
+    * </p>
+    */
+   @Override
    default boolean isZeroOrientation(double epsilon)
    {
       return isIdentity(epsilon);
