@@ -47,7 +47,7 @@ public abstract class RotationMatrixConversion
     */
    public static void computeYawMatrix(double yaw, RotationMatrix matrixToPack)
    {
-      if (EuclidCoreTools.isZeroAngle(yaw, EPS))
+      if (EuclidCoreTools.isAngleZero(yaw, EPS))
       {
          matrixToPack.setToZero();
       }
@@ -74,7 +74,7 @@ public abstract class RotationMatrixConversion
     */
    public static void computePitchMatrix(double pitch, RotationMatrix matrixToPack)
    {
-      if (EuclidCoreTools.isZeroAngle(pitch, EPS))
+      if (EuclidCoreTools.isAngleZero(pitch, EPS))
       {
          matrixToPack.setToZero();
       }
@@ -101,7 +101,7 @@ public abstract class RotationMatrixConversion
     */
    public static void computeRollMatrix(double roll, RotationMatrix matrixToPack)
    {
-      if (EuclidCoreTools.isZeroAngle(roll, EPS))
+      if (EuclidCoreTools.isAngleZero(roll, EPS))
       {
          matrixToPack.setToZero();
       }
@@ -163,7 +163,7 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      if (EuclidCoreTools.isZeroAngle(angle, EPS))
+      if (EuclidCoreTools.isAngleZero(angle, EPS))
       {
          matrixToPack.setToZero();
          return;
@@ -507,7 +507,7 @@ public abstract class RotationMatrixConversion
 
       double norm = Math.sqrt(EuclidCoreTools.normSquared(rx, ry, rz));
 
-      if (EuclidCoreTools.isZeroAngle(norm, EPS))
+      if (EuclidCoreTools.isAngleZero(norm, EPS))
       {
          matrixToPack.setIdentity();
       }

@@ -413,7 +413,7 @@ public class EuclidCoreTools
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the angle can be considered zero, {@code false} otherwise.
     */
-   public static boolean isZeroAngle(double angle, double epsilon)
+   public static boolean isAngleZero(double angle, double epsilon)
    {
       angle = Math.abs(angle) % TwoPI;
       if (angle > Math.PI)

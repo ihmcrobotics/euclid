@@ -333,7 +333,7 @@ public class EuclidCoreToolsTest
    }
 
    @Test
-   public void testIsZeroAngle() throws Exception
+   public void testIsAngleZero() throws Exception
    {
       Random random = new Random(35635);
 
@@ -346,11 +346,11 @@ public class EuclidCoreToolsTest
          if (random.nextBoolean())
             nonZeroAngle = -nonZeroAngle;
 
-         assertTrue(EuclidCoreTools.isZeroAngle(zeroAngle, epsilon));
-         assertTrue(EuclidCoreTools.isZeroAngle(zeroAngle + twoPIMutiple, epsilon));
+         assertTrue(EuclidCoreTools.isAngleZero(zeroAngle, epsilon));
+         assertTrue(EuclidCoreTools.isAngleZero(zeroAngle + twoPIMutiple, epsilon));
 
-         assertFalse(EuclidCoreTools.isZeroAngle(nonZeroAngle, epsilon));
-         assertFalse(EuclidCoreTools.isZeroAngle(nonZeroAngle + twoPIMutiple, epsilon));
+         assertFalse(EuclidCoreTools.isAngleZero(nonZeroAngle, epsilon));
+         assertFalse(EuclidCoreTools.isAngleZero(nonZeroAngle + twoPIMutiple, epsilon));
       }
    }
 

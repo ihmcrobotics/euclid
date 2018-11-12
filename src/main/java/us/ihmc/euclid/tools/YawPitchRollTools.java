@@ -47,7 +47,7 @@ public class YawPitchRollTools
     */
    public static boolean isZero(double yaw, double pitch, double roll, double epsilon)
    {
-      return EuclidCoreTools.isZeroAngle(yaw, epsilon) && EuclidCoreTools.isZeroAngle(pitch, epsilon) && EuclidCoreTools.isZeroAngle(roll, epsilon);
+      return EuclidCoreTools.isAngleZero(yaw, epsilon) && EuclidCoreTools.isAngleZero(pitch, epsilon) && EuclidCoreTools.isAngleZero(roll, epsilon);
    }
 
    /**
