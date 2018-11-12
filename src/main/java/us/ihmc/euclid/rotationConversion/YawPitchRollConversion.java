@@ -169,7 +169,7 @@ public abstract class YawPitchRollConversion
     */
    public static double computeYaw(RotationMatrixReadOnly rotationMatrix)
    {
-      return computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10());
+      return rotationMatrix.isZeroOrientation() ? 0.0 : computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10());
    }
 
    /**
@@ -187,7 +187,7 @@ public abstract class YawPitchRollConversion
     */
    public static double computePitch(RotationMatrixReadOnly rotationMatrix)
    {
-      return computePitchImpl(rotationMatrix.getM20());
+      return rotationMatrix.isZeroOrientation() ? 0.0 : computePitchImpl(rotationMatrix.getM20());
    }
 
    /**
@@ -205,7 +205,7 @@ public abstract class YawPitchRollConversion
     */
    public static double computeRoll(RotationMatrixReadOnly rotationMatrix)
    {
-      return computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22());
+      return rotationMatrix.isZeroOrientation() ? 0.0 : computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22());
    }
 
    /**
