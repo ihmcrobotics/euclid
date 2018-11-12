@@ -335,7 +335,7 @@ public class Torus3D extends Shape3D<Torus3D>
       if (Math.abs(radius - other.radius) > epsilon || Math.abs(tubeRadius - other.tubeRadius) > epsilon)
          return false;
 
-      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon))
          return false;
 
       /*

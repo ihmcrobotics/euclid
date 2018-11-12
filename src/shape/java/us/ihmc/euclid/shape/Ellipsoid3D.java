@@ -415,7 +415,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    @Override
    public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
    {
-      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon))
          return false;
 
       boolean areThisRadiiXYEqual = EuclidCoreTools.epsilonEquals(radii.getX(), radii.getY(), epsilon);
@@ -434,12 +434,12 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
          return Math.abs(thisRadiiSum - otherRadiiSum) <= 3.0 * epsilon; // Comparing the average of each ellipsoid's radii.
       }
 
-      RotationMatrixReadOnly otherRotation = other.shapePose.getRotationMatrix();
+      RotationMatrixReadOnly otherRotation = other.shapePose.getRotation();
       double otherRadiusWorldX = TransformationTools.computeTransformedX(otherRotation, false, other.radii);
       double otherRadiusWorldY = TransformationTools.computeTransformedY(otherRotation, false, other.radii);
       double otherRadiusWorldZ = TransformationTools.computeTransformedZ(otherRotation, false, other.radii);
 
-      RotationMatrixReadOnly thisRotation = shapePose.getRotationMatrix();
+      RotationMatrixReadOnly thisRotation = shapePose.getRotation();
       double otherRadiusLocalX = Math.abs(TransformationTools.computeTransformedX(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));
       double otherRadiusLocalY = Math.abs(TransformationTools.computeTransformedY(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));
       double otherRadiusLocalZ = Math.abs(TransformationTools.computeTransformedZ(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));

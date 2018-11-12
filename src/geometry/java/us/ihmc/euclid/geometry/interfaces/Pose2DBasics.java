@@ -242,7 +242,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
          rigidBodyTransform.checkIfRotation2D();
 
       setPosition(rigidBodyTransform.getTranslationX(), rigidBodyTransform.getTranslationY());
-      setOrientation(rigidBodyTransform.getRotationMatrix().getYaw());
+      setOrientation(rigidBodyTransform.getRotation().getYaw());
    }
 
    /**

@@ -2091,7 +2091,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    @Deprecated
    public RotationMatrixReadOnly getRotationMatrix()
    {
-      return rotationMatrix;
+      return getRotation();
    }
 
    @Override
@@ -2142,11 +2142,11 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    @Deprecated
    public Vector3DReadOnly getTranslationVector()
    {
-      return translationVector;
+      return getTranslation();
    }
 
    @Override
-   public Tuple3DReadOnly getTranslation()
+   public Vector3DReadOnly getTranslation()
    {
       return translationVector;
    }

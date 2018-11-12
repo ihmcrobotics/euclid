@@ -442,7 +442,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public RotationMatrixReadOnly getOrientation()
    {
-      return shapePose.getRotationMatrix();
+      return shapePose.getRotation();
    }
 
    /**
@@ -467,7 +467,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public final double getOrientationPitch()
    {
-      return shapePose.getRotationMatrix().getPitch();
+      return shapePose.getRotation().getPitch();
    }
 
    /**
@@ -482,7 +482,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public final double getOrientationRoll()
    {
-      return shapePose.getRotationMatrix().getRoll();
+      return shapePose.getRotation().getRoll();
    }
 
    /**
@@ -497,7 +497,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public final double getOrientationYaw()
    {
-      return shapePose.getRotationMatrix().getYaw();
+      return shapePose.getRotation().getYaw();
    }
 
    /**
@@ -557,7 +557,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public Tuple3DReadOnly getPosition()
    {
-      return shapePose.getTranslationVector();
+      return shapePose.getTranslation();
    }
 
    /**

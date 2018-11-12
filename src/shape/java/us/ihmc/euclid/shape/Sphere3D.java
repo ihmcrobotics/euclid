@@ -277,6 +277,6 @@ public class Sphere3D extends Shape3D<Sphere3D>
    public boolean geometricallyEquals(Sphere3D other, double epsilon)
    {
       return Math.abs(radius - other.radius) <= epsilon
-            && shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon);
+            && shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon);
    }
 }

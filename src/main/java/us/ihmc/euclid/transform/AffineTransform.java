@@ -960,8 +960,8 @@ public class AffineTransform
     */
    public void multiply(QuaternionBasedTransform quaternionBasedTransform)
    {
-      Matrix3DTools.addTransform(getRotationMatrix(), quaternionBasedTransform.getTranslationVector(), translationVector);
-      rotationScaleMatrix.append(quaternionBasedTransform.getQuaternion());
+      Matrix3DTools.addTransform(getRotationMatrix(), quaternionBasedTransform.getTranslation(), translationVector);
+      rotationScaleMatrix.append(quaternionBasedTransform.getRotation());
    }
 
    /**
@@ -1056,9 +1056,9 @@ public class AffineTransform
     */
    public void multiplyInvertThis(QuaternionBasedTransform quaternionBasedTransform)
    {
-      translationVector.sub(quaternionBasedTransform.getTranslationVector(), translationVector);
+      translationVector.sub(quaternionBasedTransform.getTranslation(), translationVector);
       getRotationMatrix().inverseTransform(translationVector, translationVector);
-      rotationScaleMatrix.appendInvertThis(quaternionBasedTransform.getQuaternion());
+      rotationScaleMatrix.appendInvertThis(quaternionBasedTransform.getRotation());
    }
 
    /**
@@ -1079,8 +1079,8 @@ public class AffineTransform
     */
    public void multiplyInvertOther(QuaternionBasedTransform quaternionBasedTransform)
    {
-      rotationScaleMatrix.appendInvertOther(quaternionBasedTransform.getQuaternion());
-      Matrix3DTools.subTransform(getRotationMatrix(), quaternionBasedTransform.getTranslationVector(), translationVector);
+      rotationScaleMatrix.appendInvertOther(quaternionBasedTransform.getRotation());
+      Matrix3DTools.subTransform(getRotationMatrix(), quaternionBasedTransform.getTranslation(), translationVector);
    }
 
    /**
@@ -1248,8 +1248,8 @@ public class AffineTransform
    public void preMultiply(QuaternionBasedTransform quaternionBasedTransform)
    {
       quaternionBasedTransform.transform(translationVector);
-      translationVector.add(quaternionBasedTransform.getTranslationVector());
-      rotationScaleMatrix.prepend(quaternionBasedTransform.getQuaternion());
+      translationVector.add(quaternionBasedTransform.getTranslation());
+      rotationScaleMatrix.prepend(quaternionBasedTransform.getRotation());
    }
 
    /**
@@ -1345,9 +1345,9 @@ public class AffineTransform
     */
    public void preMultiplyInvertThis(QuaternionBasedTransform quaternionBasedTransform)
    {
-      rotationScaleMatrix.prependInvertThis(quaternionBasedTransform.getQuaternion());
+      rotationScaleMatrix.prependInvertThis(quaternionBasedTransform.getRotation());
       getRotationMatrix().transform(translationVector);
-      translationVector.sub(quaternionBasedTransform.getTranslationVector(), translationVector);
+      translationVector.sub(quaternionBasedTransform.getTranslation(), translationVector);
    }
 
    /**
@@ -1367,9 +1367,9 @@ public class AffineTransform
     */
    public void preMultiplyInvertOther(QuaternionBasedTransform quaternionBasedTransform)
    {
-      translationVector.sub(quaternionBasedTransform.getTranslationVector());
-      quaternionBasedTransform.getQuaternion().inverseTransform(translationVector);
-      rotationScaleMatrix.prependInvertOther(quaternionBasedTransform.getQuaternion());
+      translationVector.sub(quaternionBasedTransform.getTranslation());
+      quaternionBasedTransform.getRotation().inverseTransform(translationVector);
+      rotationScaleMatrix.prependInvertOther(quaternionBasedTransform.getRotation());
    }
 
    /**

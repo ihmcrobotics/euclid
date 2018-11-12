@@ -231,8 +231,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(RigidBodyTransform rigidBodyTransform)
    {
-      setPosition(rigidBodyTransform.getTranslationVector());
-      setOrientation(rigidBodyTransform.getRotationMatrix());
+      setPosition(rigidBodyTransform.getTranslation());
+      setOrientation(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -242,8 +242,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(QuaternionBasedTransform quaternionBasedTransform)
    {
-      setPosition(quaternionBasedTransform.getTranslationVector());
-      setOrientation(quaternionBasedTransform.getQuaternion());
+      setPosition(quaternionBasedTransform.getTranslation());
+      setOrientation(quaternionBasedTransform.getRotation());
    }
 
    /**
@@ -575,8 +575,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void appendTransform(RigidBodyTransform transform)
    {
-      QuaternionTools.addTransform(getOrientation(), transform.getTranslationVector(), getPosition());
-      getOrientation().append(transform.getRotationMatrix());
+      QuaternionTools.addTransform(getOrientation(), transform.getTranslation(), getPosition());
+      getOrientation().append(transform.getRotation());
    }
 
    /**
@@ -586,8 +586,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void appendTransform(QuaternionBasedTransform transform)
    {
-      QuaternionTools.addTransform(getOrientation(), transform.getTranslationVector(), getPosition());
-      getOrientation().multiply(transform.getQuaternion());
+      QuaternionTools.addTransform(getOrientation(), transform.getTranslation(), getPosition());
+      getOrientation().multiply(transform.getRotation());
    }
 
    /**

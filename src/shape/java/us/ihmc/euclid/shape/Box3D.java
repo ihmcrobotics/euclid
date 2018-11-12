@@ -570,15 +570,15 @@ public class Box3D extends Shape3D<Box3D>
    @Override
    public boolean geometricallyEquals(Box3D other, double epsilon)
    {
-      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon))
          return false;
 
-      RotationMatrixReadOnly otherRotation = other.shapePose.getRotationMatrix();
+      RotationMatrixReadOnly otherRotation = other.shapePose.getRotation();
       double otherSizeWorldX = TransformationTools.computeTransformedX(otherRotation, false, other.size);
       double otherSizeWorldY = TransformationTools.computeTransformedY(otherRotation, false, other.size);
       double otherSizeWorldZ = TransformationTools.computeTransformedZ(otherRotation, false, other.size);
 
-      RotationMatrixReadOnly thisRotation = shapePose.getRotationMatrix();
+      RotationMatrixReadOnly thisRotation = shapePose.getRotation();
       double otherSizeLocalX = Math.abs(TransformationTools.computeTransformedX(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
       double otherSizeLocalY = Math.abs(TransformationTools.computeTransformedY(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
       double otherSizeLocalZ = Math.abs(TransformationTools.computeTransformedZ(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));

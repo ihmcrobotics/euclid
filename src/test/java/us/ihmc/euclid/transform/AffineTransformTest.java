@@ -1914,8 +1914,8 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          RigidBodyTransform rigidBodyTransform = new RigidBodyTransform();
          transform.getRigidBodyTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertMatrix3DEquals(rigidBodyTransform.getRotationMatrix(), transform.getRotationMatrix(), EPS);
-         EuclidCoreTestTools.assertTuple3DEquals(rigidBodyTransform.getTranslationVector(), transform.getTranslationVector(), EPS);
+         EuclidCoreTestTools.assertMatrix3DEquals(rigidBodyTransform.getRotation(), transform.getRotationMatrix(), EPS);
+         EuclidCoreTestTools.assertTuple3DEquals(rigidBodyTransform.getTranslation(), transform.getTranslationVector(), EPS);
       }
 
       { // Test get(DenseMatrix64F matrixToPack)

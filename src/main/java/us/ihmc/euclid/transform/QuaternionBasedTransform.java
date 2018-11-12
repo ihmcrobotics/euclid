@@ -725,8 +725,8 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     */
    public void interpolate(QuaternionBasedTransform firstTransform, QuaternionBasedTransform secondTransform, double alpha)
    {
-      quaternion.interpolate(firstTransform.getQuaternion(), secondTransform.getQuaternion(), alpha);
-      translationVector.interpolate(firstTransform.getTranslationVector(), secondTransform.getTranslationVector(), alpha);
+      quaternion.interpolate(firstTransform.getRotation(), secondTransform.getRotation(), alpha);
+      translationVector.interpolate(firstTransform.getTranslation(), secondTransform.getTranslation(), alpha);
    }
 
    /**
@@ -1288,7 +1288,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     */
    public QuaternionReadOnly getQuaternion()
    {
-      return quaternion;
+      return getRotation();
    }
 
    @Override
@@ -1305,7 +1305,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     */
    public Vector3DReadOnly getTranslationVector()
    {
-      return translationVector;
+      return getTranslation();
    }
 
    @Override
