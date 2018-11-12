@@ -81,7 +81,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    @Override
    default boolean isOrientation2D(double epsilon)
    {
-      return isMatrix2D(epsilon);
+      return isIdentity() || isMatrix2D(epsilon);
    }
 
    /**
