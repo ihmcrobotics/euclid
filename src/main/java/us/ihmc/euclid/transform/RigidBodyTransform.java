@@ -61,7 +61,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
       Settable<RigidBodyTransform>, Clearable
 {
    private static final double EPS_CHECK_IDENTITY = 1.0e-10;
-   private boolean hasRotation = false;
    private boolean hasTranslation = false;
 
    /** The rotation part of this transform. */
@@ -194,7 +193,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.setIdentity();
       translationVector.setToZero();
-      hasRotation = false;
       hasTranslation = false;
    }
 
@@ -216,7 +214,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationToZero()
    {
       rotationMatrix.setIdentity();
-      hasRotation = false;
    }
 
    /**
@@ -236,7 +233,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.setToNaN();
       translationVector.setToNaN();
-      hasRotation = true;
       hasTranslation = true;
    }
 
@@ -249,7 +245,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationToNaN()
    {
       rotationMatrix.setToNaN();
-      hasRotation = true;
    }
 
    /**
@@ -285,7 +280,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    @Override
    public boolean hasRotation()
    {
-      return hasRotation;
+      return getRotation().isZeroOrientation();
    }
 
    /**
@@ -305,10 +300,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
     */
    public void normalizeRotationPart()
    {
-      if (hasRotation)
-         rotationMatrix.normalize();
-      else
-         rotationMatrix.setIdentity();
+      rotationMatrix.normalize();
    }
 
    /**
@@ -344,7 +336,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -374,7 +365,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -398,7 +388,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(other.getRotation());
       translationVector.set(other.getTranslation());
-      hasRotation = other.hasRotation();
       hasTranslation = other.hasTranslation();
    }
 
@@ -441,7 +430,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(matrix);
       translationVector.set(0, 3, matrix);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -475,7 +463,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(startRow, startColumn, matrix);
       translationVector.set(startRow, startColumn + 3, matrix);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -521,7 +508,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -567,7 +553,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -613,7 +598,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -659,7 +643,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       translationVector.set(m03, m13, m23);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -674,7 +657,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       this.rotationMatrix.set(rotationMatrix);
       translationVector.set(translation);
-      hasRotation = !isRotationZero(this.rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -688,7 +670,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       this.rotationMatrix.set(rotationMatrix);
       translationVector.set(translation);
-      hasRotation = !isRotationZero(this.rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -707,7 +688,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(rotationScaleMatrix.getRotationMatrix());
       translationVector.set(translation);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -721,7 +701,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       rotationMatrix.set(orientation);
       translationVector.set(translation);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -742,7 +721,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotation(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
       rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      hasRotation = !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -766,7 +744,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      hasRotation = !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -780,7 +757,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotation(Orientation3DReadOnly orientation)
    {
       rotationMatrix.set(orientation);
-      hasRotation = !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -800,7 +776,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotation(Vector3DReadOnly rotationVector)
    {
       rotationMatrix.setRotationVector(rotationVector);
-      hasRotation = !isTupleZero(rotationVector);
    }
 
    /**
@@ -815,7 +790,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotation(DenseMatrix64F rotationMatrix)
    {
       this.rotationMatrix.set(rotationMatrix);
-      hasRotation = !isRotationZero(this.rotationMatrix);
    }
 
    /**
@@ -830,7 +804,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotation(Matrix3DReadOnly rotationMatrix)
    {
       this.rotationMatrix.set(rotationMatrix);
-      hasRotation = !isRotationZero(this.rotationMatrix);
    }
 
    /**
@@ -845,7 +818,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotation(RotationMatrixReadOnly rotationMatrix)
    {
       this.rotationMatrix.set(rotationMatrix);
-      hasRotation = !isRotationZero(this.rotationMatrix);
    }
 
    /**
@@ -866,7 +838,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationYaw(double yaw)
    {
       rotationMatrix.setToYawMatrix(yaw);
-      hasRotation = !isZero(yaw);
    }
 
    /**
@@ -887,7 +858,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationPitch(double pitch)
    {
       rotationMatrix.setToPitchMatrix(pitch);
-      hasRotation = !isZero(pitch);
    }
 
    /**
@@ -908,7 +878,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationRoll(double roll)
    {
       rotationMatrix.setToRollMatrix(roll);
-      hasRotation = !isZero(roll);
    }
 
    /**
@@ -953,7 +922,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationYawPitchRoll(double yaw, double pitch, double roll)
    {
       rotationMatrix.setYawPitchRoll(yaw, pitch, roll);
-      hasRotation = !areComponentsAllZero(yaw, pitch, roll);
    }
 
    /**
@@ -1003,7 +971,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void setRotationEuler(double rotX, double rotY, double rotZ)
    {
       rotationMatrix.setEuler(rotX, rotY, rotZ);
-      hasRotation = !areComponentsAllZero(rotX, rotY, rotZ);
    }
 
    /**
@@ -1318,12 +1285,9 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
     */
    public void invert()
    {
-      if (hasRotation)
-      {
-         rotationMatrix.invert();
-         if (hasTranslation)
-            rotationMatrix.transform(translationVector);
-      }
+      rotationMatrix.invert();
+      if (hasTranslation)
+         rotationMatrix.transform(translationVector);
       translationVector.negate();
    }
 
@@ -1347,27 +1311,11 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       if (other.hasTranslation())
       {
-         if (hasRotation)
-            Matrix3DTools.addTransform(rotationMatrix, other.getTranslation(), translationVector);
-         else
-            translationVector.add(other.getTranslation());
-
+         rotationMatrix.addTransform(other.getTranslation(), translationVector);
          hasTranslation = !hasTranslation || !isTupleZero(translationVector);
       }
 
-      if (other.hasRotation())
-      {
-         if (hasRotation)
-         {
-            rotationMatrix.append(other.getRotation());
-            hasRotation = !isRotationZero(rotationMatrix);
-         }
-         else
-         {
-            rotationMatrix.set(other.getRotation());
-            hasRotation = true;
-         }
-      }
+      rotationMatrix.append(other.getRotation());
    }
 
    /**
@@ -1386,9 +1334,8 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
     */
    public void multiply(AffineTransform affineTransform)
    {
-      Matrix3DTools.addTransform(rotationMatrix, affineTransform.getTranslationVector(), translationVector);
+      rotationMatrix.addTransform(affineTransform.getTranslationVector(), translationVector);
       rotationMatrix.multiply(affineTransform.getRotationMatrix());
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -1404,22 +1351,10 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       translationVector.sub(other.getTranslation(), translationVector);
 
-      if (hasRotation)
-      {
-         rotationMatrix.invert();
-         rotationMatrix.transform(translationVector);
+      rotationMatrix.invert();
+      rotationMatrix.transform(translationVector);
+      rotationMatrix.append(other.getRotation());
 
-         if (other.hasRotation())
-         {
-            rotationMatrix.append(other.getRotation());
-            hasRotation = !isRotationZero(rotationMatrix);
-         }
-      }
-      else if (other.hasRotation())
-      {
-         rotationMatrix.set(other.getRotation());
-         hasRotation = true;
-      }
       hasTranslation = hasTranslation ^ other.hasTranslation() || !isTupleZero(translationVector);
    }
 
@@ -1433,26 +1368,11 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
     */
    public void multiplyInvertOther(RigidBodyTransformReadOnly other)
    {
-      if (hasRotation)
-      {
-         if (other.hasRotation())
-         {
-            rotationMatrix.appendInvertOther(other.getRotation());
-            hasRotation = !isRotationZero(rotationMatrix);
-         }
-      }
-      else if (other.hasRotation())
-      {
-         rotationMatrix.setAndInvert(other.getRotation());
-         hasRotation = true;
-      }
+      rotationMatrix.appendInvertOther(other.getRotation());
 
       if (other.hasTranslation())
       {
-         if (hasRotation)
-            Matrix3DTools.subTransform(rotationMatrix, other.getTranslation(), translationVector);
-         else
-            translationVector.sub(other.getTranslation());
+         rotationMatrix.subTransform(other.getTranslation(), translationVector);
          hasTranslation = !hasTranslation || !isTupleZero(translationVector);
       }
    }
@@ -1476,7 +1396,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
       translationVector.sub(affineTransform.getTranslationVector(), translationVector);
       rotationMatrix.inverseTransform(translationVector, translationVector);
       rotationMatrix.inverseTransform(affineTransform.getRotationMatrix(), rotationMatrix);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -1497,8 +1416,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void multiplyInvertOther(AffineTransform affineTransform)
    {
       rotationMatrix.multiplyTransposeOther(affineTransform.getRotationMatrix());
-      Matrix3DTools.subTransform(rotationMatrix, affineTransform.getTranslationVector(), translationVector);
-      hasRotation = !isRotationZero(rotationMatrix);
+      rotationMatrix.subTransform(affineTransform.getTranslationVector(), translationVector);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -1569,7 +1487,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void appendYawRotation(double yaw)
    {
       rotationMatrix.appendYawRotation(yaw);
-      hasRotation = hasRotation ^ !isZero(yaw) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1589,7 +1506,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void appendPitchRotation(double pitch)
    {
       rotationMatrix.appendPitchRotation(pitch);
-      hasRotation = hasRotation ^ !isZero(pitch) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1609,7 +1525,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public void appendRollRotation(double roll)
    {
       rotationMatrix.appendRollRotation(roll);
-      hasRotation = hasRotation ^ !isZero(roll) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1624,8 +1539,8 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       if (hasTranslation)
       {
-         if (other.hasRotation())
-            other.getRotation().transform(translationVector);
+         other.getRotation().transform(translationVector);
+
          if (other.hasTranslation())
          {
             translationVector.add(other.getTranslation());
@@ -1638,19 +1553,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
          hasTranslation = true;
       }
 
-      if (other.hasRotation())
-      {
-         if (hasRotation)
-         {
-            rotationMatrix.prepend(other.getRotation());
-            hasRotation = !isRotationZero(rotationMatrix);
-         }
-         else
-         {
-            rotationMatrix.set(other.getRotation());
-            hasRotation = true;
-         }
-      }
+      rotationMatrix.prepend(other.getRotation());
    }
 
    /**
@@ -1672,7 +1575,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
       affineTransform.getRotationMatrix().transform(translationVector);
       translationVector.add(affineTransform.getTranslationVector());
       rotationMatrix.preMultiply(affineTransform.getRotationMatrix());
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -1686,22 +1588,10 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
     */
    public void preMultiplyInvertThis(RigidBodyTransformReadOnly other)
    {
-      if (hasRotation)
-      {
-         rotationMatrix.invert();
-         if (other.hasRotation())
-         {
-            rotationMatrix.prepend(other.getRotation());
-            hasRotation = !isRotationZero(rotationMatrix);
-         }
-      }
-      else if (other.hasRotation())
-      {
-         rotationMatrix.set(other.getRotation());
-         hasRotation = true;
-      }
+      rotationMatrix.invert();
+      rotationMatrix.prepend(other.getRotation());
 
-      if (hasRotation && hasTranslation)
+      if (hasTranslation)
          rotationMatrix.transform(translationVector);
       translationVector.sub(other.getTranslation(), translationVector);
       hasTranslation = hasTranslation ^ other.hasTranslation() || !isTupleZero(translationVector);
@@ -1725,23 +1615,10 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
 
       if (hasTranslation)
       {
-         if (other.hasRotation())
-            other.getRotation().inverseTransform(translationVector);
+         other.getRotation().inverseTransform(translationVector);
       }
 
-      if (other.hasRotation())
-      {
-         if (hasRotation)
-         {
-            rotationMatrix.prependInvertOther(other.getRotation());
-            hasRotation = !isRotationZero(rotationMatrix);
-         }
-         else
-         {
-            rotationMatrix.setAndInvert(other.getRotation());
-            hasRotation = true;
-         }
-      }
+      rotationMatrix.prependInvertOther(other.getRotation());
    }
 
    /**
@@ -1763,7 +1640,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
       rotationMatrix.preMultiplyTransposeThis(affineTransform.getRotationMatrix());
       rotationMatrix.transform(translationVector);
       translationVector.sub(affineTransform.getTranslationVector(), translationVector);
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -1786,7 +1662,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
       translationVector.sub(affineTransform.getTranslationVector());
       affineTransform.getRotationMatrix().inverseTransform(translationVector);
       rotationMatrix.preMultiplyTransposeOther(affineTransform.getRotationMatrix());
-      hasRotation = !isRotationZero(rotationMatrix);
       hasTranslation = !isTupleZero(translationVector);
    }
 
@@ -1854,7 +1729,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       RotationMatrixTools.applyYawRotation(yaw, translationVector, translationVector);
       rotationMatrix.prependYawRotation(yaw);
-      hasRotation = hasRotation ^ !isZero(yaw) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1877,7 +1751,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       RotationMatrixTools.applyPitchRotation(pitch, translationVector, translationVector);
       rotationMatrix.prependPitchRotation(pitch);
-      hasRotation = hasRotation ^ !isZero(pitch) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1900,7 +1773,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    {
       RotationMatrixTools.applyRollRotation(roll, translationVector, translationVector);
       rotationMatrix.prependRollRotation(roll);
-      hasRotation = hasRotation ^ !isZero(roll) || !isRotationZero(rotationMatrix);
    }
 
    /**
@@ -1941,10 +1813,7 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
     */
    public void interpolate(RigidBodyTransform transform1, RigidBodyTransform transform2, double alpha)
    {
-      if (transform1.hasRotation || transform2.hasRotation)
-         rotationMatrix.interpolate(transform1.rotationMatrix, transform2.rotationMatrix, alpha);
-      else
-         rotationMatrix.setToZero();
+      rotationMatrix.interpolate(transform1.rotationMatrix, transform2.rotationMatrix, alpha);
       if (transform1.hasTranslation || transform2.hasTranslation)
          translationVector.interpolate(transform1.translationVector, transform2.translationVector, alpha);
       else
@@ -2368,11 +2237,6 @@ public class RigidBodyTransform implements RigidBodyTransformReadOnly, EpsilonCo
    public double getM33()
    {
       return 1.0;
-   }
-
-   private static boolean isRotationZero(RotationMatrixReadOnly rotationMatrixToTest)
-   {
-      return rotationMatrixToTest.isZeroOrientation();
    }
 
    private static boolean isTupleZero(Tuple3DReadOnly tupleToTest)
