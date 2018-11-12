@@ -769,7 +769,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     * this = this<sup>-1</sup> * other
     * </p>
     *
-    * @param other the other transform to multiply this with. Not modified.
+    * @param rigidBodyTransform the other transform to multiply this with. Not modified.
     */
    public void multiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
@@ -784,7 +784,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     * this = this * other<sup>-1</sup>
     * </p>
     *
-    * @param other the other transform to multiply this with. Not modified.
+    * @param rigidBodyTransform the other transform to multiply this with. Not modified.
     */
    public void multiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
@@ -938,7 +938,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     * this = other * this
     * </p>
     *
-    * @param other the other transform to multiply this with. Not modified.
+    * @param rigidBodyTransform the other transform to multiply this with. Not modified.
     */
    public void preMultiply(RigidBodyTransformReadOnly rigidBodyTransform)
    {
@@ -974,7 +974,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     * this = other * this<sup>-1</sup>
     * </p>
     *
-    * @param other the other transform to multiply this with. Not modified.
+    * @param rigidBodyTransform the other transform to multiply this with. Not modified.
     */
    public void preMultiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
@@ -989,7 +989,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformReadOnly, Eps
     * this = other<sup>-1</sup> * this
     * </p>
     *
-    * @param other the other transform to multiply this with. Not modified.
+    * @param rigidBodyTransform the other transform to multiply this with. Not modified.
     */
    public void preMultiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
