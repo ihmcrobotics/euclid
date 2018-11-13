@@ -24,8 +24,23 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
+/**
+ * Read-only interface for a rigid-body transform.
+ * <p>
+ * A rigid-body transform represents a transform that can rotate and/or translate geometries.
+ * </p>
+ * <p>
+ * The data structure used to represents this transform is not enforced here, such that the rotation
+ * part can be any implementation of orientation 3D.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface RigidBodyTransformReadOnly extends Transform
 {
+   /**
+    * The tolerance used to determine if the translation part is negligible.
+    */
    static final double EPS_ZERO_TRANSLATION = 1.0e-10;
 
    /**

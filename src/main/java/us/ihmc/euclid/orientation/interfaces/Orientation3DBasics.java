@@ -207,10 +207,28 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
       setYawPitchRoll(rotZ, rotY, rotX);
    }
 
+   /**
+    * Sets this orientation to represent a counter clockwise rotation around the z-axis of an angle
+    * {@code yaw}.
+    * 
+    * @param yaw the angle to rotate about the z-axis.
+    */
    void setToYawOrientation(double yaw);
 
+   /**
+    * Sets this orientation to represent a counter clockwise rotation around the y-axis of an angle
+    * {@code pitch}.
+    * 
+    * @param pitch the angle to rotate about the y-axis.
+    */
    void setToPitchOrientation(double pitch);
 
+   /**
+    * Sets this orientation to represent a counter clockwise rotation around the x-axis of an angle
+    * {@code roll}.
+    * 
+    * @param roll the angle to rotate about the x-axis.
+    */
    void setToRollOrientation(double roll);
 
    /**
