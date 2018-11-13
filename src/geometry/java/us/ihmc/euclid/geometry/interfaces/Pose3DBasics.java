@@ -15,6 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Write and read interface for pose 3D.
@@ -202,6 +203,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * </p>
     *
     * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
+    * @deprecated Use {@link #setOrientation(Orientation3DReadOnly)} with {@link YawPitchRoll} instead.
     */
    default void setOrientationYawPitchRoll(double[] yawPitchRoll)
    {
