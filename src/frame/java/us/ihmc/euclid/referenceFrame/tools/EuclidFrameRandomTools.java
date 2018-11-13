@@ -22,6 +22,7 @@ import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.FrameYawPitchRoll;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
@@ -713,6 +714,27 @@ public class EuclidFrameRandomTools
    public static FrameQuaternion nextFrameQuaternion(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
    {
       return new FrameQuaternion(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random, minMaxAngle));
+   }
+
+   /**
+    * Generates an orientation which both value and type are random.
+    * <p>
+    * The type can be either: quaternion, or yaw-pitch-roll.
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @param referenceFrame the random frame orientation's reference frame.
+    * @return the random orientation 3D.
+    */
+   public static FrameOrientation3DBasics nextFrameOrientation3D(Random random, ReferenceFrame referenceFrame)
+   {
+      switch (random.nextInt(2))
+      {
+      case 0:
+         return nextFrameQuaternion(random, referenceFrame);
+      default:
+         return nextFrameYawPitchRoll(random, referenceFrame);
+      }
    }
 
    /**
