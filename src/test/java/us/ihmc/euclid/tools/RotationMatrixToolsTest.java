@@ -8,7 +8,10 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -185,6 +188,16 @@ public class RotationMatrixToolsTest
          errorAverage /= 9.0 * ITERATIONS;
          assertTrue(errorAverage < 5.0e-5);
       }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with zero matrices
+         RotationMatrix r1 = new RotationMatrix();
+         RotationMatrix r2 = new RotationMatrix();
+         RotationMatrix result = EuclidCoreRandomTools.nextRotationMatrix(random);
+         
+         RotationMatrixTools.interpolate(r1, r2, random.nextDouble(), result);
+         EuclidCoreTestTools.assertIdentity(result, EPS);
+      }
    }
 
    @Test
@@ -240,6 +253,294 @@ public class RotationMatrixToolsTest
          double expectedDistance = Math.abs(axisAngle.getAngle());
          EuclidCoreTestTools.assertAngleEquals(expectedDistance, actualDistance, EPS);
          assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
+      }
+   }
+
+   @Test
+   public void testMultiply() throws Exception
+   {
+      Random random = new Random(2345);
+
+      for (int i = 0; i < 10 * ITERATIONS; i++)
+      { // multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2, RotationMatrix matrixToPack)
+
+         for (int j = 0; j < 4; j++)
+         {
+            Orientation3DBasics orientation1 = EuclidCoreRandomTools.nextOrientation3D(random);
+            Orientation3DBasics orientation2 = EuclidCoreRandomTools.nextOrientation3D(random);
+            Matrix3D expected = EuclidCoreRandomTools.nextDiagonalMatrix3D(random);
+            RotationMatrix actual = EuclidCoreRandomTools.nextRotationMatrix(random);
+
+            boolean inverse1 = (j & 1) != 0;
+            boolean inverse2 = (j & 2) != 0;
+            RotationMatrix m1 = new RotationMatrix(orientation1);
+            RotationMatrix m2 = new RotationMatrix(orientation2);
+
+            if (inverse1 && inverse2)
+               Matrix3DTools.multiplyTransposeBoth(m1, m2, expected);
+            else if (inverse1 && !inverse2)
+               Matrix3DTools.multiplyTransposeLeft(m1, m2, expected);
+            else if (inverse2)
+               Matrix3DTools.multiplyTransposeRight(m1, m2, expected);
+            else
+               Matrix3DTools.multiply(m1, m2, expected);
+
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+            orientation1.setToZero();
+            m1 = new RotationMatrix(orientation1);
+            m2 = new RotationMatrix(orientation2);
+
+            if (inverse1 && inverse2)
+               Matrix3DTools.multiplyTransposeBoth(m1, m2, expected);
+            else if (inverse1 && !inverse2)
+               Matrix3DTools.multiplyTransposeLeft(m1, m2, expected);
+            else if (inverse2)
+               Matrix3DTools.multiplyTransposeRight(m1, m2, expected);
+            else
+               Matrix3DTools.multiply(m1, m2, expected);
+
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+            orientation1 = EuclidCoreRandomTools.nextOrientation3D(random);
+            orientation2.setToZero();
+            m1 = new RotationMatrix(orientation1);
+            m2 = new RotationMatrix(orientation2);
+
+            if (inverse1 && inverse2)
+               Matrix3DTools.multiplyTransposeBoth(m1, m2, expected);
+            else if (inverse1 && !inverse2)
+               Matrix3DTools.multiplyTransposeLeft(m1, m2, expected);
+            else if (inverse2)
+               Matrix3DTools.multiplyTransposeRight(m1, m2, expected);
+            else
+               Matrix3DTools.multiply(m1, m2, expected);
+
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+            orientation1.setToZero();
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertIdentity(actual, EPS);
+         }
+      }
+
+      for (int i = 0; i < 10 * ITERATIONS; i++)
+      { // multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2, RotationMatrix matrixToPack)
+
+         for (int j = 0; j < 4; j++)
+         {
+            Orientation3DBasics orientation1 = EuclidCoreRandomTools.nextOrientation3D(random);
+            RotationMatrix orientation2 = EuclidCoreRandomTools.nextRotationMatrix(random);
+            Matrix3D expected = EuclidCoreRandomTools.nextDiagonalMatrix3D(random);
+            RotationMatrix actual = EuclidCoreRandomTools.nextRotationMatrix(random);
+
+            boolean inverse1 = (j & 1) != 0;
+            boolean inverse2 = (j & 2) != 0;
+            RotationMatrix m1 = new RotationMatrix(orientation1);
+            RotationMatrix m2 = new RotationMatrix(orientation2);
+
+            if (inverse1 && inverse2)
+               Matrix3DTools.multiplyTransposeBoth(m1, m2, expected);
+            else if (inverse1 && !inverse2)
+               Matrix3DTools.multiplyTransposeLeft(m1, m2, expected);
+            else if (inverse2)
+               Matrix3DTools.multiplyTransposeRight(m1, m2, expected);
+            else
+               Matrix3DTools.multiply(m1, m2, expected);
+
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+            orientation1.setToZero();
+            m1 = new RotationMatrix(orientation1);
+            m2 = new RotationMatrix(orientation2);
+
+            if (inverse1 && inverse2)
+               Matrix3DTools.multiplyTransposeBoth(m1, m2, expected);
+            else if (inverse1 && !inverse2)
+               Matrix3DTools.multiplyTransposeLeft(m1, m2, expected);
+            else if (inverse2)
+               Matrix3DTools.multiplyTransposeRight(m1, m2, expected);
+            else
+               Matrix3DTools.multiply(m1, m2, expected);
+
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+            orientation1 = EuclidCoreRandomTools.nextOrientation3D(random);
+            orientation2.setToZero();
+            m1 = new RotationMatrix(orientation1);
+            m2 = new RotationMatrix(orientation2);
+
+            if (inverse1 && inverse2)
+               Matrix3DTools.multiplyTransposeBoth(m1, m2, expected);
+            else if (inverse1 && !inverse2)
+               Matrix3DTools.multiplyTransposeLeft(m1, m2, expected);
+            else if (inverse2)
+               Matrix3DTools.multiplyTransposeRight(m1, m2, expected);
+            else
+               Matrix3DTools.multiply(m1, m2, expected);
+
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+            orientation1.setToZero();
+            RotationMatrixTools.multiply(orientation1, inverse1, orientation2, inverse2, actual);
+            EuclidCoreTestTools.assertIdentity(actual, EPS);
+         }
+      }
+   }
+
+   @Test
+   public void testPrependYawRotation() throws Exception
+   {
+      Random random = new Random(234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RotationMatrix actual = new RotationMatrix();
+         RotationMatrix expected = new RotationMatrix();
+
+         double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
+         RotationMatrix yawMatrix = new RotationMatrix();
+         RotationMatrixConversion.computeYawMatrix(yaw, yawMatrix);
+
+         RotationMatrixTools.multiply(yawMatrix, original, expected);
+         RotationMatrixTools.prependYawRotation(yaw, original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         original.setToZero();
+         RotationMatrixTools.prependYawRotation(yaw, original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(yawMatrix, actual, EPS);
+      }
+   }
+
+   @Test
+   public void testAppendYawRotation() throws Exception
+   {
+      Random random = new Random(234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RotationMatrix actual = new RotationMatrix();
+         RotationMatrix expected = new RotationMatrix();
+
+         double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
+         RotationMatrix yawMatrix = new RotationMatrix();
+         RotationMatrixConversion.computeYawMatrix(yaw, yawMatrix);
+
+         RotationMatrixTools.multiply(original, yawMatrix, expected);
+         RotationMatrixTools.appendYawRotation(original, yaw, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         original.setToZero();
+         RotationMatrixTools.appendYawRotation(original, yaw, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(yawMatrix, actual, EPS);
+      }
+   }
+
+   @Test
+   public void testPrependPitchRotation() throws Exception
+   {
+      Random random = new Random(234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RotationMatrix actual = new RotationMatrix();
+         RotationMatrix expected = new RotationMatrix();
+
+         double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
+         RotationMatrix yawMatrix = new RotationMatrix();
+         RotationMatrixConversion.computePitchMatrix(yaw, yawMatrix);
+
+         RotationMatrixTools.multiply(yawMatrix, original, expected);
+         RotationMatrixTools.prependPitchRotation(yaw, original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         original.setToZero();
+         RotationMatrixTools.prependPitchRotation(yaw, original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(yawMatrix, actual, EPS);
+      }
+   }
+
+   @Test
+   public void testAppendPitchRotation() throws Exception
+   {
+      Random random = new Random(234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RotationMatrix actual = new RotationMatrix();
+         RotationMatrix expected = new RotationMatrix();
+
+         double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
+         RotationMatrix yawMatrix = new RotationMatrix();
+         RotationMatrixConversion.computePitchMatrix(yaw, yawMatrix);
+
+         RotationMatrixTools.multiply(original, yawMatrix, expected);
+         RotationMatrixTools.appendPitchRotation(original, yaw, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         original.setToZero();
+         RotationMatrixTools.appendPitchRotation(original, yaw, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(yawMatrix, actual, EPS);
+      }
+   }
+
+   @Test
+   public void testPrependRollRotation() throws Exception
+   {
+      Random random = new Random(234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RotationMatrix actual = new RotationMatrix();
+         RotationMatrix expected = new RotationMatrix();
+
+         double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
+         RotationMatrix yawMatrix = new RotationMatrix();
+         RotationMatrixConversion.computeRollMatrix(yaw, yawMatrix);
+
+         RotationMatrixTools.multiply(yawMatrix, original, expected);
+         RotationMatrixTools.prependRollRotation(yaw, original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         original.setToZero();
+         RotationMatrixTools.prependRollRotation(yaw, original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(yawMatrix, actual, EPS);
+      }
+   }
+
+   @Test
+   public void testAppendRollRotation() throws Exception
+   {
+      Random random = new Random(234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RotationMatrix actual = new RotationMatrix();
+         RotationMatrix expected = new RotationMatrix();
+
+         double yaw = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
+         RotationMatrix yawMatrix = new RotationMatrix();
+         RotationMatrixConversion.computeRollMatrix(yaw, yawMatrix);
+
+         RotationMatrixTools.multiply(original, yawMatrix, expected);
+         RotationMatrixTools.appendRollRotation(original, yaw, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         original.setToZero();
+         RotationMatrixTools.appendRollRotation(original, yaw, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(yawMatrix, actual, EPS);
       }
    }
 }

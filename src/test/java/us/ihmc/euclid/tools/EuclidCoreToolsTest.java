@@ -438,4 +438,46 @@ public class EuclidCoreToolsTest
          }
       }
    }
+
+   @Test
+   public void testClamp() throws Exception
+   {
+      Random random = new Random(3453);
+
+      { // Test clamp(double value, double minMax)
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            double minMax = EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+            double valueInside = EuclidCoreRandomTools.nextDouble(random, minMax);
+            double valueUnder = EuclidCoreRandomTools.nextDouble(random, -100.0, 0.0) - minMax;
+            double valueOver = EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0) + minMax;
+
+            assertTrue(valueInside == EuclidCoreTools.clamp(valueInside, minMax));
+            assertTrue(-minMax == EuclidCoreTools.clamp(valueUnder, minMax));
+            assertTrue(minMax == EuclidCoreTools.clamp(valueOver, minMax));
+         }
+
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> EuclidCoreTools.clamp(0.0, -EuclidCoreTools.CLAMP_EPS - 1.0e-12), RuntimeException.class);
+      }
+
+      { // Test clamp(double value, double minMax)
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            double min = EuclidCoreRandomTools.nextDouble(random, -100.0, 100.0);
+            double max = min + EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+            double valueInside = EuclidCoreRandomTools.nextDouble(random, min, max);
+            double valueUnder = min - EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+            double valueOver = max + EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+
+            assertTrue(valueInside == EuclidCoreTools.clamp(valueInside, min, max));
+            assertTrue(min == EuclidCoreTools.clamp(valueUnder, min, max));
+            assertTrue(max == EuclidCoreTools.clamp(valueOver, min, max));
+         }
+
+         double min = EuclidCoreRandomTools.nextDouble(random, -100.0, 100.0);
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> EuclidCoreTools.clamp(0.0, min, min - EuclidCoreTools.CLAMP_EPS - 1.0e-12), RuntimeException.class);
+      }
+   }
 }

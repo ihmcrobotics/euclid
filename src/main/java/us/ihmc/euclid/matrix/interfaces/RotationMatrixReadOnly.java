@@ -193,7 +193,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     */
    default void subTransform(Tuple3DBasics tupleToTransform)
    {
-      addTransform(tupleToTransform, tupleToTransform);
+      subTransform(tupleToTransform, tupleToTransform);
    }
 
    /**
