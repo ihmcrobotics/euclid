@@ -4,7 +4,6 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.tuple2D.Vector2D32;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
@@ -12,9 +11,9 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 /**
  * Class used to represent unit-quaternions which are used to represent 3D orientations.
  * <p>
- * This version of quaternion uses double precision fields to save the value of each component. It
+ * This version of quaternion uses single precision fields to save the value of each component. It
  * is meant for garbage free usage and for situations where heap memory is limited. When memory is
- * not a constraint, the use of {@link Vector2D32} is preferable.
+ * not a constraint, the use of {@link Quaternion} is preferable.
  * </p>
  *
  * @author Sylvain Bertrand

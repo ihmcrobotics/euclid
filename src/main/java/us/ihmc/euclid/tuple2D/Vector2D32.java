@@ -13,7 +13,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
  * <p>
  * This version of 2D vector uses single precision fields to save the value of each component. It is
  * meant for garbage free usage and for situations where heap memory is limited. When memory is not
- * a constraint, the use of {@link Vector2D32} is preferable.
+ * a constraint, the use of {@link Vector2D} is preferable.
  * </p>
  *
  * @author Sylvain Bertrand

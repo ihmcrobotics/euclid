@@ -3,7 +3,6 @@ package us.ihmc.euclid.tuple3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.tuple2D.Vector2D32;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -13,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * <p>
  * This version of 3D vector uses single precision fields to save the value of each component. It is
  * meant for garbage free usage and for situations where heap memory is limited. When memory is not
- * a constraint, the use of {@link Vector2D32} is preferable.
+ * a constraint, the use of {@link Vector3D} is preferable.
  * </p>
  *
  * @author Sylvain Bertrand
