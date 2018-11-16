@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
@@ -9,7 +8,6 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * Write and read interface for a 3D pose expressed in a constant reference frame, i.e. this pose is
@@ -196,11 +194,11 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * Sets both position and orientation.
     *
     * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the axis-angle with the new orientation. Not modified.
+    * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *            the same reference frame.
     */
-   default void set(FrameTuple3DReadOnly position, AxisAngleReadOnly orientation)
+   default void set(FrameTuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(position);
       Pose3DBasics.super.set(position, orientation);
@@ -210,25 +208,11 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * Sets both position and orientation.
     *
     * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the quaternion with the new orientation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *            the same reference frame.
-    */
-   default void set(FrameTuple3DReadOnly position, QuaternionReadOnly orientation)
-   {
-      checkReferenceFrameMatch(position);
-      Pose3DBasics.super.set(position, orientation);
-   }
-
-   /**
-    * Sets both position and orientation.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the quaternion with the new orientation. Not modified.
+    * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *            in the same reference frame.
     */
-   default void set(Tuple3DReadOnly position, FrameQuaternionReadOnly orientation)
+   default void set(Tuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
       Pose3DBasics.super.set(position, orientation);
@@ -238,11 +222,11 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * Sets both position and orientation.
     *
     * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the quaternion with the new orientation. Not modified.
+    * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code position}, and
     *            {@code orientation} are not expressed in the same reference frame.
     */
-   default void set(FrameTuple3DReadOnly position, FrameQuaternionReadOnly orientation)
+   default void set(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(position);
       checkReferenceFrameMatch(orientation);

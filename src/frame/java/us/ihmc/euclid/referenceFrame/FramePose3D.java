@@ -1,20 +1,19 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * {@code FramePose3D} is a 3D pose expressed in a given reference frame.
@@ -182,21 +181,9 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     *
     * @param referenceFrame the initial reference frame in which the given pose is expressed in.
     * @param position the tuple used to initialize the position. Not modified.
-    * @param orientation the quaternion used to initialize the orientation. Not modified.
+    * @param orientation the initial orientation. Not modified.
     */
-   public FramePose3D(ReferenceFrame referenceFrame, Tuple3DReadOnly position, QuaternionReadOnly orientation)
-   {
-      setIncludingFrame(referenceFrame, position, orientation);
-   }
-
-   /**
-    * Creates a new frame pose and initializes its current reference frame and pose.
-    *
-    * @param referenceFrame the initial reference frame in which the given pose is expressed in.
-    * @param position the tuple used to initialize the position. Not modified.
-    * @param orientation the axis-angle used to initialize the orientation. Not modified.
-    */
-   public FramePose3D(ReferenceFrame referenceFrame, Tuple3DReadOnly position, AxisAngleReadOnly orientation)
+   public FramePose3D(ReferenceFrame referenceFrame, Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
       setIncludingFrame(referenceFrame, position, orientation);
    }
@@ -209,7 +196,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
     *            expressed in the same reference frame.
     */
-   public FramePose3D(FrameTuple3DReadOnly position, FrameQuaternionReadOnly orientation)
+   public FramePose3D(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
       setIncludingFrame(position, orientation);
    }

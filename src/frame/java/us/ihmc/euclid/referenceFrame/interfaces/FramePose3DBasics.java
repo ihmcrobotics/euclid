@@ -1,14 +1,13 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * Write and read interface for a 3D pose expressed in a changeable reference frame, i.e. the
@@ -102,22 +101,9 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
     *
     * @param referenceFrame the new reference frame.
     * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the quaternion with the new orientation. Not modified.
+    * @param orientation the new orientation. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly position, QuaternionReadOnly orientation)
-   {
-      setReferenceFrame(referenceFrame);
-      set(position, orientation);
-   }
-
-   /**
-    * Sets reference frame, position, and orientation.
-    *
-    * @param referenceFrame the new reference frame.
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the axis-angle with the new orientation. Not modified.
-    */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly position, AxisAngleReadOnly orientation)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
       setReferenceFrame(referenceFrame);
       set(position, orientation);
@@ -127,15 +113,15 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
     * Sets reference frame, position, and orientation.
     *
     * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the quaternion with the new orientation. Not modified.
+    * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
     *            expressed in the same reference frame.
     */
-   default void setIncludingFrame(FrameTuple3DReadOnly position, FrameQuaternionReadOnly orientation)
+   default void setIncludingFrame(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
       position.checkReferenceFrameMatch(orientation);
       setReferenceFrame(position.getReferenceFrame());
-      set((Tuple3DReadOnly) position, (QuaternionReadOnly) orientation);
+      set((Tuple3DReadOnly) position, (Orientation3DReadOnly) orientation);
    }
 
    /**

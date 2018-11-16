@@ -91,7 +91,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *            in the same reference frame.
     */
-   default void setOrientation(FrameQuaternionReadOnly orientation)
+   default void setOrientation(FrameOrientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
       Pose2DBasics.super.setOrientation(orientation);

@@ -1,6 +1,5 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
@@ -14,7 +13,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
@@ -252,21 +250,9 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets both position and orientation.
     *
     * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the quaternion with the new orientation. Not modified.
+    * @param orientation the new orientation. Not modified.
     */
-   default void set(Tuple3DReadOnly position, QuaternionReadOnly orientation)
-   {
-      setOrientation(orientation);
-      setPosition(position);
-   }
-
-   /**
-    * Sets both position and orientation.
-    *
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the axis-angle with the new orientation. Not modified.
-    */
-   default void set(Tuple3DReadOnly position, AxisAngleReadOnly orientation)
+   default void set(Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
       setOrientation(orientation);
       setPosition(position);

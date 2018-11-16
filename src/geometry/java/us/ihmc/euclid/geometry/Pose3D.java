@@ -5,11 +5,11 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * A {@code Pose3D} represents a position and orientation in 3 dimensions.
@@ -88,7 +88,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * @param position tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
-   public Pose3D(Point3DReadOnly position, QuaternionReadOnly orientation)
+   public Pose3D(Point3DReadOnly position, Orientation3DReadOnly orientation)
    {
       this.orientation.set(orientation);
       this.position.set(position);
