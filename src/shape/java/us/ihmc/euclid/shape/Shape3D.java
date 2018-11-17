@@ -2,21 +2,18 @@ package us.ihmc.euclid.shape;
 
 import static us.ihmc.euclid.tools.TransformationTools.*;
 
-import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.shape.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
@@ -26,10 +23,8 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  *
  * @param <S> the final type of this shape.
  */
-public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
+public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>, Shape3DReadOnly
 {
-   private static final double IS_INSIDE_EPS = 1.0e-12;
-
    protected final RigidBodyTransform shapePose = new RigidBodyTransform();
 
    /**
@@ -39,24 +34,8 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    {
    }
 
-   /**
-    * Evaluates the query point {@code pointToCheck}:
-    * <ul>
-    * <li>tests if the query is located inside this shape,
-    * <li>calculates the coordinates of the closest point to the query and on laying on the shape
-    * surface,
-    * <li>calculates the normal of the shape surface at the coordinates of the closest point to the
-    * query.
-    * </ul>
-    *
-    * @param pointToCheck the coordinates of the query to be evaluated. Not modified.
-    * @param closestPointOnSurfaceToPack the closest point to the query that lies on the shape surface.
-    *           Modified.
-    * @param normalAtClosestPointToPack the surface normal at the closest point to the query. The
-    *           normal points toward outside the shape. Modified.
-    * @return {@code true} if the query is inside this shape or exactly on its surface, {@code false}
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
+   @Override
    public final boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       double xLocal = computeTransformedX(shapePose, true, pointToCheck);
@@ -81,30 +60,8 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
       return shapePose.containsNaN();
    }
 
-   /**
-    * Calculates the minimum distance between the point and this shape.
-    * <p>
-    * Note that if the point is inside this shape, this method returns 0.0.
-    * </p>
-    *
-    * @param point the coordinates of the query. Not modified.
-    * @return the value of the distance between the point and this shape.
-    */
-   public final double distance(Point3DReadOnly point)
-   {
-      return Math.max(0.0, signedDistance(point));
-   }
-
-   /**
-    * Returns minimum distance between the point and this shape.
-    * <p>
-    * The returned value is negative if the point is inside the shape.
-    * </p>
-    *
-    * @param point the coordinates of the query. Not modified.
-    * @return the distance between the query and the shape, it is negative if the point is inside the
-    *         shape.
-    */
+   /** {@inheritDoc} */
+   @Override
    public final double signedDistance(Point3DReadOnly point)
    {
       double xLocal = computeTransformedX(shapePose, true, point);
@@ -143,32 +100,8 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    protected abstract double evaluateQuery(double x, double y, double z, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
 
-   /**
-    * Tests whether the given point is inside this shape or on its surface.
-    *
-    * @param query the coordinates of the query. Not modified.
-    * @return true if the point is inside or on the surface, false otherwise.
-    */
-   public final boolean isInsideOrOnSurface(Point3DReadOnly query)
-   {
-      return isInsideEpsilon(query, IS_INSIDE_EPS);
-   }
-
-   /**
-    * Tests if the {@code query} is located inside this shape given the tolerance {@code epsilon}.
-    * <p>
-    * <ul>
-    * <li>if {@code epsilon > 0}, the size of this shape is increased by shifting its surface/faces by
-    * a distance of {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this shape is reduced by shifting its surface/faces by a
-    * distance of {@code epsilon} toward the inside.
-    * </ul>
-    * </p>
-    *
-    * @param query the coordinates of the query. Not modified.
-    * @param epsilon the tolerance to use for this test.
-    * @return {@code true} if the query is considered to be inside this shape, {@code false} otherwise.
-    */
+   /** {@inheritDoc} */
+   @Override
    public final boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
       double xLocal = computeTransformedX(shapePose, true, query);
@@ -197,37 +130,8 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    protected abstract boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon);
 
-   /**
-    * Computes the orthogonal projection of a point on this shape.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the query is inside the shape, the method fails and returns {@code false}.
-    * </ul>
-    * </p>
-    *
-    * @param pointToProject the point to project on this shape. Modified.
-    * @return whether the method succeeded or not.
-    */
-   public final boolean orthogonalProjection(Point3DBasics pointToProject)
-   {
-      return orthogonalProjection(pointToProject, pointToProject);
-   }
-
-   /**
-    * Computes the orthogonal projection of a point this shape.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the query is inside the shape, the method fails and returns {@code false}.
-    * </ul>
-    * </p>
-    *
-    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
-    * @param projectionToPack point in which the projection of the point onto this shape is stored.
-    *           Modified.
-    * @return whether the method succeeded or not.
-    */
+   /** {@inheritDoc} */
+   @Override
    public final boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
       double xOriginal = pointToProject.getX();
@@ -305,6 +209,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
     * @deprecated Use {@link YawPitchRoll} with {@link #setOrientation(Orientation3DReadOnly)}.
     */
+   @Deprecated
    public final void setOrientationYawPitchRoll(double[] yawPitchRoll)
    {
       shapePose.setRotationYawPitchRoll(yawPitchRoll);
@@ -436,106 +341,16 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
       shapePose.setToZero();
    }
 
-   /**
-    * Gets the read-only reference to the orientation of this shape.
-    *
-    * @return the orientation of this shape.
-    */
+   @Override
+   public RigidBodyTransformReadOnly getPose()
+   {
+      return shapePose;
+   }
+
+   @Override
    public RotationMatrixReadOnly getOrientation()
    {
       return shapePose.getRotation();
-   }
-
-   /**
-    * Packs the orientation of this shape into an axis-angle.
-    *
-    * @param orientationToPack used to pack the orientation of this shape. Modified.
-    */
-   public final void getOrientation(Orientation3DBasics orientationToPack)
-   {
-      shapePose.getRotation(orientationToPack);
-   }
-
-   /**
-    * Computes and returns the pitch angle from the yaw-pitch-roll representation of this shape
-    * orientation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the pitch angle around the y-axis.
-    */
-   public final double getOrientationPitch()
-   {
-      return shapePose.getRotation().getPitch();
-   }
-
-   /**
-    * Computes and returns the roll angle from the yaw-pitch-roll representation of this shape
-    * orientation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the roll angle around the x-axis.
-    */
-   public final double getOrientationRoll()
-   {
-      return shapePose.getRotation().getRoll();
-   }
-
-   /**
-    * Computes and returns the yaw angle from the yaw-pitch-roll representation of this shape
-    * orientation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the yaw angle around the z-axis.
-    */
-   public final double getOrientationYaw()
-   {
-      return shapePose.getRotation().getYaw();
-   }
-
-   /**
-    * Computes and packs the orientation of this shape into the given yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use a {@link YawPitchRoll} that can be set to {@link #getOrientation()}.
-    */
-   public final void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      shapePose.getRotationYawPitchRoll(yawPitchRollToPack);
-   }
-
-   /**
-    * Packs the pose of this shape into the given {@code poseToPack}.
-    *
-    * @param poseToPack the pose in which the position and orientation of this shape are stored.
-    *           Modified.
-    */
-   public final void getPose(Pose3DBasics poseToPack)
-   {
-      poseToPack.set(shapePose);
-   }
-
-   /**
-    * Packs the pose of this shape into the given {@code transformToPack}.
-    *
-    * @param transformToPack the rigid-body transform in which the position and orientation of this
-    *           shape are stored. Modified.
-    */
-   public final void getPose(RigidBodyTransformBasics transformToPack)
-   {
-      transformToPack.set(shapePose);
    }
 
    /**
@@ -549,56 +364,6 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    public String getPoseString()
    {
       return shapePose.toString();
-   }
-
-   /**
-    * Gets the read-only reference of the position of this shape.
-    *
-    * @return the position of this shape.
-    */
-   public Tuple3DReadOnly getPosition()
-   {
-      return shapePose.getTranslation();
-   }
-
-   /**
-    * Packs the position of this shape.
-    *
-    * @param tupleToPack the tuple in which the position of this shape is stored. Modified.
-    */
-   public final void getPosition(Tuple3DBasics tupleToPack)
-   {
-      shapePose.getTranslation(tupleToPack);
-   }
-
-   /**
-    * Gets the x-coordinate of the position of this shape.
-    *
-    * @return the x-coordinate of this shape position.
-    */
-   public final double getPositionX()
-   {
-      return shapePose.getTranslationX();
-   }
-
-   /**
-    * Gets the y-coordinate of the position of this shape.
-    *
-    * @return the y-coordinate of this shape position.
-    */
-   public final double getPositionY()
-   {
-      return shapePose.getTranslationY();
-   }
-
-   /**
-    * Gets the z-coordinate of the position of this shape.
-    *
-    * @return the z-coordinate of this shape position.
-    */
-   public final double getPositionZ()
-   {
-      return shapePose.getTranslationZ();
    }
 
    /**
