@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
@@ -34,6 +35,11 @@ public interface Shape3DReadOnly
    default Tuple3DReadOnly getPosition()
    {
       return getPose().getTranslation();
+   }
+
+   default boolean containsNaN()
+   {
+      return getPose().containsNaN();
    }
 
    /**
@@ -276,4 +282,27 @@ public interface Shape3DReadOnly
       return getPosition().getZ();
    }
 
+   /**
+    * Changes the given {@code transformable} from being expressed in world to being expressed in this
+    * shape local coordinates.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToLocal(Transformable transformable)
+   {
+      transformable.applyInverseTransform(getPose());
+   }
+
+   /**
+    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
+    * being expressed in world.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToWorld(Transformable transformable)
+   {
+      transformable.applyTransform(getPose());
+   }
 }
