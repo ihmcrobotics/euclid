@@ -5,6 +5,7 @@ import static us.ihmc.euclid.tools.TransformationTools.*;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -145,9 +146,9 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two poses are equal component-wise, {@code false} otherwise.
     */
-   public boolean epsilonEqualsPose(Shape3D<S> other, double epsilon)
+   public boolean epsilonEqualsPose(Shape3DReadOnly other, double epsilon)
    {
-      return shapePose.epsilonEquals(other.shapePose, epsilon);
+      return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
    }
 
    /**
