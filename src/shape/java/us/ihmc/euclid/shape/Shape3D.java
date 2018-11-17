@@ -2,7 +2,6 @@ package us.ihmc.euclid.shape;
 
 import static us.ihmc.euclid.tools.TransformationTools.*;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.interfaces.Shape3DReadOnly;
@@ -17,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  *
  * @param <S> the final type of this shape.
  */
-public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>, Shape3DBasics
+public abstract class Shape3D implements Shape3DBasics
 {
    protected final RigidBodyTransform shapePose = new RigidBodyTransform();
 

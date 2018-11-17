@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
@@ -19,7 +20,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * {@code Ellipsoid3D} represents a 3D ellipsoid defined by its three main radii and with its origin
  * at its center.
  */
-public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
+public class Ellipsoid3D extends Shape3D implements GeometryObject<Ellipsoid3D>
 {
    /** The three radii of this ellipsoid. */
    private final Vector3D radii = new Vector3D();

@@ -4,6 +4,7 @@ import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -14,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * {@code Sphere3D} represents a 3D sphere defined by its radius and with its origin at its center.
  */
-public class Sphere3D extends Shape3D<Sphere3D>
+public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
 {
    private static final double SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
    /** The radius of this sphere. */

@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -24,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * Its origin is located at its centroid.
  * </p>
  */
-public class Box3D extends Shape3D<Box3D>
+public class Box3D extends Shape3D implements GeometryObject<Box3D>
 {
    /** Internal point used to enable garbage free operations. */
    private final Point3D temporaryPoint = new Point3D();

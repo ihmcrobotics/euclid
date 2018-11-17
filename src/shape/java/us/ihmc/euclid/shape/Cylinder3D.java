@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -21,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * </ul>
  * </p>
  */
-public class Cylinder3D extends Shape3D<Cylinder3D>
+public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>
 {
    /** Radius of the cylinder part. */
    private double radius;

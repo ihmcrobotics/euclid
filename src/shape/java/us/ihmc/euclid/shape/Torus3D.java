@@ -4,6 +4,7 @@ import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -22,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * </ul>
  * </p>
  */
-public class Torus3D extends Shape3D<Torus3D>
+public class Torus3D extends Shape3D implements GeometryObject<Torus3D>
 {
    /** The minimum allowable value for the radius of the tube. */
    public static final double MIN_TUBE_RADIUS = 1.0e-4;

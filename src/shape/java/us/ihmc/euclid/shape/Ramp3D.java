@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -22,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * </ul>
  * </p>
  */
-public class Ramp3D extends Shape3D<Ramp3D>
+public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
 {
    /** Size of this ramp's bounding box. */
    private final Size3D size = new Size3D();
