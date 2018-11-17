@@ -180,9 +180,12 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>
 
    /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(double x, double y, double z, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      boolean isInside = isInsideEpsilonShapeFrame(x, y, z, 0.0);
+      boolean isInside = isInsideEpsilonShapeFrame(query, 0.0);
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
 
       if (isInside)
       {
@@ -473,9 +476,10 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>
 
    /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
+   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
-      return Math.abs(x) <= halfSize.getX() + epsilon && Math.abs(y) <= halfSize.getY() + epsilon && Math.abs(z) <= halfSize.getZ() + epsilon;
+      return Math.abs(query.getX()) <= halfSize.getX() + epsilon && Math.abs(query.getY()) <= halfSize.getY() + epsilon
+            && Math.abs(query.getZ()) <= halfSize.getZ() + epsilon;
    }
 
    /**

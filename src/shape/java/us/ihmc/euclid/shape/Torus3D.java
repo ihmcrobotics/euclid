@@ -8,6 +8,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
@@ -236,8 +237,12 @@ public class Torus3D extends Shape3D implements GeometryObject<Torus3D>
 
    /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
+   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
+
       double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
 
       double outerRadius = radius + tubeRadius + epsilon;
@@ -256,8 +261,11 @@ public class Torus3D extends Shape3D implements GeometryObject<Torus3D>
 
    /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(double x, double y, double z, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
       double xyLengthSquared = normSquared(x, y);
 
       if (xyLengthSquared < 1.0e-12)

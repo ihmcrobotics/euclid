@@ -1,7 +1,5 @@
 package us.ihmc.euclid.shape;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.*;
-
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -171,23 +169,23 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
 
    /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
+   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
       double radiusWithEpsilon = radius + epsilon;
-      return normSquared(x, y, z) <= radiusWithEpsilon * radiusWithEpsilon;
+      return query.distanceFromOriginSquared() <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
    /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(double x, double y, double z, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      double distance = Math.sqrt(EuclidCoreTools.normSquared(x, y, z));
+      double distance = query.distanceFromOrigin();
 
       if (closestPointToPack != null)
       {
          if (distance > SMALLEST_DISTANCE_TO_ORIGIN)
          {
-            closestPointToPack.set(x, y, z);
+            closestPointToPack.set(query);
             closestPointToPack.scale(radius / distance);
          }
          else
@@ -200,7 +198,7 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
       {
          if (distance > SMALLEST_DISTANCE_TO_ORIGIN)
          {
-            normalToPack.set(x, y, z);
+            normalToPack.set(query);
             normalToPack.scale(1.0 / distance);
          }
          else

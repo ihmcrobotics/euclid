@@ -108,16 +108,16 @@ public class Ellipsoid3D extends Shape3D implements GeometryObject<Ellipsoid3D>
 
    /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(double x, double y, double z, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      double sumOfSquares = EuclidCoreTools.normSquared(x / radii.getX(), y / radii.getY(), z / radii.getZ());
+      double sumOfSquares = EuclidCoreTools.normSquared(query.getX() / radii.getX(), query.getY() / radii.getY(), query.getZ() / radii.getZ());
       double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
 
       if (sumOfSquares > 1.0e-10)
       {
          if (closestPointToPack != null)
          {
-            closestPointToPack.set(x, y, z);
+            closestPointToPack.set(query);
             closestPointToPack.scale(scaleFactor);
          }
 
@@ -127,12 +127,12 @@ public class Ellipsoid3D extends Shape3D implements GeometryObject<Ellipsoid3D>
             double yScale = 1.0 / (radii.getY() * radii.getY());
             double zScale = 1.0 / (radii.getZ() * radii.getZ());
 
-            normalToPack.set(x, y, z);
+            normalToPack.set(query);
             normalToPack.scale(xScale, yScale, zScale);
             normalToPack.normalize();
          }
 
-         return Math.sqrt(EuclidCoreTools.normSquared(x, y, z)) * (1.0 - scaleFactor);
+         return query.distanceFromOrigin() * (1.0 - scaleFactor);
       }
       else
       {
@@ -146,7 +146,7 @@ public class Ellipsoid3D extends Shape3D implements GeometryObject<Ellipsoid3D>
             normalToPack.set(0.0, 0.0, 1.0);
          }
 
-         return z - radii.getZ();
+         return query.getZ() - radii.getZ();
       }
    }
 
@@ -251,11 +251,11 @@ public class Ellipsoid3D extends Shape3D implements GeometryObject<Ellipsoid3D>
 
    /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
+   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
-      double scaledX = x / (radii.getX() + epsilon);
-      double scaledY = y / (radii.getY() + epsilon);
-      double scaledZ = z / (radii.getZ() + epsilon);
+      double scaledX = query.getX() / (radii.getX() + epsilon);
+      double scaledY = query.getY() / (radii.getY() + epsilon);
+      double scaledZ = query.getZ() / (radii.getZ() + epsilon);
 
       return EuclidCoreTools.normSquared(scaledX, scaledY, scaledZ) <= 1.0;
    }

@@ -6,6 +6,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -255,12 +256,16 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
 
    /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(double x, double y, double z, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
       double rampDirectionX = size.getLength() / rampLength;
       double rampDirectionZ = size.getHeight() / rampLength;
       double rampNormalX = -rampDirectionZ;
       double rampNormalZ = rampDirectionX;
+
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
 
       double halfWidth = 0.5 * size.getWidth();
       if (z < 0.0)
@@ -501,24 +506,24 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
 
    /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
+   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
-      if (z < -epsilon)
+      if (query.getZ() < -epsilon)
          return false;
 
-      if (x > size.getLength() + epsilon)
+      if (query.getX() > size.getLength() + epsilon)
          return false;
 
       double halfWidth = 0.5 * size.getWidth() + epsilon;
 
-      if (y < -halfWidth || y > halfWidth)
+      if (query.getY() < -halfWidth || query.getY() > halfWidth)
          return false;
 
       double rampDirectionX = size.getLength() / rampLength;
       double rampDirectionZ = size.getHeight() / rampLength;
 
       // Computing the signed distance between the query and the slope face, negative value means the query is below the slope.
-      if (rampDirectionX * z - x * rampDirectionZ > epsilon)
+      if (rampDirectionX * query.getZ() - query.getX() * rampDirectionZ > epsilon)
          return false;
 
       return true;

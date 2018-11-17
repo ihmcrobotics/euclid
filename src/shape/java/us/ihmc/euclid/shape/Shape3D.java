@@ -1,8 +1,7 @@
 package us.ihmc.euclid.shape;
 
-import static us.ihmc.euclid.tools.TransformationTools.*;
-
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -19,6 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public abstract class Shape3D implements Shape3DBasics
 {
    protected final RigidBodyTransform shapePose = new RigidBodyTransform();
+   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /**
     * Default constructor for creating a new shape with its local frame aligned with world.
@@ -27,15 +27,25 @@ public abstract class Shape3D implements Shape3DBasics
    {
    }
 
+   @Override
+   public IntermediateVariableSupplier getIntermediateVariableSupplier()
+   {
+      return supplier;
+   }
+
+   @Override
+   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
+   {
+      supplier = newSupplier;
+   }
+
    /** {@inheritDoc} */
    @Override
    public final boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      double xLocal = computeTransformedX(shapePose, true, pointToCheck);
-      double yLocal = computeTransformedY(shapePose, true, pointToCheck);
-      double zLocal = computeTransformedZ(shapePose, true, pointToCheck);
-
-      boolean isInside = evaluateQuery(xLocal, yLocal, zLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      shapePose.inverseTransform(pointToCheck, queryInLocal);
+      boolean isInside = evaluateQuery(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
 
       if (closestPointOnSurfaceToPack != null)
          transformToWorld(closestPointOnSurfaceToPack);
@@ -50,11 +60,9 @@ public abstract class Shape3D implements Shape3DBasics
    @Override
    public final double signedDistance(Point3DReadOnly point)
    {
-      double xLocal = computeTransformedX(shapePose, true, point);
-      double yLocal = computeTransformedY(shapePose, true, point);
-      double zLocal = computeTransformedZ(shapePose, true, point);
-
-      return evaluateQuery(xLocal, yLocal, zLocal, null, null);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      shapePose.inverseTransform(point, queryInLocal);
+      return evaluateQuery(queryInLocal, null, null);
    }
 
    /**
@@ -70,17 +78,15 @@ public abstract class Shape3D implements Shape3DBasics
     * @return the distance from the query to the closest point on the shape surface. The returned value
     *         is expected to be negative when the query is inside the shape.
     */
-   protected abstract double evaluateQuery(double x, double y, double z, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
+   protected abstract double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
 
    /** {@inheritDoc} */
    @Override
    public final boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      double xLocal = computeTransformedX(shapePose, true, query);
-      double yLocal = computeTransformedY(shapePose, true, query);
-      double zLocal = computeTransformedZ(shapePose, true, query);
-
-      return isInsideEpsilonShapeFrame(xLocal, yLocal, zLocal, epsilon);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      getPose().inverseTransform(query, queryInLocal);
+      return isInsideEpsilonShapeFrame(queryInLocal, epsilon);
    }
 
    /**
@@ -100,26 +106,26 @@ public abstract class Shape3D implements Shape3DBasics
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside this shape, {@code false} otherwise.
     */
-   protected abstract boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon);
+   protected abstract boolean isInsideEpsilonShapeFrame(Point3DReadOnly queryInLocal, double epsilon);
 
    /** {@inheritDoc} */
    @Override
    public final boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      double xOriginal = pointToProject.getX();
-      double yOriginal = pointToProject.getY();
-      double zOriginal = pointToProject.getZ();
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      getPose().inverseTransform(pointToProject, pointInLocal);
 
-      double xLocal = computeTransformedX(shapePose, true, pointToProject);
-      double yLocal = computeTransformedY(shapePose, true, pointToProject);
-      double zLocal = computeTransformedZ(shapePose, true, pointToProject);
-
-      boolean isInside = evaluateQuery(xLocal, yLocal, zLocal, projectionToPack, null) <= 0.0;
+      boolean isInside = evaluateQuery(pointInLocal, projectionToPack, null) <= 0.0;
 
       if (isInside)
-         projectionToPack.set(xOriginal, yOriginal, zOriginal);
+      {
+         if (projectionToPack != pointToProject)
+            projectionToPack.set(pointToProject);
+      }
       else
+      {
          transformToWorld(projectionToPack);
+      }
 
       return !isInside;
    }

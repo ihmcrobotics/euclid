@@ -254,19 +254,19 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>
 
    /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(double x, double y, double z, double epsilon)
+   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
       double halfHeightPlusEpsilon = 0.5 * height + epsilon;
-      if (z < -halfHeightPlusEpsilon || z > halfHeightPlusEpsilon)
+      if (query.getZ() < -halfHeightPlusEpsilon || query.getZ() > halfHeightPlusEpsilon)
          return false;
 
       double radiusWithEpsilon = radius + epsilon;
-      return EuclidCoreTools.normSquared(x, y) <= radiusWithEpsilon * radiusWithEpsilon;
+      return EuclidCoreTools.normSquared(query.getX(), query.getY()) <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
    /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(double x, double y, double z, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
+   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
    {
       if (radius <= 0.0 || height <= 0.0)
       {
@@ -276,6 +276,10 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>
             normalToPack.setToNaN();
          return Double.NaN;
       }
+
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
 
       double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
       double halfHeight = 0.5 * height;
