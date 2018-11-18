@@ -28,64 +28,27 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
-      getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.doPoint3DSphere3DCollisionTest(getRadius(), queryInLocal, closestPointOnSurfaceToPack,
-                                                                      normalAtClosestPointToPack) <= 0.0;
-
-      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
-
-      if (closestPointOnSurfaceToPack != null)
-         transformToWorld(closestPointOnSurfaceToPack);
-
-      if (normalAtClosestPointToPack != null)
-         transformToWorld(normalAtClosestPointToPack);
-
-      return isInside;
+      return EuclidShapeTools.doPoint3DSphere3DCollisionTest(getRadius(), getPosition(), pointToCheck, closestPointOnSurfaceToPack,
+                                                             normalAtClosestPointToPack) <= 0.0;
    }
 
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
-      getPose().inverseTransform(point, queryInLocal);
-      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndSphere3D(queryInLocal, getRadius());
-      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
-      return signedDistance;
+      return EuclidShapeTools.signedDistanceBetweenPoint3DAndSphere3D(getRadius(), getPosition(), point);
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
-      getPose().inverseTransform(query, queryInLocal);
-      boolean isInside = EuclidShapeTools.isPoint3DInsideSphere3D(getRadius(), queryInLocal, epsilon);
-      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
-      return isInside;
+      return EuclidShapeTools.isPoint3DInsideSphere3D(getRadius(), getPosition(), query, epsilon);
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      // Saving the coordinates in case pointToProject is inside and that pointToProject == projectionToPack.
-      double xOriginal = pointToProject.getX();
-      double yOriginal = pointToProject.getY();
-      double zOriginal = pointToProject.getZ();
-
-      Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
-      getPose().inverseTransform(pointToProject, pointInLocal);
-
-      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoSphere3D(getRadius(), pointInLocal, projectionToPack);
-
-      getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
-
-      if (isInside) // Set the coordinates to the original point to save a transform operation
-         projectionToPack.set(xOriginal, yOriginal, zOriginal);
-      else
-         transformToWorld(projectionToPack);
-
-      return !isInside;
+      return !EuclidShapeTools.orthogonalProjectionOntoSphere3D(getRadius(), getPosition(), pointToProject, projectionToPack);
    }
 
    /**
@@ -126,15 +89,16 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     *         or 2.
     */
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
-                               Point3DBasics secondIntersectionToPack)
+                                Point3DBasics secondIntersectionToPack)
    {
       Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
       Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
       getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
       getPose().inverseTransform(lineDirection, lineDirectionInLocal);
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(), getRadius(), getRadius(), pointOnLineInLocal, lineDirectionInLocal,
-                                                                                              firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(), getRadius(), getRadius(), pointOnLineInLocal,
+                                                                                              lineDirectionInLocal, firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
       getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);

@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -648,45 +649,48 @@ public class EuclidShapeTools
       return possibleMin <= value1 && possibleMin <= value2;
    }
 
-   public static boolean isPoint3DInsideSphere3D(double sphere3DRadius, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideSphere3D(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly query, double epsilon)
    {
-      double radiusWithEpsilon = sphere3DRadius + epsilon;
-      return query.distanceFromOriginSquared() <= radiusWithEpsilon * radiusWithEpsilon;
+      double radiusWithEpsilon = sphereRadius + epsilon;
+      double distanceSquared = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
+      return distanceSquared <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly query, double sphere3DRadius)
+   public static double signedDistanceBetweenPoint3DAndSphere3D(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly query)
    {
-      return doPoint3DSphere3DCollisionTest(sphere3DRadius, query, null, null);
+      return doPoint3DSphere3DCollisionTest(sphereRadius, spherePosition, query, null, null);
    }
 
-   public static boolean orthogonalProjectionOntoSphere3D(double sphere3DRadius, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOntoSphere3D(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly pointToProject,
+                                                          Point3DBasics projectionToPack)
    {
-      return doPoint3DSphere3DCollisionTest(sphere3DRadius, pointToProject, projectionToPack, null) <= 0.0;
+      return doPoint3DSphere3DCollisionTest(sphereRadius, spherePosition, pointToProject, projectionToPack, null) <= 0.0;
    }
 
-   public static double doPoint3DSphere3DCollisionTest(double sphere3DRadius, Point3DReadOnly query, Point3DBasics closestPointToPack,
-                                                       Vector3DBasics normalToPack)
+   public static double doPoint3DSphere3DCollisionTest(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly query,
+                                                       Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      double distance = query.distanceFromOrigin();
+      double distance = EuclidGeometryTools.distanceBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
 
       if (closestPointToPack != null)
       {
          if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
          {
-            closestPointToPack.set(query);
-            closestPointToPack.scale(sphere3DRadius / distance);
+            closestPointToPack.sub(query, spherePosition);
+            closestPointToPack.scale(sphereRadius / distance);
          }
          else
          {
-            closestPointToPack.set(0.0, 0.0, sphere3DRadius);
+            closestPointToPack.set(0.0, 0.0, sphereRadius);
          }
+         closestPointToPack.add(spherePosition);
       }
 
       if (normalToPack != null)
       {
          if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
          {
-            normalToPack.set(query);
+            normalToPack.sub(query, spherePosition);
             normalToPack.scale(1.0 / distance);
          }
          else
@@ -695,7 +699,7 @@ public class EuclidShapeTools
          }
       }
 
-      return distance - sphere3DRadius;
+      return distance - sphereRadius;
    }
 
    public static boolean isPoint3DInsideTorus3D(double torus3DRadius, double torus3DTubeRadius, Point3DReadOnly query, double epsilon)
