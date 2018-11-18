@@ -285,7 +285,7 @@ public class Box3DTest
 
             Point3D closestPoint = new Point3D();
             Vector3D normal = new Vector3D();
-            box.checkIfInside(point, closestPoint, normal);
+            box.doPoint3DCollisionTest(point, closestPoint, normal);
 
             // check distance stuff:
             double epsilon = 1e-14;
@@ -309,13 +309,13 @@ public class Box3DTest
             point2.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, delta));
             Point3D closestPoint2 = new Point3D();
             Vector3D normal2 = new Vector3D();
-            box.checkIfInside(point2, closestPoint2, normal2);
+            box.doPoint3DCollisionTest(point2, closestPoint2, normal2);
 
             Point3D point3 = new Point3D(point);
             point3.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, delta));
             Point3D closestPoint3 = new Point3D();
             Vector3D normal3 = new Vector3D();
-            box.checkIfInside(point3, closestPoint3, normal3);
+            box.doPoint3DCollisionTest(point3, closestPoint3, normal3);
 
             boolean pointsDistinct = closestPoint2.distance(closestPoint) > epsilon && closestPoint3.distance(closestPoint) > epsilon
                   && closestPoint3.distance(closestPoint2) > epsilon;

@@ -41,7 +41,7 @@ public class Shape3DTestHelper
             shape3d.orthogonalProjection(point);
             Point3D pointOnSurface = new Point3D();
             Vector3D surfaceNormal = new Vector3D();
-            shape3d.checkIfInside(point, pointOnSurface, surfaceNormal);
+            shape3d.doPoint3DCollisionTest(point, pointOnSurface, surfaceNormal);
             runSomeTestsWithPointOnSurface(shape3d, pointOnSurface, surfaceNormal);
          }
       }
@@ -77,7 +77,7 @@ public class Shape3DTestHelper
       // Check to make sure the point is actually outside:
       Point3D pointOnSurface = new Point3D();
       Vector3D surfaceNormal = new Vector3D();
-      boolean isInside = shape3d.checkIfInside(pointOutside, pointOnSurface, surfaceNormal);
+      boolean isInside = shape3d.doPoint3DCollisionTest(pointOutside, pointOnSurface, surfaceNormal);
       assertFalse(isInside);
 
       if (pointOnSurface.containsNaN())
@@ -97,7 +97,7 @@ public class Shape3DTestHelper
       // Check to make sure the point is actually inside:
       Point3D pointOnSurface = new Point3D();
       Vector3D surfaceNormal = new Vector3D();
-      boolean isInside = shape3d.checkIfInside(pointInside, pointOnSurface, surfaceNormal);
+      boolean isInside = shape3d.doPoint3DCollisionTest(pointInside, pointOnSurface, surfaceNormal);
 
       assertTrue(isInside);
       assertFalse(surfaceNormal.containsNaN());
@@ -117,7 +117,7 @@ public class Shape3DTestHelper
       // Check that a further projection onto the surface doesn't change anything:
       Point3D newProjection = new Point3D();
       Vector3D newNormal = new Vector3D();
-      boolean isInside = shape3d.checkIfInside(pointOnSurface, newProjection, newNormal);
+      boolean isInside = shape3d.doPoint3DCollisionTest(pointOnSurface, newProjection, newNormal);
 
       if (newProjection.containsNaN())
       {
@@ -149,7 +149,7 @@ public class Shape3DTestHelper
          System.out.println("pointOnSurface = " + pointOnSurface);
          System.out.println("surfaceNormal = " + surfaceNormal);
 
-         isInside = shape3d.checkIfInside(pointOnSurface, newProjection, newNormal);
+         isInside = shape3d.doPoint3DCollisionTest(pointOnSurface, newProjection, newNormal);
 
       }
       assertFalse(isInsideCheck);
@@ -161,7 +161,7 @@ public class Shape3DTestHelper
       { // When dealing with sharp edges, the point can jump on the other side of the shape even when shifting only by a little.
         // If that's the case, computing the normal for this point should reveal that by having the normal having a much different orientation.
          Vector3D problematicNormal = new Vector3D();
-         shape3d.checkIfInside(pointALittleInside, null, problematicNormal);
+         shape3d.doPoint3DCollisionTest(pointALittleInside, null, problematicNormal);
          isNormalWayDifferent = problematicNormal.angle(surfaceNormal) > Math.toRadians(90.0);
       }
 
@@ -173,7 +173,7 @@ public class Shape3DTestHelper
          System.out.println("newNormal = " + newNormal);
          System.out.println("pointALittleInside = " + pointALittleInside);
          insideOrOnSurface = shape3d.isInsideOrOnSurface(pointALittleInside);
-         shape3d.checkIfInside(pointOnSurface, newProjection, newNormal);
+         shape3d.doPoint3DCollisionTest(pointOnSurface, newProjection, newNormal);
          System.out.println("newNormal = " + newNormal);
       }
 

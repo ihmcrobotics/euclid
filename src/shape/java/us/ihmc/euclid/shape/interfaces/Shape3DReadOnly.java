@@ -59,7 +59,7 @@ public interface Shape3DReadOnly
     * @return {@code true} if the query is inside this shape or exactly on its surface, {@code false}
     *         otherwise.
     */
-   boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
+   boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
 
    /**
     * Calculates the minimum distance between the point and this shape.

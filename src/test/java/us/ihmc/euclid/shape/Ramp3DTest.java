@@ -359,7 +359,7 @@ public class Ramp3DTest
          printIfDebug("rampLength = " + ramp.getRampLength());
          printIfDebug("pointToTestAboveRamp = " + pointToTestAboveRamp);
 
-         boolean isInside = ramp.checkIfInside(pointToTestAboveRamp, pointToPack, normalToPack);
+         boolean isInside = ramp.doPoint3DCollisionTest(pointToTestAboveRamp, pointToPack, normalToPack);
          assertFalse(isInside);
 
          double distanceToPointToTest = ramp.distance(pointToTestAboveRamp);

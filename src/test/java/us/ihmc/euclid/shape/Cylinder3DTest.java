@@ -246,7 +246,7 @@ public class Cylinder3DTest
 
       Point3D pointToCheck = new Point3D(1, 0, 1);
       Vector3D expectedNormal = new Vector3D(1, 0, 0);
-      cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       assertEquals(expectedNormal, normalToPack);
    }
 
@@ -261,7 +261,7 @@ public class Cylinder3DTest
 
       Point3D pointToCheck = new Point3D(0.5, 0, 0.5);
       Vector3D expectedNormal = new Vector3D(1, 0, 0);
-      cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       assertEquals(expectedNormal, normalToPack);
    }
 
@@ -276,7 +276,7 @@ public class Cylinder3DTest
 
       Point3D pointToCheck = new Point3D(1.5, 0, 1);
       Vector3D expectedNormal = new Vector3D(1, 0, 0);
-      assertFalse(cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack));
+      assertFalse(cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack));
       assertEquals(expectedNormal, normalToPack);
    }
 
@@ -291,7 +291,7 @@ public class Cylinder3DTest
 
       Point3D pointToCheck = new Point3D(0, 0, 3.5);
       Vector3D expectedNormal = new Vector3D(0, 0, 1.0);
-      cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       assertEquals(expectedNormal, normalToPack);
    }
 
@@ -306,7 +306,7 @@ public class Cylinder3DTest
 
       Point3D pointToCheck = new Point3D(0, 0, -1);
       Vector3D expectedNormal = new Vector3D(0, 0, -1.0);
-      cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       assertEquals(expectedNormal, normalToPack);
    }
 
@@ -322,7 +322,7 @@ public class Cylinder3DTest
       Point3D pointToCheck = new Point3D(0.0, 2.0, 2.0);
       Vector3D expectedNormal = new Vector3D(0.0, 1.0, 1.0);
       expectedNormal.normalize();
-      cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       assertEquals(expectedNormal, normalToPack);
    }
 
@@ -341,7 +341,7 @@ public class Cylinder3DTest
 
       Point3D pointToCheck = new Point3D(tx, ty, tz + 3.0);
       Vector3D expectedNormal = new Vector3D(0, 0, 1.0);
-      cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       assertEquals(expectedNormal, normalToPack);
    }
 
@@ -360,12 +360,12 @@ public class Cylinder3DTest
 
       Point3D pointToCheck = new Point3D(tx, ty, tz + 3.0);
       Vector3D expectedNormal = new Vector3D(0, 0, 1.0);
-      boolean isInside = cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      boolean isInside = cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, normalToPack, 1e-7);
       assertFalse(isInside);
 
       pointToCheck.set(tx, ty, tz + height / 2.0 - 0.011);
-      isInside = cylinder3d.checkIfInside(pointToCheck, closestPointToPack, normalToPack);
+      isInside = cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
       assertTrue(isInside);
       EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, normalToPack, 1e-7);
    }

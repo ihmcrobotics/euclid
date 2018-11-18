@@ -22,11 +22,11 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   default boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.evaluatePoint3DWithEllipsoid3D(getRadii(), queryInLocal, closestPointOnSurfaceToPack,
+      boolean isInside = EuclidShapeTools.doPoint3DEllipsoid3DCollisionTest(getRadii(), queryInLocal, closestPointOnSurfaceToPack,
                                                                          normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);

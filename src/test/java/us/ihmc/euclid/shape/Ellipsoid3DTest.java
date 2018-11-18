@@ -64,12 +64,12 @@ public class Ellipsoid3DTest
 
       Point3D closestPointToPack = new Point3D();
       Vector3D normalToPack = new Vector3D();
-      boolean isInside = ellipsoid.checkIfInside(new Point3D(xRadius - EPSILON, 0.0, 0.0), closestPointToPack, normalToPack);
+      boolean isInside = ellipsoid.doPoint3DCollisionTest(new Point3D(xRadius - EPSILON, 0.0, 0.0), closestPointToPack, normalToPack);
       assertTrue(isInside);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 0.0, 0.0), normalToPack, 1e-7);
       EuclidCoreTestTools.assertTuple3DEquals(new Point3D(xRadius, 0.0, 0.0), closestPointToPack, 1e-7);
 
-      isInside = ellipsoid.checkIfInside(new Point3D(3.0, 7.0, -12.0), closestPointToPack, normalToPack);
+      isInside = ellipsoid.doPoint3DCollisionTest(new Point3D(3.0, 7.0, -12.0), closestPointToPack, normalToPack);
       assertFalse(isInside);
       double xScaled = closestPointToPack.getX() / xRadius;
       double yScaled = closestPointToPack.getY() / yRadius;

@@ -34,11 +34,11 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.evaluatePoint3DWithCylinder3D(getRadius(), getHeight(), queryInLocal, closestPointOnSurfaceToPack,
+      boolean isInside = EuclidShapeTools.doPoint3DCylinder3DCollisionTest(getRadius(), getHeight(), queryInLocal, closestPointOnSurfaceToPack,
                                                                         normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);

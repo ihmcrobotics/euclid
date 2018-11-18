@@ -136,95 +136,95 @@ public class Torus3DTest
       //X
       // on the outside edge
       Point3D pointInWorldToCheck = new Point3D(radius + thickness, 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(radius + thickness, 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(1.0, 0.0, 0.0), 10e-7));
 
       // beyond the outside edge
       pointInWorldToCheck = new Point3D(radius + thickness + EPSILON, 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(radius + thickness, 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(1.0, 0.0, 0.0), 10e-7));
 
       // on the outside edge
       pointInWorldToCheck = new Point3D(-(radius + thickness), 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(-(radius + thickness), 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(-1.0, 0.0, 0.0), 10e-7));
 
       // beyond the outside edge
       pointInWorldToCheck = new Point3D(-(radius + thickness + EPSILON), 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(-(radius + thickness), 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(-1.0, 0.0, 0.0), 10e-7));
 
       // on the inner edge
       pointInWorldToCheck = new Point3D(radius - thickness, 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(radius - thickness, 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(-1.0, 0.0, 0.0), 10e-7));
 
       // beyond the inner edge
       pointInWorldToCheck = new Point3D(radius - (thickness + EPSILON), 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(radius - thickness, 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(-1.0, 0.0, 0.0), 10e-7));
 
       // on the inner edge
       pointInWorldToCheck = new Point3D(-radius + thickness, 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(-radius + thickness, 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(1.0, 0.0, 0.0), 10e-7));
 
       // beyond the inner edge
       pointInWorldToCheck = new Point3D(-radius + (thickness + EPSILON), 0.0, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(-radius + thickness, 0.0, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(1.0, 0.0, 0.0), 10e-7));
 
       //Y
       // on the outside edge
       pointInWorldToCheck = new Point3D(0.0, radius + thickness, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(0.0, radius + thickness, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, 1.0, 0.0), 10e-7));
 
       // beyond the outside edge
       pointInWorldToCheck = new Point3D(0.0, radius + thickness + EPSILON, 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(0.0, radius + thickness, 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, 1.0, 0.0), 10e-7));
 
       // on the outside edge
       pointInWorldToCheck = new Point3D(0.0, -(radius + thickness), 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(0.0, -(radius + thickness), 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, -1.0, 0.0), 10e-7));
 
       // beyond the outside edge
       pointInWorldToCheck = new Point3D(0.0, -(radius + thickness + EPSILON), 0.0);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(0.0, -(radius + thickness), 0.0), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, -1.0, 0.0), 10e-7));
 
       // Z at X=radius
       pointInWorldToCheck = new Point3D(radius, 0.0, thickness);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(radius, 0.0, thickness), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, 0.0, 1.0), 10e-7));
 
       pointInWorldToCheck = new Point3D(radius, 0.0, thickness + EPSILON);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(radius, 0.0, thickness), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, 0.0, 1.0), 10e-7));
 
       pointInWorldToCheck = new Point3D(-radius, 0.0, -thickness);
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(-radius, 0.0, -thickness), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, 0.0, -1.0), 10e-7));
 
       pointInWorldToCheck = new Point3D(-radius, 0.0, -(thickness + EPSILON));
-      torus3d.checkIfInside(pointInWorldToCheck, closestPointToPack, normalToPack);
+      torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(-radius, 0.0, -thickness), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, 0.0, -1.0), 10e-7));
    }
