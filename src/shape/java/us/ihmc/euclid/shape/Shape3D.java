@@ -43,9 +43,11 @@ public abstract class Shape3D implements Shape3DBasics
    @Override
    public final boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = evaluateQuery(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
       if (closestPointOnSurfaceToPack != null)
          transformToWorld(closestPointOnSurfaceToPack);
@@ -60,9 +62,11 @@ public abstract class Shape3D implements Shape3DBasics
    @Override
    public final double signedDistance(Point3DReadOnly point)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      return evaluateQuery(queryInLocal, null, null);
+      double signedDistance = evaluateQuery(queryInLocal, null, null);
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return signedDistance;
    }
 
    /**
@@ -84,9 +88,11 @@ public abstract class Shape3D implements Shape3DBasics
    @Override
    public final boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      return isInsideEpsilonShapeFrame(queryInLocal, epsilon);
+      boolean isInside = isInsideEpsilonShapeFrame(queryInLocal, epsilon);
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return isInside;
    }
 
    /**
@@ -112,10 +118,12 @@ public abstract class Shape3D implements Shape3DBasics
    @Override
    public final boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
       boolean isInside = evaluateQuery(pointInLocal, projectionToPack, null) <= 0.0;
+
+      getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
       if (isInside)
       {

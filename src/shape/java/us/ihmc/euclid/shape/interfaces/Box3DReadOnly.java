@@ -25,9 +25,11 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = EuclidShapeTools.evaluatePoint3DWithBox3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getSize()) <= 0.0;
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
       if (closestPointOnSurfaceToPack != null)
          transformToWorld(closestPointOnSurfaceToPack);
@@ -41,27 +43,33 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(queryInLocal, getSize());
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(queryInLocal, getSize());
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return signedDistance;
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      return EuclidShapeTools.isPoint3DInsideBox3D(queryInLocal, getSize(), epsilon);
+      boolean isInside = EuclidShapeTools.isPoint3DInsideBox3D(queryInLocal, getSize(), epsilon);
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return isInside;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
       boolean isInside = EuclidShapeTools.orthogonalProjectionOntoBox3D(pointInLocal, projectionToPack, getSize());
+
+      getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
       if (isInside)
       {
@@ -123,14 +131,19 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       double minY = -maxY;
       double minZ = -maxZ;
 
-      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
-      Vector3DBasics vectorInLocal = getIntermediateVariableSupplier().getVector3D(0);
+      Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
 
-      getPose().inverseTransform(pointOnLine, pointInLocal);
-      getPose().inverseTransform(lineDirection, vectorInLocal);
+      getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
+      getPose().inverseTransform(lineDirection, lineDirectionInLocal);
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ, pointInLocal, vectorInLocal,
-                                                                                                firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ, pointOnLineInLocal,
+                                                                                                lineDirectionInLocal, firstIntersectionToPack,
+                                                                                                secondIntersectionToPack);
+
+      getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
+      getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
+
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
       if (secondIntersectionToPack != null && numberOfIntersections == 2)
@@ -195,13 +208,15 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    default void getBoundingBox3D(BoundingBox3D boundingBoxToPack)
    {
       boundingBoxToPack.setToNaN();
-      Point3DBasics vertex = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics vertex = getIntermediateVariableSupplier().requestPoint3D();
 
       for (int vertexIndex = 0; vertexIndex < 8; vertexIndex++)
       {
          getVertex(vertexIndex, vertex);
          boundingBoxToPack.updateToIncludePoint(vertex);
       }
+
+      getIntermediateVariableSupplier().releasePoint3D(vertex);
    }
 
    /**
@@ -287,10 +302,12 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       if (!getPosition().geometricallyEquals(getPosition(), epsilon))
          return false;
 
-      Vector3DBasics otherSize = getIntermediateVariableSupplier().getVector3D(0);
+      Vector3DBasics otherSize = getIntermediateVariableSupplier().requestVector3D();
       other.getPose().transform(other.getSize(), otherSize);
       transformToLocal(otherSize);
 
-      return getSize().geometricallyEquals(otherSize, epsilon);
+      boolean result = getSize().geometricallyEquals(otherSize, epsilon);
+      getIntermediateVariableSupplier().releaseVector3D(otherSize);
+      return result;
    }
 }

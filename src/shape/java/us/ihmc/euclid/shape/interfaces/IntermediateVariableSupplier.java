@@ -1,7 +1,6 @@
 package us.ihmc.euclid.shape.interfaces;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
 
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -10,23 +9,38 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface IntermediateVariableSupplier
 {
-   Point3DBasics getPoint3D(int index);
-   Vector3DBasics getVector3D(int index);
+   Point3DBasics requestPoint3D();
+
+   void releasePoint3D(Point3DBasics variableToRelease);
+
+   Vector3DBasics requestVector3D();
+
+   void releaseVector3D(Vector3DBasics variableToRelease);
 
    public static IntermediateVariableSupplier defaultIntermediateVariableSupplier()
    {
       return new IntermediateVariableSupplier()
       {
          @Override
-         public Point3DBasics getPoint3D(int index)
+         public Point3DBasics requestPoint3D()
          {
             return new Point3D();
          }
 
          @Override
-         public Vector3DBasics getVector3D(int index)
+         public void releasePoint3D(Point3DBasics variableToRelease)
+         {
+         }
+
+         @Override
+         public Vector3DBasics requestVector3D()
          {
             return new Vector3D();
+         }
+
+         @Override
+         public void releaseVector3D(Vector3DBasics variableToRelease)
+         {
          }
       };
    }
@@ -35,23 +49,37 @@ public interface IntermediateVariableSupplier
    {
       return new IntermediateVariableSupplier()
       {
-         private final List<Point3D> point3DPool = new ArrayList<>();
-         private final List<Vector3D> vector3DPool = new ArrayList<>();
+         private final ArrayDeque<Point3DBasics> point3DPool = new ArrayDeque<>();
+         private final ArrayDeque<Vector3DBasics> vector3DPool = new ArrayDeque<>();
 
          @Override
-         public Point3DBasics getPoint3D(int index)
+         public Point3DBasics requestPoint3D()
          {
-            while (point3DPool.size() <= index)
-               point3DPool.add(new Point3D());
-            return point3DPool.get(index);
+            if (point3DPool.isEmpty())
+               return new Point3D();
+            else
+               return point3DPool.poll();
          }
 
          @Override
-         public Vector3DBasics getVector3D(int index)
+         public void releasePoint3D(Point3DBasics variableToRelease)
          {
-            while (vector3DPool.size() <= index)
-               vector3DPool.add(new Vector3D());
-            return vector3DPool.get(index);
+            point3DPool.addLast(variableToRelease);
+         }
+
+         @Override
+         public Vector3DBasics requestVector3D()
+         {
+            if (vector3DPool.isEmpty())
+               return new Vector3D();
+            else
+               return vector3DPool.poll();
+         }
+
+         @Override
+         public void releaseVector3D(Vector3DBasics variableToRelease)
+         {
+            vector3DPool.addLast(variableToRelease);
          }
       };
    }

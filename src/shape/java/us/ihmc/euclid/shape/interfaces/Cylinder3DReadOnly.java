@@ -36,10 +36,12 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = EuclidShapeTools.evaluatePoint3DWithCylinder3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getRadius(),
                                                                         getHeight()) <= 0.0;
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
       if (closestPointOnSurfaceToPack != null)
          transformToWorld(closestPointOnSurfaceToPack);
@@ -54,28 +56,34 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndCylinder3D(queryInLocal, getRadius(), getHeight());
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndCylinder3D(queryInLocal, getRadius(), getHeight());
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return signedDistance;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      return EuclidShapeTools.isPoint3DInsideCylinder3D(queryInLocal, epsilon, getRadius(), getHeight());
+      boolean isInside = EuclidShapeTools.isPoint3DInsideCylinder3D(queryInLocal, epsilon, getRadius(), getHeight());
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return isInside;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
       boolean isInside = EuclidShapeTools.orthogonalProjectionOntoCylinder3D(pointInLocal, projectionToPack, getRadius(), getHeight());
+
+      getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
       if (isInside)
       {
@@ -130,14 +138,20 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
-      Point3DBasics pointLocal = getIntermediateVariableSupplier().getPoint3D(0);
-      getPose().inverseTransform(pointOnLine, pointLocal);
-      Vector3DBasics vectorLocal = getIntermediateVariableSupplier().getVector3D(0);
-      getPose().inverseTransform(lineDirection, vectorLocal);
+      Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+
+      getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
+      getPose().inverseTransform(lineDirection, lineDirectionInLocal);
 
       double halfHeight = 0.5 * getHeight();
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, getRadius(), pointLocal, vectorLocal,
-                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, getRadius(), pointOnLineInLocal,
+                                                                                             lineDirectionInLocal, firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
+
+      getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
+      getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
+
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
       if (secondIntersectionToPack != null && numberOfIntersections == 2)

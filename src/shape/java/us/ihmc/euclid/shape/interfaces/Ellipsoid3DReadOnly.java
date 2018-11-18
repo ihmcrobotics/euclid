@@ -24,10 +24,12 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = EuclidShapeTools.evaluatePoint3DWithEllipsoid3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack,
                                                                          getRadii()) <= 0.0;
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
       if (closestPointOnSurfaceToPack != null)
          transformToWorld(closestPointOnSurfaceToPack);
@@ -41,27 +43,33 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(queryInLocal, getRadii());
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(queryInLocal, getRadii());
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return signedDistance;
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      return EuclidShapeTools.isPoint3DInsideEllipsoid3D(queryInLocal, getRadii(), epsilon);
+      boolean isInside = EuclidShapeTools.isPoint3DInsideEllipsoid3D(queryInLocal, getRadii(), epsilon);
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return isInside;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
       boolean isInside = EuclidShapeTools.orthogonalProjectionOntoEllipsoid3D(pointInLocal, projectionToPack, getRadii());
+
+      getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
       if (isInside)
       {
@@ -117,13 +125,19 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
-      Point3DBasics pointLocal = getIntermediateVariableSupplier().getPoint3D(0);
-      getPose().inverseTransform(pointOnLine, pointLocal);
-      Vector3DBasics vectorLocal = getIntermediateVariableSupplier().getVector3D(0);
-      getPose().inverseTransform(lineDirection, vectorLocal);
+      Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadiusX(), getRadiusY(), getRadiusZ(), pointLocal, vectorLocal,
-                                                                                              firstIntersectionToPack, secondIntersectionToPack);
+      getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
+      getPose().inverseTransform(lineDirection, lineDirectionInLocal);
+
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadiusX(), getRadiusY(), getRadiusZ(), pointOnLineInLocal,
+                                                                                              lineDirectionInLocal, firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
+
+      getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
+      getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
+
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          transformToWorld(firstIntersectionToPack);
       if (secondIntersectionToPack != null && numberOfIntersections == 2)
@@ -205,8 +219,12 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
-      boolean areThisRadiiXYEqual = EuclidCoreTools.epsilonEquals(getRadiusX(), getRadiusY(), epsilon);
-      boolean areThisRadiiXZEqual = EuclidCoreTools.epsilonEquals(getRadiusX(), getRadiusZ(), epsilon);
+      double thisRadiusX = getRadiusX();
+      double thisRadiusY = getRadiusY();
+      double thisRadiusZ = getRadiusZ();
+
+      boolean areThisRadiiXYEqual = EuclidCoreTools.epsilonEquals(thisRadiusX, thisRadiusY, epsilon);
+      boolean areThisRadiiXZEqual = EuclidCoreTools.epsilonEquals(thisRadiusX, thisRadiusZ, epsilon);
 
       if (areThisRadiiXYEqual && areThisRadiiXZEqual)
       { // This ellipsoid is a sphere.
@@ -216,53 +234,59 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
          if (!EuclidCoreTools.epsilonEquals(other.getRadiusX(), other.getRadiusZ(), epsilon))
             return false;
          // Second - assert that the radii are the same between the two ellipsoids.
-         double thisRadiiSum = getRadiusX() + getRadiusY() + getRadiusZ();
+         double thisRadiiSum = thisRadiusX + thisRadiusY + thisRadiusZ;
          double otherRadiiSum = other.getRadiusX() + other.getRadiusY() + other.getRadiusZ();
          return Math.abs(thisRadiiSum - otherRadiiSum) <= 3.0 * epsilon; // Comparing the average of each ellipsoid's radii.
       }
 
-      Vector3DBasics otherRadii = getIntermediateVariableSupplier().getVector3D(0);
+      Vector3DBasics otherRadii = getIntermediateVariableSupplier().requestVector3D();
       other.getPose().transform(other.getRadii(), otherRadii);
       transformToLocal(otherRadii);
 
+      double otherRadiusX = otherRadii.getX();
+      double otherRadiusY = otherRadii.getY();
+      double otherRadiusZ = otherRadii.getZ();
+
+      getIntermediateVariableSupplier().releaseVector3D(otherRadii);
+
       if (areThisRadiiXYEqual)
       {
-         if (!EuclidCoreTools.epsilonEquals(getRadiusZ(), otherRadii.getZ(), epsilon))
+         if (!EuclidCoreTools.epsilonEquals(thisRadiusZ, otherRadiusZ, epsilon))
             return false;
 
-         double thisRadiiXY = EuclidCoreTools.normSquared(getRadiusX(), getRadiusY());
-         double otherRadiiXY = EuclidCoreTools.normSquared(otherRadii.getX(), otherRadii.getY());
+         double thisRadiiXY = EuclidCoreTools.normSquared(thisRadiusX, thisRadiusY);
+         double otherRadiiXY = EuclidCoreTools.normSquared(otherRadiusX, otherRadiusY);
 
          return EuclidCoreTools.epsilonEquals(thisRadiiXY, otherRadiiXY, epsilon);
       }
 
       if (areThisRadiiXZEqual)
       {
-         if (!EuclidCoreTools.epsilonEquals(getRadiusY(), otherRadii.getY(), epsilon))
+         if (!EuclidCoreTools.epsilonEquals(thisRadiusY, otherRadiusY, epsilon))
             return false;
 
-         double thisRadiiXZ = EuclidCoreTools.normSquared(getRadiusX(), getRadiusZ());
-         double otherRadiiXZ = EuclidCoreTools.normSquared(otherRadii.getX(), otherRadii.getZ());
+         double thisRadiiXZ = EuclidCoreTools.normSquared(thisRadiusX, thisRadiusZ);
+         double otherRadiiXZ = EuclidCoreTools.normSquared(otherRadiusX, otherRadiusZ);
 
          return EuclidCoreTools.epsilonEquals(thisRadiiXZ, otherRadiiXZ, epsilon);
       }
 
-      boolean areThisRadiiYZEqual = EuclidCoreTools.epsilonEquals(getRadiusY(), getRadiusZ(), epsilon);
+      boolean areThisRadiiYZEqual = EuclidCoreTools.epsilonEquals(thisRadiusY, thisRadiusZ, epsilon);
 
       if (areThisRadiiYZEqual)
       {
-         if (!EuclidCoreTools.epsilonEquals(getRadiusX(), otherRadii.getX(), epsilon))
+         if (!EuclidCoreTools.epsilonEquals(thisRadiusX, otherRadiusX, epsilon))
             return false;
 
-         double thisRadiiYZ = EuclidCoreTools.normSquared(getRadiusY(), getRadiusZ());
-         double otherRadiiYZ = EuclidCoreTools.normSquared(otherRadii.getY(), otherRadii.getZ());
+         double thisRadiiYZ = EuclidCoreTools.normSquared(thisRadiusY, thisRadiusZ);
+         double otherRadiiYZ = EuclidCoreTools.normSquared(otherRadiusY, otherRadiusZ);
 
          return EuclidCoreTools.epsilonEquals(thisRadiiYZ, otherRadiiYZ, epsilon);
       }
 
-      otherRadii.sub(getRadii());
+      double difference = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(thisRadiusX, thisRadiusY, thisRadiusZ, otherRadiusX, otherRadiusY, otherRadiusZ);
 
-      if (otherRadii.lengthSquared() <= epsilon * epsilon)
+      if (difference <= epsilon * epsilon)
          return true;
 
       return false;

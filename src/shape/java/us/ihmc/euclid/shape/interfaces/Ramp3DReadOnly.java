@@ -47,9 +47,11 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = EuclidShapeTools.evaluatePoint3DWithRamp3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getSize()) <= 0.0;
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
       if (closestPointOnSurfaceToPack != null)
          transformToWorld(closestPointOnSurfaceToPack);
@@ -63,27 +65,33 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndRamp3D(queryInLocal, getSize());
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndRamp3D(queryInLocal, getSize());
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return signedDistance;
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      return EuclidShapeTools.isPoint3DInsideRamp3D(queryInLocal, epsilon, getSize());
+      boolean isInside = EuclidShapeTools.isPoint3DInsideRamp3D(queryInLocal, epsilon, getSize());
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+      return isInside;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
       boolean isInside = EuclidShapeTools.orthogonalProjectionOntoRamp3D(pointInLocal, projectionToPack, getSize());
+
+      getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
       if (isInside)
       {
