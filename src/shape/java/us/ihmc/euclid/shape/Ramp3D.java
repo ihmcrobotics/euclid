@@ -8,9 +8,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Ramp3D} represents a 3D shape with a triangular section in the XZ-plane.
@@ -110,8 +108,7 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
     */
    public Ramp3D(RigidBodyTransformReadOnly pose, double length, double width, double height)
    {
-      setPose(pose);
-      setSize(length, width, height);
+      set(pose, length, width, height);
    }
 
    /**
@@ -126,8 +123,7 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
     */
    public Ramp3D(Pose3DReadOnly pose, double length, double width, double height)
    {
-      setPose(pose);
-      setSize(length, width, height);
+      set(pose, length, width, height);
    }
 
    /**
@@ -138,66 +134,7 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
    @Override
    public void set(Ramp3D other)
    {
-      setPose(other);
-      setSize(other.size);
-   }
-
-   /**
-    * Sets the size along the x-axis for this ramp.
-    *
-    * @param sizeX the size of this ramp along the x-axis.
-    * @throws IllegalArgumentException if {@code length} is negative.
-    */
-   public void setSizeX(double sizeX)
-   {
-      size.setX(sizeX);
-   }
-
-   /**
-    * Sets the size along the y-axis for this ramp.
-    *
-    * @param sizeY the size of this ramp along the y-axis.
-    * @throws IllegalArgumentException if {@code width} is negative.
-    */
-   public void setSizeY(double sizeY)
-   {
-      size.setY(sizeY);
-   }
-
-   /**
-    * Sets the size along the z-axis for this ramp.
-    *
-    * @param sizeZ the size of this ramp along the z-axis.
-    * @throws IllegalArgumentException if {@code height} is negative.
-    */
-   public void setSizeZ(double sizeZ)
-   {
-      size.setZ(sizeZ);
-   }
-
-   /**
-    * Sets the size of this ramp.
-    *
-    * @param size tuple with the new size for this ramp. Not modified.
-    * @throws IllegalArgumentException if any of {@code size} components is negative.
-    */
-   public void setSize(Tuple3DReadOnly size)
-   {
-      setSize(size.getX(), size.getY(), size.getZ());
-   }
-
-   /**
-    * Sets the size of this ramp.
-    *
-    * @param sizeX the size of this ramp along the x-axis.
-    * @param sizeY the size of this ramp along the y-axis.
-    * @param sizeZ the size of this ramp along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
-    *            negative.
-    */
-   public void setSize(double sizeX, double sizeY, double sizeZ)
-   {
-      size.set(sizeX, sizeY, sizeZ);
+      Ramp3DBasics.super.set(other);
    }
 
    private void updateRamp()
@@ -207,7 +144,7 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
    }
 
    @Override
-   public Vector3DReadOnly getSize()
+   public Vector3DBasics getSize()
    {
       return size;
    }
@@ -253,22 +190,6 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
    protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
       return EuclidShapeTools.isPoint3DInsideRamp3D(query, epsilon, getSize());
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setToZero()
-   {
-      super.setToZero();
-      size.setToZero();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setToNaN()
-   {
-      super.setToNaN();
-      size.setToNaN();
    }
 
    /**
