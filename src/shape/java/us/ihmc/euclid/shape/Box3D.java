@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
- * {@code Box3D} represents an axis-aligned box with a length, a width, and a height.
+ * {@code Box3D} represents a box with a sizeX, a sizeY, and a sizeZ.
  * <p>
  * Its origin is located at its centroid.
  * </p>
@@ -20,7 +20,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
 {
    /**
-    * Represents the length, width, and height of this box.
+    * Represents the sizeX, sizeY, and sizeZ of this box.
     */
    private final Vector3D size = new Vector3D();
 
@@ -45,15 +45,15 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
    /**
     * Creates a new box 3D and initializes its size.
     *
-    * @param length the size of this box along the x-axis.
-    * @param width the size of this box along the y-axis.
-    * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    * @param sizeX the size of this box along the x-axis.
+    * @param sizeY the size of this box along the y-axis.
+    * @param sizeZ the size of this box along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
     *            negative.
     */
-   public Box3D(double length, double width, double height)
+   public Box3D(double sizeX, double sizeY, double sizeZ)
    {
-      setSize(length, width, height);
+      setSize(sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -61,46 +61,46 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
     *
     * @param position the position of this box. Not modified.
     * @param orientation the orientation of this box. Not modified.
-    * @param length the size of this box along the x-axis.
-    * @param width the size of this box along the y-axis.
-    * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    * @param sizeX the size of this box along the x-axis.
+    * @param sizeY the size of this box along the y-axis.
+    * @param sizeZ the size of this box along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
     *            negative.
     */
-   public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double length, double width, double height)
+   public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
-      set(position, orientation, length, width, height);
+      set(position, orientation, sizeX, sizeY, sizeZ);
    }
 
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
     * @param pose the position and orientation of this box. Not modified.
-    * @param length the size of this box along the x-axis.
-    * @param width the size of this box along the y-axis.
-    * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    * @param sizeX the size of this box along the x-axis.
+    * @param sizeY the size of this box along the y-axis.
+    * @param sizeZ the size of this box along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
     *            negative.
     */
-   public Box3D(Pose3DReadOnly pose, double length, double width, double height)
+   public Box3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      set(pose, length, width, height);
+      set(pose, sizeX, sizeY, sizeZ);
    }
 
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
     * @param pose the position and orientation of this box. Not modified.
-    * @param length the size of this box along the x-axis.
-    * @param width the size of this box along the y-axis.
-    * @param height the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    * @param sizeX the size of this box along the x-axis.
+    * @param sizeY the size of this box along the y-axis.
+    * @param sizeZ the size of this box along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
     *            negative.
     */
-   public Box3D(RigidBodyTransformReadOnly pose, double length, double width, double height)
+   public Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setPose(pose);
-      setSize(length, width, height);
+      setSize(sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -181,7 +181,7 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
 
    /**
     * Provides a {@code String} representation of this box 3D as follows:<br>
-    * Box 3D: size = (length, width, height), pose = <br>
+    * Box 3D: size = (sizeX, sizeY, sizeZ), pose = <br>
     * m00, m01, m02 | m03 <br>
     * m10, m11, m12 | m13 <br>
     * m20, m21, m22 | m23
