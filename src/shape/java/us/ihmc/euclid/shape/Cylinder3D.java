@@ -1,18 +1,14 @@
 package us.ihmc.euclid.shape;
 
-import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
+import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
-import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tools.TransformationTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Cylinder3D} represents a cylinder defined by its radius and height.
@@ -47,7 +43,7 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
     *
     * @param other the other cylinder to copy. Not modified.
     */
-   public Cylinder3D(Cylinder3D other)
+   public Cylinder3D(Cylinder3DReadOnly other)
    {
       set(other);
    }
@@ -103,9 +99,7 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
    @Override
    public void set(Cylinder3D other)
    {
-      setPose(other);
-      setHeight(other.height);
-      setRadius(other.radius);
+      Cylinder3DBasics.super.set(other);
    }
 
    /**
@@ -158,91 +152,9 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
 
    /** {@inheritDoc} */
    @Override
-   public void setToNaN()
-   {
-      super.setToNaN();
-      height = Double.NaN;
-      radius = Double.NaN;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setToZero()
-   {
-      super.setToZero();
-      height = 0.0;
-      radius = 0.0;
-   }
-
-   /**
-    * Computes the coordinates of the possible intersections between a line and this cylinder.
-    * <p>
-    * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
-    * </p>
-    *
-    * @param line the line expressed in world coordinates that may intersect this cylinder. Not
-    *           modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line and this cylinder. It is either equal to 0,
-    *         1, or 2.
-    */
-   public int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
-   {
-      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
-   }
-
-   /**
-    * Computes the coordinates of the possible intersections between a line and this cylinder.
-    * <p>
-    * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
-    * </p>
-    *
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
-    * @param lineDirection the direction expressed in world of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line and this cylinder. It is either equal to 0,
-    *         1, or 2.
-    */
-   public int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
-                               Point3DBasics secondIntersectionToPack)
-   {
-      double xLocal = TransformationTools.computeTransformedX(shapePose, true, pointOnLine);
-      double yLocal = TransformationTools.computeTransformedY(shapePose, true, pointOnLine);
-      double zLocal = TransformationTools.computeTransformedZ(shapePose, true, pointOnLine);
-
-      double dxLocal = TransformationTools.computeTransformedX(shapePose, true, lineDirection);
-      double dyLocal = TransformationTools.computeTransformedY(shapePose, true, lineDirection);
-      double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
-
-      double halfHeight = 0.5 * height;
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, radius, xLocal, yLocal, zLocal, dxLocal,
-                                                                                             dyLocal, dzLocal, firstIntersectionToPack,
-                                                                                             secondIntersectionToPack);
-      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         transformToWorld(firstIntersectionToPack);
-      if (secondIntersectionToPack != null && numberOfIntersections == 2)
-         transformToWorld(secondIntersectionToPack);
-      return numberOfIntersections;
-   }
-
-   /** {@inheritDoc} */
-   @Override
    protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
-      double halfHeightPlusEpsilon = 0.5 * height + epsilon;
-      if (query.getZ() < -halfHeightPlusEpsilon || query.getZ() > halfHeightPlusEpsilon)
-         return false;
-
-      double radiusWithEpsilon = radius + epsilon;
-      return EuclidCoreTools.normSquared(query.getX(), query.getY()) <= radiusWithEpsilon * radiusWithEpsilon;
+      return EuclidShapeTools.isPoint3DInsideCylinder3D(query, epsilon, getRadius(), getHeight());
    }
 
    /** {@inheritDoc} */

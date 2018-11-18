@@ -1,7 +1,13 @@
 package us.ihmc.euclid.shape.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface Cylinder3DReadOnly extends Shape3DReadOnly
 {
@@ -24,6 +30,119 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    default boolean containsNaN()
    {
       return Shape3DReadOnly.super.containsNaN() || Double.isNaN(getHeight()) || Double.isNaN(getRadius());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   {
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      getPose().inverseTransform(pointToCheck, queryInLocal);
+      boolean isInside = EuclidShapeTools.evaluatePoint3DWithCylinder3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getRadius(),
+                                                                        getHeight()) <= 0.0;
+
+      if (closestPointOnSurfaceToPack != null)
+         transformToWorld(closestPointOnSurfaceToPack);
+
+      if (normalAtClosestPointToPack != null)
+         transformToWorld(normalAtClosestPointToPack);
+
+      return isInside;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default double signedDistance(Point3DReadOnly point)
+   {
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      getPose().inverseTransform(point, queryInLocal);
+      return EuclidShapeTools.signedDistanceBetweenPoint3DAndCylinder3D(queryInLocal, getRadius(), getHeight());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
+   {
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      getPose().inverseTransform(query, queryInLocal);
+      return EuclidShapeTools.isPoint3DInsideCylinder3D(queryInLocal, epsilon, getRadius(), getHeight());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   {
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      getPose().inverseTransform(pointToProject, pointInLocal);
+
+      boolean isInside = EuclidShapeTools.orthogonalProjection(pointInLocal, projectionToPack, getRadius(), getHeight());
+
+      if (isInside)
+      {
+         if (projectionToPack != pointToProject)
+            projectionToPack.set(pointToProject);
+      }
+      else
+      {
+         transformToWorld(projectionToPack);
+      }
+
+      return !isInside;
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and this cylinder.
+    * <p>
+    * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    *
+    * @param line the line expressed in world coordinates that may intersect this cylinder. Not
+    *           modified.
+    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and this cylinder. It is either equal to 0,
+    *         1, or 2.
+    */
+   default int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the possible intersections between a line and this cylinder.
+    * <p>
+    * In the case the line and this cylinder do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
+    * </p>
+    *
+    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
+    * @param lineDirection the direction expressed in world of the line. Not modified.
+    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
+    *           {@code null}. Modified.
+    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
+    *           {@code null}. Modified.
+    * @return the number of intersections between the line and this cylinder. It is either equal to 0,
+    *         1, or 2.
+    */
+   default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+      Point3DBasics pointLocal = getIntermediateVariableSupplier().getPoint3D(0);
+      getPose().inverseTransform(pointOnLine, pointLocal);
+      Vector3DBasics vectorLocal = getIntermediateVariableSupplier().getVector3D(0);
+      getPose().inverseTransform(lineDirection, vectorLocal);
+
+      double halfHeight = 0.5 * getHeight();
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, getRadius(), pointLocal, vectorLocal,
+                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
+         transformToWorld(firstIntersectionToPack);
+      if (secondIntersectionToPack != null && numberOfIntersections == 2)
+         transformToWorld(secondIntersectionToPack);
+      return numberOfIntersections;
    }
 
    /**
@@ -62,16 +181,16 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       if (!getPosition().geometricallyEquals(getPosition(), epsilon))
          return false;
 
-      /*
-       * Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
-       * inherently lies on the XY plane) is the same axis that the other cylinder is aligned on using
-       * EuclidGeometryTools#areVector3DsParallel(). We could do this by transforming two (0, 0, 1)
-       * vectors by each shapePose, but for each: / r00 r01 r02 \ / 0 \ / r02 \ | r10 r11 r12 | * | 0 | =
-       * | r12 | \ r20 r21 r22 / \ 1 / \ r22 / So rather than perform this transform, just check that the
-       * last column of the rotation matrix of each cylinder (M02, M12, and M22 in shapePose) are aligned
-       * vectors.
-       */
-
+      // Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
+      // inherently lies on the XY plane) is the same axis that the other cylinder is aligned on using
+      // EuclidGeometryTools#areVector3DsParallel(). We could do this by transforming two (0, 0, 1)
+      // vectors by each shapePose, but for each:
+      // / r00 r01 r02 \   / 0 \   / r02 \ 
+      // | r10 r11 r12 | * | 0 | = | r12 |
+      // \ r20 r21 r22 /   \ 1 /   \ r22 /
+      // So rather than perform this transform, just check that the
+      // last column of the rotation matrix of each cylinder (M02, M12, and M22 in shapePose) are aligned
+      // vectors.
       return EuclidGeometryTools.areVector3DsParallel(getOrientation().getM02(), getOrientation().getM12(), getOrientation().getM22(),
                                                       other.getOrientation().getM02(), other.getOrientation().getM12(), other.getOrientation().getM22(),
                                                       epsilon);

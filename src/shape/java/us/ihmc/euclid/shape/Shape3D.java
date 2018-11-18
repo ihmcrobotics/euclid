@@ -44,7 +44,7 @@ public abstract class Shape3D implements Shape3DBasics
    public final boolean checkIfInside(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
-      shapePose.inverseTransform(pointToCheck, queryInLocal);
+      getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = evaluateQuery(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
 
       if (closestPointOnSurfaceToPack != null)

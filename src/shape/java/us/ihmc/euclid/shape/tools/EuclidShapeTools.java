@@ -30,7 +30,8 @@ public class EuclidShapeTools
       return evaluatePoint3DWithBox3D(pointToProject, projectionToPack, null, box3DSize) <= 0.0;
    }
 
-   public static double evaluatePoint3DWithBox3D(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack, Vector3DReadOnly box3DSize)
+   public static double evaluatePoint3DWithBox3D(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack,
+                                                 Vector3DReadOnly box3DSize)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
       double halfSizeY = 0.5 * box3DSize.getY();
@@ -117,7 +118,28 @@ public class EuclidShapeTools
       }
    }
 
-   public static double evaluatePoint3DWithCylinder3D(Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack, double cylinder3DRadius, double cylinder3DHeight)
+   public static boolean isPoint3DInsideCylinder3D(Point3DReadOnly query, double epsilon, double cylinder3Radius, double cylinder3DHeight)
+   {
+      double halfHeightPlusEpsilon = 0.5 * cylinder3DHeight + epsilon;
+      if (query.getZ() < -halfHeightPlusEpsilon || query.getZ() > halfHeightPlusEpsilon)
+         return false;
+
+      double radiusWithEpsilon = cylinder3Radius + epsilon;
+      return EuclidCoreTools.normSquared(query.getX(), query.getY()) <= radiusWithEpsilon * radiusWithEpsilon;
+   }
+
+   public static double signedDistanceBetweenPoint3DAndCylinder3D(Point3DReadOnly query, double cylinder3DRadius, double cylinder3DHeight)
+   {
+      return evaluatePoint3DWithCylinder3D(query, null, null, cylinder3DRadius, cylinder3DHeight);
+   }
+
+   public static boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, double cylinder3DRadius, double cylinder3DHeight)
+   {
+      return evaluatePoint3DWithCylinder3D(pointToProject, projectionToPack, null, cylinder3DRadius, cylinder3DHeight) <= 0.0;
+   }
+
+   public static double evaluatePoint3DWithCylinder3D(Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack,
+                                                      double cylinder3DRadius, double cylinder3DHeight)
    {
       if (cylinder3DRadius <= 0.0 || cylinder3DHeight <= 0.0)
       {
