@@ -27,7 +27,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.evaluatePoint3DWithBox3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getSize()) <= 0.0;
+      boolean isInside = EuclidShapeTools.evaluatePoint3DWithBox3D(getSize(), queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
@@ -45,7 +45,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(queryInLocal, getSize());
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(getSize(), queryInLocal);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return signedDistance;
    }
@@ -55,7 +55,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      boolean isInside = EuclidShapeTools.isPoint3DInsideBox3D(queryInLocal, getSize(), epsilon);
+      boolean isInside = EuclidShapeTools.isPoint3DInsideBox3D(getSize(), queryInLocal, epsilon);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return isInside;
    }
@@ -72,7 +72,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
-      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoBox3D(pointInLocal, projectionToPack, getSize());
+      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoBox3D(getSize(), pointInLocal, projectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 

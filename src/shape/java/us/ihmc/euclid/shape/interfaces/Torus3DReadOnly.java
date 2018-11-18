@@ -35,8 +35,8 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.evaluatePoint3DWithTorus3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getRadius(),
-                                                                     getTubeRadius()) <= 0.0;
+      boolean isInside = EuclidShapeTools.evaluatePoint3DWithTorus3D(getRadius(), getTubeRadius(), queryInLocal, closestPointOnSurfaceToPack,
+                                                                     normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
@@ -54,7 +54,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndTorus3D(queryInLocal, getRadius(), getTubeRadius());
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndTorus3D(getRadius(), getTubeRadius(), queryInLocal);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return signedDistance;
    }
@@ -64,7 +64,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      boolean isInside = EuclidShapeTools.isPoint3DInsideTorus3D(queryInLocal, getRadius(), getTubeRadius(), epsilon);
+      boolean isInside = EuclidShapeTools.isPoint3DInsideTorus3D(getRadius(), getTubeRadius(), queryInLocal, epsilon);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return isInside;
    }
@@ -81,7 +81,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
-      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoTorus3D(pointInLocal, projectionToPack, getRadius(), getTubeRadius());
+      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoTorus3D(getRadius(), getTubeRadius(), pointInLocal, projectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 

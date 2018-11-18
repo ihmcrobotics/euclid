@@ -26,8 +26,8 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.evaluatePoint3DWithEllipsoid3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack,
-                                                                         getRadii()) <= 0.0;
+      boolean isInside = EuclidShapeTools.evaluatePoint3DWithEllipsoid3D(getRadii(), queryInLocal, closestPointOnSurfaceToPack,
+                                                                         normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
@@ -45,7 +45,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(queryInLocal, getRadii());
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(getRadii(), queryInLocal);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return signedDistance;
    }
@@ -55,7 +55,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      boolean isInside = EuclidShapeTools.isPoint3DInsideEllipsoid3D(queryInLocal, getRadii(), epsilon);
+      boolean isInside = EuclidShapeTools.isPoint3DInsideEllipsoid3D(getRadii(), queryInLocal, epsilon);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return isInside;
    }
@@ -72,7 +72,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
-      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoEllipsoid3D(pointInLocal, projectionToPack, getRadii());
+      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoEllipsoid3D(getRadii(), pointInLocal, projectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 

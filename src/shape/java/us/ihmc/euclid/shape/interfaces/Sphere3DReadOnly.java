@@ -30,8 +30,8 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.evaluatePoint3DWithSphere3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack,
-                                                                      getRadius()) <= 0.0;
+      boolean isInside = EuclidShapeTools.evaluatePoint3DWithSphere3D(getRadius(), queryInLocal, closestPointOnSurfaceToPack,
+                                                                      normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
@@ -59,7 +59,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      boolean isInside = EuclidShapeTools.isPoint3DInsideSphere3D(queryInLocal, getRadius(), epsilon);
+      boolean isInside = EuclidShapeTools.isPoint3DInsideSphere3D(getRadius(), queryInLocal, epsilon);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return isInside;
    }
@@ -76,7 +76,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
-      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoSphere3D(pointInLocal, projectionToPack, getRadius());
+      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoSphere3D(getRadius(), pointInLocal, projectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
