@@ -22,15 +22,15 @@ public class EuclidShapeTools
 
    public static double signedDistanceBetweenPoint3DAndBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize)
    {
-      return evaluatePointWithBox3D(query, null, null, box3DSize);
+      return evaluatePoint3DWithBox3D(query, null, null, box3DSize);
    }
 
    public static boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, Vector3DReadOnly box3DSize)
    {
-      return evaluatePointWithBox3D(pointToProject, projectionToPack, null, box3DSize) <= 0.0;
+      return evaluatePoint3DWithBox3D(pointToProject, projectionToPack, null, box3DSize) <= 0.0;
    }
 
-   public static double evaluatePointWithBox3D(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack, Vector3DReadOnly box3DSize)
+   public static double evaluatePoint3DWithBox3D(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack, Vector3DReadOnly box3DSize)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
       double halfSizeY = 0.5 * box3DSize.getY();
@@ -114,6 +114,138 @@ public class EuclidShapeTools
          }
 
          return distance;
+      }
+   }
+
+   public static double evaluatePoint3DWithCylinder3D(Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack, double cylinder3DRadius, double cylinder3DHeight)
+   {
+      if (cylinder3DRadius <= 0.0 || cylinder3DHeight <= 0.0)
+      {
+         if (closestPointOnSurfaceToPack != null)
+            closestPointOnSurfaceToPack.setToNaN();
+         if (normalToPack != null)
+            normalToPack.setToNaN();
+         return Double.NaN;
+      }
+
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
+
+      double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
+      double halfHeight = 0.5 * cylinder3DHeight;
+
+      if (xyLengthSquared <= cylinder3DRadius * cylinder3DRadius)
+      {
+         if (z < -halfHeight)
+         { // The query is directly below the cylinder
+            if (closestPointOnSurfaceToPack != null)
+               closestPointOnSurfaceToPack.set(x, y, -halfHeight);
+            if (normalToPack != null)
+               normalToPack.set(0.0, 0.0, -1.0);
+            return -(z + halfHeight);
+         }
+
+         if (z > halfHeight)
+         { // The query is directly above the cylinder
+            if (closestPointOnSurfaceToPack != null)
+               closestPointOnSurfaceToPack.set(x, y, halfHeight);
+            if (normalToPack != null)
+               normalToPack.set(0.0, 0.0, 1.0);
+            return z - halfHeight;
+         }
+
+         // The query is inside the cylinder
+         double xyLength = Math.sqrt(xyLengthSquared);
+         double dz = Math.min(halfHeight - z, z + halfHeight);
+         double dr = cylinder3DRadius - xyLength;
+
+         if (dz < dr)
+         {
+            if (z < 0)
+            { // Closer to the bottom face
+               if (closestPointOnSurfaceToPack != null)
+                  closestPointOnSurfaceToPack.set(x, y, -halfHeight);
+               if (normalToPack != null)
+                  normalToPack.set(0.0, 0.0, -1.0);
+               return -(z + halfHeight);
+            }
+            else
+            { // Closer to the top face
+               if (closestPointOnSurfaceToPack != null)
+                  closestPointOnSurfaceToPack.set(x, y, halfHeight);
+               if (normalToPack != null)
+                  normalToPack.set(0.0, 0.0, 1.0);
+               return z - halfHeight;
+            }
+         }
+         else
+         { // Closer to the cylinder part
+            if (closestPointOnSurfaceToPack != null)
+            {
+               double xyScale = cylinder3DRadius / xyLength;
+               closestPointOnSurfaceToPack.set(x * xyScale, y * xyScale, z);
+            }
+
+            if (normalToPack != null)
+            {
+               normalToPack.set(x, y, 0.0);
+               normalToPack.scale(1.0 / xyLength);
+            }
+            return xyLength - cylinder3DRadius;
+         }
+      }
+      else
+      { // The projection of the query onto the xy-plane is outside of the cylinder
+         double xyLength = Math.sqrt(xyLengthSquared);
+         double xyLengthInv = 1.0 / xyLength;
+
+         double xyClosestScale = cylinder3DRadius * xyLengthInv;
+         double xClosest = x * xyClosestScale;
+         double yClosest = y * xyClosestScale;
+         double zClosest = z;
+
+         if (z < -halfHeight)
+            zClosest = -halfHeight;
+         else if (z > halfHeight)
+            zClosest = halfHeight;
+
+         if (zClosest != z)
+         { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
+
+            double dx = x - xClosest;
+            double dy = y - yClosest;
+            double dz = z - zClosest;
+
+            double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+
+            if (closestPointOnSurfaceToPack != null)
+            {
+               closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
+            }
+
+            if (normalToPack != null)
+            {
+               normalToPack.set(dx, dy, dz);
+               normalToPack.scale(1.0 / distance);
+            }
+
+            return distance;
+         }
+         else
+         { // Closest point is on the cylinder.
+            if (closestPointOnSurfaceToPack != null)
+            {
+               closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
+            }
+
+            if (normalToPack != null)
+            {
+               normalToPack.set(x * xyLengthInv, y * xyLengthInv, 0.0);
+            }
+
+            return xyLength - cylinder3DRadius;
+         }
       }
    }
 }

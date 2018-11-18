@@ -27,7 +27,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.evaluatePointWithBox3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getSize()) <= 0.0;
+      boolean isInside = EuclidShapeTools.evaluatePoint3DWithBox3D(queryInLocal, closestPointOnSurfaceToPack, normalAtClosestPointToPack, getSize()) <= 0.0;
 
       if (closestPointOnSurfaceToPack != null)
          transformToWorld(closestPointOnSurfaceToPack);

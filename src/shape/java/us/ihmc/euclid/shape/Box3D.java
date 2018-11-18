@@ -121,7 +121,7 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
    @Override
    protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      return EuclidShapeTools.evaluatePointWithBox3D(query, closestPointToPack, normalToPack, size);
+      return EuclidShapeTools.evaluatePoint3DWithBox3D(query, closestPointToPack, normalToPack, size);
    }
 
    @Override
