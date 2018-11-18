@@ -19,7 +19,10 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @return the length of the slope.
     */
-   double getRampLength();
+   default double getRampLength()
+   {
+      return EuclidShapeTools.computeRamp3DLength(getSize());
+   }
 
    /**
     * Gets the angle formed by the slope and the bottom face.
@@ -29,7 +32,10 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @return the slope angle.
     */
-   double getRampIncline();
+   default double getRampIncline()
+   {
+      return EuclidShapeTools.computeRanp3DIncline(getSize());
+   }
 
    /** {@inheritDoc} */
    @Override

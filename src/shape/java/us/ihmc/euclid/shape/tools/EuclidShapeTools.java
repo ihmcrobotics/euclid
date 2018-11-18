@@ -344,6 +344,11 @@ public class EuclidShapeTools
       return Math.sqrt(EuclidCoreTools.normSquared(ramp3DSize.getX(), ramp3DSize.getZ()));
    }
 
+   public static double computeRanp3DIncline(Vector3DReadOnly ramp3DSize)
+   {
+      return Math.atan(ramp3DSize.getZ() / ramp3DSize.getX());
+   }
+
    public static boolean isPoint3DInsideRamp3D(Point3DReadOnly query, double epsilon, Vector3DReadOnly ramp3DSize)
    {
       if (query.getZ() < -epsilon)
