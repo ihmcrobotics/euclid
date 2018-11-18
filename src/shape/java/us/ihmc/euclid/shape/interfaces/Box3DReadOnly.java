@@ -61,7 +61,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
       getPose().inverseTransform(pointToProject, pointInLocal);
 
-      boolean isInside = EuclidShapeTools.orthogonalProjection(pointInLocal, projectionToPack, getSize());
+      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoBox3D(pointInLocal, projectionToPack, getSize());
 
       if (isInside)
       {

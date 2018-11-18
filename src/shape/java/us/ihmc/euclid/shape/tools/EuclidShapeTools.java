@@ -25,7 +25,7 @@ public class EuclidShapeTools
       return evaluatePoint3DWithBox3D(query, null, null, box3DSize);
    }
 
-   public static boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, Vector3DReadOnly box3DSize)
+   public static boolean orthogonalProjectionOntoBox3D(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, Vector3DReadOnly box3DSize)
    {
       return evaluatePoint3DWithBox3D(pointToProject, projectionToPack, null, box3DSize) <= 0.0;
    }
@@ -133,7 +133,8 @@ public class EuclidShapeTools
       return evaluatePoint3DWithCylinder3D(query, null, null, cylinder3DRadius, cylinder3DHeight);
    }
 
-   public static boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, double cylinder3DRadius, double cylinder3DHeight)
+   public static boolean orthogonalProjectionOntoCylinder3D(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, double cylinder3DRadius,
+                                                            double cylinder3DHeight)
    {
       return evaluatePoint3DWithCylinder3D(pointToProject, projectionToPack, null, cylinder3DRadius, cylinder3DHeight) <= 0.0;
    }
@@ -268,6 +269,72 @@ public class EuclidShapeTools
 
             return xyLength - cylinder3DRadius;
          }
+      }
+   }
+
+   public static boolean isPoint3DInsideEllipsoid3D(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, double epsilon)
+   {
+      double scaledX = query.getX() / (ellipsoid3DRadii.getX() + epsilon);
+      double scaledY = query.getY() / (ellipsoid3DRadii.getY() + epsilon);
+      double scaledZ = query.getZ() / (ellipsoid3DRadii.getZ() + epsilon);
+
+      return EuclidCoreTools.normSquared(scaledX, scaledY, scaledZ) <= 1.0;
+   }
+
+   public static double signedDistanceBetweenPoint3DAndEllipsoid3D(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii)
+   {
+      return evaluatePoint3DWithEllipsoid3D(query, null, null, ellipsoid3DRadii);
+   }
+
+   public static boolean orthogonalProjectionOntoEllipsoid3D(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, Vector3DReadOnly ellipsoid3DRadii)
+   {
+      return evaluatePoint3DWithEllipsoid3D(pointToProject, projectionToPack, null, ellipsoid3DRadii) <= 0.0;
+   }
+
+   public static double evaluatePoint3DWithEllipsoid3D(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack,
+                                                       Vector3DReadOnly ellipsoid3DRadii)
+   {
+      double xRadius = ellipsoid3DRadii.getX();
+      double yRadius = ellipsoid3DRadii.getY();
+      double zRadius = ellipsoid3DRadii.getZ();
+
+      double sumOfSquares = EuclidCoreTools.normSquared(query.getX() / xRadius, query.getY() / yRadius, query.getZ() / zRadius);
+      double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
+
+      if (sumOfSquares > 1.0e-10)
+      {
+         if (closestPointToPack != null)
+         {
+            closestPointToPack.set(query);
+            closestPointToPack.scale(scaleFactor);
+         }
+
+         if (normalToPack != null)
+         {
+            double xScale = 1.0 / (xRadius * xRadius);
+            double yScale = 1.0 / (yRadius * yRadius);
+            double zScale = 1.0 / (zRadius * zRadius);
+
+            normalToPack.set(query);
+            normalToPack.scale(xScale, yScale, zScale);
+            normalToPack.normalize();
+         }
+
+         return query.distanceFromOrigin() * (1.0 - scaleFactor);
+      }
+      else
+      {
+         if (closestPointToPack != null)
+         {
+            closestPointToPack.set(0.0, 0.0, zRadius);
+         }
+
+         if (normalToPack != null)
+         {
+            normalToPack.set(0.0, 0.0, 1.0);
+         }
+
+         return query.getZ() - zRadius;
       }
    }
 }

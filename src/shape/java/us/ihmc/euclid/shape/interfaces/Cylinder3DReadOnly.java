@@ -75,7 +75,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().getPoint3D(0);
       getPose().inverseTransform(pointToProject, pointInLocal);
 
-      boolean isInside = EuclidShapeTools.orthogonalProjection(pointInLocal, projectionToPack, getRadius(), getHeight());
+      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoCylinder3D(pointInLocal, projectionToPack, getRadius(), getHeight());
 
       if (isInside)
       {

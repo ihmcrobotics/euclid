@@ -22,7 +22,32 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
    /**
     * Represents the sizeX, sizeY, and sizeZ of this box.
     */
-   private final Vector3D size = new Vector3D();
+   private final Vector3D size = new Vector3D()
+   {
+      @Override
+      public void setX(double x)
+      {
+         if (x < 0.0)
+            throw new IllegalArgumentException("The x-size of a Box3D cannot be negative: " + x);
+         super.setX(x);
+      }
+
+      @Override
+      public void setY(double y)
+      {
+         if (y < 0.0)
+            throw new IllegalArgumentException("The y-size of a Box3D cannot be negative: " + y);
+         super.setY(y);
+      }
+
+      @Override
+      public void setZ(double z)
+      {
+         if (z < 0.0)
+            throw new IllegalArgumentException("The z-size of a Box3D cannot be negative: " + z);
+         super.setZ(z);
+      }
+   };
 
    /**
     * Creates a 1-by-1-by-1 box 3D.

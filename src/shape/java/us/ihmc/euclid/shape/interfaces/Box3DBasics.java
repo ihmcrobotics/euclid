@@ -2,7 +2,6 @@ package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -78,9 +77,6 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
     */
    default void setSize(double sizeX, double sizeY, double sizeZ)
    {
-      if (sizeX < 0.0 || sizeY < 0.0 || sizeZ < 0.0)
-         throw new IllegalArgumentException("A Box3D cannot have a negative size: " + EuclidCoreIOTools.getStringOf("(", ")", ",", sizeX, sizeY, sizeZ));
-
       getSize().set(sizeX, sizeY, sizeZ);
    }
 
