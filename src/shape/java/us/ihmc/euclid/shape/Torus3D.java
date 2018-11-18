@@ -2,11 +2,11 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Torus3DBasics;
-import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
@@ -21,12 +21,10 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * </ul>
  * </p>
  */
-public class Torus3D extends Shape3D implements Torus3DBasics, GeometryObject<Torus3D>
+public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
 {
-   /** The minimum allowable value for the radius of the tube. */
-   public static final double MIN_TUBE_RADIUS = 1.0e-4;
-   /** The minimum allowable value for the major radius. */
-   public static final double MIN_INNER_RADIUS = 1.0e-4;
+   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** It is the radius for the center of the torus to the center of the tube. */
    private double radius;
@@ -113,15 +111,31 @@ public class Torus3D extends Shape3D implements Torus3DBasics, GeometryObject<To
     */
    public void setRadii(double radius, double tubeRadius)
    {
+      if (radius < 0.0)
+         throw new IllegalArgumentException("The radius of a Torus3D cannot be negative: " + radius);
+      if (tubeRadius < 0.0)
+         throw new IllegalArgumentException("The tube radius of a Torus3D cannot be negative: " + tubeRadius);
+
       this.radius = radius;
       this.tubeRadius = tubeRadius;
+   }
 
-      if (radius - tubeRadius < MIN_INNER_RADIUS)
-         throw new IllegalArgumentException("Invalid dimensions: Difference between radius and tube radius is too small, difference: " + (radius - tubeRadius)
-               + ", minimum allowed: " + MIN_INNER_RADIUS);
+   @Override
+   public RigidBodyTransform getPose()
+   {
+      return pose;
+   }
 
-      if (tubeRadius < MIN_TUBE_RADIUS)
-         throw new IllegalArgumentException("Invalid tube radius: Torus is too thin: " + tubeRadius + ", minimum allowed: " + MIN_TUBE_RADIUS);
+   @Override
+   public RotationMatrix getOrientation()
+   {
+      return pose.getRotation();
+   }
+
+   @Override
+   public Vector3DBasics getPosition()
+   {
+      return pose.getTranslation();
    }
 
    /**
@@ -146,33 +160,16 @@ public class Torus3D extends Shape3D implements Torus3DBasics, GeometryObject<To
       return tubeRadius;
    }
 
-   /**
-    * Provides a {@code String} representation of this torus 3D as follows:<br>
-    * Torus 3D: radius = R, tube radius = r, pose = <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
-    *
-    * @return the {@code String} representing this torus 3D.
-    */
    @Override
-   public String toString()
+   public IntermediateVariableSupplier getIntermediateVariableSupplier()
    {
-      return "Torus: radius = " + radius + ", tube radius = " + tubeRadius + ", pose =\n" + getPoseString();
+      return supplier;
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
+   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
-      return EuclidShapeTools.isPoint3DInsideTorus3D(query, getRadius(), getTubeRadius(), epsilon);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
-   {
-      return EuclidShapeTools.evaluatePoint3DWithTorus3D(query, closestPointToPack, normalToPack, getRadius(), getTubeRadius());
+      this.supplier = newSupplier;
    }
 
    /**
@@ -206,5 +203,20 @@ public class Torus3D extends Shape3D implements Torus3DBasics, GeometryObject<To
    public boolean geometricallyEquals(Torus3D other, double epsilon)
    {
       return Torus3DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Provides a {@code String} representation of this torus 3D as follows:<br>
+    * Torus 3D: radius = R, tube radius = r, pose = <br>
+    * m00, m01, m02 | m03 <br>
+    * m10, m11, m12 | m13 <br>
+    * m20, m21, m22 | m23
+    *
+    * @return the {@code String} representing this torus 3D.
+    */
+   @Override
+   public String toString()
+   {
+      return "Torus: radius = " + radius + ", tube radius = " + tubeRadius + ", pose =\n" + pose;
    }
 }

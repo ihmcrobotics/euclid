@@ -2,12 +2,13 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Box3DBasics;
-import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -17,8 +18,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * Its origin is located at its centroid.
  * </p>
  */
-public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
+public class Box3D implements Box3DBasics, GeometryObject<Box3D>
 {
+   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
+
    /**
     * Represents the sizeX, sizeY, and sizeZ of this box.
     */
@@ -140,11 +144,22 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
       set(pose, size);
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   public RigidBodyTransform getPose()
    {
-      return EuclidShapeTools.evaluatePoint3DWithBox3D(query, closestPointToPack, normalToPack, size);
+      return pose;
+   }
+
+   @Override
+   public RotationMatrix getOrientation()
+   {
+      return pose.getRotation();
+   }
+
+   @Override
+   public Vector3DBasics getPosition()
+   {
+      return pose.getTranslation();
    }
 
    @Override
@@ -153,11 +168,16 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
       return size;
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
+   public IntermediateVariableSupplier getIntermediateVariableSupplier()
    {
-      return EuclidShapeTools.isPoint3DInsideBox3D(query, size, epsilon);
+      return supplier;
+   }
+
+   @Override
+   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
+   {
+      this.supplier = newSupplier;
    }
 
    /**
@@ -216,6 +236,6 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
    @Override
    public String toString()
    {
-      return "Box 3D: size = " + size + ", pose =\n" + getPoseString();
+      return "Box 3D: size = " + size + ", pose =\n" + pose;
    }
 }

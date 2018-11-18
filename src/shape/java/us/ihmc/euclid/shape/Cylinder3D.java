@@ -2,12 +2,12 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
@@ -20,8 +20,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * </ul>
  * </p>
  */
-public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, Cylinder3DBasics
+public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
 {
+   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
+
    /** Radius of the cylinder part. */
    private double radius;
    /**
@@ -123,6 +126,24 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
       this.height = height;
    }
 
+   @Override
+   public RigidBodyTransform getPose()
+   {
+      return pose;
+   }
+
+   @Override
+   public RotationMatrix getOrientation()
+   {
+      return pose.getRotation();
+   }
+
+   @Override
+   public Vector3DBasics getPosition()
+   {
+      return pose.getTranslation();
+   }
+
    /**
     * Gets the radius of this cylinder.
     *
@@ -145,18 +166,16 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
       return height;
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
+   public IntermediateVariableSupplier getIntermediateVariableSupplier()
    {
-      return EuclidShapeTools.isPoint3DInsideCylinder3D(query, epsilon, getRadius(), getHeight());
+      return supplier;
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
+   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
-      return EuclidShapeTools.evaluatePoint3DWithCylinder3D(query, closestPointOnSurfaceToPack, normalToPack, radius, height);
+      this.supplier = newSupplier;
    }
 
    /**
@@ -205,6 +224,6 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
    @Override
    public String toString()
    {
-      return "Cylinder 3D: height = " + height + ", radius = " + radius + ", pose=\n" + getPoseString();
+      return "Cylinder 3D: height = " + height + ", radius = " + radius + ", pose=\n" + pose;
    }
 }

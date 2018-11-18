@@ -86,6 +86,11 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
+      // Saving the coordinates in case pointToProject is inside and that pointToProject == projectionToPack.
+      double xOriginal = pointToProject.getX();
+      double yOriginal = pointToProject.getY();
+      double zOriginal = pointToProject.getZ();
+
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
@@ -93,15 +98,10 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
-      if (isInside)
-      {
-         if (projectionToPack != pointToProject)
-            projectionToPack.set(pointToProject);
-      }
+      if (isInside) // Set the coordinates to the original point to save a transform operation
+         projectionToPack.set(xOriginal, yOriginal, zOriginal);
       else
-      {
          transformToWorld(projectionToPack);
-      }
 
       return !isInside;
    }
@@ -173,7 +173,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     */
    default boolean geometricallyEquals(Ramp3DReadOnly other, double epsilon)
    {
-      return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().geometricallyEquals(getPosition(), epsilon)
+      return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon)
             && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
    }
 }

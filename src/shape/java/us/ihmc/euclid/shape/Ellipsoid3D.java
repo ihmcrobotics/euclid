@@ -2,20 +2,23 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Ellipsoid3DBasics;
-import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * {@code Ellipsoid3D} represents a 3D ellipsoid defined by its three main radii and with its origin
  * at its center.
  */
-public class Ellipsoid3D extends Shape3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3D>
+public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3D>
 {
+   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
+
    /** The three radii of this ellipsoid. */
    private final Vector3D radii = new Vector3D()
    {
@@ -103,11 +106,22 @@ public class Ellipsoid3D extends Shape3D implements Ellipsoid3DBasics, GeometryO
       set(pose, radiusX, radiusY, radiusZ);
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   public RigidBodyTransform getPose()
    {
-      return EuclidShapeTools.evaluatePoint3DWithEllipsoid3D(query, closestPointToPack, normalToPack, getRadii());
+      return pose;
+   }
+
+   @Override
+   public RotationMatrix getOrientation()
+   {
+      return pose.getRotation();
+   }
+
+   @Override
+   public Vector3DBasics getPosition()
+   {
+      return pose.getTranslation();
    }
 
    @Override
@@ -116,11 +130,16 @@ public class Ellipsoid3D extends Shape3D implements Ellipsoid3DBasics, GeometryO
       return radii;
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
+   public IntermediateVariableSupplier getIntermediateVariableSupplier()
    {
-      return EuclidShapeTools.isPoint3DInsideEllipsoid3D(query, getRadii(), epsilon);
+      return supplier;
+   }
+
+   @Override
+   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
+   {
+      this.supplier = newSupplier;
    }
 
    /**
@@ -180,6 +199,6 @@ public class Ellipsoid3D extends Shape3D implements Ellipsoid3DBasics, GeometryO
    @Override
    public String toString()
    {
-      return "Ellipsoid 3D: radii = " + radii + ", pose =\n" + getPoseString();
+      return "Ellipsoid 3D: radii = " + radii + ", pose =\n" + pose;
    }
 }

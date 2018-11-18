@@ -345,12 +345,22 @@ public class EuclidShapeTools
 
    public static double computeRamp3DLength(Vector3DReadOnly ramp3DSize)
    {
-      return Math.sqrt(EuclidCoreTools.normSquared(ramp3DSize.getX(), ramp3DSize.getZ()));
+      return computeRamp3DLength(ramp3DSize.getX(), ramp3DSize.getZ());
+   }
+
+   public static double computeRamp3DLength(double ramp3DSizeX, double ramp3DSizeZ)
+   {
+      return Math.sqrt(EuclidCoreTools.normSquared(ramp3DSizeX, ramp3DSizeZ));
    }
 
    public static double computeRanp3DIncline(Vector3DReadOnly ramp3DSize)
    {
-      return Math.atan(ramp3DSize.getZ() / ramp3DSize.getX());
+      return computeRanp3DIncline(ramp3DSize.getX(), ramp3DSize.getZ());
+   }
+
+   public static double computeRanp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
+   {
+      return Math.atan(ramp3DSizeZ / ramp3DSizeX);
    }
 
    public static boolean isPoint3DInsideRamp3D(Point3DReadOnly query, double epsilon, Vector3DReadOnly ramp3DSize)

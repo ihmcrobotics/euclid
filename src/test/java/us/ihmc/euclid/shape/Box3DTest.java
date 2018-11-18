@@ -143,11 +143,12 @@ public class Box3DTest
 
       box.getVertices(vertices);
 
-      for (Point3D vertex : vertices)
+      for (int vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++)
       {
+         Point3D vertex = vertices[vertexIndex];
          Point3D projectedVertex = new Point3D(vertex);
          box.orthogonalProjection(projectedVertex);
-         EuclidCoreTestTools.assertTuple3DEquals(vertex, projectedVertex, 1e-14);
+         EuclidCoreTestTools.assertTuple3DEquals("Vertex index: " + vertexIndex,  vertex, projectedVertex, 1e-14);
       }
    }
 

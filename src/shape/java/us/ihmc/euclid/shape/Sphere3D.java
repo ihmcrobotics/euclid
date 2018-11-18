@@ -1,17 +1,21 @@
 package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Sphere3DBasics;
-import us.ihmc.euclid.shape.tools.EuclidShapeTools;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * {@code Sphere3D} represents a 3D sphere defined by its radius and with its origin at its center.
  */
-public class Sphere3D extends Shape3D implements Sphere3DBasics, GeometryObject<Sphere3D>
+public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
 {
+   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
+
    /** The radius of this sphere. */
    private double radius;
 
@@ -70,6 +74,24 @@ public class Sphere3D extends Shape3D implements Sphere3DBasics, GeometryObject<
       set(centerX, centerY, centerZ, radius);
    }
 
+   @Override
+   public RigidBodyTransform getPose()
+   {
+      return pose;
+   }
+
+   @Override
+   public RotationMatrix getOrientation()
+   {
+      return pose.getRotation();
+   }
+
+   @Override
+   public Vector3DBasics getPosition()
+   {
+      return pose.getTranslation();
+   }
+
    /**
     * Gets the radius of this sphere.
     *
@@ -79,6 +101,18 @@ public class Sphere3D extends Shape3D implements Sphere3DBasics, GeometryObject<
    public double getRadius()
    {
       return radius;
+   }
+
+   @Override
+   public IntermediateVariableSupplier getIntermediateVariableSupplier()
+   {
+      return supplier;
+   }
+
+   @Override
+   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
+   {
+      this.supplier = newSupplier;
    }
 
    /**
@@ -104,20 +138,6 @@ public class Sphere3D extends Shape3D implements Sphere3DBasics, GeometryObject<
    public void set(Sphere3D other)
    {
       Sphere3DBasics.super.set(other);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
-   {
-      return EuclidShapeTools.isPoint3DInsideSphere3D(query, getRadius(), epsilon);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
-   {
-      return EuclidShapeTools.evaluatePoint3DWithSphere3D(query, closestPointToPack, normalToPack, getRadius());
    }
 
    /**
@@ -162,6 +182,6 @@ public class Sphere3D extends Shape3D implements Sphere3DBasics, GeometryObject<
    @Override
    public String toString()
    {
-      return "Sphere 3D: radius = " + radius + ", pose=\n" + getPoseString();
+      return "Sphere 3D: radius = " + radius + ", pose=\n" + pose;
    }
 }

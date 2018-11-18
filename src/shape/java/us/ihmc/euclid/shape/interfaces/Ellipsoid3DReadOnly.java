@@ -64,6 +64,11 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
+      // Saving the coordinates in case pointToProject is inside and that pointToProject == projectionToPack.
+      double xOriginal = pointToProject.getX();
+      double yOriginal = pointToProject.getY();
+      double zOriginal = pointToProject.getZ();
+
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
@@ -71,15 +76,10 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
-      if (isInside)
-      {
-         if (projectionToPack != pointToProject)
-            projectionToPack.set(pointToProject);
-      }
+      if (isInside) // Set the coordinates to the original point to save a transform operation
+         projectionToPack.set(xOriginal, yOriginal, zOriginal);
       else
-      {
          transformToWorld(projectionToPack);
-      }
 
       return !isInside;
    }
@@ -242,6 +242,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       Vector3DBasics otherRadii = getIntermediateVariableSupplier().requestVector3D();
       other.getPose().transform(other.getRadii(), otherRadii);
       transformToLocal(otherRadii);
+      otherRadii.absolute();
 
       double otherRadiusX = otherRadii.getX();
       double otherRadiusY = otherRadii.getY();

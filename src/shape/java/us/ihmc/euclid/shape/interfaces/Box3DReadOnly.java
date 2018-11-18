@@ -64,6 +64,11 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
+      // Saving the coordinates in case pointToProject is inside and that pointToProject == projectionToPack.
+      double xOriginal = pointToProject.getX();
+      double yOriginal = pointToProject.getY();
+      double zOriginal = pointToProject.getZ();
+
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
@@ -71,15 +76,10 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
-      if (isInside)
-      {
-         if (projectionToPack != pointToProject)
-            projectionToPack.set(pointToProject);
-      }
+      if (isInside) // Set the coordinates to the original point to save a transform operation
+         projectionToPack.set(xOriginal, yOriginal, zOriginal);
       else
-      {
          transformToWorld(projectionToPack);
-      }
 
       return !isInside;
    }
@@ -299,12 +299,13 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     */
    default boolean geometricallyEquals(Box3DReadOnly other, double epsilon)
    {
-      if (!getPosition().geometricallyEquals(getPosition(), epsilon))
+      if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
       Vector3DBasics otherSize = getIntermediateVariableSupplier().requestVector3D();
       other.getPose().transform(other.getSize(), otherSize);
       transformToLocal(otherSize);
+      otherSize.absolute();
 
       boolean result = getSize().geometricallyEquals(otherSize, epsilon);
       getIntermediateVariableSupplier().releaseVector3D(otherSize);

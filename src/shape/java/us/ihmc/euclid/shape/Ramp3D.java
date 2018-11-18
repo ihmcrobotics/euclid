@@ -2,12 +2,13 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
@@ -24,8 +25,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * </ul>
  * </p>
  */
-public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp3D>
+public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 {
+   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
+
    /** Size of this ramp's bounding box. */
    private final Vector3D size = new Vector3D()
    {
@@ -34,8 +38,9 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
       {
          if (x < 0.0)
             throw new IllegalArgumentException("The x-size of a Ramp3D cannot be negative: " + x);
+         if (x != getX())
+            updateRamp(x, getZ());
          super.setX(x);
-         updateRamp();
       }
 
       @Override
@@ -51,8 +56,9 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
       {
          if (z < 0.0)
             throw new IllegalArgumentException("The z-size of a Ramp3D cannot be negative: " + z);
+         if (z != getZ())
+            updateRamp(getX(), z);
          super.setZ(z);
-         updateRamp();
       }
    };
 
@@ -137,10 +143,28 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
       Ramp3DBasics.super.set(other);
    }
 
-   private void updateRamp()
+   private void updateRamp(double x, double z)
    {
-      rampLength = EuclidShapeTools.computeRamp3DLength(getSize());
-      angleOfRampIncline = EuclidShapeTools.computeRanp3DIncline(getSize());
+      rampLength = EuclidShapeTools.computeRamp3DLength(x, z);
+      angleOfRampIncline = EuclidShapeTools.computeRanp3DIncline(x, z);
+   }
+
+   @Override
+   public RigidBodyTransform getPose()
+   {
+      return pose;
+   }
+
+   @Override
+   public RotationMatrix getOrientation()
+   {
+      return pose.getRotation();
+   }
+
+   @Override
+   public Vector3DBasics getPosition()
+   {
+      return pose.getTranslation();
    }
 
    @Override
@@ -178,18 +202,16 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
       return angleOfRampIncline;
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   public IntermediateVariableSupplier getIntermediateVariableSupplier()
    {
-      return EuclidShapeTools.evaluatePoint3DWithRamp3D(query, closestPointToPack, normalToPack, getSize());
+      return supplier;
    }
 
-   /** {@inheritDoc} */
    @Override
-   protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
+   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
-      return EuclidShapeTools.isPoint3DInsideRamp3D(query, epsilon, getSize());
+      this.supplier = newSupplier;
    }
 
    /**
@@ -234,6 +256,6 @@ public class Ramp3D extends Shape3D implements Ramp3DBasics, GeometryObject<Ramp
    @Override
    public String toString()
    {
-      return "Ramp 3D: size = " + size + ", + pose =\n" + getPoseString();
+      return "Ramp 3D: size = " + size + ", + pose =\n" + pose;
    }
 }
