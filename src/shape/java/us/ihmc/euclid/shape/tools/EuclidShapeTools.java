@@ -1,5 +1,7 @@
 package us.ihmc.euclid.shape.tools;
 
+import static us.ihmc.euclid.tools.EuclidCoreTools.*;
+
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -683,5 +685,104 @@ public class EuclidShapeTools
       }
 
       return distance - sphere3DRadius;
+   }
+
+   public static boolean isPoint3DInsideTorus3D(Point3DReadOnly query, double torus3DRadius, double torus3DTubeRadius, double epsilon)
+   {
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
+
+      double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
+
+      double outerRadius = torus3DRadius + torus3DTubeRadius + epsilon;
+      double innerRadius = torus3DRadius - torus3DTubeRadius - epsilon;
+
+      if (xyLengthSquared > outerRadius * outerRadius || xyLengthSquared < innerRadius * innerRadius)
+         return false;
+
+      double xyScale = torus3DRadius / Math.sqrt(xyLengthSquared);
+
+      double closestTubeCenterX = x * xyScale;
+      double closestTubeCenterY = y * xyScale;
+
+      return EuclidGeometryTools.distanceBetweenPoint3Ds(x, y, z, closestTubeCenterX, closestTubeCenterY, 0.0) <= torus3DTubeRadius + epsilon;
+   }
+
+   public static double signedDistanceBetweenPoint3DAndTorus3D(Point3DReadOnly query, double torus3DRadius, double torus3DTubeRadius)
+   {
+      return evaluatePoint3DWithTorus3D(query, null, null, torus3DRadius, torus3DTubeRadius);
+   }
+
+   public static boolean orthogonalProjectionOntoTorus3D(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, double torus3DRadius,
+                                                         double torus3DTubeRadius)
+   {
+      return evaluatePoint3DWithTorus3D(pointToProject, projectionToPack, null, torus3DRadius, torus3DTubeRadius) <= 0.0;
+   }
+
+   public static double evaluatePoint3DWithTorus3D(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack, double torus3DRadius,
+                                                   double torus3DTubeRadius)
+   {
+      double x = query.getX();
+      double y = query.getY();
+      double z = query.getZ();
+      double xyLengthSquared = normSquared(x, y);
+
+      if (xyLengthSquared < 1.0e-12)
+      {
+         double xzLength = Math.sqrt(normSquared(torus3DRadius, z));
+
+         if (closestPointToPack != null)
+         {
+            double scale = torus3DTubeRadius / xzLength;
+            double closestTubeCenterX = torus3DRadius;
+            double closestTubeCenterY = 0.0;
+
+            double tubeCenterToSurfaceX = -torus3DRadius * scale;
+            double tubeCenterToSurfaceY = 0.0;
+            double tubeCenterToSurfaceZ = z * scale;
+
+            closestPointToPack.set(closestTubeCenterX, closestTubeCenterY, 0.0);
+            closestPointToPack.add(tubeCenterToSurfaceX, tubeCenterToSurfaceY, tubeCenterToSurfaceZ);
+         }
+
+         if (normalToPack != null)
+         {
+            normalToPack.set(-torus3DRadius, 0.0, z);
+            normalToPack.scale(1.0 / xzLength);
+         }
+
+         return xzLength - torus3DTubeRadius;
+      }
+      else
+      {
+         double xyScale = torus3DRadius / Math.sqrt(xyLengthSquared);
+
+         double closestTubeCenterX = x * xyScale;
+         double closestTubeCenterY = y * xyScale;
+
+         double dx = x - closestTubeCenterX;
+         double dy = y - closestTubeCenterY;
+         double dz = z;
+
+         double distance = Math.sqrt(normSquared(dx, dy, dz));
+
+         double distanceInv = 1.0 / distance;
+
+         if (closestPointToPack != null)
+         {
+            closestPointToPack.set(dx, dy, dz);
+            closestPointToPack.scale(torus3DTubeRadius * distanceInv);
+            closestPointToPack.add(closestTubeCenterX, closestTubeCenterY, 0.0);
+         }
+
+         if (normalToPack != null)
+         {
+            normalToPack.set(dx, dy, dz);
+            normalToPack.scale(distanceInv);
+         }
+
+         return distance - torus3DTubeRadius;
+      }
    }
 }
