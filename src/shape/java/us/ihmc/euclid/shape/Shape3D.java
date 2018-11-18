@@ -61,7 +61,7 @@ public abstract class Shape3D implements Shape3DBasics
    public final double signedDistance(Point3DReadOnly point)
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().getPoint3D(0);
-      shapePose.inverseTransform(point, queryInLocal);
+      getPose().inverseTransform(point, queryInLocal);
       return evaluateQuery(queryInLocal, null, null);
    }
 
@@ -140,6 +140,12 @@ public abstract class Shape3D implements Shape3DBasics
    public RotationMatrix getOrientation()
    {
       return shapePose.getRotation();
+   }
+
+   @Override
+   public Vector3DBasics getPosition()
+   {
+      return shapePose.getTranslation();
    }
 
    /**
