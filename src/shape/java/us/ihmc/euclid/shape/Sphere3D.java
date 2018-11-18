@@ -1,21 +1,17 @@
 package us.ihmc.euclid.shape;
 
-import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tools.TransformationTools;
+import us.ihmc.euclid.shape.interfaces.Sphere3DBasics;
+import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Sphere3D} represents a 3D sphere defined by its radius and with its origin at its center.
  */
-public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
+public class Sphere3D extends Shape3D implements Sphere3DBasics, GeometryObject<Sphere3D>
 {
-   private static final double SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
    /** The radius of this sphere. */
    private double radius;
 
@@ -57,7 +53,7 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
     */
    public Sphere3D(Point3DReadOnly center, double radius)
    {
-      this(center.getX(), center.getY(), center.getZ(), radius);
+      set(center, radius);
    }
 
    /**
@@ -71,8 +67,7 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
     */
    public Sphere3D(double centerX, double centerY, double centerZ, double radius)
    {
-      setPosition(centerX, centerY, centerZ);
-      setRadius(radius);
+      set(centerX, centerY, centerZ, radius);
    }
 
    /**
@@ -80,6 +75,7 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
     *
     * @return the value of the radius.
     */
+   @Override
    public double getRadius()
    {
       return radius;
@@ -91,6 +87,7 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
     * @param radius the radius for this sphere.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
+   @Override
    public void setRadius(double radius)
    {
       if (radius < 0.0)
@@ -106,108 +103,21 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
    @Override
    public void set(Sphere3D other)
    {
-      setPose(other);
-      setRadius(other.radius);
-   }
-
-   /**
-    * Computes the coordinates of the possible intersections between a line and this sphere.
-    * <p>
-    * In the case the line and this sphere do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
-    * </p>
-    *
-    * @param line the line expressed in world coordinates that may intersect this sphere. Not modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
-    *         or 2.
-    */
-   public int intersectionWith(Line3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
-   {
-      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
-   }
-
-   /**
-    * Computes the coordinates of the possible intersections between a line and this sphere.
-    * <p>
-    * In the case the line and this sphere do not intersect, this method returns {@code 0} and
-    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
-    * {@link Double#NaN}.
-    * </p>
-    *
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
-    * @param lineDirection the direction expressed in world of the line. Not modified.s
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
-    * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
-    * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
-    *         or 2.
-    */
-   public int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
-                               Point3DBasics secondIntersectionToPack)
-   {
-      double xLocal = TransformationTools.computeTransformedX(shapePose, true, pointOnLine);
-      double yLocal = TransformationTools.computeTransformedY(shapePose, true, pointOnLine);
-      double zLocal = TransformationTools.computeTransformedZ(shapePose, true, pointOnLine);
-
-      double dxLocal = TransformationTools.computeTransformedX(shapePose, true, lineDirection);
-      double dyLocal = TransformationTools.computeTransformedY(shapePose, true, lineDirection);
-      double dzLocal = TransformationTools.computeTransformedZ(shapePose, true, lineDirection);
-
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radius, radius, radius, xLocal, yLocal, zLocal, dxLocal, dyLocal,
-                                                                                              dzLocal, firstIntersectionToPack, secondIntersectionToPack);
-      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         transformToWorld(firstIntersectionToPack);
-      if (secondIntersectionToPack != null && numberOfIntersections == 2)
-         transformToWorld(secondIntersectionToPack);
-      return numberOfIntersections;
+      Sphere3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
    @Override
    protected boolean isInsideEpsilonShapeFrame(Point3DReadOnly query, double epsilon)
    {
-      double radiusWithEpsilon = radius + epsilon;
-      return query.distanceFromOriginSquared() <= radiusWithEpsilon * radiusWithEpsilon;
+      return EuclidShapeTools.isPoint3DInsideSphere3D(query, getRadius(), epsilon);
    }
 
    /** {@inheritDoc} */
    @Override
    protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      double distance = query.distanceFromOrigin();
-
-      if (closestPointToPack != null)
-      {
-         if (distance > SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            closestPointToPack.set(query);
-            closestPointToPack.scale(radius / distance);
-         }
-         else
-         {
-            closestPointToPack.set(0.0, 0.0, radius);
-         }
-      }
-
-      if (normalToPack != null)
-      {
-         if (distance > SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            normalToPack.set(query);
-            normalToPack.scale(1.0 / distance);
-         }
-         else
-         {
-            normalToPack.set(0.0, 0.0, 1.0);
-         }
-      }
-
-      return distance - radius;
+      return EuclidShapeTools.evaluatePoint3DWithSphere3D(query, closestPointToPack, normalToPack, getRadius());
    }
 
    /**
@@ -222,30 +132,22 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
    @Override
    public boolean epsilonEquals(Sphere3D other, double epsilon)
    {
-      return EuclidCoreTools.epsilonEquals(radius, other.radius, epsilon) && super.epsilonEqualsPose(other, epsilon);
+      return Sphere3DBasics.super.epsilonEquals(other, epsilon);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar,
+    * i.e. the position of each sphere is geometrically similar given {@code epsilon} and the
+    * difference between the radius of each sphere is less than or equal to {@code epsilon}.
+    *
+    * @param other the sphere to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
+    */
    @Override
-   public void setToZero()
+   public boolean geometricallyEquals(Sphere3D other, double epsilon)
    {
-      super.setToZero();
-      radius = 0.0;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setToNaN()
-   {
-      super.setToNaN();
-      radius = Double.NaN;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public boolean containsNaN()
-   {
-      return super.containsNaN() || Double.isNaN(radius);
+      return Sphere3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -261,21 +163,5 @@ public class Sphere3D extends Shape3D implements GeometryObject<Sphere3D>
    public String toString()
    {
       return "Sphere 3D: radius = " + radius + ", pose=\n" + getPoseString();
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar,
-    * i.e. the position of each sphere is geometrically similar given {@code epsilon} and the
-    * difference between the radius of each sphere is less than or equal to {@code epsilon}.
-    *
-    * @param other the sphere to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Sphere3D other, double epsilon)
-   {
-      return Math.abs(radius - other.radius) <= epsilon
-            && shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon);
    }
 }

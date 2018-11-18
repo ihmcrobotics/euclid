@@ -9,6 +9,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidShapeTools
 {
+   private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
+
    public static boolean isPoint3DInsideBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize, double epsilon)
    {
       if (Math.abs(query.getX()) <= 0.5 * box3DSize.getX() + epsilon)
@@ -632,5 +634,54 @@ public class EuclidShapeTools
    private static boolean isFirstValueMinimum(double possibleMin, double value1, double value2)
    {
       return possibleMin <= value1 && possibleMin <= value2;
+   }
+
+   public static boolean isPoint3DInsideSphere3D(Point3DReadOnly query, double sphere3DRadius, double epsilon)
+   {
+      double radiusWithEpsilon = sphere3DRadius + epsilon;
+      return query.distanceFromOriginSquared() <= radiusWithEpsilon * radiusWithEpsilon;
+   }
+
+   public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly query, double sphere3DRadius)
+   {
+      return evaluatePoint3DWithSphere3D(query, null, null, sphere3DRadius);
+   }
+
+   public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly pointToProject, Point3DBasics projectionToPack, double sphere3DRadius)
+   {
+      return evaluatePoint3DWithSphere3D(pointToProject, projectionToPack, null, sphere3DRadius) <= 0.0;
+   }
+
+   public static double evaluatePoint3DWithSphere3D(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack, double sphere3DRadius)
+   {
+      double distance = query.distanceFromOrigin();
+
+      if (closestPointToPack != null)
+      {
+         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
+         {
+            closestPointToPack.set(query);
+            closestPointToPack.scale(sphere3DRadius / distance);
+         }
+         else
+         {
+            closestPointToPack.set(0.0, 0.0, sphere3DRadius);
+         }
+      }
+
+      if (normalToPack != null)
+      {
+         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
+         {
+            normalToPack.set(query);
+            normalToPack.scale(1.0 / distance);
+         }
+         else
+         {
+            normalToPack.set(0.0, 0.0, 1.0);
+         }
+      }
+
+      return distance - sphere3DRadius;
    }
 }
