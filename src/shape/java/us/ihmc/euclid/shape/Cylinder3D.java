@@ -57,8 +57,7 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
     */
    public Cylinder3D(double height, double radius)
    {
-      setHeight(height);
-      setRadius(radius);
+      setSize(height, radius);
    }
 
    /**
@@ -71,9 +70,7 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
     */
    public Cylinder3D(RigidBodyTransformReadOnly pose, double height, double radius)
    {
-      setPose(pose);
-      setHeight(height);
-      setRadius(radius);
+      set(pose, height, radius);
    }
 
    /**
@@ -86,9 +83,7 @@ public class Cylinder3D extends Shape3D implements GeometryObject<Cylinder3D>, C
     */
    public Cylinder3D(Pose3DReadOnly pose, double height, double radius)
    {
-      setPose(pose);
-      setHeight(height);
-      setRadius(radius);
+      set(pose, height, radius);
    }
 
    /**

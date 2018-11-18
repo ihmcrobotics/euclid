@@ -69,8 +69,7 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
     */
    public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double length, double width, double height)
    {
-      setPose(position, orientation);
-      setSize(length, width, height);
+      set(position, orientation, length, width, height);
    }
 
    /**
@@ -85,8 +84,7 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
     */
    public Box3D(Pose3DReadOnly pose, double length, double width, double height)
    {
-      setPose(pose);
-      setSize(length, width, height);
+      set(pose, length, width, height);
    }
 
    /**
@@ -114,7 +112,7 @@ public class Box3D extends Shape3D implements GeometryObject<Box3D>, Box3DBasics
     */
    public Box3D(RigidBodyTransformReadOnly pose, double[] size)
    {
-      this(pose, size[0], size[1], size[2]);
+      set(pose, size);
    }
 
    /** {@inheritDoc} */
