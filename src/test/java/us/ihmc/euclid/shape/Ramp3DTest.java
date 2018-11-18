@@ -67,14 +67,14 @@ public class Ramp3DTest
       Ramp3D ramp1 = createRandomRamp(random);
 
       Ramp3D ramp2 = new Ramp3D(1.0, 1.0, 1.0);
-      ramp2.setWidth(ramp1.getWidth());
-      ramp2.setLength(ramp1.getLength());
-      ramp2.setHeight(ramp1.getHeight());
+      ramp2.setSizeY(ramp1.getSizeY());
+      ramp2.setSizeX(ramp1.getSizeX());
+      ramp2.setSizeZ(ramp1.getSizeZ());
       ramp2.setPose(ramp1);
 
-      assertTrue(ramp1.getWidth() == ramp2.getWidth());
-      assertTrue(ramp1.getLength() == ramp2.getLength());
-      assertTrue(ramp1.getHeight() == ramp2.getHeight());
+      assertTrue(ramp1.getSizeY() == ramp2.getSizeY());
+      assertTrue(ramp1.getSizeX() == ramp2.getSizeX());
+      assertTrue(ramp1.getSizeZ() == ramp2.getSizeZ());
       ramp1.epsilonEquals(ramp2, 1e-7);
    }
 
@@ -173,11 +173,11 @@ public class Ramp3DTest
          Vector3D surfaceNormal = new Vector3D();
          ramp.getRampSurfaceNormal(surfaceNormal);
 
-         double insideRamp = Math.min(0.1, 0.1 * EuclidCoreTools.min(ramp.getHeight(), ramp.getLength(), ramp.getWidth()));
+         double insideRamp = Math.min(0.1, 0.1 * EuclidCoreTools.min(ramp.getSizeZ(), ramp.getSizeX(), ramp.getSizeY()));
          double minX = insideRamp;
-         double maxX = ramp.getLength() - insideRamp;
-         double minY = -(ramp.getWidth() / 2.0) + insideRamp;
-         double maxY = ramp.getWidth() / 2.0 - insideRamp;
+         double maxX = ramp.getSizeX() - insideRamp;
+         double minY = -(ramp.getSizeY() / 2.0) + insideRamp;
+         double maxY = ramp.getSizeY() / 2.0 - insideRamp;
          double minZ = 0.0;
          double maxZ = 1.0;
 
@@ -222,7 +222,7 @@ public class Ramp3DTest
       for (int i = 0; i < iterations; i++)
       {
          ramp = createRandomRamp(random);
-         rampLength = Math.sqrt(EuclidCoreTools.normSquared(ramp.getLength(), ramp.getHeight()));
+         rampLength = Math.sqrt(EuclidCoreTools.normSquared(ramp.getSizeX(), ramp.getSizeZ()));
          epsilon = random.nextDouble();
 
          // z > 0 (in angled frame) means it's outside the ramp
@@ -239,10 +239,10 @@ public class Ramp3DTest
 
          // |y| > 0.5 * width (in both angled and ramp frames) means it's
          // outside the ramp
-         pointToTest.set(random.nextDouble(), 0.5 * ramp.getWidth() + Math.abs(random.nextDouble()) + 2e-7, random.nextDouble());
+         pointToTest.set(random.nextDouble(), 0.5 * ramp.getSizeY() + Math.abs(random.nextDouble()) + 2e-7, random.nextDouble());
          assertFalse(ramp.isInsideOrOnSurface(transformFromAngledToWorldFrame(ramp, pointToTest)));
 
-         pointToTest.set(random.nextDouble(), -0.5 * ramp.getWidth() - Math.abs(random.nextDouble()) + 2e-7, random.nextDouble());
+         pointToTest.set(random.nextDouble(), -0.5 * ramp.getSizeY() - Math.abs(random.nextDouble()) + 2e-7, random.nextDouble());
          assertFalse(ramp.isInsideOrOnSurface(transformFromAngledToWorldFrame(ramp, pointToTest)));
 
          // x < 0 (in ramp frame) means it's outside the ramp
@@ -251,7 +251,7 @@ public class Ramp3DTest
          assertFalse(ramp.isInsideOrOnSurface(pointToTest));
 
          // x > length (in ramp frame) means it's outside the ramp
-         pointToTest.set(Math.abs(random.nextDouble()) + ramp.getLength() + 2e-7, random.nextDouble(), random.nextDouble());
+         pointToTest.set(Math.abs(random.nextDouble()) + ramp.getSizeX() + 2e-7, random.nextDouble(), random.nextDouble());
          ramp.transformToWorld(pointToTest);
          assertFalse(ramp.isInsideOrOnSurface(pointToTest));
 
@@ -261,12 +261,12 @@ public class Ramp3DTest
          assertFalse(ramp.isInsideOrOnSurface(pointToTest));
 
          // z > height (in ramp frame) means it's outside the ramp
-         pointToTest.set(random.nextDouble(), random.nextDouble(), Math.abs(random.nextDouble()) + ramp.getHeight() + 2e-7);
+         pointToTest.set(random.nextDouble(), random.nextDouble(), Math.abs(random.nextDouble()) + ramp.getSizeZ() + 2e-7);
          ramp.transformToWorld(pointToTest);
          assertFalse(ramp.isInsideOrOnSurface(pointToTest));
 
          // points below the ramp surface (z < 0 in angled frame) are inside
-         pointToTest.set(random.nextDouble() * rampLength, (random.nextDouble() - 0.5) * ramp.getWidth(), random.nextDouble() * epsilon);
+         pointToTest.set(random.nextDouble() * rampLength, (random.nextDouble() - 0.5) * ramp.getSizeY(), random.nextDouble() * epsilon);
          assertTrue(ramp.isInsideEpsilon(transformFromAngledToWorldFrame(ramp, pointToTest), epsilon));
 
          // points barely inside the side (y < 0.5*width in ramp frame and x and z so that they fit into the triangular sides)
@@ -274,12 +274,12 @@ public class Ramp3DTest
          assertTrue(ramp.isInsideEpsilon(pointToTest, epsilon));
 
          // points barely above the base (small positive z in ramp frame and x and z so that they fit into the rectangular sides) are inside
-         pointToTest.set(random.nextDouble() * ramp.getLength(), 0.5 * random.nextDouble() * ramp.getWidth(), random.nextDouble() * epsilon);
+         pointToTest.set(random.nextDouble() * ramp.getSizeX(), 0.5 * random.nextDouble() * ramp.getSizeY(), random.nextDouble() * epsilon);
          ramp.transformToWorld(pointToTest);
          assertTrue(ramp.isInsideEpsilon(pointToTest, epsilon));
 
          // points barely inside of the 'backboard', ie x = length
-         pointToTest.set(random.nextDouble() * epsilon + ramp.getLength(), 0.5 * random.nextDouble() * ramp.getWidth(), random.nextDouble() * ramp.getHeight());
+         pointToTest.set(random.nextDouble() * epsilon + ramp.getSizeX(), 0.5 * random.nextDouble() * ramp.getSizeY(), random.nextDouble() * ramp.getSizeZ());
          ramp.transformToWorld(pointToTest);
          assertTrue(ramp.isInsideEpsilon(pointToTest, epsilon));
       }
@@ -303,7 +303,7 @@ public class Ramp3DTest
 
          double insideRamp = 0.02;
          double x = EuclidCoreRandomTools.nextDouble(random, insideRamp, ramp.getRampLength() - insideRamp);
-         double y = EuclidCoreRandomTools.nextDouble(random, -ramp.getWidth() / 2.0 + insideRamp, ramp.getWidth() / 2.0 - insideRamp);
+         double y = EuclidCoreRandomTools.nextDouble(random, -ramp.getSizeY() / 2.0 + insideRamp, ramp.getSizeY() / 2.0 - insideRamp);
          double z = EuclidCoreRandomTools.nextDouble(random, insideRamp, 1.0);
          Point3D pointToTestAboveRamp = new Point3D(x, y, z);
          Point3D pointOnRampBelowTestPoint = new Point3D(pointToTestAboveRamp);
@@ -351,7 +351,7 @@ public class Ramp3DTest
 
          double insideRamp = 0.02;
          double x = EuclidCoreRandomTools.nextDouble(random, insideRamp, ramp.getRampLength() - insideRamp);
-         double y = EuclidCoreRandomTools.nextDouble(random, -ramp.getWidth() / 2.0 + insideRamp, ramp.getWidth() / 2.0 - insideRamp);
+         double y = EuclidCoreRandomTools.nextDouble(random, -ramp.getSizeY() / 2.0 + insideRamp, ramp.getSizeY() / 2.0 - insideRamp);
          double z = EuclidCoreRandomTools.nextDouble(random, insideRamp, 1.0);
          Point3D pointToTestAboveRamp = new Point3D(x, y, z);
          pointToTestAboveRamp = transformFromAngledToWorldFrame(ramp, pointToTestAboveRamp);
@@ -559,12 +559,12 @@ public class Ramp3DTest
    {
       Random random = new Random(97932L);
 
-      double xVal = random.nextDouble() * ramp.getLength();
-      double yVal = (2 * random.nextInt(1) - 1) * 0.5 * ramp.getWidth() + random.nextDouble() * epsilon;
-      double zVal = random.nextDouble() * ramp.getHeight();
+      double xVal = random.nextDouble() * ramp.getSizeX();
+      double yVal = (2 * random.nextInt(1) - 1) * 0.5 * ramp.getSizeY() + random.nextDouble() * epsilon;
+      double zVal = random.nextDouble() * ramp.getSizeZ();
 
-      if (zVal > xVal * (ramp.getHeight() / ramp.getLength()))
-         zVal = xVal * (ramp.getHeight() / ramp.getLength());
+      if (zVal > xVal * (ramp.getSizeZ() / ramp.getSizeX()))
+         zVal = xVal * (ramp.getSizeZ() / ramp.getSizeX());
 
       pointToPack.set(xVal, yVal, zVal);
       ramp.transformToWorld(pointToPack);

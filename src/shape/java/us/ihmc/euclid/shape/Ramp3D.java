@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -27,7 +28,34 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
 {
    /** Size of this ramp's bounding box. */
-   private final Size3D size = new Size3D();
+   private final Vector3D size = new Vector3D()
+   {
+      @Override
+      public void setX(double x)
+      {
+         if (x < 0.0)
+            throw new IllegalArgumentException("The x-size of a Ramp3D cannot be negative: " + x);
+         super.setX(x);
+         updateRamp();
+      }
+
+      @Override
+      public void setY(double y)
+      {
+         if (y < 0.0)
+            throw new IllegalArgumentException("The y-size of a Ramp3D cannot be negative: " + y);
+         super.setY(y);
+      }
+
+      @Override
+      public void setZ(double z)
+      {
+         if (z < 0.0)
+            throw new IllegalArgumentException("The z-size of a Ramp3D cannot be negative: " + z);
+         super.setZ(z);
+         updateRamp();
+      }
+   };
 
    /** Length of the slope face of this ramp. */
    private double rampLength;
@@ -116,39 +144,34 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
    /**
     * Sets the size along the x-axis for this ramp.
     *
-    * @param length the size of this ramp along the x-axis.
+    * @param sizeX the size of this ramp along the x-axis.
     * @throws IllegalArgumentException if {@code length} is negative.
     */
-   public void setLength(double length)
+   public void setSizeX(double sizeX)
    {
-      checkLength(length);
-      size.setLength(length);
-      updateRamp();
+      size.setX(sizeX);
    }
 
    /**
     * Sets the size along the y-axis for this ramp.
     *
-    * @param width the size of this ramp along the y-axis.
+    * @param sizeY the size of this ramp along the y-axis.
     * @throws IllegalArgumentException if {@code width} is negative.
     */
-   public void setWidth(double width)
+   public void setSizeY(double sizeY)
    {
-      checkWidth(width);
-      size.setWidth(width);
+      size.setY(sizeY);
    }
 
    /**
     * Sets the size along the z-axis for this ramp.
     *
-    * @param height the size of this ramp along the z-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if {@code height} is negative.
     */
-   public void setHeight(double height)
+   public void setSizeZ(double sizeZ)
    {
-      checkHeight(height);
-      size.setHeight(height);
-      updateRamp();
+      size.setZ(sizeZ);
    }
 
    /**
@@ -165,25 +188,21 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
    /**
     * Sets the size of this ramp.
     *
-    * @param length the size of this ramp along the x-axis.
-    * @param width the size of this ramp along the y-axis.
-    * @param height the size of this ramp along the z-axis.
+    * @param sizeX the size of this ramp along the x-axis.
+    * @param sizeY the size of this ramp along the y-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public void setSize(double length, double width, double height)
+   public void setSize(double sizeX, double sizeY, double sizeZ)
    {
-      checkLength(length);
-      checkWidth(width);
-      checkHeight(height);
-      size.setLengthWidthHeight(length, width, height);
-      updateRamp();
+      size.set(sizeX, sizeY, sizeZ);
    }
 
    private void updateRamp()
    {
-      rampLength = Math.sqrt(EuclidCoreTools.normSquared(size.getLength(), size.getHeight()));
-      angleOfRampIncline = Math.atan(size.getHeight() / size.getLength());
+      rampLength = Math.sqrt(EuclidCoreTools.normSquared(size.getX(), size.getZ()));
+      angleOfRampIncline = Math.atan(size.getZ() / size.getX());
    }
 
    /**
@@ -191,9 +210,9 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
     *
     * @return this ramp's length.
     */
-   public double getLength()
+   public double getSizeX()
    {
-      return size.getLength();
+      return size.getX();
    }
 
    /**
@@ -201,9 +220,9 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
     *
     * @return this ramp's width.
     */
-   public double getWidth()
+   public double getSizeY()
    {
-      return size.getWidth();
+      return size.getY();
    }
 
    /**
@@ -211,15 +230,15 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
     *
     * @return this ramp's height.
     */
-   public double getHeight()
+   public double getSizeZ()
    {
-      return size.getHeight();
+      return size.getZ();
    }
 
    /**
     * Gets the length of this ramp's slope part.
     * <p>
-    * Note that this is different than {@link #getLength()}. The returned value is equal to:
+    * Note that this is different than {@link #getSizeX()}. The returned value is equal to:
     * &radic;(this.length<sup>2</sup> + this.height<sup>2</sup>)
     * </p>
     *
@@ -237,7 +256,7 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
     */
    public void getRampSurfaceNormal(Vector3DBasics surfaceNormalToPack)
    {
-      surfaceNormalToPack.set(-size.getHeight() / rampLength, 0.0, size.getLength() / rampLength);
+      surfaceNormalToPack.set(-size.getZ() / rampLength, 0.0, size.getX() / rampLength);
       transformToWorld(surfaceNormalToPack);
    }
 
@@ -258,8 +277,8 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
    @Override
    protected double evaluateQuery(Point3DReadOnly query, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      double rampDirectionX = size.getLength() / rampLength;
-      double rampDirectionZ = size.getHeight() / rampLength;
+      double rampDirectionX = size.getX() / rampLength;
+      double rampDirectionZ = size.getZ() / rampLength;
       double rampNormalX = -rampDirectionZ;
       double rampNormalZ = rampDirectionX;
 
@@ -267,11 +286,11 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
       double y = query.getY();
       double z = query.getZ();
 
-      double halfWidth = 0.5 * size.getWidth();
+      double halfWidth = 0.5 * size.getY();
       if (z < 0.0)
       { // Query is below the ramp
-         double xClosest = EuclidCoreTools.clamp(x, 0.0, size.getLength());
-         double yClosest = EuclidCoreTools.clamp(y, -0.5 * size.getWidth(), halfWidth);
+         double xClosest = EuclidCoreTools.clamp(x, 0.0, size.getX());
+         double yClosest = EuclidCoreTools.clamp(y, -0.5 * size.getY(), halfWidth);
          double zClosest = 0.0;
 
          if (closestPointToPack != null)
@@ -293,11 +312,11 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
             return computeNormalAndDistanceFromClosestPoint(x, y, z, xClosest, yClosest, zClosest, normalToPack);
          }
       }
-      else if (x > size.getLength() || EuclidGeometryTools.isPoint2DOnSideOfLine2D(x, z, size.getLength(), size.getHeight(), rampNormalX, rampNormalZ, false))
+      else if (x > size.getX() || EuclidGeometryTools.isPoint2DOnSideOfLine2D(x, z, size.getX(), size.getZ(), rampNormalX, rampNormalZ, false))
       { // Query is beyond the ramp
-         double xClosest = size.getLength();
-         double yClosest = EuclidCoreTools.clamp(y, -0.5 * size.getWidth(), halfWidth);
-         double zClosest = EuclidCoreTools.clamp(z, 0.0, size.getHeight());
+         double xClosest = size.getX();
+         double yClosest = EuclidCoreTools.clamp(y, -0.5 * size.getY(), halfWidth);
+         double zClosest = EuclidCoreTools.clamp(z, 0.0, size.getZ());
 
          if (closestPointToPack != null)
          {
@@ -311,7 +330,7 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
                normalToPack.set(1.0, 0.0, 0.0);
             }
 
-            return x - size.getLength();
+            return x - size.getX();
          }
          else
          {
@@ -321,7 +340,7 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
       else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(x, z, 0.0, 0.0, rampNormalX, rampNormalZ, true))
       { // Query is before ramp and the closest point lies on starting edge
          double xClosest = 0.0;
-         double yClosest = EuclidCoreTools.clamp(y, -0.5 * size.getWidth(), halfWidth);
+         double yClosest = EuclidCoreTools.clamp(y, -0.5 * size.getY(), halfWidth);
          double zClosest = 0.0;
 
          if (closestPointToPack != null)
@@ -389,7 +408,7 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
       { // Query is inside the ramp
          double distanceToRightFace = -(-halfWidth - y);
          double distanceToLeftFace = halfWidth - y;
-         double distanceToRearFace = size.getLength() - x;
+         double distanceToRearFace = size.getX() - x;
          double distanceToBottomFace = z;
          double distanceToSlopeFace = -(rampDirectionX * z - x * rampDirectionZ);
 
@@ -425,7 +444,7 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
          { // Query is closer to the rear face
             if (closestPointToPack != null)
             {
-               closestPointToPack.set(size.getLength(), y, z);
+               closestPointToPack.set(size.getX(), y, z);
             }
 
             if (normalToPack != null)
@@ -511,16 +530,16 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
       if (query.getZ() < -epsilon)
          return false;
 
-      if (query.getX() > size.getLength() + epsilon)
+      if (query.getX() > size.getX() + epsilon)
          return false;
 
-      double halfWidth = 0.5 * size.getWidth() + epsilon;
+      double halfWidth = 0.5 * size.getY() + epsilon;
 
       if (query.getY() < -halfWidth || query.getY() > halfWidth)
          return false;
 
-      double rampDirectionX = size.getLength() / rampLength;
-      double rampDirectionZ = size.getHeight() / rampLength;
+      double rampDirectionX = size.getX() / rampLength;
+      double rampDirectionZ = size.getZ() / rampLength;
 
       // Computing the signed distance between the query and the slope face, negative value means the query is below the slope.
       if (rampDirectionX * query.getZ() - query.getX() * rampDirectionZ > epsilon)
@@ -565,24 +584,6 @@ public class Ramp3D extends Shape3D implements GeometryObject<Ramp3D>
    public boolean containsNaN()
    {
       return super.containsNaN() || size.containsNaN();
-   }
-
-   private static void checkLength(double length)
-   {
-      if (length < 0.0)
-         throw new IllegalArgumentException("A Ramp3D cannot have a negative length: " + length);
-   }
-
-   private static void checkWidth(double width)
-   {
-      if (width < 0.0)
-         throw new IllegalArgumentException("A Ramp3D cannot have a negative width: " + width);
-   }
-
-   private static void checkHeight(double height)
-   {
-      if (height < 0.0)
-         throw new IllegalArgumentException("A Ramp3D cannot have a negative height: " + height);
    }
 
    /**
