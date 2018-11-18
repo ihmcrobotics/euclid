@@ -8,9 +8,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Ellipsoid3D} represents a 3D ellipsoid defined by its three main radii and with its origin
@@ -113,7 +111,7 @@ public class Ellipsoid3D extends Shape3D implements Ellipsoid3DBasics, GeometryO
    }
 
    @Override
-   public Vector3DReadOnly getRadii()
+   public Vector3DBasics getRadii()
    {
       return radii;
    }
@@ -133,111 +131,7 @@ public class Ellipsoid3D extends Shape3D implements Ellipsoid3DBasics, GeometryO
    @Override
    public void set(Ellipsoid3D other)
    {
-      setPose(other);
-      radii.set(other.radii);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setToNaN()
-   {
-      super.setToNaN();
-      radii.setToNaN();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void setToZero()
-   {
-      super.setToZero();
-      radii.setToZero();
-   }
-
-   /**
-    * Sets the pose and radii of this ellipsoid.
-    *
-    * @param pose the position and orientation of this ellipsoid. Not modified.
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @throws IllegalArgumentException if any of the three radii is negative.
-    */
-   public void set(Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
-   {
-      setPose(pose);
-      setRadii(radiusX, radiusY, radiusZ);
-   }
-
-   /**
-    * Sets the pose and radii of this ellipsoid.
-    *
-    * @param pose the position and orientation of this ellipsoid. Not modified.
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @throws IllegalArgumentException if any of the three radii is negative.
-    */
-   public void set(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
-   {
-      setPose(pose);
-      setRadii(radiusX, radiusY, radiusZ);
-   }
-
-   /**
-    * Sets the radii of this ellipsoid.
-    *
-    * @param radii tuple holding the 3 radii of the ellipsoid.
-    * @throws IllegalArgumentException if any of the three radii is negative.
-    */
-   public void setRadii(Tuple3DReadOnly radii)
-   {
-      this.radii.set(radii);
-   }
-
-   /**
-    * Sets the radii of this ellipsoid.
-    *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @throws IllegalArgumentException if any of the three radii is negative.
-    */
-   public void setRadii(double radiusX, double radiusY, double radiusZ)
-   {
-      radii.set(radiusX, radiusY, radiusZ);
-   }
-
-   /**
-    * Sets the radius along the x-axis for this ellipsoid.
-    *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @throws IllegalArgumentException if the argument is negative.
-    */
-   public void setRadiusX(double radiusX)
-   {
-      radii.setX(radiusX);
-   }
-
-   /**
-    * Sets the radius along the y-axis for this ellipsoid.
-    *
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @throws IllegalArgumentException if the argument is negative.
-    */
-   public void setRadiusY(double radiusY)
-   {
-      radii.setY(radiusY);
-   }
-
-   /**
-    * Sets the radius along the z-axis for this ellipsoid.
-    *
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @throws IllegalArgumentException if the argument is negative.
-    */
-   public void setRadiusZ(double radiusZ)
-   {
-      radii.setZ(radiusZ);
+      Ellipsoid3DBasics.super.set(other);
    }
 
    /**
