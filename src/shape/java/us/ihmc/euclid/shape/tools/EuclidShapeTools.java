@@ -702,6 +702,268 @@ public class EuclidShapeTools
       return distance - sphereRadius;
    }
 
+   public static double doSphere3DSphere3DCollisionTest(double firstSphereRadius, Tuple3DReadOnly firstSpherePosition, double secondSphereRadius,
+                                                        Tuple3DReadOnly secondSpherePosition, Point3DBasics firstClosestPointToPack,
+                                                        Point3DBasics secondClosestPointToPack, Vector3DBasics firstNormalToPack,
+                                                        Vector3DBasics secondNormalToPack)
+   {
+      double distance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstSpherePosition.getX(), firstSpherePosition.getY(), firstSpherePosition.getZ(),
+                                                                    secondSpherePosition.getX(), secondSpherePosition.getY(), secondSpherePosition.getZ());
+
+      if (firstClosestPointToPack != null)
+      {
+         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
+         {
+            firstClosestPointToPack.sub(secondSpherePosition, firstSpherePosition);
+            firstClosestPointToPack.scale(firstSphereRadius / distance);
+         }
+         else
+         {
+            firstClosestPointToPack.set(0.0, 0.0, firstSphereRadius);
+         }
+         firstClosestPointToPack.add(firstSpherePosition);
+      }
+
+      if (secondClosestPointToPack != null)
+      {
+         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
+         {
+            secondClosestPointToPack.sub(firstSpherePosition, secondSpherePosition);
+            secondClosestPointToPack.scale(secondSphereRadius / distance);
+         }
+         else
+         {
+            secondClosestPointToPack.set(0.0, 0.0, secondSphereRadius);
+         }
+         secondClosestPointToPack.add(secondSpherePosition);
+      }
+
+      if (firstNormalToPack != null)
+      {
+         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
+         {
+            firstNormalToPack.sub(secondSpherePosition, firstSpherePosition);
+            firstNormalToPack.scale(1.0 / distance);
+         }
+         else
+         {
+            firstNormalToPack.set(0.0, 0.0, 1.0);
+         }
+
+         if (secondNormalToPack != null)
+            secondNormalToPack.setAndNegate(firstNormalToPack);
+      }
+      else if (secondClosestPointToPack != null)
+      {
+         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
+         {
+            secondNormalToPack.sub(firstSpherePosition, secondSpherePosition);
+            secondNormalToPack.scale(1.0 / distance);
+         }
+         else
+         {
+            secondNormalToPack.set(0.0, 0.0, 1.0);
+         }
+      }
+
+      return distance - firstSphereRadius - secondSphereRadius;
+   }
+
+   public static double doSphere3DCylinder3DCollisionTest(double sphereRadius, Tuple3DReadOnly spherePosition, double cylinderRadius, double cylinderHeight,
+                                                          Tuple3DReadOnly cylinderPosition, Vector3DReadOnly cylinderAxis,
+                                                          Point3DBasics firstClosestPointToPack, Point3DBasics secondClosestPointToPack,
+                                                          Vector3DBasics firstNormalToPack, Vector3DBasics secondNormalToPack)
+   {
+      double cylinderHalfHeight = 0.5 * cylinderHeight;
+      double cylinderAxisMagnitude = cylinderAxis.length();
+
+      double dx = spherePosition.getX() - cylinderPosition.getX();
+      double dy = spherePosition.getY() - cylinderPosition.getY();
+      double dz = spherePosition.getZ() - cylinderPosition.getZ();
+
+      double crossX = cylinderAxis.getY() * dz - cylinderAxis.getZ() * dy;
+      double crossY = cylinderAxis.getZ() * dx - cylinderAxis.getX() * dz;
+      double crossZ = cylinderAxis.getX() * dy - cylinderAxis.getY() * dx;
+      double distanceSquaredFromCylinderAxis = normSquared(crossX, crossY, crossZ) / cylinderAxisMagnitude;
+      double positionOnCylinderAxis = (dx * cylinderAxis.getX() + dy * cylinderAxis.getY() + dz * cylinderAxis.getZ()) / cylinderAxisMagnitude;
+
+      if (distanceSquaredFromCylinderAxis <= cylinderRadius * cylinderRadius)
+      { // The sphere's center is contained by the cylinder with infinite height.
+         if (positionOnCylinderAxis < -cylinderHalfHeight)
+         { // The sphere's center is below the cylinder
+            if (firstClosestPointToPack != null)
+               firstClosestPointToPack.scaleAdd(sphereRadius, cylinderAxis, spherePosition);
+            if (secondClosestPointToPack != null)
+               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfHeight, cylinderAxis, spherePosition);
+            if (firstNormalToPack != null)
+               firstNormalToPack.set(cylinderAxis);
+            if (secondNormalToPack != null)
+               secondNormalToPack.setAndNegate(cylinderAxis);
+            return -positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+         }
+
+         if (positionOnCylinderAxis > cylinderHalfHeight)
+         { // The sphere's center is above the cylinder
+            if (firstClosestPointToPack != null)
+               firstClosestPointToPack.scaleAdd(-sphereRadius, cylinderAxis, spherePosition);
+            if (secondClosestPointToPack != null)
+               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfHeight, cylinderAxis, spherePosition);
+            if (firstNormalToPack != null)
+               firstNormalToPack.setAndNegate(cylinderAxis);
+            if (secondNormalToPack != null)
+               secondNormalToPack.set(cylinderAxis);
+            return positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+         }
+
+         // The sphere's center is inside the cylinder
+         double distanceFromCylinderAxis = Math.sqrt(distanceSquaredFromCylinderAxis);
+         double dh = cylinderHalfHeight - Math.abs(positionOnCylinderAxis);
+         double dr = cylinderRadius - distanceFromCylinderAxis;
+
+         if (dh < dr)
+         { // Closer to either top or bottom face of the cylinder
+            if (positionOnCylinderAxis < 0.0)
+            { // Closer to the bottom face
+               if (firstClosestPointToPack != null)
+                  firstClosestPointToPack.scaleAdd(sphereRadius, cylinderAxis, spherePosition);
+               if (secondClosestPointToPack != null)
+                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfHeight, cylinderAxis, spherePosition);
+               if (firstNormalToPack != null)
+                  firstNormalToPack.set(cylinderAxis);
+               if (secondNormalToPack != null)
+                  secondNormalToPack.setAndNegate(cylinderAxis);
+               return -positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+            }
+            else
+            { // Closer to the top face
+               if (firstClosestPointToPack != null)
+                  firstClosestPointToPack.scaleAdd(-sphereRadius, cylinderAxis, spherePosition);
+               if (secondClosestPointToPack != null)
+                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfHeight, cylinderAxis, spherePosition);
+               if (firstNormalToPack != null)
+                  firstNormalToPack.setAndNegate(cylinderAxis);
+               if (secondNormalToPack != null)
+                  secondNormalToPack.set(cylinderAxis);
+               return positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+            }
+         }
+         else
+         { // Closer to the cylinder's side
+            double sphereProjectionOnCylinderAxisX = positionOnCylinderAxis * cylinderAxis.getX() + cylinderPosition.getX();
+            double sphereProjectionOnCylinderAxisY = positionOnCylinderAxis * cylinderAxis.getY() + cylinderPosition.getY();
+            double sphereProjectionOnCylinderAxisZ = positionOnCylinderAxis * cylinderAxis.getZ() + cylinderPosition.getZ();
+            double normalToSphereX = (spherePosition.getX() - sphereProjectionOnCylinderAxisX) / distanceFromCylinderAxis;
+            double normalToSphereY = (spherePosition.getY() - sphereProjectionOnCylinderAxisY) / distanceFromCylinderAxis;
+            double normalToSphereZ = (spherePosition.getZ() - sphereProjectionOnCylinderAxisZ) / distanceFromCylinderAxis;
+
+            if (firstClosestPointToPack != null)
+            {
+               firstClosestPointToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
+               firstClosestPointToPack.scaleAdd(sphereRadius, firstClosestPointToPack, spherePosition);
+            }
+
+            if (secondClosestPointToPack != null)
+            {
+               secondClosestPointToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
+               secondClosestPointToPack.scale(cylinderRadius);
+               secondClosestPointToPack.add(sphereProjectionOnCylinderAxisX, sphereProjectionOnCylinderAxisY, sphereProjectionOnCylinderAxisZ);
+            }
+
+            if (firstNormalToPack != null)
+               firstNormalToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
+
+            if (secondNormalToPack != null)
+               secondNormalToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
+
+            return distanceFromCylinderAxis - sphereRadius;
+         }
+      }
+      else
+      { // The sphere's center is outside the cylinder's side, maybe touching or not.
+         double distanceFromCylinderAxis = Math.sqrt(distanceSquaredFromCylinderAxis);
+
+         double positionOnCylinderAxisClamped = positionOnCylinderAxis;
+         if (positionOnCylinderAxisClamped < -cylinderHalfHeight)
+            positionOnCylinderAxisClamped = -cylinderHalfHeight;
+         else if (positionOnCylinderAxisClamped > cylinderHalfHeight)
+            positionOnCylinderAxisClamped = cylinderHalfHeight;
+
+         if (positionOnCylinderAxisClamped != positionOnCylinderAxis)
+         { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
+            double sphereProjectionOnCylinderAxisX = positionOnCylinderAxis * cylinderAxis.getX() + cylinderPosition.getX();
+            double sphereProjectionOnCylinderAxisY = positionOnCylinderAxis * cylinderAxis.getY() + cylinderPosition.getY();
+            double sphereProjectionOnCylinderAxisZ = positionOnCylinderAxis * cylinderAxis.getZ() + cylinderPosition.getZ();
+
+            double sphereProjectionOnCylinderAxisClampedX = positionOnCylinderAxisClamped * cylinderAxis.getX() + cylinderPosition.getX();
+            double sphereProjectionOnCylinderAxisClampedY = positionOnCylinderAxisClamped * cylinderAxis.getY() + cylinderPosition.getY();
+            double sphereProjectionOnCylinderAxisClampedZ = positionOnCylinderAxisClamped * cylinderAxis.getZ() + cylinderPosition.getZ();
+
+            dx = spherePosition.getX() - sphereProjectionOnCylinderAxisClampedX;
+            dy = spherePosition.getY() - sphereProjectionOnCylinderAxisClampedY;
+            dz = spherePosition.getZ() - sphereProjectionOnCylinderAxisClampedZ;
+            double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+
+            double normalToSphereX = (spherePosition.getX() - sphereProjectionOnCylinderAxisClampedX) / distance;
+            double normalToSphereY = (spherePosition.getY() - sphereProjectionOnCylinderAxisClampedY) / distance;
+            double normalToSphereZ = (spherePosition.getZ() - sphereProjectionOnCylinderAxisClampedZ) / distance;
+
+            if (firstClosestPointToPack != null)
+            {
+               firstClosestPointToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
+               firstClosestPointToPack.scaleAdd(sphereRadius, firstClosestPointToPack, spherePosition);
+            }
+
+            if (secondClosestPointToPack != null)
+            {
+               secondClosestPointToPack.set(sphereProjectionOnCylinderAxisX, sphereProjectionOnCylinderAxisY, sphereProjectionOnCylinderAxisZ);
+               secondClosestPointToPack.sub(spherePosition);
+               secondClosestPointToPack.scale(cylinderRadius / distanceFromCylinderAxis);
+               secondClosestPointToPack.add(sphereProjectionOnCylinderAxisClampedX, sphereProjectionOnCylinderAxisClampedY,
+                                            sphereProjectionOnCylinderAxisClampedZ);
+            }
+
+            if (firstNormalToPack != null)
+               firstNormalToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
+
+            if (secondNormalToPack != null)
+               secondNormalToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
+
+            return distance - sphereRadius;
+         }
+         else
+         { // Closest point is on the cylinder's side.
+            double sphereProjectionOnCylinderAxisX = positionOnCylinderAxis * cylinderAxis.getX() + cylinderPosition.getX();
+            double sphereProjectionOnCylinderAxisY = positionOnCylinderAxis * cylinderAxis.getY() + cylinderPosition.getY();
+            double sphereProjectionOnCylinderAxisZ = positionOnCylinderAxis * cylinderAxis.getZ() + cylinderPosition.getZ();
+
+            double normalToSphereX = (spherePosition.getX() - sphereProjectionOnCylinderAxisX) / distanceFromCylinderAxis;
+            double normalToSphereY = (spherePosition.getY() - sphereProjectionOnCylinderAxisY) / distanceFromCylinderAxis;
+            double normalToSphereZ = (spherePosition.getZ() - sphereProjectionOnCylinderAxisZ) / distanceFromCylinderAxis;
+
+            if (firstClosestPointToPack != null)
+            {
+               firstClosestPointToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
+               firstClosestPointToPack.scaleAdd(sphereRadius, firstClosestPointToPack, spherePosition);
+            }
+
+            if (secondClosestPointToPack != null)
+            {
+               secondClosestPointToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
+               secondClosestPointToPack.scale(cylinderRadius);
+               secondClosestPointToPack.add(sphereProjectionOnCylinderAxisX, sphereProjectionOnCylinderAxisY, sphereProjectionOnCylinderAxisZ);
+            }
+
+            if (firstNormalToPack != null)
+               firstNormalToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
+
+            if (secondNormalToPack != null)
+               secondNormalToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
+
+            return distanceFromCylinderAxis - sphereRadius;
+         }
+      }
+   }
+
    public static boolean isPoint3DInsideTorus3D(double torus3DRadius, double torus3DTubeRadius, Point3DReadOnly query, double epsilon)
    {
       double x = query.getX();
