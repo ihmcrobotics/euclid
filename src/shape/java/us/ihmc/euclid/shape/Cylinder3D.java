@@ -9,6 +9,7 @@ import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Cylinder3D} represents a cylinder defined by its radius and height.
@@ -32,6 +33,27 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * at {@code - 0.5 * height}.
     */
    private double height;
+
+   private final Vector3DReadOnly axis = new Vector3DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return pose.getM02();
+      }
+
+      @Override
+      public double getY()
+      {
+         return pose.getM12();
+      }
+
+      @Override
+      public double getZ()
+      {
+         return pose.getM22();
+      }
+   };
 
    /**
     * Creates a new cylinder with height of {@code 1} and radius of {@code 0.5}.
@@ -164,6 +186,12 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public double getHeight()
    {
       return height;
+   }
+
+   @Override
+   public Vector3DReadOnly getAxis()
+   {
+      return axis;
    }
 
    @Override

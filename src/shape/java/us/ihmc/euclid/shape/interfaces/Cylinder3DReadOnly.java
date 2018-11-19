@@ -25,6 +25,8 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     */
    double getHeight();
 
+   Vector3DReadOnly getAxis();
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
@@ -39,7 +41,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = EuclidShapeTools.doPoint3DCylinder3DCollisionTest(getRadius(), getHeight(), queryInLocal, closestPointOnSurfaceToPack,
-                                                                        normalAtClosestPointToPack) <= 0.0;
+                                                                           normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
@@ -195,18 +197,6 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
          return false;
 
-      // Here, we check that the axis the cylinder is aligned on (the Z axis, since the cylinder
-      // inherently lies on the XY plane) is the same axis that the other cylinder is aligned on using
-      // EuclidGeometryTools#areVector3DsParallel(). We could do this by transforming two (0, 0, 1)
-      // vectors by each shapePose, but for each:
-      // / r00 r01 r02 \   / 0 \   / r02 \ 
-      // | r10 r11 r12 | * | 0 | = | r12 |
-      // \ r20 r21 r22 /   \ 1 /   \ r22 /
-      // So rather than perform this transform, just check that the
-      // last column of the rotation matrix of each cylinder (M02, M12, and M22 in shapePose) are aligned
-      // vectors.
-      return EuclidGeometryTools.areVector3DsParallel(getOrientation().getM02(), getOrientation().getM12(), getOrientation().getM22(),
-                                                      other.getOrientation().getM02(), other.getOrientation().getM12(), other.getOrientation().getM22(),
-                                                      epsilon);
+      return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
    }
 }

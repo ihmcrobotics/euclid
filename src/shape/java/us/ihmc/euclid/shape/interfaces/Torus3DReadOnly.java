@@ -6,6 +6,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface Torus3DReadOnly extends Shape3DReadOnly
 {
@@ -23,6 +24,8 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
     */
    double getTubeRadius();
 
+   Vector3DReadOnly getAxis();
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
@@ -36,7 +39,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
       boolean isInside = EuclidShapeTools.doPoint3DTorus3DCollisionTest(getRadius(), getTubeRadius(), queryInLocal, closestPointOnSurfaceToPack,
-                                                                     normalAtClosestPointToPack) <= 0.0;
+                                                                        normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
@@ -131,9 +134,6 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       if (!getPosition().geometricallyEquals(getPosition(), epsilon))
          return false;
 
-      // The approach used here is the same as in Cylinder3DReadOnly.
-      return EuclidGeometryTools.areVector3DsParallel(getOrientation().getM02(), getOrientation().getM12(), getOrientation().getM22(),
-                                                      other.getOrientation().getM02(), other.getOrientation().getM12(), other.getOrientation().getM22(),
-                                                      epsilon);
+      return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
    }
 }
