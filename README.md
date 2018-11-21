@@ -1,6 +1,8 @@
 # ![Euclid](logo/Euclid.png)
 [ ![euclid](https://api.bintray.com/packages/ihmcrobotics/maven-release/euclid/images/download.svg) ](https://bintray.com/ihmcrobotics/maven-release/euclid/_latestVersion)
 
+# !!! Euclid got restructured to include the content of Euclid Core from 0.11.0. !!!
+
 ## Minutiae
 
 ### Tested Platforms
