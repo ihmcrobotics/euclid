@@ -38,6 +38,12 @@ shapeDependencies {
     compile ihmc.sourceSetProject("geometry")
 }
 
+graphvizDependencies {
+   compile ihmc.sourceSetProject("frame")
+
+   compile group: "guru.nidi", name: "graphviz-java", version: "0.5.4"
+}
+
 testDependencies {
     compile ihmc.sourceSetProject("geometry")
     compile ihmc.sourceSetProject("frame")
