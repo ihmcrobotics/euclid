@@ -1,4 +1,4 @@
-# Euclid
+# ![Euclid](logo/Euclid.png)
 [ ![euclid](https://api.bintray.com/packages/ihmcrobotics/maven-release/euclid/images/download.svg) ](https://bintray.com/ihmcrobotics/maven-release/euclid/_latestVersion)
 
 ## Minutiae
