@@ -2,6 +2,7 @@ package us.ihmc.euclid.tools;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -433,7 +434,7 @@ public abstract class EuclidCoreIOTools
     * Gets a representative {@code String} of {@code yawPitchRoll} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     *
     * @param yawPitchRoll the object to get the {@code String} of. Not modified.
@@ -450,7 +451,7 @@ public abstract class EuclidCoreIOTools
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     * </p>
     *
@@ -467,10 +468,51 @@ public abstract class EuclidCoreIOTools
    }
 
    /**
+    * Gets a representative {@code String} of {@code orientation} using a yaw-pitch-roll representation
+    * as follows:
+    *
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
+    * </pre>
+    *
+    * @param orientation the orientation to get the {@code String} of using a yaw-pitch-roll
+    *           representation. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getStringAsYawPitchRoll(Orientation3DReadOnly orientation)
+   {
+      return getStringAsYawPitchRoll(DEFAULT_FORMAT, orientation);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation} using a yaw-pitch-roll representation
+    * and given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param orientation the orientation to get the {@code String} of using a yaw-pitch-roll
+    *           representation. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getStringAsYawPitchRoll(String format, Orientation3DReadOnly orientation)
+   {
+      if (orientation == null)
+         return "null";
+      else
+         return getYawPitchRollString(format, orientation.getYaw(), orientation.getPitch(), orientation.getRoll());
+   }
+
+   /**
     * Gets a representative {@code String} of {@code yawPitchRoll} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     *
     * @param yaw the first angle representing the rotation around the z-axis.
@@ -489,7 +531,7 @@ public abstract class EuclidCoreIOTools
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     * </p>
     *
