@@ -2714,12 +2714,12 @@ public abstract class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString)
+   public static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString)
    {
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, null);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString, String differenceAsString)
+   public static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString, String differenceAsString)
    {
       String errorMessage = addPrefixToMessage(messagePrefix, "expected:\n" + expectedAsString + "\n but was:\n" + actualAsString);
       if (differenceAsString != null)
@@ -2728,7 +2728,7 @@ public abstract class EuclidCoreTestTools
       throw new AssertionError(errorMessage);
    }
 
-   private static String addPrefixToMessage(String prefix, String message)
+   public static String addPrefixToMessage(String prefix, String message)
    {
       if (prefix != null && !prefix.isEmpty())
          return prefix + " " + message;

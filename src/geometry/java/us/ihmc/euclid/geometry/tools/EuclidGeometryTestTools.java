@@ -15,6 +15,7 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**
  * This class provides the tools to perform a variety of assertions on geometry types.
@@ -1594,105 +1595,83 @@ public class EuclidGeometryTestTools
    {
       String expectedAsString = getLine2DString(format, expected);
       String actualAsString = getLine2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Line3DReadOnly expected, Line3DReadOnly actual, String format)
    {
       String expectedAsString = getLine3DString(format, expected);
       String actualAsString = getLine3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, LineSegment1D expected, LineSegment1D actual, String format)
    {
       String expectedAsString = getLineSegment1DString(format, expected);
       String actualAsString = getLineSegment1DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, LineSegment2DReadOnly expected, LineSegment2DReadOnly actual, String format)
    {
       String expectedAsString = getLineSegment2DString(format, expected);
       String actualAsString = getLineSegment2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, LineSegment3DReadOnly expected, LineSegment3DReadOnly actual, String format)
    {
       String expectedAsString = getLineSegment3DString(format, expected);
       String actualAsString = getLineSegment3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, BoundingBox2DReadOnly expected, BoundingBox2DReadOnly actual, String format)
    {
       String expectedAsString = getBoundingBox2DString(format, expected);
       String actualAsString = getBoundingBox2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, String format)
    {
       String expectedAsString = getBoundingBox3DString(format, expected);
       String actualAsString = getBoundingBox3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, String format)
    {
       String expectedAsString = getOrientation2DString(format, expected);
       String actualAsString = getOrientation2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Plane3D expected, Plane3D actual, String format)
    {
       String expectedAsString = getPlane3DString(format, expected);
       String actualAsString = getPlane3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Pose2DReadOnly expected, Pose2DReadOnly actual, String format)
    {
       String expectedAsString = getPose2DString(format, expected);
       String actualAsString = getPose2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Pose3DReadOnly expected, Pose3DReadOnly actual, String format)
    {
       String expectedAsString = getPose3DString(format, expected);
       String actualAsString = getPose3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, ConvexPolygon2DReadOnly expected, ConvexPolygon2DReadOnly actual, String format)
    {
       String expectedAsString = getConvexPolygon2DString(format, expected);
       String actualAsString = getConvexPolygon2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString)
-   {
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, null);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString, String differenceAsString)
-   {
-      String errorMessage = addPrefixToMessage(messagePrefix, "expected:\n" + expectedAsString + "\n but was:\n" + actualAsString);
-      if (differenceAsString != null)
-         errorMessage += "\nDifference of: " + differenceAsString;
-
-      throw new AssertionError(errorMessage);
-   }
-
-   private static String addPrefixToMessage(String prefix, String message)
-   {
-      if (prefix != null && !prefix.isEmpty())
-         return prefix + " " + message;
-      else
-         return message;
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 }
