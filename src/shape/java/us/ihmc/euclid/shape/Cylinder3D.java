@@ -172,7 +172,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    @Override
    public Vector3DReadOnly getAxis()
    {
-      return pose.getLocalVectorZ();
+      return pose.getZAxis();
    }
 
    @Override

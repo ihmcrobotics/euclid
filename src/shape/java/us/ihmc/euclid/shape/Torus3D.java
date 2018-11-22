@@ -164,7 +164,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    @Override
    public Vector3DReadOnly getAxis()
    {
-      return pose.getLocalVectorZ();
+      return pose.getZAxis();
    }
 
    @Override

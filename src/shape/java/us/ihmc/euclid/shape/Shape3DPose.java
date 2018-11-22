@@ -14,7 +14,7 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
 {
    private final RotationMatrix shapeOrientation = new RotationMatrix();
    private final Point3D shapePosition = new Point3D();
-   private final Vector3DReadOnly localVectorX = new Vector3DReadOnly()
+   private final Vector3DReadOnly xAxis = new Vector3DReadOnly()
    {
       @Override
       public double getX()
@@ -35,7 +35,7 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
       }
    };
 
-   private final Vector3DReadOnly localVectorY = new Vector3DReadOnly()
+   private final Vector3DReadOnly yAxis = new Vector3DReadOnly()
    {
       @Override
       public double getX()
@@ -56,7 +56,7 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
       }
    };
 
-   private final Vector3DReadOnly localVectorZ = new Vector3DReadOnly()
+   private final Vector3DReadOnly zAxis = new Vector3DReadOnly()
    {
       @Override
       public double getX()
@@ -125,19 +125,19 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
       return shapePosition;
    }
 
-   public Vector3DReadOnly getLocalVectorX()
+   public Vector3DReadOnly getXAxis()
    {
-      return localVectorX;
+      return xAxis;
    }
 
-   public Vector3DReadOnly getLocalVectorY()
+   public Vector3DReadOnly getYAxis()
    {
-      return localVectorY;
+      return yAxis;
    }
 
-   public Vector3DReadOnly getLocalVectorZ()
+   public Vector3DReadOnly getZAxis()
    {
-      return localVectorZ;
+      return zAxis;
    }
 
    @Override

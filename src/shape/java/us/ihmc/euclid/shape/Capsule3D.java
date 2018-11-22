@@ -74,7 +74,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    public Vector3DReadOnly getAxis()
    {
-      return pose.getLocalVectorZ();
+      return pose.getZAxis();
    }
 
    @Override
