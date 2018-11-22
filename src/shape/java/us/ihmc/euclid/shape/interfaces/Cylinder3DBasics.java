@@ -6,20 +6,20 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
 {
    /**
-    * Sets the radius of this cylinder.
-    *
-    * @param radius the new radius for this cylinder.
-    * @throws IllegalArgumentException if {@code radius} is negative.
-    */
-   void setRadius(double radius);
-
-   /**
     * Sets the height of this cylinder.
     *
     * @param height the cylinder length along the z-axis.
     * @throws IllegalArgumentException if {@code height} is negative.
     */
    void setHeight(double height);
+
+   /**
+    * Sets the radius of this cylinder.
+    *
+    * @param radius the new radius for this cylinder.
+    * @throws IllegalArgumentException if {@code radius} is negative.
+    */
+   void setRadius(double radius);
 
    default void setSize(double height, double radius)
    {

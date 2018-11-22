@@ -128,6 +128,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * @param radius the new radius for this cylinder.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
+   @Override
    public void setRadius(double radius)
    {
       if (radius < 0.0)
@@ -141,6 +142,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * @param height the cylinder length along the z-axis.
     * @throws IllegalArgumentException if {@code height} is negative.
     */
+   @Override
    public void setHeight(double height)
    {
       if (height < 0.0)
@@ -203,7 +205,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    @Override
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
-      this.supplier = newSupplier;
+      supplier = newSupplier;
    }
 
    /**
