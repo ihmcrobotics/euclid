@@ -1,6 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
+import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1691,17 +1691,46 @@ public class EuclidGeometryTools
    public static double distanceSquaredFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, Point3DReadOnly lineSegmentStart,
                                                                   Point3DReadOnly lineSegmentEnd)
    {
-      double percentage = percentageAlongLineSegment3D(pointX, pointY, pointZ, lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentStart.getZ(),
+      return distanceSquaredFromPoint3DToLineSegment3D(pointX, pointY, pointZ, lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentStart.getZ(),
                                                        lineSegmentEnd.getX(), lineSegmentEnd.getY(), lineSegmentEnd.getZ());
+   }
+
+   /**
+    * Returns the square of the minimum distance between a point and a given line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of point to be tested.
+    * @param pointY y-coordinate of point to be tested.
+    * @param pointZ z-coordinate of point to be tested.
+    * @param lineSegmentStartX the x-coordinate of the line segment first endpoint.
+    * @param lineSegmentStartY the y-coordinate of the line segment first endpoint.
+    * @param lineSegmentStartZ the z-coordinate of the line segment first endpoint.
+    * @param lineSegmentEndX the x-coordinate of the line segment second endpoint.
+    * @param lineSegmentEndY the y-coordinate of the line segment second endpoint.
+    * @param lineSegmentEndZ the z-coordinate of the line segment second endpoint.
+    * @return the square of the minimum distance between the 3D point and the 3D line segment.
+    */
+   public static double distanceSquaredFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, double lineSegmentStartX,
+                                                                  double lineSegmentStartY, double lineSegmentStartZ, double lineSegmentEndX,
+                                                                  double lineSegmentEndY, double lineSegmentEndZ)
+   {
+      double percentage = percentageAlongLineSegment3D(pointX, pointY, pointZ, lineSegmentStartX, lineSegmentStartY, lineSegmentStartZ, lineSegmentEndX,
+                                                       lineSegmentEndY, lineSegmentEndZ);
 
       if (percentage > 1.0)
          percentage = 1.0;
       else if (percentage < 0.0)
          percentage = 0.0;
 
-      double projectionX = (1.0 - percentage) * lineSegmentStart.getX() + percentage * lineSegmentEnd.getX();
-      double projectionY = (1.0 - percentage) * lineSegmentStart.getY() + percentage * lineSegmentEnd.getY();
-      double projectionZ = (1.0 - percentage) * lineSegmentStart.getZ() + percentage * lineSegmentEnd.getZ();
+      double projectionX = (1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX;
+      double projectionY = (1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY;
+      double projectionZ = (1.0 - percentage) * lineSegmentStartZ + percentage * lineSegmentEndZ;
 
       double dx = projectionX - pointX;
       double dy = projectionY - pointY;
@@ -4598,8 +4627,8 @@ public class EuclidGeometryTools
     * <ul>
     * <li>When the length of either the plane normal is below {@link #ONE_TRILLIONTH}, this methods
     * fails and returns {@code false}.
-    * <li>When the angle between the two planes is below {@link #ONE_MILLIONTH}, this methods
-    * fails and returns {@code false}.
+    * <li>When the angle between the two planes is below {@link #ONE_MILLIONTH}, this methods fails and
+    * returns {@code false}.
     * <li>When there is no intersection, this method returns {@code false} and
     * {@code pointOnIntersectionToPack} and {@code intersectionDirectionToPack} are set to
     * {@link Double#NaN}.
@@ -5826,6 +5855,100 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    */
+   public static double percentageAlongLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return percentageAlongLine2D(point.getX(), point.getY(), pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    */
+   public static double percentageAlongLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
+   {
+      return percentageAlongLine2D(pointX, pointY, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointOnLineX x-coordinate of a point located on the line.
+    * @param pointOnLineY y-coordinate of a point located on the line.
+    * @param lineDirectionX x-component of the direction of the line.
+    * @param lineDirectionY y-component of the direction of the line.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    */
+   public static double percentageAlongLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
+                                              double lineDirectionY)
+   {
+      double lengthSquared = normSquared(lineDirectionX, lineDirectionY);
+
+      if (lengthSquared < ONE_TRILLIONTH)
+         return 0.0;
+
+      double dx = pointX - pointOnLineX;
+      double dy = pointY - pointOnLineY;
+
+      double dot = dx * lineDirectionX + dy * lineDirectionY;
+
+      return dot / lengthSquared;
+   }
+
+   /**
     * Computes a percentage along the line segment representing the location of the given point once
     * projected onto the line segment. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0}
     * representing {@code lineSegmentStart}, and {@code 1.0} representing {@code lineSegmentEnd}.
@@ -5870,9 +5993,7 @@ public class EuclidGeometryTools
 
       double dot = dx * lineSegmentDx + dy * lineSegmentDy;
 
-      double alpha = dot / lengthSquared;
-
-      return alpha;
+      return dot / lengthSquared;
    }
 
    /**
@@ -5941,6 +6062,106 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    */
+   public static double percentageAlongLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
+   {
+      return percentageAlongLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
+                                   lineDirection.getY(), lineDirection.getZ());
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    */
+   public static double percentageAlongLine3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
+   {
+      return percentageAlongLine3D(pointX, pointY, pointZ, pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
+                                   lineDirection.getY(), lineDirection.getZ());
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value #ONE_TRILLIONTH}, this method fails and returns
+    * {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnLineX x-coordinate of a point located on the line.
+    * @param pointOnLineY y-coordinate of a point located on the line.
+    * @param pointOnLineZ z-coordinate of a point located on the line.
+    * @param lineDirectionX x-component of the direction of the line.
+    * @param lineDirectionY y-component of the direction of the line.
+    * @param lineDirectionZ z-component of the direction of the line.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    */
+   public static double percentageAlongLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
+                                              double lineDirectionX, double lineDirectionY, double lineDirectionZ)
+   {
+      double lengthSquared = normSquared(lineDirectionX, lineDirectionY, lineDirectionZ);
+
+      if (lengthSquared < ONE_TRILLIONTH)
+         return 0.0;
+
+      double dx = pointX - pointOnLineX;
+      double dy = pointY - pointOnLineY;
+      double dz = pointZ - pointOnLineZ;
+
+      double dot = dx * lineDirectionX + dy * lineDirectionY + dz * lineDirectionZ;
+
+      return dot / lengthSquared;
+   }
+
+   /**
     * Computes a percentage along the line segment representing the location of the given point once
     * projected onto the line segment. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0}
     * representing {@code lineSegmentStart}, and {@code 1.0} representing {@code lineSegmentEnd}.
@@ -5990,9 +6211,7 @@ public class EuclidGeometryTools
 
       double dot = dx * lineSegmentDx + dy * lineSegmentDy + dz * lineSegmentDz;
 
-      double alpha = dot / lengthSquared;
-
-      return alpha;
+      return dot / lengthSquared;
    }
 
    /**
@@ -6242,8 +6461,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>when the distance between the two points defining the line is below
-    * {@value #ONE_TRILLIONTH}, the method fails and returns {@code null}.
+    * <li>when the distance between the two points defining the line is below {@value #ONE_TRILLIONTH},
+    * the method fails and returns {@code null}.
     * </ul>
     * </p>
     * <p>
@@ -6280,8 +6499,8 @@ public class EuclidGeometryTools
     * <p>
     * Edge cases:
     * <ul>
-    * <li>when the distance between the two points defining the line is below
-    * {@value #ONE_TRILLIONTH}, the method fails and returns {@code false}.
+    * <li>when the distance between the two points defining the line is below {@value #ONE_TRILLIONTH},
+    * the method fails and returns {@code false}.
     * </ul>
     * </p>
     *

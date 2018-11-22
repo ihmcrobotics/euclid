@@ -7969,6 +7969,79 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testPercentageAlongLine2D() throws Exception
+   {
+      Random random = new Random(43);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with point on line
+         Point2D pointOnLine = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         Vector2D lineDirection = EuclidCoreRandomTools.nextVector2D(random, -10.0, 10.0);
+
+         Point2D pointAlreadyOnLine = new Point2D();
+
+         double expectedPercentage, actualPercentage;
+         // Trivial tests:
+         expectedPercentage = 0.0;
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointOnLine.getX(), pointOnLine.getY(), pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getX(), pointOnLine.getY(),
+                                                                      lineDirection.getX(), lineDirection.getY());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         expectedPercentage = 1.0;
+         pointAlreadyOnLine.add(pointOnLine, lineDirection);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointOnLine.getX(),
+                                                                      pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Random queries:
+         expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         pointAlreadyOnLine.scaleAdd(expectedPercentage, lineDirection, pointOnLine);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointOnLine.getX(),
+                                                                      pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with point off the line
+         Point2D pointOnLine = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         Vector2D lineDirection = EuclidCoreRandomTools.nextVector2D(random, -10.0, 10.0);
+
+         Vector2D orthogonalToLine = EuclidGeometryTools.perpendicularVector2D(lineDirection);
+         if (random.nextBoolean())
+            orthogonalToLine.negate();
+         orthogonalToLine.scale(EuclidCoreRandomTools.nextDouble(random, 10.0) / orthogonalToLine.length());
+
+         Point2D pointAlreadyOnLine = new Point2D();
+
+         double expectedPercentage, actualPercentage;
+
+         expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         pointAlreadyOnLine.scaleAdd(expectedPercentage, lineDirection, pointOnLine);
+         pointAlreadyOnLine.add(orthogonalToLine);
+
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine2D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointOnLine.getX(),
+                                                                      pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+      }
+   }
+
+   @Test
    public void testPercentageAlongLineSegment2D() throws Exception
    {
       Random random = new Random(23424L);
@@ -8047,6 +8120,84 @@ public class EuclidGeometryToolsTest
 
          double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
          assertTrue(expectedPercentage == actualPercentage);
+      }
+   }
+
+   @Test
+   public void testPercentageAlongLine3D() throws Exception
+   {
+      Random random = new Random(43);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with point on line
+         Point3D pointOnLine = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D lineDirection = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
+
+         Point3D pointAlreadyOnLine = new Point3D();
+
+         double expectedPercentage, actualPercentage;
+         // Trivial tests:
+         expectedPercentage = 0.0;
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), pointOnLine.getX(),
+                                                                      pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(), lineDirection.getY(),
+                                                                      lineDirection.getZ());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         expectedPercentage = 1.0;
+         pointAlreadyOnLine.add(pointOnLine, lineDirection);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointAlreadyOnLine.getZ(),
+                                                                      pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointAlreadyOnLine.getZ(),
+                                                                      pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
+                                                                      lineDirection.getY(), lineDirection.getZ());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+
+         // Random queries:
+         expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         pointAlreadyOnLine.scaleAdd(expectedPercentage, lineDirection, pointOnLine);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointAlreadyOnLine.getZ(),
+                                                                      pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointAlreadyOnLine.getZ(),
+                                                                      pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
+                                                                      lineDirection.getY(), lineDirection.getZ());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with point off the line
+         Point3D pointOnLine = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D lineDirection = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
+
+         Vector3D orthogonalToLine = EuclidCoreRandomTools.nextOrthogonalVector3D(random, lineDirection, true);
+         orthogonalToLine.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         Point3D pointAlreadyOnLine = new Point3D();
+
+         double expectedPercentage, actualPercentage;
+
+         expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         pointAlreadyOnLine.scaleAdd(expectedPercentage, lineDirection, pointOnLine);
+         pointAlreadyOnLine.add(orthogonalToLine);
+
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine, pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointAlreadyOnLine.getZ(),
+                                                                      pointOnLine, lineDirection);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
+         actualPercentage = EuclidGeometryTools.percentageAlongLine3D(pointAlreadyOnLine.getX(), pointAlreadyOnLine.getY(), pointAlreadyOnLine.getZ(),
+                                                                      pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
+                                                                      lineDirection.getY(), lineDirection.getZ());
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
       }
    }
 
