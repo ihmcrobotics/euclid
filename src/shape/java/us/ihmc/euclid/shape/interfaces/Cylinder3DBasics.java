@@ -6,12 +6,12 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
 {
    /**
-    * Sets the height of this cylinder.
+    * Sets the length of this cylinder.
     *
-    * @param height the cylinder length along the z-axis.
-    * @throws IllegalArgumentException if {@code height} is negative.
+    * @param length the cylinder length along the z-axis.
+    * @throws IllegalArgumentException if {@code length} is negative.
     */
-   void setHeight(double height);
+   void setLength(double length);
 
    /**
     * Sets the radius of this cylinder.
@@ -21,9 +21,9 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
     */
    void setRadius(double radius);
 
-   default void setSize(double height, double radius)
+   default void setSize(double length, double radius)
    {
-      setHeight(height);
+      setLength(length);
       setRadius(radius);
    }
 
@@ -57,19 +57,19 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    default void set(Cylinder3DReadOnly other)
    {
       setPose(other);
-      setHeight(other.getHeight());
+      setLength(other.getLength());
       setRadius(other.getRadius());
    }
 
-   default void set(RigidBodyTransformReadOnly pose, double height, double radius)
+   default void set(RigidBodyTransformReadOnly pose, double length, double radius)
    {
       setPose(pose);
-      setSize(height, radius);
+      setSize(length, radius);
    }
 
-   default void set(Pose3DReadOnly pose, double height, double radius)
+   default void set(Pose3DReadOnly pose, double length, double radius)
    {
       setPose(pose);
-      setSize(height, radius);
+      setSize(length, radius);
    }
 }

@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * {@code Cylinder3D} represents a cylinder defined by its radius and height.
+ * {@code Cylinder3D} represents a cylinder defined by its radius and length.
  * <p>
  * Shape description:
  * <ul>
@@ -29,10 +29,10 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    /** Radius of the cylinder part. */
    private double radius;
    /**
-    * Overall height of the cylinder, i.e. the top face is at {@code 0.5 * height} and the bottom face
-    * at {@code - 0.5 * height}.
+    * Overall length of the cylinder, i.e. the top face is at {@code 0.5 * length} and the bottom face
+    * at {@code - 0.5 * length}.
     */
-   private double height;
+   private double length;
 
    private final Vector3DReadOnly axis = new Vector3DReadOnly()
    {
@@ -56,7 +56,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    };
 
    /**
-    * Creates a new cylinder with height of {@code 1} and radius of {@code 0.5}.
+    * Creates a new cylinder with length of {@code 1} and radius of {@code 0.5}.
     */
    public Cylinder3D()
    {
@@ -74,41 +74,41 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    }
 
    /**
-    * Creates a new cylinder 3D and initializes its height and radius.
+    * Creates a new cylinder 3D and initializes its length and radius.
     *
-    * @param height the cylinder length along the z-axis.
+    * @param length the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
-    * @throws IllegalArgumentException if either {@code height} or {@code radius} is negative.
+    * @throws IllegalArgumentException if either {@code length} or {@code radius} is negative.
     */
-   public Cylinder3D(double height, double radius)
+   public Cylinder3D(double length, double radius)
    {
-      setSize(height, radius);
+      setSize(length, radius);
    }
 
    /**
-    * Creates a new cylinder 3D and initializes its pose, height, and radius.
+    * Creates a new cylinder 3D and initializes its pose, length, and radius.
     *
     * @param pose the position and orientation of this cylinder. Not modified.
-    * @param height the cylinder length along the z-axis.
+    * @param length the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
-    * @throws IllegalArgumentException if either {@code height} or {@code radius} is negative.
+    * @throws IllegalArgumentException if either {@code length} or {@code radius} is negative.
     */
-   public Cylinder3D(RigidBodyTransformReadOnly pose, double height, double radius)
+   public Cylinder3D(RigidBodyTransformReadOnly pose, double length, double radius)
    {
-      set(pose, height, radius);
+      set(pose, length, radius);
    }
 
    /**
-    * Creates a new cylinder 3D and initializes its pose, height, and radius.
+    * Creates a new cylinder 3D and initializes its pose, length, and radius.
     *
     * @param pose the position and orientation of this cylinder. Not modified.
-    * @param height the cylinder length along the z-axis.
+    * @param length the cylinder length along the z-axis.
     * @param radius the radius of the cylinder.
-    * @throws IllegalArgumentException if either {@code height} or {@code radius} is negative.
+    * @throws IllegalArgumentException if either {@code length} or {@code radius} is negative.
     */
-   public Cylinder3D(Pose3DReadOnly pose, double height, double radius)
+   public Cylinder3D(Pose3DReadOnly pose, double length, double radius)
    {
-      set(pose, height, radius);
+      set(pose, length, radius);
    }
 
    /**
@@ -137,17 +137,17 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    }
 
    /**
-    * Sets the height of this cylinder.
+    * Sets the length of this cylinder.
     *
-    * @param height the cylinder length along the z-axis.
-    * @throws IllegalArgumentException if {@code height} is negative.
+    * @param length the cylinder length along the z-axis.
+    * @throws IllegalArgumentException if {@code length} is negative.
     */
    @Override
-   public void setHeight(double height)
+   public void setLength(double length)
    {
-      if (height < 0.0)
-         throw new IllegalArgumentException("The height of a Cylinder3D cannot be negative: " + height);
-      this.height = height;
+      if (length < 0.0)
+         throw new IllegalArgumentException("The length of a Cylinder3D cannot be negative: " + length);
+      this.length = length;
    }
 
    @Override
@@ -180,14 +180,14 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    }
 
    /**
-    * Gets the height of this cylinder.
+    * Gets the length of this cylinder.
     *
-    * @return the value of the height.
+    * @return the value of the length.
     */
    @Override
-   public double getHeight()
+   public double getLength()
    {
-      return height;
+      return length;
    }
 
    @Override
@@ -227,7 +227,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     * <p>
-    * This method accounts for the multiple combinations of radius/height and rotations that generate
+    * This method accounts for the multiple combinations of radius/length and rotations that generate
     * identical cylinder. For instance, two cylinders that are identical but one is rotated around its
     * main axis are considered geometrically equal.
     * </p>
@@ -244,7 +244,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
 
    /**
     * Provides a {@code String} representation of this cylinder 3D as follows:<br>
-    * Cylinder 3D: height = h, radius = r, pose = <br>
+    * Cylinder 3D: length = h, radius = r, pose = <br>
     * m00, m01, m02 | m03 <br>
     * m10, m11, m12 | m13 <br>
     * m20, m21, m22 | m23
@@ -254,6 +254,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    @Override
    public String toString()
    {
-      return "Cylinder 3D: height = " + height + ", radius = " + radius + ", pose=\n" + pose;
+      return "Cylinder 3D: length = " + length + ", radius = " + radius + ", pose=\n" + pose;
    }
 }

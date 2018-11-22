@@ -124,31 +124,31 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean isPoint3DInsideCylinder3D(double cylinder3DRadius, double cylinder3DHeight, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideCylinder3D(double cylinder3DRadius, double cylinder3DLength, Point3DReadOnly query, double epsilon)
    {
-      double halfHeightPlusEpsilon = 0.5 * cylinder3DHeight + epsilon;
-      if (query.getZ() < -halfHeightPlusEpsilon || query.getZ() > halfHeightPlusEpsilon)
+      double halfLengthPlusEpsilon = 0.5 * cylinder3DLength + epsilon;
+      if (query.getZ() < -halfLengthPlusEpsilon || query.getZ() > halfLengthPlusEpsilon)
          return false;
 
       double radiusWithEpsilon = cylinder3DRadius + epsilon;
       return EuclidCoreTools.normSquared(query.getX(), query.getY()) <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndCylinder3D(double cylinder3DRadius, double cylinder3DHeight, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndCylinder3D(double cylinder3DRadius, double cylinder3DLength, Point3DReadOnly query)
    {
-      return doPoint3DCylinder3DCollisionTest(cylinder3DRadius, cylinder3DHeight, query, null, null);
+      return doPoint3DCylinder3DCollisionTest(cylinder3DRadius, cylinder3DLength, query, null, null);
    }
 
-   public static boolean orthogonalProjectionOntoCylinder3D(double cylinder3DRadius, double cylinder3DHeight, Point3DReadOnly pointToProject,
+   public static boolean orthogonalProjectionOntoCylinder3D(double cylinder3DRadius, double cylinder3DLength, Point3DReadOnly pointToProject,
                                                             Point3DBasics projectionToPack)
    {
-      return doPoint3DCylinder3DCollisionTest(cylinder3DRadius, cylinder3DHeight, pointToProject, projectionToPack, null) <= 0.0;
+      return doPoint3DCylinder3DCollisionTest(cylinder3DRadius, cylinder3DLength, pointToProject, projectionToPack, null) <= 0.0;
    }
 
-   public static double doPoint3DCylinder3DCollisionTest(double cylinder3DRadius, double cylinder3DHeight, Point3DReadOnly query,
+   public static double doPoint3DCylinder3DCollisionTest(double cylinder3DRadius, double cylinder3DLength, Point3DReadOnly query,
                                                          Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
    {
-      if (cylinder3DRadius <= 0.0 || cylinder3DHeight <= 0.0)
+      if (cylinder3DRadius <= 0.0 || cylinder3DLength <= 0.0)
       {
          if (closestPointOnSurfaceToPack != null)
             closestPointOnSurfaceToPack.setToNaN();
@@ -162,31 +162,31 @@ public class EuclidShapeTools
       double z = query.getZ();
 
       double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
-      double halfHeight = 0.5 * cylinder3DHeight;
+      double halfLength = 0.5 * cylinder3DLength;
 
       if (xyLengthSquared <= cylinder3DRadius * cylinder3DRadius)
       {
-         if (z < -halfHeight)
+         if (z < -halfLength)
          { // The query is directly below the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, -halfHeight);
+               closestPointOnSurfaceToPack.set(x, y, -halfLength);
             if (normalToPack != null)
                normalToPack.set(0.0, 0.0, -1.0);
-            return -(z + halfHeight);
+            return -(z + halfLength);
          }
 
-         if (z > halfHeight)
+         if (z > halfLength)
          { // The query is directly above the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, halfHeight);
+               closestPointOnSurfaceToPack.set(x, y, halfLength);
             if (normalToPack != null)
                normalToPack.set(0.0, 0.0, 1.0);
-            return z - halfHeight;
+            return z - halfLength;
          }
 
          // The query is inside the cylinder
          double xyLength = Math.sqrt(xyLengthSquared);
-         double dz = Math.min(halfHeight - z, z + halfHeight);
+         double dz = Math.min(halfLength - z, z + halfLength);
          double dr = cylinder3DRadius - xyLength;
 
          if (dz < dr)
@@ -194,18 +194,18 @@ public class EuclidShapeTools
             if (z < 0)
             { // Closer to the bottom face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, -halfHeight);
+                  closestPointOnSurfaceToPack.set(x, y, -halfLength);
                if (normalToPack != null)
                   normalToPack.set(0.0, 0.0, -1.0);
-               return -(z + halfHeight);
+               return -(z + halfLength);
             }
             else
             { // Closer to the top face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, halfHeight);
+                  closestPointOnSurfaceToPack.set(x, y, halfLength);
                if (normalToPack != null)
                   normalToPack.set(0.0, 0.0, 1.0);
-               return z - halfHeight;
+               return z - halfLength;
             }
          }
          else
@@ -234,10 +234,10 @@ public class EuclidShapeTools
          double yClosest = y * xyClosestScale;
          double zClosest = z;
 
-         if (z < -halfHeight)
-            zClosest = -halfHeight;
-         else if (z > halfHeight)
-            zClosest = halfHeight;
+         if (z < -halfLength)
+            zClosest = -halfLength;
+         else if (z > halfLength)
+            zClosest = halfLength;
 
          if (zClosest != z)
          { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
@@ -769,12 +769,12 @@ public class EuclidShapeTools
       return distance - firstSphereRadius - secondSphereRadius;
    }
 
-   public static double doSphere3DCylinder3DCollisionTest(double sphereRadius, Tuple3DReadOnly spherePosition, double cylinderRadius, double cylinderHeight,
+   public static double doSphere3DCylinder3DCollisionTest(double sphereRadius, Tuple3DReadOnly spherePosition, double cylinderRadius, double cylinderLength,
                                                           Tuple3DReadOnly cylinderPosition, Vector3DReadOnly cylinderAxis,
                                                           Point3DBasics firstClosestPointToPack, Point3DBasics secondClosestPointToPack,
                                                           Vector3DBasics firstNormalToPack, Vector3DBasics secondNormalToPack)
    {
-      double cylinderHalfHeight = 0.5 * cylinderHeight;
+      double cylinderHalfLength = 0.5 * cylinderLength;
       double cylinderAxisMagnitude = cylinderAxis.length();
 
       double dx = spherePosition.getX() - cylinderPosition.getX();
@@ -788,36 +788,36 @@ public class EuclidShapeTools
       double positionOnCylinderAxis = (dx * cylinderAxis.getX() + dy * cylinderAxis.getY() + dz * cylinderAxis.getZ()) / cylinderAxisMagnitude;
 
       if (distanceSquaredFromCylinderAxis <= cylinderRadius * cylinderRadius)
-      { // The sphere's center is contained by the cylinder with infinite height.
-         if (positionOnCylinderAxis < -cylinderHalfHeight)
+      { // The sphere's center is contained by the cylinder with infinite length.
+         if (positionOnCylinderAxis < -cylinderHalfLength)
          { // The sphere's center is below the cylinder
             if (firstClosestPointToPack != null)
                firstClosestPointToPack.scaleAdd(sphereRadius, cylinderAxis, spherePosition);
             if (secondClosestPointToPack != null)
-               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfHeight, cylinderAxis, spherePosition);
+               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfLength, cylinderAxis, spherePosition);
             if (firstNormalToPack != null)
                firstNormalToPack.set(cylinderAxis);
             if (secondNormalToPack != null)
                secondNormalToPack.setAndNegate(cylinderAxis);
-            return -positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+            return -positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
          }
 
-         if (positionOnCylinderAxis > cylinderHalfHeight)
+         if (positionOnCylinderAxis > cylinderHalfLength)
          { // The sphere's center is above the cylinder
             if (firstClosestPointToPack != null)
                firstClosestPointToPack.scaleAdd(-sphereRadius, cylinderAxis, spherePosition);
             if (secondClosestPointToPack != null)
-               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfHeight, cylinderAxis, spherePosition);
+               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfLength, cylinderAxis, spherePosition);
             if (firstNormalToPack != null)
                firstNormalToPack.setAndNegate(cylinderAxis);
             if (secondNormalToPack != null)
                secondNormalToPack.set(cylinderAxis);
-            return positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+            return positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
          }
 
          // The sphere's center is inside the cylinder
          double distanceFromCylinderAxis = Math.sqrt(distanceSquaredFromCylinderAxis);
-         double dh = cylinderHalfHeight - Math.abs(positionOnCylinderAxis);
+         double dh = cylinderHalfLength - Math.abs(positionOnCylinderAxis);
          double dr = cylinderRadius - distanceFromCylinderAxis;
 
          if (dh < dr)
@@ -827,24 +827,24 @@ public class EuclidShapeTools
                if (firstClosestPointToPack != null)
                   firstClosestPointToPack.scaleAdd(sphereRadius, cylinderAxis, spherePosition);
                if (secondClosestPointToPack != null)
-                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfHeight, cylinderAxis, spherePosition);
+                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfLength, cylinderAxis, spherePosition);
                if (firstNormalToPack != null)
                   firstNormalToPack.set(cylinderAxis);
                if (secondNormalToPack != null)
                   secondNormalToPack.setAndNegate(cylinderAxis);
-               return -positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+               return -positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
             }
             else
             { // Closer to the top face
                if (firstClosestPointToPack != null)
                   firstClosestPointToPack.scaleAdd(-sphereRadius, cylinderAxis, spherePosition);
                if (secondClosestPointToPack != null)
-                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfHeight, cylinderAxis, spherePosition);
+                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfLength, cylinderAxis, spherePosition);
                if (firstNormalToPack != null)
                   firstNormalToPack.setAndNegate(cylinderAxis);
                if (secondNormalToPack != null)
                   secondNormalToPack.set(cylinderAxis);
-               return positionOnCylinderAxis - cylinderHalfHeight - sphereRadius;
+               return positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
             }
          }
          else
@@ -883,10 +883,10 @@ public class EuclidShapeTools
          double distanceFromCylinderAxis = Math.sqrt(distanceSquaredFromCylinderAxis);
 
          double positionOnCylinderAxisClamped = positionOnCylinderAxis;
-         if (positionOnCylinderAxisClamped < -cylinderHalfHeight)
-            positionOnCylinderAxisClamped = -cylinderHalfHeight;
-         else if (positionOnCylinderAxisClamped > cylinderHalfHeight)
-            positionOnCylinderAxisClamped = cylinderHalfHeight;
+         if (positionOnCylinderAxisClamped < -cylinderHalfLength)
+            positionOnCylinderAxisClamped = -cylinderHalfLength;
+         else if (positionOnCylinderAxisClamped > cylinderHalfLength)
+            positionOnCylinderAxisClamped = cylinderHalfLength;
 
          if (positionOnCylinderAxisClamped != positionOnCylinderAxis)
          { // Closest point is on the circle adjacent to the cylinder and top or bottom face.

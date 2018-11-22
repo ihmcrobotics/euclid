@@ -74,13 +74,13 @@ public class Cylinder3DTest
          Cylinder3D cylinder3d = new Cylinder3D(transform, height, radius);
 
          assertEquals(cylinder3d.getRadius(), radius, 1e-7);
-         assertEquals(cylinder3d.getHeight(), height, 1e-7);
+         assertEquals(cylinder3d.getLength(), height, 1e-7);
 
          cylinder3d.setRadius(5.0);
-         cylinder3d.setHeight(10.0);
+         cylinder3d.setLength(10.0);
 
          assertEquals(cylinder3d.getRadius(), 5.0, 1e-7);
-         assertEquals(cylinder3d.getHeight(), 10.0, 1e-7);
+         assertEquals(cylinder3d.getLength(), 10.0, 1e-7);
 
          RigidBodyTransform rbt = new RigidBodyTransform();
          cylinder3d.getPose(rbt);
@@ -401,11 +401,11 @@ public class Cylinder3DTest
          firstCylinder = new Cylinder3D(pose, height, radius);
          secondCylinder = new Cylinder3D(pose, height, radius);
 
-         secondCylinder.setHeight(height + 0.99 * epsilon);
+         secondCylinder.setLength(height + 0.99 * epsilon);
 
          assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
 
-         secondCylinder.setHeight(height + 1.01 * epsilon);
+         secondCylinder.setLength(height + 1.01 * epsilon);
 
          assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
