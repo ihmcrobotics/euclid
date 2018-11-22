@@ -124,6 +124,230 @@ public class EuclidShapeTools
       }
    }
 
+   public static boolean isPoint3DInsideCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+                                                  Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, double epsilon)
+   {
+      double capsule3DHalfLength = 0.5 * capsule3DLength;
+      double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
+      double topCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
+      double topCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
+
+      double bottomCenterX = capsule3DPosition.getX() - capsule3DHalfLength * capsule3DAxis.getX();
+      double bottomCenterY = capsule3DPosition.getY() - capsule3DHalfLength * capsule3DAxis.getY();
+      double bottomCenterZ = capsule3DPosition.getZ() - capsule3DHalfLength * capsule3DAxis.getZ();
+
+      double distanceSquared = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(query.getX(), query.getY(), query.getZ(), topCenterX, topCenterY,
+                                                                                             topCenterZ, bottomCenterX, bottomCenterY, bottomCenterZ);
+      double upsizedRadius = capsule3DRadius + epsilon;
+      return distanceSquared <= upsizedRadius * upsizedRadius;
+   }
+
+   public static double signedDistanceBetweenPoint3DAndCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+                                                                 Vector3DReadOnly capsule3DAxis, Point3DReadOnly query)
+   {
+      double capsuleHalfLength = 0.5 * capsule3DLength;
+      double topCenterX = capsule3DPosition.getX() + capsuleHalfLength * capsule3DAxis.getX();
+      double topCenterY = capsule3DPosition.getY() + capsuleHalfLength * capsule3DAxis.getY();
+      double topCenterZ = capsule3DPosition.getZ() + capsuleHalfLength * capsule3DAxis.getZ();
+
+      double bottomCenterX = capsule3DPosition.getX() - capsuleHalfLength * capsule3DAxis.getX();
+      double bottomCenterY = capsule3DPosition.getY() - capsuleHalfLength * capsule3DAxis.getY();
+      double bottomCenterZ = capsule3DPosition.getZ() - capsuleHalfLength * capsule3DAxis.getZ();
+
+      double distanceFromAxis = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(query.getX(), query.getY(), query.getZ(), topCenterX, topCenterY,
+                                                                                       topCenterZ, bottomCenterX, bottomCenterY, bottomCenterZ);
+      return distanceFromAxis - capsule3DRadius;
+   }
+
+   public static boolean orthogonalProjectionOntoCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+                                                           Vector3DReadOnly capsule3DAxis, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   {
+      if (capsule3DRadius <= 0.0)
+      {
+         projectionToPack.setToNaN();
+         return false;
+      }
+      else if (capsule3DLength < 0.0)
+      {
+         projectionToPack.setToNaN();
+         return false;
+      }
+      else if (capsule3DLength == 0.0)
+      {
+         double distanceSquaredFromCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(capsule3DPosition.getX(), capsule3DPosition.getY(),
+                                                                                               capsule3DPosition.getZ(), pointToProject);
+         if (distanceSquaredFromCenter <= capsule3DRadius * capsule3DRadius)
+            return false;
+
+         projectionToPack.sub(pointToProject, capsule3DPosition);
+         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromCenter));
+         projectionToPack.add(capsule3DPosition);
+         return true;
+      }
+
+      double capsule3DHalfLength = 0.5 * capsule3DLength;
+
+      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(pointToProject.getX(), pointToProject.getY(), pointToProject.getZ(),
+                                                                          capsule3DPosition.getX(), capsule3DPosition.getY(), capsule3DPosition.getZ(),
+                                                                          capsule3DAxis.getX(), capsule3DAxis.getY(), capsule3DAxis.getZ());
+
+      if (Math.abs(percentageOnAxis) < capsule3DHalfLength)
+      {
+         double projectionOnAxisX = capsule3DPosition.getX() + percentageOnAxis * capsule3DAxis.getX();
+         double projectionOnAxisY = capsule3DPosition.getY() + percentageOnAxis * capsule3DAxis.getY();
+         double projectionOnAxisZ = capsule3DPosition.getZ() + percentageOnAxis * capsule3DAxis.getZ();
+         double distanceSquaredFromAxis = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ,
+                                                                                             pointToProject);
+
+         if (distanceSquaredFromAxis <= capsule3DRadius * capsule3DRadius)
+            return false;
+
+         projectionToPack.set(pointToProject);
+         projectionToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromAxis));
+         projectionToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+         return true;
+      }
+      else if (percentageOnAxis > 0.0)
+      {
+         double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
+         double topCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
+         double topCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
+         double distanceSquaredFromTopCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(topCenterX, topCenterY, topCenterZ, pointToProject);
+
+         if (distanceSquaredFromTopCenter <= capsule3DRadius * capsule3DRadius)
+            return false;
+
+         projectionToPack.set(pointToProject);
+         projectionToPack.sub(topCenterX, topCenterY, topCenterZ);
+         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromTopCenter));
+         projectionToPack.add(topCenterX, topCenterY, topCenterZ);
+         return true;
+      }
+      else // if (percentageOnAxis < 0.0)
+      {
+         double bottomCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
+         double bottomCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
+         double bottomCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
+         double distanceSquaredFromBottomCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(bottomCenterX, bottomCenterY, bottomCenterZ,
+                                                                                                     pointToProject);
+
+         if (distanceSquaredFromBottomCenter <= capsule3DRadius * capsule3DRadius)
+            return false;
+
+         projectionToPack.set(pointToProject);
+         projectionToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
+         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromBottomCenter));
+         projectionToPack.add(bottomCenterX, bottomCenterY, bottomCenterZ);
+         return true;
+      }
+   }
+
+   public static double doPoint3DCapsule3DCollisionTest(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+                                                        Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack,
+                                                        Vector3DBasics normalToPack)
+   {
+      if (capsule3DRadius <= 0.0)
+      {
+         if (closestPointOnSurfaceToPack != null)
+            closestPointOnSurfaceToPack.setToNaN();
+         if (normalToPack != null)
+            normalToPack.setToNaN();
+         return Double.NaN;
+      }
+      else if (capsule3DLength < 0.0)
+      {
+         if (closestPointOnSurfaceToPack != null)
+            closestPointOnSurfaceToPack.setToNaN();
+         if (normalToPack != null)
+            normalToPack.setToNaN();
+         return Double.NaN;
+      }
+      else if (capsule3DLength == 0.0)
+      {
+         return doPoint3DSphere3DCollisionTest(capsule3DRadius, capsule3DPosition, query, closestPointOnSurfaceToPack, normalToPack);
+      }
+
+      double capsule3DHalfLength = 0.5 * capsule3DLength;
+
+      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(query.getX(), query.getY(), query.getZ(), capsule3DPosition.getX(),
+                                                                          capsule3DPosition.getY(), capsule3DPosition.getZ(), capsule3DAxis.getX(),
+                                                                          capsule3DAxis.getY(), capsule3DAxis.getZ());
+
+      if (Math.abs(percentageOnAxis) < capsule3DHalfLength)
+      {
+         double projectionOnAxisX = capsule3DPosition.getX() + percentageOnAxis * capsule3DAxis.getX();
+         double projectionOnAxisY = capsule3DPosition.getY() + percentageOnAxis * capsule3DAxis.getY();
+         double projectionOnAxisZ = capsule3DPosition.getZ() + percentageOnAxis * capsule3DAxis.getZ();
+         double distanceFromAxis = EuclidGeometryTools.distanceBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ, query);
+
+         if (closestPointOnSurfaceToPack != null)
+         {
+            closestPointOnSurfaceToPack.set(query);
+            closestPointOnSurfaceToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+            closestPointOnSurfaceToPack.scale(capsule3DRadius / distanceFromAxis);
+            closestPointOnSurfaceToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+         }
+
+         if (normalToPack != null)
+         {
+            normalToPack.set(query);
+            normalToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+            normalToPack.scale(1.0 / distanceFromAxis);
+         }
+
+         return distanceFromAxis - capsule3DRadius;
+      }
+      else if (percentageOnAxis > 0.0)
+      {
+         double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
+         double topCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
+         double topCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
+         double distanceFromTopCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(topCenterX, topCenterY, topCenterZ, query);
+
+         if (closestPointOnSurfaceToPack != null)
+         {
+            closestPointOnSurfaceToPack.set(query);
+            closestPointOnSurfaceToPack.sub(topCenterX, topCenterY, topCenterZ);
+            closestPointOnSurfaceToPack.scale(capsule3DRadius / distanceFromTopCenter);
+            closestPointOnSurfaceToPack.add(topCenterX, topCenterY, topCenterZ);
+         }
+
+         if (normalToPack != null)
+         {
+            normalToPack.set(query);
+            normalToPack.sub(topCenterX, topCenterY, topCenterZ);
+            normalToPack.scale(1.0 / distanceFromTopCenter);
+         }
+
+         return distanceFromTopCenter - capsule3DRadius;
+      }
+      else // if (percentageOnAxis < 0.0)
+      {
+         double bottomCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
+         double bottomCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
+         double bottomCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
+         double distanceFromBottomCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(bottomCenterX, bottomCenterY, bottomCenterZ, query);
+
+         if (closestPointOnSurfaceToPack != null)
+         {
+            closestPointOnSurfaceToPack.set(query);
+            closestPointOnSurfaceToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
+            closestPointOnSurfaceToPack.scale(capsule3DRadius / distanceFromBottomCenter);
+            closestPointOnSurfaceToPack.add(bottomCenterX, bottomCenterY, bottomCenterZ);
+         }
+
+         if (normalToPack != null)
+         {
+            normalToPack.set(query);
+            normalToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
+            normalToPack.scale(1.0 / distanceFromBottomCenter);
+         }
+
+         return distanceFromBottomCenter - capsule3DRadius;
+      }
+   }
+
    public static boolean isPoint3DInsideCylinder3D(double cylinder3DLength, double cylinder3DRadius, Point3DReadOnly query, double epsilon)
    {
       double halfLengthPlusEpsilon = 0.5 * cylinder3DLength + epsilon;
@@ -1060,230 +1284,6 @@ public class EuclidShapeTools
          }
 
          return distance - torus3DTubeRadius;
-      }
-   }
-
-   public static boolean isPoint3DInsideCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
-                                                  Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, double epsilon)
-   {
-      double capsule3DHalfLength = 0.5 * capsule3DLength;
-      double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-      double topCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-      double topCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
-
-      double bottomCenterX = capsule3DPosition.getX() - capsule3DHalfLength * capsule3DAxis.getX();
-      double bottomCenterY = capsule3DPosition.getY() - capsule3DHalfLength * capsule3DAxis.getY();
-      double bottomCenterZ = capsule3DPosition.getZ() - capsule3DHalfLength * capsule3DAxis.getZ();
-
-      double distanceSquared = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(query.getX(), query.getY(), query.getZ(), topCenterX, topCenterY,
-                                                                                             topCenterZ, bottomCenterX, bottomCenterY, bottomCenterZ);
-      double upsizedRadius = capsule3DRadius + epsilon;
-      return distanceSquared <= upsizedRadius * upsizedRadius;
-   }
-
-   public static double signedDistanceBetweenPoint3DAndCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
-                                                                 Vector3DReadOnly capsule3DAxis, Point3DReadOnly query)
-   {
-      double capsuleHalfLength = 0.5 * capsule3DLength;
-      double topCenterX = capsule3DPosition.getX() + capsuleHalfLength * capsule3DAxis.getX();
-      double topCenterY = capsule3DPosition.getY() + capsuleHalfLength * capsule3DAxis.getY();
-      double topCenterZ = capsule3DPosition.getZ() + capsuleHalfLength * capsule3DAxis.getZ();
-
-      double bottomCenterX = capsule3DPosition.getX() - capsuleHalfLength * capsule3DAxis.getX();
-      double bottomCenterY = capsule3DPosition.getY() - capsuleHalfLength * capsule3DAxis.getY();
-      double bottomCenterZ = capsule3DPosition.getZ() - capsuleHalfLength * capsule3DAxis.getZ();
-
-      double distanceFromAxis = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(query.getX(), query.getY(), query.getZ(), topCenterX, topCenterY,
-                                                                                       topCenterZ, bottomCenterX, bottomCenterY, bottomCenterZ);
-      return distanceFromAxis - capsule3DRadius;
-   }
-
-   public static boolean orthogonalProjectionOntoCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
-                                                           Vector3DReadOnly capsule3DAxis, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
-   {
-      if (capsule3DRadius <= 0.0)
-      {
-         projectionToPack.setToNaN();
-         return false;
-      }
-      else if (capsule3DLength < 0.0)
-      {
-         projectionToPack.setToNaN();
-         return false;
-      }
-      else if (capsule3DLength == 0.0)
-      {
-         double distanceSquaredFromCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(capsule3DPosition.getX(), capsule3DPosition.getY(),
-                                                                                               capsule3DPosition.getZ(), pointToProject);
-         if (distanceSquaredFromCenter <= capsule3DRadius * capsule3DRadius)
-            return false;
-
-         projectionToPack.sub(pointToProject, capsule3DPosition);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromCenter));
-         projectionToPack.add(capsule3DPosition);
-         return true;
-      }
-
-      double capsule3DHalfLength = 0.5 * capsule3DLength;
-
-      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(pointToProject.getX(), pointToProject.getY(), pointToProject.getZ(),
-                                                                          capsule3DPosition.getX(), capsule3DPosition.getY(), capsule3DPosition.getZ(),
-                                                                          capsule3DAxis.getX(), capsule3DAxis.getY(), capsule3DAxis.getZ());
-
-      if (Math.abs(percentageOnAxis) < capsule3DHalfLength)
-      {
-         double projectionOnAxisX = capsule3DPosition.getX() + percentageOnAxis * capsule3DAxis.getX();
-         double projectionOnAxisY = capsule3DPosition.getY() + percentageOnAxis * capsule3DAxis.getY();
-         double projectionOnAxisZ = capsule3DPosition.getZ() + percentageOnAxis * capsule3DAxis.getZ();
-         double distanceSquaredFromAxis = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ,
-                                                                                             pointToProject);
-
-         if (distanceSquaredFromAxis <= capsule3DRadius * capsule3DRadius)
-            return false;
-
-         projectionToPack.set(pointToProject);
-         projectionToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromAxis));
-         projectionToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-         return true;
-      }
-      else if (percentageOnAxis > 0.0)
-      {
-         double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-         double topCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-         double topCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
-         double distanceSquaredFromTopCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(topCenterX, topCenterY, topCenterZ, pointToProject);
-
-         if (distanceSquaredFromTopCenter <= capsule3DRadius * capsule3DRadius)
-            return false;
-
-         projectionToPack.set(pointToProject);
-         projectionToPack.sub(topCenterX, topCenterY, topCenterZ);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromTopCenter));
-         projectionToPack.add(topCenterX, topCenterY, topCenterZ);
-         return true;
-      }
-      else // if (percentageOnAxis < 0.0)
-      {
-         double bottomCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-         double bottomCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-         double bottomCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
-         double distanceSquaredFromBottomCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(bottomCenterX, bottomCenterY, bottomCenterZ,
-                                                                                                     pointToProject);
-
-         if (distanceSquaredFromBottomCenter <= capsule3DRadius * capsule3DRadius)
-            return false;
-
-         projectionToPack.set(pointToProject);
-         projectionToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromBottomCenter));
-         projectionToPack.add(bottomCenterX, bottomCenterY, bottomCenterZ);
-         return true;
-      }
-   }
-
-   public static double doPoint3DCapsule3DCollisionTest(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
-                                                        Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack,
-                                                        Vector3DBasics normalToPack)
-   {
-      if (capsule3DRadius <= 0.0)
-      {
-         if (closestPointOnSurfaceToPack != null)
-            closestPointOnSurfaceToPack.setToNaN();
-         if (normalToPack != null)
-            normalToPack.setToNaN();
-         return Double.NaN;
-      }
-      else if (capsule3DLength < 0.0)
-      {
-         if (closestPointOnSurfaceToPack != null)
-            closestPointOnSurfaceToPack.setToNaN();
-         if (normalToPack != null)
-            normalToPack.setToNaN();
-         return Double.NaN;
-      }
-      else if (capsule3DLength == 0.0)
-      {
-         return doPoint3DSphere3DCollisionTest(capsule3DRadius, capsule3DPosition, query, closestPointOnSurfaceToPack, normalToPack);
-      }
-
-      double capsule3DHalfLength = 0.5 * capsule3DLength;
-
-      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(query.getX(), query.getY(), query.getZ(), capsule3DPosition.getX(),
-                                                                          capsule3DPosition.getY(), capsule3DPosition.getZ(), capsule3DAxis.getX(),
-                                                                          capsule3DAxis.getY(), capsule3DAxis.getZ());
-
-      if (Math.abs(percentageOnAxis) < capsule3DHalfLength)
-      {
-         double projectionOnAxisX = capsule3DPosition.getX() + percentageOnAxis * capsule3DAxis.getX();
-         double projectionOnAxisY = capsule3DPosition.getY() + percentageOnAxis * capsule3DAxis.getY();
-         double projectionOnAxisZ = capsule3DPosition.getZ() + percentageOnAxis * capsule3DAxis.getZ();
-         double distanceFromAxis = EuclidGeometryTools.distanceBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ, query);
-
-         if (closestPointOnSurfaceToPack != null)
-         {
-            closestPointOnSurfaceToPack.set(query);
-            closestPointOnSurfaceToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-            closestPointOnSurfaceToPack.scale(capsule3DRadius / distanceFromAxis);
-            closestPointOnSurfaceToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-         }
-
-         if (normalToPack != null)
-         {
-            normalToPack.set(query);
-            normalToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-            normalToPack.scale(1.0 / distanceFromAxis);
-         }
-
-         return distanceFromAxis - capsule3DRadius;
-      }
-      else if (percentageOnAxis > 0.0)
-      {
-         double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-         double topCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-         double topCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
-         double distanceFromTopCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(topCenterX, topCenterY, topCenterZ, query);
-
-         if (closestPointOnSurfaceToPack != null)
-         {
-            closestPointOnSurfaceToPack.set(query);
-            closestPointOnSurfaceToPack.sub(topCenterX, topCenterY, topCenterZ);
-            closestPointOnSurfaceToPack.scale(capsule3DRadius / distanceFromTopCenter);
-            closestPointOnSurfaceToPack.add(topCenterX, topCenterY, topCenterZ);
-         }
-
-         if (normalToPack != null)
-         {
-            normalToPack.set(query);
-            normalToPack.sub(topCenterX, topCenterY, topCenterZ);
-            normalToPack.scale(1.0 / distanceFromTopCenter);
-         }
-
-         return distanceFromTopCenter - capsule3DRadius;
-      }
-      else // if (percentageOnAxis < 0.0)
-      {
-         double bottomCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-         double bottomCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-         double bottomCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
-         double distanceFromBottomCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(bottomCenterX, bottomCenterY, bottomCenterZ, query);
-
-         if (closestPointOnSurfaceToPack != null)
-         {
-            closestPointOnSurfaceToPack.set(query);
-            closestPointOnSurfaceToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
-            closestPointOnSurfaceToPack.scale(capsule3DRadius / distanceFromBottomCenter);
-            closestPointOnSurfaceToPack.add(bottomCenterX, bottomCenterY, bottomCenterZ);
-         }
-
-         if (normalToPack != null)
-         {
-            normalToPack.set(query);
-            normalToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
-            normalToPack.scale(1.0 / distanceFromBottomCenter);
-         }
-
-         return distanceFromBottomCenter - capsule3DRadius;
       }
    }
 }
