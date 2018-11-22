@@ -40,7 +40,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
-      boolean isInside = EuclidShapeTools.doPoint3DCylinder3DCollisionTest(getRadius(), getLength(), queryInLocal, closestPointOnSurfaceToPack,
+      boolean isInside = EuclidShapeTools.doPoint3DCylinder3DCollisionTest(getLength(), getRadius(), queryInLocal, closestPointOnSurfaceToPack,
                                                                            normalAtClosestPointToPack) <= 0.0;
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
@@ -60,7 +60,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
-      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndCylinder3D(getRadius(), getLength(), queryInLocal);
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndCylinder3D(getLength(), getRadius(), queryInLocal);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return signedDistance;
    }
@@ -71,7 +71,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);
-      boolean isInside = EuclidShapeTools.isPoint3DInsideCylinder3D(getRadius(), getLength(), queryInLocal, epsilon);
+      boolean isInside = EuclidShapeTools.isPoint3DInsideCylinder3D(getLength(), getRadius(), queryInLocal, epsilon);
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
       return isInside;
    }
@@ -88,7 +88,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToProject, pointInLocal);
 
-      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoCylinder3D(getRadius(), getLength(), pointInLocal, projectionToPack);
+      boolean isInside = EuclidShapeTools.orthogonalProjectionOntoCylinder3D(getLength(), getRadius(), pointInLocal, projectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
 
