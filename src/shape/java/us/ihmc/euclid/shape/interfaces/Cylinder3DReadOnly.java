@@ -60,7 +60,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return !EuclidShapeTools.orthogonalProjectionOntoCylinder3D(getPosition(), getAxis(), getLength(), getRadius(), pointToProject, projectionToPack);
+      return EuclidShapeTools.orthogonalProjectionOntoCylinder3D(getPosition(), getAxis(), getLength(), getRadius(), pointToProject, projectionToPack);
    }
 
    /**

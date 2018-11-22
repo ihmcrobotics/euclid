@@ -365,14 +365,153 @@ public class EuclidShapeTools
    public static double signedDistanceBetweenPoint3DAndCylinder3D(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
                                                                   double cylinder3DRadius, Point3DReadOnly query)
    {
-      return doPoint3DCylinder3DCollisionTest(cylinder3DPosition, cylinder3DAxis, cylinder3DLength, cylinder3DRadius, query, null, null);
+      if (cylinder3DRadius <= 0.0 || cylinder3DLength <= 0.0)
+      {
+         return Double.NaN;
+      }
+
+      double positionOnAxis = EuclidGeometryTools.percentageAlongLine3D(query, cylinder3DPosition, cylinder3DAxis);
+
+      double axisToQueryX = query.getX() - (cylinder3DPosition.getX() + positionOnAxis * cylinder3DAxis.getX());
+      double axisToQueryY = query.getY() - (cylinder3DPosition.getY() + positionOnAxis * cylinder3DAxis.getY());
+      double axisToQueryZ = query.getZ() - (cylinder3DPosition.getZ() + positionOnAxis * cylinder3DAxis.getZ());
+      double distanceSquaredFromAxis = EuclidCoreTools.normSquared(axisToQueryX, axisToQueryY, axisToQueryZ);
+
+      double halfLength = 0.5 * cylinder3DLength;
+
+      if (distanceSquaredFromAxis <= cylinder3DRadius * cylinder3DRadius)
+      {
+         if (positionOnAxis < -halfLength)
+         { // The query is directly below the cylinder
+            return -(positionOnAxis + halfLength);
+         }
+
+         if (positionOnAxis > halfLength)
+         { // The query is directly above the cylinder
+            return positionOnAxis - halfLength;
+         }
+
+         // The query is inside the cylinder
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double dh = halfLength - Math.abs(positionOnAxis);
+         double dr = cylinder3DRadius - distanceFromAxis;
+
+         if (dh < dr)
+         {
+            if (positionOnAxis < 0)
+            { // Closer to the bottom face
+               return -(positionOnAxis + halfLength);
+            }
+            else
+            { // Closer to the top face
+               return positionOnAxis - halfLength;
+            }
+         }
+         else
+         { // Closer to the cylinder part
+            return distanceFromAxis - cylinder3DRadius;
+         }
+      }
+      else
+      { // The query is outside and closest to the cylinder's side.
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+
+         double positionOnAxisClamped = positionOnAxis;
+         if (positionOnAxisClamped < -halfLength)
+            positionOnAxisClamped = -halfLength;
+         else if (positionOnAxisClamped > halfLength)
+            positionOnAxisClamped = halfLength;
+
+         if (positionOnAxisClamped != positionOnAxis)
+         { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
+
+            double projectionOnAxisXClamped = cylinder3DPosition.getX() + positionOnAxisClamped * cylinder3DAxis.getX();
+            double projectionOnAxisYClamped = cylinder3DPosition.getY() + positionOnAxisClamped * cylinder3DAxis.getY();
+            double projectionOnAxisZClamped = cylinder3DPosition.getZ() + positionOnAxisClamped * cylinder3DAxis.getZ();
+
+            double toCylinderScale = cylinder3DRadius / distanceFromAxis;
+            double closestX = axisToQueryX * toCylinderScale + projectionOnAxisXClamped;
+            double closestY = axisToQueryY * toCylinderScale + projectionOnAxisYClamped;
+            double closestZ = axisToQueryZ * toCylinderScale + projectionOnAxisZClamped;
+            return EuclidGeometryTools.distanceBetweenPoint3Ds(closestX, closestY, closestZ, query);
+         }
+         else
+         { // Closest point is on the cylinder.
+            return distanceFromAxis - cylinder3DRadius;
+         }
+      }
    }
 
    public static boolean orthogonalProjectionOntoCylinder3D(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
                                                             double cylinder3DRadius, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return doPoint3DCylinder3DCollisionTest(cylinder3DPosition, cylinder3DAxis, cylinder3DLength, cylinder3DRadius, pointToProject, projectionToPack,
-                                              null) <= 0.0;
+      if (cylinder3DRadius <= 0.0 || cylinder3DLength <= 0.0)
+      {
+         projectionToPack.setToNaN();
+         return false;
+      }
+
+      double positionOnAxis = EuclidGeometryTools.percentageAlongLine3D(pointToProject, cylinder3DPosition, cylinder3DAxis);
+
+      double projectionOnAxisX = cylinder3DPosition.getX() + positionOnAxis * cylinder3DAxis.getX();
+      double projectionOnAxisY = cylinder3DPosition.getY() + positionOnAxis * cylinder3DAxis.getY();
+      double projectionOnAxisZ = cylinder3DPosition.getZ() + positionOnAxis * cylinder3DAxis.getZ();
+
+      double axisToQueryX = pointToProject.getX() - projectionOnAxisX;
+      double axisToQueryY = pointToProject.getY() - projectionOnAxisY;
+      double axisToQueryZ = pointToProject.getZ() - projectionOnAxisZ;
+      double distanceSquaredFromAxis = EuclidCoreTools.normSquared(axisToQueryX, axisToQueryY, axisToQueryZ);
+
+      double halfLength = 0.5 * cylinder3DLength;
+
+      if (distanceSquaredFromAxis <= cylinder3DRadius * cylinder3DRadius)
+      {
+         if (positionOnAxis < -halfLength)
+         { // The query is directly below the cylinder
+            projectionToPack.scaleAdd(-positionOnAxis - halfLength, cylinder3DAxis, pointToProject);
+            return true;
+         }
+
+         if (positionOnAxis > halfLength)
+         { // The query is directly above the cylinder
+            projectionToPack.scaleAdd(-positionOnAxis + halfLength, cylinder3DAxis, pointToProject);
+            return true;
+         }
+
+         // The query is inside the cylinder
+         return false;
+      }
+      else
+      { // The query is outside and closest to the cylinder's side.
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+
+         double positionOnAxisClamped = positionOnAxis;
+         if (positionOnAxisClamped < -halfLength)
+            positionOnAxisClamped = -halfLength;
+         else if (positionOnAxisClamped > halfLength)
+            positionOnAxisClamped = halfLength;
+
+         if (positionOnAxisClamped != positionOnAxis)
+         { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
+            double projectionOnAxisXClamped = cylinder3DPosition.getX() + positionOnAxisClamped * cylinder3DAxis.getX();
+            double projectionOnAxisYClamped = cylinder3DPosition.getY() + positionOnAxisClamped * cylinder3DAxis.getY();
+            double projectionOnAxisZClamped = cylinder3DPosition.getZ() + positionOnAxisClamped * cylinder3DAxis.getZ();
+
+            double toCylinderScale = cylinder3DRadius / distanceFromAxis;
+            double closestX = axisToQueryX * toCylinderScale + projectionOnAxisXClamped;
+            double closestY = axisToQueryY * toCylinderScale + projectionOnAxisYClamped;
+            double closestZ = axisToQueryZ * toCylinderScale + projectionOnAxisZClamped;
+            projectionToPack.set(closestX, closestY, closestZ);
+            return true;
+         }
+         else
+         { // Closest point is on the cylinder.
+            projectionToPack.set(axisToQueryX, axisToQueryY, axisToQueryZ);
+            projectionToPack.scale(cylinder3DRadius / distanceFromAxis);
+            projectionToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+            return true;
+         }
+      }
    }
 
    public static double doPoint3DCylinder3DCollisionTest(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
@@ -393,7 +532,7 @@ public class EuclidShapeTools
       double projectionOnAxisX = cylinder3DPosition.getX() + positionOnAxis * cylinder3DAxis.getX();
       double projectionOnAxisY = cylinder3DPosition.getY() + positionOnAxis * cylinder3DAxis.getY();
       double projectionOnAxisZ = cylinder3DPosition.getZ() + positionOnAxis * cylinder3DAxis.getZ();
-      
+
       double axisToQueryX = query.getX() - projectionOnAxisX;
       double axisToQueryY = query.getY() - projectionOnAxisY;
       double axisToQueryZ = query.getZ() - projectionOnAxisZ;
@@ -909,19 +1048,25 @@ public class EuclidShapeTools
    public static boolean isPoint3DInsideSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query, double epsilon)
    {
       double radiusWithEpsilon = sphereRadius + epsilon;
-      double distanceSquared = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
-      return distanceSquared <= radiusWithEpsilon * radiusWithEpsilon;
+      return spherePosition.distanceSquared(query) <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
    public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query)
    {
-      return doPoint3DSphere3DCollisionTest(spherePosition, sphereRadius, query, null, null);
+      return spherePosition.distance(query) - sphereRadius;
    }
 
    public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly pointToProject,
                                                           Point3DBasics projectionToPack)
    {
-      return doPoint3DSphere3DCollisionTest(spherePosition, sphereRadius, pointToProject, projectionToPack, null) <= 0.0;
+      double distanceSquared = spherePosition.distanceSquared(pointToProject);
+      if (distanceSquared <= sphereRadius * sphereRadius)
+         return false;
+
+      projectionToPack.sub(pointToProject, spherePosition);
+      projectionToPack.scale(sphereRadius / Math.sqrt(distanceSquared));
+      projectionToPack.add(spherePosition);
+      return true;
    }
 
    public static double doPoint3DSphere3DCollisionTest(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query,
