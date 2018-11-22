@@ -6,6 +6,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -138,5 +139,11 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    public boolean geometricallyEquals(Capsule3D other, double epsilon)
    {
       return Capsule3DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   @Override
+   public String toString()
+   {
+      return EuclidShapeIOTools.getCapsule3DString(this);
    }
 }

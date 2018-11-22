@@ -5,6 +5,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Torus3DBasics;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -233,18 +234,9 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
       return Torus3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Provides a {@code String} representation of this torus 3D as follows:<br>
-    * Torus 3D: radius = R, tube radius = r, pose = <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
-    *
-    * @return the {@code String} representing this torus 3D.
-    */
    @Override
    public String toString()
    {
-      return "Torus: radius = " + radius + ", tube radius = " + tubeRadius + ", pose =\n" + pose;
+      return EuclidShapeIOTools.getTorus3DString(this);
    }
 }

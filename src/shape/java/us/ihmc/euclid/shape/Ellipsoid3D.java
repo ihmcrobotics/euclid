@@ -5,6 +5,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Ellipsoid3DBasics;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -187,18 +188,9 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
       return Ellipsoid3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Provides a {@code String} representation of this ellipsoid 3D as follows:<br>
-    * Ellipsoid 3D: radii = (rx, ry, rz), pose = <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
-    *
-    * @return the {@code String} representing this ellipsoid 3D.
-    */
    @Override
    public String toString()
    {
-      return "Ellipsoid 3D: radii = " + radii + ", pose =\n" + pose;
+      return EuclidShapeIOTools.getEllipsoid3DString(this);
    }
 }

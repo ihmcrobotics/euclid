@@ -6,6 +6,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -242,18 +243,9 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       return Cylinder3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Provides a {@code String} representation of this cylinder 3D as follows:<br>
-    * Cylinder 3D: length = h, radius = r, pose = <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
-    *
-    * @return the {@code String} representing this cylinder 3D.
-    */
    @Override
    public String toString()
    {
-      return "Cylinder 3D: length = " + length + ", radius = " + radius + ", pose=\n" + pose;
+      return EuclidShapeIOTools.getCylinder3DString(this);
    }
 }

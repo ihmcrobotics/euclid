@@ -5,6 +5,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Ramp3DBasics;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -244,18 +245,9 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       return Ramp3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Provides a {@code String} representation of this ramp 3D as follows:<br>
-    * Ramp 3D: size = (length, width, height), pose = <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
-    *
-    * @return the {@code String} representing this box 3D.
-    */
    @Override
    public String toString()
    {
-      return "Ramp 3D: size = " + size + ", + pose =\n" + pose;
+      return EuclidShapeIOTools.getRamp3DString(this);
    }
 }

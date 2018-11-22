@@ -6,6 +6,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -224,18 +225,9 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       return Box3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Provides a {@code String} representation of this box 3D as follows:<br>
-    * Box 3D: size = (sizeX, sizeY, sizeZ), pose = <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
-    *
-    * @return the {@code String} representing this box 3D.
-    */
    @Override
    public String toString()
    {
-      return "Box 3D: size = " + size + ", pose =\n" + pose;
+      return EuclidShapeIOTools.getBox3DString(this);
    }
 }

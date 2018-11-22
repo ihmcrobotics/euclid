@@ -4,6 +4,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Sphere3DBasics;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -170,18 +171,9 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
       return Sphere3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Provides a {@code String} representation of this sphere 3D as follows:<br>
-    * Sphere 3D: radius = r, pose = <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
-    *
-    * @return the {@code String} representing this box 3D.
-    */
    @Override
    public String toString()
    {
-      return "Sphere 3D: radius = " + radius + ", pose=\n" + pose;
+      return EuclidShapeIOTools.getSphere3DString(this);
    }
 }
