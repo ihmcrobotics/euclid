@@ -123,8 +123,8 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean isPoint3DInsideCapsule3D(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
-                                                  Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideCapsule3D(Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis, double capsule3DLength,
+                                                  double capsule3DRadius, Point3DReadOnly query, double epsilon)
    {
       double capsule3DHalfLength = 0.5 * capsule3DLength;
       double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
@@ -141,8 +141,8 @@ public class EuclidShapeTools
       return distanceSquared <= upsizedRadius * upsizedRadius;
    }
 
-   public static double signedDistanceBetweenPoint3DAndCapsule3D(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
-                                                                 Vector3DReadOnly capsule3DAxis, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndCapsule3D(Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis, double capsule3DLength,
+                                                                 double capsule3DRadius, Point3DReadOnly query)
    {
       double capsuleHalfLength = 0.5 * capsule3DLength;
       double topCenterX = capsule3DPosition.getX() + capsuleHalfLength * capsule3DAxis.getX();
@@ -158,8 +158,8 @@ public class EuclidShapeTools
       return distanceFromAxis - capsule3DRadius;
    }
 
-   public static boolean orthogonalProjectionOntoCapsule3D(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
-                                                           Vector3DReadOnly capsule3DAxis, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOntoCapsule3D(Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis, double capsule3DLength,
+                                                           double capsule3DRadius, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
       if (capsule3DRadius <= 0.0)
       {
@@ -239,8 +239,8 @@ public class EuclidShapeTools
       }
    }
 
-   public static double doPoint3DCapsule3DCollisionTest(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
-                                                        Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack,
+   public static double doPoint3DCapsule3DCollisionTest(Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis, double capsule3DLength,
+                                                        double capsule3DRadius, Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack,
                                                         Vector3DBasics normalToPack)
    {
       if (capsule3DRadius <= 0.0)
@@ -261,7 +261,7 @@ public class EuclidShapeTools
       }
       else if (capsule3DLength == 0.0)
       {
-         return doPoint3DSphere3DCollisionTest(capsule3DRadius, capsule3DPosition, query, closestPointOnSurfaceToPack, normalToPack);
+         return doPoint3DSphere3DCollisionTest(capsule3DPosition, capsule3DRadius, query, closestPointOnSurfaceToPack, normalToPack);
       }
 
       double capsule3DHalfLength = 0.5 * capsule3DLength;
@@ -877,25 +877,25 @@ public class EuclidShapeTools
       return possibleMin <= value1 && possibleMin <= value2;
    }
 
-   public static boolean isPoint3DInsideSphere3D(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query, double epsilon)
    {
       double radiusWithEpsilon = sphereRadius + epsilon;
       double distanceSquared = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
       return distanceSquared <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndSphere3D(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query)
    {
-      return doPoint3DSphere3DCollisionTest(sphereRadius, spherePosition, query, null, null);
+      return doPoint3DSphere3DCollisionTest(spherePosition, sphereRadius, query, null, null);
    }
 
-   public static boolean orthogonalProjectionOntoSphere3D(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly pointToProject,
+   public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly pointToProject,
                                                           Point3DBasics projectionToPack)
    {
-      return doPoint3DSphere3DCollisionTest(sphereRadius, spherePosition, pointToProject, projectionToPack, null) <= 0.0;
+      return doPoint3DSphere3DCollisionTest(spherePosition, sphereRadius, pointToProject, projectionToPack, null) <= 0.0;
    }
 
-   public static double doPoint3DSphere3DCollisionTest(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly query,
+   public static double doPoint3DSphere3DCollisionTest(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query,
                                                        Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
       double distance = EuclidGeometryTools.distanceBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
@@ -930,8 +930,8 @@ public class EuclidShapeTools
       return distance - sphereRadius;
    }
 
-   public static double doSphere3DSphere3DCollisionTest(double firstSphereRadius, Point3DReadOnly firstSpherePosition, double secondSphereRadius,
-                                                        Point3DReadOnly secondSpherePosition, Point3DBasics firstClosestPointToPack,
+   public static double doSphere3DSphere3DCollisionTest(Point3DReadOnly firstSpherePosition, double firstSphereRadius, Point3DReadOnly secondSpherePosition,
+                                                        double secondSphereRadius, Point3DBasics firstClosestPointToPack,
                                                         Point3DBasics secondClosestPointToPack, Vector3DBasics firstNormalToPack,
                                                         Vector3DBasics secondNormalToPack)
    {
@@ -997,8 +997,8 @@ public class EuclidShapeTools
       return distance - firstSphereRadius - secondSphereRadius;
    }
 
-   public static double doSphere3DCylinder3DCollisionTest(double sphereRadius, Point3DReadOnly spherePosition, double cylinderRadius, double cylinderLength,
-                                                          Point3DReadOnly cylinderPosition, Vector3DReadOnly cylinderAxis,
+   public static double doSphere3DCylinder3DCollisionTest(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly cylinderPosition,
+                                                          Vector3DReadOnly cylinderAxis, double cylinderLength, double cylinderRadius,
                                                           Point3DBasics firstClosestPointToPack, Point3DBasics secondClosestPointToPack,
                                                           Vector3DBasics firstNormalToPack, Vector3DBasics secondNormalToPack)
    {
