@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -37,12 +38,7 @@ public class Ramp3DTest
 
       for (int i = 0; i < numberOfShapes; i++)
       {
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         double length = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         double width = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         double height = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         Ramp3D box3d = new Ramp3D(transform, length, width, height);
-         testHelper.runSimpleTests(box3d, random, numberOfPoints);
+         testHelper.runSimpleTests(EuclidShapeRandomTools.nextRamp3D(random), random, numberOfPoints);
       }
    }
 

@@ -8,6 +8,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -29,12 +30,7 @@ public class Ellipsoid3DTest
 
       for (int i = 0; i < numberOfShapes; i++)
       {
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         double xRadius = EuclidCoreRandomTools.nextDouble(random, 0.02, 10.0);
-         double yRadius = EuclidCoreRandomTools.nextDouble(random, 0.02, 10.0);
-         double zRadius = EuclidCoreRandomTools.nextDouble(random, 0.02, 10.0);
-         Ellipsoid3D ellipsoid3d = new Ellipsoid3D(transform, xRadius, yRadius, zRadius);
-         testHelper.runSimpleTests(ellipsoid3d, random, numberOfPoints);
+         testHelper.runSimpleTests(EuclidShapeRandomTools.nextEllipsoid3D(random), random, numberOfPoints);
       }
    }
 

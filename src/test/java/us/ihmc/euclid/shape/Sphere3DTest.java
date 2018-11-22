@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -26,10 +27,7 @@ public class Sphere3DTest
 
       for (int i = 0; i < numberOfShapes; i++)
       {
-         Point3D center = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 1.0, 1.0);
-         double radius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         Sphere3D sphere3d = new Sphere3D(center, radius);
-         testHelper.runSimpleTests(sphere3d, random, numberOfPoints);
+         testHelper.runSimpleTests(EuclidShapeRandomTools.nextSphere3D(random), random, numberOfPoints);
       }
    }
 

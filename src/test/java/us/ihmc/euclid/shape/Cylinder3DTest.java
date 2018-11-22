@@ -8,6 +8,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -30,12 +31,7 @@ public class Cylinder3DTest
 
       for (int i = 0; i < numberOfShapes; i++)
       {
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         double height = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         double radius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         Cylinder3D cylinder3d = new Cylinder3D(transform, height, radius);
-
-         testHelper.runSimpleTests(cylinder3d, random, numberOfPoints);
+         testHelper.runSimpleTests(EuclidShapeRandomTools.nextCylinder3D(random), random, numberOfPoints);
       }
    }
 
