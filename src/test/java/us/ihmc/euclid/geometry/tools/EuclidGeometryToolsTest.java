@@ -1772,6 +1772,10 @@ public class EuclidGeometryToolsTest
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint.getX(), testPoint.getY(), testPoint.getZ(), lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint.getX(), testPoint.getY(), testPoint.getZ(), lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentStart.getZ(), lineSegmentEnd.getX(), lineSegmentEnd.getY(), lineSegmentEnd.getZ());
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1780,6 +1784,10 @@ public class EuclidGeometryToolsTest
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint.getX(), testPoint.getY(), testPoint.getZ(), lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint.getX(), testPoint.getY(), testPoint.getZ(), lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentStart.getZ(), lineSegmentEnd.getX(), lineSegmentEnd.getY(), lineSegmentEnd.getZ());
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
@@ -1787,6 +1795,10 @@ public class EuclidGeometryToolsTest
          projection.set(lineSegmentEnd);
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint.getX(), testPoint.getY(), testPoint.getZ(), lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint.getX(), testPoint.getY(), testPoint.getZ(), lineSegmentStart.getX(), lineSegmentStart.getY(), lineSegmentStart.getZ(), lineSegmentEnd.getX(), lineSegmentEnd.getY(), lineSegmentEnd.getZ());
          assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }

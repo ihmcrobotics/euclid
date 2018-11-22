@@ -1515,6 +1515,34 @@ public class EuclidGeometryTools
     * @param pointX x-coordinate of point to be tested.
     * @param pointY y-coordinate of point to be tested.
     * @param pointZ z-coordinate of point to be tested.
+    * @param lineSegmentStartX the x-coordinate of the line segment first endpoint.
+    * @param lineSegmentStartY the y-coordinate of the line segment first endpoint.
+    * @param lineSegmentStartZ the z-coordinate of the line segment first endpoint.
+    * @param lineSegmentEndX the x-coordinate of the line segment second endpoint.
+    * @param lineSegmentEndY the y-coordinate of the line segment second endpoint.
+    * @param lineSegmentEndZ the z-coordinate of the line segment second endpoint.
+    * @return the minimum distance between the 3D point and the 3D line segment.
+    */
+   public static double distanceFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, double lineSegmentStartX, double lineSegmentStartY,
+                                                           double lineSegmentStartZ, double lineSegmentEndX, double lineSegmentEndY, double lineSegmentEndZ)
+   {
+      return Math.sqrt(distanceSquaredFromPoint3DToLineSegment3D(pointX, pointY, pointZ, lineSegmentStartX, lineSegmentStartY, lineSegmentStartZ,
+                                                                 lineSegmentEndX, lineSegmentEndY, lineSegmentEndZ));
+   }
+
+   /**
+    * Returns the minimum distance between a point and a given line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@value #ONE_TRILLIONTH}, this
+    * method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX x-coordinate of point to be tested.
+    * @param pointY y-coordinate of point to be tested.
+    * @param pointZ z-coordinate of point to be tested.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd second endpoint of the line segment. Not modified.
     * @return the minimum distance between the 3D point and the 3D line segment.
@@ -1728,9 +1756,10 @@ public class EuclidGeometryTools
       else if (percentage < 0.0)
          percentage = 0.0;
 
-      double projectionX = (1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX;
-      double projectionY = (1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY;
-      double projectionZ = (1.0 - percentage) * lineSegmentStartZ + percentage * lineSegmentEndZ;
+      double oneMinusPercentage = 1.0 - percentage;
+      double projectionX = oneMinusPercentage * lineSegmentStartX + percentage * lineSegmentEndX;
+      double projectionY = oneMinusPercentage * lineSegmentStartY + percentage * lineSegmentEndY;
+      double projectionZ = oneMinusPercentage * lineSegmentStartZ + percentage * lineSegmentEndZ;
 
       double dx = projectionX - pointX;
       double dy = projectionY - pointY;
