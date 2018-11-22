@@ -7,39 +7,17 @@ import us.ihmc.euclid.shape.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 {
-   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private final Shape3DPose pose = new Shape3DPose();
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    private double radius;
    private double length;
-
-   private final Vector3DReadOnly axis = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return pose.getM02();
-      }
-
-      @Override
-      public double getY()
-      {
-         return pose.getM12();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return pose.getM22();
-      }
-   };
 
    public Capsule3D()
    {
@@ -96,11 +74,11 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    public Vector3DReadOnly getAxis()
    {
-      return axis;
+      return pose.getLocalVectorZ();
    }
 
    @Override
-   public RigidBodyTransform getPose()
+   public Shape3DPose getPose()
    {
       return pose;
    }
@@ -108,13 +86,13 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    @Override
    public RotationMatrix getOrientation()
    {
-      return pose.getRotation();
+      return pose.getShapeOrientation();
    }
 
    @Override
-   public Vector3DBasics getPosition()
+   public Point3DBasics getPosition()
    {
-      return pose.getTranslation();
+      return pose.getShapePosition();
    }
 
    @Override

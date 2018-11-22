@@ -5,16 +5,15 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * {@code Sphere3D} represents a 3D sphere defined by its radius and with its origin at its center.
  */
 public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
 {
-   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private final Shape3DPose pose = new Shape3DPose();
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** The radius of this sphere. */
@@ -76,7 +75,7 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    }
 
    @Override
-   public RigidBodyTransform getPose()
+   public Shape3DPose getPose()
    {
       return pose;
    }
@@ -84,13 +83,13 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    @Override
    public RotationMatrix getOrientation()
    {
-      return pose.getRotation();
+      return pose.getShapeOrientation();
    }
 
    @Override
-   public Vector3DBasics getPosition()
+   public Point3DBasics getPosition()
    {
-      return pose.getTranslation();
+      return pose.getShapePosition();
    }
 
    /**

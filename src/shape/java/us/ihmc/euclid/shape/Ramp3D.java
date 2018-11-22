@@ -7,9 +7,9 @@ import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
@@ -28,7 +28,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  */
 public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 {
-   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private final Shape3DPose pose = new Shape3DPose();
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** Size of this ramp's bounding box. */
@@ -151,7 +151,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    }
 
    @Override
-   public RigidBodyTransform getPose()
+   public Shape3DPose getPose()
    {
       return pose;
    }
@@ -163,7 +163,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    }
 
    @Override
-   public Vector3DBasics getPosition()
+   public Point3DBasics getPosition()
    {
       return pose.getTranslation();
    }

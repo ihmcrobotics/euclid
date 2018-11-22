@@ -6,9 +6,8 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -25,34 +24,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
 {
-   private final RigidBodyTransform pose = new RigidBodyTransform();
+   private final Shape3DPose pose = new Shape3DPose();
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** It is the radius for the center of the torus to the center of the tube. */
    private double radius;
    /** Represents the radius of the tube */
    private double tubeRadius;
-
-   private final Vector3DReadOnly axis = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return pose.getM02();
-      }
-
-      @Override
-      public double getY()
-      {
-         return pose.getM12();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return pose.getM22();
-      }
-   };
 
    /**
     * Creates a new torus 3D with a radius of {@code 1}, and tube radius of {@code 0.1}.
@@ -144,7 +122,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    }
 
    @Override
-   public RigidBodyTransform getPose()
+   public Shape3DPose getPose()
    {
       return pose;
    }
@@ -152,13 +130,13 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    @Override
    public RotationMatrix getOrientation()
    {
-      return pose.getRotation();
+      return pose.getShapeOrientation();
    }
 
    @Override
-   public Vector3DBasics getPosition()
+   public Point3DBasics getPosition()
    {
-      return pose.getTranslation();
+      return pose.getShapePosition();
    }
 
    /**
@@ -186,7 +164,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    @Override
    public Vector3DReadOnly getAxis()
    {
-      return axis;
+      return pose.getLocalVectorZ();
    }
 
    @Override

@@ -69,11 +69,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
-      getPose().inverseTransform(query, queryInLocal);
-      boolean isInside = EuclidShapeTools.isPoint3DInsideCylinder3D(getLength(), getRadius(), queryInLocal, epsilon);
-      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
-      return isInside;
+      return EuclidShapeTools.isPoint3DInsideCylinder3D(getPosition(), getAxis(), getLength(), getRadius(), query, epsilon);
    }
 
    /** {@inheritDoc} */

@@ -6,7 +6,6 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -124,7 +123,7 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean isPoint3DInsideCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+   public static boolean isPoint3DInsideCapsule3D(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
                                                   Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, double epsilon)
    {
       double capsule3DHalfLength = 0.5 * capsule3DLength;
@@ -142,7 +141,7 @@ public class EuclidShapeTools
       return distanceSquared <= upsizedRadius * upsizedRadius;
    }
 
-   public static double signedDistanceBetweenPoint3DAndCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+   public static double signedDistanceBetweenPoint3DAndCapsule3D(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
                                                                  Vector3DReadOnly capsule3DAxis, Point3DReadOnly query)
    {
       double capsuleHalfLength = 0.5 * capsule3DLength;
@@ -159,7 +158,7 @@ public class EuclidShapeTools
       return distanceFromAxis - capsule3DRadius;
    }
 
-   public static boolean orthogonalProjectionOntoCapsule3D(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+   public static boolean orthogonalProjectionOntoCapsule3D(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
                                                            Vector3DReadOnly capsule3DAxis, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
       if (capsule3DRadius <= 0.0)
@@ -174,8 +173,7 @@ public class EuclidShapeTools
       }
       else if (capsule3DLength == 0.0)
       {
-         double distanceSquaredFromCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(capsule3DPosition.getX(), capsule3DPosition.getY(),
-                                                                                               capsule3DPosition.getZ(), pointToProject);
+         double distanceSquaredFromCenter = capsule3DPosition.distanceSquared(pointToProject);
          if (distanceSquaredFromCenter <= capsule3DRadius * capsule3DRadius)
             return false;
 
@@ -187,9 +185,7 @@ public class EuclidShapeTools
 
       double capsule3DHalfLength = 0.5 * capsule3DLength;
 
-      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(pointToProject.getX(), pointToProject.getY(), pointToProject.getZ(),
-                                                                          capsule3DPosition.getX(), capsule3DPosition.getY(), capsule3DPosition.getZ(),
-                                                                          capsule3DAxis.getX(), capsule3DAxis.getY(), capsule3DAxis.getZ());
+      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(pointToProject, capsule3DPosition, capsule3DAxis);
 
       if (Math.abs(percentageOnAxis) < capsule3DHalfLength)
       {
@@ -243,7 +239,7 @@ public class EuclidShapeTools
       }
    }
 
-   public static double doPoint3DCapsule3DCollisionTest(double capsule3DLength, double capsule3DRadius, Tuple3DReadOnly capsule3DPosition,
+   public static double doPoint3DCapsule3DCollisionTest(double capsule3DLength, double capsule3DRadius, Point3DReadOnly capsule3DPosition,
                                                         Vector3DReadOnly capsule3DAxis, Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack,
                                                         Vector3DBasics normalToPack)
    {
@@ -270,9 +266,7 @@ public class EuclidShapeTools
 
       double capsule3DHalfLength = 0.5 * capsule3DLength;
 
-      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(query.getX(), query.getY(), query.getZ(), capsule3DPosition.getX(),
-                                                                          capsule3DPosition.getY(), capsule3DPosition.getZ(), capsule3DAxis.getX(),
-                                                                          capsule3DAxis.getY(), capsule3DAxis.getZ());
+      double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(query, capsule3DPosition, capsule3DAxis);
 
       if (Math.abs(percentageOnAxis) < capsule3DHalfLength)
       {
@@ -348,14 +342,24 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean isPoint3DInsideCylinder3D(double cylinder3DLength, double cylinder3DRadius, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideCylinder3D(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
+                                                   double cylinder3DRadius, Point3DReadOnly query, double epsilon)
    {
+      double positionOnAxis = EuclidGeometryTools.percentageAlongLine3D(query.getX(), query.getY(), query.getZ(), cylinder3DPosition.getX(),
+                                                                        cylinder3DPosition.getY(), cylinder3DPosition.getZ(), cylinder3DAxis.getX(),
+                                                                        cylinder3DAxis.getY(), cylinder3DAxis.getZ());
+
       double halfLengthPlusEpsilon = 0.5 * cylinder3DLength + epsilon;
-      if (query.getZ() < -halfLengthPlusEpsilon || query.getZ() > halfLengthPlusEpsilon)
+
+      if (Math.abs(positionOnAxis) > halfLengthPlusEpsilon)
          return false;
 
+      double projectionOnAxisX = cylinder3DPosition.getX() + positionOnAxis * cylinder3DAxis.getX();
+      double projectionOnAxisY = cylinder3DPosition.getY() + positionOnAxis * cylinder3DAxis.getY();
+      double projectionOnAxisZ = cylinder3DPosition.getZ() + positionOnAxis * cylinder3DAxis.getZ();
+      double distanceSquaredFromAxis = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ, query);
       double radiusWithEpsilon = cylinder3DRadius + epsilon;
-      return EuclidCoreTools.normSquared(query.getX(), query.getY()) <= radiusWithEpsilon * radiusWithEpsilon;
+      return distanceSquaredFromAxis <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
    public static double signedDistanceBetweenPoint3DAndCylinder3D(double cylinder3DLength, double cylinder3DRadius, Point3DReadOnly query)
@@ -873,25 +877,25 @@ public class EuclidShapeTools
       return possibleMin <= value1 && possibleMin <= value2;
    }
 
-   public static boolean isPoint3DInsideSphere3D(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideSphere3D(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly query, double epsilon)
    {
       double radiusWithEpsilon = sphereRadius + epsilon;
       double distanceSquared = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
       return distanceSquared <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndSphere3D(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndSphere3D(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly query)
    {
       return doPoint3DSphere3DCollisionTest(sphereRadius, spherePosition, query, null, null);
    }
 
-   public static boolean orthogonalProjectionOntoSphere3D(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly pointToProject,
+   public static boolean orthogonalProjectionOntoSphere3D(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly pointToProject,
                                                           Point3DBasics projectionToPack)
    {
       return doPoint3DSphere3DCollisionTest(sphereRadius, spherePosition, pointToProject, projectionToPack, null) <= 0.0;
    }
 
-   public static double doPoint3DSphere3DCollisionTest(double sphereRadius, Tuple3DReadOnly spherePosition, Point3DReadOnly query,
+   public static double doPoint3DSphere3DCollisionTest(double sphereRadius, Point3DReadOnly spherePosition, Point3DReadOnly query,
                                                        Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
       double distance = EuclidGeometryTools.distanceBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
@@ -926,8 +930,8 @@ public class EuclidShapeTools
       return distance - sphereRadius;
    }
 
-   public static double doSphere3DSphere3DCollisionTest(double firstSphereRadius, Tuple3DReadOnly firstSpherePosition, double secondSphereRadius,
-                                                        Tuple3DReadOnly secondSpherePosition, Point3DBasics firstClosestPointToPack,
+   public static double doSphere3DSphere3DCollisionTest(double firstSphereRadius, Point3DReadOnly firstSpherePosition, double secondSphereRadius,
+                                                        Point3DReadOnly secondSpherePosition, Point3DBasics firstClosestPointToPack,
                                                         Point3DBasics secondClosestPointToPack, Vector3DBasics firstNormalToPack,
                                                         Vector3DBasics secondNormalToPack)
    {
@@ -993,8 +997,8 @@ public class EuclidShapeTools
       return distance - firstSphereRadius - secondSphereRadius;
    }
 
-   public static double doSphere3DCylinder3DCollisionTest(double sphereRadius, Tuple3DReadOnly spherePosition, double cylinderRadius, double cylinderLength,
-                                                          Tuple3DReadOnly cylinderPosition, Vector3DReadOnly cylinderAxis,
+   public static double doSphere3DCylinder3DCollisionTest(double sphereRadius, Point3DReadOnly spherePosition, double cylinderRadius, double cylinderLength,
+                                                          Point3DReadOnly cylinderPosition, Vector3DReadOnly cylinderAxis,
                                                           Point3DBasics firstClosestPointToPack, Point3DBasics secondClosestPointToPack,
                                                           Vector3DBasics firstNormalToPack, Vector3DBasics secondNormalToPack)
    {

@@ -8,8 +8,8 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public interface Shape3DBasics extends Shape3DReadOnly, Clearable, Transformable
@@ -30,7 +30,7 @@ public interface Shape3DBasics extends Shape3DReadOnly, Clearable, Transformable
     *
     * @return the position of this shape.
     */
-   Vector3DBasics getPosition();
+   Point3DBasics getPosition();
 
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
 
