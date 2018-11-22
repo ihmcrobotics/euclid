@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -33,6 +34,21 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
       {
          return shapeOrientation.getM20();
       }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector3DReadOnly)
+            return Vector3DReadOnly.super.equals((Vector3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
+      }
    };
 
    private final Vector3DReadOnly yAxis = new Vector3DReadOnly()
@@ -54,6 +70,21 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
       {
          return shapeOrientation.getM21();
       }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector3DReadOnly)
+            return Vector3DReadOnly.super.equals((Vector3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
+      }
    };
 
    private final Vector3DReadOnly zAxis = new Vector3DReadOnly()
@@ -74,6 +105,21 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
       public double getZ()
       {
          return shapeOrientation.getM22();
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Vector3DReadOnly)
+            return Vector3DReadOnly.super.equals((Vector3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
       }
    };
 

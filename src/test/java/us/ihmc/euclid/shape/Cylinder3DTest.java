@@ -87,9 +87,7 @@ public class Cylinder3DTest
          Point3D point1 = new Point3D();
          transform.getTranslation(point1);
 
-         assertEquals(point.getX(), point1.getX(), 1e-7);
-         assertEquals(point.getY(), point1.getY(), 1e-7);
-         assertEquals(point.getZ(), point1.getZ(), 1e-7);
+         EuclidCoreTestTools.assertTuple3DEquals(point, point1, 1e-7);
 
          Quaternion quat1 = new Quaternion();
          rbt.getRotation(quat1);
@@ -97,10 +95,7 @@ public class Cylinder3DTest
          Quaternion quat2 = new Quaternion();
          transform.getRotation(quat2);
 
-         assertEquals(quat1.getX(), quat2.getX(), 1e-7);
-         assertEquals(quat1.getY(), quat2.getY(), 1e-7);
-         assertEquals(quat1.getZ(), quat2.getZ(), 1e-7);
-         assertEquals(quat1.getS(), quat2.getS(), 1e-7);
+         EuclidCoreTestTools.assertQuaternionEquals(quat1, quat2, 1e-7);
       }
    }
 
@@ -188,12 +183,12 @@ public class Cylinder3DTest
       double height = 2.0;
       double radius = 1.0;
       Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Point3D pointToCheckAndPack = new Point3D(1, 1, 1);
+      Point3D pointToCheckAndPack = new Point3D(5, 5, 1);
 
       cylinder3d.orthogonalProjection(pointToCheckAndPack);
       double xy = Math.sqrt(radius * radius / 2);
       Point3D expectedProjection = new Point3D(xy, xy, 1);
-      assertPointEquals(expectedProjection, pointToCheckAndPack);
+      EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, pointToCheckAndPack, EPSILON);
    }
 
    @Test
@@ -206,7 +201,7 @@ public class Cylinder3DTest
 
       Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), height / 2.0);
       cylinder3d.orthogonalProjection(pointToCheckAndPack);
-      assertPointEquals(expectedProjection, pointToCheckAndPack);
+      EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, pointToCheckAndPack, EPSILON);
    }
 
    @Test
@@ -219,16 +214,7 @@ public class Cylinder3DTest
 
       Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), -1.0);
       cylinder3d.orthogonalProjection(pointToCheckAndPack);
-      assertPointEquals(expectedProjection, pointToCheckAndPack);
-   }
-
-   private void assertPointEquals(Point3D expectedPoint, Point3D actualPoint)
-   {
-      String failMessage = "Expected <(" + expectedPoint.getX() + "," + expectedPoint.getY() + "," + expectedPoint.getZ() + ")>, but was <("
-            + actualPoint.getX() + "," + actualPoint.getY() + "," + actualPoint.getZ() + ")>";
-      assertEquals(expectedPoint.getX(), actualPoint.getX(), EPSILON, failMessage);
-      assertEquals(expectedPoint.getY(), actualPoint.getY(), EPSILON, failMessage);
-      assertEquals(expectedPoint.getZ(), actualPoint.getZ(), EPSILON, failMessage);
+      EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, pointToCheckAndPack, EPSILON);
    }
 
    @Test

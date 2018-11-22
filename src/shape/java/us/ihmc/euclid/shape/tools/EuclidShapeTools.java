@@ -362,19 +362,22 @@ public class EuclidShapeTools
       return distanceSquaredFromAxis <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndCylinder3D(double cylinder3DLength, double cylinder3DRadius, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndCylinder3D(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
+                                                                  double cylinder3DRadius, Point3DReadOnly query)
    {
-      return doPoint3DCylinder3DCollisionTest(cylinder3DLength, cylinder3DRadius, query, null, null);
+      return doPoint3DCylinder3DCollisionTest(cylinder3DPosition, cylinder3DAxis, cylinder3DLength, cylinder3DRadius, query, null, null);
    }
 
-   public static boolean orthogonalProjectionOntoCylinder3D(double cylinder3DLength, double cylinder3DRadius, Point3DReadOnly pointToProject,
-                                                            Point3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOntoCylinder3D(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
+                                                            double cylinder3DRadius, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return doPoint3DCylinder3DCollisionTest(cylinder3DLength, cylinder3DRadius, pointToProject, projectionToPack, null) <= 0.0;
+      return doPoint3DCylinder3DCollisionTest(cylinder3DPosition, cylinder3DAxis, cylinder3DLength, cylinder3DRadius, pointToProject, projectionToPack,
+                                              null) <= 0.0;
    }
 
-   public static double doPoint3DCylinder3DCollisionTest(double cylinder3DLength, double cylinder3DRadius, Point3DReadOnly query,
-                                                         Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
+   public static double doPoint3DCylinder3DCollisionTest(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
+                                                         double cylinder3DRadius, Point3DReadOnly query, Point3DBasics closestPointOnSurfaceToPack,
+                                                         Vector3DBasics normalToPack)
    {
       if (cylinder3DRadius <= 0.0 || cylinder3DLength <= 0.0)
       {
@@ -385,123 +388,149 @@ public class EuclidShapeTools
          return Double.NaN;
       }
 
-      double x = query.getX();
-      double y = query.getY();
-      double z = query.getZ();
+      double positionOnAxis = EuclidGeometryTools.percentageAlongLine3D(query, cylinder3DPosition, cylinder3DAxis);
 
-      double xyLengthSquared = EuclidCoreTools.normSquared(x, y);
+      double projectionOnAxisX = cylinder3DPosition.getX() + positionOnAxis * cylinder3DAxis.getX();
+      double projectionOnAxisY = cylinder3DPosition.getY() + positionOnAxis * cylinder3DAxis.getY();
+      double projectionOnAxisZ = cylinder3DPosition.getZ() + positionOnAxis * cylinder3DAxis.getZ();
+      
+      double axisToQueryX = query.getX() - projectionOnAxisX;
+      double axisToQueryY = query.getY() - projectionOnAxisY;
+      double axisToQueryZ = query.getZ() - projectionOnAxisZ;
+      double distanceSquaredFromAxis = EuclidCoreTools.normSquared(axisToQueryX, axisToQueryY, axisToQueryZ);
+
       double halfLength = 0.5 * cylinder3DLength;
 
-      if (xyLengthSquared <= cylinder3DRadius * cylinder3DRadius)
+      if (distanceSquaredFromAxis <= cylinder3DRadius * cylinder3DRadius)
       {
-         if (z < -halfLength)
+         if (positionOnAxis < -halfLength)
          { // The query is directly below the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, -halfLength);
+               closestPointOnSurfaceToPack.scaleAdd(-positionOnAxis - halfLength, cylinder3DAxis, query);
             if (normalToPack != null)
-               normalToPack.set(0.0, 0.0, -1.0);
-            return -(z + halfLength);
+               normalToPack.setAndNegate(cylinder3DAxis);
+            return -(positionOnAxis + halfLength);
          }
 
-         if (z > halfLength)
+         if (positionOnAxis > halfLength)
          { // The query is directly above the cylinder
             if (closestPointOnSurfaceToPack != null)
-               closestPointOnSurfaceToPack.set(x, y, halfLength);
+               closestPointOnSurfaceToPack.scaleAdd(-positionOnAxis + halfLength, cylinder3DAxis, query);
             if (normalToPack != null)
-               normalToPack.set(0.0, 0.0, 1.0);
-            return z - halfLength;
+               normalToPack.set(cylinder3DAxis);
+            return positionOnAxis - halfLength;
          }
 
          // The query is inside the cylinder
-         double xyLength = Math.sqrt(xyLengthSquared);
-         double dz = Math.min(halfLength - z, z + halfLength);
-         double dr = cylinder3DRadius - xyLength;
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double dh = halfLength - Math.abs(positionOnAxis);
+         double dr = cylinder3DRadius - distanceFromAxis;
 
-         if (dz < dr)
+         if (dh < dr)
          {
-            if (z < 0)
+            if (positionOnAxis < 0)
             { // Closer to the bottom face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, -halfLength);
+                  closestPointOnSurfaceToPack.scaleAdd(-positionOnAxis - halfLength, cylinder3DAxis, query);
                if (normalToPack != null)
-                  normalToPack.set(0.0, 0.0, -1.0);
-               return -(z + halfLength);
+                  normalToPack.setAndNegate(cylinder3DAxis);
+               return -(positionOnAxis + halfLength);
             }
             else
             { // Closer to the top face
                if (closestPointOnSurfaceToPack != null)
-                  closestPointOnSurfaceToPack.set(x, y, halfLength);
+                  closestPointOnSurfaceToPack.scaleAdd(-positionOnAxis + halfLength, cylinder3DAxis, query);
                if (normalToPack != null)
-                  normalToPack.set(0.0, 0.0, 1.0);
-               return z - halfLength;
+                  normalToPack.set(cylinder3DAxis);
+               return positionOnAxis - halfLength;
             }
          }
          else
          { // Closer to the cylinder part
+            double directionToQueryX = axisToQueryX / distanceFromAxis;
+            double directionToQueryY = axisToQueryY / distanceFromAxis;
+            double directionToQueryZ = axisToQueryZ / distanceFromAxis;
+
             if (closestPointOnSurfaceToPack != null)
             {
-               double xyScale = cylinder3DRadius / xyLength;
-               closestPointOnSurfaceToPack.set(x * xyScale, y * xyScale, z);
+               closestPointOnSurfaceToPack.set(directionToQueryX, directionToQueryY, directionToQueryZ);
+               closestPointOnSurfaceToPack.scale(cylinder3DRadius);
+               closestPointOnSurfaceToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
             }
 
             if (normalToPack != null)
             {
-               normalToPack.set(x, y, 0.0);
-               normalToPack.scale(1.0 / xyLength);
+               normalToPack.set(directionToQueryX, directionToQueryY, directionToQueryZ);
             }
-            return xyLength - cylinder3DRadius;
+            return distanceFromAxis - cylinder3DRadius;
          }
       }
       else
-      { // The projection of the query onto the xy-plane is outside of the cylinder
-         double xyLength = Math.sqrt(xyLengthSquared);
-         double xyLengthInv = 1.0 / xyLength;
+      { // The query is outside and closest to the cylinder's side.
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
 
-         double xyClosestScale = cylinder3DRadius * xyLengthInv;
-         double xClosest = x * xyClosestScale;
-         double yClosest = y * xyClosestScale;
-         double zClosest = z;
+         double positionOnAxisClamped = positionOnAxis;
+         if (positionOnAxisClamped < -halfLength)
+            positionOnAxisClamped = -halfLength;
+         else if (positionOnAxisClamped > halfLength)
+            positionOnAxisClamped = halfLength;
 
-         if (z < -halfLength)
-            zClosest = -halfLength;
-         else if (z > halfLength)
-            zClosest = halfLength;
-
-         if (zClosest != z)
+         if (positionOnAxisClamped != positionOnAxis)
          { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
 
-            double dx = x - xClosest;
-            double dy = y - yClosest;
-            double dz = z - zClosest;
+            double projectionOnAxisXClamped = cylinder3DPosition.getX() + positionOnAxisClamped * cylinder3DAxis.getX();
+            double projectionOnAxisYClamped = cylinder3DPosition.getY() + positionOnAxisClamped * cylinder3DAxis.getY();
+            double projectionOnAxisZClamped = cylinder3DPosition.getZ() + positionOnAxisClamped * cylinder3DAxis.getZ();
 
-            double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+            double toCylinderScale = cylinder3DRadius / distanceFromAxis;
+            double closestX = axisToQueryX * toCylinderScale + projectionOnAxisXClamped;
+            double closestY = axisToQueryY * toCylinderScale + projectionOnAxisYClamped;
+            double closestZ = axisToQueryZ * toCylinderScale + projectionOnAxisZClamped;
+            double dX = query.getX() - closestX;
+            double dY = query.getY() - closestY;
+            double dZ = query.getZ() - closestZ;
+            double distance = Math.sqrt(EuclidCoreTools.normSquared(dX, dY, dZ));
 
             if (closestPointOnSurfaceToPack != null)
-            {
-               closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-            }
+               closestPointOnSurfaceToPack.set(closestX, closestY, closestZ);
 
             if (normalToPack != null)
             {
-               normalToPack.set(dx, dy, dz);
-               normalToPack.scale(1.0 / distance);
+               if (distance < 1.0e-12)
+               {
+                  if (positionOnAxis > 0.0)
+                     normalToPack.set(cylinder3DAxis);
+                  else
+                     normalToPack.setAndNegate(cylinder3DAxis);
+               }
+               else
+               {
+                  normalToPack.set(dX, dY, dZ);
+                  normalToPack.scale(1.0 / distance);
+               }
             }
 
             return distance;
          }
          else
          { // Closest point is on the cylinder.
+            double directionToQueryX = axisToQueryX / distanceFromAxis;
+            double directionToQueryY = axisToQueryY / distanceFromAxis;
+            double directionToQueryZ = axisToQueryZ / distanceFromAxis;
+
             if (closestPointOnSurfaceToPack != null)
             {
-               closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
+               closestPointOnSurfaceToPack.set(directionToQueryX, directionToQueryY, directionToQueryZ);
+               closestPointOnSurfaceToPack.scale(cylinder3DRadius);
+               closestPointOnSurfaceToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
             }
 
             if (normalToPack != null)
             {
-               normalToPack.set(x * xyLengthInv, y * xyLengthInv, 0.0);
+               normalToPack.set(directionToQueryX, directionToQueryY, directionToQueryZ);
             }
 
-            return xyLength - cylinder3DRadius;
+            return distanceFromAxis - cylinder3DRadius;
          }
       }
    }
