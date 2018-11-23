@@ -2,14 +2,17 @@ package us.ihmc.euclid.shape.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Torus3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -206,5 +209,20 @@ public class EuclidShapeIOTools
    {
       return "Torus 3D: [position: " + getTuple3DString(format, position) + ", axis: " + getTuple3DString(format, axis) + ", radius: "
             + String.format(format, radius) + ", tube radius: " + String.format(format, tubeRadius) + "]";
+   }
+
+   public static String getShape3DPoseString(Shape3DPoseReadOnly shape3DPose)
+   {
+      return getShape3DPoseString(DEFAULT_FORMAT, shape3DPose.getShapeOrientation(), shape3DPose.getShapePosition());
+   }
+
+   public static String getShape3DPoseString(String format, Shape3DPoseReadOnly shape3DPose)
+   {
+      return getShape3DPoseString(format, shape3DPose.getShapeOrientation(), shape3DPose.getShapePosition());
+   }
+
+   public static String getShape3DPoseString(String format, RotationMatrixReadOnly orientation, Point3DReadOnly position)
+   {
+      return "Shape 3D pose: [position: " + getTuple3DString(format, position) + ", " + getStringAsYawPitchRoll(format, orientation) + "]";
    }
 }

@@ -2,13 +2,10 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Torus3D} represents a torus in the XY-plane.
@@ -127,18 +124,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
       return pose;
    }
 
-   @Override
-   public RotationMatrix getOrientation()
-   {
-      return pose.getShapeOrientation();
-   }
-
-   @Override
-   public Point3DBasics getPosition()
-   {
-      return pose.getShapePosition();
-   }
-
    /**
     * Gets the radius from the torus center to the tube center.
     *
@@ -159,12 +144,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    public double getTubeRadius()
    {
       return tubeRadius;
-   }
-
-   @Override
-   public Vector3DReadOnly getAxis()
-   {
-      return pose.getZAxis();
    }
 
    @Override

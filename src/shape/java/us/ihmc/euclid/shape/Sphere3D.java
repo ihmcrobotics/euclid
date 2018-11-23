@@ -1,11 +1,9 @@
 package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -78,18 +76,6 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    public Shape3DPose getPose()
    {
       return pose;
-   }
-
-   @Override
-   public RotationMatrix getOrientation()
-   {
-      return pose.getShapeOrientation();
-   }
-
-   @Override
-   public Point3DBasics getPosition()
-   {
-      return pose.getShapePosition();
    }
 
    /**

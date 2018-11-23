@@ -25,7 +25,10 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     */
    double getRadius();
 
-   Vector3DReadOnly getAxis();
+   default Vector3DReadOnly getAxis()
+   {
+      return getPose().getZAxis();
+   }
 
    /** {@inheritDoc} */
    @Override

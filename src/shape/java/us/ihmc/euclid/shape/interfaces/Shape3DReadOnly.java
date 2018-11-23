@@ -5,7 +5,6 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -16,22 +15,27 @@ public interface Shape3DReadOnly
 {
    static final double IS_INSIDE_EPS = 1.0e-12;
 
-   RigidBodyTransformReadOnly getPose();
+   Shape3DPoseReadOnly getPose();
 
    /**
     * Gets the read-only reference to the orientation of this shape.
     *
     * @return the orientation of this shape.
     */
-   // TODO Not sure what to do here, ideally we'd want Orientation3DReadOnly but it makes epsilonEquals unavailable.
-   RotationMatrixReadOnly getOrientation();
+   default RotationMatrixReadOnly getOrientation()
+   {
+      return getPose().getShapeOrientation();
+   }
 
    /**
     * Gets the read-only reference of the position of this shape.
     *
     * @return the position of this shape.
     */
-   Point3DReadOnly getPosition();
+   default Point3DReadOnly getPosition()
+   {
+      return getPose().getShapePosition();
+   }
 
    IntermediateVariableSupplier getIntermediateVariableSupplier();
 

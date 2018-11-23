@@ -2,14 +2,11 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 {
@@ -72,27 +69,10 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
       return length;
    }
 
-   public Vector3DReadOnly getAxis()
-   {
-      return pose.getZAxis();
-   }
-
    @Override
    public Shape3DPose getPose()
    {
       return pose;
-   }
-
-   @Override
-   public RotationMatrix getOrientation()
-   {
-      return pose.getShapeOrientation();
-   }
-
-   @Override
-   public Point3DBasics getPosition()
-   {
-      return pose.getShapePosition();
    }
 
    @Override

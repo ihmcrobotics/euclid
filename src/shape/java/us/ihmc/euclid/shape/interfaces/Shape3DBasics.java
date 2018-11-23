@@ -5,7 +5,6 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -14,23 +13,30 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public interface Shape3DBasics extends Shape3DReadOnly, Clearable, Transformable
 {
-
-   RigidBodyTransformBasics getPose();
+   @Override
+   Shape3DPoseBasics getPose();
 
    /**
-    * Gets the read-only reference to the orientation of this shape.
+    * Gets the reference to the orientation of this shape.
     *
     * @return the orientation of this shape.
     */
-   // TODO Not sure what to do here, ideally we'd want Orientation3DBasics but it makes epsilonEquals unavailable.
-   RotationMatrix getOrientation();
+   @Override
+   default RotationMatrix getOrientation()
+   {
+      return getPose().getShapeOrientation();
+   }
 
    /**
-    * Gets the read-only reference of the position of this shape.
+    * Gets the reference of the position of this shape.
     *
     * @return the position of this shape.
     */
-   Point3DBasics getPosition();
+   @Override
+   default Point3DBasics getPosition()
+   {
+      return getPose().getShapePosition();
+   }
 
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
 

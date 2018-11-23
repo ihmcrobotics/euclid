@@ -2,14 +2,11 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Cylinder3D} represents a cylinder defined by its radius and length.
@@ -135,18 +132,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       return pose;
    }
 
-   @Override
-   public RotationMatrix getOrientation()
-   {
-      return pose.getShapeOrientation();
-   }
-
-   @Override
-   public Point3DBasics getPosition()
-   {
-      return pose.getShapePosition();
-   }
-
    /**
     * Gets the radius of this cylinder.
     *
@@ -167,12 +152,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public double getLength()
    {
       return length;
-   }
-
-   @Override
-   public Vector3DReadOnly getAxis()
-   {
-      return pose.getZAxis();
    }
 
    @Override

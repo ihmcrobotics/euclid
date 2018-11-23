@@ -14,7 +14,10 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    double getLength();
 
-   Vector3DReadOnly getAxis();
+   default Vector3DReadOnly getAxis()
+   {
+      return getPose().getZAxis();
+   }
 
    /** {@inheritDoc} */
    @Override
