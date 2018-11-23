@@ -1,9 +1,10 @@
 package us.ihmc.euclid.shape;
 
+import static us.ihmc.euclid.tools.EuclidCoreFactories.*;
+
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -15,113 +16,10 @@ public class Shape3DPose implements RigidBodyTransformBasics, GeometryObject<Sha
 {
    private final RotationMatrix shapeOrientation = new RotationMatrix();
    private final Point3D shapePosition = new Point3D();
-   private final Vector3DReadOnly xAxis = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return shapeOrientation.getM00();
-      }
 
-      @Override
-      public double getY()
-      {
-         return shapeOrientation.getM10();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return shapeOrientation.getM20();
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Vector3DReadOnly)
-            return Vector3DReadOnly.super.equals((Vector3DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public String toString()
-      {
-         return EuclidCoreIOTools.getTuple3DString(this);
-      }
-   };
-
-   private final Vector3DReadOnly yAxis = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return shapeOrientation.getM01();
-      }
-
-      @Override
-      public double getY()
-      {
-         return shapeOrientation.getM11();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return shapeOrientation.getM21();
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Vector3DReadOnly)
-            return Vector3DReadOnly.super.equals((Vector3DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public String toString()
-      {
-         return EuclidCoreIOTools.getTuple3DString(this);
-      }
-   };
-
-   private final Vector3DReadOnly zAxis = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return shapeOrientation.getM02();
-      }
-
-      @Override
-      public double getY()
-      {
-         return shapeOrientation.getM12();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return shapeOrientation.getM22();
-      }
-
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof Vector3DReadOnly)
-            return Vector3DReadOnly.super.equals((Vector3DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public String toString()
-      {
-         return EuclidCoreIOTools.getTuple3DString(this);
-      }
-   };
+   private final Vector3DReadOnly xAxis = newLinkedVector3DReadOnly(shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20);
+   private final Vector3DReadOnly yAxis = newLinkedVector3DReadOnly(shapeOrientation::getM01, shapeOrientation::getM11, shapeOrientation::getM21);
+   private final Vector3DReadOnly zAxis = newLinkedVector3DReadOnly(shapeOrientation::getM02, shapeOrientation::getM12, shapeOrientation::getM22);
 
    public Shape3DPose()
    {
