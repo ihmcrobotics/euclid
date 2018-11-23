@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -46,7 +47,7 @@ public class Box3DTest
       Box3D box1 = createRandomBox(random);
       Box3D box2 = new Box3D(box1);
 
-      assertBoxEquals(box1, box2, 1e-14);
+      EuclidShapeTestTools.assertBox3DEquals(box1, box2, 1e-14);
 
       // make sure we're not copying references:
       box1.setPose(EuclidCoreRandomTools.nextRigidBodyTransform(random));
@@ -69,8 +70,8 @@ public class Box3DTest
       Box3D box3 = new Box3D(length, width, height);
       box3.setPose(transform);
 
-      assertBoxEquals(box1, box2, 0.0);
-      assertBoxEquals(box1, box3, 0.0);
+      EuclidShapeTestTools.assertBox3DEquals(box1, box2, 0.0);
+      EuclidShapeTestTools.assertBox3DEquals(box1, box3, 0.0);
    }
 
    @Test
@@ -668,25 +669,6 @@ public class Box3DTest
       assertFalse(EuclidCoreTools.epsilonEquals(box1.getSizeX(), box2.getSizeX(), epsilon));
       assertFalse(EuclidCoreTools.epsilonEquals(box1.getSizeY(), box2.getSizeY(), epsilon));
       assertFalse(EuclidCoreTools.epsilonEquals(box1.getSizeZ(), box2.getSizeZ(), epsilon));
-   }
-
-   private static void assertBoxEquals(Box3D box1, Box3D box2, double epsilon)
-   {
-      assertTrue(box1.getOrientation().epsilonEquals(box2.getOrientation(), epsilon));
-      assertTrue(box1.getPosition().epsilonEquals(box2.getPosition(), epsilon));
-
-      if (epsilon == 0.0)
-      {
-         assertEquals(box1.getSizeX(), box2.getSizeX());
-         assertEquals(box1.getSizeY(), box2.getSizeY());
-         assertEquals(box1.getSizeZ(), box2.getSizeZ());
-      }
-      else
-      {
-         assertEquals(box1.getSizeX(), box2.getSizeX(), epsilon);
-         assertEquals(box1.getSizeY(), box2.getSizeY(), epsilon);
-         assertEquals(box1.getSizeZ(), box2.getSizeZ(), epsilon);
-      }
    }
 
    private static Point3D getRandomConvexCombination(Random random, Point3D[] vertices)

@@ -3,9 +3,11 @@ package us.ihmc.euclid.shape.tools;
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -13,65 +15,138 @@ public class EuclidShapeTools
 {
    private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
 
-   public static boolean isPoint3DInsideBox3D(Vector3DReadOnly box3DSize, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideBox3D(Shape3DPoseReadOnly box3DPose, Vector3DReadOnly box3DSize, Point3DReadOnly query, double epsilon)
    {
-      if (Math.abs(query.getX()) <= 0.5 * box3DSize.getX() + epsilon)
+      double dX = query.getX() - box3DPose.getTranslationX();
+      double dY = query.getY() - box3DPose.getTranslationY();
+      double dZ = query.getZ() - box3DPose.getTranslationZ();
+      double xLocalQuery = dot(dX, dY, dZ, box3DPose.getXAxis());
+
+      if (Math.abs(xLocalQuery) <= 0.5 * box3DSize.getX() + epsilon)
       {
-         if (Math.abs(query.getY()) <= 0.5 * box3DSize.getY() + epsilon)
+         double yLocalQuery = dot(dX, dY, dZ, box3DPose.getYAxis());
+
+         if (Math.abs(yLocalQuery) <= 0.5 * box3DSize.getY() + epsilon)
          {
-            return Math.abs(query.getZ()) <= 0.5 * box3DSize.getZ() + epsilon;
+            double zLocalQuery = dot(dX, dY, dZ, box3DPose.getZAxis());
+            return Math.abs(zLocalQuery) <= 0.5 * box3DSize.getZ() + epsilon;
          }
       }
       return false;
    }
 
-   public static double signedDistanceBetweenPoint3DAndBox3D(Vector3DReadOnly box3DSize, Point3DReadOnly query)
+   public static double dot(double x, double y, double z, Tuple3DReadOnly tuple)
    {
-      return doPoint3DBox3DCollisionTest(box3DSize, query, null, null);
+      return x * tuple.getX() + y * tuple.getY() + z * tuple.getZ();
    }
 
-   public static boolean orthogonalProjectionOntoBox3D(Vector3DReadOnly box3DSize, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
-   {
-      return doPoint3DBox3DCollisionTest(box3DSize, pointToProject, projectionToPack, null) <= 0.0;
-   }
-
-   public static double doPoint3DBox3DCollisionTest(Vector3DReadOnly box3DSize, Point3DReadOnly query, Point3DBasics closestPointToPack,
-                                                    Vector3DBasics normalToPack)
+   public static double signedDistanceBetweenPoint3DAndBox3D(Shape3DPoseReadOnly box3DPose, Vector3DReadOnly box3DSize, Point3DReadOnly query)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
       double halfSizeY = 0.5 * box3DSize.getY();
       double halfSizeZ = 0.5 * box3DSize.getZ();
 
-      double x = query.getX();
-      double y = query.getY();
-      double z = query.getZ();
+      double dx = query.getX() - box3DPose.getTranslationX();
+      double dy = query.getY() - box3DPose.getTranslationY();
+      double dz = query.getZ() - box3DPose.getTranslationZ();
+      double xLocal = dot(dx, dy, dz, box3DPose.getXAxis());
+      double yLocal = dot(dx, dy, dz, box3DPose.getYAxis());
+      double zLocal = dot(dx, dy, dz, box3DPose.getZAxis());
 
-      boolean isInside = Math.abs(query.getX()) <= halfSizeX && Math.abs(query.getY()) <= halfSizeY && Math.abs(query.getZ()) <= halfSizeZ;
+      boolean isInside = Math.abs(xLocal) <= halfSizeX && Math.abs(yLocal) <= halfSizeY && Math.abs(zLocal) <= halfSizeZ;
 
       if (isInside)
       {
-         double dx = Math.abs(Math.abs(x) - halfSizeX);
-         double dy = Math.abs(Math.abs(y) - halfSizeY);
-         double dz = Math.abs(Math.abs(z) - halfSizeZ);
+         dx = Math.abs(Math.abs(xLocal) - halfSizeX);
+         dy = Math.abs(Math.abs(yLocal) - halfSizeY);
+         dz = Math.abs(Math.abs(zLocal) - halfSizeZ);
+
+         return -EuclidCoreTools.min(dx, dy, dz);
+      }
+      else
+      {
+         dx = xLocal - EuclidCoreTools.clamp(xLocal, halfSizeX);
+         dy = yLocal - EuclidCoreTools.clamp(yLocal, halfSizeY);
+         dz = zLocal - EuclidCoreTools.clamp(zLocal, halfSizeZ);
+
+         return Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+      }
+   }
+
+   public static boolean orthogonalProjectionOntoBox3D(Shape3DPoseReadOnly box3DPose, Vector3DReadOnly box3DSize, Point3DReadOnly pointToProject,
+                                                       Point3DBasics projectionToPack)
+   {
+      double halfSizeX = 0.5 * box3DSize.getX();
+      double halfSizeY = 0.5 * box3DSize.getY();
+      double halfSizeZ = 0.5 * box3DSize.getZ();
+
+      double dx = pointToProject.getX() - box3DPose.getTranslationX();
+      double dy = pointToProject.getY() - box3DPose.getTranslationY();
+      double dz = pointToProject.getZ() - box3DPose.getTranslationZ();
+
+      double xLocal = dot(dx, dy, dz, box3DPose.getXAxis());
+      double yLocal = dot(dx, dy, dz, box3DPose.getYAxis());
+      double zLocal = dot(dx, dy, dz, box3DPose.getZAxis());
+
+      if (Math.abs(xLocal) > halfSizeX || Math.abs(yLocal) > halfSizeY || Math.abs(zLocal) > halfSizeZ)
+      {
+         double xLocalClamped = EuclidCoreTools.clamp(xLocal, halfSizeX);
+         double yLocalClamped = EuclidCoreTools.clamp(yLocal, halfSizeY);
+         double zLocalClamped = EuclidCoreTools.clamp(zLocal, halfSizeZ);
+
+         projectionToPack.set(xLocalClamped, yLocalClamped, zLocalClamped);
+         box3DPose.transform(projectionToPack);
+
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   public static double doPoint3DBox3DCollisionTest(Shape3DPoseReadOnly box3DPose, Vector3DReadOnly box3DSize, Point3DReadOnly query,
+                                                    Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   {
+      double halfSizeX = 0.5 * box3DSize.getX();
+      double halfSizeY = 0.5 * box3DSize.getY();
+      double halfSizeZ = 0.5 * box3DSize.getZ();
+
+      double dx = query.getX() - box3DPose.getTranslationX();
+      double dy = query.getY() - box3DPose.getTranslationY();
+      double dz = query.getZ() - box3DPose.getTranslationZ();
+      double xLocal = dot(dx, dy, dz, box3DPose.getXAxis());
+      double yLocal = dot(dx, dy, dz, box3DPose.getYAxis());
+      double zLocal = dot(dx, dy, dz, box3DPose.getZAxis());
+
+      boolean isInside = Math.abs(xLocal) <= halfSizeX && Math.abs(yLocal) <= halfSizeY && Math.abs(zLocal) <= halfSizeZ;
+
+      if (isInside)
+      {
+         dx = Math.abs(Math.abs(xLocal) - halfSizeX);
+         dy = Math.abs(Math.abs(yLocal) - halfSizeY);
+         dz = Math.abs(Math.abs(zLocal) - halfSizeZ);
 
          if (closestPointToPack != null)
          {
-            closestPointToPack.set(x, y, z);
+            closestPointToPack.set(xLocal, yLocal, zLocal);
 
             if (dx < dy)
             {
                if (dx < dz)
-                  closestPointToPack.setX(Math.copySign(halfSizeX, x));
+                  closestPointToPack.setX(Math.copySign(halfSizeX, xLocal));
                else
-                  closestPointToPack.setZ(Math.copySign(halfSizeZ, z));
+                  closestPointToPack.setZ(Math.copySign(halfSizeZ, zLocal));
             }
             else
             {
                if (dy < dz)
-                  closestPointToPack.setY(Math.copySign(halfSizeY, y));
+                  closestPointToPack.setY(Math.copySign(halfSizeY, yLocal));
                else
-                  closestPointToPack.setZ(Math.copySign(halfSizeZ, z));
+                  closestPointToPack.setZ(Math.copySign(halfSizeZ, zLocal));
             }
+
+            box3DPose.transform(closestPointToPack);
          }
 
          if (normalToPack != null)
@@ -81,42 +156,45 @@ public class EuclidShapeTools
             if (dx < dy)
             {
                if (dx < dz)
-                  normalToPack.setX(Math.copySign(1.0, x));
+                  normalToPack.setX(Math.copySign(1.0, xLocal));
                else
-                  normalToPack.setZ(Math.copySign(1.0, z));
+                  normalToPack.setZ(Math.copySign(1.0, zLocal));
             }
             else
             {
                if (dy < dz)
-                  normalToPack.setY(Math.copySign(1.0, y));
+                  normalToPack.setY(Math.copySign(1.0, yLocal));
                else
-                  normalToPack.setZ(Math.copySign(1.0, z));
+                  normalToPack.setZ(Math.copySign(1.0, zLocal));
             }
+            box3DPose.transform(normalToPack);
          }
 
          return -EuclidCoreTools.min(dx, dy, dz);
       }
       else
       {
-         double xClamped = EuclidCoreTools.clamp(x, halfSizeX);
-         double yClamped = EuclidCoreTools.clamp(y, halfSizeY);
-         double zClamped = EuclidCoreTools.clamp(z, halfSizeZ);
+         double xLocalClamped = EuclidCoreTools.clamp(xLocal, halfSizeX);
+         double yLocalClamped = EuclidCoreTools.clamp(yLocal, halfSizeY);
+         double zLocalClamped = EuclidCoreTools.clamp(zLocal, halfSizeZ);
 
-         double dx = x - xClamped;
-         double dy = y - yClamped;
-         double dz = z - zClamped;
+         dx = xLocal - xLocalClamped;
+         dy = yLocal - yLocalClamped;
+         dz = zLocal - zLocalClamped;
 
          double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
 
          if (closestPointToPack != null)
          {
-            closestPointToPack.set(xClamped, yClamped, zClamped);
+            closestPointToPack.set(xLocalClamped, yLocalClamped, zLocalClamped);
+            box3DPose.transform(closestPointToPack);
          }
 
          if (normalToPack != null)
          {
             normalToPack.set(dx, dy, dz);
             normalToPack.scale(1.0 / distance);
+            box3DPose.transform(normalToPack);
          }
 
          return distance;

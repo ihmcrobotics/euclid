@@ -12,6 +12,30 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 public abstract class TupleTools
 {
    /**
+    * Convenience method to calculate the dot product of two tuples.
+    * 
+    * @param tuple1 the first tuple in the dot product. Not modified.
+    * @param tuple2 the second tuple in the dot product. Not modified.
+    * @return the value of the dot product of the two tuples.
+    */
+   public static double tupleDotProduct(Tuple2DReadOnly tuple1, Tuple2DReadOnly tuple2)
+   {
+      return tuple1.getX() * tuple2.getX() + tuple1.getY() * tuple2.getY();
+   }
+
+   /**
+    * Convenience method to calculate the dot product of two tuples.
+    * 
+    * @param tuple1 the first tuple in the dot product. Not modified.
+    * @param tuple2 the second tuple in the dot product. Not modified.
+    * @return the value of the dot product of the two tuples.
+    */
+   public static double tupleDotProduct(Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2)
+   {
+      return tuple1.getX() * tuple2.getX() + tuple1.getY() * tuple2.getY() + tuple1.getZ() * tuple2.getZ();
+   }
+
+   /**
     * Tests on a per component basis if the two given tuples are equal to an {@code epsilon}.
     *
     * @param tuple1 the first tuple. Not modified.
