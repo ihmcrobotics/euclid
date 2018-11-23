@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
+import static us.ihmc.euclid.tools.TupleTools.*;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
@@ -8,7 +9,6 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -34,11 +34,6 @@ public class EuclidShapeTools
          }
       }
       return false;
-   }
-
-   public static double dot(double x, double y, double z, Tuple3DReadOnly tuple)
-   {
-      return x * tuple.getX() + y * tuple.getY() + z * tuple.getZ();
    }
 
    public static double signedDistanceBetweenPoint3DAndBox3D(Shape3DPoseReadOnly box3DPose, Vector3DReadOnly box3DSize, Point3DReadOnly query)

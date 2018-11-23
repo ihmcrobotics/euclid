@@ -10,6 +10,8 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 {
    Vector3DBasics getSize();
 
+   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
+
    @Override
    default boolean containsNaN()
    {

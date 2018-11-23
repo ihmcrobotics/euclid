@@ -15,6 +15,8 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 {
    Vector3DReadOnly getSize();
 
+   IntermediateVariableSupplier getIntermediateVariableSupplier();
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()

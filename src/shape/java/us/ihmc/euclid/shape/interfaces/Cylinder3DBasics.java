@@ -27,6 +27,8 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
       setRadius(radius);
    }
 
+   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
+
    @Override
    default boolean containsNaN()
    {

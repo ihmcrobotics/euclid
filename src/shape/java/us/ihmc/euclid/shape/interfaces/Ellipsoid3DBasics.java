@@ -10,6 +10,8 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    @Override
    Vector3DBasics getRadii();
 
+   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
+
    @Override
    default boolean containsNaN()
    {

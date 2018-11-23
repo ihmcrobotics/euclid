@@ -11,6 +11,21 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  */
 public abstract class TupleTools
 {
+   public static double dot(double x, double y, Tuple2DReadOnly tuple)
+   {
+      return x * tuple.getX() + y * tuple.getY();
+   }
+
+   public static double dot(double x, double y, double z, Tuple3DReadOnly tuple)
+   {
+      return x * tuple.getX() + y * tuple.getY() + z * tuple.getZ();
+   }
+
+   public static double dot(double x, double y, double z, double s, Tuple4DReadOnly tuple)
+   {
+      return x * tuple.getX() + y * tuple.getY() + z * tuple.getZ() + s * tuple.getS();
+   }
+
    /**
     * Convenience method to calculate the dot product of two tuples.
     * 
@@ -18,7 +33,7 @@ public abstract class TupleTools
     * @param tuple2 the second tuple in the dot product. Not modified.
     * @return the value of the dot product of the two tuples.
     */
-   public static double tupleDotProduct(Tuple2DReadOnly tuple1, Tuple2DReadOnly tuple2)
+   public static double dot(Tuple2DReadOnly tuple1, Tuple2DReadOnly tuple2)
    {
       return tuple1.getX() * tuple2.getX() + tuple1.getY() * tuple2.getY();
    }
@@ -30,7 +45,7 @@ public abstract class TupleTools
     * @param tuple2 the second tuple in the dot product. Not modified.
     * @return the value of the dot product of the two tuples.
     */
-   public static double tupleDotProduct(Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2)
+   public static double dot(Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2)
    {
       return tuple1.getX() * tuple2.getX() + tuple1.getY() * tuple2.getY() + tuple1.getZ() * tuple2.getZ();
    }

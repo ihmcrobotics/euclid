@@ -38,8 +38,6 @@ public interface Shape3DReadOnly
       return getPose().getShapePosition();
    }
 
-   IntermediateVariableSupplier getIntermediateVariableSupplier();
-
    default boolean containsNaN()
    {
       return getPose().containsNaN();

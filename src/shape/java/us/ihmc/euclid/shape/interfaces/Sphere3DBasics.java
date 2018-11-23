@@ -12,6 +12,8 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
 
    void setRadius(double radius);
 
+   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
+
    /** {@inheritDoc} */
    @Override
    default void setToZero()

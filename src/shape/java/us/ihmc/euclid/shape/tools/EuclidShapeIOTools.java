@@ -8,6 +8,7 @@ import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.interfaces.PointShape3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.interfaces.Sphere3DReadOnly;
@@ -128,6 +129,21 @@ public class EuclidShapeIOTools
    {
       return "Ellipsoid 3D: [position: " + getTuple3DString(format, position) + ", " + getStringAsYawPitchRoll(format, orientation) + ", radii: "
             + getTuple3DString(format, radii) + "]";
+   }
+
+   public static String getPointShape3DString(PointShape3DReadOnly pointShape3D)
+   {
+      return getPointShape3DString(DEFAULT_FORMAT, pointShape3D);
+   }
+
+   public static String getPointShape3DString(String format, PointShape3DReadOnly pointShape3D)
+   {
+      return getPointShape3DString(format, (Tuple3DReadOnly) pointShape3D);
+   }
+
+   public static String getPointShape3DString(String format, Tuple3DReadOnly position)
+   {
+      return "Point shape 3D: " + getTuple3DString(format, position);
    }
 
    public static String getRamp3DString(Ramp3DReadOnly ramp3D)

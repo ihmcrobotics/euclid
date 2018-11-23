@@ -2,7 +2,6 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -27,7 +26,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 {
    private final Shape3DPose pose = new Shape3DPose();
-   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** Size of this ramp's bounding box. */
    private final Vector3D size = new Vector3D()
@@ -187,18 +185,6 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public double getRampIncline()
    {
       return angleOfRampIncline;
-   }
-
-   @Override
-   public IntermediateVariableSupplier getIntermediateVariableSupplier()
-   {
-      return supplier;
-   }
-
-   @Override
-   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
-   {
-      this.supplier = newSupplier;
    }
 
    /**

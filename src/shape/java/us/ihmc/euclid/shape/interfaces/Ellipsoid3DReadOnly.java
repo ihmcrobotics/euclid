@@ -14,6 +14,8 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
 {
    Vector3DReadOnly getRadii();
 
+   IntermediateVariableSupplier getIntermediateVariableSupplier();
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()

@@ -4,14 +4,12 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 
 public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 {
    private final Shape3DPose pose = new Shape3DPose();
-   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    private double radius;
    private double length;
@@ -73,18 +71,6 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    public Shape3DPose getPose()
    {
       return pose;
-   }
-
-   @Override
-   public IntermediateVariableSupplier getIntermediateVariableSupplier()
-   {
-      return supplier;
-   }
-
-   @Override
-   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
-   {
-      this.supplier = newSupplier;
    }
 
    @Override

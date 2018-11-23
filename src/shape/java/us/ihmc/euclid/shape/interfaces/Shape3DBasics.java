@@ -38,8 +38,6 @@ public interface Shape3DBasics extends Shape3DReadOnly, Clearable, Transformable
       return getPose().getShapePosition();
    }
 
-   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
-
    @Override
    default boolean containsNaN()
    {

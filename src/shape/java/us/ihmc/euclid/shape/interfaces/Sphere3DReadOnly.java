@@ -18,6 +18,8 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     */
    double getRadius();
 
+   IntermediateVariableSupplier getIntermediateVariableSupplier();
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()

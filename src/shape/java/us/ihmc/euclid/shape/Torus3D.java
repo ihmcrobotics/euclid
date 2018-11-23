@@ -2,7 +2,6 @@ package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -22,7 +21,6 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
 {
    private final Shape3DPose pose = new Shape3DPose();
-   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** It is the radius for the center of the torus to the center of the tube. */
    private double radius;
@@ -144,18 +142,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    public double getTubeRadius()
    {
       return tubeRadius;
-   }
-
-   @Override
-   public IntermediateVariableSupplier getIntermediateVariableSupplier()
-   {
-      return supplier;
-   }
-
-   @Override
-   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
-   {
-      this.supplier = newSupplier;
    }
 
    /**

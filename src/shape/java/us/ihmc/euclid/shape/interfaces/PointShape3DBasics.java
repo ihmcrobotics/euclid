@@ -1,0 +1,55 @@
+package us.ihmc.euclid.shape.interfaces;
+
+import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+
+public interface PointShape3DBasics extends PointShape3DReadOnly, Shape3DBasics, Point3DBasics
+{
+   @Override
+   default void setX(double x)
+   {
+      setPositionX(x);
+   }
+
+   @Override
+   default void setY(double y)
+   {
+      setPositionY(y);
+   }
+
+   @Override
+   default void setZ(double z)
+   {
+      setPositionZ(z);
+   }
+
+   @Override
+   default void setToZero()
+   {
+      Shape3DBasics.super.setToZero();
+   }
+
+   @Override
+   default void setToNaN()
+   {
+      Shape3DBasics.super.setToNaN();
+   }
+
+   @Override
+   default boolean containsNaN()
+   {
+      return PointShape3DReadOnly.super.containsNaN();
+   }
+
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      Shape3DBasics.super.applyTransform(transform);
+   }
+
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      Shape3DBasics.super.applyInverseTransform(transform);
+   }
+}

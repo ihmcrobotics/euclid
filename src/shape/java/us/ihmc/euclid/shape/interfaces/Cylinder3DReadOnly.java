@@ -18,6 +18,8 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     */
    double getLength();
 
+   IntermediateVariableSupplier getIntermediateVariableSupplier();
+
    /**
     * Gets the radius of this cylinder.
     *
