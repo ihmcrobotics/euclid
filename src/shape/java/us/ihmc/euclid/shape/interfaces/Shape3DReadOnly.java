@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -63,6 +64,18 @@ public interface Shape3DReadOnly
     *         otherwise.
     */
    boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
+
+   default CollisionTestResult doCollisionTest(Shape3DReadOnly otherShape)
+   {
+      CollisionTestResult collisionTestResult = new CollisionTestResult();
+      doCollisionTest(otherShape, collisionTestResult);
+      return collisionTestResult;
+   }
+
+   default void doCollisionTest(Shape3DReadOnly otherShape, CollisionTestResult result)
+   {
+      throw new UnsupportedOperationException("This shape does not support shape-to-shape collision: " + getClass().getSimpleName());
+   }
 
    /**
     * Calculates the minimum distance between the point and this shape.
