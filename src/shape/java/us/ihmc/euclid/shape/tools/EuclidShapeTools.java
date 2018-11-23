@@ -752,41 +752,86 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean isPoint3DInsideEllipsoid3D(Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly query,
+                                                    double epsilon)
    {
-      double scaledX = query.getX() / (ellipsoid3DRadii.getX() + epsilon);
-      double scaledY = query.getY() / (ellipsoid3DRadii.getY() + epsilon);
-      double scaledZ = query.getZ() / (ellipsoid3DRadii.getZ() + epsilon);
+      double dX = query.getX() - ellipsoid3DPose.getTranslationX();
+      double dY = query.getY() - ellipsoid3DPose.getTranslationY();
+      double dZ = query.getZ() - ellipsoid3DPose.getTranslationZ();
+
+      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
+      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
+      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
+
+      double scaledX = xLocalQuery / (ellipsoid3DRadii.getX() + epsilon);
+      double scaledY = yLocalQuery / (ellipsoid3DRadii.getY() + epsilon);
+      double scaledZ = zLocalQuery / (ellipsoid3DRadii.getZ() + epsilon);
 
       return EuclidCoreTools.normSquared(scaledX, scaledY, scaledZ) <= 1.0;
    }
 
-   public static double signedDistanceBetweenPoint3DAndEllipsoid3D(Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii,
+                                                                   Point3DReadOnly query)
    {
-      return doPoint3DEllipsoid3DCollisionTest(ellipsoid3DRadii, query, null, null);
+      return doPoint3DEllipsoid3DCollisionTest(ellipsoid3DPose, ellipsoid3DRadii, query, null, null);
    }
 
-   public static boolean orthogonalProjectionOntoEllipsoid3D(Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
-   {
-      return doPoint3DEllipsoid3DCollisionTest(ellipsoid3DRadii, pointToProject, projectionToPack, null) <= 0.0;
-   }
-
-   public static double doPoint3DEllipsoid3DCollisionTest(Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly query, Point3DBasics closestPointToPack,
-                                                          Vector3DBasics normalToPack)
+   public static boolean orthogonalProjectionOntoEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii,
+                                                             Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
       double xRadius = ellipsoid3DRadii.getX();
       double yRadius = ellipsoid3DRadii.getY();
       double zRadius = ellipsoid3DRadii.getZ();
 
-      double sumOfSquares = EuclidCoreTools.normSquared(query.getX() / xRadius, query.getY() / yRadius, query.getZ() / zRadius);
-      double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
+      double dX = pointToProject.getX() - ellipsoid3DPose.getTranslationX();
+      double dY = pointToProject.getY() - ellipsoid3DPose.getTranslationY();
+      double dZ = pointToProject.getZ() - ellipsoid3DPose.getTranslationZ();
+
+      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
+      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
+      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
+
+      double sumOfSquares = EuclidCoreTools.normSquared(xLocalQuery / xRadius, yLocalQuery / yRadius, zLocalQuery / zRadius);
+
+      if (sumOfSquares > 1.0)
+      {
+         double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
+         projectionToPack.sub(pointToProject, ellipsoid3DPose.getShapePosition());
+         projectionToPack.scale(scaleFactor);
+         projectionToPack.add(ellipsoid3DPose.getShapePosition());
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   public static double doPoint3DEllipsoid3DCollisionTest(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly query,
+                                                          Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   {
+      double xRadius = ellipsoid3DRadii.getX();
+      double yRadius = ellipsoid3DRadii.getY();
+      double zRadius = ellipsoid3DRadii.getZ();
+
+      double dX = query.getX() - ellipsoid3DPose.getTranslationX();
+      double dY = query.getY() - ellipsoid3DPose.getTranslationY();
+      double dZ = query.getZ() - ellipsoid3DPose.getTranslationZ();
+      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
+      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
+      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
+
+      double sumOfSquares = EuclidCoreTools.normSquared(xLocalQuery / xRadius, yLocalQuery / yRadius, zLocalQuery / zRadius);
 
       if (sumOfSquares > 1.0e-10)
       {
+         double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
+
          if (closestPointToPack != null)
          {
-            closestPointToPack.set(query);
+            closestPointToPack.sub(query, ellipsoid3DPose.getShapePosition());
             closestPointToPack.scale(scaleFactor);
+            closestPointToPack.add(ellipsoid3DPose.getShapePosition());
          }
 
          if (normalToPack != null)
@@ -795,9 +840,10 @@ public class EuclidShapeTools
             double yScale = 1.0 / (yRadius * yRadius);
             double zScale = 1.0 / (zRadius * zRadius);
 
-            normalToPack.set(query);
+            normalToPack.set(xLocalQuery, yLocalQuery, zLocalQuery);
             normalToPack.scale(xScale, yScale, zScale);
             normalToPack.normalize();
+            ellipsoid3DPose.transform(normalToPack);
          }
 
          return query.distanceFromOrigin() * (1.0 - scaleFactor);
@@ -806,15 +852,15 @@ public class EuclidShapeTools
       {
          if (closestPointToPack != null)
          {
-            closestPointToPack.set(0.0, 0.0, zRadius);
+            closestPointToPack.scaleAdd(zRadius, ellipsoid3DPose.getZAxis(), ellipsoid3DPose.getShapePosition());
          }
 
          if (normalToPack != null)
          {
-            normalToPack.set(0.0, 0.0, 1.0);
+            normalToPack.set(ellipsoid3DPose.getZAxis());
          }
 
-         return query.getZ() - zRadius;
+         return zLocalQuery - zRadius;
       }
    }
 
