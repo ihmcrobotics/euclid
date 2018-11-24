@@ -193,9 +193,9 @@ public class EuclidShapeCollisionTools
          }
          else // if (percentageOnAxis < 0.0)
          {
-            double bottomCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-            double bottomCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-            double bottomCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
+            double bottomCenterX = capsule3DPosition.getX() - capsule3DHalfLength * capsule3DAxis.getX();
+            double bottomCenterY = capsule3DPosition.getY() - capsule3DHalfLength * capsule3DAxis.getY();
+            double bottomCenterZ = capsule3DPosition.getZ() - capsule3DHalfLength * capsule3DAxis.getZ();
             doPoint3DSphere3DCollisionTest(point3D, capsule3DRadius, bottomCenterX, bottomCenterY, bottomCenterZ, resultToPack);
          }
       }

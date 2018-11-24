@@ -13,6 +13,7 @@ import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.shape.Box3D;
+import us.ihmc.euclid.shape.Capsule3D;
 import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.shape.PointShape3D;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
@@ -197,6 +198,174 @@ public class EuclidShapeCollisionToolsTest
          CollisionTestResult actual = new CollisionTestResult();
          EuclidShapeCollisionTools.doPointShape3DBox3DCollisionTest(pointShape3D, box3D, actual);
          EuclidShapeTestTools.assertCollisionTestResultEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPointShape3DCapsule3D() throws Exception
+   {
+      Random random = new Random(5411);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // PointShape outside closest to one of the capsule's ends.
+         Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
+         Vector3DReadOnly capsuleAxis = capsule3D.getAxis();
+
+         // We'll choose which end is closer with this sign times the capsule axis
+         double endSign = random.nextBoolean() ? -1.0 : 1.0;
+
+         Point3D endCenter = new Point3D();
+         endCenter.scaleAdd(0.5 * endSign * capsule3D.getLength(), capsuleAxis, capsule3D.getPosition());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, capsuleAxis, false);
+
+         Vector3D normal = new Vector3D();
+         normal.setAndScale(endSign, capsuleAxis);
+         normal.interpolate(orthogonalToAxis, random.nextDouble());
+         normal.normalize();
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(capsule3D.getRadius(), normal, endCenter);
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distance, normal, pointOnSurface);
+
+         PointShape3D pointShape3D = new PointShape3D(pointOutside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(capsule3D);
+         expected.setShapesAreColliding(false);
+         expected.setDistance(distance);
+         expected.getPointOnA().set(pointOutside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // PointShape outside closest to the cylinder part of the capsule.
+         Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
+         Vector3DReadOnly capsuleAxis = capsule3D.getAxis();
+
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.5 * capsule3D.getLength()), capsuleAxis, capsule3D.getPosition());
+
+         Vector3D normal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, capsuleAxis, true);
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(capsule3D.getRadius(), normal, pointOnAxis);
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distance, normal, pointOnSurface);
+
+         PointShape3D pointShape3D = new PointShape3D(pointOutside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(capsule3D);
+         expected.setShapesAreColliding(false);
+         expected.setDistance(distance);
+         expected.getPointOnA().set(pointOutside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // PointShape inside closest to one of the capsule's ends.
+         Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
+         Vector3DReadOnly capsuleAxis = capsule3D.getAxis();
+
+         // We'll choose which end is closer with this sign times the capsule axis
+         double endSign = random.nextBoolean() ? -1.0 : 1.0;
+
+         Point3D endCenter = new Point3D();
+         endCenter.scaleAdd(0.5 * endSign * capsule3D.getLength(), capsuleAxis, capsule3D.getPosition());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, capsuleAxis, false);
+
+         Vector3D normal = new Vector3D();
+         normal.setAndScale(endSign, capsuleAxis);
+         normal.interpolate(orthogonalToAxis, random.nextDouble());
+         normal.normalize();
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(capsule3D.getRadius(), normal, endCenter);
+
+         Point3D pointInside = new Point3D();
+         pointInside.interpolate(endCenter, pointOnSurface, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         double distance = pointOnSurface.distance(pointInside);
+
+         PointShape3D pointShape3D = new PointShape3D(pointInside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(capsule3D);
+         expected.setShapesAreColliding(true);
+         expected.setDepth(distance);
+         expected.getPointOnA().set(pointInside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // PointShape outside closest to the cylinder part of the capsule.
+         Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
+         Vector3DReadOnly capsuleAxis = capsule3D.getAxis();
+
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.5 * capsule3D.getLength()), capsuleAxis, capsule3D.getPosition());
+
+         Vector3D normal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, capsuleAxis, true);
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(capsule3D.getRadius(), normal, pointOnAxis);
+
+         Point3D pointInside = new Point3D();
+         pointInside.interpolate(pointOnAxis, pointOnSurface, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         double distance = pointInside.distance(pointOnSurface);
+
+         PointShape3D pointShape3D = new PointShape3D(pointInside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(capsule3D);
+         expected.setShapesAreColliding(true);
+         expected.setDepth(distance);
+         expected.getPointOnA().set(pointInside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
    }
 
