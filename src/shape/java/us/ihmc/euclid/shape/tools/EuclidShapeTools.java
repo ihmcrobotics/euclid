@@ -985,26 +985,16 @@ public class EuclidShapeTools
          double distanceToBottomFace = zLocalQuery;
          double distanceToSlopeFace = -(rampDirectionX * zLocalQuery - xLocalQuery * rampDirectionZ);
 
-         if (isFirstValueMinimum(distanceToRightFace, distanceToLeftFace, distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
-         { // Query is closer to the right face
-            return -distanceToRightFace;
-         }
-         else if (isFirstValueMinimum(distanceToLeftFace, distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
-         { // Query is closer to the left face
-            return -distanceToLeftFace;
-         }
-         else if (isFirstValueMinimum(distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
-         { // Query is closer to the rear face
-            return -distanceToRearFace;
-         }
-         else if (distanceToBottomFace <= distanceToSlopeFace)
-         { // Query is closer to the bottom face
-            return -distanceToBottomFace;
-         }
-         else
-         { // Query is closer to the slope face
-            return -distanceToSlopeFace;
-         }
+         double minDistance = distanceToRightFace;
+         if (minDistance > distanceToLeftFace)
+            minDistance = distanceToLeftFace;
+         if (minDistance > distanceToRearFace)
+            minDistance = distanceToRearFace;
+         if (minDistance > distanceToBottomFace)
+            minDistance = distanceToBottomFace;
+         if (minDistance > distanceToSlopeFace)
+            minDistance = distanceToSlopeFace;
+         return -minDistance;
       }
    }
 
@@ -1356,17 +1346,17 @@ public class EuclidShapeTools
       return distance;
    }
 
-   private static boolean isFirstValueMinimum(double possibleMin, double value1, double value2, double value3, double value4)
+   public static boolean isFirstValueMinimum(double possibleMin, double value1, double value2, double value3, double value4)
    {
       return possibleMin <= value1 && possibleMin <= value2 && possibleMin <= value3 && possibleMin <= value4;
    }
 
-   private static boolean isFirstValueMinimum(double possibleMin, double value1, double value2, double value3)
+   public static boolean isFirstValueMinimum(double possibleMin, double value1, double value2, double value3)
    {
       return possibleMin <= value1 && possibleMin <= value2 && possibleMin <= value3;
    }
 
-   private static boolean isFirstValueMinimum(double possibleMin, double value1, double value2)
+   public static boolean isFirstValueMinimum(double possibleMin, double value1, double value2)
    {
       return possibleMin <= value1 && possibleMin <= value2;
    }
