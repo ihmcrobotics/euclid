@@ -6,6 +6,7 @@ import us.ihmc.euclid.shape.Box3D;
 import us.ihmc.euclid.shape.Capsule3D;
 import us.ihmc.euclid.shape.Cylinder3D;
 import us.ihmc.euclid.shape.Ellipsoid3D;
+import us.ihmc.euclid.shape.PointShape3D;
 import us.ihmc.euclid.shape.Ramp3D;
 import us.ihmc.euclid.shape.Sphere3D;
 import us.ihmc.euclid.shape.Torus3D;
@@ -55,6 +56,16 @@ public class EuclidShapeRandomTools
    {
       return new Ellipsoid3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
                              EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
+   }
+
+   public static PointShape3D nextPointShape3D(Random random)
+   {
+      return new PointShape3D(EuclidCoreRandomTools.nextPoint3D(random));
+   }
+
+   public static PointShape3D nextPointShape3D(Random random, double minMax)
+   {
+      return new PointShape3D(EuclidCoreRandomTools.nextPoint3D(random, minMax));
    }
 
    public static Ramp3D nextRamp3D(Random random)
