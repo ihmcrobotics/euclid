@@ -1,11 +1,15 @@
 package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.interfaces.EpsilonComparable;
+import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.shape.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
-public class CollisionTestResult implements Clearable
+public class CollisionTestResult implements Clearable, EpsilonComparable<CollisionTestResult>, GeometricallyComparable<CollisionTestResult>
 {
    private boolean shapesAreColliding;
    private double depth;
@@ -147,5 +151,69 @@ public class CollisionTestResult implements Clearable
    public Vector3D getNormalOnB()
    {
       return normalOnB;
+   }
+
+   @Override
+   public boolean epsilonEquals(CollisionTestResult other, double epsilon)
+   {
+      if (areShapesColliding() != other.areShapesColliding())
+         return false;
+
+      if (areShapesColliding())
+      {
+         if (!EuclidCoreTools.epsilonEquals(getDepth(), other.getDepth(), epsilon))
+            return false;
+      }
+      else
+      {
+         if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
+            return false;
+      }
+
+      if (!getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
+         return false;
+      if (!getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
+         return false;
+      if (!getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
+         return false;
+      if (!getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
+         return false;
+
+      return true;
+   }
+
+   @Override
+   public boolean geometricallyEquals(CollisionTestResult other, double epsilon)
+   {
+      if (areShapesColliding() != other.areShapesColliding())
+         return false;
+
+      if (areShapesColliding())
+      {
+         if (!EuclidCoreTools.epsilonEquals(getDepth(), other.getDepth(), epsilon))
+            return false;
+      }
+      else
+      {
+         if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
+            return false;
+      }
+
+      if (!getPointOnA().geometricallyEquals(other.getPointOnA(), epsilon))
+         return false;
+      if (!getNormalOnA().geometricallyEquals(other.getNormalOnA(), epsilon))
+         return false;
+      if (!getPointOnB().geometricallyEquals(other.getPointOnB(), epsilon))
+         return false;
+      if (!getNormalOnB().geometricallyEquals(other.getNormalOnB(), epsilon))
+         return false;
+
+      return true;
+   }
+
+   @Override
+   public String toString()
+   {
+      return EuclidShapeIOTools.getCollisionTestResultString(this);
    }
 }

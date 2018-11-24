@@ -4,6 +4,7 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
@@ -240,5 +241,33 @@ public class EuclidShapeIOTools
    public static String getShape3DPoseString(String format, RotationMatrixReadOnly orientation, Point3DReadOnly position)
    {
       return "Shape 3D pose: [position: " + getTuple3DString(format, position) + ", " + getStringAsYawPitchRoll(format, orientation) + "]";
+   }
+
+   public static String getCollisionTestResultString(CollisionTestResult collisionTestResult)
+   {
+      return getCollisionTestResultString(DEFAULT_FORMAT, collisionTestResult);
+   }
+
+   public static String getCollisionTestResultString(String format, CollisionTestResult collisionTestResult)
+   {
+      if (collisionTestResult == null)
+         return "null";
+
+      String string = "Collision test result: ";
+      if (collisionTestResult.areShapesColliding())
+      {
+         string += "colliding, depth: " + collisionTestResult.getDepth() + "\n";
+      }
+      else
+      {
+         string += "non-colliding, separating distance: " + collisionTestResult.getDistance() + "\n";
+      }
+      string += "Shape A: " + (collisionTestResult.getShapeA() == null ? "null" : collisionTestResult.getShapeA().getClass().getSimpleName());
+      string += ", location: " + getTuple3DString(format, collisionTestResult.getPointOnA());
+      string += ", normal: " + getTuple3DString(format, collisionTestResult.getNormalOnA()) + "\n";
+      string += "Shape B: " + (collisionTestResult.getShapeB() == null ? "null" : collisionTestResult.getShapeB().getClass().getSimpleName());
+      string += ", location: " + getTuple3DString(format, collisionTestResult.getPointOnB());
+      string += ", normal: " + getTuple3DString(format, collisionTestResult.getNormalOnB());
+      return string;
    }
 }

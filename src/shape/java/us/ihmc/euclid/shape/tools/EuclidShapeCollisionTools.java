@@ -60,40 +60,37 @@ public class EuclidShapeCollisionTools
          Point3D pointOnB = resultToPack.getPointOnB();
          pointOnB.set(xLocal, yLocal, zLocal);
 
-         if (dx < dy)
-         {
-            if (dx < dz)
-               pointOnB.setX(Math.copySign(halfSizeX, xLocal));
-            else
-               pointOnB.setZ(Math.copySign(halfSizeZ, zLocal));
-         }
-         else
-         {
-            if (dy < dz)
-               pointOnB.setY(Math.copySign(halfSizeY, yLocal));
-            else
-               pointOnB.setZ(Math.copySign(halfSizeZ, zLocal));
-         }
-
-         box3D.getPose().transform(pointOnB);
-
          Vector3D normalOnB = resultToPack.getNormalOnB();
          normalOnB.setToZero();
 
          if (dx < dy)
          {
             if (dx < dz)
+            {
+               pointOnB.setX(Math.copySign(halfSizeX, xLocal));
                normalOnB.setX(Math.copySign(1.0, xLocal));
+            }
             else
+            {
+               pointOnB.setZ(Math.copySign(halfSizeZ, zLocal));
                normalOnB.setZ(Math.copySign(1.0, zLocal));
+            }
          }
          else
          {
             if (dy < dz)
+            {
+               pointOnB.setY(Math.copySign(halfSizeY, yLocal));
                normalOnB.setY(Math.copySign(1.0, yLocal));
+            }
             else
+            {
+               pointOnB.setZ(Math.copySign(halfSizeZ, zLocal));
                normalOnB.setZ(Math.copySign(1.0, zLocal));
+            }
          }
+
+         box3D.getPose().transform(pointOnB);
          box3D.getPose().transform(normalOnB);
 
          resultToPack.setDepth(EuclidCoreTools.min(dx, dy, dz));

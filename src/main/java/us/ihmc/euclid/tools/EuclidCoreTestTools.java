@@ -40,7 +40,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  */
 public abstract class EuclidCoreTestTools
 {
-   private static final String DEFAULT_FORMAT = getStringFormat(15, 12);
+   public static final String DEFAULT_FORMAT = getStringFormat(15, 12);
 
    /**
     * Asserts that the two given angles are equal to an {@code epsilon}.

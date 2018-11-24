@@ -1,8 +1,8 @@
 package us.ihmc.euclid.shape.tools;
 
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
+import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
@@ -15,6 +15,8 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 public class EuclidShapeTestTools
 {
+   private static final String DEFAULT_FORMAT = EuclidCoreTestTools.DEFAULT_FORMAT;
+
    public static void assertBox3DEquals(Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
       assertBox3DEquals(null, expected, actual, epsilon);
@@ -194,7 +196,6 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
-
    public static void assertPointShape3DEquals(PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon)
    {
       assertPointShape3DEquals(null, expected, actual, epsilon);
@@ -228,7 +229,7 @@ public class EuclidShapeTestTools
    }
 
    public static void assertPointShape3DGeometricallyEquals(String messagePrefix, PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon,
-                                                           String format)
+                                                            String format)
    {
       if (expected == null && actual == null)
          return;
@@ -239,6 +240,7 @@ public class EuclidShapeTestTools
       if (!expected.geometricallyEquals(actual, epsilon))
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
+
    public static void assertRamp3DEquals(Ramp3DReadOnly expected, Ramp3DReadOnly actual, double epsilon)
    {
       assertRamp3DEquals(null, expected, actual, epsilon);
@@ -349,6 +351,75 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   public static void assertTorus3DGeometricallyEquals(Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon)
+   {
+      assertTorus3DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   public static void assertTorus3DGeometricallyEquals(String messagePrefix, Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon)
+   {
+      assertTorus3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   public static void assertTorus3DGeometricallyEquals(String messagePrefix, Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.geometricallyEquals(actual, epsilon))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+   }
+
+   public static void assertCollisionTestResultEquals(CollisionTestResult expected, CollisionTestResult actual, double epsilon)
+   {
+      assertCollisionTestResultEquals(null, expected, actual, epsilon);
+   }
+
+   public static void assertCollisionTestResultEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, double epsilon)
+   {
+      assertCollisionTestResultEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   public static void assertCollisionTestResultEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, double epsilon,
+                                                      String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.epsilonEquals(actual, epsilon))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+   }
+
+   public static void assertCollisionTestResultGeometricallyEquals(CollisionTestResult expected, CollisionTestResult actual, double epsilon)
+   {
+      assertCollisionTestResultGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual,
+                                                                   double epsilon)
+   {
+      assertCollisionTestResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual,
+                                                                   double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.geometricallyEquals(actual, epsilon))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+   }
+
    private static void throwNotEqualAssertionError(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, String format)
    {
       String expectedAsString = getBox3DString(format, expected);
@@ -402,6 +473,13 @@ public class EuclidShapeTestTools
    {
       String expectedAsString = getTorus3DString(format, expected);
       String actualAsString = getTorus3DString(format, actual);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, String format)
+   {
+      String expectedAsString = getCollisionTestResultString(format, expected);
+      String actualAsString = getCollisionTestResultString(format, actual);
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 }

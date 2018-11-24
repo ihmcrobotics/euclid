@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
@@ -24,7 +23,7 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
  */
 public class EuclidGeometryTestTools
 {
-   private static final String DEFAULT_FORMAT = getStringFormat(15, 12);
+   private static final String DEFAULT_FORMAT = EuclidCoreTestTools.DEFAULT_FORMAT;
 
    /**
     * Asserts on a per component basis that the two line 2Ds are equal to an {@code epsilon}.

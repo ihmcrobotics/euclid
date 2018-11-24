@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.tools;
 
+import java.util.Collection;
 import java.util.Random;
 
 import us.ihmc.euclid.shape.Box3D;
@@ -11,6 +12,8 @@ import us.ihmc.euclid.shape.Ramp3D;
 import us.ihmc.euclid.shape.Sphere3D;
 import us.ihmc.euclid.shape.Torus3D;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class EuclidShapeRandomTools
 {
@@ -98,5 +101,28 @@ public class EuclidShapeRandomTools
    {
       return new Torus3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
                          EuclidCoreRandomTools.nextDouble(random, minTubeRadius, maxTubeRadius));
+   }
+
+   public static Point3D nextWeightedAverage(Random random, Collection<? extends Point3DReadOnly> points)
+   {
+      return nextWeightedAverage(random, points.toArray(new Point3DReadOnly[points.size()]));
+   }
+
+   public static Point3D nextWeightedAverage(Random random, Point3DReadOnly[] points)
+   {
+      double[] weights = new double[points.length];
+      double sum = 0.0;
+
+      for (int j = 0; j < weights.length; j++)
+         sum += weights[j] = random.nextDouble();
+
+      Point3D next = new Point3D();
+
+      for (int j = 0; j < weights.length; j++)
+         next.scaleAdd(weights[j], points[j], next);
+
+      next.scale(1.0 / sum);
+
+      return next;
    }
 }
