@@ -7,11 +7,13 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidCoreRandomToolsTest
 {
@@ -20,29 +22,52 @@ public class EuclidCoreRandomToolsTest
    @Test
    public void testNextVector3D()
    {
+      Random random = new Random(16451L);
+
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Random random = new Random(16451L);
+         Vector3D vector = EuclidCoreRandomTools.nextVector3D(random);
+         for (int j = 0; j < 3; j++)
+            assertTrue(Math.abs(vector.getElement(j)) <= 1.0);
+      }
+   }
 
-         Vector3D vector = new Vector3D();
-         Vector3D zeroVector = new Vector3D();
-         Vector3D min = new Vector3D(-1, -1, -1);
-         Vector3D max = new Vector3D(1, 1, 1);
+   @Test
+   public void testNextOrthogonalVector3D() throws Exception
+   {
+      Random random = new Random(346346);
 
-         EuclidCoreRandomTools.nextVector3D(random);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // General test
+         Vector3D randomVector = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, randomVector, false);
+         assertEquals(0.0, randomVector.dot(orthogonal), EPSILON);
 
-         assertTrue(min.getX() <= vector.getX());
-         assertTrue(vector.getX() <= max.getX());
-         assertTrue(min.getY() <= vector.getY());
-         assertTrue(vector.getY() <= max.getY());
-         assertTrue(min.getZ() <= vector.getZ());
-         assertTrue(vector.getZ() <= max.getZ());
+         orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, randomVector, true);
+         assertEquals(0.0, randomVector.dot(orthogonal), EPSILON);
+         assertEquals(1.0, orthogonal.length(), EPSILON);
+      }
 
-         assertTrue(zeroVector.getX() == 0);
-         assertTrue(zeroVector.getY() == 0);
-         assertTrue(zeroVector.getZ() == 0);
+      // Now check with the axes X, Y, and Z to highlight edge-cases.
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3DReadOnly vector = Axis.values[random.nextInt(3)];
+         Vector3D orthogonal1 = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, false);
+         assertEquals(0.0, vector.dot(orthogonal1), EPSILON);
 
-         assertNotSame(vector, null);
+         Vector3D orthogonal2 = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, false);
+         assertEquals(0.0, vector.dot(orthogonal2), EPSILON);
+         assertFalse(orthogonal1.epsilonEquals(orthogonal2, EPSILON));
+
+         orthogonal1 = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, true);
+         assertEquals(0.0, vector.dot(orthogonal1), EPSILON);
+         assertEquals(1.0, orthogonal1.length(), EPSILON);
+
+         orthogonal2 = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, true);
+         assertEquals(0.0, vector.dot(orthogonal2), EPSILON);
+         assertEquals(1.0, orthogonal2.length(), EPSILON);
+         assertFalse(orthogonal1.epsilonEquals(orthogonal2, EPSILON));
       }
    }
 

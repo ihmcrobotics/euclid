@@ -895,6 +895,11 @@ public abstract class EuclidCoreRandomTools
       Vector3D v1 = new Vector3D(vectorToBeOrthogonalTo.getY(), -vectorToBeOrthogonalTo.getX(), 0.0);
       Vector3D v2 = new Vector3D(-vectorToBeOrthogonalTo.getZ(), 0.0, vectorToBeOrthogonalTo.getX());
 
+      if (v1.lengthSquared() < 1.0e-12)
+         v1.cross(vectorToBeOrthogonalTo, v2);
+      if (v2.lengthSquared() < 1.0e-12)
+         v2.cross(v1, vectorToBeOrthogonalTo);
+
       Vector3D randomPerpendicular = new Vector3D();
       double a = nextDouble(random, 1.0);
       double b = nextDouble(random, 1.0);
