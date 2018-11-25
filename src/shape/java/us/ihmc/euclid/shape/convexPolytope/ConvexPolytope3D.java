@@ -560,9 +560,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
 
    private void createFacesFromVisibleSilhouetteAndOnFaceList(List<HalfEdge3D> silhouetteEdges, List<Face3D> onFaceList, Vertex3D vertexToAdd, double epsilon)
    {
-      //for(int i = 0; i < silhouetteEdges.size(); i++)
-      //System.out.println("Sil: " + silhouetteEdges.get(i));
-      //System.out.println(silhouetteEdges.get(0).getFace().toString());
       HalfEdge3D previousLeadingEdge = null, trailingEdge = null;
       if (onFaceList.contains(silhouetteEdges.get(0).getFace()))
       {
@@ -582,11 +579,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
          previousLeadingEdge = firstFace.getEdge(0).getNextHalfEdge();
          trailingEdge = firstFace.getEdge(0).getPreviousHalfEdge();
       }
-      //System.out.println("PrevLeadEdge: "  + ((previousLeadingEdge == null )? "null" : previousLeadingEdge.toString()));
-      //System.out.println("TrailEdge: "  + ((trailingEdge == null) ? "null" : trailingEdge.toString() ));
       for (int i = 1; i < silhouetteEdges.size(); i++)
       {
-         //System.out.println("Previous leading: " + previousLeadingEdge.toString() + " Visible : " + visibleSilhouetteList.get(i).toString());
          if (onFaceList.contains(silhouetteEdges.get(i).getFace()))
          {
             Face3D faceToExtend = silhouetteEdges.get(i).getFace();
