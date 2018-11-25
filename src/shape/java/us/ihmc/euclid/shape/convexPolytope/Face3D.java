@@ -93,7 +93,8 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
     */
    public void addVertex(Vertex3D vertexToAdd, double epsilon)
    {
-      vertexToAdd.round(epsilon);
+      if (epsilon > 0)
+         vertexToAdd.round(epsilon);
       switch (edges.size())
       {
       case 0:

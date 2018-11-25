@@ -113,8 +113,15 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
 
    public int getNumberOfVertices()
    {
-      // Polyhedron formula for quick calc
-      return getNumberOfEdges() - getNumberOfFaces() + 2;
+      if (getNumberOfFaces() < 2)
+      {
+         updateVertices();
+         return vertices.size();
+      }
+      else
+      { // Polyhedron formula for quick calc
+         return getNumberOfEdges() - getNumberOfFaces() + 2;
+      }
    }
 
    public List<Vertex3D> getVertices()
@@ -267,7 +274,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
     */
    public void addVertex(Vertex3D vertexToAdd, double epsilon)
    {
-      vertexToAdd.round(epsilon);
+      if (epsilon > 0.0)
+         vertexToAdd.round(epsilon);
       if (faces.size() == 0)
       {
          // Polytope is empty. Creating face and adding the vertex

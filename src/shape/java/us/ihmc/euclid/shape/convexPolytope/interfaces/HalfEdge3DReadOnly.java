@@ -122,7 +122,10 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
 
    default boolean equals(HalfEdge3DReadOnly other)
    {
-      return LineSegment3DReadOnly.super.equals(other);
+      if (getOriginVertex() == null || getDestinationVertex() == null)
+         return false;
+      else
+         return LineSegment3DReadOnly.super.equals(other);
    }
 
    default boolean epsilonEquals(HalfEdge3DReadOnly other, double epsilon)
