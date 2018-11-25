@@ -101,6 +101,11 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
       return Point3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
+   default boolean geometricallyEquals(Vertex3DReadOnly other, double epsilon)
+   {
+      return Point3DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
    /**
     * Get a printable version of the vertex data
     * 

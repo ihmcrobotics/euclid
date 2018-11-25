@@ -120,9 +120,19 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
       return epsilonEquals(twinEdge.getTwinHalfEdge(), epsilon);
    }
 
+   default boolean equals(HalfEdge3DReadOnly other)
+   {
+      return LineSegment3DReadOnly.super.equals(other);
+   }
+
    default boolean epsilonEquals(HalfEdge3DReadOnly other, double epsilon)
    {
       return LineSegment3DReadOnly.super.epsilonEquals(other, epsilon);
+   }
+
+   default boolean geometricallyEquals(HalfEdge3DReadOnly other, double epsilon)
+   {
+      return LineSegment3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
    /**

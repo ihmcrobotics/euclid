@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -197,6 +197,6 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple3DString(this);
+      return EuclidPolytopeIOTools.getVertex3DString(this);
    }
 }

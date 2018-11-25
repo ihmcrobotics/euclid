@@ -3,12 +3,11 @@ package us.ihmc.euclid.shape.convexPolytope.interfaces;
 import java.util.List;
 
 import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface Face3DReadOnly extends EpsilonComparable<Face3DReadOnly>, Clearable
+public interface Face3DReadOnly extends Clearable
 {
    /**
     * Gets a list of all half edges that constitute the face
@@ -100,16 +99,6 @@ public interface Face3DReadOnly extends EpsilonComparable<Face3DReadOnly>, Clear
     * @return
     */
    int getNumberOfEdges();
-
-   /**
-    * Geometrically evaluates if the face is within an epsilon vicinity of the specified face. This
-    * check is actually performed on the vertices that the face is composed of. Both spatial and and
-    * relations between vertices are checked
-    * 
-    * @return {@code true} is the face is geometrically similar to the specified face, {@code false}
-    *         otherwise
-    */
-   boolean epsilonEquals(Face3DReadOnly other, double epsilon);
 
    /**
     * Returns the dot product of the specified vector with the face normal
@@ -235,4 +224,74 @@ public interface Face3DReadOnly extends EpsilonComparable<Face3DReadOnly>, Clear
     */
    HalfEdge3DReadOnly getEdgeClosestTo(Point3DReadOnly point);
 
+   default boolean equals(Face3DReadOnly other)
+   {
+      if (other == null)
+         return false;
+      if (getNumberOfEdges() != other.getNumberOfEdges())
+         return false;
+
+      for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
+      {
+         if (!getEdge(edgeIndex).equals(other.getEdge(edgeIndex)))
+            return false;
+      }
+      return true;
+   }
+
+   default boolean epsilonEquals(Face3DReadOnly other, double epsilon)
+   {
+      if (getNumberOfEdges() != other.getNumberOfEdges())
+         return false;
+
+      for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
+      {
+         if (!getEdge(edgeIndex).epsilonEquals(other.getEdge(edgeIndex), epsilon))
+            return false;
+      }
+      return true;
+   }
+
+   /**
+    * Geometrically evaluates if the face is within an epsilon vicinity of the specified face. This
+    * check is actually performed on the vertices that the face is composed of. Both spatial and and
+    * relations between vertices are checked
+    * 
+    * @return {@code true} is the face is geometrically similar to the specified face, {@code false}
+    *         otherwise
+    */
+   default boolean geometricallyEquals(Face3DReadOnly other, double epsilon)
+   {
+      if (getNumberOfEdges() != other.getNumberOfEdges())
+         return false;
+
+      HalfEdge3DReadOnly startEdge = null;
+      HalfEdge3DReadOnly otherCurrentEdge = other.getEdge(0);
+      HalfEdge3DReadOnly thisCurrentEdge = null;
+
+      for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
+      {
+         thisCurrentEdge = getEdge(edgeIndex);
+
+         if (!thisCurrentEdge.geometricallyEquals(otherCurrentEdge, epsilon))
+         {
+            startEdge = thisCurrentEdge;
+            break;
+         }
+      }
+
+      if (startEdge == null)
+         return false;
+
+      do
+      {
+         otherCurrentEdge.getNextHalfEdge();
+         thisCurrentEdge.getNextHalfEdge();
+         if (!thisCurrentEdge.geometricallyEquals(otherCurrentEdge, epsilon))
+            return false;
+      }
+      while (thisCurrentEdge != startEdge);
+
+      return true;
+   }
 }

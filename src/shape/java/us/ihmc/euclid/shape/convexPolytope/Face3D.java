@@ -9,6 +9,7 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -341,32 +342,6 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
          edges.get(i).getOriginVertex().applyInverseTransform(transform);
    }
 
-   @Override
-   public boolean epsilonEquals(Face3DReadOnly other, double epsilon)
-   {
-      if (other.getNumberOfEdges() == getNumberOfEdges())
-      {
-         int index = findMatchingEdgeIndex(other.getEdge(0), epsilon);
-         if (index != -1)
-         {
-            boolean result = true;
-            HalfEdge3D matchedEdge = edges.get(index);
-            HalfEdge3DReadOnly candidateEdge = other.getEdge(0);
-            for (int i = 0; result && i < edges.size() - 1; i++)
-            {
-               matchedEdge = matchedEdge.getNextHalfEdge();
-               candidateEdge = candidateEdge.getNextHalfEdge();
-               result &= matchedEdge.epsilonEquals(candidateEdge, epsilon);
-            }
-            return result;
-         }
-         else
-            return false;
-      }
-      else
-         return false;
-   }
-
    public int findMatchingEdgeIndex(HalfEdge3DReadOnly edgeToSearch, double epsilon)
    {
       for (int i = 0; i < edges.size(); i++)
@@ -554,19 +529,6 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    }
 
    @Override
-   public String toString()
-   {
-      String string = "";
-      HalfEdge3D edge = edges.get(0);
-      for (int i = 0; i < edges.size(); i++)
-      {
-         string += "\n" + edge.toString() + " Twin: " + (edge.getTwinHalfEdge() == null ? "null" : edge.getTwinHalfEdge().toString());
-         edge = edge.getNextHalfEdge();
-      }
-      return string;
-   }
-
-   @Override
    public double distance(Point3DReadOnly point)
    {
       EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOriginVertex(), getFaceNormal(), tempPoint);
@@ -608,5 +570,11 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
          return this;
       else
          return getEdgeClosestTo(tempPoint).getSmallestSimplexMemberReference(point);
+   }
+
+   @Override
+   public String toString()
+   {
+      return EuclidPolytopeIOTools.getFace3DString(this);
    }
 }

@@ -12,6 +12,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeListener;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -718,22 +719,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       }
    }
 
-   public String toString()
-   {
-      String string = "\n\nNumber of faces: " + faces.size();
-      for (int i = 0; i < faces.size(); i++)
-      {
-         string = string + "\n" + faces.get(i).toString();
-      }
-      return string;
-   }
-
-   @Override
-   public boolean epsilonEquals(ConvexPolytope3DReadOnly other, double epsilon)
-   {
-      return false;
-   }
-
    @Override
    public boolean containsNaN()
    {
@@ -852,5 +837,10 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
    public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
       return getFaceContainingPointClosestTo(point).getSmallestSimplexMemberReference(point);
+   }
+
+   public String toString()
+   {
+      return EuclidPolytopeIOTools.getConvexPolytope3DString(this);
    }
 }

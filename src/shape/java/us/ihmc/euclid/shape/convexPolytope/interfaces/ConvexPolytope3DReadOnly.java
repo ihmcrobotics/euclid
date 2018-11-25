@@ -1,12 +1,13 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
+import java.util.ArrayDeque;
+import java.util.Iterator;
 import java.util.List;
 
-import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface ConvexPolytope3DReadOnly extends EpsilonComparable<ConvexPolytope3DReadOnly>, SupportingVertexHolder
+public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder
 {
    /**
     * Get a list of faces that constitute the polytope
@@ -83,4 +84,65 @@ public interface ConvexPolytope3DReadOnly extends EpsilonComparable<ConvexPolyto
     * @return
     */
    Face3DReadOnly getFace(int index);
+
+   default boolean equals(ConvexPolytope3DReadOnly other)
+   {
+      if (other == null)
+         return false;
+
+      if (getNumberOfFaces() != other.getNumberOfFaces())
+         return false;
+
+      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
+      {
+         if (!getFace(faceIndex).equals(other.getFace(faceIndex)))
+            return false;
+      }
+
+      return true;
+   }
+
+   default boolean epsilonEquals(ConvexPolytope3DReadOnly other, double epsilon)
+   {
+      if (other == null)
+         return false;
+
+      if (getNumberOfFaces() != other.getNumberOfFaces())
+         return false;
+
+      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
+      {
+         if (!getFace(faceIndex).epsilonEquals(other.getFace(faceIndex), epsilon))
+            return false;
+      }
+
+      return true;
+   }
+
+   default boolean geometricallyEquals(ConvexPolytope3DReadOnly other, double epsilon)
+   {
+      if (other == null)
+         return false;
+
+      if (getNumberOfFaces() != other.getNumberOfFaces())
+         return false;
+
+      ArrayDeque<Face3DReadOnly> thisFacesStack = new ArrayDeque<>(getFaces());
+
+      for (int otherFaceIndex = 0; otherFaceIndex < getNumberOfFaces(); otherFaceIndex++)
+      {
+         Iterator<Face3DReadOnly> iterator = thisFacesStack.iterator();
+         while (iterator.hasNext())
+         {
+            Face3DReadOnly thisFace = iterator.next();
+            if (thisFace.geometricallyEquals(other.getFace(otherFaceIndex), epsilon))
+            {
+               iterator.remove();
+               break;
+            }
+         }
+      }
+
+      return thisFacesStack.isEmpty();
+   }
 }
