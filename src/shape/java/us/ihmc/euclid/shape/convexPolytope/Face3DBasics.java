@@ -33,7 +33,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    /**
     * Unordered list of half edges that bound the face
     */
-   private final ArrayList<HalfEdge3DBasics> edges = new ArrayList<>();
+   private final ArrayList<HalfEdge3D> edges = new ArrayList<>();
 
    /**
     * A vector normal to the plane that this face lies on. Do not access directly since this is updated
@@ -49,7 +49,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    // Temporary variables for calculations
    private final Vector3D tempVector = new Vector3D();
    private final Point3D tempPoint = new Point3D();
-   private final ArrayList<HalfEdge3DBasics> visibleEdgeList = new ArrayList<>();
+   private final ArrayList<HalfEdge3D> visibleEdgeList = new ArrayList<>();
    private boolean marked = false;
 
    /**
@@ -60,7 +60,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
 
    }
 
-   public void setEdgeList(HalfEdge3DBasics[] edgeListArray)
+   public void setEdgeList(HalfEdge3D[] edgeListArray)
    {
       edges.clear();
       for (int i = 0; i < edgeListArray.length; i++)
@@ -71,7 +71,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
     * {@inheritDoc}
     */
    @Override
-   public List<HalfEdge3DBasics> getEdgeList()
+   public List<HalfEdge3D> getEdgeList()
    {
       return edges;
    }
@@ -80,7 +80,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
     * {@inheritDoc}
     */
    @Override
-   public HalfEdge3DBasics getEdge(int index)
+   public HalfEdge3D getEdge(int index)
    {
       return edges.get(index);
    }
@@ -98,7 +98,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
       {
       case 0:
       {
-         HalfEdge3DBasics newEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, vertexToAdd);
+         HalfEdge3D newEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, vertexToAdd);
          newEdge.setFace(this);
          newEdge.setNextHalfEdge(newEdge);
          newEdge.setPreviousHalfEdge(newEdge);
@@ -111,7 +111,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
          if (edges.get(0).getOriginVertex().epsilonEquals(vertexToAdd, epsilon))
             return;
          edges.get(0).setDestinationVertex(vertexToAdd);
-         HalfEdge3DBasics newEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, edges.get(0).getOriginVertex());
+         HalfEdge3D newEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, edges.get(0).getOriginVertex());
          newEdge.setFace(this);
          newEdge.setNextHalfEdge(edges.get(0));
          newEdge.setPreviousHalfEdge(edges.get(0));
@@ -126,7 +126,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
             return;
          // Create a new edge and assign an arbitrary configuration since there is no way to tell up and down in 3D space
          edges.get(1).setDestinationVertex(vertexToAdd);
-         HalfEdge3DBasics newEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, edges.get(0).getOriginVertex());
+         HalfEdge3D newEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, edges.get(0).getOriginVertex());
          newEdge.setFace(this);
          edges.add(newEdge);
          newEdge.setNextHalfEdge(edges.get(0));
@@ -150,7 +150,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
             if (visibleEdgeList.get(0).getOriginVertex().epsilonEquals(vertexToAdd, epsilon)
                   || visibleEdgeList.get(0).getDestinationVertex().epsilonEquals(vertexToAdd, epsilon))
                return;
-            HalfEdge3DBasics additionalEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, visibleEdgeList.get(0).getDestinationVertex());
+            HalfEdge3D additionalEdge = getHalfEdgeProvider().getHalfEdge(vertexToAdd, visibleEdgeList.get(0).getDestinationVertex());
             additionalEdge.setFace(this);
             visibleEdgeList.get(0).setDestinationVertex(vertexToAdd);
             additionalEdge.setNextHalfEdge(visibleEdgeList.get(0).getNextHalfEdge());
@@ -177,15 +177,15 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
     *
     * @param newEdge
     */
-   public void addEdge(HalfEdge3DBasics newEdge)
+   public void addEdge(HalfEdge3D newEdge)
    {
       edges.add(newEdge);
    }
 
-   public void getVisibleEdgeList(Point3DReadOnly vertex, List<HalfEdge3DBasics> edgeList)
+   public void getVisibleEdgeList(Point3DReadOnly vertex, List<HalfEdge3D> edgeList)
    {
       edgeList.clear();
-      HalfEdge3DBasics edgeUnderConsideration = getFirstVisibleEdge(vertex);
+      HalfEdge3D edgeUnderConsideration = getFirstVisibleEdge(vertex);
       for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
       {
          edgeList.add(edgeUnderConsideration);
@@ -196,14 +196,14 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    }
 
    @Override
-   public HalfEdge3DBasics getFirstVisibleEdge(Point3DReadOnly vertex)
+   public HalfEdge3D getFirstVisibleEdge(Point3DReadOnly vertex)
    {
       if (edges.size() == 0)
          return null;
       else if (edges.size() == 1 || edges.size() == 2)
          return edges.get(0);
 
-      HalfEdge3DBasics edgeUnderConsideration = edges.get(0);
+      HalfEdge3D edgeUnderConsideration = edges.get(0);
       double previousDotProduct = getEdgeVisibilityProduct(vertex, edgeUnderConsideration);
       edgeUnderConsideration = edgeUnderConsideration.getNextHalfEdge();
       for (int i = 0; i < getNumberOfEdges(); i++)
@@ -233,7 +233,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
       return isPointOnInteriorSideOfEdgeInternal(point, edges.get(index));
    }
 
-   private boolean isPointOnInteriorSideOfEdgeInternal(Point3DReadOnly point, HalfEdge3DBasics halfEdge)
+   private boolean isPointOnInteriorSideOfEdgeInternal(Point3DReadOnly point, HalfEdge3D halfEdge)
    {
       return getEdgeVisibilityProduct(point, halfEdge) < 0;
    }
@@ -245,7 +245,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
       return dotFaceNormal(tempVector);
    }
 
-   private double getEdgeVisibilityProduct(Point3DReadOnly point, HalfEdge3DBasics halfEdge)
+   private double getEdgeVisibilityProduct(Point3DReadOnly point, HalfEdge3D halfEdge)
    {
       tempVector.sub(point, halfEdge.getOriginVertex());
       tempVector.cross(halfEdge.getEdgeVector());
@@ -279,7 +279,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
          return false;
 
       boolean result = true;
-      HalfEdge3DBasics halfEdge = edges.get(0);
+      HalfEdge3D halfEdge = edges.get(0);
       for (int i = 0; result && i < edges.size(); i++)
       {
          result &= isPointOnInteriorSideOfEdgeInternal(vertexToCheck, halfEdge);
@@ -351,7 +351,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
          if (index != -1)
          {
             boolean result = true;
-            HalfEdge3DBasics matchedEdge = edges.get(index);
+            HalfEdge3D matchedEdge = edges.get(index);
             HalfEdge3DReadOnly candidateEdge = other.getEdge(0);
             for (int i = 0; result && i < edges.size() - 1; i++)
             {
@@ -436,7 +436,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    @Override
    public double getMaxElement(int index)
    {
-      HalfEdge3DBasics edgeReference = edges.get(0);
+      HalfEdge3D edgeReference = edges.get(0);
       double maxElement = edgeReference.getOriginVertex().getElement(index);
       for (int i = 0; i < edges.size(); i++)
       {
@@ -450,7 +450,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    @Override
    public double getMinElement(int index)
    {
-      HalfEdge3DBasics edgeReference = edges.get(0);
+      HalfEdge3D edgeReference = edges.get(0);
       double minElement = edgeReference.getOriginVertex().getElement(index);
       for (int i = 0; i < edges.size(); i++)
       {
@@ -558,7 +558,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    public String toString()
    {
       String string = "";
-      HalfEdge3DBasics edge = edges.get(0);
+      HalfEdge3D edge = edges.get(0);
       for (int i = 0; i < edges.size(); i++)
       {
          string += "\n" + edge.toString() + " Twin: " + (edge.getTwinHalfEdge() == null ? "null" : edge.getTwinHalfEdge().toString());
@@ -578,9 +578,9 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    }
 
    @Override
-   public HalfEdge3DBasics getEdgeClosestTo(Point3DReadOnly point)
+   public HalfEdge3D getEdgeClosestTo(Point3DReadOnly point)
    {
-      HalfEdge3DBasics edge = getFirstVisibleEdge(tempPoint);
+      HalfEdge3D edge = getFirstVisibleEdge(tempPoint);
       double shortestDistance = edge.distance(tempPoint);
       double shortestDistanceCandidate = Double.NEGATIVE_INFINITY;
       while (shortestDistanceCandidate < shortestDistance)

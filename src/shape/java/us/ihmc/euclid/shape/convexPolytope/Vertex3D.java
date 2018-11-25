@@ -23,7 +23,7 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
    /**
     * List of edges that start at this vertex. May be part of different faces
     */
-   private final List<HalfEdge3DBasics> associatedEdges = new ArrayList<>();
+   private final List<HalfEdge3D> associatedEdges = new ArrayList<>();
 
    public Vertex3D()
    {
@@ -44,7 +44,7 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     * {@inheritDoc}
     */
    @Override
-   public List<HalfEdge3DBasics> getAssociatedEdges()
+   public List<HalfEdge3D> getAssociatedEdges()
    {
       return associatedEdges;
    }
@@ -53,7 +53,7 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     * {@inheritDoc}
     */
    @Override
-   public HalfEdge3DBasics getAssociatedEdge(int index)
+   public HalfEdge3D getAssociatedEdge(int index)
    {
       return associatedEdges.get(index);
    }
@@ -65,7 +65,7 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     *           the list, no errors are thrown
     *
     */
-   public void removeAssociatedEdge(HalfEdge3DBasics edgeToAdd)
+   public void removeAssociatedEdge(HalfEdge3D edgeToAdd)
    {
       associatedEdges.remove(edgeToAdd);
    }
@@ -84,7 +84,7 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     *
     * @param edgeList a list of DCEL edges that must be added
     */
-   public void addAssociatedEdges(List<? extends HalfEdge3DBasics> edgeList)
+   public void addAssociatedEdges(List<? extends HalfEdge3D> edgeList)
    {
       for (int i = 0; i < edgeList.size(); i++)
       {
@@ -100,7 +100,7 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     *
     * @param edge the DCEL edge to add to the associated edge list
     */
-   public void addAssociatedEdge(HalfEdge3DBasics edge)
+   public void addAssociatedEdge(HalfEdge3D edge)
    {
       if (!isAssociatedWithEdge(edge))
          associatedEdges.add(edge);
