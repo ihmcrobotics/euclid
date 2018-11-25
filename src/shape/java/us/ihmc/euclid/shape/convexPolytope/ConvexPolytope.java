@@ -46,7 +46,6 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    private Point3D centroid = new Point3D();
    private final PolytopeListener listener;
    private final ConvexPolytopeFaceBuilder faceBuilder = new ConvexPolytopeFaceBuilder();
-   private final PolytopeVertexBuilder vertexBuilder = new PolytopeVertexBuilder();
 
    public ConvexPolytope()
    {
@@ -245,17 +244,17 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
 
    public void addVertex(double epsilon, double... coordinates)
    {
-      addVertex(vertexBuilder.getVertex(coordinates[0], coordinates[1], coordinates[2]), epsilon);
+      addVertex(new Vertex3D(coordinates[0], coordinates[1], coordinates[2]), epsilon);
    }
 
    public void addVertex(double x, double y, double z, double epsilon)
    {
-      addVertex(vertexBuilder.getVertex(x, y, z), epsilon);
+      addVertex(new Vertex3D(x, y, z), epsilon);
    }
 
    public void addVertex(Point3D vertexToAdd, double epsilon)
    {
-      addVertex(vertexBuilder.getVertex(vertexToAdd), epsilon);
+      addVertex(new Vertex3D(vertexToAdd), epsilon);
    }
 
    /**
