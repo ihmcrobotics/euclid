@@ -9,9 +9,9 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeListener;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.SimplexBasics;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -692,40 +692,13 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    }
 
    @Override
-   public Point3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
+   public Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
       Vertex3D bestVertex = faces.get(0).getEdge(0).getOriginVertex();
       tempVector.set(bestVertex);
       double maxDotProduct = supportDirection.dot(tempVector);
       Vertex3D vertexCandidate = bestVertex;
 
-      while (true)
-      {
-         for (int i = 0; i < bestVertex.getNumberOfAssociatedEdges(); i++)
-         {
-            tempVector.set(bestVertex.getAssociatedEdge(i).getDestinationVertex());
-            double dotProduct = supportDirection.dot(tempVector);
-            if (dotProduct > maxDotProduct)
-            {
-               vertexCandidate = bestVertex.getAssociatedEdge(i).getDestinationVertex();
-               maxDotProduct = dotProduct;
-            }
-         }
-         if (bestVertex == vertexCandidate)
-            return bestVertex;
-         else
-            bestVertex = vertexCandidate;
-      }
-   }
-
-   // TODO Hacking this for the new collision detector. #FIXME fix this and the related interfaces and all that depends on those interfaces so that there dont need to be two versions of the getSupportinVertex function
-   @Override
-   public Vertex3D getSupportingPolytopeVertex(Vector3DReadOnly supportDirection)
-   {
-      Vertex3D bestVertex = faces.get(0).getEdge(0).getOriginVertex();
-      tempVector.set(bestVertex);
-      double maxDotProduct = supportDirection.dot(tempVector);
-      Vertex3D vertexCandidate = bestVertex;
       while (true)
       {
          for (int i = 0; i < bestVertex.getNumberOfAssociatedEdges(); i++)
@@ -758,7 +731,6 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    @Override
    public boolean epsilonEquals(ConvexPolytopeReadOnly other, double epsilon)
    {
-      // TODO imlepment this
       return false;
    }
 
@@ -796,12 +768,6 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    @Override
    public void set(ConvexPolytopeReadOnly other)
    {
-      copyFaces(other.getFaces());
-   }
-
-   private void copyFaces(List<? extends Face3DReadOnly> faces)
-   {
-      //TODO implement this 
       throw new RuntimeException("Unimplemented feature");
    }
 

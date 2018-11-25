@@ -153,8 +153,8 @@ public class HybridGJKEPACollisionDetector
       {
          updateListeners();
 
-         Vertex3DReadOnly supportingPolytopeVertexA = polytopeA.getSupportingPolytopeVertex(supportVectorDirection);
-         Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingPolytopeVertex(supportVectorDirectionNegative);
+         Vertex3DReadOnly supportingPolytopeVertexA = polytopeA.getSupportingVertex(supportVectorDirection);
+         Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingVertex(supportVectorDirectionNegative);
          simplex.addVertex(supportingPolytopeVertexA, supportingPolytopeVertexB);
 
          if (simplex.isInteriorPoint(origin, epsilon))
@@ -183,8 +183,8 @@ public class HybridGJKEPACollisionDetector
 
       while (true)
       {
-         Vertex3DReadOnly supportingPolytopeVertexA = polytopeA.getSupportingPolytopeVertex(supportVectorDirection);
-         Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingPolytopeVertex(supportVectorDirectionNegative);
+         Vertex3DReadOnly supportingPolytopeVertexA = polytopeA.getSupportingVertex(supportVectorDirection);
+         Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingVertex(supportVectorDirectionNegative);
          simplex.addVertex(supportingPolytopeVertexA, supportingPolytopeVertexB);
 
          simplex.getSupportVectorDirectionTo(origin, supportVectorDirection);

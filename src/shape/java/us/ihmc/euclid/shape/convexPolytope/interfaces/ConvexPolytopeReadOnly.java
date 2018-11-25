@@ -38,7 +38,7 @@ public interface ConvexPolytopeReadOnly extends EpsilonComparable<ConvexPolytope
     *           performed
     * @return a read only reference to the required vertex
     */
-   Vertex3DReadOnly getSupportingPolytopeVertex(Vector3DReadOnly supportingVertexDirection);
+   Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportingVertexDirection);
 
    /**
     * Check is the polytope is empty (contains no vertices / edges)
