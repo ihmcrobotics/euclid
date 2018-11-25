@@ -18,11 +18,6 @@ public class Face3D extends Face3DBasics
       super();
    }
 
-   public Face3D(HalfEdge3D[] edges)
-   {
-      super(edges);
-   }
-
    @Override
    protected PolytopeHalfEdgeProvider getHalfEdgeProvider()
    {

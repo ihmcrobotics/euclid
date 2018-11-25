@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeHalfEdgeProvider;
 
 /**
@@ -20,17 +19,6 @@ public class HalfEdge3D extends HalfEdge3DBasics
    public HalfEdge3D()
    {
       super();
-   }
-
-   /**
-    * Creates a new edge at the same location. References to origin / destination vertices, twin / next
-    * / previous edges and associated is not preserved
-    * 
-    * @param edge
-    */
-   public HalfEdge3D(HalfEdge3DReadOnly edge)
-   {
-      super(new Vertex3D(edge.getOriginVertex()), new Vertex3D(edge.getDestinationVertex()));
    }
 
    public HalfEdge3D(Vertex3D origin, Vertex3D destination)

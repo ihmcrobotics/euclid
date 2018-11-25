@@ -5,7 +5,6 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
@@ -29,7 +28,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Apoorv S
  *
  */
-public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHolder, Face3DReadOnly, Clearable, Settable<Face3DReadOnly>, Transformable
+public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHolder, Face3DReadOnly, Clearable, Transformable
 {
    /**
     * Unordered list of half edges that bound the face
@@ -59,69 +58,6 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    public Face3DBasics()
    {
 
-   }
-
-   /**
-    * Copy constructor. Makes and stores copies of the specified face
-    *
-    * @param other the polytope that is to be copied Note: while the edges are copied the association
-    *           between the edges is not. This will make the polytope inconsistent
-    */
-   public Face3DBasics(Face3DBasics other)
-   {
-      this(other.getEdgeList());
-   }
-
-   /**
-    * Similar to the copy constructor. Creates and stores copies of the specified edges Note: while the
-    * edges are copied the association between the edges is not
-    *
-    * @param edgeList list of edges to be copied
-    */
-   public Face3DBasics(List<HalfEdge3DBasics> edgeList)
-   {
-      this.copyEdgeList(edgeList);
-   }
-
-   /**
-    * Forms a polytope based on the list of edges specified
-    *
-    * @param edgeList array of edges that will form the boundary of the specified polytope
-    */
-   public Face3DBasics(HalfEdge3DBasics[] edgeList)
-   {
-      setEdgeList(edgeList);
-   }
-
-   /**
-    * Similar to the copy constructor. Creates and stores copies of the specified edges Note: while the
-    * edges are copied the association between the edges is not
-    *
-    * @param edgeList array of edges to be copied
-    */
-   public Face3DBasics(HalfEdge3DReadOnly[] edgeListArray)
-   {
-      this.copyEdgeList(edgeListArray);
-   }
-
-   /**
-    * Sets the face edge list to a copy of the edges in the list provided However, association of the
-    * edges is lost
-    *
-    * @param edgeList
-    */
-   public void copyEdgeList(List<? extends HalfEdge3DReadOnly> edgeList)
-   {
-      edges.clear();
-      for (int i = 0; i < edgeList.size(); i++)
-         edges.add(getHalfEdgeProvider().getHalfEdge(edgeList.get(i)));
-   }
-
-   public void copyEdgeList(HalfEdge3DReadOnly[] edgeListArray)
-   {
-      edges.clear();
-      for (int i = 0; i < edgeListArray.length; i++)
-         edges.add(getHalfEdgeProvider().getHalfEdge(edgeListArray[i]));
    }
 
    public void setEdgeList(HalfEdge3DBasics[] edgeListArray)
@@ -155,7 +91,7 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
     * @param vertexToAdd the vertex that must be added to the face
     * @param epsilon
     */
-   public void addVertex(Vertex3DBasics vertexToAdd, double epsilon)
+   public void addVertex(Vertex3D vertexToAdd, double epsilon)
    {
       vertexToAdd.round(epsilon);
       switch (edges.size())
@@ -456,13 +392,6 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
       updateFaceNormal();
    }
 
-   @Override
-   public void set(Face3DReadOnly other)
-   {
-      clearEdgeList();
-      copyEdgeList(other.getEdgeList());
-   }
-
    public void clearEdgeList()
    {
       edges.clear();
@@ -581,9 +510,9 @@ public abstract class Face3DBasics implements SimplexBasics, SupportingVertexHol
    @Override
    public Point3DReadOnly getSupportingVertex(Vector3DReadOnly supportVector)
    {
-      Vertex3DBasics bestVertex = edges.get(0).getOriginVertex();
+      Vertex3D bestVertex = edges.get(0).getOriginVertex();
       double maxDot = bestVertex.dot(supportVector);
-      Vertex3DBasics bestVertexCandidate = bestVertex;
+      Vertex3D bestVertexCandidate = bestVertex;
       while (true)
       {
          bestVertexCandidate = bestVertex;

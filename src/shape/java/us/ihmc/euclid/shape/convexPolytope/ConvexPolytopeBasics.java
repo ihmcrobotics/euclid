@@ -29,7 +29,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, SimplexBasics, Clearable, Transformable, Settable<ConvexPolytopeReadOnly>
 {
    private final static boolean DEBUG = false;
-   private final ArrayList<Vertex3DBasics> vertices = new ArrayList<>();
+   private final ArrayList<Vertex3D> vertices = new ArrayList<>();
    private final ArrayList<HalfEdge3DBasics> edges = new ArrayList<>();
    private final ArrayList<Face3DBasics> faces = new ArrayList<>();
    /**
@@ -118,7 +118,7 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
       return getNumberOfEdges() - getNumberOfFaces() + 2;
    }
 
-   public List<Vertex3DBasics> getVertices()
+   public List<Vertex3D> getVertices()
    {
       updateVertices();
       return vertices;
@@ -148,7 +148,7 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
       }
    }
 
-   public Vertex3DBasics getVertex(int index)
+   public Vertex3D getVertex(int index)
    {
       updateVertices();
       return vertices.get(index);
@@ -237,7 +237,7 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
          addVertex(vertices.get(i), epsilon);
    }
 
-   public void addVertices(List<Vertex3DBasics> vertices, double epsilon)
+   public void addVertices(List<Vertex3D> vertices, double epsilon)
    {
       for (int i = 0; i < vertices.size(); i++)
          addVertex(vertices.get(i), epsilon);
@@ -266,7 +266,7 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
     * @param epsilon
     * @return
     */
-   public void addVertex(Vertex3DBasics vertexToAdd, double epsilon)
+   public void addVertex(Vertex3D vertexToAdd, double epsilon)
    {
       vertexToAdd.round(epsilon);
       if (faces.size() == 0)
@@ -454,7 +454,7 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
          }
 
          visibleSilhouetteToPack.add(halfEdgeUnderConsideration.getTwinHalfEdge());
-         Vertex3DBasics destinationVertex = halfEdgeUnderConsideration.getDestinationVertex();
+         Vertex3D destinationVertex = halfEdgeUnderConsideration.getDestinationVertex();
          for (int i = 0; i < destinationVertex.getNumberOfAssociatedEdges(); i++)
          {
             if (DEBUG)
@@ -545,7 +545,7 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
    //      twinEdges(visibleSilhouetteList.get(visibleSilhouetteList.size() - 1).getTwinHalfEdge().getNextHalfEdge(), firstNewFace.getEdge(0).getPreviousHalfEdge());
    //   }
 
-   private void createFacesFromVisibleSilhouetteAndOnFaceList(List<HalfEdge3DBasics> silhouetteEdges, List<Face3DBasics> onFaceList, Vertex3DBasics vertexToAdd,
+   private void createFacesFromVisibleSilhouetteAndOnFaceList(List<HalfEdge3DBasics> silhouetteEdges, List<Face3DBasics> onFaceList, Vertex3D vertexToAdd,
                                                               double epsilon)
    {
       //for(int i = 0; i < silhouetteEdges.size(); i++)
@@ -605,7 +605,7 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
       halfEdge2.setTwinHalfEdge(halfEdge1);
    }
 
-   private Face3DBasics createFaceFromTwinEdgeAndVertex(Vertex3DBasics vertex, HalfEdge3DBasics twinEdge, double epsilon)
+   private Face3DBasics createFaceFromTwinEdgeAndVertex(Vertex3D vertex, HalfEdge3DBasics twinEdge, double epsilon)
    {
       Face3DBasics newFace = getConvexFaceProvider().getFace();
       faces.add(newFace);
@@ -698,10 +698,10 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
    @Override
    public Point3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
-      Vertex3DBasics bestVertex = faces.get(0).getEdge(0).getOriginVertex();
+      Vertex3D bestVertex = faces.get(0).getEdge(0).getOriginVertex();
       tempVector.set(bestVertex);
       double maxDotProduct = supportDirection.dot(tempVector);
-      Vertex3DBasics vertexCandidate = bestVertex;
+      Vertex3D vertexCandidate = bestVertex;
 
       while (true)
       {
@@ -724,12 +724,12 @@ public abstract class ConvexPolytopeBasics implements ConvexPolytopeReadOnly, Si
 
    // TODO Hacking this for the new collision detector. #FIXME fix this and the related interfaces and all that depends on those interfaces so that there dont need to be two versions of the getSupportinVertex function
    @Override
-   public Vertex3DBasics getSupportingPolytopeVertex(Vector3DReadOnly supportDirection)
+   public Vertex3D getSupportingPolytopeVertex(Vector3DReadOnly supportDirection)
    {
-      Vertex3DBasics bestVertex = faces.get(0).getEdge(0).getOriginVertex();
+      Vertex3D bestVertex = faces.get(0).getEdge(0).getOriginVertex();
       tempVector.set(bestVertex);
       double maxDotProduct = supportDirection.dot(tempVector);
-      Vertex3DBasics vertexCandidate = bestVertex;
+      Vertex3D vertexCandidate = bestVertex;
       while (true)
       {
          for (int i = 0; i < bestVertex.getNumberOfAssociatedEdges(); i++)

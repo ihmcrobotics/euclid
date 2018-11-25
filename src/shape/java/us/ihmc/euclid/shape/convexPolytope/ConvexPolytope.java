@@ -14,22 +14,22 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeVertexProvider;
  * @author Apoorv S
  */
 
-public class ExtendedConvexPolytope extends ConvexPolytopeBasics
+public class ConvexPolytope extends ConvexPolytopeBasics
 {
    private final ConvexPolytopeFaceBuilder faceBuilder = new ConvexPolytopeFaceBuilder();
    private final PolytopeVertexBuilder vertexBuilder = new PolytopeVertexBuilder();
 
-   public ExtendedConvexPolytope()
+   public ConvexPolytope()
    {
       super();
    }
 
-   public ExtendedConvexPolytope(PolytopeListener listener)
+   public ConvexPolytope(PolytopeListener listener)
    {
       super(listener);
    }
 
-   public ExtendedConvexPolytope(ExtendedConvexPolytope polytope)
+   public ConvexPolytope(ConvexPolytope polytope)
    {
       super(polytope);
    }

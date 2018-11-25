@@ -72,7 +72,7 @@ public class HybridGJKEPACollisionDetector
       vectorToPack.set(supportVectorDirectionNegative);
    }
 
-   public ExtendedConvexPolytope getSimplex()
+   public ConvexPolytope getSimplex()
    {
       return simplex.getPolytope();
    }

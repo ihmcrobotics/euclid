@@ -30,11 +30,11 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
    /**
     * Specifies the spatial location at which the half edge originates
     */
-   private Vertex3DBasics originVertex;
+   private Vertex3D originVertex;
    /**
     * Specifies the spatial location at which the half edge terminates
     */
-   private Vertex3DBasics destinationVertex;
+   private Vertex3D destinationVertex;
    /**
     * The half edge on an adjacent face that originates at the {@code destinatioVertex} and terminates
     * at the {@code originVertex}. Represents the opposite spatial direction
@@ -80,7 +80,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     * @param originVertex
     * @param destinationVertex
     */
-   public HalfEdge3DBasics(Vertex3DBasics originVertex, Vertex3DBasics destinationVertex)
+   public HalfEdge3DBasics(Vertex3D originVertex, Vertex3D destinationVertex)
    {
       setOriginVertex(originVertex);
       setDestinationVertex(destinationVertex);
@@ -138,7 +138,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     *           face normal. Can be {@code null}
     * @param face the face that this half edge is a part of. Can be {@code null}
     */
-   public HalfEdge3DBasics(Vertex3DBasics originVertex, Vertex3DBasics destinationVertex, HalfEdge3DBasics twinEdge, HalfEdge3DBasics nextHalfEdge,
+   public HalfEdge3DBasics(Vertex3D originVertex, Vertex3D destinationVertex, HalfEdge3DBasics twinEdge, HalfEdge3DBasics nextHalfEdge,
                            HalfEdge3DBasics previousHalfEdge, Face3DBasics face)
    {
       setOriginVertex(originVertex);
@@ -184,7 +184,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     *
     * @param originVertex the new vertex that the half edge originates at. Can be null. Is modified
     */
-   public void setOriginVertex(Vertex3DBasics originVertex)
+   public void setOriginVertex(Vertex3D originVertex)
    {
       if (this.originVertex != null)
          this.originVertex.removeAssociatedEdge(this);
@@ -201,7 +201,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     * @param originVertex the new vertex that the half edge originates at. Can be null. Is not modified
     *           in this function
     */
-   public void setOriginVertexUnsafe(Vertex3DBasics originVertex)
+   public void setOriginVertexUnsafe(Vertex3D originVertex)
    {
       this.originVertex = originVertex;
    }
@@ -238,7 +238,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     * Returns a reference to the origin vertex for this half edge
     */
    @Override
-   public Vertex3DBasics getOriginVertex()
+   public Vertex3D getOriginVertex()
    {
       return originVertex;
    }
@@ -250,7 +250,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     * @param destinationVertex the new vertex that the half edge originates at. Can be null. Is not
     *           modified in this function
     */
-   public void setDestinationVertex(Vertex3DBasics destinationVertex)
+   public void setDestinationVertex(Vertex3D destinationVertex)
    {
       this.destinationVertex = destinationVertex;
       updateTwinOrigin();
@@ -264,7 +264,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     *           modified in this function
     * @param destinationVertex
     */
-   public void setDestinationVertexUnsafe(Vertex3DBasics destinationVertex)
+   public void setDestinationVertexUnsafe(Vertex3D destinationVertex)
    {
       this.destinationVertex = destinationVertex;
    }
@@ -273,7 +273,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     * Returns a reference to the {@code destinationVertex} of this half edge
     */
    @Override
-   public Vertex3DBasics getDestinationVertex()
+   public Vertex3D getDestinationVertex()
    {
       return destinationVertex;
    }
@@ -448,7 +448,7 @@ public abstract class HalfEdge3DBasics implements HalfEdge3DReadOnly, LineSegmen
     */
    public void reverseEdge()
    {
-      Vertex3DBasics newDestinationVertex = originVertex;
+      Vertex3D newDestinationVertex = originVertex;
       setOriginVertex(destinationVertex);
       setDestinationVertex(newDestinationVertex);
       HalfEdge3DBasics newNextHalfEdge = previousHalfEdge;
