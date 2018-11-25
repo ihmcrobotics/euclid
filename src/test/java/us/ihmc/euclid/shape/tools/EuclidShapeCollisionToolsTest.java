@@ -19,12 +19,15 @@ import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.shape.Cylinder3D;
 import us.ihmc.euclid.shape.Ellipsoid3D;
 import us.ihmc.euclid.shape.PointShape3D;
+import us.ihmc.euclid.shape.Ramp3D;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /*
@@ -33,7 +36,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidShapeCollisionToolsTest
 {
-   private static final double EPSILON = 1.0e-12;
+   private static final double EPSILON = 1.0e-11;
 
    @Test
    public void testPointShape3DBox3D() throws Exception
@@ -777,6 +780,477 @@ public class EuclidShapeCollisionToolsTest
             EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
          }
       }
+   }
+
+   @Test
+   public void testPointShape3DRamp3D() throws Exception
+   {
+      Random random = new Random(346536);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, below the ramp
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.setX(EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getSizeX()));
+         pointOnSurface.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
+         ramp3D.getPose().transform(pointOnSurface);
+
+         Vector3D normal = new Vector3D();
+         normal.setAndNegate(ramp3D.getPose().getZAxis());
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnSurface, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, beyond the ramp
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.setX(ramp3D.getSizeX());
+         pointOnSurface.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
+         pointOnSurface.setZ(EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getSizeZ()));
+         ramp3D.getPose().transform(pointOnSurface);
+
+         Vector3D normal = new Vector3D();
+         normal.set(ramp3D.getPose().getXAxis());
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnSurface, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, above the slope face of the ramp
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnSurface = new Point3D();
+         double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
+         pointOnSurface.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnSurface.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
+         pointOnSurface.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         ramp3D.getPose().transform(pointOnSurface);
+
+         Vector3D normal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(normal);
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnSurface, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, in front of the ramp, closest to the edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnFrontEdge = new Point3D();
+         pointOnFrontEdge.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
+         ramp3D.getPose().transform(pointOnFrontEdge);
+
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(rampNormal, bottomNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnFrontEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, below of the ramp, closest to the left edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnLeftEdge = new Point3D();
+         pointOnLeftEdge.setX(EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getSizeX()));
+         pointOnLeftEdge.setY(0.5 * ramp3D.getSizeY());
+         ramp3D.getPose().transform(pointOnLeftEdge);
+
+         Vector3D leftNormal = new Vector3D();
+         leftNormal.set(ramp3D.getPose().getYAxis());
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(leftNormal, bottomNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnLeftEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, below of the ramp, closest to the right edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnRightEdge = new Point3D();
+         pointOnRightEdge.setX(EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getSizeX()));
+         pointOnRightEdge.setY(-0.5 * ramp3D.getSizeY());
+         ramp3D.getPose().transform(pointOnRightEdge);
+
+         Vector3D rightNormal = new Vector3D();
+         rightNormal.setAndNegate(ramp3D.getPose().getYAxis());
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(rightNormal, bottomNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnRightEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, below of the ramp, closest to the rear edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnRearEdge = new Point3D();
+         pointOnRearEdge.setX(ramp3D.getSizeX());
+         pointOnRearEdge.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
+         ramp3D.getPose().transform(pointOnRearEdge);
+
+         Vector3D backNormal = new Vector3D();
+         backNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(backNormal, bottomNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnRearEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, beyond of the ramp, closest to the left edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnLeftEdge = new Point3D();
+         pointOnLeftEdge.setX(ramp3D.getSizeX());
+         pointOnLeftEdge.setY(0.5 * ramp3D.getSizeY());
+         pointOnLeftEdge.setZ(EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getSizeZ()));
+         ramp3D.getPose().transform(pointOnLeftEdge);
+
+         Vector3D backNormal = new Vector3D();
+         backNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D leftNormal = new Vector3D();
+         leftNormal.set(ramp3D.getPose().getYAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(backNormal, leftNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnLeftEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, beyond of the ramp, closest to the right edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnRightEdge = new Point3D();
+         pointOnRightEdge.setX(ramp3D.getSizeX());
+         pointOnRightEdge.setY(-0.5 * ramp3D.getSizeY());
+         pointOnRightEdge.setZ(EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getSizeZ()));
+         ramp3D.getPose().transform(pointOnRightEdge);
+
+         Vector3D backNormal = new Vector3D();
+         backNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D rightNormal = new Vector3D();
+         rightNormal.setAndNegate(ramp3D.getPose().getYAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(backNormal, rightNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnRightEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, closest to the top edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnTopEdge = new Point3D();
+         pointOnTopEdge.setX(ramp3D.getSizeX());
+         pointOnTopEdge.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
+         pointOnTopEdge.setZ(ramp3D.getSizeZ());
+         ramp3D.getPose().transform(pointOnTopEdge);
+
+         Vector3D backNormal = new Vector3D();
+         backNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(backNormal, rampNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnTopEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, above the ramp, closest to the left edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnLeftEdge = new Point3D();
+         double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
+         pointOnLeftEdge.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setY(0.5 * ramp3D.getSizeY());
+         pointOnLeftEdge.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         ramp3D.getPose().transform(pointOnLeftEdge);
+
+         Vector3D leftNormal = new Vector3D();
+         leftNormal.set(ramp3D.getPose().getYAxis());
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(leftNormal, rampNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnLeftEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, above the ramp, closest to the right edge
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D pointOnLeftEdge = new Point3D();
+         double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
+         pointOnLeftEdge.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setY(-0.5 * ramp3D.getSizeY());
+         pointOnLeftEdge.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         ramp3D.getPose().transform(pointOnLeftEdge);
+
+         Vector3D rightNormal = new Vector3D();
+         rightNormal.setAndNegate(ramp3D.getPose().getYAxis());
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(rightNormal, rampNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, pointOnLeftEdge, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, closest to the front-left vertex
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D frontLeftVertex = new Point3D();
+         frontLeftVertex.setX(0.0);
+         frontLeftVertex.setY(0.5 * ramp3D.getSizeY());
+         frontLeftVertex.setZ(0.0);
+         ramp3D.getPose().transform(frontLeftVertex);
+
+         Vector3D leftNormal = new Vector3D();
+         leftNormal.set(ramp3D.getPose().getYAxis());
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(bottomNormal, rampNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+         normal.interpolate(leftNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, frontLeftVertex, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, closest to the front-right vertex
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D frontLeftVertex = new Point3D();
+         frontLeftVertex.setX(0.0);
+         frontLeftVertex.setY(-0.5 * ramp3D.getSizeY());
+         frontLeftVertex.setZ(0.0);
+         ramp3D.getPose().transform(frontLeftVertex);
+
+         Vector3D rightNormal = new Vector3D();
+         rightNormal.setAndNegate(ramp3D.getPose().getYAxis());
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(bottomNormal, rampNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+         normal.interpolate(rightNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, frontLeftVertex, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, closest to the top-left vertex
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D frontLeftVertex = new Point3D();
+         frontLeftVertex.setX(ramp3D.getSizeX());
+         frontLeftVertex.setY(0.5 * ramp3D.getSizeY());
+         frontLeftVertex.setZ(ramp3D.getSizeZ());
+         ramp3D.getPose().transform(frontLeftVertex);
+
+         Vector3D leftNormal = new Vector3D();
+         leftNormal.set(ramp3D.getPose().getYAxis());
+         Vector3D rearNormal = new Vector3D();
+         rearNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(rearNormal, rampNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+         normal.interpolate(leftNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, frontLeftVertex, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, closest to the top-right vertex
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D frontRightVertex = new Point3D();
+         frontRightVertex.setX(ramp3D.getSizeX());
+         frontRightVertex.setY(-0.5 * ramp3D.getSizeY());
+         frontRightVertex.setZ(ramp3D.getSizeZ());
+         ramp3D.getPose().transform(frontRightVertex);
+
+         Vector3D rightNormal = new Vector3D();
+         rightNormal.setAndNegate(ramp3D.getPose().getYAxis());
+         Vector3D rearNormal = new Vector3D();
+         rearNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D rampNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(rampNormal);
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(rearNormal, rampNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+         normal.interpolate(rightNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, frontRightVertex, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, closest to the bottom-left vertex
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D frontRightVertex = new Point3D();
+         frontRightVertex.setX(ramp3D.getSizeX());
+         frontRightVertex.setY(0.5 * ramp3D.getSizeY());
+         ramp3D.getPose().transform(frontRightVertex);
+
+         Vector3D rearNormal = new Vector3D();
+         rearNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D leftNormal = new Vector3D();
+         leftNormal.set(ramp3D.getPose().getYAxis());
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(bottomNormal, rearNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+         normal.interpolate(leftNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, frontRightVertex, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside, closest to the bottom-right vertex
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D frontRightVertex = new Point3D();
+         frontRightVertex.setX(ramp3D.getSizeX());
+         frontRightVertex.setY(-0.5 * ramp3D.getSizeY());
+         ramp3D.getPose().transform(frontRightVertex);
+
+         Vector3D rearNormal = new Vector3D();
+         rearNormal.set(ramp3D.getPose().getXAxis());
+         Vector3D rightNormal = new Vector3D();
+         rightNormal.setAndNegate(ramp3D.getPose().getYAxis());
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+
+         Vector3D normal = new Vector3D();
+         normal.interpolate(bottomNormal, rearNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+         normal.interpolate(rightNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         buildPointOutsideAndPerformAssertion(random, i, ramp3D, frontRightVertex, normal);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape inside ramp. Instead of manually writing the different scenarios, we'll use planes to identify which face is closest.
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         double halfWidth = 0.5 * ramp3D.getSizeY();
+
+         Point3D bottomPoint = new Point3D(0.0, 0.0, 0.0);
+         Point3D rearPoint = new Point3D(ramp3D.getSizeX(), 0.0, 0.0);
+         Point3D slopePoint = new Point3D(0.0, 0.0, 0.0);
+         Point3D leftPoint = new Point3D(0.0, halfWidth, 0.0);
+         Point3D rightPoint = new Point3D(0.0, -halfWidth, 0.0);
+         Arrays.asList(bottomPoint, rearPoint, slopePoint, leftPoint, rightPoint).forEach(ramp3D.getPose()::transform);
+
+         Vector3D bottomNormal = new Vector3D();
+         bottomNormal.setAndNegate(ramp3D.getPose().getZAxis());
+         Vector3D rearNormal = new Vector3D(ramp3D.getPose().getXAxis());
+         Vector3D slopeNormal = new Vector3D();
+         ramp3D.getRampSurfaceNormal(slopeNormal);
+         Vector3D leftNormal = new Vector3D(ramp3D.getPose().getYAxis());
+         Vector3D rightNormal = new Vector3D();
+         rightNormal.setAndNegate(ramp3D.getPose().getYAxis());
+
+         Plane3D bottomFace = new Plane3D(bottomPoint, bottomNormal);
+         Plane3D rearFace = new Plane3D(rearPoint, rearNormal);
+         Plane3D slopeFace = new Plane3D(slopePoint, slopeNormal);
+         Plane3D leftFace = new Plane3D(leftPoint, leftNormal);
+         Plane3D rightFace = new Plane3D(rightPoint, rightNormal);
+         List<Plane3D> faces = Arrays.asList(bottomFace, rearFace, slopeFace, leftFace, rightFace);
+
+         List<Point3D> vertices = Arrays.asList(new Point3D(0.0, -halfWidth, 0.0), new Point3D(0.0, halfWidth, 0.0),
+                                                new Point3D(ramp3D.getSizeX(), -halfWidth, 0.0), new Point3D(ramp3D.getSizeX(), halfWidth, 0.0),
+                                                new Point3D(ramp3D.getSizeX(), -halfWidth, ramp3D.getSizeZ()),
+                                                new Point3D(ramp3D.getSizeX(), halfWidth, ramp3D.getSizeZ()));
+         vertices.forEach(ramp3D.getPose()::transform);
+
+         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
+
+         Plane3D closestFace = faces.stream().sorted((a, b) -> Double.compare(a.distance(pointInside), b.distance(pointInside))).findFirst().get();
+         Point3D pointOnSurface = closestFace.orthogonalProjectionCopy(pointInside);
+         double depth = closestFace.distance(pointInside);
+
+         PointShape3D pointShape3D = new PointShape3D(pointInside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(ramp3D);
+         expected.setShapesAreColliding(true);
+         expected.setDepth(depth);
+         expected.getPointOnA().set(pointInside);
+         expected.getNormalOnA().setAndNegate(closestFace.getNormal());
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(closestFace.getNormal());
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DRamp3DCollisionTest(pointShape3D, ramp3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+   }
+
+   private void buildPointOutsideAndPerformAssertion(Random random, int iteration, Ramp3DReadOnly ramp3D, Point3DReadOnly pointOnShape, Vector3DReadOnly normal)
+   {
+      double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+      Point3D pointOutside = new Point3D();
+      pointOutside.scaleAdd(distance, normal, pointOnShape);
+
+      PointShape3D pointShape3D = new PointShape3D(pointOutside);
+      pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+      CollisionTestResult expected = new CollisionTestResult();
+      expected.setToNaN();
+      expected.setShapeA(pointShape3D);
+      expected.setShapeB(ramp3D);
+      expected.setShapesAreColliding(false);
+      expected.setDistance(distance);
+      expected.getPointOnA().set(pointOutside);
+      expected.getNormalOnA().setAndNegate(normal);
+      expected.getPointOnB().set(pointOnShape);
+      expected.getNormalOnB().set(normal);
+
+      CollisionTestResult actual = new CollisionTestResult();
+      EuclidShapeCollisionTools.doPointShape3DRamp3DCollisionTest(pointShape3D, ramp3D, actual);
+      EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + iteration + "\n", expected, actual, EPSILON);
    }
 
    public static Vector3DReadOnly getAxis(Axis axis, Shape3DPoseReadOnly shape3DPose)

@@ -472,7 +472,7 @@ public class EuclidShapeCollisionTools
          }
          else
          {
-            normalOnB.sub(pointOnB, query);
+            normalOnB.sub(query, pointOnB);
             double distance = normalOnB.length();
             normalOnB.scale(1.0 / distance);
             resultToPack.setDistance(distance);
@@ -496,7 +496,7 @@ public class EuclidShapeCollisionTools
          }
          else
          {
-            normalOnB.sub(pointOnB, query);
+            normalOnB.sub(query, pointOnB);
             double distance = normalOnB.length();
             normalOnB.scale(1.0 / distance);
             resultToPack.setDistance(distance);
@@ -511,7 +511,7 @@ public class EuclidShapeCollisionTools
 
          pointOnB.set(xClosest, yClosest, zClosest);
          ramp3DPose.transform(pointOnB);
-         normalOnB.sub(pointOnB, query);
+         normalOnB.sub(query, pointOnB);
          double distance = normalOnB.length();
          normalOnB.scale(1.0 / distance);
          resultToPack.setDistance(distance);
