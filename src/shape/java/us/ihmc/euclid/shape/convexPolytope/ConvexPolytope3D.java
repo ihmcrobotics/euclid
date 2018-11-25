@@ -172,6 +172,12 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       return edges;
    }
 
+   public HalfEdge3D getEdge(int index)
+   {
+      updateEdges();
+      return edges.get(index);
+   }
+
    private void updateEdges()
    {
       edges.clear();

@@ -30,7 +30,7 @@ public class EuclidPolytopeIOTools
    public static String getVertex3DString(String format, Tuple3DReadOnly vertex3DPosition, List<? extends HalfEdge3DReadOnly> vertexHalfEdges)
    {
       String string = "Vertex 3D: " + getTuple3DString(format, vertex3DPosition) + ", number of edges: " + vertexHalfEdges.size();
-      string = getHalfEdge3DListString(format, "\n\t", vertexHalfEdges);
+      string += getHalfEdge3DListString(format, "\n\t", vertexHalfEdges);
       return string;
    }
 

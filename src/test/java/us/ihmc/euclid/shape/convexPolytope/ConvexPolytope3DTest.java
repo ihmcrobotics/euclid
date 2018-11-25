@@ -9,6 +9,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTestTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -126,10 +127,55 @@ public class ConvexPolytope3DTest
       expectedCentroid = EuclidGeometryTools.averagePoint3Ds(pointsAdded);
       EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getCentroid(), EPSILON);
 
-      for (int vertexIndex = 0; vertexIndex < pointsAdded.size(); vertexIndex++)
+      for (int vertexIndex = 0; vertexIndex < polytope.getVertices().size(); vertexIndex++)
       {
          Vertex3D vertex = polytope.getVertex(vertexIndex);
+         // Assert that each vertex is unique
+         assertTrue(polytope.getVertices().stream().noneMatch(otherVertex -> (otherVertex != vertex && otherVertex.epsilonEquals(vertex, EPSILON))));
+         // Assert that all vertex are from the points added
          assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
+
+         for (HalfEdge3D edge : vertex.getAssociatedEdges())
+            assertTrue(edge.getOriginVertex() == vertex);
+      }
+
+      for (int edgeIndex = 0; edgeIndex < polytope.getEdges().size(); edgeIndex++)
+      {
+         HalfEdge3D edge = polytope.getEdge(edgeIndex);
+         // Assert that each vertex is unique
+         assertTrue(polytope.getEdges().stream().noneMatch(otherEdge -> (otherEdge != edge && otherEdge.epsilonEquals(edge, EPSILON))));
+         // Assert that all vertex are from the points added
+         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOriginVertex(), EPSILON)));
+         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestinationVertex(), EPSILON)));
+
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getTwinHalfEdge().getDestinationVertex(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getTwinHalfEdge().getOriginVertex(), EPSILON);
+
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getPreviousHalfEdge().getDestinationVertex(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getNextHalfEdge().getOriginVertex(), EPSILON);
+
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getPreviousHalfEdge().getTwinHalfEdge().getOriginVertex(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getNextHalfEdge().getTwinHalfEdge().getDestinationVertex(), EPSILON);
+
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getTwinHalfEdge().getNextHalfEdge().getOriginVertex(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getTwinHalfEdge().getPreviousHalfEdge().getDestinationVertex(),
+                                                      EPSILON);
+
+         assertTrue(edge.getTwinHalfEdge().getTwinHalfEdge() == edge);
+         assertTrue(edge.getNextHalfEdge().getPreviousHalfEdge() == edge);
+         assertTrue(edge.getPreviousHalfEdge().getNextHalfEdge() == edge);
+      }
+
+      for (int faceIndex = 0; faceIndex < polytope.getFaces().size(); faceIndex++)
+      {
+         Face3D face = polytope.getFace(faceIndex);
+         assertTrue(polytope.getFaces().stream().noneMatch(otherFace -> (otherFace != face && otherFace.epsilonEquals(face, EPSILON))));
+         // Assert that all vertex are from the points added
+         for (HalfEdge3D edge : face.getEdgeList())
+         {
+            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOriginVertex(), EPSILON)));
+            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestinationVertex(), EPSILON)));
+         }
       }
 
       for (int i = 0; i < ITERATIONS; i++)
