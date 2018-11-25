@@ -50,7 +50,6 @@ public class Face3D implements SimplexBasics, SupportingVertexHolder, Face3DRead
    private final Point3D tempPoint = new Point3D();
    private final ArrayList<HalfEdge3D> visibleEdgeList = new ArrayList<>();
    private boolean marked = false;
-   private final PolytopeHalfEdgeBuilder halfEdgeBuilder = new PolytopeHalfEdgeBuilder();
 
    /**
     * Default constructor. Does not initialize anything
@@ -98,7 +97,7 @@ public class Face3D implements SimplexBasics, SupportingVertexHolder, Face3DRead
       {
       case 0:
       {
-         HalfEdge3D newEdge = halfEdgeBuilder.getHalfEdge(vertexToAdd, vertexToAdd);
+         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, vertexToAdd);
          newEdge.setFace(this);
          newEdge.setNextHalfEdge(newEdge);
          newEdge.setPreviousHalfEdge(newEdge);
@@ -111,7 +110,7 @@ public class Face3D implements SimplexBasics, SupportingVertexHolder, Face3DRead
          if (edges.get(0).getOriginVertex().epsilonEquals(vertexToAdd, epsilon))
             return;
          edges.get(0).setDestinationVertex(vertexToAdd);
-         HalfEdge3D newEdge = halfEdgeBuilder.getHalfEdge(vertexToAdd, edges.get(0).getOriginVertex());
+         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, edges.get(0).getOriginVertex());
          newEdge.setFace(this);
          newEdge.setNextHalfEdge(edges.get(0));
          newEdge.setPreviousHalfEdge(edges.get(0));
@@ -126,7 +125,7 @@ public class Face3D implements SimplexBasics, SupportingVertexHolder, Face3DRead
             return;
          // Create a new edge and assign an arbitrary configuration since there is no way to tell up and down in 3D space
          edges.get(1).setDestinationVertex(vertexToAdd);
-         HalfEdge3D newEdge = halfEdgeBuilder.getHalfEdge(vertexToAdd, edges.get(0).getOriginVertex());
+         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, edges.get(0).getOriginVertex());
          newEdge.setFace(this);
          edges.add(newEdge);
          newEdge.setNextHalfEdge(edges.get(0));
@@ -150,7 +149,7 @@ public class Face3D implements SimplexBasics, SupportingVertexHolder, Face3DRead
             if (visibleEdgeList.get(0).getOriginVertex().epsilonEquals(vertexToAdd, epsilon)
                   || visibleEdgeList.get(0).getDestinationVertex().epsilonEquals(vertexToAdd, epsilon))
                return;
-            HalfEdge3D additionalEdge = halfEdgeBuilder.getHalfEdge(vertexToAdd, visibleEdgeList.get(0).getDestinationVertex());
+            HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, visibleEdgeList.get(0).getDestinationVertex());
             additionalEdge.setFace(this);
             visibleEdgeList.get(0).setDestinationVertex(vertexToAdd);
             additionalEdge.setNextHalfEdge(visibleEdgeList.get(0).getNextHalfEdge());

@@ -57,8 +57,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    private Vector3D edgeVector = new Vector3D();
 
-   private final PolytopeHalfEdgeBuilder halfEdgeBuilder = new PolytopeHalfEdgeBuilder();
-
    public HalfEdge3D()
    {
       super();
@@ -118,8 +116,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *           face normal. Can be {@code null}
     * @param face the face that this half edge is a part of. Can be {@code null}
     */
-   public HalfEdge3D(Vertex3D originVertex, Vertex3D destinationVertex, HalfEdge3D twinEdge, HalfEdge3D nextHalfEdge,
-                           HalfEdge3D previousHalfEdge, Face3D face)
+   public HalfEdge3D(Vertex3D originVertex, Vertex3D destinationVertex, HalfEdge3D twinEdge, HalfEdge3D nextHalfEdge, HalfEdge3D previousHalfEdge, Face3D face)
    {
       setOriginVertex(originVertex);
       setDestinationVertex(destinationVertex);
@@ -152,7 +149,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public HalfEdge3D createTwinHalfEdge()
    {
-      HalfEdge3D twinEdge = halfEdgeBuilder.getHalfEdge(getDestinationVertex(), getOriginVertex());
+      HalfEdge3D twinEdge = new HalfEdge3D(getDestinationVertex(), getOriginVertex());
       twinEdge.setTwinHalfEdge(this);
       return twinEdge;
    }
