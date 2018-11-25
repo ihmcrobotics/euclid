@@ -6,7 +6,7 @@ import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface ConvexPolytopeReadOnly extends EpsilonComparable<ConvexPolytopeReadOnly>, SupportingVertexHolder
+public interface ConvexPolytope3DReadOnly extends EpsilonComparable<ConvexPolytope3DReadOnly>, SupportingVertexHolder
 {
    /**
     * Get a list of faces that consitute the polytope

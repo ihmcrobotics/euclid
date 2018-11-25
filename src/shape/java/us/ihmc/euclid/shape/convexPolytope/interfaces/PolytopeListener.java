@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface PolytopeListener
 {
-   void attachPolytope(ConvexPolytopeReadOnly polytopeToAttach);
+   void attachPolytope(ConvexPolytope3DReadOnly polytopeToAttach);
 
    void updateAll();
 

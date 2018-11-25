@@ -8,7 +8,7 @@ import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeListener;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.SimplexBasics;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Apoorv S
  *
  */
-public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Clearable, Transformable, Settable<ConvexPolytopeReadOnly>
+public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, SimplexBasics, Clearable, Transformable, Settable<ConvexPolytope3DReadOnly>
 {
    private final static boolean DEBUG = false;
    private final ArrayList<Vertex3D> vertices = new ArrayList<>();
@@ -46,18 +46,18 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    private Point3D centroid = new Point3D();
    private final PolytopeListener listener;
 
-   public ConvexPolytope()
+   public ConvexPolytope3D()
    {
       listener = null;
    }
 
-   public ConvexPolytope(PolytopeListener listener)
+   public ConvexPolytope3D(PolytopeListener listener)
    {
       this.listener = listener;
       this.listener.attachPolytope(this);
    }
 
-   public ConvexPolytope(ConvexPolytopeReadOnly polytope)
+   public ConvexPolytope3D(ConvexPolytope3DReadOnly polytope)
    {
       set(polytope);
       boundingBoxNeedsUpdating = true;
@@ -729,7 +729,7 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    }
 
    @Override
-   public boolean epsilonEquals(ConvexPolytopeReadOnly other, double epsilon)
+   public boolean epsilonEquals(ConvexPolytope3DReadOnly other, double epsilon)
    {
       return false;
    }
@@ -766,7 +766,7 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    }
 
    @Override
-   public void set(ConvexPolytopeReadOnly other)
+   public void set(ConvexPolytope3DReadOnly other)
    {
       throw new RuntimeException("Unimplemented feature");
    }

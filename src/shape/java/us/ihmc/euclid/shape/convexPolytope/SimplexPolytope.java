@@ -17,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public class SimplexPolytope implements SimplexBasics
 {
    private double epsilon = 1.0e-12;
-   private ConvexPolytope polytope = new ConvexPolytope();
+   private ConvexPolytope3D polytope = new ConvexPolytope3D();
    private List<SimplexVertex> vertices = new ArrayList<>();
    private final Vector3D basisVector1 = new Vector3D();
    private final Vector3D basisVector2 = new Vector3D();
@@ -90,7 +90,7 @@ public class SimplexPolytope implements SimplexBasics
       return polytope.toString();
    }
 
-   public ConvexPolytope getPolytope()
+   public ConvexPolytope3D getPolytope()
    {
       return polytope;
    }

@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.Axis;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeListener;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -26,8 +26,8 @@ public class HybridGJKEPACollisionDetector
 
    private double epsilon;
    private SimplexPolytope simplex;
-   private ConvexPolytopeReadOnly polytopeA;
-   private ConvexPolytopeReadOnly polytopeB;
+   private ConvexPolytope3DReadOnly polytopeA;
+   private ConvexPolytope3DReadOnly polytopeB;
    private Vector3D supportVectorDirectionNegative = new Vector3D();
    private Vector3D supportVectorDirection = new Vector3D()
    {
@@ -72,7 +72,7 @@ public class HybridGJKEPACollisionDetector
       vectorToPack.set(supportVectorDirectionNegative);
    }
 
-   public ConvexPolytope getSimplex()
+   public ConvexPolytope3D getSimplex()
    {
       return simplex.getPolytope();
    }
@@ -84,12 +84,12 @@ public class HybridGJKEPACollisionDetector
          listener.attachPolytope(getSimplex());
    }
 
-   public void setPolytopeA(ConvexPolytopeReadOnly polytopeA)
+   public void setPolytopeA(ConvexPolytope3DReadOnly polytopeA)
    {
       this.polytopeA = polytopeA;
    }
 
-   public void setPolytopeB(ConvexPolytopeReadOnly polytopeB)
+   public void setPolytopeB(ConvexPolytope3DReadOnly polytopeB)
    {
       this.polytopeB = polytopeB;
    }
