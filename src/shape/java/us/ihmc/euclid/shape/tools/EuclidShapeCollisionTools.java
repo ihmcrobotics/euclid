@@ -398,7 +398,7 @@ public class EuclidShapeCollisionTools
          normalOnB.normalize();
          ellipsoid3DPose.transform(normalOnB);
 
-         double signedDistance = point3D.distanceFromOrigin() * (1.0 - scaleFactor);
+         double signedDistance = point3D.distance(ellipsoid3DPose.getShapePosition()) * (1.0 - scaleFactor);
          if (signedDistance < 0.0)
          {
             resultToPack.setShapesAreColliding(true);

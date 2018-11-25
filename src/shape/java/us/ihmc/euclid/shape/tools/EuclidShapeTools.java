@@ -769,7 +769,20 @@ public class EuclidShapeTools
    public static double signedDistanceBetweenPoint3DAndEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii,
                                                                    Point3DReadOnly query)
    {
-      return doPoint3DEllipsoid3DCollisionTest(ellipsoid3DPose, ellipsoid3DRadii, query, null, null);
+      double xRadius = ellipsoid3DRadii.getX();
+      double yRadius = ellipsoid3DRadii.getY();
+      double zRadius = ellipsoid3DRadii.getZ();
+
+      double dX = query.getX() - ellipsoid3DPose.getTranslationX();
+      double dY = query.getY() - ellipsoid3DPose.getTranslationY();
+      double dZ = query.getZ() - ellipsoid3DPose.getTranslationZ();
+      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
+      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
+      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
+
+      double scaleFactor = 1.0 / Math.sqrt(EuclidCoreTools.normSquared(xLocalQuery / xRadius, yLocalQuery / yRadius, zLocalQuery / zRadius));
+
+      return query.distance(ellipsoid3DPose.getShapePosition()) * (1.0 - scaleFactor);
    }
 
    public static boolean orthogonalProjectionOntoEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii,
@@ -842,7 +855,7 @@ public class EuclidShapeTools
             ellipsoid3DPose.transform(normalToPack);
          }
 
-         return query.distanceFromOrigin() * (1.0 - scaleFactor);
+         return query.distance(ellipsoid3DPose.getShapePosition()) * (1.0 - scaleFactor);
       }
       else
       {

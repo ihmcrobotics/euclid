@@ -17,6 +17,7 @@ import us.ihmc.euclid.shape.Box3D;
 import us.ihmc.euclid.shape.Capsule3D;
 import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.shape.Cylinder3D;
+import us.ihmc.euclid.shape.Ellipsoid3D;
 import us.ihmc.euclid.shape.PointShape3D;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
@@ -26,6 +27,10 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/*
+ * TODO Need to test the edge-cases, for instance when a PointShape3D is at the center of the other
+ * shape.
+ */
 public class EuclidShapeCollisionToolsTest
 {
    private static final double EPSILON = 1.0e-12;
@@ -631,6 +636,146 @@ public class EuclidShapeCollisionToolsTest
          CollisionTestResult actual = new CollisionTestResult();
          EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
          EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPointShape3DEllipsoid3D() throws Exception
+   {
+      Random random = new Random(54652);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Trivial case: point laying on one of the ellipsoid principal axes
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random, 0.01, 1.0);
+
+         Axis localAxis = Axis.values[random.nextInt(3)];
+         double sign = random.nextBoolean() ? -1.0 : 1.0;
+         double radius = localAxis.dot(ellipsoid3D.getRadii());
+         Vector3D normal = new Vector3D();
+         normal.setAndScale(sign, getAxis(localAxis, ellipsoid3D.getPose()));
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(radius, normal, ellipsoid3D.getPosition());
+
+         { // Do test with point being outside
+            double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+            Point3D pointOutside = new Point3D();
+            pointOutside.scaleAdd(distance, normal, pointOnSurface);
+
+            PointShape3D pointShape3D = new PointShape3D(pointOutside);
+            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+            CollisionTestResult expected = new CollisionTestResult();
+            expected.setToNaN();
+            expected.setShapeA(pointShape3D);
+            expected.setShapeB(ellipsoid3D);
+            expected.setShapesAreColliding(false);
+            expected.setDistance(distance);
+            expected.getPointOnA().set(pointOutside);
+            expected.getNormalOnA().setAndNegate(normal);
+            expected.getPointOnB().set(pointOnSurface);
+            expected.getNormalOnB().set(normal);
+
+            CollisionTestResult actual = new CollisionTestResult();
+            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+         }
+
+         { // Do test with point being inside
+            Point3D pointInside = new Point3D();
+            double alpha = EuclidCoreRandomTools.nextDouble(random, 0.0, 0.9995); // When the point gets too close to the center, it triggers an edge-case.
+            pointInside.interpolate(pointOnSurface, ellipsoid3D.getPosition(), alpha);
+            double distance = pointInside.distance(pointOnSurface);
+
+            PointShape3D pointShape3D = new PointShape3D(pointInside);
+            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+            CollisionTestResult expected = new CollisionTestResult();
+            expected.setToNaN();
+            expected.setShapeA(pointShape3D);
+            expected.setShapeB(ellipsoid3D);
+            expected.setShapesAreColliding(true);
+            expected.setDepth(distance);
+            expected.getPointOnA().set(pointInside);
+            expected.getNormalOnA().setAndNegate(normal);
+            expected.getPointOnB().set(pointOnSurface);
+            expected.getNormalOnB().set(normal);
+
+            CollisionTestResult actual = new CollisionTestResult();
+            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside. Using the scale trick to place the point on the surface.
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random, 0.1, 1.0);
+
+         // Build the configuration assuming a unit-sphere with its pose set to identity
+         Vector3D unitVector = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         Point3D pointOnSurface = new Point3D(unitVector);
+         Vector3D normal = new Vector3D(unitVector);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), normal, pointOnSurface);
+         Point3D pointInside = new Point3D();
+         pointInside.interpolate(pointOnSurface, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         // Go in the ellipsoid space by scaling everything with its radii
+         pointOnSurface.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         normal.scale(1.0 / ellipsoid3D.getRadiusX(), 1.0 / ellipsoid3D.getRadiusY(), 1.0 / ellipsoid3D.getRadiusZ());
+         normal.normalize();
+         pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         pointInside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         // Apply to the pose of the ellipsoid.
+         pointOnSurface.applyTransform(ellipsoid3D.getPose());
+         normal.applyTransform(ellipsoid3D.getPose());
+         pointOutside.applyTransform(ellipsoid3D.getPose());
+         pointInside.applyTransform(ellipsoid3D.getPose());
+
+         { // Do test with point being outside
+            double distance = pointOnSurface.distance(pointOutside);
+
+            PointShape3D pointShape3D = new PointShape3D(pointOutside);
+            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+            CollisionTestResult expected = new CollisionTestResult();
+            expected.setToNaN();
+            expected.setShapeA(pointShape3D);
+            expected.setShapeB(ellipsoid3D);
+            expected.setShapesAreColliding(false);
+            expected.setDistance(distance);
+            expected.getPointOnA().set(pointOutside);
+            expected.getNormalOnA().setAndNegate(normal);
+            expected.getPointOnB().set(pointOnSurface);
+            expected.getNormalOnB().set(normal);
+
+            CollisionTestResult actual = new CollisionTestResult();
+            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+         }
+
+         { // Do test with point being inside
+            double distance = pointInside.distance(pointOnSurface);
+
+            PointShape3D pointShape3D = new PointShape3D(pointInside);
+            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+            CollisionTestResult expected = new CollisionTestResult();
+            expected.setToNaN();
+            expected.setShapeA(pointShape3D);
+            expected.setShapeB(ellipsoid3D);
+            expected.setShapesAreColliding(true);
+            expected.setDepth(distance);
+            expected.getPointOnA().set(pointInside);
+            expected.getNormalOnA().setAndNegate(normal);
+            expected.getPointOnB().set(pointOnSurface);
+            expected.getNormalOnB().set(normal);
+
+            CollisionTestResult actual = new CollisionTestResult();
+            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+         }
       }
    }
 
