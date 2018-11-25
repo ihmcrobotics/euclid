@@ -246,48 +246,49 @@ public class EuclidShapeCollisionTools
             resultToPack.setShapesAreColliding(false);
             resultToPack.setDistance(-positionOnAxis - halfLength);
          }
-
-         if (positionOnAxis > halfLength)
+         else if (positionOnAxis > halfLength)
          { // The query is directly above the cylinder
             pointOnB.scaleAdd(-positionOnAxis + halfLength, cylinder3DAxis, point3D);
             normalOnB.set(cylinder3DAxis);
             resultToPack.setShapesAreColliding(false);
             resultToPack.setDistance(positionOnAxis - halfLength);
          }
-
-         // The query is inside the cylinder
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
-         double dh = halfLength - Math.abs(positionOnAxis);
-         double dr = cylinder3DRadius - distanceFromAxis;
-         resultToPack.setShapesAreColliding(true);
-
-         if (dh < dr)
+         else
          {
-            if (positionOnAxis < 0)
-            { // Closer to the bottom face
-               pointOnB.scaleAdd(-positionOnAxis - halfLength, cylinder3DAxis, point3D);
-               normalOnB.setAndNegate(cylinder3DAxis);
-               resultToPack.setDepth(positionOnAxis + halfLength);
+            // The query is inside the cylinder
+            double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+            double dh = halfLength - Math.abs(positionOnAxis);
+            double dr = cylinder3DRadius - distanceFromAxis;
+            resultToPack.setShapesAreColliding(true);
+            
+            if (dh < dr)
+            {
+               if (positionOnAxis < 0)
+               { // Closer to the bottom face
+                  pointOnB.scaleAdd(-positionOnAxis - halfLength, cylinder3DAxis, point3D);
+                  normalOnB.setAndNegate(cylinder3DAxis);
+                  resultToPack.setDepth(positionOnAxis + halfLength);
+               }
+               else
+               { // Closer to the top face
+                  pointOnB.scaleAdd(-positionOnAxis + halfLength, cylinder3DAxis, point3D);
+                  normalOnB.set(cylinder3DAxis);
+                  resultToPack.setDepth(-positionOnAxis + halfLength);
+               }
             }
             else
-            { // Closer to the top face
-               pointOnB.scaleAdd(-positionOnAxis + halfLength, cylinder3DAxis, point3D);
-               normalOnB.set(cylinder3DAxis);
-               resultToPack.setDepth(-positionOnAxis + halfLength);
+            { // Closer to the cylinder part
+               double directionToQueryX = axisToQueryX / distanceFromAxis;
+               double directionToQueryY = axisToQueryY / distanceFromAxis;
+               double directionToQueryZ = axisToQueryZ / distanceFromAxis;
+               
+               pointOnB.set(directionToQueryX, directionToQueryY, directionToQueryZ);
+               pointOnB.scale(cylinder3DRadius);
+               pointOnB.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+               
+               normalOnB.set(directionToQueryX, directionToQueryY, directionToQueryZ);
+               resultToPack.setDepth(cylinder3DRadius - distanceFromAxis);
             }
-         }
-         else
-         { // Closer to the cylinder part
-            double directionToQueryX = axisToQueryX / distanceFromAxis;
-            double directionToQueryY = axisToQueryY / distanceFromAxis;
-            double directionToQueryZ = axisToQueryZ / distanceFromAxis;
-
-            pointOnB.set(directionToQueryX, directionToQueryY, directionToQueryZ);
-            pointOnB.scale(cylinder3DRadius);
-            pointOnB.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-
-            normalOnB.set(directionToQueryX, directionToQueryY, directionToQueryZ);
-            resultToPack.setDepth(cylinder3DRadius - distanceFromAxis);
          }
       }
       else

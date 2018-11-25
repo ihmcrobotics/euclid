@@ -12,9 +12,11 @@ import org.junit.Test;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.Box3D;
 import us.ihmc.euclid.shape.Capsule3D;
 import us.ihmc.euclid.shape.CollisionTestResult;
+import us.ihmc.euclid.shape.Cylinder3D;
 import us.ihmc.euclid.shape.PointShape3D;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
@@ -365,6 +367,269 @@ public class EuclidShapeCollisionToolsTest
 
          CollisionTestResult actual = new CollisionTestResult();
          EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPointShape3DCylinder3D() throws Exception
+   {
+      Random random = new Random(42352);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to one of the cylinder's ends.
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Vector3DReadOnly cylinderAxis = cylinder3D.getAxis();
+
+         // We'll choose which end is closer with this sign times the capsule axis
+         double endSign = random.nextBoolean() ? -1.0 : 1.0;
+
+         Point3D endCenter = new Point3D();
+         endCenter.scaleAdd(0.5 * endSign * cylinder3D.getLength(), cylinderAxis, cylinder3D.getPosition());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinderAxis, true);
+
+         Point3D pointOnSurface = new Point3D();
+         double distanceFromCenter = EuclidCoreRandomTools.nextDouble(random, 0.0, cylinder3D.getRadius());
+         pointOnSurface.scaleAdd(distanceFromCenter, orthogonalToAxis, endCenter);
+
+         Vector3D normal = new Vector3D();
+         normal.setAndScale(endSign, cylinderAxis);
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distance, normal, pointOnSurface);
+
+         PointShape3D pointShape3D = new PointShape3D(pointOutside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(cylinder3D);
+         expected.setShapesAreColliding(false);
+         expected.setDistance(distance);
+         expected.getPointOnA().set(pointOutside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to the cylinder side.
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Vector3DReadOnly cylinderAxis = cylinder3D.getAxis();
+
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.5 * cylinder3D.getLength()), cylinderAxis, cylinder3D.getPosition());
+
+         Vector3D normal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinderAxis, true);
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(cylinder3D.getRadius(), normal, pointOnAxis);
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distance, normal, pointOnSurface);
+
+         PointShape3D pointShape3D = new PointShape3D(pointOutside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(cylinder3D);
+         expected.setShapesAreColliding(false);
+         expected.setDistance(distance);
+         expected.getPointOnA().set(pointOutside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to the edge of one of the cylinder's ends.
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Vector3DReadOnly cylinderAxis = cylinder3D.getAxis();
+
+         // We'll choose which end is closer with this sign times the capsule axis
+         double endSign = random.nextBoolean() ? -1.0 : 1.0;
+
+         Point3D endCenter = new Point3D();
+         endCenter.scaleAdd(0.5 * endSign * cylinder3D.getLength(), cylinderAxis, cylinder3D.getPosition());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinderAxis, true);
+
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, endCenter);
+
+         Vector3D normal = new Vector3D();
+         normal.setAndScale(endSign, cylinderAxis);
+         normal.interpolate(orthogonalToAxis, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         normal.normalize();
+
+         double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distance, normal, pointOnEdge);
+
+         PointShape3D pointShape3D = new PointShape3D(pointOutside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(cylinder3D);
+         expected.setShapesAreColliding(false);
+         expected.setDistance(distance);
+         expected.getPointOnA().set(pointOutside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnEdge);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside closest to one of the cylinder's ends.
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Vector3DReadOnly cylinderAxis = cylinder3D.getAxis();
+
+         // We'll choose which end is closer with this sign times the capsule axis
+         double endSign = random.nextBoolean() ? -1.0 : 1.0;
+
+         Point3D endCenter = new Point3D();
+         endCenter.scaleAdd(0.5 * endSign * cylinder3D.getLength(), cylinderAxis, cylinder3D.getPosition());
+
+         Vector3D normal = new Vector3D();
+         normal.setAndScale(endSign, cylinderAxis);
+
+         Plane3D endPlane = new Plane3D(endCenter, normal);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinderAxis, true);
+
+         List<Point3D> regionToExplore = new ArrayList<>();
+
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, endCenter);
+         Point3D pointOnEdgeOpposideSide = new Point3D();
+         pointOnEdgeOpposideSide.scaleAdd(-cylinder3D.getRadius(), orthogonalToAxis, endCenter);
+         regionToExplore.add(pointOnEdge);
+         regionToExplore.add(pointOnEdgeOpposideSide);
+
+         if (cylinder3D.getRadius() < 0.5 * cylinder3D.getLength())
+         {
+            Point3D farthestPointInside = new Point3D();
+            double maxDistanceIn = cylinder3D.getRadius();
+            farthestPointInside.scaleAdd(-endSign * maxDistanceIn, cylinderAxis, endCenter);
+            regionToExplore.add(farthestPointInside);
+         }
+         else
+         { // The region that is the farthest from the end form a circle, beyond it the points are closer to the opposite end. 
+            Point3D farthestInsideCenter = new Point3D();
+            double maxDistanceIn = 0.5 * cylinder3D.getLength();
+            farthestInsideCenter.scaleAdd(-endSign * maxDistanceIn, cylinderAxis, endCenter);
+
+            double radius = cylinder3D.getRadius() - 0.5 * cylinder3D.getLength();
+            Point3D farthestInside1 = new Point3D();
+            Point3D farthestInside2 = new Point3D();
+            farthestInside1.scaleAdd(radius, orthogonalToAxis, farthestInsideCenter);
+            farthestInside2.scaleAdd(-radius, orthogonalToAxis, farthestInsideCenter);
+            regionToExplore.add(farthestInside1);
+            regionToExplore.add(farthestInside2);
+         }
+
+         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, regionToExplore);
+
+         Point3D pointOnSurface = new Point3D();
+         endPlane.orthogonalProjection(pointInside, pointOnSurface);
+         double distance = pointOnSurface.distance(pointInside);
+
+         PointShape3D pointShape3D = new PointShape3D(pointInside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(cylinder3D);
+         expected.setShapesAreColliding(true);
+         expected.setDepth(distance);
+         expected.getPointOnA().set(pointInside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside closest to the cylinder's side.
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Vector3DReadOnly cylinderAxis = cylinder3D.getAxis();
+
+         Vector3D normal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinderAxis, true);
+         Point3D centerOnSurface = new Point3D();
+         centerOnSurface.scaleAdd(cylinder3D.getRadius(), normal, cylinder3D.getPosition());
+
+         List<Point3D> regionToExplore = new ArrayList<>();
+
+         Point3D pointOnOneEnd = new Point3D();
+         pointOnOneEnd.scaleAdd(0.5 * cylinder3D.getLength(), cylinderAxis, centerOnSurface);
+         Point3D pointOnEdgeOtherEnd = new Point3D();
+         pointOnEdgeOtherEnd.scaleAdd(-0.5 * cylinder3D.getLength(), cylinderAxis, centerOnSurface);
+         regionToExplore.add(pointOnOneEnd);
+         regionToExplore.add(pointOnEdgeOtherEnd);
+
+         if (cylinder3D.getRadius() < 0.5 * cylinder3D.getLength())
+         {
+            double positionFromCenter = 0.5 * cylinder3D.getLength() - cylinder3D.getRadius();
+            Point3D farthestInside1 = new Point3D();
+            Point3D farthestInside2 = new Point3D();
+            farthestInside1.scaleAdd(positionFromCenter, cylinderAxis, cylinder3D.getPosition());
+            farthestInside2.scaleAdd(-positionFromCenter, cylinderAxis, cylinder3D.getPosition());
+            regionToExplore.add(farthestInside1);
+            regionToExplore.add(farthestInside2);
+         }
+         else
+         {
+            Point3D farthestInside = new Point3D();
+            double minDistanceFromAxis = cylinder3D.getRadius() - 0.5 * cylinder3D.getLength();
+            farthestInside.scaleAdd(minDistanceFromAxis, normal, cylinder3D.getPosition());
+            regionToExplore.add(farthestInside);
+         }
+
+         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, regionToExplore);
+
+         Point3D pointOnSurface = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointInside, centerOnSurface, normal);
+         double distance = pointOnSurface.distance(pointInside);
+
+         PointShape3D pointShape3D = new PointShape3D(pointInside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(cylinder3D);
+         expected.setShapesAreColliding(true);
+         expected.setDepth(distance);
+         expected.getPointOnA().set(pointInside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
          EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
    }
