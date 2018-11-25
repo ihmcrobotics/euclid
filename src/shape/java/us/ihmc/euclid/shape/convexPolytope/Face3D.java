@@ -60,13 +60,6 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
 
    }
 
-   public void setEdgeList(HalfEdge3D[] edgeListArray)
-   {
-      edges.clear();
-      for (int i = 0; i < edgeListArray.length; i++)
-         edges.add(edgeListArray[i]);
-   }
-
    /**
     * {@inheritDoc}
     */
@@ -172,15 +165,6 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
          break;
       }
       }
-   }
-
-   /**
-    *
-    * @param newEdge
-    */
-   public void addEdge(HalfEdge3D newEdge)
-   {
-      edges.add(newEdge);
    }
 
    public void getVisibleEdgeList(Point3DReadOnly vertex, List<HalfEdge3D> edgeList)
