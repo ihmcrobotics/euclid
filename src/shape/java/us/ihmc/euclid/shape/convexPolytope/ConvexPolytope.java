@@ -45,7 +45,6 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
    private Vector3D tempVector = new Vector3D();
    private Point3D centroid = new Point3D();
    private final PolytopeListener listener;
-   private final ConvexPolytopeFaceBuilder faceBuilder = new ConvexPolytopeFaceBuilder();
 
    public ConvexPolytope()
    {
@@ -271,7 +270,7 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
       if (faces.size() == 0)
       {
          // Polytope is empty. Creating face and adding the vertex
-         Face3D newFace = faceBuilder.getFace();
+         Face3D newFace = new Face3D();
          newFace.addVertex(vertexToAdd, epsilon);
          faces.add(newFace);
          boundingBoxNeedsUpdating = true;
@@ -604,7 +603,7 @@ public class ConvexPolytope implements ConvexPolytopeReadOnly, SimplexBasics, Cl
 
    private Face3D createFaceFromTwinEdgeAndVertex(Vertex3D vertex, HalfEdge3D twinEdge, double epsilon)
    {
-      Face3D newFace = faceBuilder.getFace();
+      Face3D newFace = new Face3D();
       faces.add(newFace);
       newFace.addVertex(twinEdge.getDestinationVertex(), epsilon);
       newFace.addVertex(twinEdge.getOriginVertex(), epsilon);
