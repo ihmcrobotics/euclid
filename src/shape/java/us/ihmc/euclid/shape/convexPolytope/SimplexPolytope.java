@@ -14,7 +14,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public class ExtendedSimplexPolytope implements SimplexBasics
+public class SimplexPolytope implements SimplexBasics
 {
    private double epsilon = 1.0e-12;
    private ConvexPolytope polytope = new ConvexPolytope();
@@ -28,7 +28,7 @@ public class ExtendedSimplexPolytope implements SimplexBasics
    private final DenseMatrix64F vector = new DenseMatrix64F(3, 1);
    private final DenseMatrix64F coordinates = new DenseMatrix64F(2, 1);
 
-   public ExtendedSimplexPolytope()
+   public SimplexPolytope()
    {
       super();
    }
