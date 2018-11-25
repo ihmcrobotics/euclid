@@ -857,23 +857,63 @@ public class EuclidGeometryTools
                                                                 Point3DReadOnly lineSegmentStart2, Point3DReadOnly lineSegmentEnd2,
                                                                 Point3DBasics closestPointOnLineSegment1ToPack, Point3DBasics closestPointOnLineSegment2ToPack)
    {
+      return closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1.getX(), lineSegmentStart1.getY(), lineSegmentStart1.getZ(), lineSegmentEnd1.getX(),
+                                                     lineSegmentEnd1.getY(), lineSegmentEnd1.getZ(), lineSegmentStart2.getX(), lineSegmentStart2.getY(),
+                                                     lineSegmentStart2.getZ(), lineSegmentEnd2.getX(), lineSegmentEnd2.getY(), lineSegmentEnd2.getZ(),
+                                                     closestPointOnLineSegment1ToPack, closestPointOnLineSegment2ToPack);
+   }
+
+   /**
+    * Given two 3D line segments with finite length, this methods computes two points P &in;
+    * lineSegment1 and Q &in; lineSegment2 such that the distance || P - Q || is the minimum distance
+    * between the two 3D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
+    * link</a>.
+    *
+    * @param lineSegmentStart1X the x-coordinate of the first endpoint of the first line segment.
+    * @param lineSegmentStart1Y the y-coordinate of the first endpoint of the first line segment.
+    * @param lineSegmentStart1Z the z-coordinate of the first endpoint of the first line segment.
+    * @param lineSegmentEnd1X the x-coordinate of the second endpoint of the first line segment.
+    * @param lineSegmentEnd1Y the y-coordinate of the second endpoint of the first line segment.
+    * @param lineSegmentEnd1Z the z-coordinate of the second endpoint of the first line segment.
+    * @param lineSegmentStart2X the x-coordinate of the first endpoint of the second line segment.
+    * @param lineSegmentStart2Y the y-coordinate of the first endpoint of the second line segment.
+    * @param lineSegmentStart2Z the z-coordinate of the first endpoint of the second line segment.
+    * @param lineSegmentEnd2X the x-coordinate of the second endpoint of the second line segment.
+    * @param lineSegmentEnd2Y the y-coordinate of the second endpoint of the second line segment.
+    * @param lineSegmentEnd2Z the z-coordinate of the second endpoint of the second line segment.
+    * @param closestPointOnLineSegment1ToPack the 3D coordinates of the point P are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @param closestPointOnLineSegment2ToPack the 3D coordinates of the point Q are packed in this 3D
+    *           point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two line segments.
+    */
+   public static double closestPoint3DsBetweenTwoLineSegment3Ds(double lineSegmentStart1X, double lineSegmentStart1Y, double lineSegmentStart1Z,
+                                                                double lineSegmentEnd1X, double lineSegmentEnd1Y, double lineSegmentEnd1Z,
+                                                                double lineSegmentStart2X, double lineSegmentStart2Y, double lineSegmentStart2Z,
+                                                                double lineSegmentEnd2X, double lineSegmentEnd2Y, double lineSegmentEnd2Z,
+                                                                Point3DBasics closestPointOnLineSegment1ToPack, Point3DBasics closestPointOnLineSegment2ToPack)
+   {
       // Switching to the notation used in http://geomalgorithms.com/a07-_distance.html.
       // The line1 is defined by (P0, u) and the line2 by (Q0, v).
-      Point3DReadOnly P0 = lineSegmentStart1;
-      double ux = lineSegmentEnd1.getX() - lineSegmentStart1.getX();
-      double uy = lineSegmentEnd1.getY() - lineSegmentStart1.getY();
-      double uz = lineSegmentEnd1.getZ() - lineSegmentStart1.getZ();
-      Point3DReadOnly Q0 = lineSegmentStart2;
-      double vx = lineSegmentEnd2.getX() - lineSegmentStart2.getX();
-      double vy = lineSegmentEnd2.getY() - lineSegmentStart2.getY();
-      double vz = lineSegmentEnd2.getZ() - lineSegmentStart2.getZ();
+      double P0X = lineSegmentStart1X;
+      double P0Y = lineSegmentStart1Y;
+      double P0Z = lineSegmentStart1Z;
+      double ux = lineSegmentEnd1X - lineSegmentStart1X;
+      double uy = lineSegmentEnd1Y - lineSegmentStart1Y;
+      double uz = lineSegmentEnd1Z - lineSegmentStart1Z;
+      double Q0X = lineSegmentStart2X;
+      double Q0Y = lineSegmentStart2Y;
+      double Q0Z = lineSegmentStart2Z;
+      double vx = lineSegmentEnd2X - lineSegmentStart2X;
+      double vy = lineSegmentEnd2Y - lineSegmentStart2Y;
+      double vz = lineSegmentEnd2Z - lineSegmentStart2Z;
 
       Point3DBasics Psc = closestPointOnLineSegment1ToPack;
       Point3DBasics Qtc = closestPointOnLineSegment2ToPack;
 
-      double w0X = P0.getX() - Q0.getX();
-      double w0Y = P0.getY() - Q0.getY();
-      double w0Z = P0.getZ() - Q0.getZ();
+      double w0X = P0X - Q0X;
+      double w0Y = P0Y - Q0Y;
+      double w0Z = P0Z - Q0Z;
 
       double a = ux * ux + uy * uy + uz * uz;
       double b = ux * vx + uy * vy + uz * vz;
@@ -942,13 +982,13 @@ public class EuclidGeometryTools
       sc = Math.abs(sNumerator) < ONE_MILLIONTH ? 0.0 : sNumerator / sDenominator;
       tc = Math.abs(tNumerator) < ONE_MILLIONTH ? 0.0 : tNumerator / tDenominator;
 
-      double PscX = sc * ux + P0.getX();
-      double PscY = sc * uy + P0.getY();
-      double PscZ = sc * uz + P0.getZ();
+      double PscX = sc * ux + P0X;
+      double PscY = sc * uy + P0Y;
+      double PscZ = sc * uz + P0Z;
 
-      double QtcX = tc * vx + Q0.getX();
-      double QtcY = tc * vy + Q0.getY();
-      double QtcZ = tc * vz + Q0.getZ();
+      double QtcX = tc * vx + Q0X;
+      double QtcY = tc * vy + Q0Y;
+      double QtcZ = tc * vz + Q0Z;
 
       if (Psc != null)
          Psc.set(PscX, PscY, PscZ);

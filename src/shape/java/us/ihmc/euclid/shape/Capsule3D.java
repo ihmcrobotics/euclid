@@ -5,7 +5,9 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 {
@@ -13,6 +15,14 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    private double radius;
    private double length;
+   private double halfLength;
+
+   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPositionX(),
+                                                                                          () -> getHalfLength() * getAxis().getY() + getPositionY(),
+                                                                                          () -> getHalfLength() * getAxis().getZ() + getPositionZ());
+   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPositionX(),
+                                                                                             () -> -getHalfLength() * getAxis().getY() + getPositionY(),
+                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPositionZ());
 
    public Capsule3D()
    {
@@ -47,30 +57,53 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
       setLength(other.getLength());
    }
 
+   @Override
    public void setRadius(double radius)
    {
       this.radius = radius;
    }
 
+   @Override
    public void setLength(double length)
    {
       this.length = length;
+      halfLength = 0.5 * length;
    }
 
+   @Override
    public double getRadius()
    {
       return radius;
    }
 
+   @Override
    public double getLength()
    {
       return length;
    }
 
    @Override
+   public double getHalfLength()
+   {
+      return halfLength;
+   }
+
+   @Override
    public Shape3DPose getPose()
    {
       return pose;
+   }
+
+   @Override
+   public Point3DReadOnly getTopCenter()
+   {
+      return topCenter;
+   }
+
+   @Override
+   public Point3DReadOnly getBottomCenter()
+   {
+      return bottomCenter;
    }
 
    @Override

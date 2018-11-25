@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.interfaces;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -14,9 +15,28 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    double getLength();
 
+   default double getHalfLength()
+   {
+      return 0.5 * getLength();
+   }
+
    default Vector3DReadOnly getAxis()
    {
       return getPose().getZAxis();
+   }
+
+   default Point3DReadOnly getTopCenter()
+   {
+      Point3D topCenter = new Point3D();
+      topCenter.scaleAdd(getHalfLength(), getAxis(), getPosition());
+      return topCenter;
+   }
+
+   default Point3DReadOnly getBottomCenter()
+   {
+      Point3D bottomCenter = new Point3D();
+      bottomCenter.scaleAdd(getHalfLength(), getAxis(), getPosition());
+      return bottomCenter;
    }
 
    /** {@inheritDoc} */
