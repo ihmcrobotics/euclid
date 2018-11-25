@@ -2,17 +2,17 @@ package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 
-public class SimplexVertex extends Vertex3D
+public class SimplexVertex3D extends Vertex3D
 {
    Vertex3DReadOnly polytopeAVertexReference;
    Vertex3DReadOnly polytopeBVertexReference;
 
-   public SimplexVertex()
+   public SimplexVertex3D()
    {
       super();
    }
 
-   public SimplexVertex(Vertex3D vertexOnPolytopeA, Vertex3D vertexOnPolytopeB)
+   public SimplexVertex3D(Vertex3D vertexOnPolytopeA, Vertex3D vertexOnPolytopeB)
    {
       set(vertexOnPolytopeA, vertexOnPolytopeB);
    }

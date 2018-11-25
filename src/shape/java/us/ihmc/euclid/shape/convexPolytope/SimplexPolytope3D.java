@@ -7,18 +7,18 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.SimplexBasics;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public class SimplexPolytope implements SimplexBasics
+public class SimplexPolytope3D implements Simplex3D
 {
    private double epsilon = 1.0e-12;
    private ConvexPolytope3D polytope = new ConvexPolytope3D();
-   private List<SimplexVertex> vertices = new ArrayList<>();
+   private List<SimplexVertex3D> vertices = new ArrayList<>();
    private final Vector3D basisVector1 = new Vector3D();
    private final Vector3D basisVector2 = new Vector3D();
    private final Vector3D pointVector = new Vector3D();
@@ -28,7 +28,7 @@ public class SimplexPolytope implements SimplexBasics
    private final DenseMatrix64F vector = new DenseMatrix64F(3, 1);
    private final DenseMatrix64F coordinates = new DenseMatrix64F(2, 1);
 
-   public SimplexPolytope()
+   public SimplexPolytope3D()
    {
       super();
    }
@@ -45,7 +45,7 @@ public class SimplexPolytope implements SimplexBasics
 
    public void addVertex(Vertex3DReadOnly vertexOnPolytopeA, Vertex3DReadOnly vertexOnPolytopeB, double epsilon)
    {
-      SimplexVertex newVertex = new SimplexVertex();
+      SimplexVertex3D newVertex = new SimplexVertex3D();
       newVertex.set(vertexOnPolytopeA, vertexOnPolytopeB);
       polytope.addVertex(newVertex, epsilon);
    }
@@ -79,7 +79,7 @@ public class SimplexPolytope implements SimplexBasics
    }
 
    @Override
-   public SimplexBasics getSmallestSimplexMemberReference(Point3DReadOnly point)
+   public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
       return polytope.getSmallestSimplexMemberReference(point);
    }
@@ -97,18 +97,18 @@ public class SimplexPolytope implements SimplexBasics
 
    public void getCollidingPointsOnSimplex(Point3DReadOnly point, Point3D pointOnA, Point3D pointOnB)
    {
-      SimplexBasics member = getSmallestSimplexMemberReference(point);
+      Simplex3D member = getSmallestSimplexMemberReference(point);
       // Assuming linearity between the simplex and polytope points
       if (member instanceof Face3D)
       {
          // TODO fix this nasty type casting
-         SimplexVertex simplexVertex1 = (SimplexVertex) ((Face3D) member).getEdge(0).getOriginVertex();
+         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getOriginVertex();
          Vertex3DReadOnly polytopeAVertex1 = simplexVertex1.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex1 = simplexVertex1.getVertexOnPolytopeB();
-         SimplexVertex simplexVertex2 = (SimplexVertex) ((Face3D) member).getEdge(0).getDestinationVertex();
+         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getDestinationVertex();
          Vertex3DReadOnly polytopeAVertex2 = simplexVertex2.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex2 = simplexVertex2.getVertexOnPolytopeB();
-         SimplexVertex simplexVertex3 = (SimplexVertex) ((Face3D) member).getEdge(1).getDestinationVertex();
+         SimplexVertex3D simplexVertex3 = (SimplexVertex3D) ((Face3D) member).getEdge(1).getDestinationVertex();
          Vertex3DReadOnly polytopeAVertex3 = simplexVertex3.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex3 = simplexVertex3.getVertexOnPolytopeB();
 
@@ -128,21 +128,21 @@ public class SimplexPolytope implements SimplexBasics
       else if (member instanceof HalfEdge3D)
       {
          // TODO fix this nasty type casting
-         SimplexVertex simplexVertex1 = (SimplexVertex) ((HalfEdge3D) member).getOriginVertex();
+         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((HalfEdge3D) member).getOriginVertex();
          Vertex3DReadOnly polytopeAVertex1 = simplexVertex1.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex1 = simplexVertex1.getVertexOnPolytopeB();
-         SimplexVertex simplexVertex2 = (SimplexVertex) ((HalfEdge3D) member).getDestinationVertex();
+         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((HalfEdge3D) member).getDestinationVertex();
          Vertex3DReadOnly polytopeAVertex2 = simplexVertex2.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex2 = simplexVertex2.getVertexOnPolytopeB();
          double percentage = EuclidGeometryTools.percentageAlongLineSegment3D(point, simplexVertex1, simplexVertex2);
          pointOnA.interpolate(polytopeAVertex1, polytopeAVertex2, percentage);
          pointOnB.interpolate(polytopeBVertex1, polytopeBVertex2, percentage);
       }
-      else if (member instanceof SimplexVertex)
+      else if (member instanceof SimplexVertex3D)
       {
          // TODO fix this nasty type casting
-         pointOnA.set(((SimplexVertex) member).getVertexOnPolytopeA());
-         pointOnB.set(((SimplexVertex) member).getVertexOnPolytopeB());
+         pointOnA.set(((SimplexVertex3D) member).getVertexOnPolytopeA());
+         pointOnB.set(((SimplexVertex3D) member).getVertexOnPolytopeB());
       }
       else
       {

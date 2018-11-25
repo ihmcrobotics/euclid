@@ -25,7 +25,7 @@ public class HybridGJKEPACollisionDetector
    private static final Point3D origin = new Point3D();
 
    private double epsilon;
-   private SimplexPolytope simplex;
+   private SimplexPolytope3D simplex;
    private ConvexPolytope3DReadOnly polytopeA;
    private ConvexPolytope3DReadOnly polytopeB;
    private Vector3D supportVectorDirectionNegative = new Vector3D();
@@ -77,7 +77,7 @@ public class HybridGJKEPACollisionDetector
       return simplex.getPolytope();
    }
 
-   public void setSimplex(SimplexPolytope simplex)
+   public void setSimplex(SimplexPolytope3D simplex)
    {
       this.simplex = simplex;
       if (listener != null)
@@ -119,17 +119,17 @@ public class HybridGJKEPACollisionDetector
       this(null, epsilon);
    }
 
-   public HybridGJKEPACollisionDetector(SimplexPolytope simplex)
+   public HybridGJKEPACollisionDetector(SimplexPolytope3D simplex)
    {
       this(simplex, defaultCollisionEpsilon);
    }
 
-   public HybridGJKEPACollisionDetector(SimplexPolytope simplex, double epsilon)
+   public HybridGJKEPACollisionDetector(SimplexPolytope3D simplex, double epsilon)
    {
       this(simplex, epsilon, null);
    }
 
-   public HybridGJKEPACollisionDetector(SimplexPolytope simplex, double epsilon, PolytopeListener listener)
+   public HybridGJKEPACollisionDetector(SimplexPolytope3D simplex, double epsilon, PolytopeListener listener)
    {
       setSimplex(simplex);
       setEpsilon(epsilon);

@@ -5,7 +5,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, SimplexBasics
+public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
 {
    /**
     * Returns a reference to the origin vertex for this half edge
@@ -76,7 +76,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, SimplexBasics
    }
 
    @Override
-   default SimplexBasics getSmallestSimplexMemberReference(Point3DReadOnly point)
+   default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
       double percentage = percentageAlongLineSegment(point);
       if (percentage <= 0.0)

@@ -6,7 +6,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface Vertex3DReadOnly extends Point3DReadOnly, SimplexBasics
+public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
 {
    /**
     * Get list of edges that originate at this vertex
@@ -86,7 +86,7 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, SimplexBasics
    }
 
    @Override
-   default SimplexBasics getSmallestSimplexMemberReference(Point3DReadOnly point)
+   default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
       return this;
    }

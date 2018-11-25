@@ -3,7 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope.interfaces;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public interface SimplexBasics
+public interface Simplex3D
 {
    /**
     * Return the shortest distance from the point to the simplex
@@ -28,5 +28,5 @@ public interface SimplexBasics
     * @param point the point for which the smallest simplex is needed
     * @return the smallest simplex for said point
     */
-   SimplexBasics getSmallestSimplexMemberReference(Point3DReadOnly point);
+   Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point);
 }

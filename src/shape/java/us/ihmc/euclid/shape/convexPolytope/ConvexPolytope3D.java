@@ -10,7 +10,7 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeListener;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.SimplexBasics;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Apoorv S
  *
  */
-public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, SimplexBasics, Clearable, Transformable, Settable<ConvexPolytope3DReadOnly>
+public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Clearable, Transformable, Settable<ConvexPolytope3DReadOnly>
 {
    private final static boolean DEBUG = false;
    private final ArrayList<Vertex3D> vertices = new ArrayList<>();
@@ -849,7 +849,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, SimplexBasics
    }
 
    @Override
-   public SimplexBasics getSmallestSimplexMemberReference(Point3DReadOnly point)
+   public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
       return getFaceContainingPointClosestTo(point).getSmallestSimplexMemberReference(point);
    }

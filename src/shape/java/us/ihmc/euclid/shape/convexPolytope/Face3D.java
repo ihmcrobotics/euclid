@@ -8,7 +8,7 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.SimplexBasics;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -27,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Apoorv S
  *
  */
-public class Face3D implements SimplexBasics, SupportingVertexHolder, Face3DReadOnly, Clearable, Transformable
+public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly, Clearable, Transformable
 {
    /**
     * Unordered list of half edges that bound the face
@@ -601,7 +601,7 @@ public class Face3D implements SimplexBasics, SupportingVertexHolder, Face3DRead
    }
 
    @Override
-   public SimplexBasics getSmallestSimplexMemberReference(Point3DReadOnly point)
+   public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
       EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOriginVertex(), getFaceNormal(), tempPoint);
       if (isInteriorPointInternal(tempPoint))
