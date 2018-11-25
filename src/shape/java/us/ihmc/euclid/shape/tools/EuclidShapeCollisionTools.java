@@ -687,15 +687,15 @@ public class EuclidShapeCollisionTools
       resultToPack.setShapeB(torus3D);
    }
 
-   private static void doPoint3DTorus3DCollisionTest(Point3DReadOnly query, Torus3DReadOnly torus3D, CollisionTestResult resultToPack)
+   private static void doPoint3DTorus3DCollisionTest(Point3DReadOnly point3D, Torus3DReadOnly torus3D, CollisionTestResult resultToPack)
    {
       Shape3DPoseReadOnly torus3DPose = torus3D.getPose();
       double torus3DRadius = torus3D.getRadius();
       double torus3DTubeRadius = torus3D.getTubeRadius();
 
-      double dx = query.getX() - torus3D.getPositionX();
-      double dy = query.getY() - torus3D.getPositionY();
-      double dz = query.getZ() - torus3D.getPositionZ();
+      double dx = point3D.getX() - torus3D.getPositionX();
+      double dy = point3D.getY() - torus3D.getPositionY();
+      double dz = point3D.getZ() - torus3D.getPositionZ();
 
       double xLocal = dot(dx, dy, dz, torus3DPose.getXAxis());
       double yLocal = dot(dx, dy, dz, torus3DPose.getYAxis());
@@ -775,5 +775,8 @@ public class EuclidShapeCollisionTools
             resultToPack.setDistance(signedDistance);
          }
       }
+
+      resultToPack.getPointOnA().set(point3D);
+      resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
    }
 }

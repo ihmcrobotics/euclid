@@ -20,6 +20,8 @@ import us.ihmc.euclid.shape.Cylinder3D;
 import us.ihmc.euclid.shape.Ellipsoid3D;
 import us.ihmc.euclid.shape.PointShape3D;
 import us.ihmc.euclid.shape.Ramp3D;
+import us.ihmc.euclid.shape.Sphere3D;
+import us.ihmc.euclid.shape.Torus3D;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
@@ -1228,7 +1230,8 @@ public class EuclidShapeCollisionToolsTest
       }
    }
 
-   private void buildPointOutsideAndPerformAssertion(Random random, int iteration, Ramp3DReadOnly ramp3D, Point3DReadOnly pointOnShape, Vector3DReadOnly normal)
+   private static void buildPointOutsideAndPerformAssertion(Random random, int iteration, Ramp3DReadOnly ramp3D, Point3DReadOnly pointOnShape,
+                                                            Vector3DReadOnly normal)
    {
       double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
       Point3D pointOutside = new Point3D();
@@ -1251,6 +1254,177 @@ public class EuclidShapeCollisionToolsTest
       CollisionTestResult actual = new CollisionTestResult();
       EuclidShapeCollisionTools.doPointShape3DRamp3DCollisionTest(pointShape3D, ramp3D, actual);
       EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + iteration + "\n", expected, actual, EPSILON);
+   }
+
+   @Test
+   public void testPointShape3DSphere3D() throws Exception
+   {
+      Random random = new Random(43563);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Sphere3D sphere3D = EuclidShapeRandomTools.nextSphere3D(random);
+
+         Vector3D normal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(sphere3D.getRadius(), normal, sphere3D.getPosition());
+
+         { // Do test with point being outside
+            double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+            Point3D pointOutside = new Point3D();
+            pointOutside.scaleAdd(distance, normal, pointOnSurface);
+
+            PointShape3D pointShape3D = new PointShape3D(pointOutside);
+            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+            CollisionTestResult expected = new CollisionTestResult();
+            expected.setToNaN();
+            expected.setShapeA(pointShape3D);
+            expected.setShapeB(sphere3D);
+            expected.setShapesAreColliding(false);
+            expected.setDistance(distance);
+            expected.getPointOnA().set(pointOutside);
+            expected.getNormalOnA().setAndNegate(normal);
+            expected.getPointOnB().set(pointOnSurface);
+            expected.getNormalOnB().set(normal);
+
+            CollisionTestResult actual = new CollisionTestResult();
+            EuclidShapeCollisionTools.doPointShape3DSphere3DCollisionTest(pointShape3D, sphere3D, actual);
+            EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+         }
+
+         { // Do test with point being inside
+            Point3D pointInside = new Point3D();
+            double alpha = EuclidCoreRandomTools.nextDouble(random, 0.0, 0.9995); // When the point gets too close to the center, it triggers an edge-case.
+            pointInside.interpolate(pointOnSurface, sphere3D.getPosition(), alpha);
+            double distance = pointInside.distance(pointOnSurface);
+
+            PointShape3D pointShape3D = new PointShape3D(pointInside);
+            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+            CollisionTestResult expected = new CollisionTestResult();
+            expected.setToNaN();
+            expected.setShapeA(pointShape3D);
+            expected.setShapeB(sphere3D);
+            expected.setShapesAreColliding(true);
+            expected.setDepth(distance);
+            expected.getPointOnA().set(pointInside);
+            expected.getNormalOnA().setAndNegate(normal);
+            expected.getPointOnB().set(pointOnSurface);
+            expected.getNormalOnB().set(normal);
+
+            CollisionTestResult actual = new CollisionTestResult();
+            EuclidShapeCollisionTools.doPointShape3DSphere3DCollisionTest(pointShape3D, sphere3D, actual);
+            EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+         }
+      }
+   }
+
+   @Test
+   public void testPointShape3DTorus3D() throws Exception
+   {
+      Random random = new Random(45645);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape outside the torus
+         Torus3D torus3D = EuclidShapeRandomTools.nextTorus3D(random);
+         Vector3DReadOnly torusAxis = torus3D.getAxis();
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, torusAxis, true);
+
+         Point3D pointOnTubeAxis = new Point3D();
+         pointOnTubeAxis.scaleAdd(torus3D.getRadius(), orthogonalToAxis, torus3D.getPosition());
+
+         Vector3D tubeDirection = new Vector3D();
+         tubeDirection.cross(torusAxis, orthogonalToAxis);
+         if (random.nextBoolean())
+            tubeDirection.negate();
+
+         Vector3D normal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, tubeDirection, true);
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(torus3D.getTubeRadius(), normal, pointOnTubeAxis);
+         double distance;
+
+         if (normal.dot(orthogonalToAxis) < 0.0)
+         { // The point-on-surface is in the inner part of the tube, need to be careful when placing the point outside.
+            double angle = orthogonalToAxis.angle(normal);
+            double maxDistance = torus3D.getRadius() / Math.cos(angle) - torus3D.getTubeRadius();
+            if (maxDistance < 0.0)
+            { // The torus is likely to have no inner empty space, resetting this iteration
+               i--;
+               continue;
+            }
+
+            distance = EuclidCoreRandomTools.nextDouble(random, 0.0, maxDistance);
+         }
+         else
+         {
+            distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         }
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distance, normal, pointOnSurface);
+         PointShape3D pointShape3D = new PointShape3D(pointOutside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(torus3D);
+         expected.setShapesAreColliding(false);
+         expected.setDistance(distance);
+         expected.getPointOnA().set(pointOutside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DTorus3DCollisionTest(pointShape3D, torus3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point shape inside the torus
+         Torus3D torus3D = EuclidShapeRandomTools.nextTorus3D(random);
+         Vector3DReadOnly torusAxis = torus3D.getAxis();
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, torusAxis, true);
+
+         Point3D pointOnTubeAxis = new Point3D();
+         pointOnTubeAxis.scaleAdd(torus3D.getRadius(), orthogonalToAxis, torus3D.getPosition());
+
+         Vector3D tubeDirection = new Vector3D();
+         tubeDirection.cross(torusAxis, orthogonalToAxis);
+         if (random.nextBoolean())
+            tubeDirection.negate();
+
+         Vector3D normal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, tubeDirection, true);
+
+         Point3D pointOnSurface = new Point3D();
+         pointOnSurface.scaleAdd(torus3D.getTubeRadius(), normal, pointOnTubeAxis);
+         Point3D pointInside = new Point3D();
+         pointInside.interpolate(pointOnSurface, pointOnTubeAxis, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         double distance = pointOnSurface.distance(pointInside);
+
+         PointShape3D pointShape3D = new PointShape3D(pointInside);
+         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
+
+         CollisionTestResult expected = new CollisionTestResult();
+         expected.setToNaN();
+         expected.setShapeA(pointShape3D);
+         expected.setShapeB(torus3D);
+         expected.setShapesAreColliding(true);
+         expected.setDepth(distance);
+         expected.getPointOnA().set(pointInside);
+         expected.getNormalOnA().setAndNegate(normal);
+         expected.getPointOnB().set(pointOnSurface);
+         expected.getNormalOnB().set(normal);
+
+         CollisionTestResult actual = new CollisionTestResult();
+         EuclidShapeCollisionTools.doPointShape3DTorus3DCollisionTest(pointShape3D, torus3D, actual);
+         EuclidShapeTestTools.assertCollisionTestResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
+      }
    }
 
    public static Vector3DReadOnly getAxis(Axis axis, Shape3DPoseReadOnly shape3DPose)
