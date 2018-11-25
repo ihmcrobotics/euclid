@@ -9,7 +9,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public interface ConvexPolytope3DReadOnly extends EpsilonComparable<ConvexPolytope3DReadOnly>, SupportingVertexHolder
 {
    /**
-    * Get a list of faces that consitute the polytope
+    * Get a list of faces that constitute the polytope
     * 
     * @return a list of read only references to the faces of the polytope
     */
@@ -24,7 +24,7 @@ public interface ConvexPolytope3DReadOnly extends EpsilonComparable<ConvexPolyto
    List<? extends HalfEdge3DReadOnly> getEdges();
 
    /**
-    * Get a list of vertices that are part of this polytope. List does not contain any repititions
+    * Get a list of vertices that are part of this polytope. List does not contain any repetitions
     * 
     * @return a list of read only reference to the vertices of the polytope
     */
