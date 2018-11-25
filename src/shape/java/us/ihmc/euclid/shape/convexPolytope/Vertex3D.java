@@ -119,15 +119,6 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     * {@inheritDoc}
     */
    @Override
-   public String toString()
-   {
-      return EuclidCoreIOTools.getTuple3DString(this);
-   }
-
-   /**
-    * {@inheritDoc}
-    */
-   @Override
    public boolean isAnyFaceMarked()
    {
       boolean isMarked = false;
@@ -198,5 +189,14 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
       hashCode = EuclidHashCodeTools.addToHashCode(hashCode, y);
       hashCode = EuclidHashCodeTools.addToHashCode(hashCode, z);
       return EuclidHashCodeTools.toIntHashCode(hashCode);
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public String toString()
+   {
+      return EuclidCoreIOTools.getTuple3DString(this);
    }
 }
