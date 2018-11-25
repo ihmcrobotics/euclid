@@ -50,7 +50,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    /**
     * The face that this edge is a part of
     */
-   private Face3DBasics face;
+   private Face3D face;
    /**
     * A vector that represents the direction and lenght of the half edge. Not recomputed on change of
     * values. Only recomputed when called through its getter
@@ -93,7 +93,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * @param twinEdge the edge that is to be the twin of the new half edgegetShortestDistanceTo
     * @param face the face that the new half edge is to be a part of
     */
-   public HalfEdge3D(HalfEdge3D twinEdge, Face3DBasics face)
+   public HalfEdge3D(HalfEdge3D twinEdge, Face3D face)
    {
       setTwinHalfEdge(twinEdge);
       setOriginVertex(twinEdge.getDestinationVertex());
@@ -119,7 +119,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * @param face the face that this half edge is a part of. Can be {@code null}
     */
    public HalfEdge3D(Vertex3D originVertex, Vertex3D destinationVertex, HalfEdge3D twinEdge, HalfEdge3D nextHalfEdge,
-                           HalfEdge3D previousHalfEdge, Face3DBasics face)
+                           HalfEdge3D previousHalfEdge, Face3D face)
    {
       setOriginVertex(originVertex);
       setDestinationVertex(destinationVertex);
@@ -356,7 +356,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *
     * @param face the face reference to be stored. Can be null
     */
-   public void setFace(Face3DBasics face)
+   public void setFace(Face3D face)
    {
       this.face = face;
    }
@@ -365,7 +365,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * {@inheritDoc}
     */
    @Override
-   public Face3DBasics getFace()
+   public Face3D getFace()
    {
       return face;
    }

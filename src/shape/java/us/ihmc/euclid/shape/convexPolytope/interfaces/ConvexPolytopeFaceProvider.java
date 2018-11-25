@@ -1,8 +1,8 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
-import us.ihmc.euclid.shape.convexPolytope.Face3DBasics;
+import us.ihmc.euclid.shape.convexPolytope.Face3D;
 
 public interface ConvexPolytopeFaceProvider
 {
-   Face3DBasics getFace();
+   Face3D getFace();
 }
