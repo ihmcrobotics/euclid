@@ -33,7 +33,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    /**
     * Unordered list of half edges that bound the face
     */
-   private final ArrayList<HalfEdge3D> edges = new ArrayList<>();
+   private final List<HalfEdge3D> edges = new ArrayList<>();
 
    /**
     * A vector normal to the plane that this face lies on. Do not access directly since this is updated
@@ -49,7 +49,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    // Temporary variables for calculations
    private final Vector3D tempVector = new Vector3D();
    private final Point3D tempPoint = new Point3D();
-   private final ArrayList<HalfEdge3D> visibleEdgeList = new ArrayList<>();
+   private final List<HalfEdge3D> visibleEdgeList = new ArrayList<>();
    private boolean marked = false;
 
    /**
@@ -136,28 +136,30 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
             return;
 
          getVisibleEdgeList(vertexToAdd, visibleEdgeList);
+         HalfEdge3D firstVisibleEdge = visibleEdgeList.get(0);
+         HalfEdge3D lastVisibleEdge = visibleEdgeList.get(visibleEdgeList.size() - 1);
          switch (visibleEdgeList.size())
          {
          case 0:
             return; // Case where the point is internal
          case 1:
-            if (visibleEdgeList.get(0).getOriginVertex().epsilonEquals(vertexToAdd, epsilon)
-                  || visibleEdgeList.get(0).getDestinationVertex().epsilonEquals(vertexToAdd, epsilon))
+            if (firstVisibleEdge.getOriginVertex().epsilonEquals(vertexToAdd, epsilon)
+                  || firstVisibleEdge.getDestinationVertex().epsilonEquals(vertexToAdd, epsilon))
                return;
-            HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, visibleEdgeList.get(0).getDestinationVertex());
+            HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestinationVertex());
             additionalEdge.setFace(this);
-            visibleEdgeList.get(0).setDestinationVertex(vertexToAdd);
-            additionalEdge.setNextHalfEdge(visibleEdgeList.get(0).getNextHalfEdge());
-            visibleEdgeList.get(0).getNextHalfEdge().setPreviousHalfEdge(additionalEdge);
-            visibleEdgeList.get(0).setNextHalfEdge(additionalEdge);
-            additionalEdge.setPreviousHalfEdge(visibleEdgeList.get(0));
+            firstVisibleEdge.setDestinationVertex(vertexToAdd);
+            additionalEdge.setNextHalfEdge(firstVisibleEdge.getNextHalfEdge());
+            firstVisibleEdge.getNextHalfEdge().setPreviousHalfEdge(additionalEdge);
+            firstVisibleEdge.setNextHalfEdge(additionalEdge);
+            additionalEdge.setPreviousHalfEdge(firstVisibleEdge);
             edges.add(additionalEdge);
             break;
          default:
-            visibleEdgeList.get(0).setDestinationVertex(vertexToAdd);
-            visibleEdgeList.get(visibleEdgeList.size() - 1).setOriginVertex(vertexToAdd);
-            visibleEdgeList.get(0).setNextHalfEdge(visibleEdgeList.get(visibleEdgeList.size() - 1));
-            visibleEdgeList.get(visibleEdgeList.size() - 1).setPreviousHalfEdge(visibleEdgeList.get(0));
+            firstVisibleEdge.setDestinationVertex(vertexToAdd);
+            lastVisibleEdge.setOriginVertex(vertexToAdd);
+            firstVisibleEdge.setNextHalfEdge(lastVisibleEdge);
+            lastVisibleEdge.setPreviousHalfEdge(firstVisibleEdge);
             for (int i = 1; i < visibleEdgeList.size() - 1; i++)
                edges.remove(visibleEdgeList.get(i));
             break;
