@@ -5290,6 +5290,229 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlaneX the x-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneY the y-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneZ the z-coordinate of a point positioned on the infinite plane.
+    * @param planeFirstTangentX the x-component of a first tangent of the infinite plane.
+    * @param planeFirstTangentY the y-component of a first tangent of the infinite plane.
+    * @param planeFirstTangentZ the z-component of a first tangent of the infinite plane.
+    * @param planeSecondTangentX the x-component of a second tangent of the infinite plane.
+    * @param planeSecondTangentY the y-component of a second tangent of the infinite plane.
+    * @param planeSecondTangentZ the z-component of a second tangent of the infinite plane.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
+    *      double, double, boolean)
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, double pointOnPlaneX, double pointOnPlaneY,
+                                                      double pointOnPlaneZ, double planeFirstTangentX, double planeFirstTangentY, double planeFirstTangentZ,
+                                                      double planeSecondTangentX, double planeSecondTangentY, double planeSecondTangentZ, boolean testForAbove)
+   {
+      double planeNormalX = planeFirstTangentY * planeSecondTangentZ - planeFirstTangentZ * planeSecondTangentY;
+      double planeNormalY = planeFirstTangentZ * planeSecondTangentX - planeFirstTangentX * planeSecondTangentZ;
+      double planeNormalZ = planeFirstTangentX * planeSecondTangentY - planeFirstTangentY * planeSecondTangentX;
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeNormalX, planeNormalY, planeNormalZ,
+                                          testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
+    *      double, double, boolean)
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane,
+                                                      Vector3DReadOnly planeFirstTangent, Vector3DReadOnly planeSecondTangent, boolean testForAbove)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ(), planeFirstTangent.getX(),
+                                          planeFirstTangent.getY(), planeFirstTangent.getZ(), planeSecondTangent.getX(), planeSecondTangent.getY(),
+                                          planeSecondTangent.getZ(), testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point the coordinates of the query point. Not modified.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
+    *      double, double, boolean)
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeFirstTangent,
+                                                      Vector3DReadOnly planeSecondTangent, boolean testForAbove)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
+    *      double, double, boolean)
+    */
+   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeFirstTangent,
+                                               Vector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
+    *      double, double, boolean)
+    */
+   public static boolean isPoint3DAbovePlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeFirstTangent,
+                                               Vector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
+    *      double, double, boolean)
+    */
+   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeFirstTangent,
+                                               Vector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @see #isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double,
+    *      double, double, boolean)
+    */
+   public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeFirstTangent,
+                                               Vector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+   }
+
+   /**
     * Computes the normal of a plane that is defined by three points.
     * <p>
     * Edge cases:

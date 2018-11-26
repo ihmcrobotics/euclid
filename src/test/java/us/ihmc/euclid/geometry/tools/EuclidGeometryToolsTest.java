@@ -7721,7 +7721,7 @@ public class EuclidGeometryToolsTest
          Vector3D planeNormal = EuclidCoreRandomTools.nextVector3D(random);
          Point3D pointOnPlane = EuclidCoreRandomTools.nextPoint3D(random);
 
-         performAssertionsForPoint3DOnSideOfPlane3D(pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
 
          double shift = EuclidCoreRandomTools.nextDouble(random, 1.0e-17, 1.0);
 
@@ -7730,24 +7730,24 @@ public class EuclidGeometryToolsTest
          Point3D pointBelow = new Point3D();
          pointBelow.scaleAdd(-shift, planeNormal, pointOnPlane);
 
-         performAssertionsForPoint3DOnSideOfPlane3D(pointAbove, pointOnPlane, planeNormal, Plane3DSide.ABOVE);
-         performAssertionsForPoint3DOnSideOfPlane3D(pointBelow, pointOnPlane, planeNormal, Plane3DSide.BELOW);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointAbove, pointOnPlane, planeNormal, Plane3DSide.ABOVE);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointBelow, pointOnPlane, planeNormal, Plane3DSide.BELOW);
 
          Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, planeNormal, true);
 
          pointAbove.scaleAdd(EuclidCoreRandomTools.nextDouble(random), orthogonal, pointAbove);
          pointBelow.scaleAdd(EuclidCoreRandomTools.nextDouble(random), orthogonal, pointBelow);
-         performAssertionsForPoint3DOnSideOfPlane3D(pointAbove, pointOnPlane, planeNormal, Plane3DSide.ABOVE);
-         performAssertionsForPoint3DOnSideOfPlane3D(pointBelow, pointOnPlane, planeNormal, Plane3DSide.BELOW);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointAbove, pointOnPlane, planeNormal, Plane3DSide.ABOVE);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointBelow, pointOnPlane, planeNormal, Plane3DSide.BELOW);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with query exactly on plane
          Axis planeNormal = Axis.values[random.nextInt(3)];
          Point3D pointOnPlane = EuclidCoreRandomTools.nextPoint3D(random);
-         
-         performAssertionsForPoint3DOnSideOfPlane3D(pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
-         
+
+         performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
+
          Axis otherAxis1 = planeNormal.getNextClockwiseAxis();
          Axis otherAxis2 = otherAxis1.getNextClockwiseAxis();
 
@@ -7764,7 +7764,7 @@ public class EuclidGeometryToolsTest
 
          Point3D anotherPointOnPlane = new Point3D();
          anotherPointOnPlane.scaleAdd(EuclidCoreRandomTools.nextDouble(random), orthogonal, pointOnPlane);
-         performAssertionsForPoint3DOnSideOfPlane3D(anotherPointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
+         performAssertionsForPoint3DOnSideOfPlane3D(random, anotherPointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
       }
    }
 
@@ -7773,8 +7773,8 @@ public class EuclidGeometryToolsTest
       EXACTLY_ON, ABOVE, BELOW
    };
 
-   private static void performAssertionsForPoint3DOnSideOfPlane3D(Point3DReadOnly query, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal,
-                                                                  Plane3DSide expected)
+   private static void performAssertionsForPoint3DOnSideOfPlane3D(Random random, Point3DReadOnly query, Point3DReadOnly pointOnPlane,
+                                                                  Vector3DReadOnly planeNormal, Plane3DSide expected)
    {
       double queryX = query.getX();
       double queryY = query.getY();
@@ -7785,6 +7785,22 @@ public class EuclidGeometryToolsTest
       double planeNormalX = planeNormal.getX();
       double planeNormalY = planeNormal.getY();
       double planeNormalZ = planeNormal.getZ();
+
+      Vector3D planeFirstTangent = EuclidCoreRandomTools.nextOrthogonalVector3D(random, planeNormal, false);
+      planeFirstTangent.scale(EuclidCoreRandomTools.nextDouble(random));
+      Vector3D planeSecondTangent = new Vector3D();
+      planeSecondTangent.cross(planeNormal, planeFirstTangent);
+      planeSecondTangent.interpolate(planeFirstTangent, EuclidCoreRandomTools.nextDouble(random, 0.0, 0.9));
+      planeFirstTangent.negate();
+      planeSecondTangent.interpolate(planeFirstTangent, EuclidCoreRandomTools.nextDouble(random, 0.0, 0.9));
+      planeFirstTangent.negate();
+
+      double planeFirstTangentX = planeFirstTangent.getX();
+      double planeFirstTangentY = planeFirstTangent.getY();
+      double planeFirstTangentZ = planeFirstTangent.getZ();
+      double planeSecondTangentX = planeSecondTangent.getX();
+      double planeSecondTangentY = planeSecondTangent.getY();
+      double planeSecondTangentZ = planeSecondTangent.getZ();
 
       if (expected == Plane3DSide.EXACTLY_ON)
       {
@@ -7800,6 +7816,21 @@ public class EuclidGeometryToolsTest
          assertFalse(EuclidGeometryTools.isPoint3DAbovePlane3D(query, pointOnPlane, planeNormal));
          assertFalse(EuclidGeometryTools.isPoint3DBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeNormal));
          assertFalse(EuclidGeometryTools.isPoint3DBelowPlane3D(query, pointOnPlane, planeNormal));
+
+         assertFalse(EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeFirstTangentX,
+                                                                      planeFirstTangentY, planeFirstTangentZ, planeSecondTangentX, planeSecondTangentY,
+                                                                      planeSecondTangentZ, true));
+         assertFalse(EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeFirstTangentX,
+                                                                      planeFirstTangentY, planeFirstTangentZ, planeSecondTangentX, planeSecondTangentY,
+                                                                      planeSecondTangentZ, false));
+         assertFalse(EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true));
+         assertFalse(EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false));
+         assertFalse(EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent, true));
+         assertFalse(EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent, false));
+         assertFalse(EuclidGeometryTools.isPoint3DAbovePlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent));
+         assertFalse(EuclidGeometryTools.isPoint3DAbovePlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent));
+         assertFalse(EuclidGeometryTools.isPoint3DBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent));
+         assertFalse(EuclidGeometryTools.isPoint3DBelowPlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent));
          return;
       }
 
@@ -7819,6 +7850,29 @@ public class EuclidGeometryToolsTest
       assertEquals(isBelowExpectedResult, EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(query, pointOnPlane, planeNormal, false));
       assertEquals(isBelowExpectedResult, EuclidGeometryTools.isPoint3DBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeNormal));
       assertEquals(isBelowExpectedResult, EuclidGeometryTools.isPoint3DBelowPlane3D(query, pointOnPlane, planeNormal));
+
+      // Now using the plane tangents
+      assertEquals(isAboveExpectedResult,
+                   EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeFirstTangentX,
+                                                                    planeFirstTangentY, planeFirstTangentZ, planeSecondTangentX, planeSecondTangentY,
+                                                                    planeSecondTangentZ, true));
+      assertEquals(isAboveExpectedResult,
+                   EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true));
+      assertEquals(isAboveExpectedResult, EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent, true));
+      assertEquals(isAboveExpectedResult,
+                   EuclidGeometryTools.isPoint3DAbovePlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent));
+      assertEquals(isAboveExpectedResult, EuclidGeometryTools.isPoint3DAbovePlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent));
+
+      assertEquals(isBelowExpectedResult,
+                   EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeFirstTangentX,
+                                                                    planeFirstTangentY, planeFirstTangentZ, planeSecondTangentX, planeSecondTangentY,
+                                                                    planeSecondTangentZ, false));
+      assertEquals(isBelowExpectedResult,
+                   EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false));
+      assertEquals(isBelowExpectedResult, EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent, false));
+      assertEquals(isBelowExpectedResult,
+                   EuclidGeometryTools.isPoint3DBelowPlane3D(queryX, queryY, queryZ, pointOnPlane, planeFirstTangent, planeSecondTangent));
+      assertEquals(isBelowExpectedResult, EuclidGeometryTools.isPoint3DBelowPlane3D(query, pointOnPlane, planeFirstTangent, planeSecondTangent));
    }
 
    @Test
