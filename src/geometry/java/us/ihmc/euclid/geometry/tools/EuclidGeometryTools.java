@@ -1650,6 +1650,37 @@ public class EuclidGeometryTools
     * @param pointX the x-coordinate of the query. Not modified.
     * @param pointY the y-coordinate of the query. Not modified.
     * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointOnPlaneX the x-coordinate of a point located on the plane. Not modified.
+    * @param pointOnPlaneY the y-coordinate of a point located on the plane. Not modified.
+    * @param pointOnPlaneZ the z-coordinate of a point located on the plane. Not modified.
+    * @param planeNormalX the x-component of the normal of the plane. Not modified.
+    * @param planeNormalY the y-component of the normal of the plane. Not modified.
+    * @param planeNormalZ the z-component of the normal of the plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, double pointOnPlaneX, double pointOnPlaneY,
+                                                           double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ)
+   {
+      double dx = pointX - pointOnPlaneX;
+      double dy = pointY - pointOnPlaneY;
+      double dz = pointZ - pointOnPlaneZ;
+      double normalMagnitude = Math.sqrt(EuclidCoreTools.normSquared(planeNormalX, planeNormalY, planeNormalZ));
+
+      if (normalMagnitude < ONE_TRILLIONTH)
+         return Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+      else
+         return (dx * planeNormalX + dy * planeNormalY + dz * planeNormalZ) / Math.sqrt(normalMagnitude);
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query. Not modified.
+    * @param pointY the y-coordinate of the query. Not modified.
+    * @param pointZ the z-coordinate of the query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
     * @param planeNormal the normal of the plane. Not modified.
     * @return the signed distance between the point and the plane.
@@ -1657,11 +1688,8 @@ public class EuclidGeometryTools
    public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane,
                                                            Vector3DReadOnly planeNormal)
    {
-      double dx = (pointX - pointOnPlane.getX()) * planeNormal.getX();
-      double dy = (pointY - pointOnPlane.getY()) * planeNormal.getY();
-      double dz = (pointZ - pointOnPlane.getZ()) * planeNormal.getZ();
-      double signedDistance = (dx + dy + dz) / planeNormal.length();
-      return signedDistance;
+      return signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ(), planeNormal.getX(),
+                                                planeNormal.getY(), planeNormal.getZ());
    }
 
    /**
