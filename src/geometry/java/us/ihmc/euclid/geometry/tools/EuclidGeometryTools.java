@@ -4895,12 +4895,12 @@ public class EuclidGeometryTools
 
    /**
     * Returns a boolean value, stating whether a 2D point is on the left side of an infinitely long
-    * line defined by two points. "Left side" is determined based on order of {@code lineStart} and
-    * {@code lineEnd}.
+    * line defined by two points. "Left side" is determined based on order of {@code firstPointOnLine}
+    * and {@code secondPointOnLine}.
     * <p>
-    * For instance, given the {@code lineStart} coordinates x = 0, and y = 0, and the {@code lineEnd}
-    * coordinates x = 1, y = 0, a point located on the left side of this line has a negative y
-    * coordinate.
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on the left side of this line
+    * has a negative x coordinate.
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
@@ -4917,12 +4917,12 @@ public class EuclidGeometryTools
 
    /**
     * Returns a boolean value, stating whether a 2D point is on the right side of an infinitely long
-    * line defined by two points. "Right side" is determined based on order of {@code lineStart} and
-    * {@code lineEnd}.
+    * line defined by two points. "Right side" is determined based on order of {@code firstPointOnLine}
+    * and {@code secondPointOnLine}.
     * <p>
-    * For instance, given the {@code lineStart} coordinates x = 0, and y = 0, and the {@code lineEnd}
-    * coordinates x = 1, y = 0, a point located on the right side of this line has a positive y
-    * coordinate.
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on the right side of this
+    * line has a positive x coordinate.
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
@@ -4944,8 +4944,8 @@ public class EuclidGeometryTools
     * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
     * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
     * <ul>
-    * <li>the left side of this line has a negative y coordinate.
-    * <li>the right side of this line has a positive y coordinate.
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
     * </ul>
     * </p>
     * This method will return {@code false} if the point is on the line.
@@ -4976,13 +4976,13 @@ public class EuclidGeometryTools
    /**
     * Returns a boolean value, stating whether a 2D point is on the left or right side of an infinitely
     * long line defined by two points. The idea of "side" is determined based on order of
-    * {@code lineStart} and {@code lineEnd}.
+    * {@code firstPointOnLine} and {@code secondPointOnLine}.
     * <p>
-    * For instance, given the {@code lineStart} coordinates x = 0, and y = 0, and the {@code lineEnd}
-    * coordinates x = 1, y = 0, a point located on:
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on:
     * <ul>
-    * <li>the left side of this line has a negative y coordinate.
-    * <li>the right side of this line has a positive y coordinate.
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
     * </ul>
     * </p>
     * This method will return {@code false} if the point is on the line.
@@ -5013,8 +5013,8 @@ public class EuclidGeometryTools
     * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
     * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
     * <ul>
-    * <li>the left side of this line has a negative y coordinate.
-    * <li>the right side of this line has a positive y coordinate.
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
     * </ul>
     * </p>
     * This method will return {@code false} if the point is on the line.
@@ -5041,13 +5041,13 @@ public class EuclidGeometryTools
    /**
     * Returns a boolean value, stating whether a 2D point is on the left or right side of an infinitely
     * long line defined by two points. The idea of "side" is determined based on order of
-    * {@code lineStart} and {@code lineEnd}.
+    * {@code firstPointOnLine} and {@code secondPointOnLine}.
     * <p>
-    * For instance, given the {@code lineStart} coordinates x = 0, and y = 0, and the {@code lineEnd}
-    * coordinates x = 1, y = 0, a point located on:
+    * For instance, given the {@code firstPointOnLine} coordinates x = 0, and y = 0, and the
+    * {@code secondPointOnLine} coordinates x = 0, y = 1, a point located on:
     * <ul>
-    * <li>the left side of this line has a negative y coordinate.
-    * <li>the right side of this line has a positive y coordinate.
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
     * </ul>
     * </p>
     * This method will return {@code false} if the point is on the line.
@@ -5073,8 +5073,8 @@ public class EuclidGeometryTools
     * For instance, given the {@code lineDirection} components x = 0, and y = 1, and the
     * {@code pointOnLine} coordinates x = 0, and y = 0, a point located on:
     * <ul>
-    * <li>the left side of this line has a negative y coordinate.
-    * <li>the right side of this line has a positive y coordinate.
+    * <li>the left side of this line has a negative x coordinate.
+    * <li>the right side of this line has a positive x coordinate.
     * </ul>
     * </p>
     * This method will return {@code false} if the point is on the line.
@@ -5090,6 +5090,203 @@ public class EuclidGeometryTools
    public static boolean isPoint2DOnSideOfLine2D(Point2DReadOnly point, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, boolean testLeftSide)
    {
       return isPoint2DOnSideOfLine2D(point.getX(), point.getY(), pointOnLine, lineDirection, testLeftSide);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlaneX the x-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneY the y-coordinate of a point positioned on the infinite plane.
+    * @param pointOnPlaneZ the z-coordinate of a point positioned on the infinite plane.
+    * @param planeNormalX the x-component of the normal of the infinite plane.
+    * @param planeNormalY the y-component of the normal of the infinite plane.
+    * @param planeNormalZ the z-component of the normal of the infinite plane.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, double pointOnPlaneX, double pointOnPlaneY,
+                                                      double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ, boolean testForAbove)
+   {
+      double dx = (pointX - pointOnPlaneX) * planeNormalX;
+      double dy = (pointY - pointOnPlaneY) * planeNormalY;
+      double dz = (pointZ - pointOnPlaneZ) * planeNormalZ;
+      double signedDistance = dx + dy + dz;
+
+      if (testForAbove)
+         return signedDistance > 0.0;
+      else
+         return signedDistance < 0.0;
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal,
+                                                      boolean testForAbove)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ(), planeNormal.getX(),
+                                          planeNormal.getY(), planeNormal.getZ(), testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal, boolean testForAbove)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    */
+   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    */
+   public static boolean isPoint3DAbovePlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    */
+   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, false);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    */
+   public static boolean isPoint3DBelowPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, false);
    }
 
    /**
@@ -5966,7 +6163,6 @@ public class EuclidGeometryTools
     *
     * @param pointX the x-coordinate of the query point.
     * @param pointY the y-coordinate of the query point.
-    * @param pointZ the z-coordinate of the query point.
     * @param pointOnLine a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the computed percentage along the line representing where the point projection is
