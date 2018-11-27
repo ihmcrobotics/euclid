@@ -1664,7 +1664,7 @@ public class EuclidGeometryTools
       double dx = pointX - pointOnPlaneX;
       double dy = pointY - pointOnPlaneY;
       double dz = pointZ - pointOnPlaneZ;
-      double normalMagnitude = Math.sqrt(EuclidCoreTools.normSquared(planeNormalX, planeNormalY, planeNormalZ));
+      double normalMagnitude = EuclidCoreTools.normSquared(planeNormalX, planeNormalY, planeNormalZ);
 
       if (normalMagnitude < ONE_TRILLIONTH)
          return Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
