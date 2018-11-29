@@ -280,8 +280,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
     */
    public void addVertex(Vertex3D vertexToAdd, double epsilon)
    {
-      if (epsilon > 0.0)
-         vertexToAdd.round(epsilon);
       if (faces.size() == 0)
       {
          // Polytope is empty. Creating face and adding the vertex

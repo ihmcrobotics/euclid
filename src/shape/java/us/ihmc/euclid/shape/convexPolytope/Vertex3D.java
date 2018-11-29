@@ -129,13 +129,6 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
       return isMarked;
    }
 
-   public void round(double epsilon)
-   {
-      setX(Math.round(getX() / epsilon) * epsilon);
-      setY(Math.round(getY() / epsilon) * epsilon);
-      setZ(Math.round(getZ() / epsilon) * epsilon);
-   }
-
    @Override
    public void setX(double x)
    {
