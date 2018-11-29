@@ -1,9 +1,24 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
+
+import java.util.List;
+
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.factory.DecompositionFactory;
+import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidPolytopeTools
@@ -156,5 +171,103 @@ public class EuclidPolytopeTools
       return signedDistanceFromPoint3DToLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(),
                                                lineDirection.getX(), lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(),
                                                planeNormal.getZ());
+   }
+
+   public static double updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
+   {
+      Matrix3D covariance = new Matrix3D();
+      computeCovariance3D(vertices, averageToPack, covariance);
+      Vector3D eigenValues = new Vector3D();
+      Vector3D newNormal = new Vector3D();
+      boolean success = computeEigenVectors(covariance, eigenValues , null, null, newNormal);
+      if (!success)
+         return Double.NaN;
+
+      if (newNormal.dot(normalToUpdate) < 0.0)
+         newNormal.negate();
+
+      normalToUpdate.set(newNormal);
+
+      return EuclidCoreTools.norm(eigenValues.getX(), eigenValues.getY()) / eigenValues.getZ();
+   }
+
+   public static boolean computeEigenVectors(Matrix3DReadOnly matrix, Tuple3DBasics eigenValues, Vector3DBasics firstEigenVector,
+                                             Vector3DBasics secondEigenVector, Vector3DBasics thirdEigenVector)
+   {
+      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+      matrix.get(denseMatrix);
+
+      EigenDecomposition<DenseMatrix64F> eig = DecompositionFactory.eig(3, true, true);
+      if (!eig.decompose(denseMatrix))
+         return false;
+
+      if (eigenValues != null)
+      {
+         eigenValues.setX(eig.getEigenvalue(0).getReal());
+         eigenValues.setY(eig.getEigenvalue(1).getReal());
+         eigenValues.setZ(eig.getEigenvalue(2).getReal());
+      }
+
+      if (firstEigenVector != null)
+         firstEigenVector.set(eig.getEigenVector(0));
+      if (secondEigenVector != null)
+         secondEigenVector.set(eig.getEigenVector(1));
+      if (thirdEigenVector != null)
+         thirdEigenVector.set(eig.getEigenVector(2));
+
+      return true;
+   }
+
+   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, Matrix3DBasics covarianceToPack)
+   {
+      double meanX = 0.0;
+      double meanY = 0.0;
+      double meanZ = 0.0;
+
+      for (int i = 0; i < input.size(); i++)
+      {
+         Tuple3DReadOnly element = input.get(i);
+         meanX += element.getX();
+         meanY += element.getY();
+         meanZ += element.getZ();
+      }
+
+      double inverseOfInputSize = 1.0 / input.size();
+
+      meanX *= inverseOfInputSize;
+      meanY *= inverseOfInputSize;
+      meanZ *= inverseOfInputSize;
+
+      if (averageToPack != null)
+      {
+         averageToPack.set(meanX, meanY, meanZ);
+      }
+
+      covarianceToPack.setToZero();
+
+      for (int i = 0; i < input.size(); i++)
+      {
+         Tuple3DReadOnly element = input.get(i);
+         double devX = element.getX() - meanX;
+         double devY = element.getY() - meanY;
+         double devZ = element.getZ() - meanZ;
+
+         double covXX = devX * devX * inverseOfInputSize;
+         double covYY = devY * devY * inverseOfInputSize;
+         double covZZ = devZ * devZ * inverseOfInputSize;
+         double covXY = devX * devY * inverseOfInputSize;
+         double covXZ = devX * devZ * inverseOfInputSize;
+         double covYZ = devY * devZ * inverseOfInputSize;
+
+         covarianceToPack.addM00(covXX);
+         covarianceToPack.addM11(covYY);
+         covarianceToPack.addM22(covZZ);
+         covarianceToPack.addM01(covXY);
+         covarianceToPack.addM10(covXY);
+         covarianceToPack.addM02(covXZ);
+         covarianceToPack.addM20(covXZ);
+         covarianceToPack.addM12(covYZ);
+         covarianceToPack.addM21(covYZ);
+      }
    }
 }
