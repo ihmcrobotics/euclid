@@ -161,6 +161,8 @@ public class EuclidPolytopeIOTools
 
    private static String getFace3DShortString(String format, Face3DReadOnly face3D)
    {
+      if (face3D == null)
+         return "null";
       return getFace3DShortString(format, face3D.getFaceCentroid(), face3D.getFaceNormal());
    }
 
