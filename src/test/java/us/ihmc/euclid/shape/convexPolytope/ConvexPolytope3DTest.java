@@ -136,7 +136,7 @@ public class ConvexPolytope3DTest
          assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
 
          for (HalfEdge3D edge : vertex.getAssociatedEdges())
-            assertTrue(edge.getOriginVertex() == vertex);
+            assertTrue(edge.getOrigin() == vertex);
       }
 
       for (int edgeIndex = 0; edgeIndex < polytope.getEdges().size(); edgeIndex++)
@@ -145,25 +145,25 @@ public class ConvexPolytope3DTest
          // Assert that each vertex is unique
          assertTrue(polytope.getEdges().stream().noneMatch(otherEdge -> (otherEdge != edge && otherEdge.epsilonEquals(edge, EPSILON))));
          // Assert that all vertex are from the points added
-         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOriginVertex(), EPSILON)));
-         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestinationVertex(), EPSILON)));
+         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
+         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
 
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getTwinHalfEdge().getDestinationVertex(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getTwinHalfEdge().getOriginVertex(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getDestination(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getOrigin(), EPSILON);
 
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getPreviousHalfEdge().getDestinationVertex(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getNextHalfEdge().getOriginVertex(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getDestination(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getOrigin(), EPSILON);
 
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getPreviousHalfEdge().getTwinHalfEdge().getOriginVertex(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getNextHalfEdge().getTwinHalfEdge().getDestinationVertex(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getTwinEdge().getOrigin(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getTwinEdge().getDestination(), EPSILON);
 
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOriginVertex(), edge.getTwinHalfEdge().getNextHalfEdge().getOriginVertex(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestinationVertex(), edge.getTwinHalfEdge().getPreviousHalfEdge().getDestinationVertex(),
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getNextEdge().getOrigin(), EPSILON);
+         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getPreviousEdge().getDestination(),
                                                       EPSILON);
 
-         assertTrue(edge.getTwinHalfEdge().getTwinHalfEdge() == edge);
-         assertTrue(edge.getNextHalfEdge().getPreviousHalfEdge() == edge);
-         assertTrue(edge.getPreviousHalfEdge().getNextHalfEdge() == edge);
+         assertTrue(edge.getTwinEdge().getTwinEdge() == edge);
+         assertTrue(edge.getNextEdge().getPreviousEdge() == edge);
+         assertTrue(edge.getPreviousEdge().getNextEdge() == edge);
       }
 
       for (int faceIndex = 0; faceIndex < polytope.getFaces().size(); faceIndex++)
@@ -171,10 +171,10 @@ public class ConvexPolytope3DTest
          Face3D face = polytope.getFace(faceIndex);
          assertTrue(polytope.getFaces().stream().noneMatch(otherFace -> (otherFace != face && otherFace.epsilonEquals(face, EPSILON))));
          // Assert that all vertex are from the points added
-         for (HalfEdge3D edge : face.getEdgeList())
+         for (HalfEdge3D edge : face.getEdges())
          {
-            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOriginVertex(), EPSILON)));
-            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestinationVertex(), EPSILON)));
+            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
+            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
          }
       }
 

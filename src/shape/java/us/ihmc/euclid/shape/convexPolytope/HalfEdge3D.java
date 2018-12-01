@@ -30,11 +30,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    /**
     * Specifies the spatial location at which the half edge originates
     */
-   private Vertex3D originVertex;
+   private Vertex3D origin;
    /**
     * Specifies the spatial location at which the half edge terminates
     */
-   private Vertex3D destinationVertex;
+   private Vertex3D destination;
    /**
     * The half edge on an adjacent face that originates at the {@code destinatioVertex} and terminates
     * at the {@code originVertex}. Represents the opposite spatial direction
@@ -43,11 +43,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    /**
     * The half edge on the same face as this edge that originates at the {@code destinationVertex}
     */
-   private HalfEdge3D nextHalfEdge;
+   private HalfEdge3D nextEdge;
    /**
     * The half edge on the same face as this edge that terminates at the {@code originVertex}
     */
-   private HalfEdge3D previousHalfEdge;
+   private HalfEdge3D previousEdge;
    /**
     * The face that this edge is a part of
     */
@@ -66,13 +66,13 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    /**
     * Primary constructor for half edge
     *
-    * @param originVertex
-    * @param destinationVertex
+    * @param origin
+    * @param destination
     */
-   public HalfEdge3D(Vertex3D originVertex, Vertex3D destinationVertex)
+   public HalfEdge3D(Vertex3D origin, Vertex3D destination)
    {
-      setOriginVertex(originVertex);
-      setDestinationVertex(destinationVertex);
+      setOrigin(origin);
+      setDestination(destination);
    }
 
    /**
@@ -81,8 +81,8 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public HalfEdge3D setAndCreateTwinHalfEdge()
    {
-      HalfEdge3D twinEdge = createTwinHalfEdge();
-      setTwinHalfEdge(twinEdge);
+      HalfEdge3D twinEdge = createTwinEdge();
+      setTwinEdge(twinEdge);
       return twinEdge;
    }
 
@@ -94,36 +94,36 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public HalfEdge3D(HalfEdge3D twinEdge, Face3D face)
    {
-      setTwinHalfEdge(twinEdge);
-      setOriginVertex(twinEdge.getDestinationVertex());
-      setDestinationVertex(twinEdge.getOriginVertex());
+      setTwinEdge(twinEdge);
+      setOrigin(twinEdge.getDestination());
+      setDestination(twinEdge.getOrigin());
       setFace(face);
    }
 
    /**
     * Creates a half edge using all specified values
     *
-    * @param originVertex the vertex that the new half edge will start at. Stored as a reference. Can
-    *           be {@code null}
-    * @param destinationVertex the vertex that the new half edge will end at. Stored as a reference.
-    *           Can be {@code null}
+    * @param origin the vertex that the new half edge will start at. Stored as a reference. Can be
+    *           {@code null}
+    * @param destination the vertex that the new half edge will end at. Stored as a reference. Can be
+    *           {@code null}
     * @param twinEdge the half edge that is the DCEL twin of the new edge . Stored as a reference. Can
     *           be {@code null}
-    * @param nextHalfEdge the half edge that is originates at the destination vertex and comes after
-    *           the current edge when the face is traversed in a counter clockwise manner w.r.t. its
-    *           face normal. Can be {@code null}
-    * @param previousHalfEdge the half edge that is terminates at the origin vertex and comes before
-    *           the current edge when the face is traversed in a counter clockwise manner w.r.t. its
-    *           face normal. Can be {@code null}
+    * @param nextEdge the half edge that is originates at the destination vertex and comes after the
+    *           current edge when the face is traversed in a counter clockwise manner w.r.t. its face
+    *           normal. Can be {@code null}
+    * @param previousEdge the half edge that is terminates at the origin vertex and comes before the
+    *           current edge when the face is traversed in a counter clockwise manner w.r.t. its face
+    *           normal. Can be {@code null}
     * @param face the face that this half edge is a part of. Can be {@code null}
     */
-   public HalfEdge3D(Vertex3D originVertex, Vertex3D destinationVertex, HalfEdge3D twinEdge, HalfEdge3D nextHalfEdge, HalfEdge3D previousHalfEdge, Face3D face)
+   public HalfEdge3D(Vertex3D origin, Vertex3D destination, HalfEdge3D twinEdge, HalfEdge3D nextEdge, HalfEdge3D previousEdge, Face3D face)
    {
-      setOriginVertex(originVertex);
-      setDestinationVertex(destinationVertex);
-      setTwinHalfEdge(twinEdge);
-      setNextHalfEdge(nextHalfEdge);
-      setPreviousHalfEdge(previousHalfEdge);
+      setOrigin(origin);
+      setDestination(destination);
+      setTwinEdge(twinEdge);
+      setNextEdge(nextEdge);
+      setPreviousEdge(previousEdge);
       setFace(face);
    }
 
@@ -136,9 +136,9 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    public void setToTwin(HalfEdge3D twinEdge)
    {
       twinEdge.clear();
-      twinEdge.setOriginVertex(destinationVertex);
-      twinEdge.setDestinationVertex(originVertex);
-      twinEdge.setTwinHalfEdge(this);
+      twinEdge.setOrigin(destination);
+      twinEdge.setDestination(origin);
+      twinEdge.setTwinEdge(this);
    }
 
    /**
@@ -148,10 +148,10 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *         stores this edge as its twin but this half edge does not store the generated half edge as
     *         its twin
     */
-   public HalfEdge3D createTwinHalfEdge()
+   public HalfEdge3D createTwinEdge()
    {
-      HalfEdge3D twinEdge = new HalfEdge3D(getDestinationVertex(), getOriginVertex());
-      twinEdge.setTwinHalfEdge(this);
+      HalfEdge3D twinEdge = new HalfEdge3D(getDestination(), getOrigin());
+      twinEdge.setTwinEdge(this);
       return twinEdge;
    }
 
@@ -160,15 +160,15 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * associated edges of the previously held and newly specified {@code originVertex} and the
     * {@code twinEdge} of this edge
     *
-    * @param originVertex the new vertex that the half edge originates at. Can be null. Is modified
+    * @param origin the new vertex that the half edge originates at. Can be null. Is modified
     */
-   public void setOriginVertex(Vertex3D originVertex)
+   public void setOrigin(Vertex3D origin)
    {
-      if (this.originVertex != null)
-         this.originVertex.removeAssociatedEdge(this);
-      setOriginVertexUnsafe(originVertex);
-      if (this.originVertex != null)
-         this.originVertex.addAssociatedEdge(this);
+      if (this.origin != null)
+         this.origin.removeAssociatedEdge(this);
+      setOriginUnsafe(origin);
+      if (this.origin != null)
+         this.origin.addAssociatedEdge(this);
       updateTwinDestination();
    }
 
@@ -176,12 +176,12 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * Update the reference to the {@code originVertex} to the specified value. Associations are not
     * updated
     *
-    * @param originVertex the new vertex that the half edge originates at. Can be null. Is not modified
-    *           in this function
+    * @param origin the new vertex that the half edge originates at. Can be null. Is not modified in
+    *           this function
     */
-   public void setOriginVertexUnsafe(Vertex3D originVertex)
+   public void setOriginUnsafe(Vertex3D origin)
    {
-      this.originVertex = originVertex;
+      this.origin = origin;
    }
 
    /**
@@ -193,11 +193,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    {
       if (twinEdge != null)
       {
-         if (twinEdge.getOriginVertex() != null)
-            twinEdge.getOriginVertex().removeAssociatedEdge(twinEdge);
-         twinEdge.setOriginVertexUnsafe(destinationVertex);
-         if (twinEdge.getOriginVertex() != null)
-            twinEdge.getOriginVertex().addAssociatedEdge(twinEdge);
+         if (twinEdge.getOrigin() != null)
+            twinEdge.getOrigin().removeAssociatedEdge(twinEdge);
+         twinEdge.setOriginUnsafe(destination);
+         if (twinEdge.getOrigin() != null)
+            twinEdge.getOrigin().addAssociatedEdge(twinEdge);
       }
    }
 
@@ -209,28 +209,28 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    private void updateTwinDestination()
    {
       if (twinEdge != null)
-         twinEdge.setDestinationVertexUnsafe(originVertex);
+         twinEdge.setDestinationUnsafe(origin);
    }
 
    /**
     * Returns a reference to the origin vertex for this half edge
     */
    @Override
-   public Vertex3D getOriginVertex()
+   public Vertex3D getOrigin()
    {
-      return originVertex;
+      return origin;
    }
 
    /**
     * Update the reference to the {@code destinationVertex} to the specified value. Also updates the
     * associated twin edge
     *
-    * @param destinationVertex the new vertex that the half edge originates at. Can be null. Is not
-    *           modified in this function
+    * @param destination the new vertex that the half edge originates at. Can be null. Is not modified
+    *           in this function
     */
-   public void setDestinationVertex(Vertex3D destinationVertex)
+   public void setDestination(Vertex3D destination)
    {
-      this.destinationVertex = destinationVertex;
+      this.destination = destination;
       updateTwinOrigin();
    }
 
@@ -238,22 +238,22 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * Update the reference to the {@code destinationVertex} to the specified value. Associations of the
     * specified vertex and of this object are not updated
     *
-    * @param destinationVertex the new vertex that the half edge originates at. Can be null. Is not
-    *           modified in this function
-    * @param destinationVertex
+    * @param destination the new vertex that the half edge originates at. Can be null. Is not modified
+    *           in this function
+    * @param destination
     */
-   public void setDestinationVertexUnsafe(Vertex3D destinationVertex)
+   public void setDestinationUnsafe(Vertex3D destination)
    {
-      this.destinationVertex = destinationVertex;
+      this.destination = destination;
    }
 
    /**
     * Returns a reference to the {@code destinationVertex} of this half edge
     */
    @Override
-   public Vertex3D getDestinationVertex()
+   public Vertex3D getDestination()
    {
-      return destinationVertex;
+      return destination;
    }
 
    /**
@@ -262,7 +262,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *
     * @param twinEdge the half edge to be stored as a twin edge of this half edge.
     */
-   public void setTwinHalfEdge(HalfEdge3D twinEdge)
+   public void setTwinEdge(HalfEdge3D twinEdge)
    {
       this.twinEdge = twinEdge;
    }
@@ -271,7 +271,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * {@inheritDoc}
     */
    @Override
-   public HalfEdge3D getTwinHalfEdge()
+   public HalfEdge3D getTwinEdge()
    {
       return twinEdge;
    }
@@ -280,17 +280,17 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * Update the reference to the {@code nextHalfEdge}. Checks to ensure that the origin of the
     * specified edge and destination of the this half edge are the same
     *
-    * @param nextHalfEdge the new next half edge for the current half edge. Can be null
+    * @param nextEdge the new next half edge for the current half edge. Can be null
     * @throws RuntimeException in case the origin of this specified next half edge is not the same as
     *            the destination of the this edge
     */
-   public void setNextHalfEdge(HalfEdge3D nextHalfEdge)
+   public void setNextEdge(HalfEdge3D nextEdge)
    {
-      if (nextHalfEdge == null || nextHalfEdge.getOriginVertex() == getDestinationVertex() && nextHalfEdge.getFace() == getFace())
-         setNextHalfEdgeUnsafe(nextHalfEdge);
+      if (nextEdge == null || nextEdge.getOrigin() == getDestination() && nextEdge.getFace() == getFace())
+         setNextEdgeUnsafe(nextEdge);
       else
-         throw new RuntimeException("Mismatch between vertices, destination vertex: " + getDestinationVertex().toString() + " , next edge origin vertex: "
-               + nextHalfEdge.getOriginVertex().toString());
+         throw new RuntimeException("Mismatch between vertices, destination vertex: " + getDestination().toString() + " , next edge origin vertex: "
+               + nextEdge.getOrigin().toString());
    }
 
    /**
@@ -298,55 +298,54 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *
     * @param nextHalfEdge the half edge whose reference is to be stored in the next half edge field
     */
-   private void setNextHalfEdgeUnsafe(HalfEdge3D nextHalfEdge)
+   private void setNextEdgeUnsafe(HalfEdge3D nextHalfEdge)
    {
-      this.nextHalfEdge = nextHalfEdge;
+      this.nextEdge = nextHalfEdge;
    }
 
    /**
     * {@inheritDoc}
     */
    @Override
-   public HalfEdge3D getNextHalfEdge()
+   public HalfEdge3D getNextEdge()
    {
-      return nextHalfEdge;
+      return nextEdge;
    }
 
    /**
     * Update the reference to the {@code previous HalfEdge}. Checks to ensure that the destination of
     * the specified edge and origin of the this half edge are the same
     *
-    * @param previousHalfEdge the new previous half edge for the current half edge. Can be null
+    * @param previousEdge the new previous half edge for the current half edge. Can be null
     * @throws RuntimeException in case the destination of this specified next half edge is not the same
     *            as the origin of the this edge
     */
-   public void setPreviousHalfEdge(HalfEdge3D previousHalfEdge)
+   public void setPreviousEdge(HalfEdge3D previousEdge)
    {
-      if (previousHalfEdge == null || previousHalfEdge.getDestinationVertex() == getOriginVertex() && previousHalfEdge.getFace() == getFace())
-         setPreviousHalfEdgeUnsafe(previousHalfEdge);
+      if (previousEdge == null || previousEdge.getDestination() == getOrigin() && previousEdge.getFace() == getFace())
+         setPreviousEdgeUnsafe(previousEdge);
       else
-         throw new RuntimeException("Mismatch between vertices, origin vertex: " + getOriginVertex().toString() + " , previous edge destination vertex: "
-               + previousHalfEdge.getDestinationVertex().toString());
+         throw new RuntimeException("Mismatch between vertices, origin vertex: " + getOrigin().toString() + " , previous edge destination vertex: "
+               + previousEdge.getDestination().toString());
    }
 
    /**
     * Internal method to update the next half edge without any checks
     *
-    * @param previousHalfEdge the half edge whose reference is to be stored in the previous half edge
-    *           field
+    * @param previousEdge the half edge whose reference is to be stored in the previous half edge field
     */
-   private void setPreviousHalfEdgeUnsafe(HalfEdge3D previousHalfEdge)
+   private void setPreviousEdgeUnsafe(HalfEdge3D previousEdge)
    {
-      this.previousHalfEdge = previousHalfEdge;
+      this.previousEdge = previousEdge;
    }
 
    /**
     * {@inheritDoc}
     */
    @Override
-   public HalfEdge3D getPreviousHalfEdge()
+   public HalfEdge3D getPreviousEdge()
    {
-      return previousHalfEdge;
+      return previousEdge;
    }
 
    /**
@@ -371,13 +370,13 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    @Override
    public Point3DBasics getFirstEndpoint()
    {
-      return getOriginVertex();
+      return getOrigin();
    }
 
    @Override
    public Point3DBasics getSecondEndpoint()
    {
-      return getDestinationVertex();
+      return getDestination();
    }
 
    /**
@@ -386,7 +385,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    @Override
    public Vector3DReadOnly getEdgeVector()
    {
-      edgeVector.sub(destinationVertex, originVertex);
+      edgeVector.sub(destination, origin);
       return edgeVector;
    }
 
@@ -396,11 +395,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public void clear()
    {
-      setTwinHalfEdge(null);
-      setOriginVertex(null);
-      setDestinationVertex(null);
-      setNextHalfEdge(null);
-      setPreviousHalfEdge(null);
+      setTwinEdge(null);
+      setOrigin(null);
+      setDestination(null);
+      setNextEdge(null);
+      setPreviousEdge(null);
       setFace(null);
    }
 
@@ -412,12 +411,12 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public void reverseEdge()
    {
-      Vertex3D newDestinationVertex = originVertex;
-      setOriginVertex(destinationVertex);
-      setDestinationVertex(newDestinationVertex);
-      HalfEdge3D newNextHalfEdge = previousHalfEdge;
-      setPreviousHalfEdgeUnsafe(nextHalfEdge);
-      setNextHalfEdgeUnsafe(newNextHalfEdge);
+      Vertex3D newDestinationVertex = origin;
+      setOrigin(destination);
+      setDestination(newDestinationVertex);
+      HalfEdge3D newNextHalfEdge = previousEdge;
+      setPreviousEdgeUnsafe(nextEdge);
+      setNextEdgeUnsafe(newNextHalfEdge);
    }
 
    @Override
@@ -432,7 +431,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    @Override
    public int hashCode()
    {
-      return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.combineHashCode(getOriginVertex().hashCode(), getDestinationVertex().hashCode()));
+      return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.combineHashCode(getOrigin().hashCode(), getDestination().hashCode()));
    }
 
    /**
@@ -441,7 +440,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    @Override
    public String toString()
    {
-      return "From: " + (originVertex == null ? "null" : originVertex.toString()) + ", To: "
-            + (destinationVertex == null ? "null" : destinationVertex.toString());
+      return "From: " + (origin == null ? "null" : origin.toString()) + ", To: " + (destination == null ? "null" : destination.toString());
    }
 }

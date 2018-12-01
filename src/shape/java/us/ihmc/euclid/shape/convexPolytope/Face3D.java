@@ -10,6 +10,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -64,7 +65,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
     * {@inheritDoc}
     */
    @Override
-   public List<HalfEdge3D> getEdgeList()
+   public List<HalfEdge3D> getEdges()
    {
       return edges;
    }
@@ -86,84 +87,84 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
     */
    public void addVertex(Vertex3D vertexToAdd, double epsilon)
    {
-      switch (edges.size())
-      {
-      case 0:
+      if (edges.isEmpty())
       {
          HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, vertexToAdd);
          newEdge.setFace(this);
-         newEdge.setNextHalfEdge(newEdge);
-         newEdge.setPreviousHalfEdge(newEdge);
+         newEdge.setNextEdge(newEdge);
+         newEdge.setPreviousEdge(newEdge);
          edges.add(newEdge);
-         break;
       }
-      case 1:
+      else if (edges.size() == 1)
       {
-         // Set the edge for the two points and then create its twin
-         if (edges.get(0).getOriginVertex().epsilonEquals(vertexToAdd, epsilon))
-            return;
-         edges.get(0).setDestinationVertex(vertexToAdd);
-         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, edges.get(0).getOriginVertex());
-         newEdge.setFace(this);
-         newEdge.setNextHalfEdge(edges.get(0));
-         newEdge.setPreviousHalfEdge(edges.get(0));
-         edges.get(0).setNextHalfEdge(newEdge);
-         edges.get(0).setPreviousHalfEdge(newEdge);
-         edges.add(newEdge);
-         break;
-      }
-      case 2:
-      {
-         if (edges.get(0).getOriginVertex().epsilonEquals(vertexToAdd, epsilon) || edges.get(0).getDestinationVertex().epsilonEquals(vertexToAdd, epsilon))
-            return;
-         // Create a new edge and assign an arbitrary configuration since there is no way to tell up and down in 3D space
-         edges.get(1).setDestinationVertex(vertexToAdd);
-         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, edges.get(0).getOriginVertex());
-         newEdge.setFace(this);
-         edges.add(newEdge);
-         newEdge.setNextHalfEdge(edges.get(0));
-         edges.get(0).setPreviousHalfEdge(newEdge);
-         newEdge.setPreviousHalfEdge(edges.get(1));
-         edges.get(1).setNextHalfEdge(newEdge);
-         break;
-      }
-      default:
-      {
-         // Now a ordering is available and all new vertices to add must be done accordingly. Also points must lie in the same plane
-         if (!isPointInFacePlane(vertexToAdd, epsilon))
+         HalfEdge3D firstEdge = edges.get(0);
+         if (firstEdge.getOrigin().epsilonEquals(vertexToAdd, epsilon))
             return;
 
+         // Set the edge for the two points and then create its twin
+         firstEdge.setDestination(vertexToAdd);
+         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
+         newEdge.setFace(this);
+         newEdge.setNextEdge(firstEdge);
+         newEdge.setPreviousEdge(firstEdge);
+         firstEdge.setNextEdge(newEdge);
+         firstEdge.setPreviousEdge(newEdge);
+         edges.add(newEdge);
+      }
+      else if (edges.size() == 2)
+      {
+         HalfEdge3D firstEdge = edges.get(0);
+         if (firstEdge.getOrigin().epsilonEquals(vertexToAdd, epsilon) || firstEdge.getDestination().epsilonEquals(vertexToAdd, epsilon))
+            return;
+
+         HalfEdge3D secondEdge = edges.get(1);
+
+         // Create a new edge and assign an arbitrary configuration since there is no way to tell up and down in 3D space
+         secondEdge.setDestination(vertexToAdd);
+         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
+         newEdge.setFace(this);
+         newEdge.setNextEdge(firstEdge);
+         firstEdge.setPreviousEdge(newEdge);
+         newEdge.setPreviousEdge(secondEdge);
+         secondEdge.setNextEdge(newEdge);
+         edges.add(newEdge);
+      }
+      else
+      {
          getVisibleEdgeList(vertexToAdd, visibleEdgeList);
+
+         if (visibleEdgeList.isEmpty())
+            return;
+
          HalfEdge3D firstVisibleEdge = visibleEdgeList.get(0);
          HalfEdge3D lastVisibleEdge = visibleEdgeList.get(visibleEdgeList.size() - 1);
-         switch (visibleEdgeList.size())
+
+         if (visibleEdgeList.size() == 1)
          {
-         case 0:
-            return; // Case where the point is internal
-         case 1:
-            if (firstVisibleEdge.getOriginVertex().epsilonEquals(vertexToAdd, epsilon)
-                  || firstVisibleEdge.getDestinationVertex().epsilonEquals(vertexToAdd, epsilon))
+            if (firstVisibleEdge.getOrigin().epsilonEquals(vertexToAdd, epsilon))
                return;
-            HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestinationVertex());
+            if (firstVisibleEdge.getDestination().epsilonEquals(vertexToAdd, epsilon))
+               return;
+
+            HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
             additionalEdge.setFace(this);
-            firstVisibleEdge.setDestinationVertex(vertexToAdd);
-            additionalEdge.setNextHalfEdge(firstVisibleEdge.getNextHalfEdge());
-            firstVisibleEdge.getNextHalfEdge().setPreviousHalfEdge(additionalEdge);
-            firstVisibleEdge.setNextHalfEdge(additionalEdge);
-            additionalEdge.setPreviousHalfEdge(firstVisibleEdge);
+            firstVisibleEdge.setDestination(vertexToAdd);
+            additionalEdge.setNextEdge(firstVisibleEdge.getNextEdge());
+            firstVisibleEdge.getNextEdge().setPreviousEdge(additionalEdge);
+            firstVisibleEdge.setNextEdge(additionalEdge);
+            additionalEdge.setPreviousEdge(firstVisibleEdge);
             edges.add(additionalEdge);
-            break;
-         default:
-            firstVisibleEdge.setDestinationVertex(vertexToAdd);
-            lastVisibleEdge.setOriginVertex(vertexToAdd);
-            firstVisibleEdge.setNextHalfEdge(lastVisibleEdge);
-            lastVisibleEdge.setPreviousHalfEdge(firstVisibleEdge);
+         }
+         else
+         {
+            firstVisibleEdge.setDestination(vertexToAdd);
+            lastVisibleEdge.setOrigin(vertexToAdd);
+            firstVisibleEdge.setNextEdge(lastVisibleEdge);
+            lastVisibleEdge.setPreviousEdge(firstVisibleEdge);
+
             for (int i = 1; i < visibleEdgeList.size() - 1; i++)
                edges.remove(visibleEdgeList.get(i));
-            break;
          }
-         break;
-      }
       }
    }
 
@@ -174,7 +175,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
       {
          edgeList.add(edgeUnderConsideration);
-         edgeUnderConsideration = edgeUnderConsideration.getNextHalfEdge();
+         edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
          if (isPointOnInteriorSideOfEdgeInternal(vertex, edgeUnderConsideration))
             break;
       }
@@ -190,7 +191,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
 
       HalfEdge3D edgeUnderConsideration = edges.get(0);
       double previousDotProduct = getEdgeVisibilityProduct(vertex, edgeUnderConsideration);
-      edgeUnderConsideration = edgeUnderConsideration.getNextHalfEdge();
+      edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
       for (int i = 0; i < getNumberOfEdges(); i++)
       {
          double dotProduct = getEdgeVisibilityProduct(vertex, edgeUnderConsideration);
@@ -200,11 +201,11 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
          }
          else if (dotProduct >= 0.0 && previousDotProduct == 0.0)
          {
-            return edgeUnderConsideration.getPreviousHalfEdge();
+            return edgeUnderConsideration.getPreviousEdge();
          }
          else
          {
-            edgeUnderConsideration = edgeUnderConsideration.getNextHalfEdge();
+            edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
             previousDotProduct = dotProduct;
          }
       }
@@ -218,34 +219,33 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       return isPointOnInteriorSideOfEdgeInternal(point, edges.get(index));
    }
 
-   private boolean isPointOnInteriorSideOfEdgeInternal(Point3DReadOnly point, HalfEdge3D halfEdge)
+   private boolean isPointOnInteriorSideOfEdgeInternal(Point3DReadOnly query, HalfEdge3D edge)
    {
-      return getEdgeVisibilityProduct(point, halfEdge) < 0;
+      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getFaceNormal());
    }
 
    @Override
    public double getFaceVisibilityProduct(Point3DReadOnly point)
    {
-      tempVector.sub(point, getEdge(0).getOriginVertex());
+      tempVector.sub(point, getEdge(0).getOrigin());
       return dotFaceNormal(tempVector);
    }
 
    private double getEdgeVisibilityProduct(Point3DReadOnly point, HalfEdge3D halfEdge)
    {
-      tempVector.sub(point, halfEdge.getOriginVertex());
-      tempVector.cross(halfEdge.getEdgeVector());
-      return tempVector.dot(getFaceNormal());
+      return EuclidPolytopeTools.signedDistanceFromPoint3DToLine3D(point, halfEdge.getOrigin(), halfEdge.getDirection(false), getFaceNormal());
    }
 
    @Override
    public boolean isPointInFacePlane(Point3DReadOnly vertexToCheck, double epsilon)
    {
       boolean isInFacePlane;
-      tempVector.sub(vertexToCheck, edges.get(0).getOriginVertex());
+      HalfEdge3D firstEdge = edges.get(0);
+      tempVector.sub(vertexToCheck, firstEdge.getOrigin());
       if (edges.size() < 3)
       {
-         isInFacePlane = !EuclidCoreTools.epsilonEquals(Math.abs(edges.get(0).getEdgeVector().dot(tempVector))
-               / (edges.get(0).getEdgeVector().length() * tempVector.length()), 1.0, epsilon);
+         isInFacePlane = !EuclidCoreTools.epsilonEquals(Math.abs(firstEdge.getEdgeVector().dot(tempVector))
+               / (firstEdge.getEdgeVector().length() * tempVector.length()), 1.0, epsilon);
       }
       else
          isInFacePlane = EuclidCoreTools.epsilonEquals(tempVector.dot(getFaceNormal()), 0.0, epsilon);
@@ -268,7 +268,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       for (int i = 0; result && i < edges.size(); i++)
       {
          result &= isPointOnInteriorSideOfEdgeInternal(vertexToCheck, halfEdge);
-         halfEdge = halfEdge.getNextHalfEdge();
+         halfEdge = halfEdge.getNextEdge();
       }
       return result;
    }
@@ -284,7 +284,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    {
       faceCentroid.setToZero();
       for (int i = 0; i < edges.size(); i++)
-         faceCentroid.add(edges.get(i).getOriginVertex());
+         faceCentroid.add(edges.get(i).getOrigin());
       faceCentroid.scale(1.0 / edges.size());
    }
 
@@ -300,11 +300,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       if (edges.size() < 3)
          faceNormal.setToZero();
       else
-      {
-         faceNormal.cross(edges.get(0).getEdgeVector(), edges.get(0).getNextHalfEdge().getEdgeVector());
-         if (faceNormal.dot(faceNormal) > 1.0e-5)
-            faceNormal.normalize();
-      }
+         EuclidPolytopeTools.updateFace3DNormal(getVertices(), faceCentroid, faceNormal);
    }
 
    @Override
@@ -317,14 +313,14 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    public void applyTransform(Transform transform)
    {
       for (int i = 0; i < getNumberOfEdges(); i++)
-         edges.get(i).getOriginVertex().applyTransform(transform);
+         edges.get(i).getOrigin().applyTransform(transform);
    }
 
    @Override
    public void applyInverseTransform(Transform transform)
    {
       for (int i = 0; i < getNumberOfEdges(); i++)
-         edges.get(i).getOriginVertex().applyInverseTransform(transform);
+         edges.get(i).getOrigin().applyInverseTransform(transform);
    }
 
    public int findMatchingEdgeIndex(HalfEdge3DReadOnly edgeToSearch, double epsilon)
@@ -361,7 +357,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    {
       boolean result = edges.size() > 0 && edges.get(0).containsNaN();
       for (int i = 1; !result && i < edges.size(); i++)
-         result |= edges.get(i).getDestinationVertex().containsNaN();
+         result |= edges.get(i).getDestination().containsNaN();
       return result;
    }
 
@@ -396,12 +392,12 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    public double getMaxElement(int index)
    {
       HalfEdge3D edgeReference = edges.get(0);
-      double maxElement = edgeReference.getOriginVertex().getElement(index);
+      double maxElement = edgeReference.getOrigin().getElement(index);
       for (int i = 0; i < edges.size(); i++)
       {
-         if (maxElement < edgeReference.getDestinationVertex().getElement(index))
-            maxElement = edgeReference.getDestinationVertex().getElement(index);
-         edgeReference = edgeReference.getNextHalfEdge();
+         if (maxElement < edgeReference.getDestination().getElement(index))
+            maxElement = edgeReference.getDestination().getElement(index);
+         edgeReference = edgeReference.getNextEdge();
       }
       return maxElement;
    }
@@ -410,12 +406,12 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    public double getMinElement(int index)
    {
       HalfEdge3D edgeReference = edges.get(0);
-      double minElement = edgeReference.getOriginVertex().getElement(index);
+      double minElement = edgeReference.getOrigin().getElement(index);
       for (int i = 0; i < edges.size(); i++)
       {
-         if (minElement > edgeReference.getDestinationVertex().getElement(index))
-            minElement = edgeReference.getDestinationVertex().getElement(index);
-         edgeReference = edgeReference.getNextHalfEdge();
+         if (minElement > edgeReference.getDestination().getElement(index))
+            minElement = edgeReference.getDestination().getElement(index);
+         edgeReference = edgeReference.getNextEdge();
       }
       return minElement;
    }
@@ -459,17 +455,17 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public Face3D getNeighbouringFace(int index)
    {
-      if (index > edges.size() || edges.get(index).getTwinHalfEdge() == null)
+      if (index > edges.size() || edges.get(index).getTwinEdge() == null)
          return null;
       else
-         return edges.get(index).getTwinHalfEdge().getFace();
+         return edges.get(index).getTwinEdge().getFace();
 
    }
 
    @Override
    public Point3DReadOnly getSupportingVertex(Vector3DReadOnly supportVector)
    {
-      Vertex3D bestVertex = edges.get(0).getOriginVertex();
+      Vertex3D bestVertex = edges.get(0).getOrigin();
       double maxDot = bestVertex.dot(supportVector);
       Vertex3D bestVertexCandidate = bestVertex;
       while (true)
@@ -477,11 +473,11 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
          bestVertexCandidate = bestVertex;
          for (int i = 0; i < bestVertex.getNumberOfAssociatedEdges(); i++)
          {
-            double dotCandidate = bestVertex.getAssociatedEdges().get(i).getDestinationVertex().dot(supportVector);
+            double dotCandidate = bestVertex.getAssociatedEdges().get(i).getDestination().dot(supportVector);
             if (maxDot < dotCandidate)
             {
                maxDot = dotCandidate;
-               bestVertexCandidate = bestVertex.getAssociatedEdge(i).getDestinationVertex();
+               bestVertexCandidate = bestVertex.getAssociatedEdge(i).getDestination();
             }
          }
          if (bestVertexCandidate == bestVertex)
@@ -516,7 +512,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public double distance(Point3DReadOnly point)
    {
-      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOriginVertex(), getFaceNormal(), tempPoint);
+      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOrigin(), getFaceNormal(), tempPoint);
       if (isInteriorPointInternal(tempPoint))
          return point.distance(tempPoint);
       else
@@ -531,16 +527,16 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       double shortestDistanceCandidate = Double.NEGATIVE_INFINITY;
       while (shortestDistanceCandidate < shortestDistance)
       {
-         edge = edge.getNextHalfEdge();
+         edge = edge.getNextEdge();
          shortestDistanceCandidate = edge.distance(tempPoint);
       }
-      return edge.getPreviousHalfEdge();
+      return edge.getPreviousEdge();
    }
 
    @Override
    public void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
-      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOriginVertex(), getFaceNormal(), tempPoint);
+      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOrigin(), getFaceNormal(), tempPoint);
       if (isInteriorPointInternal(tempPoint))
          supportVectorToPack.set(getFaceNormal());
       else
@@ -550,7 +546,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
-      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOriginVertex(), getFaceNormal(), tempPoint);
+      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOrigin(), getFaceNormal(), tempPoint);
       if (isInteriorPointInternal(tempPoint))
          return this;
       else

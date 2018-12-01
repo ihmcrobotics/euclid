@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -14,7 +15,7 @@ public interface Face3DReadOnly extends Clearable
     * 
     * @return a list of read only references to the half edges
     */
-   List<? extends HalfEdge3DReadOnly> getEdgeList();
+   List<? extends HalfEdge3DReadOnly> getEdges();
 
    /**
     * Gets a particular half edge that is part of the face
@@ -24,6 +25,11 @@ public interface Face3DReadOnly extends Clearable
     * @return
     */
    HalfEdge3DReadOnly getEdge(int index);
+
+   default List<? extends Vertex3DReadOnly> getVertices()
+   {
+      return getEdges().stream().map(HalfEdge3DReadOnly::getOrigin).collect(Collectors.toList());
+   }
 
    /**
     * Returns the first edge that is visible from the specified point.
@@ -285,8 +291,8 @@ public interface Face3DReadOnly extends Clearable
 
       do
       {
-         otherCurrentEdge.getNextHalfEdge();
-         thisCurrentEdge.getNextHalfEdge();
+         otherCurrentEdge.getNextEdge();
+         thisCurrentEdge.getNextEdge();
          if (!thisCurrentEdge.geometricallyEquals(otherCurrentEdge, epsilon))
             return false;
       }

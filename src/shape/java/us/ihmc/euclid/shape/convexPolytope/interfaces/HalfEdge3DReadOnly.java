@@ -12,25 +12,25 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
     * 
     * @return a read only reference of the origin vertex for the half edge
     */
-   Vertex3DReadOnly getOriginVertex();
+   Vertex3DReadOnly getOrigin();
 
    /**
     * Returns a reference to the destination vertex for this half edge
     * 
     * @return a read only reference of the destination vertex for the half edge
     */
-   Vertex3DReadOnly getDestinationVertex();
+   Vertex3DReadOnly getDestination();
 
    @Override
    default Point3DReadOnly getFirstEndpoint()
    {
-      return getOriginVertex();
+      return getOrigin();
    }
 
    @Override
    default Point3DReadOnly getSecondEndpoint()
    {
-      return getDestinationVertex();
+      return getDestination();
    }
 
    /**
@@ -38,21 +38,21 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
     * 
     * @return a read only reference to the twin half edge
     */
-   HalfEdge3DReadOnly getTwinHalfEdge();
+   HalfEdge3DReadOnly getTwinEdge();
 
    /**
     * Returns a reference to the {@code nextHalfEdge} in the same {@code face} as this half edge
     * 
     * @return a read only reference to the next half edge
     */
-   HalfEdge3DReadOnly getNextHalfEdge();
+   HalfEdge3DReadOnly getNextEdge();
 
    /**
     * Returns a reference to the {@code previousHalfEdge} in the same {@code face} as this half edge
     * 
     * @return a read only reference to the previous half edge
     */
-   HalfEdge3DReadOnly getPreviousHalfEdge();
+   HalfEdge3DReadOnly getPreviousEdge();
 
    /**
     * Returns the reference to the face that this half edge is a part of
@@ -80,9 +80,9 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
    {
       double percentage = percentageAlongLineSegment(point);
       if (percentage <= 0.0)
-         return getOriginVertex();
+         return getOrigin();
       else if (percentage >= 1.0)
-         return getDestinationVertex();
+         return getDestination();
       else
          return this;
    }
@@ -93,15 +93,15 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
       double alpha = percentageAlongLineSegment(point);
       if (alpha >= 1.0)
       {
-         supportVectorToPack.sub(point, getDestinationVertex());
+         supportVectorToPack.sub(point, getDestination());
       }
       else if (alpha <= 0.0)
       {
-         supportVectorToPack.sub(point, getOriginVertex());
+         supportVectorToPack.sub(point, getOrigin());
       }
       else
       {
-         supportVectorToPack.interpolate(getOriginVertex(), getDestinationVertex(), alpha);
+         supportVectorToPack.interpolate(getOrigin(), getDestination(), alpha);
          supportVectorToPack.sub(point, supportVectorToPack);
       }
    }
@@ -117,12 +117,12 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
     */
    default boolean isTwin(HalfEdge3DReadOnly twinEdge, double epsilon)
    {
-      return epsilonEquals(twinEdge.getTwinHalfEdge(), epsilon);
+      return epsilonEquals(twinEdge.getTwinEdge(), epsilon);
    }
 
    default boolean equals(HalfEdge3DReadOnly other)
    {
-      if (getOriginVertex() == null || getDestinationVertex() == null)
+      if (getOrigin() == null || getDestination() == null)
          return false;
       else
          return LineSegment3DReadOnly.super.equals(other);

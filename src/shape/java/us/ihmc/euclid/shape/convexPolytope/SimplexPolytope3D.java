@@ -102,13 +102,13 @@ public class SimplexPolytope3D implements Simplex3D
       if (member instanceof Face3D)
       {
          // TODO fix this nasty type casting
-         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getOriginVertex();
+         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getOrigin();
          Vertex3DReadOnly polytopeAVertex1 = simplexVertex1.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex1 = simplexVertex1.getVertexOnPolytopeB();
-         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getDestinationVertex();
+         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getDestination();
          Vertex3DReadOnly polytopeAVertex2 = simplexVertex2.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex2 = simplexVertex2.getVertexOnPolytopeB();
-         SimplexVertex3D simplexVertex3 = (SimplexVertex3D) ((Face3D) member).getEdge(1).getDestinationVertex();
+         SimplexVertex3D simplexVertex3 = (SimplexVertex3D) ((Face3D) member).getEdge(1).getDestination();
          Vertex3DReadOnly polytopeAVertex3 = simplexVertex3.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex3 = simplexVertex3.getVertexOnPolytopeB();
 
@@ -128,10 +128,10 @@ public class SimplexPolytope3D implements Simplex3D
       else if (member instanceof HalfEdge3D)
       {
          // TODO fix this nasty type casting
-         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((HalfEdge3D) member).getOriginVertex();
+         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((HalfEdge3D) member).getOrigin();
          Vertex3DReadOnly polytopeAVertex1 = simplexVertex1.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex1 = simplexVertex1.getVertexOnPolytopeB();
-         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((HalfEdge3D) member).getDestinationVertex();
+         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((HalfEdge3D) member).getDestination();
          Vertex3DReadOnly polytopeAVertex2 = simplexVertex2.getVertexOnPolytopeA();
          Vertex3DReadOnly polytopeBVertex2 = simplexVertex2.getVertexOnPolytopeB();
          double percentage = EuclidGeometryTools.percentageAlongLineSegment3D(point, simplexVertex1, simplexVertex2);
