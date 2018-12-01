@@ -1681,6 +1681,38 @@ public class EuclidGeometryTools
     * @param pointX the x-coordinate of the query. Not modified.
     * @param pointY the y-coordinate of the query. Not modified.
     * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointOnPlaneX the x-coordinate of a point located on the plane. Not modified.
+    * @param pointOnPlaneY the y-coordinate of a point located on the plane. Not modified.
+    * @param pointOnPlaneZ the z-coordinate of a point located on the plane. Not modified.
+    * @param planeFirstTangentX the x-component of a first tangent of the infinite plane.
+    * @param planeFirstTangentY the y-component of a first tangent of the infinite plane.
+    * @param planeFirstTangentZ the z-component of a first tangent of the infinite plane.
+    * @param planeSecondTangentX the x-component of a second tangent of the infinite plane.
+    * @param planeSecondTangentY the y-component of a second tangent of the infinite plane.
+    * @param planeSecondTangentZ the z-component of a second tangent of the infinite plane.
+    * @return the signed distance between the point and the plane.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, double pointOnPlaneX, double pointOnPlaneY,
+                                                           double pointOnPlaneZ, double planeFirstTangentX, double planeFirstTangentY,
+                                                           double planeFirstTangentZ, double planeSecondTangentX, double planeSecondTangentY,
+                                                           double planeSecondTangentZ)
+   {
+      double planeNormalX = planeFirstTangentY * planeSecondTangentZ - planeFirstTangentZ * planeSecondTangentY;
+      double planeNormalY = planeFirstTangentZ * planeSecondTangentX - planeFirstTangentX * planeSecondTangentZ;
+      double planeNormalZ = planeFirstTangentX * planeSecondTangentY - planeFirstTangentY * planeSecondTangentX;
+      return signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ, planeNormalX, planeNormalY, planeNormalZ);
+
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query. Not modified.
+    * @param pointY the y-coordinate of the query. Not modified.
+    * @param pointZ the z-coordinate of the query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
     * @param planeNormal the normal of the plane. Not modified.
     * @return the signed distance between the point and the plane.
@@ -1706,6 +1738,46 @@ public class EuclidGeometryTools
    public static double signedDistanceFromPoint3DToPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
       return signedDistanceFromPoint3DToPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal);
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query. Not modified.
+    * @param pointY the y-coordinate of the query. Not modified.
+    * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, Point3DReadOnly pointOnPlane,
+                                                           Vector3DReadOnly planeFirstTangent, Vector3DReadOnly planeSecondTangent)
+   {
+      return signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ(), planeFirstTangent.getX(),
+                                                planeFirstTangent.getY(), planeFirstTangent.getZ(), planeSecondTangent.getX(), planeSecondTangent.getY(),
+                                                planeSecondTangent.getZ());
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param point the query. Not modified.
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(Point3DReadOnly point, Point3DReadOnly pointOnPlane, Vector3DReadOnly planeFirstTangent,
+                                                           Vector3DReadOnly planeSecondTangent)
+   {
+      return signedDistanceFromPoint3DToPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeFirstTangent, planeSecondTangent);
    }
 
    /**

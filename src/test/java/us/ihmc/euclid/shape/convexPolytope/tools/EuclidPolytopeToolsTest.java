@@ -1,7 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.Random;
@@ -13,19 +12,68 @@ import org.ejml.ops.CommonOps;
 import org.junit.Test;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.geometry.Line2D;
+import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidPolytopeToolsTest
 {
    private final static int ITERATIONS = EuclidTestSuite.ITERATIONS;
    private static final double EPSILON = 1.0e-12;
+
+   @Test
+   public void testSignedDistanceFromPoint3DToLine3D() throws Exception
+   {
+      Random random = new Random(243234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ensure consistency with the 2D method.
+         Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random);
+         Line2D line2D = new Line2D(new Point2D(line3D.getPoint()), new Vector2D(line3D.getDirection()));
+
+         Point3D query3D = EuclidCoreRandomTools.nextPoint3D(random);
+         Point2D query2D = new Point2D(query3D);
+
+         Vector3DReadOnly planeNormal = Axis.Z;
+
+         double expected = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query2D, line2D.getPoint(), line2D.getDirection());
+         double actual = EuclidPolytopeTools.signedDistanceFromPoint3DToLine3D(query3D, line3D.getPoint(), line3D.getDirection(), planeNormal);
+         assertEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testIsPoint3DOnSideOfLine3D() throws Exception
+   {
+      Random random = new Random(243234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ensure consistency with the 2D method.
+         Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random);
+         Line2D line2D = new Line2D(new Point2D(line3D.getPoint()), new Vector2D(line3D.getDirection()));
+
+         Point3D query3D = EuclidCoreRandomTools.nextPoint3D(random);
+         Point2D query2D = new Point2D(query3D);
+
+         Vector3DReadOnly planeNormal = Axis.Z;
+
+         boolean testForLeftSide = random.nextBoolean();
+         boolean expected = EuclidGeometryTools.isPoint2DOnSideOfLine2D(query2D, line2D.getPoint(), line2D.getDirection(), testForLeftSide);
+         boolean actual = EuclidPolytopeTools.isPoint3DOnSideOfLine3D(query3D, line3D.getPoint(), line3D.getDirection(), planeNormal, testForLeftSide);
+         assertEquals(expected, actual);
+      }
+   }
 
    @Test
    public void testEigenVector() throws Exception
@@ -63,6 +111,33 @@ public class EuclidPolytopeToolsTest
 
             String errorMessage = "Iteration" + i + ", nPoints: " + numberOfPoints + ", angle: " + expected[j].angle(actual[j]);
             assertTrue(errorMessage, EuclidGeometryTools.areVector3DsParallel(expected[j], actual[j], 0.30));
+         }
+      }
+   }
+
+   @Test
+   public void testEigenVectorBug() throws Exception
+   { // Reproducing a bug where eigenValue.getY() < eigenValue.getZ()
+      Random random = new Random(3453);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D expectedNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         List<Point3D> vertices = EuclidPolytopeRandomTools.nextCircleBasedConvexPolygon3D(random, 5.0, 1.0, 15, expectedNormal);
+
+         for (int j = 3; j <= vertices.size(); j++)
+         {
+            Matrix3D actualCovariance = new Matrix3D();
+            Vector3D actualNormal = new Vector3D();
+            EuclidPolytopeTools.computeCovariance3D(vertices.subList(0, j), null, actualCovariance);
+            Point3D eigenValues = new Point3D();
+            EuclidPolytopeTools.computeEigenVectors(actualCovariance, eigenValues, null, null, actualNormal);
+
+            assertTrue(eigenValues.getX() > eigenValues.getY());
+            assertTrue(eigenValues.getY() > eigenValues.getZ());
+
+            String errorMessage = "Iteration" + i + ", nPoints: " + j + ", angle: " + expectedNormal.angle(actualNormal);
+            assertTrue(errorMessage, EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5));
          }
       }
    }

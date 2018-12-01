@@ -1,7 +1,5 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
-
 import java.util.List;
 
 import org.ejml.data.DenseMatrix64F;
@@ -23,7 +21,30 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidPolytopeTools
 {
-   private static final double ONE_TRILLIONTH = EuclidGeometryTools.ONE_TRILLIONTH;
+   public static Vector3D crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
+                                                       Point3DReadOnly lineSegmentEnd2)
+   {
+      Vector3D crossProduct = new Vector3D();
+      crossProductOfLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, crossProduct);
+      return crossProduct;
+   }
+
+   public static void crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
+                                                   Point3DReadOnly lineSegmentEnd2, Vector3DBasics crossProductToPack)
+   {
+      double direction1X = lineSegmentEnd1.getX() - lineSegmentStart1.getX();
+      double direction1Y = lineSegmentEnd1.getY() - lineSegmentStart1.getY();
+      double direction1Z = lineSegmentEnd1.getZ() - lineSegmentStart1.getZ();
+
+      double direction2X = lineSegmentEnd2.getX() - lineSegmentStart2.getX();
+      double direction2Y = lineSegmentEnd2.getY() - lineSegmentStart2.getY();
+      double direction2Z = lineSegmentEnd2.getZ() - lineSegmentStart2.getZ();
+
+      double crossX = direction1Y * direction2Z - direction1Z * direction2Y;
+      double crossY = direction1Z * direction2X - direction1X * direction2Z;
+      double crossZ = direction1X * direction2Y - direction1Y * direction2X;
+      crossProductToPack.set(crossX, crossY, crossZ);
+   }
 
    public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
                                                      Vector3DReadOnly planeNormal)
@@ -93,8 +114,10 @@ public class EuclidPolytopeTools
     * Returns the minimum signed distance between the projection of a 3D point and an infinitely long
     * 3D line defined by a point and a direction onto a plane of given normal.
     * <p>
-    * The calculated distance is negative if the query is located on the right side of the line. The
-    * notion of left side is defined as the semi-open space that starts at {@code pointOnLine} and
+    * The calculated distance is negative if the query is located on the right side of the line.
+    * </p>
+    * <p>
+    * The notion of left side is defined as the semi-open space that starts at {@code pointOnLine} and
     * extends to the direction given by the vector <tt>planeNormal &times; lineDirection</tt> and the
     * right side starts at {@code pointOnLine} and direction
     * <tt>-planeNormal &times; lineDirection</tt>. In an intuitive manner, the left side refers to the
@@ -131,25 +154,8 @@ public class EuclidPolytopeTools
                                                           double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ,
                                                           double planeNormalX, double planeNormalY, double planeNormalZ)
    {
-      double directionMagnitude = Math.sqrt(normSquared(lineDirectionX, lineDirectionY, lineDirectionZ));
-
-      double dx = pointOnLineX - pointX;
-      double dy = pointOnLineY - pointY;
-      double dz = pointOnLineZ - pointZ;
-
-      if (directionMagnitude < ONE_TRILLIONTH)
-      {
-         return Math.sqrt(normSquared(dx, dy, dz));
-      }
-      else
-      {
-         // (lineDirection) X (dx, dy, dz)
-         double crossX = lineDirectionY * dz - lineDirectionZ * dy;
-         double crossY = lineDirectionZ * dx - lineDirectionX * dz;
-         double crossZ = lineDirectionX * dy - lineDirectionY * dx;
-
-         return (crossX * planeNormalX + crossY * planeNormalY + crossZ * planeNormalZ) / directionMagnitude;
-      }
+      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnLineX, pointOnLineY, pointOnLineZ, planeNormalX,
+                                                                    planeNormalY, planeNormalZ, lineDirectionX, lineDirectionY, lineDirectionZ);
    }
 
    public static double signedDistanceFromPoint3DToLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
@@ -179,7 +185,7 @@ public class EuclidPolytopeTools
       computeCovariance3D(vertices, averageToPack, covariance);
       Vector3D eigenValues = new Vector3D();
       Vector3D newNormal = new Vector3D();
-      boolean success = computeEigenVectors(covariance, eigenValues , null, null, newNormal);
+      boolean success = computeEigenVectors(covariance, eigenValues, null, null, newNormal);
       if (!success)
          return Double.NaN;
 
@@ -200,20 +206,68 @@ public class EuclidPolytopeTools
       EigenDecomposition<DenseMatrix64F> eig = DecompositionFactory.eig(3, true, true);
       if (!eig.decompose(denseMatrix))
          return false;
+      double eigenValue0 = eig.getEigenvalue(0).getReal();
+      double eigenValue1 = eig.getEigenvalue(1).getReal();
+      double eigenValue2 = eig.getEigenvalue(2).getReal();
+
+      int largeEigenValueIndex, midEigenValueIndex, smallEigenValueIndex;
+
+      if (eigenValue0 > eigenValue1)
+      {
+         if (eigenValue1 > eigenValue2)
+         { // eigenValue0 > eigenValue1 > eigenValue2
+            largeEigenValueIndex = 0;
+            midEigenValueIndex = 1;
+            smallEigenValueIndex = 2;
+         }
+         else if (eigenValue0 > eigenValue2)
+         { // eigenValue0 > eigenValue2 > eigenValue1
+            largeEigenValueIndex = 0;
+            midEigenValueIndex = 2;
+            smallEigenValueIndex = 1;
+         }
+         else
+         { // eigenValue2 > eigenValue0 > eigenValue1
+            largeEigenValueIndex = 2;
+            midEigenValueIndex = 0;
+            smallEigenValueIndex = 1;
+         }
+      }
+      else
+      {
+         if (eigenValue0 > eigenValue2)
+         { // eigenValue1 > eigenValue0 > eigenValue2
+            largeEigenValueIndex = 1;
+            midEigenValueIndex = 0;
+            smallEigenValueIndex = 2;
+         }
+         else if (eigenValue1 > eigenValue2)
+         { // eigenValue1 > eigenValue2 > eigenValue0
+            largeEigenValueIndex = 1;
+            midEigenValueIndex = 2;
+            smallEigenValueIndex = 0;
+         }
+         else
+         { // eigenValue2 > eigenValue1 > eigenValue0
+            largeEigenValueIndex = 2;
+            midEigenValueIndex = 1;
+            smallEigenValueIndex = 0;
+         }
+      }
 
       if (eigenValues != null)
       {
-         eigenValues.setX(eig.getEigenvalue(0).getReal());
-         eigenValues.setY(eig.getEigenvalue(1).getReal());
-         eigenValues.setZ(eig.getEigenvalue(2).getReal());
+         eigenValues.setX(eig.getEigenvalue(largeEigenValueIndex).getReal());
+         eigenValues.setY(eig.getEigenvalue(midEigenValueIndex).getReal());
+         eigenValues.setZ(eig.getEigenvalue(smallEigenValueIndex).getReal());
       }
 
       if (firstEigenVector != null)
-         firstEigenVector.set(eig.getEigenVector(0));
+         firstEigenVector.set(eig.getEigenVector(largeEigenValueIndex));
       if (secondEigenVector != null)
-         secondEigenVector.set(eig.getEigenVector(1));
+         secondEigenVector.set(eig.getEigenVector(midEigenValueIndex));
       if (thirdEigenVector != null)
-         thirdEigenVector.set(eig.getEigenVector(2));
+         thirdEigenVector.set(eig.getEigenVector(smallEigenValueIndex));
 
       return true;
    }
