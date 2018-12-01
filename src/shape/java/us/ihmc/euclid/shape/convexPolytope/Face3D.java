@@ -181,7 +181,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
          edges.add(currentEdge);
          currentEdge = currentEdge.getNextEdge();
       }
-      
+
       List<? extends Vertex3DReadOnly> vertices = getVertices();
 
       if (vertices.size() > 3)
@@ -192,7 +192,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       {
          if (vertices.size() == 3)
             EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
-         
+
          centroid.setToZero();
          vertices.forEach(centroid::add);
          centroid.scale(1.0 / vertices.size());
@@ -518,45 +518,52 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public double distance(Point3DReadOnly point)
    {
-      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOrigin(), getFaceNormal(), tempPoint);
-      if (isInteriorPointInternal(tempPoint))
-         return point.distance(tempPoint);
+      if (isInteriorPointInternal(point))
+         return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, centroid, normal);
       else
-         return getEdgeClosestTo(tempPoint).distance(point);
+         return getEdgeClosestTo(point).distance(point);
    }
 
    @Override
    public HalfEdge3D getEdgeClosestTo(Point3DReadOnly point)
    {
-      HalfEdge3D edge = getFirstVisibleEdge(tempPoint);
-      double shortestDistance = edge.distance(tempPoint);
-      double shortestDistanceCandidate = Double.NEGATIVE_INFINITY;
-      while (shortestDistanceCandidate < shortestDistance)
+      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, centroid, normal, tempPoint);
+
+      HalfEdge3D startEdge = edges.get(0);
+      HalfEdge3D closestEdge = startEdge;
+      double minDistanceSquared = startEdge.distanceSquared(tempPoint);
+      HalfEdge3D currentEdge = startEdge.getNextEdge();
+
+      while (currentEdge != startEdge)
       {
-         edge = edge.getNextEdge();
-         shortestDistanceCandidate = edge.distance(tempPoint);
+         double distanceSquared = currentEdge.distanceSquared(tempPoint);
+         if (distanceSquared < minDistanceSquared)
+         {
+            closestEdge = currentEdge;
+            minDistanceSquared = distanceSquared;
+         }
+         currentEdge = currentEdge.getNextEdge();
       }
-      return edge.getPreviousEdge();
+
+      return closestEdge;
    }
 
    @Override
    public void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
-      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOrigin(), getFaceNormal(), tempPoint);
-      if (isInteriorPointInternal(tempPoint))
+      if (isInteriorPointInternal(point))
          supportVectorToPack.set(getFaceNormal());
       else
-         getEdgeClosestTo(tempPoint).getSupportVectorDirectionTo(point, supportVectorToPack);
+         getEdgeClosestTo(point).getSupportVectorDirectionTo(point, supportVectorToPack);
    }
 
    @Override
    public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
-      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, edges.get(0).getOrigin(), getFaceNormal(), tempPoint);
-      if (isInteriorPointInternal(tempPoint))
+      if (isInteriorPointInternal(point))
          return this;
       else
-         return getEdgeClosestTo(tempPoint).getSmallestSimplexMemberReference(point);
+         return getEdgeClosestTo(point).getSmallestSimplexMemberReference(point);
    }
 
    @Override

@@ -140,7 +140,7 @@ public class Face3DTest
    }
 
    @Test
-   public void test()
+   public void testAddVertexWithConvexVertices()
    {
       Random random = new Random(366);
 
@@ -212,15 +212,15 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with point on exterior/interior side of one edge
          Vector3D faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
 
-         int edgeIndex = random.nextInt(face3D.getNumberOfEdges());
-         HalfEdge3D edge = face3D.getEdge(edgeIndex);
+         int edgeIndex = random.nextInt(face.getNumberOfEdges());
+         HalfEdge3D edge = face.getEdge(edgeIndex);
 
-         assertTrue(edge == face3D.getEdges().get(edgeIndex));
-         assertTrue(face3D.getNumberOfEdges() >= 3);
+         assertTrue(edge == face.getEdges().get(edgeIndex));
+         assertTrue(face.getNumberOfEdges() >= 3);
 
-         Point3D centroid = face3D.getFaceCentroid();
+         Point3D centroid = face.getFaceCentroid();
 
          Vector3D towardOutside = new Vector3D();
          Vector3DBasics edgeDirection = edge.getDirection(true);
@@ -233,7 +233,7 @@ public class Face3DTest
          pointInside.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, pointInside);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), faceNormal, pointInside);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), edgeDirection, pointInside);
-         assertTrue("Iteration: " + i, face3D.isPointOnInteriorSideOfEdgeInternal(pointInside, edgeIndex));
+         assertTrue("Iteration: " + i, face.isPointOnInteriorSideOfEdgeInternal(pointInside, edgeIndex));
 
          assertEquals(0.0, towardOutside.dot(faceNormal), EPSILON);
          assertEquals(0.0, towardOutside.dot(edgeDirection), EPSILON);
@@ -242,7 +242,221 @@ public class Face3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, pointOutside);
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), faceNormal, pointOutside);
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), edgeDirection, pointOutside);
-         assertFalse("Iteration: " + i, face3D.isPointOnInteriorSideOfEdgeInternal(pointOutside, edgeIndex));
+         assertFalse("Iteration: " + i, face.isPointOnInteriorSideOfEdgeInternal(pointOutside, edgeIndex));
+      }
+   }
+
+   @Test
+   public void testDistance() throws Exception
+   {
+      Random random = new Random(3453456);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with a point inside the face
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Point3D pointOnFace = EuclidShapeRandomTools.nextWeightedAverage(random, face.getVertices());
+
+         assertEquals(0.0, face.distance(pointOnFace), EPSILON);
+
+         double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Point3D pointDirectlyAbove = new Point3D();
+         pointDirectlyAbove.scaleAdd(expectedDistance, face.getFaceNormal(), pointOnFace);
+         assertEquals(expectedDistance, face.distance(pointDirectlyAbove), EPSILON);
+
+         Point3D pointDirectlyBelow = new Point3D();
+         pointDirectlyBelow.scaleAdd(-expectedDistance, face.getFaceNormal(), pointOnFace);
+         assertEquals(expectedDistance, face.distance(pointDirectlyBelow), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to an edge
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+
+         HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+
+         Vector3D outsideDirection = new Vector3D();
+         outsideDirection.cross(face.getFaceNormal(), edge.getDirection(false));
+         outsideDirection.normalize();
+
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(expectedDistance, outsideDirection, pointOnEdge);
+
+         assertEquals(expectedDistance, face.distance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to one of the face's vertices
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+
+         HalfEdge3D prevEdge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+         HalfEdge3D nextEdge = prevEdge.getNextEdge();
+
+         Vertex3D closestVertex = prevEdge.getDestination();
+
+         Vector3D prevOutsideDirection = new Vector3D();
+         prevOutsideDirection.cross(face.getFaceNormal(), prevEdge.getDirection(false));
+         prevOutsideDirection.normalize();
+
+         Vector3D nextOutsideDirection = new Vector3D();
+         nextOutsideDirection.cross(face.getFaceNormal(), nextEdge.getDirection(false));
+         nextOutsideDirection.normalize();
+
+         Vector3D outsideDirection = new Vector3D();
+         outsideDirection.interpolate(prevOutsideDirection, nextOutsideDirection, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         outsideDirection.normalize();
+
+         double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(expectedDistance, outsideDirection, closestVertex);
+
+         //         assertEquals(expectedDistance, face.distance(pointOutside), EPSILON); TODO
+      }
+   }
+
+   @Test
+   public void testGetClosestEdgeTo() throws Exception
+   {
+      Random random = new Random(43654);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with triangle to get edge-cases
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 3);
+
+         Point3D pointOutside = new Point3D();
+         {
+            HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+
+            Vector3D outsideDirection = new Vector3D();
+            outsideDirection.cross(face.getFaceNormal(), edge.getDirection(false));
+            outsideDirection.normalize();
+
+            Point3D pointOnEdge = new Point3D();
+            pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+            pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), outsideDirection, pointOnEdge);
+         }
+
+         HalfEdge3D expectedEdge = null;
+         int expectedEdgeIndex = -1;
+         double distance = Double.POSITIVE_INFINITY;
+
+         for (int edgeIndex = 0; edgeIndex < face.getNumberOfEdges(); edgeIndex++)
+         {
+            HalfEdge3D candidate = face.getEdge(edgeIndex);
+            double candidateDistance = candidate.distance(pointOutside);
+            if (candidateDistance < distance)
+            {
+               expectedEdge = candidate;
+               expectedEdgeIndex = edgeIndex;
+               distance = candidateDistance;
+            }
+         }
+
+         HalfEdge3D actualEdge = face.getEdgeClosestTo(pointOutside);
+         int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
+         String errorMessage = "Iteration: " + i + ", distance from: expected: " + expectedEdge.distance(pointOutside) + ", actual: "
+               + actualEdge.distance(pointOutside);
+         assertEquals(errorMessage, expectedEdgeIndex, actualEdgeIndex);
+         assertTrue(errorMessage, expectedEdge == actualEdge);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test against naive method with point outside closest to an edge
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+
+         Point3D pointOutside = new Point3D();
+         {
+            HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+
+            Vector3D outsideDirection = new Vector3D();
+            outsideDirection.cross(face.getFaceNormal(), edge.getDirection(false));
+            outsideDirection.normalize();
+
+            Point3D pointOnEdge = new Point3D();
+            pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+            pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), outsideDirection, pointOnEdge);
+         }
+
+         HalfEdge3D expectedEdge = null;
+         int expectedEdgeIndex = -1;
+         double distance = Double.POSITIVE_INFINITY;
+
+         for (int edgeIndex = 0; edgeIndex < face.getNumberOfEdges(); edgeIndex++)
+         {
+            HalfEdge3D candidate = face.getEdge(edgeIndex);
+            double candidateDistance = candidate.distance(pointOutside);
+            if (candidateDistance < distance)
+            {
+               expectedEdge = candidate;
+               expectedEdgeIndex = edgeIndex;
+               distance = candidateDistance;
+            }
+         }
+
+         HalfEdge3D actualEdge = face.getEdgeClosestTo(pointOutside);
+         int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
+         String errorMessage = "Iteration: " + i + ", distance from: expected: " + expectedEdge.distance(pointOutside) + ", actual: "
+               + actualEdge.distance(pointOutside);
+         assertEquals(errorMessage, expectedEdgeIndex, actualEdgeIndex);
+         assertTrue(errorMessage, expectedEdge == actualEdge);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+
+         int expectedEdgeIndex = random.nextInt(face.getNumberOfEdges());
+         HalfEdge3D expectedEdge = face.getEdge(expectedEdgeIndex);
+
+         Vector3D outsideDirection = new Vector3D();
+         outsideDirection.cross(face.getFaceNormal(), expectedEdge.getDirection(false));
+         outsideDirection.normalize();
+
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.interpolate(expectedEdge.getOrigin(), expectedEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), outsideDirection, pointOnEdge);
+
+         HalfEdge3D actualEdge = face.getEdgeClosestTo(pointOutside);
+         int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
+
+         assertEquals("Iteration: " + i, expectedEdgeIndex, actualEdgeIndex);
+         assertTrue("Iteration: " + i, expectedEdge == actualEdge);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test against naive method with point inside
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+
+         Point3D point = EuclidShapeRandomTools.nextWeightedAverage(random, face.getVertices());
+
+         HalfEdge3D expectedEdge = null;
+         int expectedEdgeIndex = -1;
+         double distance = Double.POSITIVE_INFINITY;
+
+         for (int edgeIndex = 0; edgeIndex < face.getNumberOfEdges(); edgeIndex++)
+         {
+            HalfEdge3D candidate = face.getEdge(edgeIndex);
+            double candidateDistance = candidate.distance(point);
+            if (candidateDistance < distance)
+            {
+               expectedEdge = candidate;
+               expectedEdgeIndex = edgeIndex;
+               distance = candidateDistance;
+            }
+         }
+
+         HalfEdge3D actualEdge = face.getEdgeClosestTo(point);
+         int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
+         String errorMessage = "Iteration: " + i + ", distance from: expected: " + expectedEdge.distance(point) + ", actual: " + actualEdge.distance(point);
+         assertEquals(errorMessage, expectedEdgeIndex, actualEdgeIndex);
+         assertTrue(errorMessage, expectedEdge == actualEdge);
       }
    }
 }
