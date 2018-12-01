@@ -295,7 +295,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       {
          if (faces.get(0).isPointInFacePlane(vertexToAdd, epsilon))
          {
-            if (!faces.get(0).isInteriorPoint(vertexToAdd, epsilon))
+            if (!faces.get(0).isPointInside(vertexToAdd, epsilon))
                faces.get(0).addVertex(vertexToAdd, epsilon);
             updateListener();
             return;
@@ -638,7 +638,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       faceReferencesToPack.clear();
       for (int i = 0; i < faces.size(); i++)
       {
-         double visibilityProduct = faces.get(i).getFaceVisibilityProduct(vertexUnderConsideration);
+         double visibilityProduct = faces.get(i).signedDistanceToPlane(vertexUnderConsideration);
          if (visibilityProduct > epsilon)
          {
             faceReferencesToPack.add(faces.get(i));
@@ -667,15 +667,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
 
    public void removeFace(Face3D faceToRemove)
    {
-      for (int i = 0; i < faceToRemove.getNumberOfEdges(); i++)
-      {
-         HalfEdge3D twinHalfEdge = faceToRemove.getEdge(i).getTwinEdge();
-         if (twinHalfEdge != null)
-            twinHalfEdge.setTwinEdge(null);
-         faceToRemove.getEdge(i).clear();
-      }
-      faceToRemove.clearEdgeList();
-      faces.remove(faceToRemove);
+      if (faces.remove(faceToRemove))
+         faceToRemove.clear();
    }
 
    private Face3D isInteriorPointInternal(Point3DReadOnly pointToCheck, double epsilon)
@@ -683,7 +676,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       if (faces.size() == 0)
          return null;
       else if (faces.size() == 1)
-         return faces.get(0).isInteriorPoint(pointToCheck, epsilon) ? null : faces.get(0);
+         return faces.get(0).isPointInside(pointToCheck, epsilon) ? null : faces.get(0);
 
       for (int i = 0; i < faces.size(); i++)
       {

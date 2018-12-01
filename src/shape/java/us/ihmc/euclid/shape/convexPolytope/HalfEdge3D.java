@@ -396,12 +396,18 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public void clear()
    {
+      if (twinEdge != null)
+         twinEdge.setTwinEdge(null);
+      if (nextEdge != null)
+         nextEdge.setPreviousEdge(null);
+      if (previousEdge != null)
+         previousEdge.setNextEdge(null);
       setTwinEdge(null);
-      setOrigin(null);
-      setDestination(null);
       setNextEdge(null);
       setPreviousEdge(null);
       setFace(null);
+      setOrigin(null);
+      setDestination(null);
    }
 
    /**

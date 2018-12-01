@@ -192,7 +192,7 @@ public class Face3DTest
 
          for (int edgeIndex = 0; edgeIndex < face3D.getNumberOfEdges(); edgeIndex++)
          {
-            assertTrue(face3D.isPointOnInteriorSideOfEdgeInternal(face3D.getFaceCentroid(), edgeIndex));
+            assertTrue(face3D.canObserverSeeEdge(face3D.getFaceCentroid(), edgeIndex));
          }
       }
 
@@ -205,7 +205,7 @@ public class Face3DTest
 
          for (int edgeIndex = 0; edgeIndex < face3D.getNumberOfEdges(); edgeIndex++)
          {
-            assertTrue(face3D.isPointOnInteriorSideOfEdgeInternal(pointInside, edgeIndex));
+            assertTrue(face3D.canObserverSeeEdge(pointInside, edgeIndex));
          }
       }
 
@@ -233,7 +233,7 @@ public class Face3DTest
          pointInside.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, pointInside);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), faceNormal, pointInside);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), edgeDirection, pointInside);
-         assertTrue("Iteration: " + i, face.isPointOnInteriorSideOfEdgeInternal(pointInside, edgeIndex));
+         assertTrue("Iteration: " + i, face.canObserverSeeEdge(pointInside, edgeIndex));
 
          assertEquals(0.0, towardOutside.dot(faceNormal), EPSILON);
          assertEquals(0.0, towardOutside.dot(edgeDirection), EPSILON);
@@ -242,7 +242,7 @@ public class Face3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, pointOutside);
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), faceNormal, pointOutside);
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), edgeDirection, pointOutside);
-         assertFalse("Iteration: " + i, face.isPointOnInteriorSideOfEdgeInternal(pointOutside, edgeIndex));
+         assertFalse("Iteration: " + i, face.canObserverSeeEdge(pointOutside, edgeIndex));
       }
    }
 

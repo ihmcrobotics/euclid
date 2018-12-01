@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -52,7 +51,7 @@ public interface Face3DReadOnly extends Clearable
     * @param index index of the edge w.r.t. which the point is to be evaluated
     * @return
     */
-   boolean isPointOnInteriorSideOfEdgeInternal(Point3DBasics point, int index);
+   boolean canObserverSeeEdge(Point3DReadOnly observer, int index);
 
    /**
     * Returns a dot product of the vector from a point on the face to the specified point and the face
@@ -62,7 +61,7 @@ public interface Face3DReadOnly extends Clearable
     * @return dot product result from the computation. Represents the distance of the face plane from
     *         the point
     */
-   double getFaceVisibilityProduct(Point3DReadOnly point);
+   double signedDistanceToPlane(Point3DReadOnly point);
 
    /**
     * Checks if a particular point is in the same spatial plane as this face
@@ -81,7 +80,7 @@ public interface Face3DReadOnly extends Clearable
     * @param epsilon the precision level for this check operation
     * @return {@code true} if the point is an interior point. {@code false} otherwise
     */
-   boolean isInteriorPoint(Point3DReadOnly vertexToCheck, double epsilon);
+   boolean isPointInside(Point3DReadOnly vertexToCheck, double epsilon);
 
    /**
     * Gets the centroid of the face
