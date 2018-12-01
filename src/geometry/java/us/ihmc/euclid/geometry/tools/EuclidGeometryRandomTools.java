@@ -559,7 +559,7 @@ public abstract class EuclidGeometryRandomTools
       }
 
       // Limiting the min value from the random to prevent obtaining a polygon that is way too small
-      scale = nextDouble(random, 0.1, 1.0) * maxEdgeLength / currentMaxEdgeLength;
+      scale = nextDouble(random, 0.5, 1.0) * maxEdgeLength / currentMaxEdgeLength;
       for (int i = 0; i < numberOfVertices; i++)
          clockwiseVertices.get(i).scale(scale);
 
