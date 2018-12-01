@@ -9,10 +9,10 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -40,25 +40,21 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
     * A vector normal to the plane that this face lies on. Do not access directly since this is updated
     * only when the getter is called
     */
-   private final Vector3D faceNormal = new Vector3D();
+   private final Vector3D normal = new Vector3D();
    /**
     * The variable used to store the centroid of the polytope whenever updated Do not access directly
     * since this is updated only when the getter is called
     */
-   private final Point3D faceCentroid = new Point3D();
+   private final Point3D centroid = new Point3D();
 
    // Temporary variables for calculations
-   private final Vector3D tempVector = new Vector3D();
    private final Point3D tempPoint = new Point3D();
    private final List<HalfEdge3D> visibleEdgeList = new ArrayList<>();
    private boolean marked = false;
 
-   /**
-    * Default constructor. Does not initialize anything
-    */
-   public Face3D()
+   public Face3D(Vector3DReadOnly initialGuessNormal)
    {
-
+      normal.setAndNormalize(initialGuessNormal);
    }
 
    /**
@@ -119,7 +115,15 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
 
          HalfEdge3D secondEdge = edges.get(1);
 
-         // Create a new edge and assign an arbitrary configuration since there is no way to tell up and down in 3D space
+         // Ensuring clockwise ordering using the initial guess for the normal.
+         Vector3D resultingNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(firstEdge.getOrigin(), firstEdge.getDestination(),
+                                                                                     firstEdge.getDestination(), vertexToAdd);
+         if (resultingNormal.dot(normal) > 0.0)
+         { // Counter-clockwise, need to reverse the ordering.
+            firstEdge.reverseEdge();
+            secondEdge.setOrigin(firstEdge.getDestination());
+         }
+
          secondEdge.setDestination(vertexToAdd);
          HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
          newEdge.setFace(this);
@@ -166,6 +170,33 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
                edges.remove(visibleEdgeList.get(i));
          }
       }
+
+      HalfEdge3D startEdge = edges.get(0);
+      edges.clear();
+      edges.add(startEdge);
+
+      HalfEdge3D currentEdge = startEdge.getNextEdge();
+      while (currentEdge != startEdge)
+      {
+         edges.add(currentEdge);
+         currentEdge = currentEdge.getNextEdge();
+      }
+      
+      List<? extends Vertex3DReadOnly> vertices = getVertices();
+
+      if (vertices.size() > 3)
+      {
+         EuclidPolytopeTools.updateFace3DNormal(vertices, centroid, normal);
+      }
+      else
+      {
+         if (vertices.size() == 3)
+            EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
+         
+         centroid.setToZero();
+         vertices.forEach(centroid::add);
+         centroid.scale(1.0 / vertices.size());
+      }
    }
 
    public void getVisibleEdgeList(Point3DReadOnly vertex, List<HalfEdge3D> edgeList)
@@ -186,7 +217,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    {
       if (edges.size() == 0)
          return null;
-      else if (edges.size() == 1 || edges.size() == 2)
+      else if (edges.size() <= 2)
          return edges.get(0);
 
       HalfEdge3D edgeUnderConsideration = edges.get(0);
@@ -215,20 +246,18 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public boolean isPointOnInteriorSideOfEdgeInternal(Point3DBasics point, int index)
    {
-      updateFaceNormal();
       return isPointOnInteriorSideOfEdgeInternal(point, edges.get(index));
    }
 
    private boolean isPointOnInteriorSideOfEdgeInternal(Point3DReadOnly query, HalfEdge3D edge)
    {
-      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getFaceNormal());
+      return EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getFaceNormal());
    }
 
    @Override
    public double getFaceVisibilityProduct(Point3DReadOnly point)
    {
-      tempVector.sub(point, getEdge(0).getOrigin());
-      return dotFaceNormal(tempVector);
+      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, centroid, normal);
    }
 
    private double getEdgeVisibilityProduct(Point3DReadOnly point, HalfEdge3D halfEdge)
@@ -239,17 +268,10 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public boolean isPointInFacePlane(Point3DReadOnly vertexToCheck, double epsilon)
    {
-      boolean isInFacePlane;
-      HalfEdge3D firstEdge = edges.get(0);
-      tempVector.sub(vertexToCheck, firstEdge.getOrigin());
       if (edges.size() < 3)
-      {
-         isInFacePlane = !EuclidCoreTools.epsilonEquals(Math.abs(firstEdge.getEdgeVector().dot(tempVector))
-               / (firstEdge.getEdgeVector().length() * tempVector.length()), 1.0, epsilon);
-      }
+         return edges.get(0).distanceSquared(vertexToCheck) < epsilon * epsilon;
       else
-         isInFacePlane = EuclidCoreTools.epsilonEquals(tempVector.dot(getFaceNormal()), 0.0, epsilon);
-      return isInFacePlane;
+         return EuclidGeometryTools.distanceFromPoint3DToPlane3D(vertexToCheck, centroid, normal) < epsilon;
    }
 
    @Override
@@ -258,49 +280,34 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       return isPointInFacePlane(vertexToCheck, epsilon) && isInteriorPointInternal(vertexToCheck);
    }
 
-   private boolean isInteriorPointInternal(Point3DReadOnly vertexToCheck)
+   private boolean isInteriorPointInternal(Point3DReadOnly query)
    {
       if (edges.size() < 3)
          return false;
 
-      boolean result = true;
-      HalfEdge3D halfEdge = edges.get(0);
-      for (int i = 0; result && i < edges.size(); i++)
+      HalfEdge3D edge = edges.get(0);
+
+      for (int i = 0; i < edges.size(); i++)
       {
-         result &= isPointOnInteriorSideOfEdgeInternal(vertexToCheck, halfEdge);
-         halfEdge = halfEdge.getNextEdge();
+         if (!isPointOnInteriorSideOfEdgeInternal(query, edge))
+            return false;
+
+         edge = edge.getNextEdge();
       }
-      return result;
+
+      return true;
    }
 
    @Override
    public Point3D getFaceCentroid()
    {
-      updateFaceCentroid();
-      return faceCentroid;
-   }
-
-   private void updateFaceCentroid()
-   {
-      faceCentroid.setToZero();
-      for (int i = 0; i < edges.size(); i++)
-         faceCentroid.add(edges.get(i).getOrigin());
-      faceCentroid.scale(1.0 / edges.size());
+      return centroid;
    }
 
    @Override
    public Vector3D getFaceNormal()
    {
-      updateFaceNormal();
-      return faceNormal;
-   }
-
-   private void updateFaceNormal()
-   {
-      if (edges.size() < 3)
-         faceNormal.setToZero();
-      else
-         EuclidPolytopeTools.updateFace3DNormal(getVertices(), faceCentroid, faceNormal);
+      return normal;
    }
 
    @Override
@@ -344,7 +351,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       {
          edges.get(i).reverseEdge();
       }
-      updateFaceNormal();
+      normal.negate();
    }
 
    public void clearEdgeList()
@@ -371,8 +378,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public double dotFaceNormal(Vector3DReadOnly direction)
    {
-      updateFaceNormal();
-      return direction.dot(faceNormal);
+      return direction.dot(normal);
    }
 
    @Override

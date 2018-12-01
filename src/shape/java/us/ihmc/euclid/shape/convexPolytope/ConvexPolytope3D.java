@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Settable;
@@ -283,7 +284,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       if (faces.size() == 0)
       {
          // Polytope is empty. Creating face and adding the vertex
-         Face3D newFace = new Face3D();
+         Face3D newFace = new Face3D(Axis.Z);
          newFace.addVertex(vertexToAdd, epsilon);
          faces.add(newFace);
          boundingBoxNeedsUpdating = true;
@@ -611,7 +612,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
 
    private Face3D createFaceFromTwinEdgeAndVertex(Vertex3D vertex, HalfEdge3D twinEdge, double epsilon)
    {
-      Face3D newFace = new Face3D();
+      Vector3D initialNormal = new Vector3D();
+      initialNormal.sub(vertex, centroid);
+      Face3D newFace = new Face3D(initialNormal);
       faces.add(newFace);
       newFace.addVertex(twinEdge.getDestination(), epsilon);
       newFace.addVertex(twinEdge.getOrigin(), epsilon);
