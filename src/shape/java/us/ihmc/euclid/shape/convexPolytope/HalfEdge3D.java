@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -440,6 +441,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    @Override
    public String toString()
    {
-      return "From: " + (origin == null ? "null" : origin.toString()) + ", To: " + (destination == null ? "null" : destination.toString());
+      return EuclidPolytopeIOTools.getHalfEdge3DString(this);
    }
 }
