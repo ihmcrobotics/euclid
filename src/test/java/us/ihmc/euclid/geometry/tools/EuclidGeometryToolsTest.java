@@ -420,6 +420,11 @@ public class EuclidGeometryToolsTest
          secondVector.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
 
          assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
+         secondVector.negate();
+         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
+         firstVector.negate();
+         secondVector.negate();
+         assertEquals(rotationAngle < angleEpsilon, EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
       }
 
       // Try again with small values
