@@ -7,7 +7,7 @@ import java.util.List;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder
+public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simplex3D
 {
    /**
     * Get a list of faces that constitute the polytope

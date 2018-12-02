@@ -22,13 +22,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * 
+ *
  * @author Apoorv S
  *
  */
-public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Clearable, Transformable, Settable<ConvexPolytope3DReadOnly>
+public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Transformable, Settable<ConvexPolytope3DReadOnly>
 {
-   private final static boolean DEBUG = false;
    private final ArrayList<Vertex3D> vertices = new ArrayList<>();
    private final ArrayList<HalfEdge3D> edges = new ArrayList<>();
    private final ArrayList<Face3D> faces = new ArrayList<>();
@@ -36,8 +35,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
     * Bounding box for the polytope
     */
    private boolean boundingBoxNeedsUpdating = false;
-   private final BoundingBox3D boundingBox = new BoundingBox3D(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
-                                                               Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+   private final BoundingBox3D boundingBox = new BoundingBox3D();
    private final ArrayList<Face3D> visibleFaces = new ArrayList<>();
    private final ArrayList<Face3D> silhouetteFaces = new ArrayList<>();
    private final ArrayList<Face3D> nonSilhouetteFaces = new ArrayList<>();
@@ -87,6 +85,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
+   @Override
    public int getNumberOfVertices()
    {
       if (getNumberOfFaces() < 2)
@@ -100,6 +99,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       }
    }
 
+   @Override
    public List<Vertex3D> getVertices()
    {
       updateVertices();
@@ -136,12 +136,14 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       return vertices.get(index);
    }
 
+   @Override
    public int getNumberOfEdges()
    {
       updateEdges();
       return edges.size() / 2;
    }
 
+   @Override
    public List<HalfEdge3D> getEdges()
    {
       updateEdges();
@@ -167,16 +169,19 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       }
    }
 
+   @Override
    public int getNumberOfFaces()
    {
       return faces.size();
    }
 
+   @Override
    public List<Face3D> getFaces()
    {
       return faces;
    }
 
+   @Override
    public Face3D getFace(int index)
    {
       return faces.get(index);
@@ -249,7 +254,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
    /**
     * Adds a polytope vertex to the current polytope. In case needed faces are removed and recreated.
     * This will result in garbage. Fix if possible
-    * 
+    *
     * @param vertexToAdd
     * @param epsilon
     * @return
@@ -268,29 +273,33 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       }
       else if (faces.size() == 1)
       {
-         if (faces.get(0).isPointInFacePlane(vertexToAdd, epsilon))
+         Face3D firstFace = faces.get(0);
+
+         if (firstFace.isPointInFacePlane(vertexToAdd, epsilon))
          {
-            if (!faces.get(0).isPointInside(vertexToAdd, epsilon))
-               faces.get(0).addVertex(vertexToAdd, epsilon);
+            if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
+               firstFace.addVertex(vertexToAdd, epsilon);
             updateListener();
             return;
          }
          else
          {
-            if (faces.get(0).canObserverSeeFace(vertexToAdd))
-               faces.get(0).reverseFaceNormal();
+            if (firstFace.canObserverSeeFace(vertexToAdd))
+               firstFace.reverseFaceNormal();
 
             visibleSilhouetteList.clear();
-            HalfEdge3D halfEdge = faces.get(0).getEdge(0);
+            HalfEdge3D halfEdge = firstFace.getEdge(0);
             if (listener != null)
                listener.udpateVisibleEdgeSeed(halfEdge);
-            for (int i = 0; i < faces.get(0).getNumberOfEdges(); i++)
+
+            for (int i = 0; i < firstFace.getNumberOfEdges(); i++)
             {
                visibleSilhouetteList.add(halfEdge);
                halfEdge = halfEdge.getPreviousEdge();
             }
             if (listener != null)
                listener.updateVisibleSilhouette(visibleSilhouetteList);
+
             onFaceList.clear();
             createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
          }
@@ -306,8 +315,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
          return;
       }
       getFacesWhichPointIsOn(vertexToAdd, onFaceList, epsilon);
-      if (DEBUG)
-         System.out.println("Visible faces: " + visibleFaces.size() + ", On Faces: " + onFaceList.size());
+
       getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
       HalfEdge3D firstHalfEdgeForSilhouette = null;
       if (listener != null)
@@ -332,8 +340,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
          listener.udpateVisibleEdgeSeed(firstHalfEdgeForSilhouette);
       if (firstHalfEdgeForSilhouette == null)
       {
-         if (DEBUG)
-            System.out.println("Seed edge was null, aborting. On faces: " + onFaceList.size() + ", visible: " + visibleFaces.size());
          return;
       }
       getVisibleSilhouetteUsingSeed(visibleSilhouetteList, firstHalfEdgeForSilhouette, visibleFaces);
@@ -341,8 +347,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
          listener.updateVisibleSilhouette(visibleSilhouetteList);
       if (visibleSilhouetteList.isEmpty())
       {
-         if (DEBUG)
-            System.out.println("Empty visible silhouette ");
          updateListener();
          return;
       }
@@ -411,14 +415,18 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
    public void getVisibleSilhouette(Point3DReadOnly vertex, List<HalfEdge3D> visibleSilhouetteToPack, double epsilon)
    {
       Face3D leastVisibleFace = getVisibleFaces(visibleFaces, vertex, epsilon);
+
       if (visibleFaces.isEmpty())
       {
          return;
       }
       getFacesWhichPointIsOn(vertex, onFaceList, epsilon);
       getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
-      HalfEdge3D firstHalfEdgeForSilhouette = onFaceList.size() > 0 ? onFaceList.get(0).lineOfSightStart(vertex).getTwinEdge()
-            : getSeedEdgeForSilhouetteCalculation(visibleFaces, leastVisibleFace);
+      HalfEdge3D firstHalfEdgeForSilhouette;
+      if (onFaceList.size() > 0)
+         firstHalfEdgeForSilhouette = onFaceList.get(0).lineOfSightStart(vertex).getTwinEdge();
+      else
+         firstHalfEdgeForSilhouette = getSeedEdgeForSilhouetteCalculation(visibleFaces, leastVisibleFace);
       getVisibleSilhouetteUsingSeed(visibleSilhouetteToPack, firstHalfEdgeForSilhouette, visibleFaces);
    }
 
@@ -430,29 +438,10 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       int count;
       for (count = 0; count < numberOfEdges; count++)
       {
-         if (DEBUG)
-         {
-            if (halfEdgeUnderConsideration == null)
-               System.out.println("Half edge null " + faces.size());
-            if (visibleSilhouetteToPack == null)
-               System.out.println("visible list null");
-            if (halfEdgeUnderConsideration.getTwinEdge() == null)
-               System.out.println("Twing half edge null");
-         }
-
          visibleSilhouetteToPack.add(halfEdgeUnderConsideration.getTwinEdge());
          Vertex3D destinationVertex = halfEdgeUnderConsideration.getDestination();
          for (int i = 0; i < destinationVertex.getNumberOfAssociatedEdges(); i++)
          {
-            if (DEBUG)
-            {
-               if (destinationVertex.getAssociatedEdge(i) == null)
-                  System.out.println("Associated edge is null");
-               if (destinationVertex.getAssociatedEdge(i).getTwinEdge() == null)
-                  System.out.println("Associated edge twin is null\n" + toString());
-               if (destinationVertex.getAssociatedEdge(i).getTwinEdge().getFace() == null)
-                  System.out.println("Associated edge twin face is null");
-            }
             if (silhouetteFaceList.contains(destinationVertex.getAssociatedEdge(i).getFace())
                   && !silhouetteFaceList.contains(destinationVertex.getAssociatedEdge(i).getTwinEdge().getFace()))
             {
@@ -465,21 +454,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       }
       if (count == numberOfEdges && faces.size() > 1)
       {
-         if (DEBUG)
-         {
-            System.out.println("Could not determine visible silhouette " + onFaceList.size() + ", " + silhouetteFaceList.size() + ", "
-                  + visibleSilhouetteToPack.size());
-            System.out.println("On face size: " + onFaceList.size());
-            for (int i = 0; i < onFaceList.size(); i++)
-            {
-               System.out.println(onFaceList.get(i).toString());
-            }
-            System.out.println("Visible face size: " + visibleFaces.size());
-            for (int i = 0; i < visibleFaces.size(); i++)
-            {
-               System.out.println(visibleFaces.get(i).toString());
-            }
-         }
          if (listener != null)
          {
             listener.updateOnFaceList(onFaceList);
@@ -700,12 +674,12 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
    @Override
    public boolean containsNaN()
    {
-      boolean result = false;
       for (int i = 0; i < faces.size(); i++)
       {
-         result |= faces.get(i).containsNaN();
+         if (faces.get(i).containsNaN())
+            return true;
       }
-      return result;
+      return false;
    }
 
    @Override
@@ -817,6 +791,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
       return getFaceContainingPointClosestTo(point).getSmallestSimplexMemberReference(point);
    }
 
+   @Override
    public String toString()
    {
       return EuclidPolytopeIOTools.getConvexPolytope3DString(this);
