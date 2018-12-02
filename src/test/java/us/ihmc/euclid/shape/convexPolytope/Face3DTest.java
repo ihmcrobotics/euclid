@@ -369,7 +369,7 @@ public class Face3DTest
             }
          }
 
-         HalfEdge3D actualEdge = face.getEdgeClosestTo(pointOutside);
+         HalfEdge3D actualEdge = face.getClosestEdge(pointOutside);
          int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
          String errorMessage = "Iteration: " + i + ", distance from: expected: " + expectedEdge.distance(pointOutside) + ", actual: "
                + actualEdge.distance(pointOutside);
@@ -411,7 +411,7 @@ public class Face3DTest
             }
          }
 
-         HalfEdge3D actualEdge = face.getEdgeClosestTo(pointOutside);
+         HalfEdge3D actualEdge = face.getClosestEdge(pointOutside);
          int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
          String errorMessage = "Iteration: " + i + ", distance from: expected: " + expectedEdge.distance(pointOutside) + ", actual: "
                + actualEdge.distance(pointOutside);
@@ -436,7 +436,7 @@ public class Face3DTest
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), outsideDirection, pointOnEdge);
 
-         HalfEdge3D actualEdge = face.getEdgeClosestTo(pointOutside);
+         HalfEdge3D actualEdge = face.getClosestEdge(pointOutside);
          int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
 
          assertEquals("Iteration: " + i, expectedEdgeIndex, actualEdgeIndex);
@@ -465,7 +465,7 @@ public class Face3DTest
             }
          }
 
-         HalfEdge3D actualEdge = face.getEdgeClosestTo(point);
+         HalfEdge3D actualEdge = face.getClosestEdge(point);
          int actualEdgeIndex = face.getEdges().indexOf(actualEdge);
          String errorMessage = "Iteration: " + i + ", distance from: expected: " + expectedEdge.distance(point) + ", actual: " + actualEdge.distance(point);
          assertEquals(errorMessage, expectedEdgeIndex, actualEdgeIndex);

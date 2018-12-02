@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
@@ -288,6 +289,24 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       return supportingVertex;
    }
 
+   @Override
+   default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
+   {
+      if (isPointDirectlyAboveOrBelow(point))
+         return this;
+      else
+         return getClosestEdge(point).getSmallestSimplexMemberReference(point);
+   }
+
+   @Override
+   default void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   {
+      if (isPointDirectlyAboveOrBelow(point))
+         supportVectorToPack.set(getNormal());
+      else
+         getClosestEdge(point).getSupportVectorDirectionTo(point, supportVectorToPack);
+   }
+
    /**
     * Return a reference to an adjacent face if this face is part of a polytope. If not can return a
     * {@code null} or throw a {@code NullPointerException}
@@ -330,7 +349,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       if (isPointDirectlyAboveOrBelow(point))
          return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
       else
-         return getEdgeClosestTo(point).distance(point);
+         return getClosestEdge(point).distance(point);
    }
 
    /**
@@ -339,7 +358,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     * @param point the point to which the closed edge is required
     * @return read only reference to the half edge that is closed to the specified point
     */
-   default HalfEdge3DReadOnly getEdgeClosestTo(Point3DReadOnly point)
+   default HalfEdge3DReadOnly getClosestEdge(Point3DReadOnly point)
    {
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly closestEdge = startEdge;

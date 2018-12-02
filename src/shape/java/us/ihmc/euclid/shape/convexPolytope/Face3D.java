@@ -9,7 +9,6 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
@@ -17,7 +16,6 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -182,6 +180,24 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       boundingBox.updateToIncludePoint(vertexToAdd);
    }
 
+   public void reverseFaceNormal()
+   {
+      for (int i = 0; i < edges.size(); i++)
+      {
+         edges.get(i).reverseEdge();
+      }
+      normal.negate();
+   }
+
+   public void destroy()
+   {
+      for (int i = 0; i < edges.size(); i++)
+      {
+         edges.get(i).detroy();
+      }
+      edges.clear();
+   }
+
    @Override
    public List<HalfEdge3D> lineOfSight(Point3DReadOnly vertex)
    {
@@ -210,6 +226,18 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    public HalfEdge3D lineOfSightEnd(Point3DReadOnly observer)
    {
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer);
+   }
+
+   @Override
+   public Face3D getNeighbouringFace(int index)
+   {
+      return (Face3D) Face3DReadOnly.super.getNeighbouringFace(index);
+   }
+
+   @Override
+   public HalfEdge3D getClosestEdge(Point3DReadOnly point)
+   {
+      return (HalfEdge3D) Face3DReadOnly.super.getClosestEdge(point);
    }
 
    /**
@@ -249,42 +277,6 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
-   public void applyTransform(Transform transform)
-   {
-      for (int i = 0; i < getNumberOfEdges(); i++)
-         edges.get(i).getOrigin().applyTransform(transform);
-      centroid.applyTransform(transform);
-      normal.applyTransform(transform);
-   }
-
-   @Override
-   public void applyInverseTransform(Transform transform)
-   {
-      for (int i = 0; i < getNumberOfEdges(); i++)
-         edges.get(i).getOrigin().applyInverseTransform(transform);
-      centroid.applyInverseTransform(transform);
-      normal.applyInverseTransform(transform);
-   }
-
-   public void reverseFaceNormal()
-   {
-      for (int i = 0; i < edges.size(); i++)
-      {
-         edges.get(i).reverseEdge();
-      }
-      normal.negate();
-   }
-
-   public void destroy()
-   {
-      for (int i = 0; i < edges.size(); i++)
-      {
-         edges.get(i).detroy();
-      }
-      edges.clear();
-   }
-
-   @Override
    public boolean containsNaN()
    {
       return Face3DReadOnly.super.containsNaN();
@@ -302,12 +294,6 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       for (int i = 0; i < edges.size(); i++)
          edges.get(i).setToZero();
-   }
-
-   @Override
-   public Face3D getNeighbouringFace(int index)
-   {
-      return (Face3D) Face3DReadOnly.super.getNeighbouringFace(index);
    }
 
    public void mark()
@@ -333,27 +319,21 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
-   public HalfEdge3D getEdgeClosestTo(Point3DReadOnly point)
+   public void applyTransform(Transform transform)
    {
-      return (HalfEdge3D) Face3DReadOnly.super.getEdgeClosestTo(point);
+      for (int i = 0; i < getNumberOfEdges(); i++)
+         edges.get(i).getOrigin().applyTransform(transform);
+      centroid.applyTransform(transform);
+      normal.applyTransform(transform);
    }
 
    @Override
-   public void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   public void applyInverseTransform(Transform transform)
    {
-      if (isPointDirectlyAboveOrBelow(point))
-         supportVectorToPack.set(getNormal());
-      else
-         getEdgeClosestTo(point).getSupportVectorDirectionTo(point, supportVectorToPack);
-   }
-
-   @Override
-   public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
-   {
-      if (isPointDirectlyAboveOrBelow(point))
-         return this;
-      else
-         return getEdgeClosestTo(point).getSmallestSimplexMemberReference(point);
+      for (int i = 0; i < getNumberOfEdges(); i++)
+         edges.get(i).getOrigin().applyInverseTransform(transform);
+      centroid.applyInverseTransform(transform);
+      normal.applyInverseTransform(transform);
    }
 
    @Override
