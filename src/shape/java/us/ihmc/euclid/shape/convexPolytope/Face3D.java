@@ -3,6 +3,8 @@ package us.ihmc.euclid.shape.convexPolytope;
 import java.util.ArrayList;
 import java.util.List;
 
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -44,30 +46,14 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     */
    private final Point3D centroid = new Point3D();
 
+   private final BoundingBox3D boundingBox = new BoundingBox3D();
+
    // Temporary variables for calculations
    private boolean marked = false;
 
    public Face3D(Vector3DReadOnly initialGuessNormal)
    {
       normal.setAndNormalize(initialGuessNormal);
-   }
-
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public List<HalfEdge3D> getEdges()
-   {
-      return edges;
-   }
-
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public HalfEdge3D getEdge(int index)
-   {
-      return edges.get(index);
    }
 
    /**
@@ -192,6 +178,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          vertices.forEach(centroid::add);
          centroid.scale(1.0 / vertices.size());
       }
+
+      boundingBox.updateToIncludePoint(vertexToAdd);
    }
 
    @Override
@@ -224,6 +212,24 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer);
    }
 
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public List<HalfEdge3D> getEdges()
+   {
+      return edges;
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public HalfEdge3D getEdge(int index)
+   {
+      return edges.get(index);
+   }
+
    @Override
    public Point3D getCentroid()
    {
@@ -237,9 +243,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
-   public int getNumberOfEdges()
+   public BoundingBox3DReadOnly getBoundingBox()
    {
-      return edges.size();
+      return boundingBox;
    }
 
    @Override
@@ -269,11 +275,11 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       normal.negate();
    }
 
-   public void clear()
+   public void destroy()
    {
       for (int i = 0; i < edges.size(); i++)
       {
-         edges.get(i).clear();
+         edges.get(i).detroy();
       }
       edges.clear();
    }
@@ -296,70 +302,6 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       for (int i = 0; i < edges.size(); i++)
          edges.get(i).setToZero();
-   }
-
-   @Override
-   public double getMaxElement(int index)
-   {
-      HalfEdge3D edgeReference = edges.get(0);
-      double maxElement = edgeReference.getOrigin().getElement(index);
-      for (int i = 0; i < edges.size(); i++)
-      {
-         if (maxElement < edgeReference.getDestination().getElement(index))
-            maxElement = edgeReference.getDestination().getElement(index);
-         edgeReference = edgeReference.getNextEdge();
-      }
-      return maxElement;
-   }
-
-   @Override
-   public double getMinElement(int index)
-   {
-      HalfEdge3D edgeReference = edges.get(0);
-      double minElement = edgeReference.getOrigin().getElement(index);
-      for (int i = 0; i < edges.size(); i++)
-      {
-         if (minElement > edgeReference.getDestination().getElement(index))
-            minElement = edgeReference.getDestination().getElement(index);
-         edgeReference = edgeReference.getNextEdge();
-      }
-      return minElement;
-   }
-
-   @Override
-   public double getMaxX()
-   {
-      return getMaxElement(0);
-   }
-
-   @Override
-   public double getMaxY()
-   {
-      return getMaxElement(1);
-   }
-
-   @Override
-   public double getMaxZ()
-   {
-      return getMaxElement(2);
-   }
-
-   @Override
-   public double getMinX()
-   {
-      return getMinElement(0);
-   }
-
-   @Override
-   public double getMinY()
-   {
-      return getMinElement(1);
-   }
-
-   @Override
-   public double getMinZ()
-   {
-      return getMinElement(2);
    }
 
    @Override

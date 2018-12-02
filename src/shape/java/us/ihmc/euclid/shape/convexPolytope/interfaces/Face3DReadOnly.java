@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
@@ -34,6 +35,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     * @return a read only vector normal to the face
     */
    Vector3DReadOnly getNormal();
+
+   BoundingBox3DReadOnly getBoundingBox();
 
    /**
     * Gets a particular half edge that is part of the face
@@ -284,66 +287,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 
       return supportingVertex;
    }
-
-   /**
-    * Returns the largest value of the face along the specified axis (0 - X axis, 1 - Y axis, 2 - Z
-    * axis) The axes are in the reference frame in which the face exists
-    * 
-    * @param index the ordinal of the axis
-    * @return the largest value of the coordinate along the specified axis
-    */
-   double getMaxElement(int index);
-
-   /**
-    * Returns the smallest value of the face along the specified axis (0 - X axis, 1 - Y axis, 2 - Z
-    * axis) The axes are in the reference frame in which the face exists
-    * 
-    * @param index the ordinal of the axis
-    * @return the smallest value of the coordinate along the specified axis
-    */
-   double getMinElement(int index);
-
-   /**
-    * Returns the largest X - coordinate value of all points on the face
-    * 
-    * @return the largest X coordinate value
-    */
-   double getMaxX();
-
-   /**
-    * Returns the largest Y - coordinate value of all points on the face
-    * 
-    * @return the largest Y coordinate value
-    */
-   double getMaxY();
-
-   /**
-    * Returns the largest Z - coordinate value of all points on the face
-    * 
-    * @return the largest Z coordinate value
-    */
-   double getMaxZ();
-
-   /**
-    * Returns the smallest X - coordinate value of all points on the face
-    * 
-    * @return the smallest X coordinate value
-    */
-   double getMinX();
-
-   /**
-    * Returns the smallest Y - coordinate value of all points on the face
-    * 
-    * @return the smallest Y coordinate value
-    */
-   double getMinY();
-
-   /**
-    * Returns the smallest Z - coordinate value of all points on the face
-    * 
-    * @return the smallest Z coordinate value
-    */
-   double getMinZ();
 
    /**
     * Return a reference to an adjacent face if this face is part of a polytope. If not can return a

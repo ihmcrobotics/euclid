@@ -78,38 +78,13 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
 
    private void updateBoundingBox()
    {
-      double xMin = Double.POSITIVE_INFINITY;
-      double yMin = Double.POSITIVE_INFINITY;
-      double zMin = Double.POSITIVE_INFINITY;
+      boundingBox.setToNaN();
+      if (faces.isEmpty())
+         return;
+      boundingBox.set(faces.get(0).getBoundingBox());
 
-      double xMax = Double.NEGATIVE_INFINITY;
-      double yMax = Double.NEGATIVE_INFINITY;
-      double zMax = Double.NEGATIVE_INFINITY;
-
-      for (int i = 0; i < faces.size(); i++)
-      {
-         double x = faces.get(i).getMinX();
-         double y = faces.get(i).getMinY();
-         double z = faces.get(i).getMinZ();
-
-         if (x < xMin)
-            xMin = x;
-         if (y < yMin)
-            yMin = y;
-         if (z < zMin)
-            zMin = z;
-
-         x = faces.get(i).getMaxX();
-         y = faces.get(i).getMaxY();
-         z = faces.get(i).getMaxZ();
-         if (x > xMax)
-            xMax = x;
-         if (y > yMax)
-            yMax = y;
-         if (z > zMax)
-            zMax = z;
-      }
-      boundingBox.set(xMin, yMin, zMin, xMax, yMax, zMax);
+      for (int faceIndex = 1; faceIndex < faces.size(); faceIndex++)
+         boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
    public int getNumberOfVertices()
@@ -668,7 +643,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Simplex3D, Cl
    public void removeFace(Face3D faceToRemove)
    {
       if (faces.remove(faceToRemove))
-         faceToRemove.clear();
+         faceToRemove.destroy();
    }
 
    private Face3D isInteriorPointInternal(Point3DReadOnly pointToCheck, double epsilon)

@@ -136,7 +136,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public void setToTwin(HalfEdge3D twinEdge)
    {
-      twinEdge.clear();
+      twinEdge.detroy();
       twinEdge.setOrigin(destination);
       twinEdge.setDestination(origin);
       twinEdge.setTwinEdge(this);
@@ -394,7 +394,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * Sets all the references that are held by this half edge to null and also updates the previously
     * associated objects
     */
-   public void clear()
+   public void detroy()
    {
       if (twinEdge != null)
          twinEdge.setTwinEdge(null);
