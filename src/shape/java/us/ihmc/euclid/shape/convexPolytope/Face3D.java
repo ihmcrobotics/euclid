@@ -11,7 +11,6 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
-import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -27,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Apoorv S
  *
  */
-public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly, Clearable, Transformable
+public class Face3D implements Face3DReadOnly, Clearable, Transformable
 {
    /**
     * Unordered list of half edges that bound the face
@@ -46,8 +45,6 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    private final Point3D centroid = new Point3D();
 
    // Temporary variables for calculations
-   private final Point3D tempPoint = new Point3D();
-   private final List<HalfEdge3D> visibleEdgeList = new ArrayList<>();
    private boolean marked = false;
 
    public Face3D(Vector3DReadOnly initialGuessNormal)
@@ -133,15 +130,15 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       }
       else
       {
-         getVisibleEdgeList(vertexToAdd, visibleEdgeList);
+         List<HalfEdge3D> lineOfSight = lineOfSight(vertexToAdd);
 
-         if (visibleEdgeList.isEmpty())
+         if (lineOfSight.isEmpty())
             return;
 
-         HalfEdge3D firstVisibleEdge = visibleEdgeList.get(0);
-         HalfEdge3D lastVisibleEdge = visibleEdgeList.get(visibleEdgeList.size() - 1);
+         HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
+         HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
 
-         if (visibleEdgeList.size() == 1)
+         if (lineOfSight.size() == 1)
          {
             if (firstVisibleEdge.getOrigin().epsilonEquals(vertexToAdd, epsilon))
                return;
@@ -164,8 +161,8 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
             firstVisibleEdge.setNextEdge(lastVisibleEdge);
             lastVisibleEdge.setPreviousEdge(firstVisibleEdge);
 
-            for (int i = 1; i < visibleEdgeList.size() - 1; i++)
-               edges.remove(visibleEdgeList.get(i));
+            for (int i = 1; i < lineOfSight.size() - 1; i++)
+               edges.remove(lineOfSight.get(i));
          }
       }
 
@@ -197,113 +194,44 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
       }
    }
 
-   public void getVisibleEdgeList(Point3DReadOnly vertex, List<HalfEdge3D> edgeList)
+   @Override
+   public List<HalfEdge3D> lineOfSight(Point3DReadOnly vertex)
    {
-      edgeList.clear();
-      HalfEdge3D edgeUnderConsideration = getFirstVisibleEdge(vertex);
+      List<HalfEdge3D> lineOfSight = new ArrayList<>();
+
+      HalfEdge3D edgeUnderConsideration = lineOfSightStart(vertex);
+
       for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
       {
-         edgeList.add(edgeUnderConsideration);
+         lineOfSight.add(edgeUnderConsideration);
          edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
-         if (canObserverSeeEdge(vertex, edgeUnderConsideration))
+         if (!canObserverSeeEdge(vertex, edgeUnderConsideration))
             break;
       }
+
+      return lineOfSight;
    }
 
    @Override
-   public HalfEdge3D getFirstVisibleEdge(Point3DReadOnly vertex)
+   public HalfEdge3D lineOfSightStart(Point3DReadOnly observer)
    {
-      if (edges.size() == 0)
-         return null;
-      else if (edges.size() <= 2)
-         return edges.get(0);
-
-      HalfEdge3D edgeUnderConsideration = edges.get(0);
-      double previousDotProduct = signedDistanceToEdge(vertex, edgeUnderConsideration);
-      edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
-      for (int i = 0; i < getNumberOfEdges(); i++)
-      {
-         double dotProduct = signedDistanceToEdge(vertex, edgeUnderConsideration);
-         if (dotProduct >= 0.0 && previousDotProduct < 0.0)
-         {
-            return edgeUnderConsideration;
-         }
-         else if (dotProduct >= 0.0 && previousDotProduct == 0.0)
-         {
-            return edgeUnderConsideration.getPreviousEdge();
-         }
-         else
-         {
-            edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
-            previousDotProduct = dotProduct;
-         }
-      }
-      return null;
+      return (HalfEdge3D) Face3DReadOnly.super.lineOfSightStart(observer);
    }
 
    @Override
-   public boolean canObserverSeeEdge(Point3DReadOnly observer, int index)
+   public HalfEdge3D lineOfSightEnd(Point3DReadOnly observer)
    {
-      return canObserverSeeEdge(observer, edges.get(index));
-   }
-
-   private boolean canObserverSeeEdge(Point3DReadOnly query, HalfEdge3D edge)
-   {
-      return EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getFaceNormal());
+      return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer);
    }
 
    @Override
-   public double signedDistanceToPlane(Point3DReadOnly point)
-   {
-      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, centroid, normal);
-   }
-
-   private double signedDistanceToEdge(Point3DReadOnly point, HalfEdge3D halfEdge)
-   {
-      return EuclidPolytopeTools.signedDistanceFromPoint3DToLine3D(point, halfEdge.getOrigin(), halfEdge.getDirection(false), getFaceNormal());
-   }
-
-   @Override
-   public boolean isPointInFacePlane(Point3DReadOnly vertexToCheck, double epsilon)
-   {
-      if (edges.size() < 3)
-         return edges.get(0).distanceSquared(vertexToCheck) < epsilon * epsilon;
-      else
-         return EuclidGeometryTools.distanceFromPoint3DToPlane3D(vertexToCheck, centroid, normal) < epsilon;
-   }
-
-   @Override
-   public boolean isPointInside(Point3DReadOnly query, double epsilon)
-   {
-      return isPointInFacePlane(query, epsilon) && isPointDirectlyAboveOrBelow(query);
-   }
-
-   private boolean isPointDirectlyAboveOrBelow(Point3DReadOnly query)
-   {
-      if (edges.size() < 3)
-         return false;
-
-      HalfEdge3D edge = edges.get(0);
-
-      for (int i = 0; i < edges.size(); i++)
-      {
-         if (!canObserverSeeEdge(query, edge))
-            return false;
-
-         edge = edge.getNextEdge();
-      }
-
-      return true;
-   }
-
-   @Override
-   public Point3D getFaceCentroid()
+   public Point3D getCentroid()
    {
       return centroid;
    }
 
    @Override
-   public Vector3D getFaceNormal()
+   public Vector3D getNormal()
    {
       return normal;
    }
@@ -353,10 +281,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public boolean containsNaN()
    {
-      boolean result = edges.size() > 0 && edges.get(0).containsNaN();
-      for (int i = 1; !result && i < edges.size(); i++)
-         result |= edges.get(i).getDestination().containsNaN();
-      return result;
+      return Face3DReadOnly.super.containsNaN();
    }
 
    @Override
@@ -364,18 +289,6 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    {
       for (int i = 0; i < edges.size(); i++)
          edges.get(i).setToNaN();
-   }
-
-   @Override
-   public double dotFaceNormal(Vector3DReadOnly direction)
-   {
-      return direction.dot(normal);
-   }
-
-   @Override
-   public boolean isFaceVisible(Point3DReadOnly point, double epsilon)
-   {
-      return signedDistanceToPlane(point) > epsilon;
    }
 
    @Override
@@ -452,36 +365,7 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    @Override
    public Face3D getNeighbouringFace(int index)
    {
-      if (index > edges.size() || edges.get(index).getTwinEdge() == null)
-         return null;
-      else
-         return edges.get(index).getTwinEdge().getFace();
-
-   }
-
-   @Override
-   public Point3DReadOnly getSupportingVertex(Vector3DReadOnly supportVector)
-   {
-      Vertex3D bestVertex = edges.get(0).getOrigin();
-      double maxDot = bestVertex.dot(supportVector);
-      Vertex3D bestVertexCandidate = bestVertex;
-      while (true)
-      {
-         bestVertexCandidate = bestVertex;
-         for (int i = 0; i < bestVertex.getNumberOfAssociatedEdges(); i++)
-         {
-            double dotCandidate = bestVertex.getAssociatedEdges().get(i).getDestination().dot(supportVector);
-            if (maxDot < dotCandidate)
-            {
-               maxDot = dotCandidate;
-               bestVertexCandidate = bestVertex.getAssociatedEdge(i).getDestination();
-            }
-         }
-         if (bestVertexCandidate == bestVertex)
-            return bestVertex;
-         else
-            bestVertex = bestVertexCandidate;
-      }
+      return (Face3D) Face3DReadOnly.super.getNeighbouringFace(index);
    }
 
    public void mark()
@@ -507,43 +391,16 @@ public class Face3D implements Simplex3D, SupportingVertexHolder, Face3DReadOnly
    }
 
    @Override
-   public double distance(Point3DReadOnly point)
-   {
-      if (isPointDirectlyAboveOrBelow(point))
-         return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, centroid, normal);
-      else
-         return getEdgeClosestTo(point).distance(point);
-   }
-
-   @Override
    public HalfEdge3D getEdgeClosestTo(Point3DReadOnly point)
    {
-      EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, centroid, normal, tempPoint);
-
-      HalfEdge3D startEdge = edges.get(0);
-      HalfEdge3D closestEdge = startEdge;
-      double minDistanceSquared = startEdge.distanceSquared(tempPoint);
-      HalfEdge3D currentEdge = startEdge.getNextEdge();
-
-      while (currentEdge != startEdge)
-      {
-         double distanceSquared = currentEdge.distanceSquared(tempPoint);
-         if (distanceSquared < minDistanceSquared)
-         {
-            closestEdge = currentEdge;
-            minDistanceSquared = distanceSquared;
-         }
-         currentEdge = currentEdge.getNextEdge();
-      }
-
-      return closestEdge;
+      return (HalfEdge3D) Face3DReadOnly.super.getEdgeClosestTo(point);
    }
 
    @Override
    public void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
       if (isPointDirectlyAboveOrBelow(point))
-         supportVectorToPack.set(getFaceNormal());
+         supportVectorToPack.set(getNormal());
       else
          getEdgeClosestTo(point).getSupportVectorDirectionTo(point, supportVectorToPack);
    }

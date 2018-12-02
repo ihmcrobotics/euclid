@@ -113,7 +113,7 @@ public class SimplexPolytope3D implements Simplex3D
          Vertex3DReadOnly polytopeBVertex3 = simplexVertex3.getVertexOnPolytopeB();
 
          // Computing the coordinate vector for the face basis (using the first two edges as the basis)
-         EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, simplexVertex2, ((Face3D) member).getFaceNormal(), projection);
+         EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, simplexVertex2, ((Face3D) member).getNormal(), projection);
          for (int i = 0; i < 3; i++)
          {
             basis.set(i, 0, simplexVertex1.getElement(i) - simplexVertex2.getElement(i));

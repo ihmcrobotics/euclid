@@ -67,7 +67,7 @@ public class EuclidPolytopeIOTools
    {
       if (face3D == null)
          return "null";
-      return getFace3DString(format, face3D.getFaceCentroid(), face3D.getFaceNormal(), face3D.getEdges());
+      return getFace3DString(format, face3D.getCentroid(), face3D.getNormal(), face3D.getEdges());
    }
 
    public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, List<? extends HalfEdge3DReadOnly> faceEdges)
@@ -163,7 +163,7 @@ public class EuclidPolytopeIOTools
    {
       if (face3D == null)
          return "null";
-      return getFace3DShortString(format, face3D.getFaceCentroid(), face3D.getFaceNormal());
+      return getFace3DShortString(format, face3D.getCentroid(), face3D.getNormal());
    }
 
    private static String getFace3DShortString(String format, Point3DReadOnly faceCentroid, Vector3DReadOnly faceNormal)

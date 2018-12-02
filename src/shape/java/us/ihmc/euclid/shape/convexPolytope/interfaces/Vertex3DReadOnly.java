@@ -93,7 +93,7 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
 
    default boolean equals(Vertex3DReadOnly other)
    {
-      return equals(other);
+      return Point3DReadOnly.super.equals(other);
    }
 
    default boolean epsilonEquals(Vertex3DReadOnly other, double epsilon)

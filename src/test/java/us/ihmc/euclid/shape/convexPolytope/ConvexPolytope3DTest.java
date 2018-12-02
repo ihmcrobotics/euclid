@@ -99,11 +99,11 @@ public class ConvexPolytope3DTest
          EuclidCoreTestTools.assertTuple3DEquals(pointsAdded.get(vertexIndex), polytope.getVertex(vertexIndex), EPSILON);
       }
 
-      EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getFace(0).getFaceCentroid(), EPSILON);
+      EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getFace(0).getCentroid(), EPSILON);
       Vector3D expectedNormal = EuclidGeometryTools.normal3DFromThreePoint3Ds(firstVertex, secondVertex, thirdVertex);
-      if (expectedNormal.dot(polytope.getFace(0).getFaceNormal()) < 0.0)
+      if (expectedNormal.dot(polytope.getFace(0).getNormal()) < 0.0)
          expectedNormal.negate();
-      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, polytope.getFace(0).getFaceNormal(), EPSILON);
+      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, polytope.getFace(0).getNormal(), EPSILON);
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Assert that adding a point that is on the face does not change anything.

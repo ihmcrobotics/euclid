@@ -3,13 +3,16 @@ package us.ihmc.euclid.shape.convexPolytope;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;
@@ -18,8 +21,10 @@ import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class Face3DTest
@@ -88,6 +93,14 @@ public class Face3DTest
       {
          face.addVertex(new Vertex3D(points.get(i)), 0);
          assertEquals(i + 1, face.getNumberOfEdges());
+      }
+   }
+
+   @Test
+   public void testGetFirstVisibleEdge() throws Exception
+   {
+      { // Simple queries using a 
+        // TODO
       }
    }
 
@@ -172,7 +185,7 @@ public class Face3DTest
 
          assertTrue(face3D.getNumberOfEdges() >= 3);
 
-         Vector3D actualNormal = face3D.getFaceNormal();
+         Vector3D actualNormal = face3D.getNormal();
          String errorMessage = "Iteration: " + i + ", angle between the vectors: " + expectedNormal.angle(actualNormal);
          assertTrue(errorMessage, EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5));
          EuclidCoreTestTools.assertVector3DGeometricallyEquals(expectedNormal, actualNormal, EPSILON);
@@ -181,7 +194,7 @@ public class Face3DTest
    }
 
    @Test
-   public void testIsPointOnInteriorSideOfEdgeInternal() throws Exception
+   public void testCanObserverSeeEdge() throws Exception
    {
       Random random = new Random(34534);
 
@@ -192,7 +205,7 @@ public class Face3DTest
 
          for (int edgeIndex = 0; edgeIndex < face3D.getNumberOfEdges(); edgeIndex++)
          {
-            assertTrue(face3D.canObserverSeeEdge(face3D.getFaceCentroid(), edgeIndex));
+            assertFalse(face3D.canObserverSeeEdge(face3D.getCentroid(), edgeIndex));
          }
       }
 
@@ -205,7 +218,7 @@ public class Face3DTest
 
          for (int edgeIndex = 0; edgeIndex < face3D.getNumberOfEdges(); edgeIndex++)
          {
-            assertTrue(face3D.canObserverSeeEdge(pointInside, edgeIndex));
+            assertFalse(face3D.canObserverSeeEdge(pointInside, edgeIndex));
          }
       }
 
@@ -220,7 +233,7 @@ public class Face3DTest
          assertTrue(edge == face.getEdges().get(edgeIndex));
          assertTrue(face.getNumberOfEdges() >= 3);
 
-         Point3D centroid = face.getFaceCentroid();
+         Point3D centroid = face.getCentroid();
 
          Vector3D towardOutside = new Vector3D();
          Vector3DBasics edgeDirection = edge.getDirection(true);
@@ -233,7 +246,7 @@ public class Face3DTest
          pointInside.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, pointInside);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), faceNormal, pointInside);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), edgeDirection, pointInside);
-         assertTrue("Iteration: " + i, face.canObserverSeeEdge(pointInside, edgeIndex));
+         assertFalse("Iteration: " + i, face.canObserverSeeEdge(pointInside, edgeIndex));
 
          assertEquals(0.0, towardOutside.dot(faceNormal), EPSILON);
          assertEquals(0.0, towardOutside.dot(edgeDirection), EPSILON);
@@ -242,7 +255,7 @@ public class Face3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, pointOutside);
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), faceNormal, pointOutside);
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random), edgeDirection, pointOutside);
-         assertFalse("Iteration: " + i, face.canObserverSeeEdge(pointOutside, edgeIndex));
+         assertTrue("Iteration: " + i, face.canObserverSeeEdge(pointOutside, edgeIndex));
       }
    }
 
@@ -260,11 +273,11 @@ public class Face3DTest
 
          double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
          Point3D pointDirectlyAbove = new Point3D();
-         pointDirectlyAbove.scaleAdd(expectedDistance, face.getFaceNormal(), pointOnFace);
+         pointDirectlyAbove.scaleAdd(expectedDistance, face.getNormal(), pointOnFace);
          assertEquals(expectedDistance, face.distance(pointDirectlyAbove), EPSILON);
 
          Point3D pointDirectlyBelow = new Point3D();
-         pointDirectlyBelow.scaleAdd(-expectedDistance, face.getFaceNormal(), pointOnFace);
+         pointDirectlyBelow.scaleAdd(-expectedDistance, face.getNormal(), pointOnFace);
          assertEquals(expectedDistance, face.distance(pointDirectlyBelow), EPSILON);
       }
 
@@ -275,7 +288,7 @@ public class Face3DTest
          HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
 
          Vector3D outsideDirection = new Vector3D();
-         outsideDirection.cross(face.getFaceNormal(), edge.getDirection(false));
+         outsideDirection.cross(face.getNormal(), edge.getDirection(false));
          outsideDirection.normalize();
 
          Point3D pointOnEdge = new Point3D();
@@ -298,11 +311,11 @@ public class Face3DTest
          Vertex3D closestVertex = prevEdge.getDestination();
 
          Vector3D prevOutsideDirection = new Vector3D();
-         prevOutsideDirection.cross(face.getFaceNormal(), prevEdge.getDirection(false));
+         prevOutsideDirection.cross(face.getNormal(), prevEdge.getDirection(false));
          prevOutsideDirection.normalize();
 
          Vector3D nextOutsideDirection = new Vector3D();
-         nextOutsideDirection.cross(face.getFaceNormal(), nextEdge.getDirection(false));
+         nextOutsideDirection.cross(face.getNormal(), nextEdge.getDirection(false));
          nextOutsideDirection.normalize();
 
          Vector3D outsideDirection = new Vector3D();
@@ -313,7 +326,7 @@ public class Face3DTest
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(expectedDistance, outsideDirection, closestVertex);
 
-         //         assertEquals(expectedDistance, face.distance(pointOutside), EPSILON); TODO
+         assertEquals(expectedDistance, face.distance(pointOutside), EPSILON);
       }
    }
 
@@ -331,7 +344,7 @@ public class Face3DTest
             HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
 
             Vector3D outsideDirection = new Vector3D();
-            outsideDirection.cross(face.getFaceNormal(), edge.getDirection(false));
+            outsideDirection.cross(face.getNormal(), edge.getDirection(false));
             outsideDirection.normalize();
 
             Point3D pointOnEdge = new Point3D();
@@ -373,7 +386,7 @@ public class Face3DTest
             HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
 
             Vector3D outsideDirection = new Vector3D();
-            outsideDirection.cross(face.getFaceNormal(), edge.getDirection(false));
+            outsideDirection.cross(face.getNormal(), edge.getDirection(false));
             outsideDirection.normalize();
 
             Point3D pointOnEdge = new Point3D();
@@ -414,7 +427,7 @@ public class Face3DTest
          HalfEdge3D expectedEdge = face.getEdge(expectedEdgeIndex);
 
          Vector3D outsideDirection = new Vector3D();
-         outsideDirection.cross(face.getFaceNormal(), expectedEdge.getDirection(false));
+         outsideDirection.cross(face.getNormal(), expectedEdge.getDirection(false));
          outsideDirection.normalize();
 
          Point3D pointOnEdge = new Point3D();
@@ -457,6 +470,82 @@ public class Face3DTest
          String errorMessage = "Iteration: " + i + ", distance from: expected: " + expectedEdge.distance(point) + ", actual: " + actualEdge.distance(point);
          assertEquals(errorMessage, expectedEdgeIndex, actualEdgeIndex);
          assertTrue(errorMessage, expectedEdge == actualEdge);
+      }
+   }
+
+   @Test
+   public void testGetSupportingVertex() throws Exception
+   {
+      Random random = new Random(3453);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Trivial 2D tests:
+         List<Point2D> vertices2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 15);
+         Face3D face = new Face3D(Axis.Z);
+         vertices2D.forEach(vertex2D -> face.addVertex(new Vertex3D(new Point3D(vertex2D)), 0.0));
+
+         Vector3D supportVector = new Vector3D();
+
+         // supportVector = +Axis.X
+         supportVector.set(Axis.X);
+         Vertex3DReadOnly expected = face.getVertices().stream().sorted((v1, v2) -> -Double.compare(v1.getX(), v2.getX())).findFirst().get();
+         Point3DReadOnly actual = face.getSupportingVertex(supportVector);
+         assertEquals("Iteration: " + i, expected, actual);
+
+         // supportVector = -Axis.X
+         supportVector.setAndNegate(Axis.X);
+         expected = face.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getX(), v2.getX())).findFirst().get();
+         actual = face.getSupportingVertex(supportVector);
+         assertEquals("Iteration: " + i, expected, actual);
+
+         // supportVector = +Axis.Y
+         supportVector.set(Axis.Y);
+         expected = face.getVertices().stream().sorted((v1, v2) -> -Double.compare(v1.getY(), v2.getY())).findFirst().get();
+         actual = face.getSupportingVertex(supportVector);
+         assertEquals("Iteration: " + i, expected, actual);
+
+         // supportVector = -Axis.Y
+         supportVector.setAndNegate(Axis.Y);
+         expected = face.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getY(), v2.getY())).findFirst().get();
+         actual = face.getSupportingVertex(supportVector);
+         assertEquals("Iteration: " + i, expected, actual);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Using the projection on a line to predict which vertex is the farthest.
+         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+
+         Vector3D supportVector = EuclidCoreRandomTools.nextVector3D(random);
+         LinePercentageComparator comparator = new LinePercentageComparator(new Line3D(new Point3D(), supportVector));
+         comparator.flipDirection();
+
+         Vertex3DReadOnly expected = face.getVertices().stream().sorted(comparator::compare).findFirst().get();
+         Point3DReadOnly actual = face.getSupportingVertex(supportVector);
+
+         assertEquals("Iteration: " + i, expected, actual);
+      }
+   }
+
+   private static class LinePercentageComparator implements Comparator<Point3DReadOnly>
+   {
+      private final Line3D line;
+
+      public LinePercentageComparator(Line3D line)
+      {
+         this.line = line;
+      }
+
+      public void flipDirection()
+      {
+         line.negateDirection();
+      }
+
+      @Override
+      public int compare(Point3DReadOnly o1, Point3DReadOnly o2)
+      {
+         double p1 = EuclidGeometryTools.percentageAlongLine3D(o1, line.getPoint(), line.getDirection());
+         double p2 = EuclidGeometryTools.percentageAlongLine3D(o2, line.getPoint(), line.getDirection());
+         return Double.compare(p1, p2);
       }
    }
 }
