@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.matrix.Matrix3D;

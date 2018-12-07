@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;

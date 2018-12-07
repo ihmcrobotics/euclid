@@ -1,11 +1,12 @@
 package us.ihmc.euclid.tuple3D;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;

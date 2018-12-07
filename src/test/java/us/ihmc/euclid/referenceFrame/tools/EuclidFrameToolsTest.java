@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;

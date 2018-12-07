@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.Method;
@@ -12,7 +13,7 @@ import java.util.function.Predicate;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;

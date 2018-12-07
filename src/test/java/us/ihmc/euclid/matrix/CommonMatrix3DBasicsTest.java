@@ -1,12 +1,13 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;

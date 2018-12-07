@@ -1,9 +1,10 @@
 package us.ihmc.euclid.utils;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.utils.NameBasedHashCodeTools.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class NameBasedHashCodeToolsTest
 {

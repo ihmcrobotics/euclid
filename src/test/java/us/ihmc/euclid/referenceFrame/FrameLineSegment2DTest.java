@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;

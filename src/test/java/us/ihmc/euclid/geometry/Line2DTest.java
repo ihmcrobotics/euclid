@@ -1,12 +1,13 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
@@ -111,7 +112,7 @@ public class Line2DTest
       assertEquals("not equal", true, line2d.isPointInFrontOfLine(frontDirection, point3));
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test// expected = RuntimeException.class
    public void testPointPointConstructorForException()
    {
       // TODO: Test this at various random points, or is this sufficient?
@@ -347,7 +348,7 @@ public class Line2DTest
       }
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test// expected = RuntimeException.class
    public void testSetPointPointException()
    {
       Point2D firstPointOnLine = new Point2D(0.0, 0.0);
@@ -1206,7 +1207,7 @@ public class Line2DTest
       assertEquals("pure rotation failed", vector.getX() * sina + vector.getY() * cosa, line.getDirectionY(), delta);
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test// expected = RuntimeException.class
    public void testApplyTransformRotationXaxisException()
    {
       Random random = new Random(1776L);
@@ -1226,7 +1227,7 @@ public class Line2DTest
       line.applyTransform(transform);
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test// expected = RuntimeException.class
    public void testApplyTransformRotationYaxisException()
    {
       Random random = new Random(1776L);

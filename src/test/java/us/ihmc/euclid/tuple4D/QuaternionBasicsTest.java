@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,8 +9,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;

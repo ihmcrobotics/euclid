@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;

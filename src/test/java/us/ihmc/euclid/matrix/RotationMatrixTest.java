@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,8 +10,8 @@ import java.lang.reflect.Modifier;
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Assert;
-import org.junit.Test;
+import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;

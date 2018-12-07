@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
+
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.Method;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
@@ -473,7 +474,7 @@ public class ReferenceFrameTest
    }
 
    // TODO Re-enable when unique names are enforce in ReferenceFrame.
-   @Ignore
+   @Disabled
    @Test
    public void testUniqueNaming()
    {

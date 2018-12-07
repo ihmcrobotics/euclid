@@ -1,10 +1,10 @@
 package us.ihmc.euclid;
 
-import static org.junit.Assert.*;
+import static us.ihmc.robotics.Assert.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -25,7 +25,7 @@ public class AxisTest
       assertEquals(zAxis.ordinal(), 2, allowedDelta);
    }
 
-   @Test(timeout = 30000)
+   @Test// timeout = 30000
    public void testAxisValuesGetter()
    {
       assertEquals(3, Axis.values().length);
