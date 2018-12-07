@@ -103,6 +103,7 @@ public class EuclidShapeRandomTools
                          EuclidCoreRandomTools.nextDouble(random, minTubeRadius, maxTubeRadius));
    }
 
+   // FIXME Generates points that are mostly sitting around the average of the points.
    public static Point3D nextWeightedAverage(Random random, Collection<? extends Point3DReadOnly> points)
    {
       return nextWeightedAverage(random, points.toArray(new Point3DReadOnly[points.size()]));
