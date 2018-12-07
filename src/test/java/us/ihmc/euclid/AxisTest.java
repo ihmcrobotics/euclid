@@ -25,7 +25,7 @@ public class AxisTest
       assertEquals(zAxis.ordinal(), 2, allowedDelta);
    }
 
-   @Test// timeout = 30000
+   @Test
    public void testAxisValuesGetter()
    {
       assertEquals(3, Axis.values().length);

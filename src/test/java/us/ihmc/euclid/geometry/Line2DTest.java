@@ -113,7 +113,7 @@ public class Line2DTest
       assertEquals("not equal", true, line2d.isPointInFrontOfLine(frontDirection, point3));
    }
 
-   @Test// expected = RuntimeException.class
+   @Test
    public void testPointPointConstructorForException()
    {
       Assertions.assertThrows(RuntimeException.class, () ->
@@ -352,7 +352,7 @@ public class Line2DTest
       }
    }
 
-   @Test// expected = RuntimeException.class
+   @Test
    public void testSetPointPointException()
    {
       Assertions.assertThrows(RuntimeException.class, () -> {
@@ -1213,7 +1213,7 @@ public class Line2DTest
       assertEquals("pure rotation failed", vector.getX() * sina + vector.getY() * cosa, line.getDirectionY(), delta);
    }
 
-   @Test// expected = RuntimeException.class
+   @Test
    public void testApplyTransformRotationXaxisException()
    {
       Assertions.assertThrows(RuntimeException.class, () -> {
@@ -1235,7 +1235,7 @@ public class Line2DTest
       });
    }
 
-   @Test// expected = RuntimeException.class
+   @Test
    public void testApplyTransformRotationYaxisException()
    {
       Assertions.assertThrows(RuntimeException.class, () -> {
