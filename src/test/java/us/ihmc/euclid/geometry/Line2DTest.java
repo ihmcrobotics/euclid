@@ -7,6 +7,7 @@ import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
@@ -115,9 +116,12 @@ public class Line2DTest
    @Test// expected = RuntimeException.class
    public void testPointPointConstructorForException()
    {
-      // TODO: Test this at various random points, or is this sufficient?
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      new Line2D(firstPointOnLine, firstPointOnLine);
+      Assertions.assertThrows(RuntimeException.class, () ->
+      {
+         // TODO: Test this at various random points, or is this sufficient?
+         Point2D firstPointOnLine = new Point2D(0.0, 0.0);
+         new Line2D(firstPointOnLine, firstPointOnLine);
+      });
    }
 
    @Test
@@ -351,10 +355,12 @@ public class Line2DTest
    @Test// expected = RuntimeException.class
    public void testSetPointPointException()
    {
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      Point2D secondPointOnLine = new Point2D(1.0, 1.0);
-      Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-      line2d.set(firstPointOnLine, firstPointOnLine);
+      Assertions.assertThrows(RuntimeException.class, () -> {
+         Point2D firstPointOnLine = new Point2D(0.0, 0.0);
+         Point2D secondPointOnLine = new Point2D(1.0, 1.0);
+         Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
+         line2d.set(firstPointOnLine, firstPointOnLine);
+      });
    }
 
    @Test
@@ -1210,41 +1216,45 @@ public class Line2DTest
    @Test// expected = RuntimeException.class
    public void testApplyTransformRotationXaxisException()
    {
-      Random random = new Random(1776L);
-      RigidBodyTransform transform = new RigidBodyTransform();
-      Point2D firstPointOnLine = randomPoint(random);
-      Point2D secondPointOnLine = randomPoint(random);
+      Assertions.assertThrows(RuntimeException.class, () -> {
+         Random random = new Random(1776L);
+         RigidBodyTransform transform = new RigidBodyTransform();
+         Point2D firstPointOnLine = randomPoint(random);
+         Point2D secondPointOnLine = randomPoint(random);
 
-      // pure translation:
-      Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
-      Vector3D eulerAngles = new Vector3D(randomDouble(random, 2.0 * Math.PI), 0.0, 0.0);
+         // pure translation:
+         Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
+         Vector3D eulerAngles = new Vector3D(randomDouble(random, 2.0 * Math.PI), 0.0, 0.0);
 
-      transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+         transform.setRotationEulerAndZeroTranslation(eulerAngles);
+         transform.setTranslation(translation);
 
-      Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
+         Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
-      line.applyTransform(transform);
+         line.applyTransform(transform);
+      });
    }
 
    @Test// expected = RuntimeException.class
    public void testApplyTransformRotationYaxisException()
    {
-      Random random = new Random(1776L);
-      RigidBodyTransform transform = new RigidBodyTransform();
-      Point2D firstPointOnLine = randomPoint(random);
-      Point2D secondPointOnLine = randomPoint(random);
+      Assertions.assertThrows(RuntimeException.class, () -> {
+         Random random = new Random(1776L);
+         RigidBodyTransform transform = new RigidBodyTransform();
+         Point2D firstPointOnLine = randomPoint(random);
+         Point2D secondPointOnLine = randomPoint(random);
 
-      // pure translation:
-      Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
-      Vector3D eulerAngles = new Vector3D(0.0, randomDouble(random, 2.0 * Math.PI), 0.0);
+         // pure translation:
+         Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
+         Vector3D eulerAngles = new Vector3D(0.0, randomDouble(random, 2.0 * Math.PI), 0.0);
 
-      transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+         transform.setRotationEulerAndZeroTranslation(eulerAngles);
+         transform.setTranslation(translation);
 
-      Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
+         Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
-      line.applyTransform(transform);
+         line.applyTransform(transform);
+      });
    }
 
    @Test
