@@ -83,9 +83,9 @@ public class Pose2DTest
 
          toSet.setToZero();
 
-         assertEquals((double) 0, toSet.getX(), epsilon);
-         assertEquals((double) 0, toSet.getY(), epsilon);
-         assertEquals((double) 0, toSet.getYaw(), epsilon);
+         assertEquals(0, toSet.getX(), epsilon);
+         assertEquals(0, toSet.getY(), epsilon);
+         assertEquals(0, toSet.getYaw(), epsilon);
       }
    }
 

@@ -84,7 +84,7 @@ public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
             assertEquals(axisAngle.getX(), vectorAxis.getX(), EPS);
             assertEquals(axisAngle.getY(), vectorAxis.getY(), EPS);
             assertEquals(axisAngle.getZ(), vectorAxis.getZ(), EPS);
-            assertEquals(axisAngle.getAngle(), (double) angle, EPS);
+            assertEquals(axisAngle.getAngle(), angle, EPS);
 
             EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(vectorAxis, vectorAxisCopy, EPS);
             assertTrue(angle == angleCopy);

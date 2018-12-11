@@ -30,6 +30,7 @@ public class EuclidGeometryPolygonToolsTest
 {
    private static final double SMALL_EPSILON = 1.0e-9;
    private static final double SMALLEST_EPSILON = 1.0e-12;
+
    private static interface ConvexHullAlgorithm
    {
       int process(List<? extends Point2DReadOnly> vertices, int numberOfVertices);
@@ -654,7 +655,8 @@ public class EuclidGeometryPolygonToolsTest
 
             Point2D pointInsidePolygon = new Point2D();
             pointInsidePolygon.scaleAdd(-1.0e-8, edgeNormal, edgeStart);
-            assertTrue(isPoint2DInsideConvexPolygon2D(pointInsidePolygon, convexPolygon2D, hullSize, clockwiseOrdered, 0.0), "Iteration: " + i + ", edgeIndex: " + edgeIndex);
+            assertTrue(isPoint2DInsideConvexPolygon2D(pointInsidePolygon, convexPolygon2D, hullSize, clockwiseOrdered, 0.0),
+                       "Iteration: " + i + ", edgeIndex: " + edgeIndex);
 
             Point2D pointOutsidePolygon = new Point2D();
             pointOutsidePolygon.scaleAdd(1.0e8, edgeNormal, edgeStart);
@@ -2313,13 +2315,13 @@ public class EuclidGeometryPolygonToolsTest
             Vector2D startDirection = new Vector2D();
             startDirection.sub(startVertex, observer);
             assertEquals(1, intersectionBetweenLine2DAndConvexPolygon2D(observer, startDirection, convexPolygon2D, hullSize, clockwiseOrdered, new Point2D(),
-            new Point2D()));
+                                                                        new Point2D()));
 
             Point2DReadOnly endVertex = convexPolygon2D.get(lineOfSightEndIndex);
             Vector2D endDirection = new Vector2D();
             endDirection.sub(endVertex, observer);
             assertEquals(1, intersectionBetweenLine2DAndConvexPolygon2D(observer, endDirection, convexPolygon2D, hullSize, clockwiseOrdered, new Point2D(),
-            new Point2D()));
+                                                                        new Point2D()));
          }
 
          Set<Integer> lineOfSightIndices = new HashSet<>();

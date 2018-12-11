@@ -114,10 +114,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       verticesList.add(new Point2D(1.0, 1.0));
 
       T list = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList));
-      assertEquals(4.0, (double) list.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
+      assertEquals(4.0, list.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
       assertTrue(list.isUpToDate());
       list.clearAndUpdate();
-      assertEquals(0.0, (double) list.getNumberOfVertices(), EPSILON, "Number of vertices should be 0");
+      assertEquals(0.0, list.getNumberOfVertices(), EPSILON, "Number of vertices should be 0");
       assertTrue(list.isUpToDate());
       list.clear();
       assertFalse(list.isUpToDate());
@@ -137,7 +137,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       int numberOfVertices = 4;
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
       doubleInt.set(Vertex2DSupplier.asVertex2DSupplier(verticesArray, numberOfVertices));
-      assertEquals(4.0, (double) doubleInt.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
+      assertEquals(4.0, doubleInt.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
       assertTrue(doubleInt.isUpToDate());
    }
 
@@ -960,7 +960,8 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
             if (convexPolygon.isPointInside(testPoint))
                assertNull(projectedPoint);
             else
-               assertTrue(convexPolygon.isPointInside(projectedPoint, 1.0E-10), "Projected point was not inside the polygon for point\n" + projectedPoint + "\nand convex polygon \n" + convexPolygon);
+               assertTrue(convexPolygon.isPointInside(projectedPoint, 1.0E-10),
+                          "Projected point was not inside the polygon for point\n" + projectedPoint + "\nand convex polygon \n" + convexPolygon);
          }
       }
    }

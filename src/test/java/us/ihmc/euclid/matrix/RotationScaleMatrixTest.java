@@ -2374,10 +2374,9 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
    public void testEpsilonEquals() throws Exception
    {
       /*
-       * This test needs to be custom as the method calls epsilonEquals on the rotationMatrix and
-       * the scale separately. This means that two rotation-scale matrices can have different
-       * rotation and scale parts but still being epsilon-equal when looking at the resulting
-       * matrix.
+       * This test needs to be custom as the method calls epsilonEquals on the rotationMatrix and the
+       * scale separately. This means that two rotation-scale matrices can have different rotation and
+       * scale parts but still being epsilon-equal when looking at the resulting matrix.
        */
       Random random = new Random(2354L);
       RotationScaleMatrix m1 = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);

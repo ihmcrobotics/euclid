@@ -21,6 +21,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 public class BoundingBox2DTest
 {
    private static final double EPSILON = EuclidGeometryTools.ONE_TRILLIONTH;
+
    @Test
    public void testConstructors() throws Exception
    {

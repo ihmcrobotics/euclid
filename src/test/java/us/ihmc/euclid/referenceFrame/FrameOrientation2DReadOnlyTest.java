@@ -35,7 +35,8 @@ public abstract class FrameOrientation2DReadOnlyTest<T extends FrameOrientation2
    public void testReferenceFrameChecks() throws Throwable
    {
       Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals") && !m.getName().equals("setMatchingFrame");
+      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
+            && !m.getName().equals("setMatchingFrame");
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameOrientation(random, frame), methodFilter);
    }
 

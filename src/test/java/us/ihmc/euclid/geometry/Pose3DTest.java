@@ -107,12 +107,12 @@ public class Pose3DTest
 
          toSet.setToZero();
 
-         assertEquals((double) 0, toSet.getX(), EPSILON);
-         assertEquals((double) 0, toSet.getY(), EPSILON);
-         assertEquals((double) 0, toSet.getZ(), EPSILON);
-         assertEquals((double) 0, toSet.getYaw(), EPSILON);
-         assertEquals((double) 0, toSet.getPitch(), EPSILON);
-         assertEquals((double) 0, toSet.getRoll(), EPSILON);
+         assertEquals(0, toSet.getX(), EPSILON);
+         assertEquals(0, toSet.getY(), EPSILON);
+         assertEquals(0, toSet.getZ(), EPSILON);
+         assertEquals(0, toSet.getYaw(), EPSILON);
+         assertEquals(0, toSet.getPitch(), EPSILON);
+         assertEquals(0, toSet.getRoll(), EPSILON);
       }
    }
 

@@ -448,9 +448,9 @@ public class LineSegment3DTest
          assertFalse(lineSegment3D.isBetweenEndpoints(new Point3D(lineSegment3D.getFirstEndpoint()), Double.MIN_VALUE));
          assertFalse(lineSegment3D.isBetweenEndpoints(new Point3D(lineSegment3D.getSecondEndpoint()), 0.555555e-16));
          assertFalse(lineSegment3D.isBetweenEndpoints(lineSegment3D.getFirstEndpoint().getX(), lineSegment3D.getFirstEndpoint().getY(),
-         lineSegment3D.getFirstEndpoint().getZ(), Double.MIN_VALUE));
+                                                      lineSegment3D.getFirstEndpoint().getZ(), Double.MIN_VALUE));
          assertFalse(lineSegment3D.isBetweenEndpoints(lineSegment3D.getSecondEndpoint().getX(), lineSegment3D.getSecondEndpoint().getY(),
-         lineSegment3D.getSecondEndpoint().getZ(), 0.555555e-16));
+                                                      lineSegment3D.getSecondEndpoint().getZ(), 0.555555e-16));
 
          Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointInside);

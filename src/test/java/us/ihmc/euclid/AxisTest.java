@@ -20,9 +20,9 @@ public class AxisTest
    @Test
    public void testOrdinals()
    {
-      assertEquals((double) xAxis.ordinal(), (double) 0, allowedDelta);
-      assertEquals((double) yAxis.ordinal(), (double) 1, allowedDelta);
-      assertEquals((double) zAxis.ordinal(), (double) 2, allowedDelta);
+      assertEquals(xAxis.ordinal(), 0, allowedDelta);
+      assertEquals(yAxis.ordinal(), 1, allowedDelta);
+      assertEquals(zAxis.ordinal(), 2, allowedDelta);
    }
 
    @Test

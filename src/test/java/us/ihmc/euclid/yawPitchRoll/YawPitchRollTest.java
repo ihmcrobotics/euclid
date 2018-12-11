@@ -57,6 +57,7 @@ public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
       }
    }
 
+   @Override
    @Test
    public void testSet()
    {

@@ -83,12 +83,12 @@ public class ReferenceFrameTest
       for (int i = 0; i < numberOfTests; i++)
       {
          runGarbageCollector();
-         long usedMemoryStart = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+         long usedMemoryStart = runtime.totalMemory() - runtime.freeMemory() >> 20;
 
          EuclidFrameRandomTools.nextReferenceFrameTree(random, 100000);
          runGarbageCollector();
 
-         long usedMemoryEnd = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+         long usedMemoryEnd = runtime.totalMemory() - runtime.freeMemory() >> 20;
          long difference = usedMemoryEnd - usedMemoryStart;
          if (verbose)
          {

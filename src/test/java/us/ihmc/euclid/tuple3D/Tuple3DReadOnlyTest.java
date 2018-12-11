@@ -45,9 +45,9 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          float z = random.nextFloat();
          tuple = createTuple(x, y, z);
 
-         assertEquals((double) tuple.getX32(), (double) x, getEpsilon());
-         assertEquals((double) tuple.getY32(), (double) y, getEpsilon());
-         assertEquals((double) tuple.getZ32(), (double) z, getEpsilon());
+         assertEquals(tuple.getX32(), x, getEpsilon());
+         assertEquals(tuple.getY32(), y, getEpsilon());
+         assertEquals(tuple.getZ32(), z, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)

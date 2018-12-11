@@ -50,10 +50,10 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          float s = random.nextFloat();
          tuple = createTuple(x, y, z, s);
 
-         assertEquals((double) tuple.getX32(), (double) x, getEpsilon());
-         assertEquals((double) tuple.getY32(), (double) y, getEpsilon());
-         assertEquals((double) tuple.getZ32(), (double) z, getEpsilon());
-         assertEquals((double) tuple.getS32(), (double) s, getEpsilon());
+         assertEquals(tuple.getX32(), x, getEpsilon());
+         assertEquals(tuple.getY32(), y, getEpsilon());
+         assertEquals(tuple.getZ32(), z, getEpsilon());
+         assertEquals(tuple.getS32(), s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)

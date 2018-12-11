@@ -209,10 +209,14 @@ public class FrameVertex3DSupplierTest
          List<FramePoint3D> listB = IntStream.range(0, sizeB).mapToObj(v -> EuclidFrameRandomTools.nextFramePoint3D(random, worldFrame))
                                              .collect(Collectors.toList());
 
-         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA), epsilon), "Iteration: " + i);
-         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listAPrime), epsilon), "Iteration: " + i);
-         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listSizeA), epsilon), "Iteration: " + i);
-         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listB), epsilon), "Iteration: " + i);
+         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA), epsilon),
+                    "Iteration: " + i);
+         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listAPrime), epsilon),
+                    "Iteration: " + i);
+         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listSizeA), epsilon),
+                     "Iteration: " + i);
+         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listB), epsilon),
+                     "Iteration: " + i);
       }
    }
 }

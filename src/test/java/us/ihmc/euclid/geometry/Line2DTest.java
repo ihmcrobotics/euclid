@@ -115,8 +115,7 @@ public class Line2DTest
    @Test
    public void testPointPointConstructorForException()
    {
-      Assertions.assertThrows(RuntimeException.class, () ->
-      {
+      Assertions.assertThrows(RuntimeException.class, () -> {
          // TODO: Test this at various random points, or is this sufficient?
          Point2D firstPointOnLine = new Point2D(0.0, 0.0);
          new Line2D(firstPointOnLine, firstPointOnLine);
@@ -589,7 +588,7 @@ public class Line2DTest
 
          assertTrue(perpendicularLine.isPointOnLine(pointOnPerpendicularLine, delta));
          assertEquals(0.0, perpendicularLine.getDirection().getX() * line2d.getDirection().getX()
-         + perpendicularLine.getDirection().getY() * line2d.getDirection().getY(), delta);
+               + perpendicularLine.getDirection().getY() * line2d.getDirection().getY(), delta);
       }
    }
 

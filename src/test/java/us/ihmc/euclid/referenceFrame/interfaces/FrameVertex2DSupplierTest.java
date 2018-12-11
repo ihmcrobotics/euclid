@@ -208,10 +208,14 @@ public class FrameVertex2DSupplierTest
          List<FramePoint2D> listB = IntStream.range(0, sizeB).mapToObj(v -> EuclidFrameRandomTools.nextFramePoint2D(random, worldFrame))
                                              .collect(Collectors.toList());
 
-         assertTrue(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA), epsilon), "Iteration: " + i);
-         assertTrue(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listAPrime), epsilon), "Iteration: " + i);
-         assertFalse(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listSizeA), epsilon), "Iteration: " + i);
-         assertFalse(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listB), epsilon), "Iteration: " + i);
+         assertTrue(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA), epsilon),
+                    "Iteration: " + i);
+         assertTrue(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listAPrime), epsilon),
+                    "Iteration: " + i);
+         assertFalse(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listSizeA), epsilon),
+                     "Iteration: " + i);
+         assertFalse(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listB), epsilon),
+                     "Iteration: " + i);
       }
    }
 }

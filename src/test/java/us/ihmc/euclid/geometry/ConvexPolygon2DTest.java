@@ -95,7 +95,7 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
    public void testConstructors()
    {
       ConvexPolygon2D defaultConstructor = new ConvexPolygon2D();
-      assertEquals(0.0, (double) defaultConstructor.getNumberOfVertices(), EPSILON, "Number of vertices should be zero");
+      assertEquals(0.0, defaultConstructor.getNumberOfVertices(), EPSILON, "Number of vertices should be zero");
       assertTrue(defaultConstructor.isUpToDate());
 
       int numberOfVertices = 4;
@@ -106,27 +106,27 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
       verticesList.add(new Point2D(1.0, 1.0));
 
       ConvexPolygon2D listInt = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList, numberOfVertices));
-      assertEquals(4.0, (double) listInt.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
+      assertEquals(4.0, listInt.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
 
       ConvexPolygon2D list = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList));
-      assertEquals(4.0, (double) list.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
+      assertEquals(4.0, list.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
 
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
 
       ConvexPolygon2D doubleInt = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray, numberOfVertices));
-      assertEquals(4.0, (double) doubleInt.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
+      assertEquals(4.0, doubleInt.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
       assertTrue(doubleInt.isUpToDate());
 
       ConvexPolygon2D doubles = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
-      assertEquals(4.0, (double) doubles.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
+      assertEquals(4.0, doubles.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
       assertTrue(doubles.isUpToDate());
 
       ConvexPolygon2D polygon = new ConvexPolygon2D(doubles);
-      assertEquals(4.0, (double) polygon.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
+      assertEquals(4.0, polygon.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
       assertTrue(polygon.isUpToDate());
 
       ConvexPolygon2D polygonPolygon = new ConvexPolygon2D(doubleInt, doubles);
-      assertEquals(4.0, (double) polygonPolygon.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
+      assertEquals(4.0, polygonPolygon.getNumberOfVertices(), EPSILON, "Number of vertices should be four");
       assertTrue(polygonPolygon.isUpToDate());
    }
 }

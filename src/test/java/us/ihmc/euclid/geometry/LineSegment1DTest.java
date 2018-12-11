@@ -292,10 +292,10 @@ public class LineSegment1DTest
       LineSegment1D mainLine = new LineSegment1D(firstPoint, secondPoint);
       LineSegment1D secondLine = new LineSegment1D(secondPoint, firstPoint);
 
-      assertEquals(mainLine.signedDistance(p1), (double) 5, 0.001);
-      assertEquals(mainLine.signedDistance(p2), (double) 5, 0.001);
-      assertEquals(mainLine.signedDistance(p3), (double) -8, 0.001);
-      assertEquals(mainLine.signedDistance(firstPoint), (double) 0, 0.001);
+      assertEquals(mainLine.signedDistance(p1), 5, 0.001);
+      assertEquals(mainLine.signedDistance(p2), 5, 0.001);
+      assertEquals(mainLine.signedDistance(p3), -8, 0.001);
+      assertEquals(mainLine.signedDistance(firstPoint), 0, 0.001);
 
       assertTrue(mainLine.isBefore(p2));
       assertTrue(mainLine.isAfter(p1));
@@ -311,7 +311,7 @@ public class LineSegment1DTest
       assertFalse(secondLine.isBefore(secondPoint));
       assertFalse(secondLine.isAfter(firstPoint));
 
-      assertEquals(mainLine.length(), (double) 20, 0.001);
+      assertEquals(mainLine.length(), 20, 0.001);
    }
 
    @Test
@@ -352,10 +352,10 @@ public class LineSegment1DTest
 
       line1.setMaxPoint(17);
       line1.setMinPoint(-17);
-      assertEquals(line1.length(), (double) 34, 0.001);
+      assertEquals(line1.length(), 34, 0.001);
 
       line2.setMaxPoint(17);
-      assertEquals(line2.length(), (double) 27, 0.001);
+      assertEquals(line2.length(), 27, 0.001);
 
       try
       {

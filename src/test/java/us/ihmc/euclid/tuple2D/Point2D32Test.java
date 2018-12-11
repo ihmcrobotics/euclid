@@ -73,14 +73,14 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
-         assertEquals((double) tuple1.getX32(), (double) x, getEpsilon());
+         assertEquals(tuple1.getX32(), x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
-         assertEquals((double) tuple1.getY32(), (double) y, getEpsilon());
+         assertEquals(tuple1.getY32(), y, getEpsilon());
       }
 
    }

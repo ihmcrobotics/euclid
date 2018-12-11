@@ -2125,7 +2125,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          transform.get(transformArray);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
-               assertEquals((double) transformArray[4 * row + column], transform.getElement(row, column), 1.0e-7);
+               assertEquals(transformArray[4 * row + column], transform.getElement(row, column), 1.0e-7);
       }
 
       { // Test get(QuaternionBasics quaternionToPack, TupleBasics translationToPack)

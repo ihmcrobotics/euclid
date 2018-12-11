@@ -146,7 +146,8 @@ public class YawPitchRollToolsTest
 
          assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR, secondYPR), EPSILON);
          assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR.getYaw(), firstYPR.getPitch(), firstYPR.getRoll(), secondYPR.getYaw(),
-         secondYPR.getPitch(), secondYPR.getRoll()), EPSILON);
+                                                                           secondYPR.getPitch(), secondYPR.getRoll()),
+                      EPSILON);
       }
    }
 

@@ -20,6 +20,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 public class Vertex2DSupplierTest
 {
    public static final double EPSILON = 1.0e-12;
+
    @Test
    public void testCreatingEmptySupplier()
    {

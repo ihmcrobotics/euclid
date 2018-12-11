@@ -262,7 +262,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
 
          actual.setMatchingFrame(expected);
          expected.changeFrame(destinationFrame);
-         
+
          EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
       }
 
@@ -277,7 +277,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          actual.setMatchingFrame(source);
          FrameQuaternion expected = new FrameQuaternion(source);
          expected.changeFrame(destinationFrame);
-         
+
          EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
       }
    }

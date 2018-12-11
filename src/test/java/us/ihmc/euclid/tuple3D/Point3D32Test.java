@@ -75,21 +75,21 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
-         assertEquals((double) tuple1.getX32(), (double) x, getEpsilon());
+         assertEquals(tuple1.getX32(), x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
-         assertEquals((double) tuple1.getY32(), (double) y, getEpsilon());
+         assertEquals(tuple1.getY32(), y, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(float z)
          float z = random.nextFloat();
          tuple1.setZ(z);
-         assertEquals((double) tuple1.getZ32(), (double) z, getEpsilon());
+         assertEquals(tuple1.getZ32(), z, getEpsilon());
       }
    }
 

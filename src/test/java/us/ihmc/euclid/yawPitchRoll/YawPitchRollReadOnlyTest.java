@@ -70,9 +70,9 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          assertEquals(expectedPitch, ypr.getPitch(), getEpsilon());
          assertEquals(expectedRoll, ypr.getRoll(), getEpsilon());
 
-         assertEquals((double) (float) expectedYaw, (double) ypr.getYaw32(), getEpsilon());
-         assertEquals((double) (float) expectedPitch, (double) ypr.getPitch32(), getEpsilon());
-         assertEquals((double) (float) expectedRoll, (double) ypr.getRoll32(), getEpsilon());
+         assertEquals((float) expectedYaw, ypr.getYaw32(), getEpsilon());
+         assertEquals((float) expectedPitch, ypr.getPitch32(), getEpsilon());
+         assertEquals((float) expectedRoll, ypr.getRoll32(), getEpsilon());
       }
    }
 
