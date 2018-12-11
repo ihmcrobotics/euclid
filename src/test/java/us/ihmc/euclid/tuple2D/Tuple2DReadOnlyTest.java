@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -34,8 +32,8 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
          double y = random.nextDouble();
          tuple = createTuple(x, y);
 
-         assertEqualsDelta(tuple.getX(), x, getEpsilon());
-         assertEqualsDelta(tuple.getY(), y, getEpsilon());
+         assertEquals(tuple.getX(), x, getEpsilon());
+         assertEquals(tuple.getY(), y, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -54,8 +52,8 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
          double y = random.nextDouble();
          tuple = createTuple(x, y);
 
-         assertEqualsDelta(tuple.getElement(0), x, getEpsilon());
-         assertEqualsDelta(tuple.getElement(1), y, getEpsilon());
+         assertEquals(tuple.getElement(0), x, getEpsilon());
+         assertEquals(tuple.getElement(1), y, getEpsilon());
 
          try
          {

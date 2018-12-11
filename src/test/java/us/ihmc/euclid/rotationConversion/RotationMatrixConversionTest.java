@@ -2,8 +2,6 @@ package us.ihmc.euclid.rotationConversion;
 
 import static java.lang.Math.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -45,10 +43,10 @@ public class RotationMatrixConversionTest
          assertTrue(yawMatrix.getM02() == 0.0);
          assertTrue(yawMatrix.getM21() == 0.0);
          assertTrue(yawMatrix.getM20() == 0.0);
-         assertEqualsDelta(yawMatrix.getM00(), Math.cos(yaw), EPSILON);
-         assertEqualsDelta(yawMatrix.getM11(), Math.cos(yaw), EPSILON);
-         assertEqualsDelta(yawMatrix.getM10(), Math.sin(yaw), EPSILON);
-         assertEqualsDelta(yawMatrix.getM01(), -Math.sin(yaw), EPSILON);
+         assertEquals(yawMatrix.getM00(), Math.cos(yaw), EPSILON);
+         assertEquals(yawMatrix.getM11(), Math.cos(yaw), EPSILON);
+         assertEquals(yawMatrix.getM10(), Math.sin(yaw), EPSILON);
+         assertEquals(yawMatrix.getM01(), -Math.sin(yaw), EPSILON);
          EuclidCoreTestTools.assertRotationMatrix(yawMatrix, EPSILON);
 
          for (double pitch = -Math.PI / 2.0; pitch <= Math.PI / 2.0; pitch += deltaAngle)
@@ -60,10 +58,10 @@ public class RotationMatrixConversionTest
             assertTrue(pitchMatrix.getM10() == 0.0);
             assertTrue(pitchMatrix.getM21() == 0.0);
             assertTrue(pitchMatrix.getM12() == 0.0);
-            assertEqualsDelta(pitchMatrix.getM00(), Math.cos(pitch), EPSILON);
-            assertEqualsDelta(pitchMatrix.getM22(), Math.cos(pitch), EPSILON);
-            assertEqualsDelta(pitchMatrix.getM20(), -Math.sin(pitch), EPSILON);
-            assertEqualsDelta(pitchMatrix.getM02(), Math.sin(pitch), EPSILON);
+            assertEquals(pitchMatrix.getM00(), Math.cos(pitch), EPSILON);
+            assertEquals(pitchMatrix.getM22(), Math.cos(pitch), EPSILON);
+            assertEquals(pitchMatrix.getM20(), -Math.sin(pitch), EPSILON);
+            assertEquals(pitchMatrix.getM02(), Math.sin(pitch), EPSILON);
             EuclidCoreTestTools.assertRotationMatrix(pitchMatrix, EPSILON);
 
             for (double roll = -Math.PI; roll <= Math.PI; roll += deltaAngle)
@@ -75,10 +73,10 @@ public class RotationMatrixConversionTest
                assertTrue(rollMatrix.getM20() == 0.0);
                assertTrue(rollMatrix.getM01() == 0.0);
                assertTrue(rollMatrix.getM02() == 0.0);
-               assertEqualsDelta(rollMatrix.getM11(), Math.cos(roll), EPSILON);
-               assertEqualsDelta(rollMatrix.getM22(), Math.cos(roll), EPSILON);
-               assertEqualsDelta(rollMatrix.getM12(), -Math.sin(roll), EPSILON);
-               assertEqualsDelta(rollMatrix.getM21(), Math.sin(roll), EPSILON);
+               assertEquals(rollMatrix.getM11(), Math.cos(roll), EPSILON);
+               assertEquals(rollMatrix.getM22(), Math.cos(roll), EPSILON);
+               assertEquals(rollMatrix.getM12(), -Math.sin(roll), EPSILON);
+               assertEquals(rollMatrix.getM21(), Math.sin(roll), EPSILON);
                EuclidCoreTestTools.assertRotationMatrix(rollMatrix, EPSILON);
 
                RotationMatrixTools.multiply(yawMatrix, pitchMatrix, expectedMatrix);

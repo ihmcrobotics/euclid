@@ -1,8 +1,6 @@
 package us.ihmc.euclid.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Arrays;
@@ -69,7 +67,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          {
             for (int column = 0; column < 4; column++)
             {
-               assertEqualsDelta(expected.getElement(row, column), actual.getElement(row, column), EPS);
+               assertEquals(expected.getElement(row, column), actual.getElement(row, column), EPS);
             }
          }
       }
@@ -284,10 +282,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       for (int j = 0; j < 3; j++)
       {
          rotation.getRow(j, vector1);
-         assertEqualsDelta(1.0, vector1.length(), EPS);
+         assertEquals(1.0, vector1.length(), EPS);
 
          rotation.getColumn(j, vector1);
-         assertEqualsDelta(1.0, vector1.length(), EPS);
+         assertEquals(1.0, vector1.length(), EPS);
       }
 
       // Test that each pair of rows and each pair of columns are orthogonal
@@ -295,11 +293,11 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       {
          rotation.getRow(j, vector1);
          rotation.getRow((j + 1) % 3, vector2);
-         assertEqualsDelta(0.0, vector1.dot(vector2), EPS);
+         assertEquals(0.0, vector1.dot(vector2), EPS);
 
          rotation.getColumn(j, vector1);
          rotation.getColumn((j + 1) % 3, vector2);
-         assertEqualsDelta(0.0, vector1.dot(vector2), EPS);
+         assertEquals(0.0, vector1.dot(vector2), EPS);
       }
 
       corruptionFactor = 0.9e-10;
@@ -321,12 +319,12 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          {
             if (row == column)
             {
-               assertEqualsDelta(1.0, transform.getElement(row, column), corruptionFactor);
+               assertEquals(1.0, transform.getElement(row, column), corruptionFactor);
                assertFalse(1.0 == transform.getElement(row, column));
             }
             else
             {
-               assertEqualsDelta(0.0, transform.getElement(row, column), corruptionFactor);
+               assertEquals(0.0, transform.getElement(row, column), corruptionFactor);
                assertFalse(0.0 == transform.getElement(row, column));
             }
          }
@@ -370,7 +368,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       transform.setRotationUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       assertTrue(transform.determinantRotationPart() < corruptionFactor);
       transform.normalizeRotationPart();
-      assertEqualsDelta(1.0, transform.determinantRotationPart(), EPS);
+      assertEquals(1.0, transform.determinantRotationPart(), EPS);
    }
 
    @Test
@@ -2018,7 +2016,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          rotationMatrix.set(quaternion);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
+               assertEquals(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
       }
 
       { // Test getRotation(AxisAngleBasics axisAngleToPack)
@@ -2028,7 +2026,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          rotationMatrix.set(axisAngle);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
+               assertEquals(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
       }
 
       { // Test getRotation(double[] rotationMatrixArrayToPack)
@@ -2047,7 +2045,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          rotationMatrix.setRotationVector(rotationVector);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
+               assertEquals(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
       }
 
       { // Test getRotationYawPitchRoll(double[] yawPitchRollToPack)
@@ -2057,7 +2055,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          rotationMatrix.setYawPitchRoll(yawPitchRoll);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
+               assertEquals(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
       }
 
       { // Test getRotationEuler(Vector3DBasics eulerAngles)
@@ -2067,7 +2065,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          rotationMatrix.setEuler(eulerAngles);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
+               assertEquals(rotationMatrix.getElement(row, column), transform.getElement(row, column), EPS);
       }
    }
 
@@ -2127,7 +2125,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          transform.get(transformArray);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
-               assertEqualsDelta(transformArray[4 * row + column], transform.getElement(row, column), 1.0e-7);
+               assertEquals((double) transformArray[4 * row + column], transform.getElement(row, column), 1.0e-7);
       }
 
       { // Test get(QuaternionBasics quaternionToPack, TupleBasics translationToPack)
@@ -2223,7 +2221,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          transform.invert();
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
-               assertEqualsDelta(denseMatrix.get(row, column), transform.getElement(row, column), EPS);
+               assertEquals(denseMatrix.get(row, column), transform.getElement(row, column), EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2268,9 +2266,9 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
             {
                if (row == column)
-                  assertEqualsDelta(transform.getElement(row, column), 1.0, EPS);
+                  assertEquals(transform.getElement(row, column), 1.0, EPS);
                else
-                  assertEqualsDelta(transform.getElement(row, column), 0.0, EPS);
+                  assertEquals(transform.getElement(row, column), 0.0, EPS);
             }
          }
       }
@@ -2380,7 +2378,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       for (int row = 0; row < 4; row++)
          for (int column = 0; column < 4; column++)
-            assertEqualsDelta(m3.get(row, column), t3.getElement(row, column), EPS);
+            assertEquals(m3.get(row, column), t3.getElement(row, column), EPS);
    }
 
    @Test
@@ -2903,9 +2901,9 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
             for (int column = 0; column < 4; column++)
             {
                if (row == column)
-                  assertEqualsDelta(transform.getElement(row, column), 1.0, EPS);
+                  assertEquals(transform.getElement(row, column), 1.0, EPS);
                else
-                  assertEqualsDelta(transform.getElement(row, column), 0.0, EPS);
+                  assertEquals(transform.getElement(row, column), 0.0, EPS);
             }
          }
       }
@@ -2927,7 +2925,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
-               assertEqualsDelta(m3.get(row, column), t3.getElement(row, column), EPS);
+               assertEquals(m3.get(row, column), t3.getElement(row, column), EPS);
       }
 
       // Try different combinations with/without translation/rotation
@@ -3573,7 +3571,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          CommonOps.mult(matrix, ejmlPoint, ejmlTransformedPoint);
 
          for (int i = 0; i < 3; i++)
-            assertEqualsDelta(ejmlTransformedPoint.get(i, 0), point.getElement(i), EPS);
+            assertEquals(ejmlTransformedPoint.get(i, 0), point.getElement(i), EPS);
       }
 
       { // Test transform(PointReadOnly pointOriginal, PointBasics pointTransformed)
@@ -3589,7 +3587,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          CommonOps.mult(matrix, ejmlPoint, ejmlTransformedPoint);
 
          for (int i = 0; i < 3; i++)
-            assertEqualsDelta(ejmlTransformedPoint.get(i, 0), pointTransformed.getElement(i), EPS);
+            assertEquals(ejmlTransformedPoint.get(i, 0), pointTransformed.getElement(i), EPS);
       }
 
       { // Test transform(VectorBasics vectorToTransform)
@@ -3603,7 +3601,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          CommonOps.mult(matrix, ejmlVector, ejmlTransformedVector);
 
          for (int i = 0; i < 3; i++)
-            assertEqualsDelta(ejmlTransformedVector.get(i, 0), vector.getElement(i), EPS);
+            assertEquals(ejmlTransformedVector.get(i, 0), vector.getElement(i), EPS);
       }
 
       { // Test transform(VectorReadOnly vectorOriginal, VectorBasics vectorTransformed)
@@ -3618,7 +3616,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          CommonOps.mult(matrix, ejmlVector, ejmlTransformedVector);
 
          for (int i = 0; i < 3; i++)
-            assertEqualsDelta(ejmlTransformedVector.get(i, 0), vectorTransformed.getElement(i), EPS);
+            assertEquals(ejmlTransformedVector.get(i, 0), vectorTransformed.getElement(i), EPS);
       }
    }
 

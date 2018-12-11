@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -109,7 +107,7 @@ public class Plane3DTest
    {
       Point3D q = new Point3D(1.0, 1.0, 1.0);
       Plane3D plane = new Plane3D(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-      assertEqualsDelta(1.0, plane.distance(q), 1e-14);
+      assertEquals(1.0, plane.distance(q), 1e-14);
    }
 
    @Test

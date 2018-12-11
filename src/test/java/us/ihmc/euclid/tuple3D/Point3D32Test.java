@@ -1,13 +1,10 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -78,21 +75,21 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
-         assertEqualsDelta(tuple1.getX32(), x, getEpsilon());
+         assertEquals((double) tuple1.getX32(), (double) x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
-         assertEqualsDelta(tuple1.getY32(), y, getEpsilon());
+         assertEquals((double) tuple1.getY32(), (double) y, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(float z)
          float z = random.nextFloat();
          tuple1.setZ(z);
-         assertEqualsDelta(tuple1.getZ32(), z, getEpsilon());
+         assertEquals((double) tuple1.getZ32(), (double) z, getEpsilon());
       }
    }
 

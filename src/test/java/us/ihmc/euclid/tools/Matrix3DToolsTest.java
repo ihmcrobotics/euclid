@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -606,10 +604,10 @@ public class Matrix3DToolsTest
          for (int j = 0; j < 3; j++)
          {
             matrixActual.getRow(j, vector1);
-            assertEqualsDelta(1.0, vector1.length(), EPS);
+            assertEquals(1.0, vector1.length(), EPS);
 
             matrixActual.getColumn(j, vector1);
-            assertEqualsDelta(1.0, vector1.length(), EPS);
+            assertEquals(1.0, vector1.length(), EPS);
          }
 
          // Test that each pair of rows and each pair of columns are orthogonal
@@ -617,11 +615,11 @@ public class Matrix3DToolsTest
          {
             matrixActual.getRow(j, vector1);
             matrixActual.getRow((j + 1) % 3, vector2);
-            assertEqualsDelta(0.0, vector1.dot(vector2), EPS);
+            assertEquals(0.0, vector1.dot(vector2), EPS);
 
             matrixActual.getColumn(j, vector1);
             matrixActual.getColumn((j + 1) % 3, vector2);
-            assertEqualsDelta(0.0, vector1.dot(vector2), EPS);
+            assertEquals(0.0, vector1.dot(vector2), EPS);
          }
       }
    }

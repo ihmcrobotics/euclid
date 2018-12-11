@@ -1,8 +1,6 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -41,7 +39,7 @@ public class Sphere3DTest
       Sphere3D sphere3d = new Sphere3D();
 
       double epsilon = 1e-14;
-      assertEqualsDelta(sphere3d.getRadius(), 1.0, epsilon);
+      assertEquals(sphere3d.getRadius(), 1.0, epsilon);
       Point3D centerCheck = new Point3D();
       sphere3d.getPosition(centerCheck);
       EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), centerCheck, epsilon);
@@ -79,7 +77,7 @@ public class Sphere3DTest
       Point3D orthogonalProjection = new Point3D(randomPoint);
       sphere3d.orthogonalProjection(orthogonalProjection);
 
-      assertEqualsDelta(radius, orthogonalProjection.distance(center), 1e-7);
+      assertEquals(radius, orthogonalProjection.distance(center), 1e-7);
       Vector3D vector1 = new Vector3D(randomPoint);
       vector1.sub(center);
 

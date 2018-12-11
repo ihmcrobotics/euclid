@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tuple4D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -36,10 +34,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          double s = random.nextDouble();
          vector.set(x, y, z, s);
 
-         assertEqualsDelta(vector.getX(), x, getEpsilon());
-         assertEqualsDelta(vector.getY(), y, getEpsilon());
-         assertEqualsDelta(vector.getZ(), z, getEpsilon());
-         assertEqualsDelta(vector.getS(), s, getEpsilon());
+         assertEquals(vector.getX(), x, getEpsilon());
+         assertEquals(vector.getY(), y, getEpsilon());
+         assertEquals(vector.getZ(), z, getEpsilon());
+         assertEquals(vector.getS(), s, getEpsilon());
       }
    }
 
@@ -74,7 +72,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          Point3D point3D = EuclidCoreRandomTools.nextPoint3D(random);
          tuple.set(point3D);
          for (int index = 0; index < 3; index++)
-            assertEqualsDelta(tuple.getElement(index), point3D.getElement(index), getEpsilon());
+            assertEquals(tuple.getElement(index), point3D.getElement(index), getEpsilon());
          assertTrue(tuple.getS() == 1.0);
       }
 
@@ -84,7 +82,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          Vector3D vector3D = EuclidCoreRandomTools.nextVector3D(random);
          tuple.set(vector3D);
          for (int index = 0; index < 3; index++)
-            assertEqualsDelta(tuple.getElement(index), vector3D.getElement(index), getEpsilon());
+            assertEquals(tuple.getElement(index), vector3D.getElement(index), getEpsilon());
          assertTrue(tuple.getS() == 0.0);
       }
    }
@@ -99,28 +97,28 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
       { // Test setX(double x)
          double x = random.nextDouble();
          vector.setX(x);
-         assertEqualsDelta(vector.getX(), x, getEpsilon());
+         assertEquals(vector.getX(), x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(double y)
          double y = random.nextDouble();
          vector.setY(y);
-         assertEqualsDelta(vector.getY(), y, getEpsilon());
+         assertEquals(vector.getY(), y, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(double z)
          double z = random.nextDouble();
          vector.setZ(z);
-         assertEqualsDelta(vector.getZ(), z, getEpsilon());
+         assertEquals(vector.getZ(), z, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setS(double s)
          double s = random.nextDouble();
          vector.setS(s);
-         assertEqualsDelta(vector.getS(), s, getEpsilon());
+         assertEquals(vector.getS(), s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -162,10 +160,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          vector.setElement(2, z);
          vector.setElement(3, s);
 
-         assertEqualsDelta(vector.getX(), x, getEpsilon());
-         assertEqualsDelta(vector.getY(), y, getEpsilon());
-         assertEqualsDelta(vector.getZ(), z, getEpsilon());
-         assertEqualsDelta(vector.getS(), s, getEpsilon());
+         assertEquals(vector.getX(), x, getEpsilon());
+         assertEquals(vector.getY(), y, getEpsilon());
+         assertEquals(vector.getZ(), z, getEpsilon());
+         assertEquals(vector.getS(), s, getEpsilon());
       }
    }
 
@@ -184,10 +182,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setZ(max + random.nextDouble());
          tuple1.setS(max + random.nextDouble());
          tuple1.clipToMax(max);
-         assertEqualsDelta(tuple1.getX(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), max, getEpsilon());
+         assertEquals(tuple1.getX(), max, getEpsilon());
+         assertEquals(tuple1.getY(), max, getEpsilon());
+         assertEquals(tuple1.getZ(), max, getEpsilon());
+         assertEquals(tuple1.getS(), max, getEpsilon());
 
          max = random.nextDouble();
          tuple1.setX(max - random.nextDouble());
@@ -211,10 +209,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.setZ(max + random.nextDouble());
          tuple2.setS(max + random.nextDouble());
          tuple1.setAndClipToMax(max, tuple2);
-         assertEqualsDelta(tuple1.getX(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), max, getEpsilon());
+         assertEquals(tuple1.getX(), max, getEpsilon());
+         assertEquals(tuple1.getY(), max, getEpsilon());
+         assertEquals(tuple1.getZ(), max, getEpsilon());
+         assertEquals(tuple1.getS(), max, getEpsilon());
 
          max = random.nextDouble();
          tuple2.setX(max - random.nextDouble());
@@ -233,10 +231,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setZ(min - random.nextDouble());
          tuple1.setS(min - random.nextDouble());
          tuple1.clipToMin(min);
-         assertEqualsDelta(tuple1.getX(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), min, getEpsilon());
+         assertEquals(tuple1.getX(), min, getEpsilon());
+         assertEquals(tuple1.getY(), min, getEpsilon());
+         assertEquals(tuple1.getZ(), min, getEpsilon());
+         assertEquals(tuple1.getS(), min, getEpsilon());
 
          min = random.nextDouble();
          tuple2.setX(min + random.nextDouble());
@@ -260,10 +258,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.setZ(min - random.nextDouble());
          tuple2.setS(min - random.nextDouble());
          tuple1.setAndClipToMin(min, tuple2);
-         assertEqualsDelta(tuple1.getX(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), min, getEpsilon());
+         assertEquals(tuple1.getX(), min, getEpsilon());
+         assertEquals(tuple1.getY(), min, getEpsilon());
+         assertEquals(tuple1.getZ(), min, getEpsilon());
+         assertEquals(tuple1.getS(), min, getEpsilon());
 
          min = random.nextDouble();
          tuple2.setX(min + random.nextDouble());
@@ -283,9 +281,9 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setZ(min - random.nextDouble());
          tuple1.setS(min - random.nextDouble());
          tuple1.clipToMinMax(min, max);
-         assertEqualsDelta(tuple1.getX(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), min, getEpsilon());
+         assertEquals(tuple1.getX(), min, getEpsilon());
+         assertEquals(tuple1.getY(), min, getEpsilon());
+         assertEquals(tuple1.getS(), min, getEpsilon());
 
          min = random.nextDouble() - 0.5;
          max = random.nextDouble() + 0.5;
@@ -294,10 +292,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setZ(max + random.nextDouble());
          tuple1.setS(max + random.nextDouble());
          tuple1.clipToMinMax(min, max);
-         assertEqualsDelta(tuple1.getX(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), max, getEpsilon());
+         assertEquals(tuple1.getX(), max, getEpsilon());
+         assertEquals(tuple1.getY(), max, getEpsilon());
+         assertEquals(tuple1.getZ(), max, getEpsilon());
+         assertEquals(tuple1.getS(), max, getEpsilon());
 
          min = random.nextDouble() - 1.0;
          max = random.nextDouble() + 1.0;
@@ -323,10 +321,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.setZ(min - random.nextDouble());
          tuple2.setS(min - random.nextDouble());
          tuple1.setAndClipToMinMax(min, max, tuple2);
-         assertEqualsDelta(tuple1.getX(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), min, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), min, getEpsilon());
+         assertEquals(tuple1.getX(), min, getEpsilon());
+         assertEquals(tuple1.getY(), min, getEpsilon());
+         assertEquals(tuple1.getZ(), min, getEpsilon());
+         assertEquals(tuple1.getS(), min, getEpsilon());
 
          min = random.nextDouble() - 0.5;
          max = random.nextDouble() + 0.5;
@@ -339,10 +337,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.setZ(max + random.nextDouble());
          tuple2.setS(max + random.nextDouble());
          tuple1.setAndClipToMinMax(min, max, tuple2);
-         assertEqualsDelta(tuple1.getX(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), max, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), max, getEpsilon());
+         assertEquals(tuple1.getX(), max, getEpsilon());
+         assertEquals(tuple1.getY(), max, getEpsilon());
+         assertEquals(tuple1.getZ(), max, getEpsilon());
+         assertEquals(tuple1.getS(), max, getEpsilon());
 
          min = random.nextDouble() - 1.0;
          max = random.nextDouble() + 1.0;
@@ -383,13 +381,13 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setS(sOld);
 
          tuple1.addX(x);
-         assertEqualsDelta(tuple1.getX(), xOld + x, getEpsilon());
+         assertEquals(tuple1.getX(), xOld + x, getEpsilon());
          tuple1.addY(y);
-         assertEqualsDelta(tuple1.getY(), yOld + y, getEpsilon());
+         assertEquals(tuple1.getY(), yOld + y, getEpsilon());
          tuple1.addZ(z);
-         assertEqualsDelta(tuple1.getZ(), zOld + z, getEpsilon());
+         assertEquals(tuple1.getZ(), zOld + z, getEpsilon());
          tuple1.addS(s);
-         assertEqualsDelta(tuple1.getS(), sOld + s, getEpsilon());
+         assertEquals(tuple1.getS(), sOld + s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -408,10 +406,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setS(sOld);
 
          tuple1.add(x, y, z, s);
-         assertEqualsDelta(tuple1.getX(), xOld + x, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld + y, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld + z, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld + s, getEpsilon());
+         assertEquals(tuple1.getX(), xOld + x, getEpsilon());
+         assertEquals(tuple1.getY(), yOld + y, getEpsilon());
+         assertEquals(tuple1.getZ(), zOld + z, getEpsilon());
+         assertEquals(tuple1.getS(), sOld + s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -430,10 +428,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setS(sOld);
 
          tuple1.add(tuple2);
-         assertEqualsDelta(tuple1.getX(), xOld + tuple2.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld + tuple2.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld + tuple2.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld + tuple2.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), xOld + tuple2.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), yOld + tuple2.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), zOld + tuple2.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), sOld + tuple2.getS(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -452,10 +450,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple3.setS(random.nextDouble());
 
          tuple1.add(tuple2, tuple3);
-         assertEqualsDelta(tuple1.getX(), tuple2.getX() + tuple3.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), tuple2.getY() + tuple3.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), tuple2.getZ() + tuple3.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), tuple2.getS() + tuple3.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), tuple2.getX() + tuple3.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), tuple2.getY() + tuple3.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), tuple2.getZ() + tuple3.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), tuple2.getS() + tuple3.getS(), getEpsilon());
       }
    }
 
@@ -483,13 +481,13 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setS(sOld);
 
          tuple1.subX(x);
-         assertEqualsDelta(tuple1.getX(), xOld - x, getEpsilon());
+         assertEquals(tuple1.getX(), xOld - x, getEpsilon());
          tuple1.subY(y);
-         assertEqualsDelta(tuple1.getY(), yOld - y, getEpsilon());
+         assertEquals(tuple1.getY(), yOld - y, getEpsilon());
          tuple1.subZ(z);
-         assertEqualsDelta(tuple1.getZ(), zOld - z, getEpsilon());
+         assertEquals(tuple1.getZ(), zOld - z, getEpsilon());
          tuple1.subS(s);
-         assertEqualsDelta(tuple1.getS(), sOld - s, getEpsilon());
+         assertEquals(tuple1.getS(), sOld - s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -505,10 +503,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.set(xOld, yOld, zOld, sOld);
 
          tuple1.sub(x, y, z, s);
-         assertEqualsDelta(tuple1.getX(), xOld - x, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld - y, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld - z, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld - s, getEpsilon());
+         assertEquals(tuple1.getX(), xOld - x, getEpsilon());
+         assertEquals(tuple1.getY(), yOld - y, getEpsilon());
+         assertEquals(tuple1.getZ(), zOld - z, getEpsilon());
+         assertEquals(tuple1.getS(), sOld - s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -527,10 +525,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.setS(sOld);
 
          tuple1.sub(tuple2);
-         assertEqualsDelta(tuple1.getX(), xOld - tuple2.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld - tuple2.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld - tuple2.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld - tuple2.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), xOld - tuple2.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), yOld - tuple2.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), zOld - tuple2.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), sOld - tuple2.getS(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -540,10 +538,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple3.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
 
          tuple1.sub(tuple2, tuple3);
-         assertEqualsDelta(tuple1.getX(), tuple2.getX() - tuple3.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), tuple2.getY() - tuple3.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), tuple2.getZ() - tuple3.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), tuple2.getS() - tuple3.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), tuple2.getX() - tuple3.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), tuple2.getY() - tuple3.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), tuple2.getZ() - tuple3.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), tuple2.getS() - tuple3.getS(), getEpsilon());
       }
    }
 
@@ -565,10 +563,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.set(xOld, yOld, zOld, sOld);
 
          tuple1.scale(scale);
-         assertEqualsDelta(tuple1.getX(), xOld * scale, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld * scale, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld * scale, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld * scale, getEpsilon());
+         assertEquals(tuple1.getX(), xOld * scale, getEpsilon());
+         assertEquals(tuple1.getY(), yOld * scale, getEpsilon());
+         assertEquals(tuple1.getZ(), zOld * scale, getEpsilon());
+         assertEquals(tuple1.getS(), sOld * scale, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -584,10 +582,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple1.set(xOld, yOld, zOld, sOld);
 
          tuple1.scale(scaleX, scaleY, scaleZ, scaleS);
-         assertEqualsDelta(tuple1.getX(), xOld * scaleX, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld * scaleY, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld * scaleZ, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld * scaleS, getEpsilon());
+         assertEquals(tuple1.getX(), xOld * scaleX, getEpsilon());
+         assertEquals(tuple1.getY(), yOld * scaleY, getEpsilon());
+         assertEquals(tuple1.getZ(), zOld * scaleZ, getEpsilon());
+         assertEquals(tuple1.getS(), sOld * scaleS, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -597,10 +595,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
 
          tuple1.setAndScale(scale, tuple2);
-         assertEqualsDelta(tuple1.getX(), tuple2.getX() * scale, getEpsilon());
-         assertEqualsDelta(tuple1.getY(), tuple2.getY() * scale, getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), tuple2.getZ() * scale, getEpsilon());
-         assertEqualsDelta(tuple1.getS(), tuple2.getS() * scale, getEpsilon());
+         assertEquals(tuple1.getX(), tuple2.getX() * scale, getEpsilon());
+         assertEquals(tuple1.getY(), tuple2.getY() * scale, getEpsilon());
+         assertEquals(tuple1.getZ(), tuple2.getZ() * scale, getEpsilon());
+         assertEquals(tuple1.getS(), tuple2.getS() * scale, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -620,10 +618,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.setS(random.nextDouble());
 
          tuple1.scaleAdd(scale, tuple2);
-         assertEqualsDelta(tuple1.getX(), xOld * scale + tuple2.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld * scale + tuple2.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld * scale + tuple2.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld * scale + tuple2.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), xOld * scale + tuple2.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), yOld * scale + tuple2.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), zOld * scale + tuple2.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), sOld * scale + tuple2.getS(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -634,10 +632,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple3.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
 
          tuple1.scaleAdd(scale, tuple2, tuple3);
-         assertEqualsDelta(tuple1.getX(), tuple2.getX() * scale + tuple3.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), tuple2.getY() * scale + tuple3.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), tuple2.getZ() * scale + tuple3.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), tuple2.getS() * scale + tuple3.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), tuple2.getX() * scale + tuple3.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), tuple2.getY() * scale + tuple3.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), tuple2.getZ() * scale + tuple3.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), tuple2.getS() * scale + tuple3.getS(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -648,10 +646,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple3.set(tuple1);
 
          tuple1.scaleAdd(scale, tuple2, tuple1);
-         assertEqualsDelta(tuple1.getX(), tuple2.getX() * scale + tuple3.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), tuple2.getY() * scale + tuple3.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), tuple2.getZ() * scale + tuple3.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), tuple2.getS() * scale + tuple3.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), tuple2.getX() * scale + tuple3.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), tuple2.getY() * scale + tuple3.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), tuple2.getZ() * scale + tuple3.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), tuple2.getS() * scale + tuple3.getS(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -671,10 +669,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.setS(random.nextDouble());
 
          tuple1.scaleSub(scale, tuple2);
-         assertEqualsDelta(tuple1.getX(), xOld * scale - tuple2.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), yOld * scale - tuple2.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), zOld * scale - tuple2.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), sOld * scale - tuple2.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), xOld * scale - tuple2.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), yOld * scale - tuple2.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), zOld * scale - tuple2.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), sOld * scale - tuple2.getS(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -685,10 +683,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple3.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
 
          tuple1.scaleSub(scale, tuple2, tuple3);
-         assertEqualsDelta(tuple1.getX(), tuple2.getX() * scale - tuple3.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), tuple2.getY() * scale - tuple3.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), tuple2.getZ() * scale - tuple3.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), tuple2.getS() * scale - tuple3.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), tuple2.getX() * scale - tuple3.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), tuple2.getY() * scale - tuple3.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), tuple2.getZ() * scale - tuple3.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), tuple2.getS() * scale - tuple3.getS(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -699,10 +697,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple3.set(tuple1);
 
          tuple1.scaleSub(scale, tuple2, tuple1);
-         assertEqualsDelta(tuple1.getX(), tuple2.getX() * scale - tuple3.getX(), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), tuple2.getY() * scale - tuple3.getY(), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), tuple2.getZ() * scale - tuple3.getZ(), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), tuple2.getS() * scale - tuple3.getS(), getEpsilon());
+         assertEquals(tuple1.getX(), tuple2.getX() * scale - tuple3.getX(), getEpsilon());
+         assertEquals(tuple1.getY(), tuple2.getY() * scale - tuple3.getY(), getEpsilon());
+         assertEquals(tuple1.getZ(), tuple2.getZ() * scale - tuple3.getZ(), getEpsilon());
+         assertEquals(tuple1.getS(), tuple2.getS() * scale - tuple3.getS(), getEpsilon());
       }
    }
 
@@ -731,10 +729,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple2.setS(random.nextDouble());
 
          tuple1.interpolate(tuple2, alpha);
-         assertEqualsDelta(tuple1.getX(), EuclidCoreTools.interpolate(xOld, tuple2.getX(), alpha), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), EuclidCoreTools.interpolate(yOld, tuple2.getY(), alpha), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), EuclidCoreTools.interpolate(zOld, tuple2.getZ(), alpha), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), EuclidCoreTools.interpolate(sOld, tuple2.getS(), alpha), getEpsilon());
+         assertEquals(tuple1.getX(), EuclidCoreTools.interpolate(xOld, tuple2.getX(), alpha), getEpsilon());
+         assertEquals(tuple1.getY(), EuclidCoreTools.interpolate(yOld, tuple2.getY(), alpha), getEpsilon());
+         assertEquals(tuple1.getZ(), EuclidCoreTools.interpolate(zOld, tuple2.getZ(), alpha), getEpsilon());
+         assertEquals(tuple1.getS(), EuclidCoreTools.interpolate(sOld, tuple2.getS(), alpha), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -745,10 +743,10 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
          tuple3.set(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble());
 
          tuple1.interpolate(tuple2, tuple3, alpha);
-         assertEqualsDelta(tuple1.getX(), EuclidCoreTools.interpolate(tuple2.getX(), tuple3.getX(), alpha), getEpsilon());
-         assertEqualsDelta(tuple1.getY(), EuclidCoreTools.interpolate(tuple2.getY(), tuple3.getY(), alpha), getEpsilon());
-         assertEqualsDelta(tuple1.getZ(), EuclidCoreTools.interpolate(tuple2.getZ(), tuple3.getZ(), alpha), getEpsilon());
-         assertEqualsDelta(tuple1.getS(), EuclidCoreTools.interpolate(tuple2.getS(), tuple3.getS(), alpha), getEpsilon());
+         assertEquals(tuple1.getX(), EuclidCoreTools.interpolate(tuple2.getX(), tuple3.getX(), alpha), getEpsilon());
+         assertEquals(tuple1.getY(), EuclidCoreTools.interpolate(tuple2.getY(), tuple3.getY(), alpha), getEpsilon());
+         assertEquals(tuple1.getZ(), EuclidCoreTools.interpolate(tuple2.getZ(), tuple3.getZ(), alpha), getEpsilon());
+         assertEquals(tuple1.getS(), EuclidCoreTools.interpolate(tuple2.getS(), tuple3.getS(), alpha), getEpsilon());
       }
    }
 

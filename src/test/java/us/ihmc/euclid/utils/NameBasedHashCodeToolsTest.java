@@ -1,8 +1,6 @@
 package us.ihmc.euclid.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.utils.NameBasedHashCodeTools.*;
 
 import org.junit.jupiter.api.Test;

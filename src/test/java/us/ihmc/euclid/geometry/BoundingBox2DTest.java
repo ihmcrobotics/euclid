@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -644,12 +642,12 @@ public class BoundingBox2DTest
             alpha = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
             alpha.setElement(axisIndex, 0.0);
             boundingBox2D.getPointGivenParameters(alpha.getX(), alpha.getY(), actualPoint);
-            assertEqualsDelta(boundingBox2D.getMinPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
+            assertEquals(boundingBox2D.getMinPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
 
             alpha = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
             alpha.setElement(axisIndex, 1.0);
             boundingBox2D.getPointGivenParameters(alpha.getX(), alpha.getY(), actualPoint);
-            assertEqualsDelta(boundingBox2D.getMaxPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
+            assertEquals(boundingBox2D.getMaxPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
          }
       }
    }
@@ -665,7 +663,7 @@ public class BoundingBox2DTest
          Vector2D halfSize = EuclidCoreRandomTools.nextVector2D(random, 0.0, 10.0);
          BoundingBox2D boundingBox2D = new BoundingBox2D();
          boundingBox2D.set(center, halfSize);
-         assertEqualsDelta(4.0 * halfSize.lengthSquared(), boundingBox2D.getDiagonalLengthSquared(), EPSILON);
+         assertEquals(4.0 * halfSize.lengthSquared(), boundingBox2D.getDiagonalLengthSquared(), EPSILON);
       }
    }
 

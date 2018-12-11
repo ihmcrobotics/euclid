@@ -1,7 +1,6 @@
 package us.ihmc.euclid.rotationConversion;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import java.util.Random;
 
@@ -40,32 +39,32 @@ public class YawPitchRollConversionTest
                RotationMatrixConversion.convertYawPitchRollToMatrix(yaw, pitch, roll, matrix);
 
                double actualYaw = YawPitchRollConversion.computeYawImpl(matrix.getM00(), matrix.getM10());
-               assertEqualsDelta(yaw, actualYaw, EPSILON);
+               assertEquals(yaw, actualYaw, EPSILON);
 
                double actualPitch = YawPitchRollConversion.computePitchImpl(matrix.getM20());
-               assertEqualsDelta(pitch, actualPitch, EPSILON);
+               assertEquals(pitch, actualPitch, EPSILON);
 
                double actualRoll = YawPitchRollConversion.computeRollImpl(matrix.getM21(), matrix.getM22());
-               assertEqualsDelta(roll, actualRoll, EPSILON);
+               assertEquals(roll, actualRoll, EPSILON);
 
                actualYaw = YawPitchRollConversion.computeYaw(matrix);
-               assertEqualsDelta(yaw, actualYaw, EPSILON);
+               assertEquals(yaw, actualYaw, EPSILON);
 
                actualPitch = YawPitchRollConversion.computePitch(matrix);
-               assertEqualsDelta(pitch, actualPitch, EPSILON);
+               assertEquals(pitch, actualPitch, EPSILON);
 
                actualRoll = YawPitchRollConversion.computeRoll(matrix);
-               assertEqualsDelta(roll, actualRoll, EPSILON);
+               assertEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualYawPitchRoll);
-               assertEqualsDelta(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEqualsDelta(pitch, actualYawPitchRoll[1], EPSILON);
-               assertEqualsDelta(roll, actualYawPitchRoll[2], EPSILON);
+               assertEquals(yaw, actualYawPitchRoll[0], EPSILON);
+               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
+               assertEquals(roll, actualYawPitchRoll[2], EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualEulerAngles);
-               assertEqualsDelta(yaw, actualEulerAngles.getZ(), EPSILON);
-               assertEqualsDelta(pitch, actualEulerAngles.getY(), EPSILON);
-               assertEqualsDelta(roll, actualEulerAngles.getX(), EPSILON);
+               assertEquals(yaw, actualEulerAngles.getZ(), EPSILON);
+               assertEquals(pitch, actualEulerAngles.getY(), EPSILON);
+               assertEquals(roll, actualEulerAngles.getX(), EPSILON);
             }
          }
       }
@@ -110,23 +109,23 @@ public class YawPitchRollConversionTest
                matrix.setYawPitchRoll(yaw, pitch, roll);
 
                double actualYaw = YawPitchRollConversion.computeYaw(matrix);
-               assertEqualsDelta(yaw, actualYaw, EPSILON);
+               assertEquals(yaw, actualYaw, EPSILON);
 
                double actualPitch = YawPitchRollConversion.computePitch(matrix);
-               assertEqualsDelta(pitch, actualPitch, EPSILON);
+               assertEquals(pitch, actualPitch, EPSILON);
 
                double actualRoll = YawPitchRollConversion.computeRoll(matrix);
-               assertEqualsDelta(roll, actualRoll, EPSILON);
+               assertEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualYawPitchRoll);
-               assertEqualsDelta(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEqualsDelta(pitch, actualYawPitchRoll[1], EPSILON);
-               assertEqualsDelta(roll, actualYawPitchRoll[2], EPSILON);
+               assertEquals(yaw, actualYawPitchRoll[0], EPSILON);
+               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
+               assertEquals(roll, actualYawPitchRoll[2], EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualEulerAngles);
-               assertEqualsDelta(yaw, actualEulerAngles.getZ(), EPSILON);
-               assertEqualsDelta(pitch, actualEulerAngles.getY(), EPSILON);
-               assertEqualsDelta(roll, actualEulerAngles.getX(), EPSILON);
+               assertEquals(yaw, actualEulerAngles.getZ(), EPSILON);
+               assertEquals(pitch, actualEulerAngles.getY(), EPSILON);
+               assertEquals(roll, actualEulerAngles.getX(), EPSILON);
             }
          }
       }
@@ -204,19 +203,19 @@ public class YawPitchRollConversionTest
                EuclidCoreTestTools.assertAngleEquals(yaw, actualYaw, EPSILON);
 
                double actualPitch = YawPitchRollConversion.computePitch(quaternion);
-               assertEqualsDelta(pitch, actualPitch, EPSILON);
+               assertEquals(pitch, actualPitch, EPSILON);
 
                double actualRoll = YawPitchRollConversion.computeRoll(quaternion);
                EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
                EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEqualsDelta(pitch, actualYawPitchRoll[1], EPSILON);
+               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
                EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], EPSILON);
 
                YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
                EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), EPSILON);
-               assertEqualsDelta(pitch, actualEulerAngles.getY(), EPSILON);
+               assertEquals(pitch, actualEulerAngles.getY(), EPSILON);
                EuclidCoreTestTools.assertAngleEquals(roll, actualEulerAngles.getX(), EPSILON);
             }
          }
@@ -337,7 +336,7 @@ public class YawPitchRollConversionTest
       EuclidCoreTestTools.assertAngleEquals(yaw, actualYaw, epsilon);
 
       double actualPitch = YawPitchRollConversion.computePitchFromQuaternionImpl(qx, qy, qz, qs);
-      assertEqualsDelta(pitch, actualPitch, epsilon);
+      assertEquals(pitch, actualPitch, epsilon);
 
       double actualRoll = YawPitchRollConversion.computeRollFromQuaternionImpl(qx, qy, qz, qs);
       EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, epsilon);
@@ -346,19 +345,19 @@ public class YawPitchRollConversionTest
       EuclidCoreTestTools.assertAngleEquals(yaw, actualYaw, epsilon);
 
       actualPitch = YawPitchRollConversion.computePitch(quaternion);
-      assertEqualsDelta(pitch, actualPitch, epsilon);
+      assertEquals(pitch, actualPitch, epsilon);
 
       actualRoll = YawPitchRollConversion.computeRoll(quaternion);
       EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, epsilon);
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], epsilon);
-      assertEqualsDelta(pitch, actualYawPitchRoll[1], epsilon);
+      assertEquals(pitch, actualYawPitchRoll[1], epsilon);
       EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], epsilon);
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), epsilon);
-      assertEqualsDelta(pitch, actualEulerAngles.getY(), epsilon);
+      assertEquals(pitch, actualEulerAngles.getY(), epsilon);
       EuclidCoreTestTools.assertAngleEquals(roll, actualEulerAngles.getX(), epsilon);
    }
 
@@ -416,19 +415,19 @@ public class YawPitchRollConversionTest
                EuclidCoreTestTools.assertAngleEquals(yaw, actualYaw, EPSILON);
 
                double actualPitch = YawPitchRollConversion.computePitch(axisAngle);
-               assertEqualsDelta(pitch, actualPitch, EPSILON);
+               assertEquals(pitch, actualPitch, EPSILON);
 
                double actualRoll = YawPitchRollConversion.computeRoll(axisAngle);
                EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
                EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEqualsDelta(pitch, actualYawPitchRoll[1], EPSILON);
+               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
                EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], EPSILON);
 
                YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
                EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), EPSILON);
-               assertEqualsDelta(pitch, actualEulerAngles.getY(), EPSILON);
+               assertEquals(pitch, actualEulerAngles.getY(), EPSILON);
                EuclidCoreTestTools.assertAngleEquals(roll, actualEulerAngles.getX(), EPSILON);
             }
          }
@@ -548,7 +547,7 @@ public class YawPitchRollConversionTest
       EuclidCoreTestTools.assertAngleEquals(yaw, actualYaw, epsilon);
 
       double actualPitch = YawPitchRollConversion.computePitchFromAxisAngleImpl(ux, uy, uz, angle);
-      assertEqualsDelta(pitch, actualPitch, epsilon);
+      assertEquals(pitch, actualPitch, epsilon);
 
       double actualRoll = YawPitchRollConversion.computeRollFromAxisAngleImpl(ux, uy, uz, angle);
       EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, epsilon);
@@ -557,19 +556,19 @@ public class YawPitchRollConversionTest
       EuclidCoreTestTools.assertAngleEquals(yaw, actualYaw, epsilon);
 
       actualPitch = YawPitchRollConversion.computePitch(axisAngle);
-      assertEqualsDelta(pitch, actualPitch, epsilon);
+      assertEquals(pitch, actualPitch, epsilon);
 
       actualRoll = YawPitchRollConversion.computeRoll(axisAngle);
       EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, epsilon);
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], epsilon);
-      assertEqualsDelta(pitch, actualYawPitchRoll[1], epsilon);
+      assertEquals(pitch, actualYawPitchRoll[1], epsilon);
       EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], epsilon);
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), epsilon);
-      assertEqualsDelta(pitch, actualEulerAngles.getY(), epsilon);
+      assertEquals(pitch, actualEulerAngles.getY(), epsilon);
       EuclidCoreTestTools.assertAngleEquals(roll, actualEulerAngles.getX(), epsilon);
    }
 
@@ -704,7 +703,7 @@ public class YawPitchRollConversionTest
       assertTrue(rotationVector.equals(rotationVectorCopy));
 
       double actualPitch = YawPitchRollConversion.computePitch(rotationVector);
-      assertEqualsDelta(pitch, actualPitch, epsilon);
+      assertEquals(pitch, actualPitch, epsilon);
       assertTrue(rotationVector.equals(rotationVectorCopy));
 
       double actualRoll = YawPitchRollConversion.computeRoll(rotationVector);
@@ -713,13 +712,13 @@ public class YawPitchRollConversionTest
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualYawPitchRoll);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], epsilon);
-      assertEqualsDelta(pitch, actualYawPitchRoll[1], epsilon);
+      assertEquals(pitch, actualYawPitchRoll[1], epsilon);
       EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], epsilon);
       assertTrue(rotationVector.equals(rotationVectorCopy));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualEulerAngles);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), epsilon);
-      assertEqualsDelta(pitch, actualEulerAngles.getY(), epsilon);
+      assertEquals(pitch, actualEulerAngles.getY(), epsilon);
       EuclidCoreTestTools.assertAngleEquals(roll, actualEulerAngles.getX(), epsilon);
       assertTrue(rotationVector.equals(rotationVectorCopy));
    }

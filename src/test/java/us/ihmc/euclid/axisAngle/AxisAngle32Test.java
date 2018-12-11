@@ -1,13 +1,10 @@
 package us.ihmc.euclid.axisAngle;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
@@ -84,10 +81,10 @@ public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
 
             axisAngle = new AxisAngle32(vectorAxis, angle);
 
-            assertEqualsDelta(axisAngle.getX(), vectorAxis.getX(), EPS);
-            assertEqualsDelta(axisAngle.getY(), vectorAxis.getY(), EPS);
-            assertEqualsDelta(axisAngle.getZ(), vectorAxis.getZ(), EPS);
-            assertEqualsDelta(axisAngle.getAngle(), angle, EPS);
+            assertEquals(axisAngle.getX(), vectorAxis.getX(), EPS);
+            assertEquals(axisAngle.getY(), vectorAxis.getY(), EPS);
+            assertEquals(axisAngle.getZ(), vectorAxis.getZ(), EPS);
+            assertEquals(axisAngle.getAngle(), (double) angle, EPS);
 
             EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(vectorAxis, vectorAxisCopy, EPS);
             assertTrue(angle == angleCopy);

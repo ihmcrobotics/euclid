@@ -1,7 +1,6 @@
 package us.ihmc.euclid.matrix;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import java.util.Random;
 
@@ -498,10 +497,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          for (int j = 0; j < 3; j++)
          {
             matrixActual.getRow(j, vector1);
-            assertEqualsDelta(1.0, vector1.length(), EPS);
+            assertEquals(1.0, vector1.length(), EPS);
 
             matrixActual.getColumn(j, vector1);
-            assertEqualsDelta(1.0, vector1.length(), EPS);
+            assertEquals(1.0, vector1.length(), EPS);
          }
 
          // Test that each pair of rows and each pair of columns are orthogonal
@@ -509,11 +508,11 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          {
             matrixActual.getRow(j, vector1);
             matrixActual.getRow((j + 1) % 3, vector2);
-            assertEqualsDelta(0.0, vector1.dot(vector2), EPS);
+            assertEquals(0.0, vector1.dot(vector2), EPS);
 
             matrixActual.getColumn(j, vector1);
             matrixActual.getColumn((j + 1) % 3, vector2);
-            assertEqualsDelta(0.0, vector1.dot(vector2), EPS);
+            assertEquals(0.0, vector1.dot(vector2), EPS);
          }
       }
    }
@@ -1181,9 +1180,9 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          RotationScaleMatrix matrix = new RotationScaleMatrix();
          double scale = random.nextDouble();
          matrix.setScale(scale);
-         assertEqualsDelta(scale, matrix.getScaleX(), EPS);
-         assertEqualsDelta(scale, matrix.getScaleY(), EPS);
-         assertEqualsDelta(scale, matrix.getScaleZ(), EPS);
+         assertEquals(scale, matrix.getScaleX(), EPS);
+         assertEquals(scale, matrix.getScaleY(), EPS);
+         assertEquals(scale, matrix.getScaleZ(), EPS);
       }
 
       { // Test setScale(double x, double y, double z)

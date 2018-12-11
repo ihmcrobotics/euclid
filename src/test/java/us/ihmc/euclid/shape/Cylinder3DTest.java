@@ -1,8 +1,6 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -75,14 +73,14 @@ public class Cylinder3DTest
          double radius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
          Cylinder3D cylinder3d = new Cylinder3D(transform, height, radius);
 
-         assertEqualsDelta(cylinder3d.getRadius(), radius, 1e-7);
-         assertEqualsDelta(cylinder3d.getHeight(), height, 1e-7);
+         assertEquals(cylinder3d.getRadius(), radius, 1e-7);
+         assertEquals(cylinder3d.getHeight(), height, 1e-7);
 
          cylinder3d.setRadius(5.0);
          cylinder3d.setHeight(10.0);
 
-         assertEqualsDelta(cylinder3d.getRadius(), 5.0, 1e-7);
-         assertEqualsDelta(cylinder3d.getHeight(), 10.0, 1e-7);
+         assertEquals(cylinder3d.getRadius(), 5.0, 1e-7);
+         assertEquals(cylinder3d.getHeight(), 10.0, 1e-7);
 
          RigidBodyTransform rbt = new RigidBodyTransform();
          cylinder3d.getPose(rbt);
@@ -93,9 +91,9 @@ public class Cylinder3DTest
          Point3D point1 = new Point3D();
          transform.getTranslation(point1);
 
-         assertEqualsDelta(point.getX(), point1.getX(), 1e-7);
-         assertEqualsDelta(point.getY(), point1.getY(), 1e-7);
-         assertEqualsDelta(point.getZ(), point1.getZ(), 1e-7);
+         assertEquals(point.getX(), point1.getX(), 1e-7);
+         assertEquals(point.getY(), point1.getY(), 1e-7);
+         assertEquals(point.getZ(), point1.getZ(), 1e-7);
 
          Quaternion quat1 = new Quaternion();
          rbt.getRotation(quat1);
@@ -103,10 +101,10 @@ public class Cylinder3DTest
          Quaternion quat2 = new Quaternion();
          transform.getRotation(quat2);
 
-         assertEqualsDelta(quat1.getX(), quat2.getX(), 1e-7);
-         assertEqualsDelta(quat1.getY(), quat2.getY(), 1e-7);
-         assertEqualsDelta(quat1.getZ(), quat2.getZ(), 1e-7);
-         assertEqualsDelta(quat1.getS(), quat2.getS(), 1e-7);
+         assertEquals(quat1.getX(), quat2.getX(), 1e-7);
+         assertEquals(quat1.getY(), quat2.getY(), 1e-7);
+         assertEquals(quat1.getZ(), quat2.getZ(), 1e-7);
+         assertEquals(quat1.getS(), quat2.getS(), 1e-7);
       }
    }
 
@@ -232,9 +230,9 @@ public class Cylinder3DTest
    {
       String failMessage = "Expected <(" + expectedPoint.getX() + "," + expectedPoint.getY() + "," + expectedPoint.getZ() + ")>, but was <("
             + actualPoint.getX() + "," + actualPoint.getY() + "," + actualPoint.getZ() + ")>";
-      assertEqualsDelta(failMessage, expectedPoint.getX(), actualPoint.getX(), EPSILON);
-      assertEqualsDelta(failMessage, expectedPoint.getY(), actualPoint.getY(), EPSILON);
-      assertEqualsDelta(failMessage, expectedPoint.getZ(), actualPoint.getZ(), EPSILON);
+      assertEquals(expectedPoint.getX(), actualPoint.getX(), EPSILON, failMessage);
+      assertEquals(expectedPoint.getY(), actualPoint.getY(), EPSILON, failMessage);
+      assertEquals(expectedPoint.getZ(), actualPoint.getZ(), EPSILON, failMessage);
    }
 
    @Test

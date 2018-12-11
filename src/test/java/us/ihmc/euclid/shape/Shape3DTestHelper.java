@@ -1,7 +1,6 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import java.util.Random;
 
@@ -110,7 +109,7 @@ public class Shape3DTestHelper
       // If the surface normal is NaN, then that means it was projected or something. If it does not contain NaN, then it should be checked for validity.
       if (surfaceNormal.containsNaN())
       {
-         assertEqualsDelta(1.0, surfaceNormal.length(), 1e-7);
+         assertEquals(1.0, surfaceNormal.length(), 1e-7);
       }
 
       // Check that a further projection onto the surface doesn't change anything:
@@ -130,7 +129,7 @@ public class Shape3DTestHelper
       else
       {
          assertTrue(shape3d.isInsideOrOnSurface(newProjection));
-         assertEqualsDelta(1.0, newNormal.length(), 1e-7);
+         assertEquals(1.0, newNormal.length(), 1e-7);
       }
       EuclidCoreTestTools.assertTuple3DEquals(pointOnSurface, newProjection, 1e-7);
 

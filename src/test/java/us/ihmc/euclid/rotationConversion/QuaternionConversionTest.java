@@ -1,8 +1,6 @@
 package us.ihmc.euclid.rotationConversion;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -187,10 +185,10 @@ public class QuaternionConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getS(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getX(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getY(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getZ(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getS(), EPSILON);
 
       // Pi around x
       m00 = 1.0;
@@ -204,10 +202,10 @@ public class QuaternionConversionTest
       m22 = -1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(1.0, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getS(), EPSILON);
+      assertEquals(1.0, actualQuaternion.getX(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getY(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getZ(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getS(), EPSILON);
 
       // Pi/2 around y
       m00 = 0.0;
@@ -221,10 +219,10 @@ public class QuaternionConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(0.0, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getS(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getX(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getY(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getZ(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getS(), EPSILON);
 
       // Pi around z
       m00 = -1.0;
@@ -238,10 +236,10 @@ public class QuaternionConversionTest
       m22 = -1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(0.0, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(1.0, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getS(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getX(), EPSILON);
+      assertEquals(1.0, actualQuaternion.getY(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getZ(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getS(), EPSILON);
 
       // Pi/2 around z
       m00 = 0.0;
@@ -255,10 +253,10 @@ public class QuaternionConversionTest
       m22 = 1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(0.0, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getS(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getX(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getY(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getZ(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getS(), EPSILON);
 
       // Pi around z
       m00 = -1.0;
@@ -272,10 +270,10 @@ public class QuaternionConversionTest
       m22 = 1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(0.0, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(1.0, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getS(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getX(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getY(), EPSILON);
+      assertEquals(1.0, actualQuaternion.getZ(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getS(), EPSILON);
 
       // Pi around xy (as axis-angle: (x = sqrt(2)/2, y = sqrt(2)/2, z = 0, angle = Pi)
       m00 = 0.0;
@@ -289,10 +287,10 @@ public class QuaternionConversionTest
       m22 = -1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getS(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getX(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getY(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getZ(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getS(), EPSILON);
 
       // Pi around xz (as axis-angle: (x = sqrt(2)/2, y = 0, z = sqrt(2)/2, angle = Pi)
       m00 = 0.0;
@@ -306,10 +304,10 @@ public class QuaternionConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getS(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getX(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getY(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getZ(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getS(), EPSILON);
 
       // Pi around yz (as axis-angle: (x = 0, y = sqrt(2)/2, z = sqrt(2)/2, angle = Pi)
       m00 = -1.0;
@@ -323,10 +321,10 @@ public class QuaternionConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
-      assertEqualsDelta(0.0, actualQuaternion.getX(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getY(), EPSILON);
-      assertEqualsDelta(sqrt2Over2, actualQuaternion.getZ(), EPSILON);
-      assertEqualsDelta(0.0, actualQuaternion.getS(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getX(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getY(), EPSILON);
+      assertEquals(sqrt2Over2, actualQuaternion.getZ(), EPSILON);
+      assertEquals(0.0, actualQuaternion.getS(), EPSILON);
 
       rotationMatrix.setUnsafe(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);

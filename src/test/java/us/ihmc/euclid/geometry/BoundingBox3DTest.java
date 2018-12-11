@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -764,12 +762,12 @@ public class BoundingBox3DTest
             alpha = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
             alpha.setElement(axisIndex, 0.0);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), actualPoint);
-            assertEqualsDelta(boundingBox3D.getMinPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
+            assertEquals(boundingBox3D.getMinPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
 
             alpha = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
             alpha.setElement(axisIndex, 1.0);
             boundingBox3D.getPointGivenParameters(alpha.getX(), alpha.getY(), alpha.getZ(), actualPoint);
-            assertEqualsDelta(boundingBox3D.getMaxPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
+            assertEquals(boundingBox3D.getMaxPoint().getElement(axisIndex), actualPoint.getElement(axisIndex), EPSILON);
          }
       }
    }
@@ -785,7 +783,7 @@ public class BoundingBox3DTest
          Vector3D halfSize = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
          BoundingBox3D boundingBox3D = new BoundingBox3D();
          boundingBox3D.set(center, halfSize);
-         assertEqualsDelta(4.0 * halfSize.lengthSquared(), boundingBox3D.getDiagonalLengthSquared(), EPSILON);
+         assertEquals(4.0 * halfSize.lengthSquared(), boundingBox3D.getDiagonalLengthSquared(), EPSILON);
       }
    }
 

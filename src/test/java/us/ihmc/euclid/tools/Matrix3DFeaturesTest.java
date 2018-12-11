@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -451,14 +449,14 @@ public class Matrix3DFeaturesTest
       { // Test that the identity's determinant is equal to 1.0
          Matrix3D identity = new Matrix3D();
          identity.setIdentity();
-         assertEqualsDelta(1.0, identity.determinant(), EPS);
-         assertEqualsDelta(1.0, Matrix3DFeatures.determinant(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0), EPS);
+         assertEquals(1.0, identity.determinant(), EPS);
+         assertEquals(1.0, Matrix3DFeatures.determinant(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0), EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test that the determinant of a random rotation matrix is also equal to 1.0
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         assertEqualsDelta(1.0, rotationMatrix.determinant(), EPS);
+         assertEquals(1.0, rotationMatrix.determinant(), EPS);
          double m00 = rotationMatrix.getM00();
          double m01 = rotationMatrix.getM01();
          double m02 = rotationMatrix.getM02();
@@ -468,7 +466,7 @@ public class Matrix3DFeaturesTest
          double m20 = rotationMatrix.getM20();
          double m21 = rotationMatrix.getM21();
          double m22 = rotationMatrix.getM22();
-         assertEqualsDelta(1.0, Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22), EPS);
+         assertEquals(1.0, Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22), EPS);
       }
 
       // Check det == 0.0 when a column is zero
@@ -487,7 +485,7 @@ public class Matrix3DFeaturesTest
          }
 
          double det = Matrix3DFeatures.determinant(row0[0], row0[1], row0[2], row1[0], row1[1], row1[2], row2[0], row2[1], row2[2]);
-         assertEqualsDelta(0.0, det, EPS);
+         assertEquals(0.0, det, EPS);
       }
 
       // Check that row swap negates the determinant
@@ -514,7 +512,7 @@ public class Matrix3DFeaturesTest
 
          double detSwapped = Matrix3DFeatures.determinant(column0[0], column1[0], column2[0], column0[1], column1[1], column2[1], column0[2], column1[2],
                                                           column2[2]);
-         assertEqualsDelta(detSwapped, -det, EPS);
+         assertEquals(detSwapped, -det, EPS);
       }
 
       // Check that column swap negates the determinant
@@ -540,7 +538,7 @@ public class Matrix3DFeaturesTest
          row2[columnSwap2] = temp2;
 
          double detSwapped = Matrix3DFeatures.determinant(row0[0], row0[1], row0[2], row1[0], row1[1], row1[2], row2[0], row2[1], row2[2]);
-         assertEqualsDelta(detSwapped, -det, EPS);
+         assertEquals(detSwapped, -det, EPS);
       }
 
       // Check that scaling a row scales the determinant
@@ -561,7 +559,7 @@ public class Matrix3DFeaturesTest
 
          double detScaled = Matrix3DFeatures.determinant(column0[0], column1[0], column2[0], column0[1], column1[1], column2[1], column0[2], column1[2],
                                                          column2[2]);
-         assertEqualsDelta(detScaled, scale * det, EPS);
+         assertEquals(detScaled, scale * det, EPS);
       }
 
       // Check that scaling a column scales the determinant
@@ -581,7 +579,7 @@ public class Matrix3DFeaturesTest
          row2[columnScale] *= scale;
 
          double detScaled = Matrix3DFeatures.determinant(row0[0], row0[1], row0[2], row1[0], row1[1], row1[2], row2[0], row2[1], row2[2]);
-         assertEqualsDelta(detScaled, scale * det, EPS);
+         assertEquals(detScaled, scale * det, EPS);
       }
 
       // Check that det(M) == 0 when M has two equal rows
@@ -599,7 +597,7 @@ public class Matrix3DFeaturesTest
          column2[rowCopyDest] = column2[rowCopySrc];
 
          double det = Matrix3DFeatures.determinant(column0[0], column1[0], column2[0], column0[1], column1[1], column2[1], column0[2], column1[2], column2[2]);
-         assertEqualsDelta(0.0, det, EPS);
+         assertEquals(0.0, det, EPS);
       }
 
       // Check that det(M) == 0 when M has two equal columns
@@ -617,7 +615,7 @@ public class Matrix3DFeaturesTest
          row2[columnCopyDest] = row2[columnCopySrc];
 
          double det = Matrix3DFeatures.determinant(row0[0], row0[1], row0[2], row1[0], row1[1], row1[2], row2[0], row2[1], row2[2]);
-         assertEqualsDelta(0.0, det, EPS);
+         assertEquals(0.0, det, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -625,7 +623,7 @@ public class Matrix3DFeaturesTest
          Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          matrix.get(denseMatrix);
 
-         assertEqualsDelta(CommonOps.det(denseMatrix), matrix.determinant(), EPS);
+         assertEquals(CommonOps.det(denseMatrix), matrix.determinant(), EPS);
 
          double m00 = matrix.getM00();
          double m01 = matrix.getM01();
@@ -636,7 +634,7 @@ public class Matrix3DFeaturesTest
          double m20 = matrix.getM20();
          double m21 = matrix.getM21();
          double m22 = matrix.getM22();
-         assertEqualsDelta(CommonOps.det(denseMatrix), Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22), EPS);
+         assertEquals(CommonOps.det(denseMatrix), Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22), EPS);
       }
    }
 

@@ -1,8 +1,6 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -59,7 +57,7 @@ public class Ramp3DTest
       Ramp3D ramp3d = new Ramp3D(transform, 1.0, 1.0, 1.0);
       Point3D pointToCheck = new Point3D(2.0, 0.0, 4.0);
       assertFalse(ramp3d.isInsideOrOnSurface(pointToCheck));
-      assertEqualsDelta(Math.toRadians(45.0), ramp3d.getRampIncline(), 1e-7);
+      assertEquals(Math.toRadians(45.0), ramp3d.getRampIncline(), 1e-7);
    }
 
    @Test
@@ -86,9 +84,9 @@ public class Ramp3DTest
       Ramp3D ramp = new Ramp3D(1.0, 1.0, 1.0);
       Vector3D surfaceNormal = new Vector3D();
       ramp.getRampSurfaceNormal(surfaceNormal);
-      assertEqualsDelta("not equal", surfaceNormal.getX(), -1.0 / Math.sqrt(2.0), 1e-14);
-      assertEqualsDelta("not equal", surfaceNormal.getY(), 0.0, 1e-14);
-      assertEqualsDelta("not equal", surfaceNormal.getZ(), 1.0 / Math.sqrt(2.0), 1e-14);
+      assertEquals(surfaceNormal.getX(), -1.0 / Math.sqrt(2.0), 1e-14, "not equal");
+      assertEquals(surfaceNormal.getY(), 0.0, 1e-14, "not equal");
+      assertEquals(surfaceNormal.getZ(), 1.0 / Math.sqrt(2.0), 1e-14, "not equal");
    }
 
    @Test
@@ -97,18 +95,18 @@ public class Ramp3DTest
       Ramp3D ramp3d = new Ramp3D(1.0, 1.0, 1.0);
       Point3D pointToProject = new Point3D(0.0, 0.0, 1.0);
       ramp3d.orthogonalProjection(pointToProject);
-      assertEqualsDelta(pointToProject.getX(), 0.5, 1e-14);
-      assertEqualsDelta(pointToProject.getY(), 0.0, 1e-14);
-      assertEqualsDelta(pointToProject.getZ(), 0.5, 1e-14);
+      assertEquals(pointToProject.getX(), 0.5, 1e-14);
+      assertEquals(pointToProject.getY(), 0.0, 1e-14);
+      assertEquals(pointToProject.getZ(), 0.5, 1e-14);
 
       RigidBodyTransform transform = new RigidBodyTransform();
       transform.setRotationYawAndZeroTranslation(0.5 * Math.PI);
       ramp3d.applyTransform(transform);
       pointToProject.set(0.0, 0.0, 1.0);
       ramp3d.orthogonalProjection(pointToProject);
-      assertEqualsDelta(pointToProject.getX(), 0.0, 1e-14);
-      assertEqualsDelta(pointToProject.getY(), 0.5, 1e-14);
-      assertEqualsDelta(pointToProject.getZ(), 0.5, 1e-14);
+      assertEquals(pointToProject.getX(), 0.0, 1e-14);
+      assertEquals(pointToProject.getY(), 0.5, 1e-14);
+      assertEquals(pointToProject.getZ(), 0.5, 1e-14);
    }
 
    @Test
@@ -202,7 +200,7 @@ public class Ramp3DTest
             System.out.println(" vectorFromOriginToPointOnRamp = " + vectorFromOriginToPointOnRamp);
             System.out.println(" surfaceNormal = " + surfaceNormal);
          }
-         assertEqualsDelta(0.0, dotProduct, 1e-14);
+         assertEquals(0.0, dotProduct, 1e-14);
       }
    }
 
@@ -328,7 +326,7 @@ public class Ramp3DTest
             distance = ramp.distance(pointToTestAboveRamp);
 
          }
-         assertEqualsDelta(distance, heightAboveRamp, 1e-3);
+         assertEquals(distance, heightAboveRamp, 1e-3);
       }
    }
 
@@ -390,7 +388,7 @@ public class Ramp3DTest
          printIfDebug("isInside = " + isInside);
          printIfDebug("distanceToPointToTest = " + distanceToPointToTest);
 
-         assertEqualsDelta(Math.max(0.0, distanceToPointOnRamp), 0.0, 1e-7);
+         assertEquals(Math.max(0.0, distanceToPointOnRamp), 0.0, 1e-7);
       }
    }
 

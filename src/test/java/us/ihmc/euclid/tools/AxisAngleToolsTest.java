@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
@@ -34,8 +32,8 @@ public class AxisAngleToolsTest
 
          double actualDistance = AxisAngleTools.distance(aa1, aa2);
          double expectedDistance = q1.distance(q2);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
-         assertEqualsDelta(0.0, aa1.distance(aa1), EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+         assertEquals(0.0, aa1.distance(aa1), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -50,8 +48,8 @@ public class AxisAngleToolsTest
 
          double actualDistance = AxisAngleTools.distance(aa1, aa2);
          double expectedDistance = q1.distance(q2);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
-         assertEqualsDelta(0.0, aa1.distance(aa1), EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+         assertEquals(0.0, aa1.distance(aa1), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)

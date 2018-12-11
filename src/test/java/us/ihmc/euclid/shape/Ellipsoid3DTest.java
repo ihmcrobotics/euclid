@@ -1,8 +1,6 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -77,7 +75,7 @@ public class Ellipsoid3DTest
       double yScaled = closestPointToPack.getY() / yRadius;
       double zScaled = closestPointToPack.getZ() / zRadius;
       double sumSquared = xScaled * xScaled + yScaled * yScaled + zScaled * zScaled;
-      assertEqualsDelta(1.0, sumSquared, 1e-7);
+      assertEquals(1.0, sumSquared, 1e-7);
    }
 
    @Test
@@ -324,9 +322,9 @@ public class Ellipsoid3DTest
 
          Ellipsoid3D ellipsoidCopy = new Ellipsoid3D(ellipsoid);
 
-         assertEqualsDelta(ellipsoid.getRadiusX(), ellipsoidCopy.getRadiusX(), 1e-10);
-         assertEqualsDelta(ellipsoid.getRadiusY(), ellipsoidCopy.getRadiusY(), 1e-10);
-         assertEqualsDelta(ellipsoid.getRadiusZ(), ellipsoidCopy.getRadiusZ(), 1e-10);
+         assertEquals(ellipsoid.getRadiusX(), ellipsoidCopy.getRadiusX(), 1e-10);
+         assertEquals(ellipsoid.getRadiusY(), ellipsoidCopy.getRadiusY(), 1e-10);
+         assertEquals(ellipsoid.getRadiusZ(), ellipsoidCopy.getRadiusZ(), 1e-10);
 
          Point3D center = new Point3D();
          ellipsoid.getPosition(center);

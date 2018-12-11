@@ -1,8 +1,6 @@
 package us.ihmc.euclid.yawPitchRoll;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
 
@@ -68,13 +66,13 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          double expectedRoll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
          T ypr = createYawPitchRoll(expectedYaw, expectedPitch, expectedRoll);
-         assertEqualsDelta(expectedYaw, ypr.getYaw(), getEpsilon());
-         assertEqualsDelta(expectedPitch, ypr.getPitch(), getEpsilon());
-         assertEqualsDelta(expectedRoll, ypr.getRoll(), getEpsilon());
+         assertEquals(expectedYaw, ypr.getYaw(), getEpsilon());
+         assertEquals(expectedPitch, ypr.getPitch(), getEpsilon());
+         assertEquals(expectedRoll, ypr.getRoll(), getEpsilon());
 
-         assertEqualsDelta((float) expectedYaw, ypr.getYaw32(), getEpsilon());
-         assertEqualsDelta((float) expectedPitch, ypr.getPitch32(), getEpsilon());
-         assertEqualsDelta((float) expectedRoll, ypr.getRoll32(), getEpsilon());
+         assertEquals((double) (float) expectedYaw, (double) ypr.getYaw32(), getEpsilon());
+         assertEquals((double) (float) expectedPitch, (double) ypr.getPitch32(), getEpsilon());
+         assertEquals((double) (float) expectedRoll, (double) ypr.getRoll32(), getEpsilon());
       }
    }
 
@@ -205,7 +203,7 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
 
          double actual = ypr1.distance(ypr2);
          double expected = YawPitchRollTools.distance(ypr1, ypr2);
-         assertEqualsDelta(expected, actual, getEpsilon());
+         assertEquals(expected, actual, getEpsilon());
       }
    }
 

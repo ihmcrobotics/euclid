@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -34,24 +32,24 @@ public class Pose2DTest
          yaw = Math.PI - 2.0 * Math.PI * random.nextDouble();
 
          allDoubles = new Pose2D(x, y, yaw);
-         assertEqualsDelta(x, allDoubles.getX(), epsilon);
-         assertEqualsDelta(y, allDoubles.getY(), epsilon);
-         assertEqualsDelta(yaw, allDoubles.getYaw(), epsilon);
+         assertEquals(x, allDoubles.getX(), epsilon);
+         assertEquals(y, allDoubles.getY(), epsilon);
+         assertEquals(yaw, allDoubles.getYaw(), epsilon);
 
          toCopy = new Pose2D(x, y, yaw);
          copyPose = new Pose2D(toCopy);
 
-         assertEqualsDelta(x, copyPose.getX(), epsilon);
-         assertEqualsDelta(y, copyPose.getY(), epsilon);
-         assertEqualsDelta(yaw, copyPose.getYaw(), epsilon);
+         assertEquals(x, copyPose.getX(), epsilon);
+         assertEquals(y, copyPose.getY(), epsilon);
+         assertEquals(yaw, copyPose.getYaw(), epsilon);
 
          tuple = new Vector2D(x, y);
          orientation = new Orientation2D(yaw);
          fromComponents = new Pose2D(tuple, orientation);
 
-         assertEqualsDelta(x, fromComponents.getX(), epsilon);
-         assertEqualsDelta(y, fromComponents.getY(), epsilon);
-         assertEqualsDelta(yaw, fromComponents.getYaw(), epsilon);
+         assertEquals(x, fromComponents.getX(), epsilon);
+         assertEquals(y, fromComponents.getY(), epsilon);
+         assertEquals(yaw, fromComponents.getYaw(), epsilon);
       }
    }
 
@@ -67,9 +65,9 @@ public class Pose2DTest
 
          toSet.setToNaN();
 
-         assertEqualsDelta(Double.NaN, toSet.getX(), epsilon);
-         assertEqualsDelta(Double.NaN, toSet.getY(), epsilon);
-         assertEqualsDelta(Double.NaN, toSet.getYaw(), epsilon);
+         assertEquals(Double.NaN, toSet.getX(), epsilon);
+         assertEquals(Double.NaN, toSet.getY(), epsilon);
+         assertEquals(Double.NaN, toSet.getYaw(), epsilon);
       }
    }
 
@@ -85,9 +83,9 @@ public class Pose2DTest
 
          toSet.setToZero();
 
-         assertEqualsDelta(0, toSet.getX(), epsilon);
-         assertEqualsDelta(0, toSet.getY(), epsilon);
-         assertEqualsDelta(0, toSet.getYaw(), epsilon);
+         assertEquals((double) 0, toSet.getX(), epsilon);
+         assertEquals((double) 0, toSet.getY(), epsilon);
+         assertEquals((double) 0, toSet.getYaw(), epsilon);
       }
    }
 
@@ -112,26 +110,26 @@ public class Pose2DTest
          toSet.setY(y);
          toSet.setYaw(yaw);
 
-         assertEqualsDelta(x, toSet.getX(), epsilon);
-         assertEqualsDelta(y, toSet.getY(), epsilon);
-         assertEqualsDelta(yaw, toSet.getYaw(), epsilon);
+         assertEquals(x, toSet.getX(), epsilon);
+         assertEquals(y, toSet.getY(), epsilon);
+         assertEquals(yaw, toSet.getYaw(), epsilon);
 
          toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.setPosition(x, y);
          toSet.setYaw(yaw);
 
-         assertEqualsDelta(x, toSet.getX(), epsilon);
-         assertEqualsDelta(y, toSet.getY(), epsilon);
-         assertEqualsDelta(yaw, toSet.getYaw(), epsilon);
+         assertEquals(x, toSet.getX(), epsilon);
+         assertEquals(y, toSet.getY(), epsilon);
+         assertEquals(yaw, toSet.getYaw(), epsilon);
 
          toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.set(x, y, yaw);
 
-         assertEqualsDelta(x, toSet.getX(), epsilon);
-         assertEqualsDelta(y, toSet.getY(), epsilon);
-         assertEqualsDelta(yaw, toSet.getYaw(), epsilon);
+         assertEquals(x, toSet.getX(), epsilon);
+         assertEquals(y, toSet.getY(), epsilon);
+         assertEquals(yaw, toSet.getYaw(), epsilon);
 
          toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
@@ -139,18 +137,18 @@ public class Pose2DTest
          orientation = new Orientation2D(yaw);
          toSet.set(tuple, orientation);
 
-         assertEqualsDelta(x, toSet.getX(), epsilon);
-         assertEqualsDelta(y, toSet.getY(), epsilon);
-         assertEqualsDelta(yaw, toSet.getYaw(), epsilon);
+         assertEquals(x, toSet.getX(), epsilon);
+         assertEquals(y, toSet.getY(), epsilon);
+         assertEquals(yaw, toSet.getYaw(), epsilon);
 
          toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
          toSet.setPosition(tuple);
          toSet.setOrientation(orientation);
 
-         assertEqualsDelta(x, toSet.getX(), epsilon);
-         assertEqualsDelta(y, toSet.getY(), epsilon);
-         assertEqualsDelta(yaw, toSet.getYaw(), epsilon);
+         assertEquals(x, toSet.getX(), epsilon);
+         assertEquals(y, toSet.getY(), epsilon);
+         assertEquals(yaw, toSet.getYaw(), epsilon);
 
          toSet = EuclidGeometryRandomTools.nextPose2D(random);
 
@@ -158,9 +156,9 @@ public class Pose2DTest
 
          toSet.set(toCopy);
 
-         assertEqualsDelta(x, toSet.getX(), epsilon);
-         assertEqualsDelta(y, toSet.getY(), epsilon);
-         assertEqualsDelta(yaw, toSet.getYaw(), epsilon);
+         assertEquals(x, toSet.getX(), epsilon);
+         assertEquals(y, toSet.getY(), epsilon);
+         assertEquals(yaw, toSet.getYaw(), epsilon);
       }
    }
 
@@ -183,12 +181,12 @@ public class Pose2DTest
 
          secondPose.appendTranslation(translation);
 
-         assertEqualsDelta(length, firstPose.getPositionDistance(secondPose), epsilon);
+         assertEquals(length, firstPose.getPositionDistance(secondPose), epsilon);
 
          point.set(firstPose.getPosition());
          point.add(translation);
 
-         assertEqualsDelta(length, firstPose.getPositionDistance(point), epsilon);
+         assertEquals(length, firstPose.getPositionDistance(point), epsilon);
       }
    }
 
@@ -209,12 +207,12 @@ public class Pose2DTest
 
          secondPose.appendRotation(angleDiff);
 
-         assertEqualsDelta(Math.abs(angleDiff), firstPose.getOrientationDistance(secondPose), epsilon);
+         assertEquals(Math.abs(angleDiff), firstPose.getOrientationDistance(secondPose), epsilon);
 
          orientation.set(firstPose.getOrientation());
          orientation.add(angleDiff);
 
-         assertEqualsDelta(Math.abs(angleDiff), firstPose.getOrientationDistance(orientation), epsilon);
+         assertEquals(Math.abs(angleDiff), firstPose.getOrientationDistance(orientation), epsilon);
       }
    }
 

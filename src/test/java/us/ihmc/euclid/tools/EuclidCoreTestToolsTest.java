@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

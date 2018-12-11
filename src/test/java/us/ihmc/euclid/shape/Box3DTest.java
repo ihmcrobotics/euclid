@@ -1,8 +1,6 @@
 package us.ihmc.euclid.shape;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
@@ -290,7 +288,7 @@ public class Box3DTest
 
             // check distance stuff:
             double epsilon = 1e-14;
-            assertEqualsDelta(box.distance(closestPoint), 0.0, epsilon);
+            assertEquals(box.distance(closestPoint), 0.0, epsilon);
             assertTrue(box.isInsideEpsilon(closestPoint, epsilon));
             assertTrue(box.isInsideEpsilon(projectedPoint, epsilon));
             if (box.isInsideOrOnSurface(point))
@@ -299,7 +297,7 @@ public class Box3DTest
             }
             else
             {
-               assertEqualsDelta(point.distance(projectedPoint), Math.abs(box.distance(point)), epsilon);
+               assertEquals(point.distance(projectedPoint), Math.abs(box.distance(point)), epsilon);
                EuclidCoreTestTools.assertTuple3DEquals(projectedPoint, closestPoint, epsilon);
             }
 
@@ -335,7 +333,7 @@ public class Box3DTest
                   normalFromCrossProduct.cross(vector1, vector2);
                   normalFromCrossProduct.normalize();
 
-                  assertEqualsDelta(1.0, Math.abs(normalFromCrossProduct.dot(normal)), 1e-8);
+                  assertEquals(1.0, Math.abs(normalFromCrossProduct.dot(normal)), 1e-8);
                }
             }
          }
@@ -422,9 +420,9 @@ public class Box3DTest
          box.getOrientation(rotation);
 
          double epsilon = 1e-14;
-         assertEqualsDelta(yaw, rotation.getYaw(), epsilon);
-         assertEqualsDelta(pitch, rotation.getPitch(), epsilon);
-         assertEqualsDelta(roll, rotation.getRoll(), epsilon);
+         assertEquals(yaw, rotation.getYaw(), epsilon);
+         assertEquals(pitch, rotation.getPitch(), epsilon);
+         assertEquals(roll, rotation.getRoll(), epsilon);
       }
    }
 
@@ -682,9 +680,18 @@ public class Box3DTest
       assertTrue(box1.getOrientation().epsilonEquals(box2.getOrientation(), epsilon));
       assertTrue(box1.getPosition().epsilonEquals(box2.getPosition(), epsilon));
 
-      assertEqualsDelta(box1.getSizeX(), box2.getSizeX(), epsilon);
-      assertEqualsDelta(box1.getSizeY(), box2.getSizeY(), epsilon);
-      assertEqualsDelta(box1.getSizeZ(), box2.getSizeZ(), epsilon);
+      if (epsilon == 0.0)
+      {
+         assertEquals(box1.getSizeX(), box2.getSizeX());
+         assertEquals(box1.getSizeY(), box2.getSizeY());
+         assertEquals(box1.getSizeZ(), box2.getSizeZ());
+      }
+      else
+      {
+         assertEquals(box1.getSizeX(), box2.getSizeX(), epsilon);
+         assertEquals(box1.getSizeY(), box2.getSizeY(), epsilon);
+         assertEquals(box1.getSizeZ(), box2.getSizeZ(), epsilon);
+      }
    }
 
    private static Point3D getRandomConvexCombination(Random random, Point3D[] vertices)

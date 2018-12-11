@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -189,7 +187,7 @@ public class LineSegment3DTest
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          double actualLength = lineSegment3D.length();
          double expectedLength = lineSegment3D.getFirstEndpoint().distance(lineSegment3D.getSecondEndpoint());
-         assertEqualsDelta(expectedLength, actualLength, EPSILON);
+         assertEquals(expectedLength, actualLength, EPSILON);
       }
    }
 
@@ -205,7 +203,7 @@ public class LineSegment3DTest
          double expected = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(query, lineSegment3D.getFirstEndpoint(),
                                                                                          lineSegment3D.getSecondEndpoint());
          double actual = lineSegment3D.distanceSquared(query);
-         assertEqualsDelta(expected, actual, EPSILON);
+         assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -214,7 +212,7 @@ public class LineSegment3DTest
          Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          double expected = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(query, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
          double actual = lineSegment3D.distance(query);
-         assertEqualsDelta(expected, actual, EPSILON);
+         assertEquals(expected, actual, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -224,7 +222,7 @@ public class LineSegment3DTest
          double expected = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegment1.getFirstEndpoint(), lineSegment1.getSecondEndpoint(),
                                                                                 lineSegment2.getFirstEndpoint(), lineSegment2.getSecondEndpoint());
          double actual = lineSegment1.distance(lineSegment2);
-         assertEqualsDelta(expected, actual, EPSILON);
+         assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -378,7 +376,7 @@ public class LineSegment3DTest
          Vector3D expectedDirection = new Vector3D();
          expectedDirection.sub(secondEndpoint, firstEndpoint);
          EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualDirection, EPSILON);
-         assertEqualsDelta(lineSegment3D.length(), actualDirection.length(), EPSILON);
+         assertEquals(lineSegment3D.length(), actualDirection.length(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -387,7 +385,7 @@ public class LineSegment3DTest
          Vector3D actualDirection = new Vector3D();
          lineSegment3D.getDirection(true, actualDirection);
 
-         assertEqualsDelta(1.0, actualDirection.length(), EPSILON);
+         assertEquals(1.0, actualDirection.length(), EPSILON);
 
          Vector3D expectedDirection = new Vector3D();
          lineSegment3D.getDirection(false, expectedDirection);
@@ -403,7 +401,7 @@ public class LineSegment3DTest
          Vector3D expectedDirection = new Vector3D();
          lineSegment3D.getDirection(false, expectedDirection);
          EuclidCoreTestTools.assertTuple3DEquals(expectedDirection, actualDirection, EPSILON);
-         assertEqualsDelta(lineSegment3D.length(), actualDirection.length(), EPSILON);
+         assertEquals(lineSegment3D.length(), actualDirection.length(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -411,7 +409,7 @@ public class LineSegment3DTest
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Vector3DBasics actualDirection = lineSegment3D.getDirection(true);
 
-         assertEqualsDelta(1.0, actualDirection.length(), EPSILON);
+         assertEquals(1.0, actualDirection.length(), EPSILON);
 
          Vector3D expectedDirection = new Vector3D();
          lineSegment3D.getDirection(true, expectedDirection);
@@ -518,9 +516,9 @@ public class LineSegment3DTest
 
          double expected = EuclidGeometryTools.percentageAlongLineSegment3D(query, lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint());
          double actual = lineSegment3D.percentageAlongLineSegment(query);
-         assertEqualsDelta(expected, actual, EPSILON);
+         assertEquals(expected, actual, EPSILON);
          actual = lineSegment3D.percentageAlongLineSegment(query.getX(), query.getY(), query.getZ());
-         assertEqualsDelta(expected, actual, EPSILON);
+         assertEquals(expected, actual, EPSILON);
       }
    }
 
@@ -710,7 +708,7 @@ public class LineSegment3DTest
          double z = EuclidCoreRandomTools.nextDouble(random, 10.0);
          translatedLineSegment.translate(x, y, z);
 
-         assertEqualsDelta(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
+         assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(originalLineSegment.getDirection(false), translatedLineSegment.getDirection(false), EPSILON);
 
          LineSegment3D expectedLineSegment = new LineSegment3D(originalLineSegment);
@@ -727,7 +725,7 @@ public class LineSegment3DTest
          Tuple3DReadOnly translation = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          translatedLineSegment.translate(translation);
 
-         assertEqualsDelta(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
+         assertEquals(originalLineSegment.length(), translatedLineSegment.length(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(originalLineSegment.getDirection(false), translatedLineSegment.getDirection(false), EPSILON);
 
          LineSegment3D expectedLineSegment = new LineSegment3D(originalLineSegment);

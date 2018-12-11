@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
@@ -492,8 +490,8 @@ public class EuclidGeometryToolsTest
       Point2D actualReturn = EuclidGeometryTools.averagePoint2Ds(points);
       double actualReturn1 = actualReturn.getX();
       double actualReturn2 = actualReturn.getY();
-      assertEqualsDelta("return value", expectedReturn1, actualReturn1, EPSILON);
-      assertEqualsDelta("return value", expectedReturn2, actualReturn2, EPSILON);
+      assertEquals(expectedReturn1, actualReturn1, EPSILON, "return value");
+      assertEquals(expectedReturn2, actualReturn2, EPSILON, "return value");
 
       ArrayList<Point2D> points1 = new ArrayList<>();
       Point2D a1 = new Point2D(0.0, 0.0);
@@ -507,8 +505,8 @@ public class EuclidGeometryToolsTest
       Point2D actualReturn01 = EuclidGeometryTools.averagePoint2Ds(points1);
       double actualReturn11 = actualReturn01.getX();
       double actualReturn12 = actualReturn01.getY();
-      assertEqualsDelta("return value", expectedReturn11, actualReturn11, EPSILON);
-      assertEqualsDelta("return value", expectedReturn12, actualReturn12, EPSILON);
+      assertEquals(expectedReturn11, actualReturn11, EPSILON, "return value");
+      assertEquals(expectedReturn12, actualReturn12, EPSILON, "return value");
 
       ArrayList<Point2D> points2 = new ArrayList<>();
       Point2D a2 = new Point2D(-1.0, -4.6);
@@ -522,8 +520,8 @@ public class EuclidGeometryToolsTest
       Point2D actualReturn02 = EuclidGeometryTools.averagePoint2Ds(points2);
       double actualReturn21 = actualReturn02.getX();
       double actualReturn22 = actualReturn02.getY();
-      assertEqualsDelta("return value", expectedReturn21, actualReturn21, EPSILON);
-      assertEqualsDelta("return value", expectedReturn22, actualReturn22, EPSILON);
+      assertEquals(expectedReturn21, actualReturn21, EPSILON, "return value");
+      assertEquals(expectedReturn22, actualReturn22, EPSILON, "return value");
    }
 
    @Test
@@ -545,9 +543,9 @@ public class EuclidGeometryToolsTest
       double actualReturn1 = actualReturn.getX();
       double actualReturn2 = actualReturn.getY();
       double actualReturn3 = actualReturn.getZ();
-      assertEqualsDelta("return value", expectedReturn1, actualReturn1, EPSILON);
-      assertEqualsDelta("return value", expectedReturn2, actualReturn2, EPSILON);
-      assertEqualsDelta("return value", expectedReturn3, actualReturn3, EPSILON);
+      assertEquals(expectedReturn1, actualReturn1, EPSILON, "return value");
+      assertEquals(expectedReturn2, actualReturn2, EPSILON, "return value");
+      assertEquals(expectedReturn3, actualReturn3, EPSILON, "return value");
 
       ArrayList<Point3D> points1 = new ArrayList<>();
       Point3D a1 = new Point3D(0.0, 0.0, 0.0);
@@ -563,9 +561,9 @@ public class EuclidGeometryToolsTest
       double actualReturn11 = actualReturn01.getX();
       double actualReturn12 = actualReturn01.getY();
       double actualReturn13 = actualReturn01.getZ();
-      assertEqualsDelta("return value", expectedReturn11, actualReturn11, EPSILON);
-      assertEqualsDelta("return value", expectedReturn12, actualReturn12, EPSILON);
-      assertEqualsDelta("return value", expectedReturn13, actualReturn13, EPSILON);
+      assertEquals(expectedReturn11, actualReturn11, EPSILON, "return value");
+      assertEquals(expectedReturn12, actualReturn12, EPSILON, "return value");
+      assertEquals(expectedReturn13, actualReturn13, EPSILON, "return value");
    }
 
    @Test
@@ -581,9 +579,9 @@ public class EuclidGeometryToolsTest
       double actualReturn1 = actualReturn.getX();
       double actualReturn2 = actualReturn.getY();
       double actualReturn3 = actualReturn.getZ();
-      assertEqualsDelta("return value", expectedReturn1, actualReturn1, EPSILON);
-      assertEqualsDelta("return value", expectedReturn2, actualReturn2, EPSILON);
-      assertEqualsDelta("return value", expectedReturn3, actualReturn3, EPSILON);
+      assertEquals(expectedReturn1, actualReturn1, EPSILON, "return value");
+      assertEquals(expectedReturn2, actualReturn2, EPSILON, "return value");
+      assertEquals(expectedReturn3, actualReturn3, EPSILON, "return value");
 
       Point3D a1 = new Point3D(-5, -5, -5);
       Point3D b1 = new Point3D(-5, -5, -5);
@@ -594,9 +592,9 @@ public class EuclidGeometryToolsTest
       double actualReturn11 = actualReturn01.getX();
       double actualReturn12 = actualReturn01.getY();
       double actualReturn13 = actualReturn01.getZ();
-      assertEqualsDelta("return value", expectedReturn11, actualReturn11, EPSILON);
-      assertEqualsDelta("return value", expectedReturn12, actualReturn12, EPSILON);
-      assertEqualsDelta("return value", expectedReturn13, actualReturn13, EPSILON);
+      assertEquals(expectedReturn11, actualReturn11, EPSILON, "return value");
+      assertEquals(expectedReturn12, actualReturn12, EPSILON, "return value");
+      assertEquals(expectedReturn13, actualReturn13, EPSILON, "return value");
 
       Point3D a2 = new Point3D(0, 0, 0);
       Point3D b2 = new Point3D(0, 0, 0);
@@ -607,9 +605,9 @@ public class EuclidGeometryToolsTest
       double actualReturn21 = actualReturn02.getX();
       double actualReturn22 = actualReturn02.getY();
       double actualReturn23 = actualReturn02.getZ();
-      assertEqualsDelta("return value", expectedReturn21, actualReturn21, EPSILON);
-      assertEqualsDelta("return value", expectedReturn22, actualReturn22, EPSILON);
-      assertEqualsDelta("return value", expectedReturn23, actualReturn23, EPSILON);
+      assertEquals(expectedReturn21, actualReturn21, EPSILON, "return value");
+      assertEquals(expectedReturn22, actualReturn22, EPSILON, "return value");
+      assertEquals(expectedReturn23, actualReturn23, EPSILON, "return value");
    }
 
    @Test
@@ -634,12 +632,12 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEqualsDelta(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEqualsDelta(0.0, actualAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEqualsDelta(0.0, actualAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, actualAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, actualAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
 
-         assertEqualsDelta(0.0, expectedAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEqualsDelta(0.0, expectedAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, expectedAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, expectedAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
 
          if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
          {
@@ -671,13 +669,13 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEqualsDelta(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
          // Can not be as accurate as we get closer to 0.0
-         assertEqualsDelta(0.0, actualAxis.dot(firstVector), 1.0e-10);
-         assertEqualsDelta(0.0, actualAxis.dot(secondVector), 1.0e-10);
+         assertEquals(0.0, actualAxis.dot(firstVector), 1.0e-10);
+         assertEquals(0.0, actualAxis.dot(secondVector), 1.0e-10);
 
-         assertEqualsDelta(0.0, expectedAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEqualsDelta(0.0, expectedAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, expectedAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, expectedAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
 
          if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
          {
@@ -711,13 +709,13 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEqualsDelta(0.0, expectedAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
-         assertEqualsDelta(0.0, expectedAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, expectedAxis.dot(firstVector), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(0.0, expectedAxis.dot(secondVector), EuclidGeometryTools.ONE_TRILLIONTH);
 
-         assertEqualsDelta(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
          // Can not be as accurate as we get closer to Math.PI
-         assertEqualsDelta(0.0, actualAxis.dot(firstVector), 1.0e-10);
-         assertEqualsDelta(0.0, actualAxis.dot(secondVector), 1.0e-10);
+         assertEquals(0.0, actualAxis.dot(firstVector), 1.0e-10);
+         assertEquals(0.0, actualAxis.dot(secondVector), 1.0e-10);
          if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
          {
             expectedAxis.negate();
@@ -745,7 +743,7 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEqualsDelta(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
 
          if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
          {
@@ -774,7 +772,7 @@ public class EuclidGeometryToolsTest
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
-         assertEqualsDelta(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(1.0, actualAxis.length(), EuclidGeometryTools.ONE_TRILLIONTH);
 
          if (actualAxisAngle.getAngle() * expectedAxisAngle.getAngle() < 0.0)
          {
@@ -842,7 +840,7 @@ public class EuclidGeometryToolsTest
 
          double actualMinimumDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2,
                                                                                              actualPointOnLine1ToPack, actualPointOnLine2ToPack);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnLine1ToPack, actualPointOnLine1ToPack, 1.0e-10);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnLine2ToPack, actualPointOnLine2ToPack, 1.0e-10);
 
@@ -853,7 +851,7 @@ public class EuclidGeometryToolsTest
 
          actualMinimumDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2,
                                                                                       actualPointOnLine1ToPack, actualPointOnLine2ToPack);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnLine1ToPack, actualPointOnLine1ToPack, 1.0e-10);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnLine2ToPack, actualPointOnLine2ToPack, 1.0e-10);
       }
@@ -877,7 +875,7 @@ public class EuclidGeometryToolsTest
 
          double actualMinimumDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2,
                                                                                              actualPointOnLine1ToPack, actualPointOnLine2ToPack);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
 
          // Let's shift lineStart1 and lineStart2 along their respective line
          // direction (the minimum distance should remain the same).
@@ -886,7 +884,7 @@ public class EuclidGeometryToolsTest
 
          actualMinimumDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2,
                                                                                       actualPointOnLine1ToPack, actualPointOnLine2ToPack);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
 
       // Intersection case: the lines are not parallel, but intersecting.
@@ -913,7 +911,7 @@ public class EuclidGeometryToolsTest
 
          double actualMinimumDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2,
                                                                                              actualPointOnLine1ToPack, actualPointOnLine2ToPack);
-         assertEqualsDelta(0.0, actualMinimumDistance, 1.0e-10);
+         assertEquals(0.0, actualMinimumDistance, 1.0e-10);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnLine1ToPack, actualPointOnLine1ToPack, 1.0e-10);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnLine2ToPack, actualPointOnLine2ToPack, 1.0e-10);
       }
@@ -1171,16 +1169,16 @@ public class EuclidGeometryToolsTest
 
          double expectedArea = 0.5 * length * width;
          double actualArea = EuclidGeometryTools.triangleArea(a, b, c);
-         assertEqualsDelta(expectedArea, actualArea, EPSILON);
+         assertEquals(expectedArea, actualArea, EPSILON);
          actualArea = EuclidGeometryTools.triangleArea(a, c, d);
-         assertEqualsDelta(expectedArea, actualArea, EPSILON);
+         assertEquals(expectedArea, actualArea, EPSILON);
          actualArea = EuclidGeometryTools.triangleArea(b, c, d);
-         assertEqualsDelta(expectedArea, actualArea, EPSILON);
+         assertEquals(expectedArea, actualArea, EPSILON);
          actualArea = EuclidGeometryTools.triangleArea(a, b, d);
-         assertEqualsDelta(expectedArea, actualArea, EPSILON);
+         assertEquals(expectedArea, actualArea, EPSILON);
 
          // Just an annoying case
-         assertEqualsDelta(0.0, EuclidGeometryTools.triangleArea(a, a, c), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.triangleArea(a, a, c), EPSILON);
       }
    }
 
@@ -1199,10 +1197,10 @@ public class EuclidGeometryToolsTest
 
          double expectedDistance = firstPoint.distance(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(), secondPoint.getY());
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
 
          actualDistance = EuclidGeometryTools.distanceBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1222,10 +1220,10 @@ public class EuclidGeometryToolsTest
          double expectedDistance = firstPoint.distanceSquared(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(),
                                                                                     secondPoint.getY());
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
 
          actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint2Ds(firstPoint.getX(), firstPoint.getY(), secondPoint);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1245,10 +1243,10 @@ public class EuclidGeometryToolsTest
          double expectedDistance = firstPoint.distance(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(),
                                                                              secondPoint.getY(), secondPoint.getZ());
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
 
          actualDistance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1268,10 +1266,10 @@ public class EuclidGeometryToolsTest
          double expectedDistance = firstPoint.distanceSquared(secondPoint);
          double actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint.getX(),
                                                                                     secondPoint.getY(), secondPoint.getZ());
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
 
          actualDistance = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(firstPoint.getX(), firstPoint.getY(), firstPoint.getZ(), secondPoint);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1311,7 +1309,7 @@ public class EuclidGeometryToolsTest
          closestPointOnLine2.set(lineStart2);
 
          double actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
 
          // Let's shift lineStart1 and lineStart2 along their respective line
          // direction so they're not the closest points.
@@ -1319,7 +1317,7 @@ public class EuclidGeometryToolsTest
          lineStart2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, lineStart2);
 
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
 
       // Test the parallel case. There's an infinite number of solutions but
@@ -1340,7 +1338,7 @@ public class EuclidGeometryToolsTest
          lineStart2.scaleAdd(expectedMinimumDistance, orthogonalToLine1, lineStart1);
 
          double actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
 
          // Let's shift lineStart1 and lineStart2 along their respective line
          // direction (the minimum distance should remain the same).
@@ -1348,7 +1346,7 @@ public class EuclidGeometryToolsTest
          lineStart2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection2, lineStart2);
 
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
    }
 
@@ -1397,7 +1395,7 @@ public class EuclidGeometryToolsTest
 
          double actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2,
                                                                                              lineSegmentEnd2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
 
       // Parallel case, expecting expectedPointOnLineSegment1 =
@@ -1432,7 +1430,7 @@ public class EuclidGeometryToolsTest
 
          double actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2,
                                                                                              lineSegmentEnd2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
 
          // Set the end points of the line segment 2 before the expected
          // closest point, so we have expectedClosestPointOnLineSegment2 =
@@ -1445,10 +1443,10 @@ public class EuclidGeometryToolsTest
          expectedMinimumDistance = closestPointOnLineSegment1.distance(closestPointOnLineSegment2);
 
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
 
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
 
       // Case: on closest point on lineSegment1 outside end points.
@@ -1487,13 +1485,13 @@ public class EuclidGeometryToolsTest
 
          double actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2,
                                                                                              lineSegmentEnd2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
 
       // Edge case: both closest points are outside bounds of each line
@@ -1539,13 +1537,13 @@ public class EuclidGeometryToolsTest
          double expectedMinimumDistance = closestPointOnLineSegment1.distance(closestPointOnLineSegment2);
          double actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2,
                                                                                              lineSegmentEnd2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2);
-         assertEqualsDelta(expectedMinimumDistance, actualMinimumDistance, EPSILON);
+         assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
    }
 
@@ -1573,14 +1571,14 @@ public class EuclidGeometryToolsTest
          query.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection, query);
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint2DToLine2D(query, pointOnLine, lineDirection);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
 
          // Test with a line direction that a magnitude that is too small
          lineDirection.normalize();
          lineDirection.scale(0.999999 * EuclidGeometryTools.ONE_TRILLIONTH);
          expectedDistance = pointOnLine.distance(query);
          actualDistance = EuclidGeometryTools.distanceFromPoint2DToLine2D(query, pointOnLine, lineDirection);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1592,21 +1590,21 @@ public class EuclidGeometryToolsTest
       Point2D lineEnd = new Point2D(10, 10);
       double expectedReturn = 4.8;
       double actualReturn = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(point, lineStart, lineEnd);
-      assertEqualsDelta("return value", expectedReturn, actualReturn, Double.MIN_VALUE);
+      assertEquals(expectedReturn, actualReturn, Double.MIN_VALUE, "return value");
 
       Point2D point1 = new Point2D(10, 10);
       Point2D lineStart1 = new Point2D(4, 2);
       Point2D lineEnd1 = new Point2D(4, 2);
       double expectedReturn1 = 10.0;
       double actualReturn1 = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(point1, lineStart1, lineEnd1);
-      assertEqualsDelta("return value", expectedReturn1, actualReturn1, Double.MIN_VALUE);
+      assertEquals(expectedReturn1, actualReturn1, Double.MIN_VALUE, "return value");
 
       Point2D point2 = new Point2D(1, 1);
       Point2D lineStart2 = new Point2D(5, 5);
       Point2D lineEnd2 = new Point2D(5, 5);
       double expectedReturn2 = lineStart2.distance(point2);
       double actualReturn2 = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(point2, lineStart2, lineEnd2);
-      assertEqualsDelta("return value", expectedReturn2, actualReturn2, EPSILON);
+      assertEquals(expectedReturn2, actualReturn2, EPSILON, "return value");
 
       Random random = new Random(32423L);
 
@@ -1630,7 +1628,7 @@ public class EuclidGeometryToolsTest
          testPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, projection);
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1638,7 +1636,7 @@ public class EuclidGeometryToolsTest
          projection.set(lineSegmentStart);
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
@@ -1646,7 +1644,7 @@ public class EuclidGeometryToolsTest
          projection.set(lineSegmentEnd);
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -1672,7 +1670,7 @@ public class EuclidGeometryToolsTest
          // Distance should be the same as the distance to the line collinear to the ray
          double expectedDistance = EuclidGeometryTools.distanceFromPoint2DToLine2D(query, rayOrigin, rayDirection);
          double actualDistance = EuclidGeometryTools.distanceFromPoint2DToRay2D(query, rayOrigin, rayDirection);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1692,7 +1690,7 @@ public class EuclidGeometryToolsTest
          // Distance should be the same as the distance to the line collinear to the ray
          double expectedDistance = query.distance(rayOrigin);
          double actualDistance = EuclidGeometryTools.distanceFromPoint2DToRay2D(query, rayOrigin, rayDirection);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1705,14 +1703,14 @@ public class EuclidGeometryToolsTest
       Point3D lineEnd = new Point3D(10, 10, 0);
       double expectedReturn = 4.8;
       double actualReturn = EuclidGeometryTools.distanceFromPoint3DToLine3D(point, lineStart, lineEnd);
-      assertEqualsDelta("return value", expectedReturn, actualReturn, Double.MIN_VALUE);
+      assertEquals(expectedReturn, actualReturn, Double.MIN_VALUE, "return value");
 
       Point3D point1 = new Point3D(10, 10, 0);
       Point3D lineStart1 = new Point3D(4, 2, 0);
       Point3D lineEnd1 = new Point3D(4, 2, 0);
       double expectedReturn1 = 10.0;
       double actualReturn1 = EuclidGeometryTools.distanceFromPoint3DToLine3D(point1, lineStart1, lineEnd1);
-      assertEqualsDelta("return value", expectedReturn1, actualReturn1, Double.MIN_VALUE);
+      assertEquals(expectedReturn1, actualReturn1, Double.MIN_VALUE, "return value");
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -1734,17 +1732,17 @@ public class EuclidGeometryToolsTest
          query.scaleAdd(expectedDistance, orthogonalVector, query);
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, firstPointOnLine, secondPointOnLine);
-         assertEqualsDelta(expectedDistance, actualDistance, 1.0e-12);
+         assertEquals(expectedDistance, actualDistance, 1.0e-12);
 
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, firstPointOnLine, lineDirection);
-         assertEqualsDelta(expectedDistance, actualDistance, 1.0e-12);
+         assertEquals(expectedDistance, actualDistance, 1.0e-12);
 
          // Test with a line direction that a magnitude that is too small
          lineDirection.normalize();
          lineDirection.scale(0.999999 * EuclidGeometryTools.ONE_TRILLIONTH);
          expectedDistance = firstPointOnLine.distance(query);
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, firstPointOnLine, lineDirection);
-         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -1773,7 +1771,7 @@ public class EuclidGeometryToolsTest
          testPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, projection);
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1781,7 +1779,7 @@ public class EuclidGeometryToolsTest
          projection.set(lineSegmentStart);
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
@@ -1789,7 +1787,7 @@ public class EuclidGeometryToolsTest
          projection.set(lineSegmentEnd);
          expectedDistance = projection.distance(testPoint);
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -1815,10 +1813,10 @@ public class EuclidGeometryToolsTest
          point.scaleAdd(scalar, planeNormal, secondPointOnPlane);
 
          double actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          actualDistance = EuclidGeometryTools.distanceFromPoint3DToPlane3D(point.getX(), point.getY(), point.getZ(), pointOnPlane, planeNormal);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -1841,7 +1839,7 @@ public class EuclidGeometryToolsTest
          point.scaleAdd(expectedDistance / planeNormal.length(), planeNormal, secondPointOnPlane);
 
          double actualDistance = EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
-         assertEqualsDelta(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedDistance, actualDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -1872,10 +1870,10 @@ public class EuclidGeometryToolsTest
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart.getX(),
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
                                                                                                lineSegmentEnd);
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1885,11 +1883,11 @@ public class EuclidGeometryToolsTest
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart.getX(),
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
          expectedSquaredDistance = projection.distanceSquared(testPoint);
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
                                                                                                lineSegmentEnd);
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
@@ -1899,10 +1897,10 @@ public class EuclidGeometryToolsTest
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart.getX(),
                                                                                                lineSegmentStart.getY(), lineSegmentEnd.getX(),
                                                                                                lineSegmentEnd.getY());
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
                                                                                                lineSegmentEnd);
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -1931,7 +1929,7 @@ public class EuclidGeometryToolsTest
          testPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, projection);
          expectedSquaredDistance = projection.distanceSquared(testPoint);
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1939,7 +1937,7 @@ public class EuclidGeometryToolsTest
          projection.set(lineSegmentStart);
          expectedSquaredDistance = projection.distanceSquared(testPoint);
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
@@ -1947,7 +1945,7 @@ public class EuclidGeometryToolsTest
          projection.set(lineSegmentEnd);
          expectedSquaredDistance = projection.distanceSquared(testPoint);
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(testPoint, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }
 
@@ -2345,7 +2343,7 @@ public class EuclidGeometryToolsTest
 
          double expectedDotProduct = vector1.dot(vector2);
          double actualDotProduct = EuclidGeometryTools.dotProduct(start1, end1, start2, end2);
-         assertEqualsDelta(expectedDotProduct, actualDotProduct, EPSILON);
+         assertEquals(expectedDotProduct, actualDotProduct, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -2366,7 +2364,7 @@ public class EuclidGeometryToolsTest
 
          double expectedDotProduct = vector1.dot(vector2);
          double actualDotProduct = EuclidGeometryTools.dotProduct(start1, end1, start2, end2);
-         assertEqualsDelta(expectedDotProduct, actualDotProduct, EPSILON);
+         assertEquals(expectedDotProduct, actualDotProduct, EPSILON);
       }
    }
 
@@ -2489,8 +2487,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -2502,8 +2500,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -2519,8 +2517,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -2531,8 +2529,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -2543,8 +2541,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -2555,8 +2553,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
       }
@@ -2891,7 +2889,7 @@ public class EuclidGeometryToolsTest
       double percentage = EuclidGeometryTools.percentageAlongLineSegment2D(query, lineSegmentStart, lineSegmentEnd);
       assertTrue(percentage >= -epsilon && percentage <= 1.0 + epsilon);
       double distance = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(query, lineSegmentStart, lineSegmentEnd);
-      assertEqualsDelta(0.0, distance, epsilon);
+      assertEquals(0.0, distance, epsilon);
    }
 
    @Test
@@ -3217,8 +3215,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -3230,8 +3228,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -3247,8 +3245,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -3259,8 +3257,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -3271,8 +3269,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
 
@@ -3283,8 +3281,8 @@ public class EuclidGeometryToolsTest
 
          assertEquals(2, numberOfIntersections, "Was expecting 2 intersections");
 
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(firstIntersection, insidePoint, outsidePoint), EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(secondIntersection, insidePoint, outsidePoint), EPSILON);
          assertPointIsOnBoundingBoxFace(firstIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
          assertPointIsOnBoundingBoxFace(secondIntersection, boundingBoxMin, boundingBoxMax, EPSILON);
       }
@@ -3562,7 +3560,7 @@ public class EuclidGeometryToolsTest
             errors.add(expectedIntersection2.distance(actualIntersection2));
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -3637,7 +3635,7 @@ public class EuclidGeometryToolsTest
             errors.add(pointOnCylinder.distance(actualIntersection2));
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -3712,7 +3710,7 @@ public class EuclidGeometryToolsTest
             errors.add(pointOnCylinder.distance(actualIntersection2));
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
    }
 
@@ -4220,7 +4218,7 @@ public class EuclidGeometryToolsTest
       double percentage = EuclidGeometryTools.percentageAlongLineSegment3D(query, lineSegmentStart, lineSegmentEnd);
       assertTrue(percentage >= -epsilon && percentage <= 1.0 + epsilon);
       double distance = EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(query, lineSegmentStart, lineSegmentEnd);
-      assertEqualsDelta(0.0, distance, epsilon);
+      assertEquals(0.0, distance, epsilon);
    }
 
    @Test
@@ -4645,7 +4643,7 @@ public class EuclidGeometryToolsTest
             actualIntersection2.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -4810,7 +4808,7 @@ public class EuclidGeometryToolsTest
             actualIntersection2.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -4957,7 +4955,7 @@ public class EuclidGeometryToolsTest
             actualIntersection2.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
    }
 
@@ -5406,7 +5404,7 @@ public class EuclidGeometryToolsTest
       double percentage = EuclidGeometryTools.percentageAlongLineSegment2D(query, rayOrigin, pointOnRay);
       assertTrue(percentage >= -epsilon);
       double distance = EuclidGeometryTools.distanceFromPoint2DToLine2D(query, rayOrigin, pointOnRay);
-      assertEqualsDelta(0.0, distance, epsilon);
+      assertEquals(0.0, distance, epsilon);
    }
 
    @Test
@@ -6180,7 +6178,7 @@ public class EuclidGeometryToolsTest
       double percentage = EuclidGeometryTools.percentageAlongLineSegment3D(query, rayOrigin, pointOnRay);
       assertTrue(percentage >= -epsilon);
       double distance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, rayOrigin, pointOnRay);
-      assertEqualsDelta(0.0, distance, epsilon);
+      assertEquals(0.0, distance, epsilon);
    }
 
    @Test
@@ -6476,7 +6474,7 @@ public class EuclidGeometryToolsTest
             actualIntersection2.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -6517,7 +6515,7 @@ public class EuclidGeometryToolsTest
             EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualIntersection2);
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), 1.5 * EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), 1.5 * EPSILON);
       }
 
       {
@@ -6561,7 +6559,7 @@ public class EuclidGeometryToolsTest
             actualIntersection2.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -6605,7 +6603,7 @@ public class EuclidGeometryToolsTest
             actualIntersection2.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -6661,7 +6659,7 @@ public class EuclidGeometryToolsTest
             actualIntersection1.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -6705,7 +6703,7 @@ public class EuclidGeometryToolsTest
             actualIntersection2.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
 
       {
@@ -6761,7 +6759,7 @@ public class EuclidGeometryToolsTest
             actualIntersection1.setToNaN();
          }
 
-         assertEqualsDelta(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
+         assertEquals(0.0, errors.stream().collect(Collectors.averagingDouble(Double::doubleValue)), EPSILON);
       }
    }
 
@@ -7341,7 +7339,7 @@ public class EuclidGeometryToolsTest
 
          String message = "Angle between vectors " + expectedIntersectionDirection.angle(actualIntersectionDirection);
          assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedIntersectionDirection, actualIntersectionDirection, 1.0e-7), message);
-         assertEqualsDelta(1.0, actualIntersectionDirection.length(), EPSILON);
+         assertEquals(1.0, actualIntersectionDirection.length(), EPSILON);
 
          if (planeNormal1.dot(planeNormal2) < 0.0)
             planeNormal1.negate();
@@ -7362,8 +7360,7 @@ public class EuclidGeometryToolsTest
             epsilon = 1.0e-3;
 
          //         System.out.println("angle: " + planeNormal1.angle(planeNormal2) + ", distance: " + pointOnPlane1.distance(pointOnPlane2));
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(actualPointOnIntersection, firstPointOnIntersection, expectedIntersectionDirection),
-                      epsilon);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint3DToLine3D(actualPointOnIntersection, firstPointOnIntersection, expectedIntersectionDirection), epsilon);
       }
 
       Point3D pointOnPlane1 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -7987,19 +7984,19 @@ public class EuclidGeometryToolsTest
          double expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test before end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
          pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test after end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
          pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
       }
 
       // Test off line segment
@@ -8019,21 +8016,21 @@ public class EuclidGeometryToolsTest
          pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOffLineSegment);
          double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test before end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
          pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOffLineSegment);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test after end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
          pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOffLineSegment);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment2D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
       }
 
       // The line segment is very small
@@ -8069,19 +8066,19 @@ public class EuclidGeometryToolsTest
          double expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test before end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
          pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test after end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
          pointOnLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOnLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
       }
 
       // Test off line segment
@@ -8101,21 +8098,21 @@ public class EuclidGeometryToolsTest
          pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOffLineSegment);
          double actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test before end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
          pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOffLineSegment);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
 
          // Test after end points
          expectedPercentage = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
          pointOffLineSegment.interpolate(lineSegmentStart, lineSegmentEnd, expectedPercentage);
          pointOffLineSegment.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointOffLineSegment);
          actualPercentage = EuclidGeometryTools.percentageAlongLineSegment3D(pointOffLineSegment, lineSegmentStart, lineSegmentEnd);
-         assertEqualsDelta(expectedPercentage, actualPercentage, EPSILON);
+         assertEquals(expectedPercentage, actualPercentage, EPSILON);
       }
 
       // The line segment is very small
@@ -8195,12 +8192,10 @@ public class EuclidGeometryToolsTest
          assertTrue(success);
 
          bisectorDirection.sub(bisectorSegmentEnd, bisectorSegmentStart);
-         assertEqualsDelta(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
-         assertEqualsDelta(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
-         assertEqualsDelta(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
-                      EPSILON);
-         assertEqualsDelta(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
-                      EPSILON);
+         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
+         assertEquals(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd), EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd), EPSILON);
          assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd));
          EuclidCoreTestTools.assertTuple2DEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart,
@@ -8216,12 +8211,10 @@ public class EuclidGeometryToolsTest
          bisectorSegmentEnd = bisectorSegmentEndpoints.get(1);
 
          bisectorDirection.sub(bisectorSegmentEnd, bisectorSegmentStart);
-         assertEqualsDelta(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
-         assertEqualsDelta(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
-         assertEqualsDelta(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd),
-                      EPSILON);
-         assertEqualsDelta(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd),
-                      EPSILON);
+         assertEquals(2.0 * bisectorSegmentHalfLength, bisectorDirection.length(), EPSILON);
+         assertEquals(0.0, lineSegmentDirection.dot(bisectorDirection), EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd), EPSILON);
+         assertEquals(bisectorSegmentHalfLength, EuclidGeometryTools.distanceFromPoint2DToLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd), EPSILON);
          assertTrue(EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D(bisectorSegmentStart, lineSegmentStart, lineSegmentEnd));
          assertTrue(EuclidGeometryTools.isPoint2DOnRightSideOfLine2D(bisectorSegmentEnd, lineSegmentStart, lineSegmentEnd));
          EuclidCoreTestTools.assertTuple2DEquals(lineSegmentMidpoint, EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(bisectorSegmentStart,
@@ -8255,10 +8248,10 @@ public class EuclidGeometryToolsTest
       {
          vector = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
          Vector2D perpendicularVector = EuclidGeometryTools.perpendicularVector2D(vector);
-         assertEqualsDelta(vector.length(), perpendicularVector.length(), EPSILON);
-         assertEqualsDelta(vector.length() * vector.length(), vector.cross(perpendicularVector), EPSILON);
-         assertEqualsDelta(0.0, vector.dot(perpendicularVector), EPSILON);
-         assertEqualsDelta(Math.PI / 2.0, vector.angle(perpendicularVector), EPSILON);
+         assertEquals(vector.length(), perpendicularVector.length(), EPSILON);
+         assertEquals(vector.length() * vector.length(), vector.cross(perpendicularVector), EPSILON);
+         assertEquals(0.0, vector.dot(perpendicularVector), EPSILON);
+         assertEquals(Math.PI / 2.0, vector.angle(perpendicularVector), EPSILON);
       }
    }
 
@@ -8350,7 +8343,7 @@ public class EuclidGeometryToolsTest
          double cathetusA = a.distance(b);
          double expectedCathetusB = a.distance(c);
          double actualCathetusB = EuclidGeometryTools.pythagorasGetCathetus(hypotenuseC, cathetusA);
-         assertEqualsDelta(expectedCathetusB, actualCathetusB, EPSILON);
+         assertEquals(expectedCathetusB, actualCathetusB, EPSILON);
       }
    }
 
@@ -8389,7 +8382,7 @@ public class EuclidGeometryToolsTest
          double cathetusB = a.distance(c);
          double expectedHypotenuseC = b.distance(c);
          double actualHypotenuseC = EuclidGeometryTools.pythagorasGetHypotenuse(cathetusA, cathetusB);
-         assertEqualsDelta(expectedHypotenuseC, actualHypotenuseC, EPSILON);
+         assertEquals(expectedHypotenuseC, actualHypotenuseC, EPSILON);
       }
    }
 
@@ -8403,7 +8396,7 @@ public class EuclidGeometryToolsTest
          double chordAngle = EuclidCoreRandomTools.nextDouble(random, -3.0 * Math.PI, 3.0 * Math.PI);
          double chordLength = 2.0 * expectedArcRadius * Math.sin(0.5 * chordAngle);
          double actualArcRadius = EuclidGeometryTools.radiusOfArc(chordLength, chordAngle);
-         assertEqualsDelta(expectedArcRadius, actualArcRadius, EPSILON);
+         assertEquals(expectedArcRadius, actualArcRadius, EPSILON);
       }
 
       assertTrue(Double.isNaN(EuclidGeometryTools.radiusOfArc(1.0, 0.0)));
@@ -8437,9 +8430,9 @@ public class EuclidGeometryToolsTest
          query.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), lineDirection, query);
 
          double actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, lineDirection);
-         assertEqualsDelta("Iteration: " + i, expectedDistance, expectingNegativeSign ? -actualDistance : actualDistance, EPSILON);
+         assertEquals(expectedDistance, expectingNegativeSign ? -actualDistance : actualDistance, EPSILON, "Iteration: " + i);
          actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, secondPointOnLine);
-         assertEqualsDelta("Iteration: " + i, expectedDistance, expectingNegativeSign ? -actualDistance : actualDistance, EPSILON);
+         assertEquals(expectedDistance, expectingNegativeSign ? -actualDistance : actualDistance, EPSILON, "Iteration: " + i);
 
          // Test with a line direction that a magnitude that is too small
          lineDirection.normalize();
@@ -8447,9 +8440,9 @@ public class EuclidGeometryToolsTest
          secondPointOnLine.add(firstPointOnLine, lineDirection);
          expectedDistance = firstPointOnLine.distance(query);
          actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, lineDirection);
-         assertEqualsDelta("Iteration: " + i, expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON, "Iteration: " + i);
          actualDistance = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query, firstPointOnLine, secondPointOnLine);
-         assertEqualsDelta("Iteration: " + i, expectedDistance, actualDistance, EPSILON);
+         assertEquals(expectedDistance, actualDistance, EPSILON, "Iteration: " + i);
       }
    }
 
@@ -8482,7 +8475,7 @@ public class EuclidGeometryToolsTest
          Point3D actualB = new Point3D();
          EuclidGeometryTools.topVertex3DOfIsoscelesTriangle3D(a, c, triangleNormal, abcAngle, actualB);
          EuclidCoreTestTools.assertTuple3DEquals(expectedB, actualB, epsilon);
-         assertEqualsDelta(abcAngle, ba.angle(bc), epsilon);
+         assertEquals(abcAngle, ba.angle(bc), epsilon);
       }
    }
 
@@ -8510,14 +8503,14 @@ public class EuclidGeometryToolsTest
          assertTrue(success);
          bx.sub(x, b);
          double abxAngle = ba.angle(bx);
-         assertEqualsDelta(0.5 * abcAngle, abxAngle, EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(x, a, c), EPSILON);
+         assertEquals(0.5 * abcAngle, abxAngle, EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(x, a, c), EPSILON);
 
          x = EuclidGeometryTools.triangleBisector2D(a, b, c);
          bx.sub(x, b);
          abxAngle = ba.angle(bx);
-         assertEqualsDelta(0.5 * abcAngle, abxAngle, EPSILON);
-         assertEqualsDelta(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(x, a, c), EPSILON);
+         assertEquals(0.5 * abcAngle, abxAngle, EPSILON);
+         assertEquals(0.0, EuclidGeometryTools.distanceFromPoint2DToLine2D(x, a, c), EPSILON);
       }
 
       // Test failure case 1
@@ -8594,9 +8587,9 @@ public class EuclidGeometryToolsTest
          double bca = Math.abs(cb.angle(ca));
          double cab = Math.abs(ac.angle(ab));
 
-         assertEqualsDelta(cab, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(abLength, acLength, bcLength), EPSILON);
-         assertEqualsDelta(bca, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(acLength, bcLength, abLength), EPSILON);
-         assertEqualsDelta(abc, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(abLength, bcLength, acLength), EPSILON);
+         assertEquals(cab, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(abLength, acLength, bcLength), EPSILON);
+         assertEquals(bca, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(acLength, bcLength, abLength), EPSILON);
+         assertEquals(abc, EuclidGeometryTools.unknownTriangleAngleByLawOfCosine(abLength, bcLength, acLength), EPSILON);
       }
    }
 
@@ -8634,9 +8627,9 @@ public class EuclidGeometryToolsTest
          double bca = Math.abs(cb.angle(ca));
          double cab = Math.abs(ac.angle(ab));
 
-         assertEqualsDelta(bcLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, acLength, cab), EPSILON);
-         assertEqualsDelta(abLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(acLength, bcLength, bca), EPSILON);
-         assertEqualsDelta(acLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, bcLength, abc), EPSILON);
+         assertEquals(bcLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, acLength, cab), EPSILON);
+         assertEquals(abLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(acLength, bcLength, bca), EPSILON);
+         assertEquals(acLength, EuclidGeometryTools.unknownTriangleSideLengthByLawOfCosine(abLength, bcLength, abc), EPSILON);
       }
 
       try

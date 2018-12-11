@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -34,7 +32,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY(), p1.getZ() + translation.getZ());
          double actualDistance = p1.distance(p2);
-         assertEqualsDelta(expectedDistance, actualDistance, getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -51,7 +49,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY(), p1.getZ() + translation.getZ());
          double actualDistanceSquared = p1.distanceSquared(p2);
-         assertEqualsDelta(expectedDistanceSquared, actualDistanceSquared, getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistanceSquared, getEpsilon());
       }
    }
 
@@ -70,7 +68,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY(), p1.getZ() + random.nextDouble());
          double actualDistance = p1.distanceXY(p2);
-         assertEqualsDelta(expectedDistance, actualDistance, getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -83,7 +81,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          T p1 = createRandomTuple(random);
          Point2D p2 = new Point2D(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistance = p1.distanceXY(p2);
-         assertEqualsDelta(expectedDistance, actualDistance, getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -102,7 +100,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY(), p1.getZ() + random.nextDouble());
          double actualDistance = p1.distanceXYSquared(p2);
-         assertEqualsDelta(expectedDistanceSquared, actualDistance, 10.0 * getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistance, 10.0 * getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -115,7 +113,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          T p1 = createRandomTuple(random);
          Point2D p2 = new Point2D(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistance = p1.distanceXYSquared(p2);
-         assertEqualsDelta(expectedDistanceSquared, actualDistance, getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
       }
    }
 
@@ -131,7 +129,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          translation.scale(expectedDistance);
          T p = createTuple(translation.getX(), translation.getY(), translation.getZ());
          double actualDistance = p.distanceFromOrigin();
-         assertEqualsDelta(expectedDistance, actualDistance, getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -147,7 +145,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          translation.scale(Math.sqrt(expectedDistanceSquared));
          T p = createTuple(translation.getX(), translation.getY(), translation.getZ());
          double actualDistance = p.distanceFromOriginSquared();
-         assertEqualsDelta(expectedDistanceSquared, actualDistance, getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
       }
    }
 

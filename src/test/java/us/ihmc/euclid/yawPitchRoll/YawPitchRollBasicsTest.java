@@ -1,8 +1,6 @@
 package us.ihmc.euclid.yawPitchRoll;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -310,7 +308,7 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
                double expectedValue = random.nextDouble();
                actualYPR.setElement(index, expectedValue);
                double actualValue = actualYPR.getElement(index);
-               assertEqualsDelta(expectedValue, actualValue, getEpsilon());
+               assertEquals(expectedValue, actualValue, getEpsilon());
             }
          }
       }

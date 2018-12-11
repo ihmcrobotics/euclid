@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -34,7 +32,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistance = p1.distance(p2);
-         assertEqualsDelta(expectedDistance, actualDistance, getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -51,7 +49,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistanceSquared = p1.distanceSquared(p2);
-         assertEqualsDelta(expectedDistanceSquared, actualDistanceSquared, getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistanceSquared, getEpsilon());
       }
    }
 
@@ -68,7 +66,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          Point3D p2 = new Point3D(p1.getX() + translation.getX(), p1.getY() + translation.getY(), random.nextDouble());
          double actualDistance = p1.distanceXY(p2);
-         assertEqualsDelta(expectedDistance, actualDistance, getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -85,7 +83,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T p1 = createRandomTuple(random);
          Point3D p2 = new Point3D(p1.getX() + translation.getX(), p1.getY() + translation.getY(), random.nextDouble());
          double actualDistance = p1.distanceXYSquared(p2);
-         assertEqualsDelta(expectedDistanceSquared, actualDistance, getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
       }
    }
 
@@ -101,7 +99,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          translation.scale(expectedDistance);
          T p = createTuple(translation.getX(), translation.getY());
          double actualDistance = p.distanceFromOrigin();
-         assertEqualsDelta(expectedDistance, actualDistance, getEpsilon());
+         assertEquals(expectedDistance, actualDistance, getEpsilon());
       }
    }
 
@@ -117,7 +115,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          translation.scale(Math.sqrt(expectedDistanceSquared));
          T p = createTuple(translation.getX(), translation.getY());
          double actualDistance = p.distanceFromOriginSquared();
-         assertEqualsDelta(expectedDistanceSquared, actualDistance, getEpsilon());
+         assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
       }
    }
 

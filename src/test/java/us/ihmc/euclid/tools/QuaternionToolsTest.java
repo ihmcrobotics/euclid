@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -499,7 +497,7 @@ public class QuaternionToolsTest
       tupleExpected.setY(-tupleExpected.getY());
       quaternion.setUnsafe(10.0, 10.0, 10.0, 10.0);
       QuaternionTools.transform(quaternion, tupleActual, tupleActual);
-      assertEqualsDelta(tupleExpected.length(), tupleActual.length(), EPSILON);
+      assertEquals(tupleExpected.length(), tupleActual.length(), EPSILON);
    }
 
    @Test
@@ -618,7 +616,7 @@ public class QuaternionToolsTest
       tupleExpected.setY(-tupleExpected.getY());
       quaternion.setUnsafe(10.0, 10.0, 10.0, 10.0);
       QuaternionTools.inverseTransform(quaternion, tupleActual, tupleActual);
-      assertEqualsDelta(tupleExpected.length(), tupleActual.length(), EPSILON);
+      assertEquals(tupleExpected.length(), tupleActual.length(), EPSILON);
 
       // Test that a quaternion with zeros does not do anything
       tupleExpected = EuclidCoreRandomTools.nextRotationVector(random);

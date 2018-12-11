@@ -1,8 +1,6 @@
 package us.ihmc.euclid.tuple3D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
@@ -36,7 +34,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          vector2.setAndScale(scalar, vector1);
          double expectedLength2 = scalar * length1;
          double actualLength2 = vector2.length();
-         assertEqualsDelta(expectedLength2, actualLength2, 5.0 * getEpsilon());
+         assertEquals(expectedLength2, actualLength2, 5.0 * getEpsilon());
       }
    }
 
@@ -54,7 +52,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          vector2.setAndScale(scalar, vector1);
          double expectedLength2 = scalar * length1;
          double actualLength2 = vector2.lengthSquared();
-         assertEqualsDelta(expectedLength2, Math.sqrt(actualLength2), 5.0 * getEpsilon());
+         assertEquals(expectedLength2, Math.sqrt(actualLength2), 5.0 * getEpsilon());
       }
    }
 
@@ -79,7 +77,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
 
          double expectedDot = vector1.length() * vector2.length() * Math.cos(angle);
          double actualDot = vector1.dot(vector2);
-         assertEqualsDelta(expectedDot, actualDot, 10.0 * getEpsilon());
+         assertEquals(expectedDot, actualDot, 10.0 * getEpsilon());
       }
    }
 
@@ -103,7 +101,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          vector2.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0));
 
          double actualAngle = vector1.angle(vector2);
-         assertEqualsDelta(Math.abs(expectedAngle), actualAngle, 10.0 * getEpsilon());
+         assertEquals(Math.abs(expectedAngle), actualAngle, 10.0 * getEpsilon());
       }
    }
 
@@ -130,10 +128,10 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
 
          double expectedCrossMagnitude = vector1.length() * vector2.length() * Math.sin(angle);
          double actualCrossMagnitude = vector3.length();
-         assertEqualsDelta(expectedCrossMagnitude, actualCrossMagnitude, 10.0 * getEpsilon());
+         assertEquals(expectedCrossMagnitude, actualCrossMagnitude, 10.0 * getEpsilon());
 
-         assertEqualsDelta(0.0, vector1.dot(vector3), 10.0 * getEpsilon());
-         assertEqualsDelta(0.0, vector2.dot(vector3), 10.0 * getEpsilon());
+         assertEquals(0.0, vector1.dot(vector3), 10.0 * getEpsilon());
+         assertEquals(0.0, vector2.dot(vector3), 10.0 * getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -214,7 +212,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
 
          double expectedLength = 1.0;
          double actualLength = vector1.length();
-         assertEqualsDelta(expectedLength, actualLength, getEpsilon());
+         assertEquals(expectedLength, actualLength, getEpsilon());
 
          T vector2 = createRandomTuple(random);
          vector2.normalize();
@@ -237,7 +235,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
 
          double expectedLength = 1.0;
          double actualLength = vector2.length();
-         assertEqualsDelta(expectedLength, actualLength, getEpsilon());
+         assertEquals(expectedLength, actualLength, getEpsilon());
 
          vector2 = createRandomTuple(random);
          vector2.normalize();

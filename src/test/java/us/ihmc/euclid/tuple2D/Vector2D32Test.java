@@ -1,13 +1,10 @@
 package us.ihmc.euclid.tuple2D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -69,14 +66,14 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
-         assertEqualsDelta(tuple1.getX32(), x, getEpsilon());
+         assertEquals((double) tuple1.getX32(), (double) x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
-         assertEqualsDelta(tuple1.getY32(), y, getEpsilon());
+         assertEquals((double) tuple1.getY32(), (double) y, getEpsilon());
       }
    }
 

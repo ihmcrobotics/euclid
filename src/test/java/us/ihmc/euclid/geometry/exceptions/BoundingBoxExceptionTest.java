@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.exceptions;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import org.junit.jupiter.api.Test;
 

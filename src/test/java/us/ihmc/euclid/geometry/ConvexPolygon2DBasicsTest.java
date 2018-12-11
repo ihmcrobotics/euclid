@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
-
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
@@ -116,10 +114,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       verticesList.add(new Point2D(1.0, 1.0));
 
       T list = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList));
-      assertEqualsDelta("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), EPSILON);
+      assertEquals(4.0, (double) list.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
       assertTrue(list.isUpToDate());
       list.clearAndUpdate();
-      assertEqualsDelta("Number of vertices should be 0", 0.0, list.getNumberOfVertices(), EPSILON);
+      assertEquals(0.0, (double) list.getNumberOfVertices(), EPSILON, "Number of vertices should be 0");
       assertTrue(list.isUpToDate());
       list.clear();
       assertFalse(list.isUpToDate());
@@ -139,7 +137,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       int numberOfVertices = 4;
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
       doubleInt.set(Vertex2DSupplier.asVertex2DSupplier(verticesArray, numberOfVertices));
-      assertEqualsDelta("Number of vertices should be 4", 4.0, doubleInt.getNumberOfVertices(), EPSILON);
+      assertEquals(4.0, (double) doubleInt.getNumberOfVertices(), EPSILON, "Number of vertices should be 4");
       assertTrue(doubleInt.isUpToDate());
    }
 
@@ -161,10 +159,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       T doubles = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
       BoundingBox2DBasics box = doubles.getBoundingBox();
 
-      assertEqualsDelta("Bounding boxes should be equal", box.getMinPoint().getX(), 0.0, EPSILON);
-      assertEqualsDelta("Bounding boxes should be equal", box.getMinPoint().getX(), 0.0, EPSILON);
-      assertEqualsDelta("Bounding boxes should be equal", box.getMaxPoint().getY(), 1.0, EPSILON);
-      assertEqualsDelta("Bounding boxes should be equal", box.getMaxPoint().getY(), 1.0, EPSILON);
+      assertEquals(box.getMinPoint().getX(), 0.0, EPSILON, "Bounding boxes should be equal");
+      assertEquals(box.getMinPoint().getX(), 0.0, EPSILON, "Bounding boxes should be equal");
+      assertEquals(box.getMaxPoint().getY(), 1.0, EPSILON, "Bounding boxes should be equal");
+      assertEquals(box.getMaxPoint().getY(), 1.0, EPSILON, "Bounding boxes should be equal");
    }
 
    @Test
@@ -1035,7 +1033,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
    private static void assertDistanceCorrect(double expected, double actual)
    {
-      assertEqualsDelta("Distance does not equal expected.", expected, actual, EPSILON);
+      assertEquals(expected, actual, EPSILON, "Distance does not equal expected.");
    }
 
    @Test
