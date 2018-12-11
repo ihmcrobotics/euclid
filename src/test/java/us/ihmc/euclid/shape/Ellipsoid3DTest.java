@@ -1,11 +1,11 @@
 package us.ihmc.euclid.shape;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -351,18 +351,18 @@ public class Ellipsoid3DTest
          Ellipsoid3D firstEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
          Ellipsoid3D secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
 
-         assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
-         assertTrue("Iteration: " + i, secondEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON));
-         assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON));
-         assertTrue("Iteration: " + i, secondEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
+         assertTrue(secondEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON), "Iteration: " + i);
+         assertTrue(firstEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON), "Iteration: " + i);
+         assertTrue(secondEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
 
          firstEllipsoid = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
          secondEllipsoid = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
 
-         assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
-         assertTrue("Iteration: " + i, secondEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON));
-         assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON));
-         assertTrue("Iteration: " + i, secondEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
+         assertTrue(secondEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON), "Iteration: " + i);
+         assertTrue(firstEllipsoid.geometricallyEquals(firstEllipsoid, EPSILON), "Iteration: " + i);
+         assertTrue(secondEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -381,8 +381,8 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX1, radiusY1, radiusZ1);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusX2, radiusY2, radiusZ2);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON) == radii1.geometricallyEquals(radii2, EPSILON));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON) == radii1.geometricallyEquals(radii2, EPSILON), "Iteration: " + i);
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -399,11 +399,11 @@ public class Ellipsoid3DTest
          Vector3D radii2 = new Vector3D();
          radii2.add(radii1, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon));
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radii2.getX(), radii2.getY(), radii2.getZ());
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon), "Iteration: " + i);
 
          radii2.add(radii1, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon));
          ellipsoid2 = new Ellipsoid3D(pose, radii2.getX(), radii2.getY(), radii2.getZ());
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, epsilon) == radii1.geometricallyEquals(radii2, epsilon), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -418,13 +418,13 @@ public class Ellipsoid3DTest
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
-         assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
 
          secondEllipsoid = new Ellipsoid3D(radiusX, radiusY, radiusZ);
          translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
-         assertFalse("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
+         assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -440,13 +440,13 @@ public class Ellipsoid3DTest
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
-         assertTrue("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
+         assertTrue(firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
 
          secondEllipsoid = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
          translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * EPSILON);
          secondEllipsoid.appendTranslation(translation);
 
-         assertFalse("Iteration: " + i, firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON));
+         assertFalse(firstEllipsoid.geometricallyEquals(secondEllipsoid, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -458,22 +458,22 @@ public class Ellipsoid3DTest
 
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radius, radius, radius);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radius, radius, radius);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.setRadii(radius + 0.99 * EPSILON, radius + 0.99 * EPSILON, radius + 0.99 * EPSILON);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.setRadii(radius + 1.19 * EPSILON, radius + 0.99 * EPSILON, radius + 0.79 * EPSILON);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.setRadii(radius + 0.99 * EPSILON, radius + 1.19 * EPSILON, radius + 0.79 * EPSILON);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.setRadii(radius + 1.01 * EPSILON, radius + 1.01 * EPSILON, radius + 1.01 * EPSILON);
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.setRadii(radius + 1.11 * EPSILON, radius + 1.01 * EPSILON, radius + 0.91 * EPSILON);
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -492,7 +492,7 @@ public class Ellipsoid3DTest
 
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radii.getX(), radii.getY(), radii.getZ());
 
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          radii = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
          radii.setX(radii.getY());
@@ -502,7 +502,7 @@ public class Ellipsoid3DTest
 
          ellipsoid2 = new Ellipsoid3D(pose2, radii.getX(), radii.getY(), radii.getZ());
 
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -516,20 +516,20 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -543,21 +543,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -571,21 +571,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendRollRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -613,7 +613,7 @@ public class Ellipsoid3DTest
             throw new RuntimeException("Unexpected axis value: " + axis);
          }
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          double angle = EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI / 2.0);
          switch (axis)
@@ -631,7 +631,7 @@ public class Ellipsoid3DTest
             throw new RuntimeException("Unexpected axis value: " + axis);
          }
 
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -647,7 +647,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radiusX, radiusY, heightZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radiusY, radiusX, heightZ);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -663,7 +663,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radiusX, radiusY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radiusZ, radiusY, radiusX);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -679,7 +679,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radiusX, radiusY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radiusX, radiusZ, radiusY);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -695,7 +695,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radiusX, radiusY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radiusZ, radiusX, radiusY);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -711,7 +711,7 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose1, radiusX, radiusY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radiusY, radiusZ, radiusX);
 
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -726,21 +726,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusZ, radiusXY, radiusXY);
          ellipsoid2.appendPitchRotation(Math.PI / 2.0);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendRollRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -755,21 +755,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXY, radiusXY, radiusZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXY, radiusZ, radiusXY);
          ellipsoid2.appendRollRotation(Math.PI / 2.0);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -784,21 +784,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusY, radiusXZ, radiusXZ);
          ellipsoid2.appendYawRotation(Math.PI / 2.0);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendRollRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(1.0, 0.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -813,21 +813,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusXZ, radiusY, radiusXZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusXZ, radiusXZ, radiusY);
          ellipsoid2.appendRollRotation(Math.PI / 2.0);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -842,21 +842,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusYZ, radiusX, radiusYZ);
          ellipsoid2.appendYawRotation(Math.PI / 2.0);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendPitchRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 1.0, 0.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -871,21 +871,21 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid1 = new Ellipsoid3D(pose, radiusX, radiusYZ, radiusYZ);
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose, radiusYZ, radiusYZ, radiusX);
          ellipsoid2.appendPitchRotation(Math.PI / 2.0);
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          ellipsoid2.appendYawRotation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0.0, 0.0, 1.0), true);
          AxisAngle axisAngle = new AxisAngle(rotationAxis, Math.PI);
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertTrue("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
          axisAngle = new AxisAngle(rotationAxis, EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI - 0.1));
 
          ellipsoid2.appendTransform(new RigidBodyTransform(axisAngle, new Vector3D()));
-         assertFalse("Iteration: " + i, ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON));
+         assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
    }
 

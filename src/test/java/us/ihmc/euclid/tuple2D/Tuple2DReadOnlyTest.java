@@ -1,12 +1,12 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
@@ -238,7 +238,8 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       assertFalse(tuple.equals(createEmptyTuple()));
       assertFalse(tuple.equals(null));
       assertFalse(tuple.equals(new double[5]));
-      assertTrue(tuple.equals((Object) tuple));
+      Object tupleAsObject = tuple;
+      assertTrue(tuple.equals(tupleAsObject));
 
       double x = tuple.getX();
       double y = tuple.getY();

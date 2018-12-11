@@ -1,13 +1,13 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EuclidCoreToolsTest
 {
@@ -243,7 +243,7 @@ public class EuclidCoreToolsTest
          double expectedAngle = EuclidCoreRandomTools.nextDouble(random, startOfRange, endOfRange);
          double angleToShift = expectedAngle + (random.nextInt(21) - 10) * 2.0 * Math.PI;
          double actualAngle = EuclidCoreTools.trimAngleMinusPiToPi(angleToShift);
-         assertEquals("iteration: " + i, expectedAngle, actualAngle, 1.0e-12);
+         assertEquals(expectedAngle, actualAngle, 1.0e-12, "iteration: " + i);
 
          expectedAngle = startOfRange;
          angleToShift = expectedAngle + (random.nextInt(21) - 10) * 2.0 * Math.PI;
@@ -271,7 +271,7 @@ public class EuclidCoreToolsTest
          double angleA = EuclidCoreRandomTools.nextDouble(random, 4.0 * Math.PI);
          double angleB = angleA - untrimmedDifference;
          double actualDifference = EuclidCoreTools.angleDifferenceMinusPiToPi(angleA, angleB);
-         assertEquals("iteration: " + i, expectedDifference, actualDifference, 1.0e-12);
+         assertEquals(expectedDifference, actualDifference, 1.0e-12, "iteration: " + i);
       }
    }
 
@@ -287,7 +287,7 @@ public class EuclidCoreToolsTest
          double expectedAngle = EuclidCoreRandomTools.nextDouble(random, startOfRange, endOfRange);
          double angleToShift = expectedAngle + (random.nextInt(21) - 10) * 2.0 * Math.PI;
          double actualAngle = EuclidCoreTools.shiftAngleInRange(angleToShift, startOfRange);
-         assertEquals("iteration: " + i, expectedAngle, actualAngle, 1.0e-12);
+         assertEquals(expectedAngle, actualAngle, 1.0e-12, "iteration: " + i);
 
          expectedAngle = startOfRange;
          angleToShift = expectedAngle + (random.nextInt(21) - 10) * 2.0 * Math.PI;
@@ -349,7 +349,7 @@ public class EuclidCoreToolsTest
          double actual = EuclidCoreTools.med(a, b, c);
          if (expected != actual)
             EuclidCoreTools.med(a, b, c);
-         assertTrue("a = " + a + ", b = " + b + ", c = " + c, expected == actual);
+         assertTrue(expected == actual, "a = " + a + ", b = " + b + ", c = " + c);
       }
    }
 

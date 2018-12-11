@@ -1,13 +1,13 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
@@ -119,7 +119,7 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    public void testSetMatchingFrame() throws Exception
    {
       Random random = new Random(544354);
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setMatchingFrame(FrameTuple2DReadOnly other)
          ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
@@ -127,12 +127,12 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
 
          FrameTuple2DReadOnly source = EuclidFrameRandomTools.nextFramePoint2D(random, sourceFrame);
          FramePoint2D actual = createEmptyFrameTuple(destinationFrame);
-         
+
          actual.setMatchingFrame(source);
-         
+
          FramePoint2D expected = new FramePoint2D(source);
          expected.changeFrame(destinationFrame);
-         
+
          EuclidFrameTestTools.assertFrameTuple2DEquals(expected, actual, EPSILON);
       }
    }

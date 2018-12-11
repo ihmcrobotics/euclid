@@ -1,12 +1,11 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -20,8 +19,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
       Vector2D32 vector = new Vector2D32();
 
       { // Test Vector2D32()
-         Assert.assertTrue(0 == vector.getX32());
-         Assert.assertTrue(0 == vector.getY32());
+         assertTrue(0 == vector.getX32());
+         assertTrue(0 == vector.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -31,8 +30,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
 
          vector = new Vector2D32(newX, newY);
 
-         Assert.assertTrue(newX == vector.getX32());
-         Assert.assertTrue(newY == vector.getY32());
+         assertTrue(newX == vector.getX32());
+         assertTrue(newY == vector.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -41,8 +40,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
 
          Vector2D32 vectorArray = new Vector2D32(randomVector2DArray);
 
-         Assert.assertTrue(randomVector2DArray[0] == vectorArray.getX32());
-         Assert.assertTrue(randomVector2DArray[1] == vectorArray.getY32());
+         assertTrue(randomVector2DArray[0] == vectorArray.getX32());
+         assertTrue(randomVector2DArray[1] == vectorArray.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -50,8 +49,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
          Vector2D32 vector2 = EuclidCoreRandomTools.nextVector2D32(random);
          vector = new Vector2D32(vector2);
 
-         Assert.assertTrue(vector.getX32() == vector2.getX32());
-         Assert.assertTrue(vector.getY32() == vector2.getY32());
+         assertTrue(vector.getX32() == vector2.getX32());
+         assertTrue(vector.getY32() == vector2.getY32());
       }
    }
 

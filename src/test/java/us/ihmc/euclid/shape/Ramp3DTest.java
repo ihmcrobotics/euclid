@@ -1,11 +1,11 @@
 package us.ihmc.euclid.shape;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.Pose3D;
@@ -84,9 +84,9 @@ public class Ramp3DTest
       Ramp3D ramp = new Ramp3D(1.0, 1.0, 1.0);
       Vector3D surfaceNormal = new Vector3D();
       ramp.getRampSurfaceNormal(surfaceNormal);
-      assertEquals("not equal", surfaceNormal.getX(), -1.0 / Math.sqrt(2.0), 1e-14);
-      assertEquals("not equal", surfaceNormal.getY(), 0.0, 1e-14);
-      assertEquals("not equal", surfaceNormal.getZ(), 1.0 / Math.sqrt(2.0), 1e-14);
+      assertEquals(surfaceNormal.getX(), -1.0 / Math.sqrt(2.0), 1e-14, "not equal");
+      assertEquals(surfaceNormal.getY(), 0.0, 1e-14, "not equal");
+      assertEquals(surfaceNormal.getZ(), 1.0 / Math.sqrt(2.0), 1e-14, "not equal");
    }
 
    @Test

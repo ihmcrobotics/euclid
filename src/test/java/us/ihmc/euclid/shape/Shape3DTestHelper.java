@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 

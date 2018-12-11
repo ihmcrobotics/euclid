@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.ConvexPolygon2DBasicsTest;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
@@ -56,7 +56,8 @@ public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygo
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, polygon) -> createFrameConvexPolygon2D(frame,
                                                                                                                          (ConvexPolygon2DReadOnly) polygon);
       GenericTypeBuilder framelessTypeBuilber = () -> createRandomFramelessConvexPolygon2D(random);
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && Arrays.stream(m.getParameterTypes()).noneMatch(p -> Collection.class.isAssignableFrom(p));
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode")
+            && Arrays.stream(m.getParameterTypes()).noneMatch(p -> Collection.class.isAssignableFrom(p));
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
    }
 

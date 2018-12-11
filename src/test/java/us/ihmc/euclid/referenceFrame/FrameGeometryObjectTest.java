@@ -1,11 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -516,23 +516,27 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          F frameGeometry1 = createFrameGeometryObject(worldFrame, expectedGeometry);
          F frameGeometry2 = createFrameGeometryObject(worldFrame, expectedGeometry);
 
-         assertFalse(frameGeometry1.equals((Object) null));
+         Object nullAsObject = null;
+         assertFalse(frameGeometry1.equals(nullAsObject));
          assertFalse(frameGeometry1.equals((F) null));
          assertFalse(frameGeometry1.equals(new Object()));
 
          assertTrue(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
          assertTrue(frameGeometry1.equals(frameGeometry2));
-         assertTrue(frameGeometry1.equals((Object) frameGeometry2));
+         Object frameGeometry2AsObject = frameGeometry2;
+         assertTrue(frameGeometry1.equals(frameGeometry2AsObject));
 
          frameGeometry2 = createFrameGeometryObject(randomFrame, expectedGeometry);
          assertTrue(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
          assertFalse(frameGeometry1.equals(frameGeometry2));
-         assertFalse(frameGeometry1.equals((Object) frameGeometry2));
+         frameGeometry2AsObject = frameGeometry2;
+         assertTrue(frameGeometry1.equals(frameGeometry2AsObject));
 
          frameGeometry2 = createRandomFrameGeometryObject(random, randomFrame);
          assertFalse(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
          assertFalse(frameGeometry1.equals(frameGeometry2));
-         assertFalse(frameGeometry1.equals((Object) frameGeometry2));
+         frameGeometry2AsObject = frameGeometry2;
+         assertTrue(frameGeometry1.equals(frameGeometry2AsObject));
       }
    }
 }

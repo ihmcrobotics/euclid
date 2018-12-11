@@ -1,11 +1,11 @@
 package us.ihmc.euclid.shape;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -230,9 +230,9 @@ public class Cylinder3DTest
    {
       String failMessage = "Expected <(" + expectedPoint.getX() + "," + expectedPoint.getY() + "," + expectedPoint.getZ() + ")>, but was <("
             + actualPoint.getX() + "," + actualPoint.getY() + "," + actualPoint.getZ() + ")>";
-      assertEquals(failMessage, expectedPoint.getX(), actualPoint.getX(), EPSILON);
-      assertEquals(failMessage, expectedPoint.getY(), actualPoint.getY(), EPSILON);
-      assertEquals(failMessage, expectedPoint.getZ(), actualPoint.getZ(), EPSILON);
+      assertEquals(expectedPoint.getX(), actualPoint.getX(), EPSILON, failMessage);
+      assertEquals(expectedPoint.getY(), actualPoint.getY(), EPSILON, failMessage);
+      assertEquals(expectedPoint.getZ(), actualPoint.getZ(), EPSILON, failMessage);
    }
 
    @Test

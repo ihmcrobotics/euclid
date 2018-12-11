@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.Method;
@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
@@ -262,7 +262,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
 
          actual.setMatchingFrame(expected);
          expected.changeFrame(destinationFrame);
-         
+
          EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
       }
 
@@ -277,7 +277,7 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          actual.setMatchingFrame(source);
          FrameQuaternion expected = new FrameQuaternion(source);
          expected.changeFrame(destinationFrame);
-         
+
          EuclidFrameTestTools.assertFrameTuple4DEquals(expected, actual, EPSILON);
       }
    }

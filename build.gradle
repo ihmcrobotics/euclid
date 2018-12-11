@@ -1,5 +1,6 @@
 plugins {
    id("us.ihmc.ihmc-build") version "0.15.4"
+   id("us.ihmc.ihmc-ci") version "3.2"
 }
 
 ihmc {
@@ -35,7 +36,6 @@ testDependencies {
     compile ihmc.sourceSetProject("frame")
     compile ihmc.sourceSetProject("shape")
 
-    compile group: "junit", name: "junit", version: "4.11"
     compile group: "org.pitest", name: "pitest", version: "1.2.0"
     compile group: "org.pitest", name: "pitest-command-line", version: "1.2.0"
 }

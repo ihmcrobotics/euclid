@@ -1,6 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -20,6 +20,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 public class Vertex2DSupplierTest
 {
    public static final double EPSILON = 1.0e-12;
+
    @Test
    public void testCreatingEmptySupplier()
    {
@@ -261,10 +262,10 @@ public class Vertex2DSupplierTest
          int sizeB = random.nextInt(100) + 1;
          List<Point2D> listB = IntStream.range(0, sizeB).mapToObj(v -> EuclidCoreRandomTools.nextPoint2D(random)).collect(Collectors.toList());
 
-         assertTrue("Iteration: " + i, Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listA), epsilon));
-         assertTrue("Iteration: " + i, Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listAPrime), epsilon));
-         assertFalse("Iteration: " + i, Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listSizeA), epsilon));
-         assertFalse("Iteration: " + i, Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listB), epsilon));
+         assertTrue(Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listA), epsilon), "Iteration: " + i);
+         assertTrue(Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listAPrime), epsilon), "Iteration: " + i);
+         assertFalse(Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listSizeA), epsilon), "Iteration: " + i);
+         assertFalse(Vertex2DSupplier.asVertex2DSupplier(listA).epsilonEquals(Vertex2DSupplier.asVertex2DSupplier(listB), epsilon), "Iteration: " + i);
       }
    }
 }

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,8 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
@@ -193,7 +192,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          {
             rotationMatrix = new RotationMatrix(matrix);
             rotationMatrix.checkIfRotationMatrix();
-            Assert.assertTrue(matrix.isRotationMatrix());
+            assertTrue(matrix.isRotationMatrix());
          }
          catch (RuntimeException e)
          {
@@ -643,7 +642,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
 
-            Assert.assertTrue(pitch == pitchCopy);
+            assertTrue(pitch == pitchCopy);
          }
 
          { // Test setToRollMatrix()
@@ -658,7 +657,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
 
-            Assert.assertTrue(roll == rollCopy);
+            assertTrue(roll == rollCopy);
          }
 
          { // Test setToYawMatrix()
@@ -673,7 +672,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
 
-            Assert.assertTrue(yaw == yawCopy);
+            assertTrue(yaw == yawCopy);
          }
       }
    }
@@ -696,7 +695,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, rotationMatrixCopy);
 
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
-         Assert.assertTrue(yawPitchRoll == yawPitchRollCopy);
+         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -711,7 +710,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, rotationMatrixCopy);
 
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
-         Assert.assertTrue(yawPitchRoll == yawPitchRollCopy);
+         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
    }
 
@@ -826,7 +825,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             double pitch = rotationMatrix.getPitch();
             double expectedPitch = YawPitchRollConversion.computePitch(expectedMatrix);
 
-            Assert.assertEquals(pitch, expectedPitch, EPS);
+            assertEquals(pitch, expectedPitch, EPS);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
          }
@@ -836,7 +835,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             double roll = rotationMatrix.getRoll();
             double expectedRoll = YawPitchRollConversion.computeRoll(expectedMatrix);
 
-            Assert.assertEquals(roll, expectedRoll, EPS);
+            assertEquals(roll, expectedRoll, EPS);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
          }
@@ -845,7 +844,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             double yaw = rotationMatrix.getYaw();
             double expectedYaw = YawPitchRollConversion.computeYaw(expectedMatrix);
 
-            Assert.assertEquals(yaw, expectedYaw, EPS);
+            assertEquals(yaw, expectedYaw, EPS);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
 
@@ -872,7 +871,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, expectedMatrix);
 
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
-         Assert.assertTrue(yawPitchRoll == yawPitchRollCopy);
+         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
    }
 
@@ -1103,7 +1102,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             normalized.multiply(multiplyWith);
             normalized.normalize();
             EuclidCoreTestTools.assertMatrix3DEquals(normalized, unnormalized, EPS);
-            assertTrue("At multiplication #" + i + ".", unnormalized.isRotationMatrix(1.0e-11));
+            assertTrue(unnormalized.isRotationMatrix(1.0e-11), "At multiplication #" + i + ".");
          }
       }
 
@@ -1118,7 +1117,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             normalized.append(multiplyWith);
             normalized.normalize();
             EuclidCoreTestTools.assertMatrix3DEquals(normalized, unnormalized, EPS);
-            assertTrue("At multiplication #" + i + ".", unnormalized.isRotationMatrix(1.0e-11));
+            assertTrue(unnormalized.isRotationMatrix(1.0e-11), "At multiplication #" + i + ".");
          }
       }
 
@@ -1133,7 +1132,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             normalized.append(multiplyWith);
             normalized.normalize();
             EuclidCoreTestTools.assertMatrix3DEquals(normalized, unnormalized, EPS);
-            assertTrue("At multiplication #" + i + ".", unnormalized.isRotationMatrix(1.0e-11));
+            assertTrue(unnormalized.isRotationMatrix(1.0e-11), "At multiplication #" + i + ".");
          }
       }
    }
@@ -1816,7 +1815,8 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       assertFalse(m1.equals(new double[4]));
       m2.set(m1);
       assertTrue(m1.equals(m2));
-      assertTrue(m1.equals((Object) m2));
+      Object m2AsObject = m2;
+      assertTrue(m1.equals(m2AsObject));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[9];
@@ -1859,7 +1859,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mB = new RotationMatrix(aa);
          mB.preMultiply(mA);
 
-         assertTrue("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertTrue(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
@@ -1874,7 +1874,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mB = new RotationMatrix(aa);
          mB.preMultiply(mA);
 
-         assertFalse("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertFalse(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
@@ -1889,7 +1889,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mB = new RotationMatrix(aa);
          mB.preMultiply(mA);
 
-         assertTrue("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertTrue(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
@@ -1904,7 +1904,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mB = new RotationMatrix(aa);
          mB.preMultiply(mA);
 
-         assertFalse("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertFalse(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
@@ -1915,7 +1915,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mA = createRandomMatrix(random);
          mB = createRandomMatrix(random);
 
-         assertTrue("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertTrue(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
       }
    }
 

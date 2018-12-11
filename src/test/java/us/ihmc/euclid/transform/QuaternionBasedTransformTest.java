@@ -1,12 +1,12 @@
 package us.ihmc.euclid.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
@@ -104,13 +104,13 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(45L);
       QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
 
-      assertNotEquals(transform.getQuaternion().getX(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getY(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getZ(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getS(), 1.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getX(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getY(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getZ(), 0.0, EPS);
+      assertNotEquals(transform.getQuaternion().getX(), 0.0);
+      assertNotEquals(transform.getQuaternion().getY(), 0.0);
+      assertNotEquals(transform.getQuaternion().getZ(), 0.0);
+      assertNotEquals(transform.getQuaternion().getS(), 1.0);
+      assertNotEquals(transform.getTranslationVector().getX(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getY(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getZ(), 0.0);
 
       transform.setToZero();
 
@@ -182,13 +182,13 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Vector3D expectedTranslation = new Vector3D();
       transform.getTranslation(expectedTranslation);
 
-      assertNotEquals(transform.getQuaternion().getX(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getY(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getZ(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getS(), 1.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getX(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getY(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getZ(), 0.0, EPS);
+      assertNotEquals(transform.getQuaternion().getX(), 0.0);
+      assertNotEquals(transform.getQuaternion().getY(), 0.0);
+      assertNotEquals(transform.getQuaternion().getZ(), 0.0);
+      assertNotEquals(transform.getQuaternion().getS(), 1.0);
+      assertNotEquals(transform.getTranslationVector().getX(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getY(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getZ(), 0.0);
 
       transform.setRotationToZero();
 
@@ -204,13 +204,13 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Quaternion expectedQuaternion = new Quaternion();
       transform.getRotation(expectedQuaternion);
 
-      assertNotEquals(transform.getQuaternion().getX(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getY(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getZ(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getS(), 1.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getX(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getY(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getZ(), 0.0, EPS);
+      assertNotEquals(transform.getQuaternion().getX(), 0.0);
+      assertNotEquals(transform.getQuaternion().getY(), 0.0);
+      assertNotEquals(transform.getQuaternion().getZ(), 0.0);
+      assertNotEquals(transform.getQuaternion().getS(), 1.0);
+      assertNotEquals(transform.getTranslationVector().getX(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getY(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getZ(), 0.0);
 
       transform.setTranslationToZero();
 
@@ -321,13 +321,13 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Random random = new Random(45L);
       QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
 
-      assertNotEquals(transform.getQuaternion().getX(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getY(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getZ(), 0.0, EPS);
-      assertNotEquals(transform.getQuaternion().getS(), 1.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getX(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getY(), 0.0, EPS);
-      assertNotEquals(transform.getTranslationVector().getZ(), 0.0, EPS);
+      assertNotEquals(transform.getQuaternion().getX(), 0.0);
+      assertNotEquals(transform.getQuaternion().getY(), 0.0);
+      assertNotEquals(transform.getQuaternion().getZ(), 0.0);
+      assertNotEquals(transform.getQuaternion().getS(), 1.0);
+      assertNotEquals(transform.getTranslationVector().getX(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getY(), 0.0);
+      assertNotEquals(transform.getTranslationVector().getZ(), 0.0);
 
       transform.setIdentity();
 
@@ -1707,7 +1707,8 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       assertFalse(t1.equals(new double[4]));
       t2.set(t1);
       assertTrue(t1.equals(t2));
-      assertTrue(t1.equals((Object) t2));
+      Object t2AsObject = t2;
+      assertTrue(t1.equals(t2AsObject));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[7];

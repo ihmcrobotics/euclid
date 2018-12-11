@@ -1,11 +1,11 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -211,7 +211,7 @@ public class Plane3DTest
          normal.negate();
          secondPlane.setNormal(normal);
 
-         assertTrue("Iteration: " + i, firstPlane.geometricallyEquals(secondPlane, epsilon));
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -222,12 +222,12 @@ public class Plane3DTest
          translation = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstPlane.getNormal(), true);
          translation.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
 
-         assertTrue("Iteration: " + i, firstPlane.geometricallyEquals(secondPlane, epsilon));
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon), "Iteration: " + i);
 
          normal = secondPlane.getNormalCopy();
          normal.negate();
          secondPlane.setNormal(normal);
-         assertTrue("Iteration: " + i, firstPlane.geometricallyEquals(secondPlane, epsilon));
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon), "Iteration: " + i);
       }
    }
 }

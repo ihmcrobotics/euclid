@@ -1,12 +1,11 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -21,8 +20,8 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
       Vector2D vector = new Vector2D();
 
       { // Test Vector2D()
-         Assert.assertTrue(0 == vector.getX());
-         Assert.assertTrue(0 == vector.getY());
+         assertTrue(0 == vector.getX());
+         assertTrue(0 == vector.getY());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -32,8 +31,8 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
 
          vector = new Vector2D(newX, newY);
 
-         Assert.assertTrue(newX == vector.getX());
-         Assert.assertTrue(newY == vector.getY());
+         assertTrue(newX == vector.getX());
+         assertTrue(newY == vector.getY());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -45,11 +44,11 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
 
          Vector2D vectorArray = new Vector2D(randomVector2DArray);
 
-         Assert.assertTrue(randomVector2DArray[0] == vectorArray.getX());
-         Assert.assertTrue(randomVector2DArray[1] == vectorArray.getY());
+         assertTrue(randomVector2DArray[0] == vectorArray.getX());
+         assertTrue(randomVector2DArray[1] == vectorArray.getY());
 
-         Assert.assertTrue(copyRandomVector2DArray[0] == randomVector2DArray[0]);
-         Assert.assertTrue(copyRandomVector2DArray[1] == randomVector2DArray[1]);
+         assertTrue(copyRandomVector2DArray[0] == randomVector2DArray[0]);
+         assertTrue(copyRandomVector2DArray[1] == randomVector2DArray[1]);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -57,8 +56,8 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
          Vector2D vector2 = EuclidCoreRandomTools.nextVector2D(random);
          vector = new Vector2D(vector2);
 
-         Assert.assertTrue(vector.getX() == vector2.getX());
-         Assert.assertTrue(vector.getY() == vector2.getY());
+         assertTrue(vector.getX() == vector2.getX());
+         assertTrue(vector.getY() == vector2.getY());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -66,8 +65,8 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
          Vector3D vector2 = EuclidCoreRandomTools.nextVector3D(random);
          vector = new Vector2D(vector2);
 
-         Assert.assertTrue(vector.getX() == vector2.getX());
-         Assert.assertTrue(vector.getY() == vector2.getY());
+         assertTrue(vector.getX() == vector2.getX());
+         assertTrue(vector.getY() == vector2.getY());
       }
    }
 

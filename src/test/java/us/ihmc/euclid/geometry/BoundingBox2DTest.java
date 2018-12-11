@@ -1,11 +1,11 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -21,6 +21,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 public class BoundingBox2DTest
 {
    private static final double EPSILON = EuclidGeometryTools.ONE_TRILLIONTH;
+
    @Test
    public void testConstructors() throws Exception
    {
@@ -491,7 +492,7 @@ public class BoundingBox2DTest
                   break;
                }
             }
-            assertTrue("Unexpected min coordinate for the combined bounding box, axis index = " + axisIndex, isMinCoordinateFromOriginal);
+            assertTrue(isMinCoordinateFromOriginal, "Unexpected min coordinate for the combined bounding box, axis index = " + axisIndex);
          }
 
          Point2DReadOnly[] originalMaxCoordinates = {boundingBoxOne.getMaxPoint(), boundingBoxTwo.getMaxPoint()};
@@ -506,7 +507,7 @@ public class BoundingBox2DTest
                   break;
                }
             }
-            assertTrue("Unexpected max coordinate for the combined bounding box, axis index = " + axisIndex, isMaxCoordinateFromOriginal);
+            assertTrue(isMaxCoordinateFromOriginal, "Unexpected max coordinate for the combined bounding box, axis index = " + axisIndex);
          }
       }
 
@@ -537,7 +538,7 @@ public class BoundingBox2DTest
                   break;
                }
             }
-            assertTrue("Unexpected min coordinate for the combined bounding box, axis index = " + axisIndex, isMinCoordinateFromOriginal);
+            assertTrue(isMinCoordinateFromOriginal, "Unexpected min coordinate for the combined bounding box, axis index = " + axisIndex);
          }
 
          Point2DReadOnly[] originalMaxCoordinates = {boundingBoxOne.getMaxPoint(), boundingBoxTwo.getMaxPoint()};
@@ -552,7 +553,7 @@ public class BoundingBox2DTest
                   break;
                }
             }
-            assertTrue("Unexpected max coordinate for the combined bounding box, axis index = " + axisIndex, isMaxCoordinateFromOriginal);
+            assertTrue(isMaxCoordinateFromOriginal, "Unexpected max coordinate for the combined bounding box, axis index = " + axisIndex);
          }
       }
    }
@@ -1349,7 +1350,8 @@ public class BoundingBox2DTest
       double smallestEpsilon = 8.8888e-16;
 
       assertTrue(boundingBox2D.equals(new BoundingBox2D(minX, minY, maxX, maxY)));
-      assertTrue(boundingBox2D.equals((Object) new BoundingBox2D(minX, minY, maxX, maxY)));
+      Object bbxAxObject = new BoundingBox2D(minX, minY, maxX, maxY);
+      assertTrue(boundingBox2D.equals(bbxAxObject));
       assertFalse(boundingBox2D.equals(null));
       assertFalse(boundingBox2D.equals(new double[5]));
 

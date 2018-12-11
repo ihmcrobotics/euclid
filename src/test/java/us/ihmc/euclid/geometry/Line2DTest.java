@@ -1,12 +1,13 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
@@ -87,36 +88,38 @@ public class Line2DTest
       frontDirection.set(0.0, 1.0);
 
       point3.set(0.0, 1.0);
-      assertEquals("not equal", true, line2d.isPointInFrontOfLine(frontDirection, point3));
+      assertEquals(true, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point3.set(0.0, -1.0);
-      assertEquals("not equal", false, line2d.isPointInFrontOfLine(frontDirection, point3));
+      assertEquals(false, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point1.set(0.0, 0.0);
       point2.set(-1.0, 1.0);
       line2d.set(point1, point2);
 
       point3.set(0.0, 1.0);
-      assertEquals("not equal", true, line2d.isPointInFrontOfLine(frontDirection, point3));
+      assertEquals(true, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point3.set(0.0, -1.0);
-      assertEquals("not equal", false, line2d.isPointInFrontOfLine(frontDirection, point3));
+      assertEquals(false, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       frontDirection.set(0.0, -1.0);
 
       point3.set(0.0, 1.0);
-      assertEquals("not equal", false, line2d.isPointInFrontOfLine(frontDirection, point3));
+      assertEquals(false, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point3.set(0.0, -1.0);
-      assertEquals("not equal", true, line2d.isPointInFrontOfLine(frontDirection, point3));
+      assertEquals(true, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test
    public void testPointPointConstructorForException()
    {
-      // TODO: Test this at various random points, or is this sufficient?
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      new Line2D(firstPointOnLine, firstPointOnLine);
+      Assertions.assertThrows(RuntimeException.class, () -> {
+         // TODO: Test this at various random points, or is this sufficient?
+         Point2D firstPointOnLine = new Point2D(0.0, 0.0);
+         new Line2D(firstPointOnLine, firstPointOnLine);
+      });
    }
 
    @Test
@@ -347,13 +350,15 @@ public class Line2DTest
       }
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test
    public void testSetPointPointException()
    {
-      Point2D firstPointOnLine = new Point2D(0.0, 0.0);
-      Point2D secondPointOnLine = new Point2D(1.0, 1.0);
-      Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-      line2d.set(firstPointOnLine, firstPointOnLine);
+      Assertions.assertThrows(RuntimeException.class, () -> {
+         Point2D firstPointOnLine = new Point2D(0.0, 0.0);
+         Point2D secondPointOnLine = new Point2D(1.0, 1.0);
+         Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
+         line2d.set(firstPointOnLine, firstPointOnLine);
+      });
    }
 
    @Test
@@ -1167,10 +1172,10 @@ public class Line2DTest
       Vector2D vector = new Vector2D(line.getDirection());
 
       line.applyTransform(transform);
-      assertEquals("pure translation failed", point.getX() + translation.getX(), line.getPointX(), delta);
-      assertEquals("pure translation failed", point.getY() + translation.getY(), line.getPointY(), delta);
-      assertEquals("pure translation failed", vector.getX(), line.getDirectionX(), delta);
-      assertEquals("pure translation failed", vector.getY(), line.getDirectionY(), delta);
+      assertEquals(point.getX() + translation.getX(), line.getPointX(), delta, "pure translation failed");
+      assertEquals(point.getY() + translation.getY(), line.getPointY(), delta, "pure translation failed");
+      assertEquals(vector.getX(), line.getDirectionX(), delta, "pure translation failed");
+      assertEquals(vector.getY(), line.getDirectionY(), delta, "pure translation failed");
    }
 
    @Test
@@ -1200,50 +1205,54 @@ public class Line2DTest
       double sina = Math.sin(alpha);
       double cosa = Math.cos(alpha);
 
-      assertEquals("pure rotation failed", point.getX() * cosa - point.getY() * sina, line.getPointX(), delta);
-      assertEquals("pure rotation failed", point.getX() * sina + point.getY() * cosa, line.getPointY(), delta);
-      assertEquals("pure rotation failed", vector.getX() * cosa - vector.getY() * sina, line.getDirectionX(), delta);
-      assertEquals("pure rotation failed", vector.getX() * sina + vector.getY() * cosa, line.getDirectionY(), delta);
+      assertEquals(point.getX() * cosa - point.getY() * sina, line.getPointX(), delta, "pure rotation failed");
+      assertEquals(point.getX() * sina + point.getY() * cosa, line.getPointY(), delta, "pure rotation failed");
+      assertEquals(vector.getX() * cosa - vector.getY() * sina, line.getDirectionX(), delta, "pure rotation failed");
+      assertEquals(vector.getX() * sina + vector.getY() * cosa, line.getDirectionY(), delta, "pure rotation failed");
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test
    public void testApplyTransformRotationXaxisException()
    {
-      Random random = new Random(1776L);
-      RigidBodyTransform transform = new RigidBodyTransform();
-      Point2D firstPointOnLine = randomPoint(random);
-      Point2D secondPointOnLine = randomPoint(random);
+      Assertions.assertThrows(RuntimeException.class, () -> {
+         Random random = new Random(1776L);
+         RigidBodyTransform transform = new RigidBodyTransform();
+         Point2D firstPointOnLine = randomPoint(random);
+         Point2D secondPointOnLine = randomPoint(random);
 
-      // pure translation:
-      Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
-      Vector3D eulerAngles = new Vector3D(randomDouble(random, 2.0 * Math.PI), 0.0, 0.0);
+         // pure translation:
+         Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
+         Vector3D eulerAngles = new Vector3D(randomDouble(random, 2.0 * Math.PI), 0.0, 0.0);
 
-      transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+         transform.setRotationEulerAndZeroTranslation(eulerAngles);
+         transform.setTranslation(translation);
 
-      Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
+         Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
-      line.applyTransform(transform);
+         line.applyTransform(transform);
+      });
    }
 
-   @Test(expected = RuntimeException.class)
+   @Test
    public void testApplyTransformRotationYaxisException()
    {
-      Random random = new Random(1776L);
-      RigidBodyTransform transform = new RigidBodyTransform();
-      Point2D firstPointOnLine = randomPoint(random);
-      Point2D secondPointOnLine = randomPoint(random);
+      Assertions.assertThrows(RuntimeException.class, () -> {
+         Random random = new Random(1776L);
+         RigidBodyTransform transform = new RigidBodyTransform();
+         Point2D firstPointOnLine = randomPoint(random);
+         Point2D secondPointOnLine = randomPoint(random);
 
-      // pure translation:
-      Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
-      Vector3D eulerAngles = new Vector3D(0.0, randomDouble(random, 2.0 * Math.PI), 0.0);
+         // pure translation:
+         Vector3D translation = new Vector3D(0.0, 0.0, 0.0);
+         Vector3D eulerAngles = new Vector3D(0.0, randomDouble(random, 2.0 * Math.PI), 0.0);
 
-      transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+         transform.setRotationEulerAndZeroTranslation(eulerAngles);
+         transform.setTranslation(translation);
 
-      Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
+         Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
-      line.applyTransform(transform);
+         line.applyTransform(transform);
+      });
    }
 
    @Test
@@ -1273,10 +1282,10 @@ public class Line2DTest
       double sina = Math.sin(alpha);
       double cosa = Math.cos(alpha);
 
-      assertEquals("pure rotation failed", point.getX() * cosa - point.getY() * sina + translation.getX(), line.getPointX(), delta);
-      assertEquals("pure rotation failed", point.getX() * sina + point.getY() * cosa + translation.getY(), line.getPointY(), delta);
-      assertEquals("pure rotation failed", vector.getX() * cosa - vector.getY() * sina, line.getDirectionX(), delta);
-      assertEquals("pure rotation failed", vector.getX() * sina + vector.getY() * cosa, line.getDirectionY(), delta);
+      assertEquals(point.getX() * cosa - point.getY() * sina + translation.getX(), line.getPointX(), delta, "pure rotation failed");
+      assertEquals(point.getX() * sina + point.getY() * cosa + translation.getY(), line.getPointY(), delta, "pure rotation failed");
+      assertEquals(vector.getX() * cosa - vector.getY() * sina, line.getDirectionX(), delta, "pure rotation failed");
+      assertEquals(vector.getX() * sina + vector.getY() * cosa, line.getDirectionY(), delta, "pure rotation failed");
    }
 
    @Test
@@ -1360,7 +1369,7 @@ public class Line2DTest
       Point2D point = new Point2D(0.0, 2.0);
       double distance = line.distance(point);
       double delta = 1e-12;
-      assertEquals("Distance to a horizontal line not calculated correctly", 1.0, distance, delta);
+      assertEquals(1.0, distance, delta, "Distance to a horizontal line not calculated correctly");
 
       pointOnLine = new Point2D(-1.0, 0.0);
       directionVector = new Vector2D(0.0, 1.0);
@@ -1369,7 +1378,7 @@ public class Line2DTest
       point = new Point2D(2.0, 3.0);
       distance = line.distance(point);
       delta = 1e-12;
-      assertEquals("Distance to a horizontal line not calculated correctly", 3.0, distance, delta);
+      assertEquals(3.0, distance, delta, "Distance to a horizontal line not calculated correctly");
    }
 
    @Test
