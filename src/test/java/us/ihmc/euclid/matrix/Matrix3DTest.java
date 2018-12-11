@@ -1275,7 +1275,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
       assertFalse(m1.equals(new double[4]));
       m2.set(m1);
       assertTrue(m1.equals(m2));
-      assertTrue(m1.equals((Object) m2));
+      assertTrue(m1.equals(m2));
 
       double smallestEpsilon = 1.0e-16;
 
@@ -1314,7 +1314,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
          int column = random.nextInt(3);
          tuple1.setElement(row, column, random.nextDouble());
          newHashCode = tuple1.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

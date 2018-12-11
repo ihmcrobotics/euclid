@@ -134,7 +134,7 @@ public class Quaternion32Test extends QuaternionBasicsTest<Quaternion32>
          }
          q.setUnsafe(qx, qy, qz, qs);
          newHashCode = q.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

@@ -652,10 +652,10 @@ public class LineSegment3DTest
          LineSegment3D line2 = new LineSegment3D(line1);
          double epsilon = 1.0e-15;
          assertTrue(line1.equals(line2));
-         assertTrue(line1.equals((Object) line2));
+         assertTrue(line1.equals(line2));
 
          assertFalse(line1.equals((LineSegment3D) null));
-         assertFalse(line1.equals((Object) null));
+         assertFalse(line1.equals(null));
          assertFalse(line1.equals(new double[3]));
 
          for (int j = 0; j < 3; j++)

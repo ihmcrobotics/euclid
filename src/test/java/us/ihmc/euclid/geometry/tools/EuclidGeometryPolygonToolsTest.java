@@ -2303,8 +2303,8 @@ public class EuclidGeometryPolygonToolsTest
          int lineOfSightStartIndex = lineOfSightStartIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
          int lineOfSightEndIndex = lineOfSightEndIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
 
-         assertNotEquals((long) -1, (long) lineOfSightStartIndex);
-         assertNotEquals((long) -1, (long) lineOfSightEndIndex);
+         assertNotEquals(-1, lineOfSightStartIndex);
+         assertNotEquals(-1, lineOfSightEndIndex);
 
          /*
           * Drawing lines from the observer going through the start/end vertices. Each line should intersect

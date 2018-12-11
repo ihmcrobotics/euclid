@@ -4018,7 +4018,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       assertFalse(t1.equals(new double[4]));
       t2.set(t1);
       assertTrue(t1.equals(t2));
-      assertTrue(t1.equals((Object) t2));
+      assertTrue(t1.equals(t2));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[16];
@@ -4216,7 +4216,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          translation = EuclidCoreRandomTools.nextVector3D(random);
          rbt = new RigidBodyTransform(rotation, translation);
          newHashCode = rbt.hashCode();
-         assertNotEquals((long) previousHashCode, (long) newHashCode);
+         assertNotEquals(previousHashCode, newHashCode);
          previousHashCode = newHashCode;
       }
    }

@@ -2574,10 +2574,10 @@ public class EuclidGeometryToolsTest
          lineDirection.sub(secondPointOnLine, firstPointOnLine);
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
                                                                                                    secondPointOnLine, null, null);
-         assertNotEquals((long) 1, (long) numberOfIntersections);
+         assertNotEquals(1, numberOfIntersections);
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine, lineDirection,
                                                                                                null, null);
-         assertNotEquals((long) 1, (long) numberOfIntersections);
+         assertNotEquals(1, numberOfIntersections);
       }
    }
 
@@ -3302,10 +3302,10 @@ public class EuclidGeometryToolsTest
          lineDirection.sub(secondPointOnLine, firstPointOnLine);
          int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
                                                                                                    secondPointOnLine, null, null);
-         assertNotEquals((long) 1, (long) numberOfIntersections);
+         assertNotEquals(1, numberOfIntersections);
          numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine, lineDirection,
                                                                                                null, null);
-         assertNotEquals((long) 1, (long) numberOfIntersections);
+         assertNotEquals(1, numberOfIntersections);
       }
    }
 
@@ -7332,7 +7332,7 @@ public class EuclidGeometryToolsTest
          boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2,
                                                                               actualPointOnIntersection, actualIntersectionDirection);
          boolean areParallel = EuclidGeometryTools.areVector3DsParallel(planeNormal1, planeNormal2, 1.0e-6);
-         assertNotEquals((Object) areParallel, (Object) success);
+         assertNotEquals(areParallel, success);
          if (areParallel)
             continue;
 

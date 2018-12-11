@@ -117,7 +117,7 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
       {
          tuple1.setElement(i % 3, random.nextFloat());
          newHashCode = tuple1.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

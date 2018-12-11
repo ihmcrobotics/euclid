@@ -1818,7 +1818,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       assertFalse(m1.equals(new double[4]));
       m2.set(m1);
       assertTrue(m1.equals(m2));
-      assertTrue(m1.equals((Object) m2));
+      assertTrue(m1.equals(m2));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[9];
@@ -2008,7 +2008,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
 
          newHashCode = rotationMatrix.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

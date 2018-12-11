@@ -89,7 +89,7 @@ public class Vector2DTest extends Vector2DBasicsTest<Vector2D>
       {
          tuple1.setElement(i % 2, random.nextDouble());
          newHashCode = tuple1.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

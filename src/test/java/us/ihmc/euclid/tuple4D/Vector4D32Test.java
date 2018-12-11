@@ -103,7 +103,7 @@ public class Vector4D32Test extends Vector4DBasicsTest<Vector4D32>
       {
          vector.setElement(i % 4, random.nextDouble());
          newHashCode = vector.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

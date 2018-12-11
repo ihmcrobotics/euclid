@@ -240,7 +240,7 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       assertFalse(tuple.equals(createEmptyTuple()));
       assertFalse(tuple.equals(null));
       assertFalse(tuple.equals(new double[5]));
-      assertTrue(tuple.equals((Object) tuple));
+      assertTrue(tuple.equals(tuple));
 
       double x = tuple.getX();
       double y = tuple.getY();

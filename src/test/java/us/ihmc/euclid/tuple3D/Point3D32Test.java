@@ -112,7 +112,7 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       {
          tuple1.setElement(i % 3, random.nextFloat());
          newHashCode = tuple1.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

@@ -96,7 +96,7 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
       {
          point.setElement(i % 2, random.nextFloat());
          newHashCode = point.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

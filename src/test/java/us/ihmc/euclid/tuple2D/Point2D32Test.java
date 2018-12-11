@@ -104,7 +104,7 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
       {
          point.setElement(i % 2, random.nextFloat());
          newHashCode = point.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }

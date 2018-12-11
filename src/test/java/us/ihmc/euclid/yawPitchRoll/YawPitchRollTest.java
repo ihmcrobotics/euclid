@@ -98,7 +98,7 @@ public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
       {
          ypr.setElement(i % 3, random.nextDouble());
          newHashCode = ypr.hashCode();
-         assertNotEquals((long) newHashCode, (long) previousHashCode);
+         assertNotEquals(newHashCode, previousHashCode);
          previousHashCode = newHashCode;
       }
    }
