@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -119,8 +120,8 @@ public class Torus3DTest
       projectedPoint = new Point3D(testPoint);
       torus3d.orthogonalProjection(projectedPoint);
 
-      assertEquals(radius - thickness, testPoint.distance(projectedPoint), 1e-7);
-      assertEquals(0.0, projectedPoint.getZ(), 1e-7);
+      assertEqualsDelta(radius - thickness, testPoint.distance(projectedPoint), 1e-7);
+      assertEqualsDelta(0.0, projectedPoint.getZ(), 1e-7);
    }
 
    @Test

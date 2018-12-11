@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -115,10 +116,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       verticesList.add(new Point2D(1.0, 1.0));
 
       T list = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList));
-      assertEquals("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), EPSILON);
       assertTrue(list.isUpToDate());
       list.clearAndUpdate();
-      assertEquals("Number of vertices should be 0", 0.0, list.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be 0", 0.0, list.getNumberOfVertices(), EPSILON);
       assertTrue(list.isUpToDate());
       list.clear();
       assertFalse(list.isUpToDate());
@@ -138,7 +139,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       int numberOfVertices = 4;
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
       doubleInt.set(Vertex2DSupplier.asVertex2DSupplier(verticesArray, numberOfVertices));
-      assertEquals("Number of vertices should be 4", 4.0, doubleInt.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be 4", 4.0, doubleInt.getNumberOfVertices(), EPSILON);
       assertTrue(doubleInt.isUpToDate());
    }
 
@@ -150,7 +151,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       Point2D centroid = new Point2D();
 
       centroid.set(doubles.getCentroid());
-      assertEquals("Centroids should be equal", centroid, doubles.getCentroid());
+      assertEquals(centroid, doubles.getCentroid(), "Centroids should be equal");
    }
 
    @Test
@@ -160,10 +161,10 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       T doubles = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
       BoundingBox2DBasics box = doubles.getBoundingBox();
 
-      assertEquals("Bounding boxes should be equal", box.getMinPoint().getX(), 0.0, EPSILON);
-      assertEquals("Bounding boxes should be equal", box.getMinPoint().getX(), 0.0, EPSILON);
-      assertEquals("Bounding boxes should be equal", box.getMaxPoint().getY(), 1.0, EPSILON);
-      assertEquals("Bounding boxes should be equal", box.getMaxPoint().getY(), 1.0, EPSILON);
+      assertEqualsDelta("Bounding boxes should be equal", box.getMinPoint().getX(), 0.0, EPSILON);
+      assertEqualsDelta("Bounding boxes should be equal", box.getMinPoint().getX(), 0.0, EPSILON);
+      assertEqualsDelta("Bounding boxes should be equal", box.getMaxPoint().getY(), 1.0, EPSILON);
+      assertEqualsDelta("Bounding boxes should be equal", box.getMaxPoint().getY(), 1.0, EPSILON);
    }
 
    @Test
@@ -904,7 +905,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       // TODO this may fail, if the point is really close to the "true" biSecotor and the biSector float calc error moves it to the wrong side...
       // TODO edge cases unsolved...
-      assertEquals(isPointBehindLine, isOtherEdgeVertexBehindLine);
+      assertEquals((Object) isPointBehindLine, (Object) isOtherEdgeVertexBehindLine);
 
    }
 
@@ -961,8 +962,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
             if (convexPolygon.isPointInside(testPoint))
                assertNull(projectedPoint);
             else
-               assertTrue("Projected point was not inside the polygon for point\n" + projectedPoint + "\nand convex polygon \n" + convexPolygon,
-                          convexPolygon.isPointInside(projectedPoint, 1.0E-10));
+               assertTrue(convexPolygon.isPointInside(projectedPoint, 1.0E-10), "Projected point was not inside the polygon for point\n" + projectedPoint + "\nand convex polygon \n" + convexPolygon);
          }
       }
    }
@@ -1035,7 +1035,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
    private static void assertDistanceCorrect(double expected, double actual)
    {
-      assertEquals("Distance does not equal expected.", expected, actual, EPSILON);
+      assertEqualsDelta("Distance does not equal expected.", expected, actual, EPSILON);
    }
 
    @Test
@@ -1585,11 +1585,11 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
    {
       if (expected == null || actual == null)
       {
-         assertTrue("Expected did not equal actual. One of them was null.", expected == actual);
+         assertTrue(expected == actual, "Expected did not equal actual. One of them was null.");
          return;
       }
 
-      assertEquals("Array lengths are not equal.", expected.length, actual.length);
+      assertEquals(expected.length, actual.length, "Array lengths are not equal.");
       int points = expected.length;
       for (int i = 0; i < points; i++)
       {
@@ -1605,7 +1605,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
             if (expected[i].epsilonEquals(actual[j], EPSILON))
                foundPoint = true;
          }
-         assertTrue("Did not find point.", foundPoint);
+         assertTrue(foundPoint, "Did not find point.");
       }
    }
 }

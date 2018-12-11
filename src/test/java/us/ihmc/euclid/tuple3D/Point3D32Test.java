@@ -1,12 +1,13 @@
 package us.ihmc.euclid.tuple3D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -25,9 +26,9 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       { // Test Point32()
          Point3D32 point = new Point3D32();
 
-         Assert.assertTrue(0 == point.getX());
-         Assert.assertTrue(0 == point.getY());
-         Assert.assertTrue(0 == point.getZ());
+         assertTrue(0 == point.getX());
+         assertTrue(0 == point.getY());
+         assertTrue(0 == point.getZ());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -40,9 +41,9 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
 
          point = new Point3D32(newX, newY, newZ);
 
-         Assert.assertTrue(newX == point.getX32());
-         Assert.assertTrue(newY == point.getY32());
-         Assert.assertTrue(newZ == point.getZ32());
+         assertTrue(newX == point.getX32());
+         assertTrue(newY == point.getY32());
+         assertTrue(newZ == point.getZ32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -51,9 +52,9 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
 
          Point3D32 point = new Point3D32(randomPoint32Array);
 
-         Assert.assertTrue(randomPoint32Array[0] == point.getX32());
-         Assert.assertTrue(randomPoint32Array[1] == point.getY32());
-         Assert.assertTrue(randomPoint32Array[2] == point.getZ32());
+         assertTrue(randomPoint32Array[0] == point.getX32());
+         assertTrue(randomPoint32Array[1] == point.getY32());
+         assertTrue(randomPoint32Array[2] == point.getZ32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -77,21 +78,21 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
-         assertEquals(tuple1.getX32(), x, getEpsilon());
+         assertEqualsDelta(tuple1.getX32(), x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
-         assertEquals(tuple1.getY32(), y, getEpsilon());
+         assertEqualsDelta(tuple1.getY32(), y, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(float z)
          float z = random.nextFloat();
          tuple1.setZ(z);
-         assertEquals(tuple1.getZ32(), z, getEpsilon());
+         assertEqualsDelta(tuple1.getZ32(), z, getEpsilon());
       }
    }
 
@@ -111,7 +112,7 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       {
          tuple1.setElement(i % 3, random.nextFloat());
          newHashCode = tuple1.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 

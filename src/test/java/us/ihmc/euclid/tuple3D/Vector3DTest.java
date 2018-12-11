@@ -1,12 +1,13 @@
 package us.ihmc.euclid.tuple3D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -21,9 +22,9 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
       Vector3D vector = new Vector3D();
 
       { // Test Vector()
-         Assert.assertTrue(0 == vector.getX());
-         Assert.assertTrue(0 == vector.getY());
-         Assert.assertTrue(0 == vector.getZ());
+         assertTrue(0 == vector.getX());
+         assertTrue(0 == vector.getY());
+         assertTrue(0 == vector.getZ());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -34,9 +35,9 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
 
          vector = new Vector3D(newX, newY, newZ);
 
-         Assert.assertTrue(newX == vector.getX());
-         Assert.assertTrue(newY == vector.getY());
-         Assert.assertTrue(newZ == vector.getZ());
+         assertTrue(newX == vector.getX());
+         assertTrue(newY == vector.getY());
+         assertTrue(newZ == vector.getZ());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -44,9 +45,9 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
          double[] randomVectorArray = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
          Vector3D vectorArray = new Vector3D(randomVectorArray);
 
-         Assert.assertTrue(randomVectorArray[0] == vectorArray.getX());
-         Assert.assertTrue(randomVectorArray[1] == vectorArray.getY());
-         Assert.assertTrue(randomVectorArray[2] == vectorArray.getZ());
+         assertTrue(randomVectorArray[0] == vectorArray.getX());
+         assertTrue(randomVectorArray[1] == vectorArray.getY());
+         assertTrue(randomVectorArray[2] == vectorArray.getZ());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -58,9 +59,9 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
 
          vector = new Vector3D(vector2);
 
-         Assert.assertTrue(vector.getX() == vector2.getX());
-         Assert.assertTrue(vector.getY() == vector2.getY());
-         Assert.assertTrue(vector.getZ() == vector2.getZ());
+         assertTrue(vector.getX() == vector2.getX());
+         assertTrue(vector.getY() == vector2.getY());
+         assertTrue(vector.getZ() == vector2.getZ());
       }
    }
 
@@ -80,7 +81,7 @@ public class Vector3DTest extends Vector3DBasicsTest<Vector3D>
       {
          tuple1.setElement(i % 3, random.nextDouble());
          newHashCode = tuple1.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

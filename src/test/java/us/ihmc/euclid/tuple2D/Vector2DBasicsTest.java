@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -36,7 +37,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          vector2.setAndScale(scalar, vector1);
          double expectedLength2 = scalar * length1;
          double actualLength2 = vector2.length();
-         assertEquals(expectedLength2, actualLength2, 2.0 * getEpsilon());
+         assertEqualsDelta(expectedLength2, actualLength2, 2.0 * getEpsilon());
       }
    }
 
@@ -54,7 +55,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          vector2.setAndScale(scalar, vector1);
          double expectedLength2 = scalar * length1;
          double actualLength2 = vector2.lengthSquared();
-         assertEquals(expectedLength2, Math.sqrt(actualLength2), 2.0 * getEpsilon());
+         assertEqualsDelta(expectedLength2, Math.sqrt(actualLength2), 2.0 * getEpsilon());
       }
    }
 
@@ -74,7 +75,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
 
          double expectedDot = vector1.length() * vector2.length() * Math.cos(angle);
          double actualDot = vector1.dot(vector2);
-         assertEquals(expectedDot, actualDot, getEpsilon());
+         assertEqualsDelta(expectedDot, actualDot, getEpsilon());
       }
    }
 
@@ -94,7 +95,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
 
          double actualAngle = vector1.angle(vector2);
 
-         assertEquals(expectedAngle, actualAngle, getEpsilon());
+         assertEqualsDelta(expectedAngle, actualAngle, getEpsilon());
       }
    }
 
@@ -113,7 +114,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
 
          double expectedDot = vector1.length() * vector2.length() * Math.sin(angle);
          double actualDot = vector1.cross(vector2);
-         assertEquals(expectedDot, actualDot, getEpsilon());
+         assertEqualsDelta(expectedDot, actualDot, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -127,7 +128,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
 
          double expectedCross = vector1.length() * vector2.length() * Math.sin(angle);
          double actualCross = Vector2DReadOnly.cross(vector1, vector2);
-         assertEquals(expectedCross, actualCross, getEpsilon());
+         assertEqualsDelta(expectedCross, actualCross, getEpsilon());
       }
    }
 
@@ -144,7 +145,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
 
          double expectedLength = 1.0;
          double actualLength = vector1.length();
-         assertEquals(expectedLength, actualLength, getEpsilon());
+         assertEqualsDelta(expectedLength, actualLength, getEpsilon());
 
          T vector2 = createRandomTuple(random);
          vector2.normalize();
@@ -162,7 +163,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
 
          double expectedLength = 1.0;
          double actualLength = vector2.length();
-         assertEquals(expectedLength, actualLength, getEpsilon());
+         assertEqualsDelta(expectedLength, actualLength, getEpsilon());
 
          vector2 = createRandomTuple(random);
          vector2.normalize();

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -34,9 +35,9 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          double z = random.nextDouble();
          tuple = createTuple(x, y, z);
 
-         assertEquals(tuple.getX(), x, getEpsilon());
-         assertEquals(tuple.getY(), y, getEpsilon());
-         assertEquals(tuple.getZ(), z, getEpsilon());
+         assertEqualsDelta(tuple.getX(), x, getEpsilon());
+         assertEqualsDelta(tuple.getY(), y, getEpsilon());
+         assertEqualsDelta(tuple.getZ(), z, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -46,9 +47,9 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          float z = random.nextFloat();
          tuple = createTuple(x, y, z);
 
-         assertEquals(tuple.getX32(), x, getEpsilon());
-         assertEquals(tuple.getY32(), y, getEpsilon());
-         assertEquals(tuple.getZ32(), z, getEpsilon());
+         assertEqualsDelta(tuple.getX32(), x, getEpsilon());
+         assertEqualsDelta(tuple.getY32(), y, getEpsilon());
+         assertEqualsDelta(tuple.getZ32(), z, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -58,9 +59,9 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          double z = random.nextDouble();
          tuple = createTuple(x, y, z);
 
-         assertEquals(tuple.getElement(0), x, getEpsilon());
-         assertEquals(tuple.getElement(1), y, getEpsilon());
-         assertEquals(tuple.getElement(2), z, getEpsilon());
+         assertEqualsDelta(tuple.getElement(0), x, getEpsilon());
+         assertEqualsDelta(tuple.getElement(1), y, getEpsilon());
+         assertEqualsDelta(tuple.getElement(2), z, getEpsilon());
 
          try
          {

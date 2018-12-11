@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -185,12 +186,12 @@ public class Line3DTest
 
          double expectedDistance = EuclidGeometryTools.distanceFromPoint3DToLine3D(query, line.getPoint(), line.getDirection());
          double actualDistance = line.distance(query);
-         assertEquals(expectedDistance, actualDistance, EPSILON);
+         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
 
          Line3D otherLine = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
          expectedDistance = EuclidGeometryTools.distanceBetweenTwoLine3Ds(line.getPoint(), line.getDirection(), otherLine.getPoint(), otherLine.getDirection());
          actualDistance = line.distance(otherLine);
-         assertEquals(expectedDistance, actualDistance, EPSILON);
+         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
       }
    }
 
@@ -213,7 +214,7 @@ public class Line3DTest
                                                                                         otherLine.getDirection(), expectedClosestPointOnLine,
                                                                                         expectedClosestPointOnOtherLine);
          double actualDistance = line.closestPointsWith(otherLine, actualClosestPointOnLine, actualClosestPointOnOtherLine);
-         assertEquals(expectedDistance, actualDistance, EPSILON);
+         assertEqualsDelta(expectedDistance, actualDistance, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPointOnLine, actualClosestPointOnLine, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPointOnOtherLine, actualClosestPointOnOtherLine, EPSILON);
       }
@@ -234,8 +235,8 @@ public class Line3DTest
          assertFalse(direction.epsilonEquals(line.getDirection(), 1.0e-3));
 
          assertTrue(direction.dot(line.getDirection()) > 0.0);
-         assertEquals(direction.length(), direction.dot(line.getDirection()), EPSILON);
-         assertEquals(1.0, line.getDirection().length(), EPSILON);
+         assertEqualsDelta(direction.length(), direction.dot(line.getDirection()), EPSILON);
+         assertEqualsDelta(1.0, line.getDirection().length(), EPSILON);
       }
    }
 

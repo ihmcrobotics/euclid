@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
@@ -202,10 +203,10 @@ public class Vertex3DSupplierTest
          int sizeB = random.nextInt(100) + 1;
          List<Point3D> listB = IntStream.range(0, sizeB).mapToObj(v -> EuclidCoreRandomTools.nextPoint3D(random)).collect(Collectors.toList());
 
-         assertTrue("Iteration: " + i, Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listA), epsilon));
-         assertTrue("Iteration: " + i, Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listAPrime), epsilon));
-         assertFalse("Iteration: " + i, Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listSizeA), epsilon));
-         assertFalse("Iteration: " + i, Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listB), epsilon));
+         assertTrue(Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listA), epsilon), "Iteration: " + i);
+         assertTrue(Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listAPrime), epsilon), "Iteration: " + i);
+         assertFalse(Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listSizeA), epsilon), "Iteration: " + i);
+         assertFalse(Vertex3DSupplier.asVertex3DSupplier(listA).epsilonEquals(Vertex3DSupplier.asVertex3DSupplier(listB), epsilon), "Iteration: " + i);
       }
    }
 }

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
@@ -209,14 +210,10 @@ public class FrameVertex2DSupplierTest
          List<FramePoint2D> listB = IntStream.range(0, sizeB).mapToObj(v -> EuclidFrameRandomTools.nextFramePoint2D(random, worldFrame))
                                              .collect(Collectors.toList());
 
-         assertTrue("Iteration: " + i,
-                    FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA), epsilon));
-         assertTrue("Iteration: " + i,
-                    FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listAPrime), epsilon));
-         assertFalse("Iteration: " + i,
-                     FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listSizeA), epsilon));
-         assertFalse("Iteration: " + i,
-                     FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listB), epsilon));
+         assertTrue(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA), epsilon), "Iteration: " + i);
+         assertTrue(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listAPrime), epsilon), "Iteration: " + i);
+         assertFalse(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listSizeA), epsilon), "Iteration: " + i);
+         assertFalse(FrameVertex2DSupplier.asFrameVertex2DSupplier(listA).epsilonEquals(FrameVertex2DSupplier.asFrameVertex2DSupplier(listB), epsilon), "Iteration: " + i);
       }
    }
 }

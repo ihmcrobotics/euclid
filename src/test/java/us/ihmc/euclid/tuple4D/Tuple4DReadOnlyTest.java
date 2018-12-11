@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -37,10 +38,10 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          double s = random.nextDouble();
          tuple = createTuple(x, y, z, s);
 
-         assertEquals(tuple.getX(), x, getEpsilon());
-         assertEquals(tuple.getY(), y, getEpsilon());
-         assertEquals(tuple.getZ(), z, getEpsilon());
-         assertEquals(tuple.getS(), s, getEpsilon());
+         assertEqualsDelta(tuple.getX(), x, getEpsilon());
+         assertEqualsDelta(tuple.getY(), y, getEpsilon());
+         assertEqualsDelta(tuple.getZ(), z, getEpsilon());
+         assertEqualsDelta(tuple.getS(), s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -51,10 +52,10 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          float s = random.nextFloat();
          tuple = createTuple(x, y, z, s);
 
-         assertEquals(tuple.getX32(), x, getEpsilon());
-         assertEquals(tuple.getY32(), y, getEpsilon());
-         assertEquals(tuple.getZ32(), z, getEpsilon());
-         assertEquals(tuple.getS32(), s, getEpsilon());
+         assertEqualsDelta(tuple.getX32(), x, getEpsilon());
+         assertEqualsDelta(tuple.getY32(), y, getEpsilon());
+         assertEqualsDelta(tuple.getZ32(), z, getEpsilon());
+         assertEqualsDelta(tuple.getS32(), s, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -65,10 +66,10 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          double s = random.nextDouble();
          tuple = createTuple(x, y, z, s);
 
-         assertEquals(tuple.getElement(0), x, getEpsilon());
-         assertEquals(tuple.getElement(1), y, getEpsilon());
-         assertEquals(tuple.getElement(2), z, getEpsilon());
-         assertEquals(tuple.getElement(3), s, getEpsilon());
+         assertEqualsDelta(tuple.getElement(0), x, getEpsilon());
+         assertEqualsDelta(tuple.getElement(1), y, getEpsilon());
+         assertEqualsDelta(tuple.getElement(2), z, getEpsilon());
+         assertEqualsDelta(tuple.getElement(3), s, getEpsilon());
 
          try
          {
@@ -252,7 +253,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ(), scalar * tuple1.getS());
          double expectedLength2 = scalar * length1;
          double actualLength2 = tuple2.norm();
-         assertEquals(expectedLength2, actualLength2, 5.0 * getEpsilon());
+         assertEqualsDelta(expectedLength2, actualLength2, 5.0 * getEpsilon());
       }
    }
 
@@ -269,7 +270,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ(), scalar * tuple1.getS());
          double expectedLength2 = scalar * length1;
          double actualLength2 = tuple2.normSquared();
-         assertEquals(expectedLength2, Math.sqrt(actualLength2), 5.0 * getEpsilon());
+         assertEqualsDelta(expectedLength2, Math.sqrt(actualLength2), 5.0 * getEpsilon());
       }
    }
 
@@ -297,19 +298,19 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
 
          QuaternionTools.multiplyConjugateRight(p, q, product);
          expectedDot = product.getS();
-         assertEquals(expectedDot, actualDot, getEpsilon());
+         assertEqualsDelta(expectedDot, actualDot, getEpsilon());
 
          QuaternionTools.multiplyConjugateRight(q, p, product);
          expectedDot = product.getS();
-         assertEquals(expectedDot, actualDot, getEpsilon());
+         assertEqualsDelta(expectedDot, actualDot, getEpsilon());
 
          QuaternionTools.multiplyConjugateLeft(p, q, product);
          expectedDot = product.getS();
-         assertEquals(expectedDot, actualDot, getEpsilon());
+         assertEqualsDelta(expectedDot, actualDot, getEpsilon());
 
          QuaternionTools.multiplyConjugateLeft(q, p, product);
          expectedDot = product.getS();
-         assertEquals(expectedDot, actualDot, getEpsilon());
+         assertEqualsDelta(expectedDot, actualDot, getEpsilon());
       }
    }
 

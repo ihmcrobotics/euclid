@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -96,7 +97,7 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
    public void testConstructors()
    {
       ConvexPolygon2D defaultConstructor = new ConvexPolygon2D();
-      assertEquals("Number of vertices should be zero", 0.0, defaultConstructor.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be zero", 0.0, defaultConstructor.getNumberOfVertices(), EPSILON);
       assertTrue(defaultConstructor.isUpToDate());
 
       int numberOfVertices = 4;
@@ -107,27 +108,27 @@ public class ConvexPolygon2DTest extends ConvexPolygon2DBasicsTest<ConvexPolygon
       verticesList.add(new Point2D(1.0, 1.0));
 
       ConvexPolygon2D listInt = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList, numberOfVertices));
-      assertEquals("Number of vertices should be 4", 4.0, listInt.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be 4", 4.0, listInt.getNumberOfVertices(), EPSILON);
 
       ConvexPolygon2D list = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesList));
-      assertEquals("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be 4", 4.0, list.getNumberOfVertices(), EPSILON);
 
       double[][] verticesArray = {{0.0, 0.0}, {0.0, 1.0}, {1.0, 0.0}, {1.0, 1.0}};
 
       ConvexPolygon2D doubleInt = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray, numberOfVertices));
-      assertEquals("Number of vertices should be four", 4.0, doubleInt.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be four", 4.0, doubleInt.getNumberOfVertices(), EPSILON);
       assertTrue(doubleInt.isUpToDate());
 
       ConvexPolygon2D doubles = new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(verticesArray));
-      assertEquals("Number of vertices should be four", 4.0, doubles.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be four", 4.0, doubles.getNumberOfVertices(), EPSILON);
       assertTrue(doubles.isUpToDate());
 
       ConvexPolygon2D polygon = new ConvexPolygon2D(doubles);
-      assertEquals("Number of vertices should be four", 4.0, polygon.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be four", 4.0, polygon.getNumberOfVertices(), EPSILON);
       assertTrue(polygon.isUpToDate());
 
       ConvexPolygon2D polygonPolygon = new ConvexPolygon2D(doubleInt, doubles);
-      assertEquals("Number of vertices should be four", 4.0, polygonPolygon.getNumberOfVertices(), EPSILON);
+      assertEqualsDelta("Number of vertices should be four", 4.0, polygonPolygon.getNumberOfVertices(), EPSILON);
       assertTrue(polygonPolygon.isUpToDate());
    }
 }

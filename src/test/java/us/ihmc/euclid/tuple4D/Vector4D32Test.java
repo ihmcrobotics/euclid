@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -102,7 +103,7 @@ public class Vector4D32Test extends Vector4DBasicsTest<Vector4D32>
       {
          vector.setElement(i % 4, random.nextDouble());
          newHashCode = vector.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

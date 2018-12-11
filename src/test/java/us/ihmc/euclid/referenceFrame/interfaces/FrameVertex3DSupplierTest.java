@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
@@ -210,14 +211,10 @@ public class FrameVertex3DSupplierTest
          List<FramePoint3D> listB = IntStream.range(0, sizeB).mapToObj(v -> EuclidFrameRandomTools.nextFramePoint3D(random, worldFrame))
                                              .collect(Collectors.toList());
 
-         assertTrue("Iteration: " + i,
-                    FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA), epsilon));
-         assertTrue("Iteration: " + i,
-                    FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listAPrime), epsilon));
-         assertFalse("Iteration: " + i,
-                     FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listSizeA), epsilon));
-         assertFalse("Iteration: " + i,
-                     FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listB), epsilon));
+         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA), epsilon), "Iteration: " + i);
+         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listAPrime), epsilon), "Iteration: " + i);
+         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listSizeA), epsilon), "Iteration: " + i);
+         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listB), epsilon), "Iteration: " + i);
       }
    }
 }

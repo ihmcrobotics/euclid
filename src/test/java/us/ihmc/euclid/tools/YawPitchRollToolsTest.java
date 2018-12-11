@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
@@ -145,8 +146,8 @@ public class YawPitchRollToolsTest
          Quaternion firstQ = new Quaternion(firstYPR);
          Quaternion secondQ = new Quaternion(secondYPR);
 
-         assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR, secondYPR), EPSILON);
-         assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR.getYaw(), firstYPR.getPitch(), firstYPR.getRoll(), secondYPR.getYaw(),
+         assertEqualsDelta(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR, secondYPR), EPSILON);
+         assertEqualsDelta(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR.getYaw(), firstYPR.getPitch(), firstYPR.getRoll(), secondYPR.getYaw(),
                                                                            secondYPR.getPitch(), secondYPR.getRoll()),
                       EPSILON);
       }

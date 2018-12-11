@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
@@ -150,8 +151,8 @@ public class EuclidGeometryPolygonToolsTest
 
          for (int index = 0; index < numberOfPoints; index++)
          {
-            assertTrue("Iteration: " + i + ", index: " + index, isPolygon2DConvexAtVertex(index, points, clockwiseOrdered));
-            assertFalse("Iteration: " + i + ", index: " + index, isPolygon2DConvexAtVertex(index, points, !clockwiseOrdered));
+            assertTrue(isPolygon2DConvexAtVertex(index, points, clockwiseOrdered), "Iteration: " + i + ", index: " + index);
+            assertFalse(isPolygon2DConvexAtVertex(index, points, !clockwiseOrdered), "Iteration: " + i + ", index: " + index);
          }
 
          int numberOfExtraPoints = random.nextInt(20);
@@ -160,8 +161,8 @@ public class EuclidGeometryPolygonToolsTest
 
          for (int index = 0; index < numberOfPoints; index++)
          {
-            assertTrue("Iteration: " + i + ", index: " + index, isPolygon2DConvexAtVertex(index, points, numberOfPoints, clockwiseOrdered));
-            assertFalse("Iteration: " + i + ", index: " + index, isPolygon2DConvexAtVertex(index, points, numberOfPoints, !clockwiseOrdered));
+            assertTrue(isPolygon2DConvexAtVertex(index, points, numberOfPoints, clockwiseOrdered), "Iteration: " + i + ", index: " + index);
+            assertFalse(isPolygon2DConvexAtVertex(index, points, numberOfPoints, !clockwiseOrdered), "Iteration: " + i + ", index: " + index);
          }
 
          try
@@ -372,11 +373,11 @@ public class EuclidGeometryPolygonToolsTest
 
          if (listToProcess.isEmpty())
          {
-            assertEquals("Failed at iteration: " + i, 0, hullSize);
+            assertEquals(0, hullSize, "Failed at iteration: " + i);
          }
          else
          {
-            assertEquals("Failed at iteration: " + i, 1, hullSize);
+            assertEquals(1, hullSize, "Failed at iteration: " + i);
             EuclidCoreTestTools.assertTuple2DEquals(original, listToProcess.get(0), SMALLEST_EPSILON);
          }
       }
@@ -408,7 +409,7 @@ public class EuclidGeometryPolygonToolsTest
          List<? extends Point2DReadOnly> points = nextPointCloud2D(random, 10.0, 10.0, numberOfPoints);
          int hullSize = algorithmToTest.process(points, numberOfPoints);
          for (int index = 0; index < hullSize; index++)
-            assertTrue("Is not convex at vertex index: " + index, EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex(index, points, hullSize, true));
+            assertTrue(EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex(index, points, hullSize, true), "Is not convex at vertex index: " + index);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -442,7 +443,7 @@ public class EuclidGeometryPolygonToolsTest
             sumOfAngles -= previousEdge.angle(nextEdge); // Because the vertices are clockwise ordered.
          }
 
-         assertEquals(2.0 * Math.PI, sumOfAngles, SMALLEST_EPSILON);
+         assertEqualsDelta(2.0 * Math.PI, sumOfAngles, SMALLEST_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -467,7 +468,7 @@ public class EuclidGeometryPolygonToolsTest
             for (int secondIndex = firstIndex + 1; secondIndex < hullSize; secondIndex++)
             {
                Point2DReadOnly second = processedList.get(secondIndex);
-               assertFalse(duplicateMessage(processedList, hullSize, firstIndex, secondIndex), first.epsilonEquals(second, EuclidGeometryPolygonTools.EPSILON));
+               assertFalse(first.epsilonEquals(second, EuclidGeometryPolygonTools.EPSILON), duplicateMessage(processedList, hullSize, firstIndex, secondIndex));
             }
          }
       }
@@ -539,7 +540,7 @@ public class EuclidGeometryPolygonToolsTest
          }
          Point2D centroid = nextPoint2D(random);
          double actualArea = computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
-         assertEquals(expectedArea, actualArea, SMALLEST_EPSILON);
+         assertEqualsDelta(expectedArea, actualArea, SMALLEST_EPSILON);
 
          Point2D recomputedCentroid = new Point2D();
 
@@ -647,16 +648,15 @@ public class EuclidGeometryPolygonToolsTest
             Vector2D edgeNormal = new Vector2D();
             boolean success = edgeNormal(edgeIndex, convexPolygon2D, hullSize, clockwiseOrdered, edgeNormal);
             assertTrue(success);
-            assertEquals(1.0, edgeNormal.length(), SMALLEST_EPSILON);
+            assertEqualsDelta(1.0, edgeNormal.length(), SMALLEST_EPSILON);
 
             Vector2D edgeDirection = new Vector2D();
             edgeDirection.sub(edgeEnd, edgeStart);
-            assertEquals(0.0, edgeDirection.dot(edgeNormal), SMALLEST_EPSILON);
+            assertEqualsDelta(0.0, edgeDirection.dot(edgeNormal), SMALLEST_EPSILON);
 
             Point2D pointInsidePolygon = new Point2D();
             pointInsidePolygon.scaleAdd(-1.0e-8, edgeNormal, edgeStart);
-            assertTrue("Iteration: " + i + ", edgeIndex: " + edgeIndex,
-                       isPoint2DInsideConvexPolygon2D(pointInsidePolygon, convexPolygon2D, hullSize, clockwiseOrdered, 0.0));
+            assertTrue(isPoint2DInsideConvexPolygon2D(pointInsidePolygon, convexPolygon2D, hullSize, clockwiseOrdered, 0.0), "Iteration: " + i + ", edgeIndex: " + edgeIndex);
 
             Point2D pointOutsidePolygon = new Point2D();
             pointOutsidePolygon.scaleAdd(1.0e8, edgeNormal, edgeStart);
@@ -1000,7 +1000,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(2.5, 1.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(Math.sqrt(2.5 * 2.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+         assertEqualsDelta(Math.sqrt(2.5 * 2.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
       }
 
       { // Test examples single line polygon
@@ -1012,11 +1012,11 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(2.5, 1.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(Math.sqrt(1.5 * 1.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+         assertEqualsDelta(Math.sqrt(1.5 * 1.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
 
          query.set(0.5, 1.0);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(1.0, distance, SMALLEST_EPSILON);
+         assertEqualsDelta(1.0, distance, SMALLEST_EPSILON);
       }
 
       { // Test examples single line polygon
@@ -1029,27 +1029,27 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(10.0, 10.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(5.0 * Math.sqrt(2.0), distance, SMALLEST_EPSILON);
+         assertEqualsDelta(5.0 * Math.sqrt(2.0), distance, SMALLEST_EPSILON);
 
          query.set(1.2, 1.1);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(-1.1, distance, SMALLEST_EPSILON);
+         assertEqualsDelta(-1.1, distance, SMALLEST_EPSILON);
 
          query.set(0.05, 9.8);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(-0.05, distance, SMALLEST_EPSILON);
+         assertEqualsDelta(-0.05, distance, SMALLEST_EPSILON);
 
          query.set(9.8, 0.15);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(-0.5 * Math.sqrt(0.05 * 0.05 * 2.0), distance, SMALLEST_EPSILON);
+         assertEqualsDelta(-0.5 * Math.sqrt(0.05 * 0.05 * 2.0), distance, SMALLEST_EPSILON);
 
          query.set(5.0, -0.15);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(0.15, distance, SMALLEST_EPSILON);
+         assertEqualsDelta(0.15, distance, SMALLEST_EPSILON);
 
          query.set(15.0, -0.15);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(Math.sqrt(5.0 * 5.0 + 0.15 * 0.15), distance, SMALLEST_EPSILON);
+         assertEqualsDelta(Math.sqrt(5.0 * 5.0 + 0.15 * 0.15), distance, SMALLEST_EPSILON);
       }
 
       {// Trivial case: Square
@@ -1069,9 +1069,9 @@ public class EuclidGeometryPolygonToolsTest
             y = 1.1;
             expectedDistance = 0.1;
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, clockwiseSquareVertices, n, true);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, counterClockwiseSquareVertices, n, false);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          }
 
          for (x = 0.0; x <= 1.0; x += 0.05)
@@ -1079,9 +1079,9 @@ public class EuclidGeometryPolygonToolsTest
             y = -0.1;
             expectedDistance = 0.1;
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, clockwiseSquareVertices, n, true);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, counterClockwiseSquareVertices, n, false);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          }
 
          for (y = 0.0; y <= 1.0; y += 0.05)
@@ -1089,9 +1089,9 @@ public class EuclidGeometryPolygonToolsTest
             x = 1.1;
             expectedDistance = 0.1;
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, clockwiseSquareVertices, n, true);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, counterClockwiseSquareVertices, n, false);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          }
 
          for (y = 0.0; y <= 1.0; y += 0.05)
@@ -1099,9 +1099,9 @@ public class EuclidGeometryPolygonToolsTest
             x = -0.1;
             expectedDistance = 0.1;
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, clockwiseSquareVertices, n, true);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, counterClockwiseSquareVertices, n, false);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          }
 
          for (x = 0.1; x <= 0.9; x += 0.05)
@@ -1109,9 +1109,9 @@ public class EuclidGeometryPolygonToolsTest
             y = 0.9;
             expectedDistance = -0.1;
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, clockwiseSquareVertices, n, true);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, counterClockwiseSquareVertices, n, false);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          }
 
          for (x = 0.1; x <= 0.9; x += 0.05)
@@ -1119,9 +1119,9 @@ public class EuclidGeometryPolygonToolsTest
             y = 0.1;
             expectedDistance = -0.1;
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, clockwiseSquareVertices, n, true);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
             actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(x, y, counterClockwiseSquareVertices, n, false);
-            assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+            assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          }
       }
 
@@ -1152,7 +1152,7 @@ public class EuclidGeometryPolygonToolsTest
          outsidePoint.interpolate(centroid, pointOnEdge, alphaOutside);
          expectedDistance = distanceFromPoint2DToLineSegment2D(outsidePoint, vertex, nextVertex);
          actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered);
-         assertEquals("EdgeLength = " + vertex.distance(nextVertex), expectedDistance, actualDistance, SMALLEST_EPSILON);
+         assertEqualsDelta("EdgeLength = " + vertex.distance(nextVertex), expectedDistance, actualDistance, SMALLEST_EPSILON);
 
          double alphaInside = nextDouble(random, 0.0, 1.0);
          Point2D insidePoint = new Point2D();
@@ -1169,7 +1169,7 @@ public class EuclidGeometryPolygonToolsTest
 
          expectedDistance = -expectedDistance;
          actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered);
-         assertEquals("EdgeLength = " + vertex.distance(nextVertex), expectedDistance, actualDistance, SMALLEST_EPSILON);
+         assertEqualsDelta("EdgeLength = " + vertex.distance(nextVertex), expectedDistance, actualDistance, SMALLEST_EPSILON);
       }
 
       { // Test exceptions
@@ -1210,9 +1210,9 @@ public class EuclidGeometryPolygonToolsTest
          Point2D vertex = nextPoint2D(random, 10.0);
          expectedDistance = query.distance(vertex);
          actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(query, Collections.singletonList(vertex), 1, true);
-         assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+         assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(query, Collections.singletonList(vertex), 1, false);
-         assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+         assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
       }
 
       { // Test with a two vertices polygon
@@ -1225,9 +1225,9 @@ public class EuclidGeometryPolygonToolsTest
          points.add(vertex1);
          expectedDistance = distanceFromPoint2DToLineSegment2D(query, vertex0, vertex1);
          actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(query, points, 2, true);
-         assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+         assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
          actualDistance = signedDistanceFromPoint2DToConvexPolygon2D(query, points, 2, false);
-         assertEquals(expectedDistance, actualDistance, SMALLEST_EPSILON);
+         assertEqualsDelta(expectedDistance, actualDistance, SMALLEST_EPSILON);
       }
    }
 
@@ -1308,7 +1308,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D actualSecondIntersection = new Point2D();
          int numberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLine, lineDirection, convexPolygon2D, hullSize, clockwiseOrdered,
                                                                                  actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 2, numberOfIntersections);
+         assertEquals(2, numberOfIntersections, "Iteration: " + i);
 
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
          {
@@ -1386,7 +1386,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D actualSecondIntersection = new Point2D();
          int numberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLine, lineDirection, convexPolygon2D, hullSize, clockwiseOrdered,
                                                                                  actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         assertEquals(0, numberOfIntersections, "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1419,7 +1419,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D actualSecondIntersection = new Point2D();
          int numberOfIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLine, lineDirection, convexPolygon2D, hullSize, clockwiseOrdered,
                                                                                  actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 1, numberOfIntersections);
+         assertEquals(1, numberOfIntersections, "Iteration: " + i);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, actualSecondIntersection, SMALL_EPSILON);
       }
@@ -1446,7 +1446,7 @@ public class EuclidGeometryPolygonToolsTest
 
          int nIntersections = intersectionBetweenLine2DAndConvexPolygon2D(pointOnLine, lineDirection, convexPolygon2D, hullSize, clockwiseOrdered,
                                                                           actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 2, nIntersections);
+         assertEquals(2, nIntersections, "Iteration: " + i);
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
             EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
          else
@@ -1961,7 +1961,7 @@ public class EuclidGeometryPolygonToolsTest
 
          int numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                         clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 2, numberOfIntersections);
+         assertEquals(2, numberOfIntersections, "Iteration: " + i);
 
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
          {
@@ -1979,13 +1979,13 @@ public class EuclidGeometryPolygonToolsTest
          lineSegmentEnd.interpolate(vertex, nextVertex, nextDouble(random, -10.0, 0.0));
          numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                     clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         assertEquals(0, numberOfIntersections, "Iteration: " + i);
 
          lineSegmentStart.interpolate(vertex, nextVertex, nextDouble(random, 1.0, 10.0));
          lineSegmentEnd.interpolate(vertex, nextVertex, nextDouble(random, 1.0, 10.0));
          numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                     clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 0, numberOfIntersections);
+         assertEquals(0, numberOfIntersections, "Iteration: " + i);
 
          // Make the line-segment partially overlap (two sides to test)
          lineSegmentStart.interpolate(vertex, nextVertex, nextDouble(random, -10.0, 0.0));
@@ -1993,7 +1993,7 @@ public class EuclidGeometryPolygonToolsTest
 
          numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                     clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 2, numberOfIntersections);
+         assertEquals(2, numberOfIntersections, "Iteration: " + i);
 
          if (vertex.distance(actualFirstIntersection) < vertex.distance(actualSecondIntersection))
          {
@@ -2012,7 +2012,7 @@ public class EuclidGeometryPolygonToolsTest
 
          numberOfIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize,
                                                                                     clockwiseOrdered, actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 2, numberOfIntersections);
+         assertEquals(2, numberOfIntersections, "Iteration: " + i);
 
          if (nextVertex.distance(actualFirstIntersection) < nextVertex.distance(actualSecondIntersection))
          {
@@ -2051,7 +2051,7 @@ public class EuclidGeometryPolygonToolsTest
 
          int nIntersections = intersectionBetweenLineSegment2DAndConvexPolygon2D(lineSegmentStart, lineSegmentEnd, convexPolygon2D, hullSize, clockwiseOrdered,
                                                                                  actualFirstIntersection, actualSecondIntersection);
-         assertEquals("Iteration: " + i, 1, nIntersections);
+         assertEquals(1, nIntersections, "Iteration: " + i);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, actualFirstIntersection, SMALL_EPSILON);
       }
    }
@@ -2089,7 +2089,7 @@ public class EuclidGeometryPolygonToolsTest
 
          int actualNumberOfIntersections = intersectionBetweenRay2DAndConvexPolygon2D(rayOrigin, rayDirection, convexPolygon2D, hullSize, clockwiseOrdered,
                                                                                       firstIntersectionWithRay, secondIntersectionWithRay);
-         assertEquals("Iteration: " + i, expectedNumberOfIntersections, actualNumberOfIntersections);
+         assertEquals(expectedNumberOfIntersections, actualNumberOfIntersections, "Iteration: " + i);
 
          if (expectedNumberOfIntersections == 2)
          {
@@ -2303,8 +2303,8 @@ public class EuclidGeometryPolygonToolsTest
          int lineOfSightStartIndex = lineOfSightStartIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
          int lineOfSightEndIndex = lineOfSightEndIndex(observer, convexPolygon2D, hullSize, clockwiseOrdered);
 
-         assertNotEquals(-1, lineOfSightStartIndex);
-         assertNotEquals(-1, lineOfSightEndIndex);
+         assertNotEquals((long) -1, (long) lineOfSightStartIndex);
+         assertNotEquals((long) -1, (long) lineOfSightEndIndex);
 
          /*
           * Drawing lines from the observer going through the start/end vertices. Each line should intersect
@@ -2315,13 +2315,13 @@ public class EuclidGeometryPolygonToolsTest
             Vector2D startDirection = new Vector2D();
             startDirection.sub(startVertex, observer);
             assertEquals(1, intersectionBetweenLine2DAndConvexPolygon2D(observer, startDirection, convexPolygon2D, hullSize, clockwiseOrdered, new Point2D(),
-                                                                        new Point2D()));
+            new Point2D()));
 
             Point2DReadOnly endVertex = convexPolygon2D.get(lineOfSightEndIndex);
             Vector2D endDirection = new Vector2D();
             endDirection.sub(endVertex, observer);
             assertEquals(1, intersectionBetweenLine2DAndConvexPolygon2D(observer, endDirection, convexPolygon2D, hullSize, clockwiseOrdered, new Point2D(),
-                                                                        new Point2D()));
+            new Point2D()));
          }
 
          Set<Integer> lineOfSightIndices = new HashSet<>();

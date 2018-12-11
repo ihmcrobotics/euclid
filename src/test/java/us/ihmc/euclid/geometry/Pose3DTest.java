@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -39,39 +40,39 @@ public class Pose3DTest
 
          allDoubles = new Pose3D(x, y, z, quaternion.getYaw(), quaternion.getPitch(), quaternion.getRoll());
 
-         assertEquals(x, allDoubles.getX(), EPSILON);
-         assertEquals(y, allDoubles.getY(), EPSILON);
-         assertEquals(z, allDoubles.getZ(), EPSILON);
-         assertEquals(quaternion.getYaw(), allDoubles.getYaw(), EPSILON);
-         assertEquals(quaternion.getPitch(), allDoubles.getPitch(), EPSILON);
-         assertEquals(quaternion.getRoll(), allDoubles.getRoll(), EPSILON);
+         assertEqualsDelta(x, allDoubles.getX(), EPSILON);
+         assertEqualsDelta(y, allDoubles.getY(), EPSILON);
+         assertEqualsDelta(z, allDoubles.getZ(), EPSILON);
+         assertEqualsDelta(quaternion.getYaw(), allDoubles.getYaw(), EPSILON);
+         assertEqualsDelta(quaternion.getPitch(), allDoubles.getPitch(), EPSILON);
+         assertEqualsDelta(quaternion.getRoll(), allDoubles.getRoll(), EPSILON);
 
          fromComponents = new Pose3D(new Point3D(x, y, z), quaternion);
 
-         assertEquals(x, fromComponents.getX(), EPSILON);
-         assertEquals(y, fromComponents.getY(), EPSILON);
-         assertEquals(z, fromComponents.getZ(), EPSILON);
-         assertEquals(quaternion.getYaw(), fromComponents.getYaw(), EPSILON);
-         assertEquals(quaternion.getPitch(), fromComponents.getPitch(), EPSILON);
-         assertEquals(quaternion.getRoll(), fromComponents.getRoll(), EPSILON);
+         assertEqualsDelta(x, fromComponents.getX(), EPSILON);
+         assertEqualsDelta(y, fromComponents.getY(), EPSILON);
+         assertEqualsDelta(z, fromComponents.getZ(), EPSILON);
+         assertEqualsDelta(quaternion.getYaw(), fromComponents.getYaw(), EPSILON);
+         assertEqualsDelta(quaternion.getPitch(), fromComponents.getPitch(), EPSILON);
+         assertEqualsDelta(quaternion.getRoll(), fromComponents.getRoll(), EPSILON);
 
          copiedPose = new Pose3D(fromComponents);
 
-         assertEquals(x, fromComponents.getX(), EPSILON);
-         assertEquals(y, fromComponents.getY(), EPSILON);
-         assertEquals(z, fromComponents.getZ(), EPSILON);
-         assertEquals(fromComponents.getYaw(), copiedPose.getYaw(), EPSILON);
-         assertEquals(fromComponents.getPitch(), copiedPose.getPitch(), EPSILON);
-         assertEquals(fromComponents.getRoll(), copiedPose.getRoll(), EPSILON);
+         assertEqualsDelta(x, fromComponents.getX(), EPSILON);
+         assertEqualsDelta(y, fromComponents.getY(), EPSILON);
+         assertEqualsDelta(z, fromComponents.getZ(), EPSILON);
+         assertEqualsDelta(fromComponents.getYaw(), copiedPose.getYaw(), EPSILON);
+         assertEqualsDelta(fromComponents.getPitch(), copiedPose.getPitch(), EPSILON);
+         assertEqualsDelta(fromComponents.getRoll(), copiedPose.getRoll(), EPSILON);
 
          fromRBT = new Pose3D(new RigidBodyTransform(new QuaternionBasedTransform(quaternion, new Point3D(x, y, z))));
 
-         assertEquals(x, fromRBT.getX(), EPSILON);
-         assertEquals(y, fromRBT.getY(), EPSILON);
-         assertEquals(z, fromRBT.getZ(), EPSILON);
-         assertEquals(quaternion.getYaw(), fromRBT.getYaw(), EPSILON);
-         assertEquals(quaternion.getPitch(), fromRBT.getPitch(), EPSILON);
-         assertEquals(quaternion.getRoll(), fromRBT.getRoll(), EPSILON);
+         assertEqualsDelta(x, fromRBT.getX(), EPSILON);
+         assertEqualsDelta(y, fromRBT.getY(), EPSILON);
+         assertEqualsDelta(z, fromRBT.getZ(), EPSILON);
+         assertEqualsDelta(quaternion.getYaw(), fromRBT.getYaw(), EPSILON);
+         assertEqualsDelta(quaternion.getPitch(), fromRBT.getPitch(), EPSILON);
+         assertEqualsDelta(quaternion.getRoll(), fromRBT.getRoll(), EPSILON);
       }
    }
 
@@ -87,12 +88,12 @@ public class Pose3DTest
 
          toSet.setToNaN();
 
-         assertEquals(Double.NaN, toSet.getX(), EPSILON);
-         assertEquals(Double.NaN, toSet.getY(), EPSILON);
-         assertEquals(Double.NaN, toSet.getZ(), EPSILON);
-         assertEquals(Double.NaN, toSet.getYaw(), EPSILON);
-         assertEquals(Double.NaN, toSet.getPitch(), EPSILON);
-         assertEquals(Double.NaN, toSet.getRoll(), EPSILON);
+         assertEqualsDelta(Double.NaN, toSet.getX(), EPSILON);
+         assertEqualsDelta(Double.NaN, toSet.getY(), EPSILON);
+         assertEqualsDelta(Double.NaN, toSet.getZ(), EPSILON);
+         assertEqualsDelta(Double.NaN, toSet.getYaw(), EPSILON);
+         assertEqualsDelta(Double.NaN, toSet.getPitch(), EPSILON);
+         assertEqualsDelta(Double.NaN, toSet.getRoll(), EPSILON);
       }
    }
 
@@ -108,12 +109,12 @@ public class Pose3DTest
 
          toSet.setToZero();
 
-         assertEquals(0, toSet.getX(), EPSILON);
-         assertEquals(0, toSet.getY(), EPSILON);
-         assertEquals(0, toSet.getZ(), EPSILON);
-         assertEquals(0, toSet.getYaw(), EPSILON);
-         assertEquals(0, toSet.getPitch(), EPSILON);
-         assertEquals(0, toSet.getRoll(), EPSILON);
+         assertEqualsDelta(0, toSet.getX(), EPSILON);
+         assertEqualsDelta(0, toSet.getY(), EPSILON);
+         assertEqualsDelta(0, toSet.getZ(), EPSILON);
+         assertEqualsDelta(0, toSet.getYaw(), EPSILON);
+         assertEqualsDelta(0, toSet.getPitch(), EPSILON);
+         assertEqualsDelta(0, toSet.getRoll(), EPSILON);
       }
    }
 
@@ -142,12 +143,12 @@ public class Pose3DTest
          toSet.setZ(z);
          toSet.setOrientation(quaternion);
 
-         assertEquals(x, toSet.getX(), EPSILON);
-         assertEquals(y, toSet.getY(), EPSILON);
-         assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(quaternion.getYaw(), toSet.getYaw(), EPSILON);
-         assertEquals(quaternion.getPitch(), toSet.getPitch(), EPSILON);
-         assertEquals(quaternion.getRoll(), toSet.getRoll(), EPSILON);
+         assertEqualsDelta(x, toSet.getX(), EPSILON);
+         assertEqualsDelta(y, toSet.getY(), EPSILON);
+         assertEqualsDelta(z, toSet.getZ(), EPSILON);
+         assertEqualsDelta(quaternion.getYaw(), toSet.getYaw(), EPSILON);
+         assertEqualsDelta(quaternion.getPitch(), toSet.getPitch(), EPSILON);
+         assertEqualsDelta(quaternion.getRoll(), toSet.getRoll(), EPSILON);
 
          toSet = EuclidGeometryRandomTools.nextPose3D(random);
 
@@ -156,24 +157,24 @@ public class Pose3DTest
          toSet.setPosition(x, y, z);
          toSet.setOrientation(aa);
 
-         assertEquals(x, toSet.getX(), EPSILON);
-         assertEquals(y, toSet.getY(), EPSILON);
-         assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(aa.getYaw(), toSet.getYaw(), EPSILON);
-         assertEquals(aa.getPitch(), toSet.getPitch(), EPSILON);
-         assertEquals(aa.getRoll(), toSet.getRoll(), EPSILON);
+         assertEqualsDelta(x, toSet.getX(), EPSILON);
+         assertEqualsDelta(y, toSet.getY(), EPSILON);
+         assertEqualsDelta(z, toSet.getZ(), EPSILON);
+         assertEqualsDelta(aa.getYaw(), toSet.getYaw(), EPSILON);
+         assertEqualsDelta(aa.getPitch(), toSet.getPitch(), EPSILON);
+         assertEqualsDelta(aa.getRoll(), toSet.getRoll(), EPSILON);
 
          toSet = EuclidGeometryRandomTools.nextPose3D(random);
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
 
          toSet.set(x, y, z, quaternion.getYaw(), quaternion.getPitch(), quaternion.getRoll());
 
-         assertEquals(x, toSet.getX(), EPSILON);
-         assertEquals(y, toSet.getY(), EPSILON);
-         assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(quaternion.getYaw(), toSet.getYaw(), EPSILON);
-         assertEquals(quaternion.getPitch(), toSet.getPitch(), EPSILON);
-         assertEquals(quaternion.getRoll(), toSet.getRoll(), EPSILON);
+         assertEqualsDelta(x, toSet.getX(), EPSILON);
+         assertEqualsDelta(y, toSet.getY(), EPSILON);
+         assertEqualsDelta(z, toSet.getZ(), EPSILON);
+         assertEqualsDelta(quaternion.getYaw(), toSet.getYaw(), EPSILON);
+         assertEqualsDelta(quaternion.getPitch(), toSet.getPitch(), EPSILON);
+         assertEqualsDelta(quaternion.getRoll(), toSet.getRoll(), EPSILON);
 
          toSet = EuclidGeometryRandomTools.nextPose3D(random);
 
@@ -181,12 +182,12 @@ public class Pose3DTest
          quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          toSet.set(tuple, quaternion);
 
-         assertEquals(x, toSet.getX(), EPSILON);
-         assertEquals(y, toSet.getY(), EPSILON);
-         assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(quaternion.getYaw(), toSet.getYaw(), EPSILON);
-         assertEquals(quaternion.getPitch(), toSet.getPitch(), EPSILON);
-         assertEquals(quaternion.getRoll(), toSet.getRoll(), EPSILON);
+         assertEqualsDelta(x, toSet.getX(), EPSILON);
+         assertEqualsDelta(y, toSet.getY(), EPSILON);
+         assertEqualsDelta(z, toSet.getZ(), EPSILON);
+         assertEqualsDelta(quaternion.getYaw(), toSet.getYaw(), EPSILON);
+         assertEqualsDelta(quaternion.getPitch(), toSet.getPitch(), EPSILON);
+         assertEqualsDelta(quaternion.getRoll(), toSet.getRoll(), EPSILON);
 
          toSet = EuclidGeometryRandomTools.nextPose3D(random);
          rot = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -194,12 +195,12 @@ public class Pose3DTest
          toSet.setPosition(tuple);
          toSet.setOrientation(rot);
 
-         assertEquals(x, toSet.getX(), EPSILON);
-         assertEquals(y, toSet.getY(), EPSILON);
-         assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(rot.getYaw(), toSet.getYaw(), EPSILON);
-         assertEquals(rot.getPitch(), toSet.getPitch(), EPSILON);
-         assertEquals(rot.getRoll(), toSet.getRoll(), EPSILON);
+         assertEqualsDelta(x, toSet.getX(), EPSILON);
+         assertEqualsDelta(y, toSet.getY(), EPSILON);
+         assertEqualsDelta(z, toSet.getZ(), EPSILON);
+         assertEqualsDelta(rot.getYaw(), toSet.getYaw(), EPSILON);
+         assertEqualsDelta(rot.getPitch(), toSet.getPitch(), EPSILON);
+         assertEqualsDelta(rot.getRoll(), toSet.getRoll(), EPSILON);
 
          toSet = EuclidGeometryRandomTools.nextPose3D(random);
 
@@ -208,24 +209,24 @@ public class Pose3DTest
          toCopy.setPosition(x, y, z);
          toCopy.setOrientationYawPitchRoll(ypr);
 
-         assertEquals(ypr[0], toCopy.getYaw(), EPSILON);
-         assertEquals(ypr[1], toCopy.getPitch(), EPSILON);
-         assertEquals(ypr[2], toCopy.getRoll(), EPSILON);
+         assertEqualsDelta(ypr[0], toCopy.getYaw(), EPSILON);
+         assertEqualsDelta(ypr[1], toCopy.getPitch(), EPSILON);
+         assertEqualsDelta(ypr[2], toCopy.getRoll(), EPSILON);
 
          toCopy.setOrientationYawPitchRoll(ypr[0], ypr[1], ypr[2]);
 
-         assertEquals(ypr[0], toCopy.getYaw(), EPSILON);
-         assertEquals(ypr[1], toCopy.getPitch(), EPSILON);
-         assertEquals(ypr[2], toCopy.getRoll(), EPSILON);
+         assertEqualsDelta(ypr[0], toCopy.getYaw(), EPSILON);
+         assertEqualsDelta(ypr[1], toCopy.getPitch(), EPSILON);
+         assertEqualsDelta(ypr[2], toCopy.getRoll(), EPSILON);
 
          toSet.set(toCopy);
 
-         assertEquals(x, toSet.getX(), EPSILON);
-         assertEquals(y, toSet.getY(), EPSILON);
-         assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(ypr[0], toSet.getYaw(), EPSILON);
-         assertEquals(ypr[1], toSet.getPitch(), EPSILON);
-         assertEquals(ypr[2], toSet.getRoll(), EPSILON);
+         assertEqualsDelta(x, toSet.getX(), EPSILON);
+         assertEqualsDelta(y, toSet.getY(), EPSILON);
+         assertEqualsDelta(z, toSet.getZ(), EPSILON);
+         assertEqualsDelta(ypr[0], toSet.getYaw(), EPSILON);
+         assertEqualsDelta(ypr[1], toSet.getPitch(), EPSILON);
+         assertEqualsDelta(ypr[2], toSet.getRoll(), EPSILON);
       }
    }
 
@@ -248,12 +249,12 @@ public class Pose3DTest
 
          secondPose.appendTranslation(translation);
 
-         assertEquals(length, firstPose.getPositionDistance(secondPose), EPSILON);
+         assertEqualsDelta(length, firstPose.getPositionDistance(secondPose), EPSILON);
 
          point.set(firstPose.getPosition());
          point.add(translation);
 
-         assertEquals(length, firstPose.getPositionDistance(point), EPSILON);
+         assertEqualsDelta(length, firstPose.getPositionDistance(point), EPSILON);
       }
    }
 

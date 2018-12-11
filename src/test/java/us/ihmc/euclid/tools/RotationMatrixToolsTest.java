@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -203,8 +204,8 @@ public class RotationMatrixToolsTest
 
          double actualDistance = RotationMatrixTools.distance(m1, m2);
          double expectedDistance = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(q1.distance(q2)));
-         assertEquals(expectedDistance, actualDistance, EPS);
-         assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
+         assertEqualsDelta(expectedDistance, actualDistance, EPS);
+         assertEqualsDelta(0.0, RotationMatrixTools.distance(m1, m1), EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -218,14 +219,14 @@ public class RotationMatrixToolsTest
          double actualDistance = RotationMatrixTools.distance(m1, m2);
          double expectedDistance = Math.abs(axisAngle.getAngle());
          EuclidCoreTestTools.assertAngleEquals(expectedDistance, actualDistance, EPS);
-         assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
+         assertEqualsDelta(0.0, RotationMatrixTools.distance(m1, m1), EPS);
 
          m2.set(axisAngle);
          m2.preMultiplyTransposeThis(m1);
 
          actualDistance = RotationMatrixTools.distance(m1, m2);
          EuclidCoreTestTools.assertAngleEquals(expectedDistance, actualDistance, EPS);
-         assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
+         assertEqualsDelta(0.0, RotationMatrixTools.distance(m1, m1), EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -240,7 +241,7 @@ public class RotationMatrixToolsTest
          double actualDistance = RotationMatrixTools.distance(m1, m2);
          double expectedDistance = Math.abs(axisAngle.getAngle());
          EuclidCoreTestTools.assertAngleEquals(expectedDistance, actualDistance, EPS);
-         assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
+         assertEqualsDelta(0.0, RotationMatrixTools.distance(m1, m1), EPS);
       }
    }
 }

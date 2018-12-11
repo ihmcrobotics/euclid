@@ -1,6 +1,7 @@
 package us.ihmc.euclid.axisAngle;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,7 +36,7 @@ public abstract class AxisAngleBasicsTest<T extends AxisAngleBasics> extends Axi
          double scale = EuclidCoreRandomTools.nextDouble(random, 2.0);
          double angle = axisAngle.getAngle();
          axisAngle.scaleAngle(scale);
-         assertEquals(scale * angle, axisAngle.getAngle(), getSmallestEpsilon());
+         assertEqualsDelta(scale * angle, axisAngle.getAngle(), getSmallestEpsilon());
       }
    }
 
@@ -275,10 +276,10 @@ public abstract class AxisAngleBasicsTest<T extends AxisAngleBasics> extends Axi
 
             actualAxisAngle.set(vectorAxis, angle);
 
-            assertEquals(actualAxisAngle.getX(), vectorAxis.getX(), getEpsilon());
-            assertEquals(actualAxisAngle.getY(), vectorAxis.getY(), getEpsilon());
-            assertEquals(actualAxisAngle.getZ(), vectorAxis.getZ(), getEpsilon());
-            assertEquals(actualAxisAngle.getAngle(), angle, getEpsilon());
+            assertEqualsDelta(actualAxisAngle.getX(), vectorAxis.getX(), getEpsilon());
+            assertEqualsDelta(actualAxisAngle.getY(), vectorAxis.getY(), getEpsilon());
+            assertEqualsDelta(actualAxisAngle.getZ(), vectorAxis.getZ(), getEpsilon());
+            assertEqualsDelta(actualAxisAngle.getAngle(), angle, getEpsilon());
          }
       }
 
@@ -413,7 +414,7 @@ public abstract class AxisAngleBasicsTest<T extends AxisAngleBasics> extends Axi
                double expectedValue = random.nextDouble();
                actualAxisAngle.setElement(index, expectedValue);
                double actualValue = actualAxisAngle.getElement(index);
-               assertEquals(expectedValue, actualValue, getEpsilon());
+               assertEqualsDelta(expectedValue, actualValue, getEpsilon());
             }
          }
       }

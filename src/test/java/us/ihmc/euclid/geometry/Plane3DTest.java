@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -108,7 +109,7 @@ public class Plane3DTest
    {
       Point3D q = new Point3D(1.0, 1.0, 1.0);
       Plane3D plane = new Plane3D(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-      assertEquals(1.0, plane.distance(q), 1e-14);
+      assertEqualsDelta(1.0, plane.distance(q), 1e-14);
    }
 
    @Test
@@ -212,7 +213,7 @@ public class Plane3DTest
          normal.negate();
          secondPlane.setNormal(normal);
 
-         assertTrue("Iteration: " + i, firstPlane.geometricallyEquals(secondPlane, epsilon));
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon), "Iteration: " + i);
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
@@ -223,12 +224,12 @@ public class Plane3DTest
          translation = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstPlane.getNormal(), true);
          translation.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
 
-         assertTrue("Iteration: " + i, firstPlane.geometricallyEquals(secondPlane, epsilon));
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon), "Iteration: " + i);
 
          normal = secondPlane.getNormalCopy();
          normal.negate();
          secondPlane.setNormal(normal);
-         assertTrue("Iteration: " + i, firstPlane.geometricallyEquals(secondPlane, epsilon));
+         assertTrue(firstPlane.geometricallyEquals(secondPlane, epsilon), "Iteration: " + i);
       }
    }
 }

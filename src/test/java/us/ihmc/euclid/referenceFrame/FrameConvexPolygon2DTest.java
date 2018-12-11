@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -8,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
@@ -203,7 +204,7 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
          FrameConvexPolygon2D expected = new FrameConvexPolygon2D(source);
          expected.changeFrame(destinationFrame);
 
-         Assert.assertTrue(expected.epsilonEquals((FrameConvexPolygon2D) actual, EPSILON));
+         assertTrue(expected.epsilonEquals((FrameConvexPolygon2D) actual, EPSILON));
       }
    }
 }

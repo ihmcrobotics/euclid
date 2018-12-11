@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -8,7 +9,7 @@ import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.SingularMatrixException;
@@ -46,17 +47,17 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
          expectedMatrix.set(matrixArray);
 
          for (int j = 0; j < matrixArray.length; j++)
-            Assert.assertTrue(matrixArray[j] == matrixArrayCopy[j]);
+            assertTrue(matrixArray[j] == matrixArrayCopy[j]);
 
-         Assert.assertTrue(matrix.getM00() == matrixArray[0]);
-         Assert.assertTrue(matrix.getM01() == matrixArray[1]);
-         Assert.assertTrue(matrix.getM02() == matrixArray[2]);
-         Assert.assertTrue(matrix.getM10() == matrixArray[3]);
-         Assert.assertTrue(matrix.getM11() == matrixArray[4]);
-         Assert.assertTrue(matrix.getM12() == matrixArray[5]);
-         Assert.assertTrue(matrix.getM20() == matrixArray[6]);
-         Assert.assertTrue(matrix.getM21() == matrixArray[7]);
-         Assert.assertTrue(matrix.getM22() == matrixArray[8]);
+         assertTrue(matrix.getM00() == matrixArray[0]);
+         assertTrue(matrix.getM01() == matrixArray[1]);
+         assertTrue(matrix.getM02() == matrixArray[2]);
+         assertTrue(matrix.getM10() == matrixArray[3]);
+         assertTrue(matrix.getM11() == matrixArray[4]);
+         assertTrue(matrix.getM12() == matrixArray[5]);
+         assertTrue(matrix.getM20() == matrixArray[6]);
+         assertTrue(matrix.getM21() == matrixArray[7]);
+         assertTrue(matrix.getM22() == matrixArray[8]);
 
          EuclidCoreTestTools.assertMatrix3DEquals(matrix, expectedMatrix, EPS);
          EuclidCoreTestTools.assertMatrix3DEquals(matrix, matrixCopy, EPS);
@@ -83,15 +84,15 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
 
          EuclidCoreTestTools.assertMatrix3DEquals(matrix, matrix2, EPS);
 
-         Assert.assertTrue(matrix.getM00() == matrixArray[0]);
-         Assert.assertTrue(matrix.getM01() == matrixArray[1]);
-         Assert.assertTrue(matrix.getM02() == matrixArray[2]);
-         Assert.assertTrue(matrix.getM10() == matrixArray[3]);
-         Assert.assertTrue(matrix.getM11() == matrixArray[4]);
-         Assert.assertTrue(matrix.getM12() == matrixArray[5]);
-         Assert.assertTrue(matrix.getM20() == matrixArray[6]);
-         Assert.assertTrue(matrix.getM21() == matrixArray[7]);
-         Assert.assertTrue(matrix.getM22() == matrixArray[8]);
+         assertTrue(matrix.getM00() == matrixArray[0]);
+         assertTrue(matrix.getM01() == matrixArray[1]);
+         assertTrue(matrix.getM02() == matrixArray[2]);
+         assertTrue(matrix.getM10() == matrixArray[3]);
+         assertTrue(matrix.getM11() == matrixArray[4]);
+         assertTrue(matrix.getM12() == matrixArray[5]);
+         assertTrue(matrix.getM20() == matrixArray[6]);
+         assertTrue(matrix.getM21() == matrixArray[7]);
+         assertTrue(matrix.getM22() == matrixArray[8]);
       }
    }
 
@@ -366,7 +367,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
                double aij = a.getElement(row, column);
                double bij = b.getElement(row, column);
                double cij = c.getElement(row, column);
-               assertEquals(aij + bij, cij, EPS);
+               assertEqualsDelta(aij + bij, cij, EPS);
             }
          }
 
@@ -383,7 +384,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
                double aij = a.getElement(row, column);
                double bij = b.getElement(row, column);
                double cij = c.getElement(row, column);
-               assertEquals(aij + bij, cij, EPS);
+               assertEqualsDelta(aij + bij, cij, EPS);
             }
          }
       }
@@ -415,7 +416,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
                double aij = a.getElement(row, column);
                double bij = b.getElement(row, column);
                double cij = c.getElement(row, column);
-               assertEquals(aij - bij, cij, EPS);
+               assertEqualsDelta(aij - bij, cij, EPS);
             }
          }
 
@@ -432,7 +433,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
                double aij = a.getElement(row, column);
                double bij = b.getElement(row, column);
                double cij = c.getElement(row, column);
-               assertEquals(aij - bij, cij, EPS);
+               assertEqualsDelta(aij - bij, cij, EPS);
             }
          }
       }
@@ -462,7 +463,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
             {
                double mij = matrixOriginal.getElement(row, column);
                double sij = scaledMatrix.getElement(row, column);
-               assertEquals(scalar * mij, sij, EPS);
+               assertEqualsDelta(scalar * mij, sij, EPS);
             }
          }
       }
@@ -483,9 +484,9 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
                double mij = matrixOriginal.getElement(row, column);
                double sij = scaledMatrix.getElement(row, column);
                if (row == scaledRow)
-                  assertEquals(scalar * mij, sij, EPS);
+                  assertEqualsDelta(scalar * mij, sij, EPS);
                else
-                  assertEquals(mij, sij, EPS);
+                  assertEqualsDelta(mij, sij, EPS);
             }
          }
       }
@@ -506,9 +507,9 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
                double mij = matrixOriginal.getElement(row, column);
                double sij = scaledMatrix.getElement(row, column);
                if (column == scaledColumn)
-                  assertEquals(scalar * mij, sij, EPS);
+                  assertEqualsDelta(scalar * mij, sij, EPS);
                else
-                  assertEquals(mij, sij, EPS);
+                  assertEqualsDelta(mij, sij, EPS);
             }
          }
       }
@@ -527,7 +528,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
             {
                double mij = matrixOriginal.getElement(row, column);
                double sij = scaledMatrix.getElement(row, column);
-               assertEquals(scales.getElement(column) * mij, sij, EPS);
+               assertEqualsDelta(scales.getElement(column) * mij, sij, EPS);
             }
          }
       }
@@ -546,7 +547,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
             {
                double mij = matrixOriginal.getElement(row, column);
                double sij = scaledMatrix.getElement(row, column);
-               assertEquals(scales.getElement(row) * mij, sij, EPS);
+               assertEqualsDelta(scales.getElement(row) * mij, sij, EPS);
             }
          }
       }
@@ -555,55 +556,55 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM00(scalar);
-      assertEquals(scalar * matrixOriginal.getM00(), scaledMatrix.getM00(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM00(), scaledMatrix.getM00(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM01(scalar);
-      assertEquals(scalar * matrixOriginal.getM01(), scaledMatrix.getM01(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM01(), scaledMatrix.getM01(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM02(scalar);
-      assertEquals(scalar * matrixOriginal.getM02(), scaledMatrix.getM02(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM02(), scaledMatrix.getM02(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM10(scalar);
-      assertEquals(scalar * matrixOriginal.getM10(), scaledMatrix.getM10(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM10(), scaledMatrix.getM10(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM11(scalar);
-      assertEquals(scalar * matrixOriginal.getM11(), scaledMatrix.getM11(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM11(), scaledMatrix.getM11(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM12(scalar);
-      assertEquals(scalar * matrixOriginal.getM12(), scaledMatrix.getM12(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM12(), scaledMatrix.getM12(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM20(scalar);
-      assertEquals(scalar * matrixOriginal.getM20(), scaledMatrix.getM20(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM20(), scaledMatrix.getM20(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM21(scalar);
-      assertEquals(scalar * matrixOriginal.getM21(), scaledMatrix.getM21(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM21(), scaledMatrix.getM21(), EPS);
 
       matrixOriginal = EuclidCoreRandomTools.nextMatrix3D(random);
       scaledMatrix.set(matrixOriginal);
       scalar = random.nextDouble();
       scaledMatrix.scaleM22(scalar);
-      assertEquals(scalar * matrixOriginal.getM22(), scaledMatrix.getM22(), EPS);
+      assertEqualsDelta(scalar * matrixOriginal.getM22(), scaledMatrix.getM22(), EPS);
 
       // Test some exceptions
       double scalarFinal = scalar;
@@ -714,7 +715,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
       {
          for (int column = 0; column < 3; column++)
          {
-            assertEquals(matrix.getElement(row, column), matrixTranspose.getElement(column, row), EPS);
+            assertEqualsDelta(matrix.getElement(row, column), matrixTranspose.getElement(column, row), EPS);
          }
       }
 
@@ -725,7 +726,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
       {
          for (int column = 0; column < 3; column++)
          {
-            assertEquals(matrix.getElement(row, column), matrixTranspose.getElement(column, row), EPS);
+            assertEqualsDelta(matrix.getElement(row, column), matrixTranspose.getElement(column, row), EPS);
          }
       }
    }
@@ -747,7 +748,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
          {
             for (int column = 0; column < 3; column++)
             {
-               assertEquals(-m1.getElement(row, column), m2.getElement(row, column), EPS);
+               assertEqualsDelta(-m1.getElement(row, column), m2.getElement(row, column), EPS);
             }
          }
 
@@ -1313,7 +1314,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
          int column = random.nextInt(3);
          tuple1.setElement(row, column, random.nextDouble());
          newHashCode = tuple1.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

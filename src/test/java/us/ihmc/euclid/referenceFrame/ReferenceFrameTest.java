@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -467,7 +468,7 @@ public class ReferenceFrameTest
             }
 
             long frameIndex = referenceFrame.getFrameIndex();
-            assertFalse("Already has ID " + frameIndex, existingIds.contains(frameIndex));
+            assertFalse(existingIds.contains(frameIndex), "Already has ID " + frameIndex);
             existingIds.add(frameIndex);
          }
       }

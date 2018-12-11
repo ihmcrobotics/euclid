@@ -1,6 +1,7 @@
 package us.ihmc.euclid.geometry;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -33,11 +34,11 @@ public class LineSegment1DTest
 
       LineSegment1D line = new LineSegment1D(pointsArray);
 
-      assertEquals(line.getMinPoint(), secondPoint, 0.001 / line.length());
-      assertEquals(line.getMaxPoint(), firstPoint, 0.001 / line.length());
-      assertEquals(line.getSecondEndpoint(), secondPoint, 0.001 / line.length());
-      assertEquals(line.getFirstEndpoint(), firstPoint, 0.001 / line.length());
-      assertEquals(line.getMidPoint(), p4, 0.001 / line.length());
+      assertEqualsDelta(line.getMinPoint(), secondPoint, 0.001 / line.length());
+      assertEqualsDelta(line.getMaxPoint(), firstPoint, 0.001 / line.length());
+      assertEqualsDelta(line.getSecondEndpoint(), secondPoint, 0.001 / line.length());
+      assertEqualsDelta(line.getFirstEndpoint(), firstPoint, 0.001 / line.length());
+      assertEqualsDelta(line.getMidPoint(), p4, 0.001 / line.length());
 
       assertFalse(line.isBetweenEndpoints(p2, 0.001 / line.length()));
       assertTrue(line.isBetweenEndpoints(p3, 0.001 / line.length()));
@@ -70,8 +71,8 @@ public class LineSegment1DTest
       LineSegment1D otherLine2 = new LineSegment1D(secondPoint, secondPoint + 10);
 
       assertTrue(mainLine.computeOverlap(otherLine1, emptyLine));
-      assertEquals(intersectionLine1.getMaxPoint(), emptyLine.getMaxPoint(), 0.001);
-      assertEquals(intersectionLine1.getMinPoint(), emptyLine.getMinPoint(), 0.001);
+      assertEqualsDelta(intersectionLine1.getMaxPoint(), emptyLine.getMaxPoint(), 0.001);
+      assertEqualsDelta(intersectionLine1.getMinPoint(), emptyLine.getMinPoint(), 0.001);
       assertTrue(intersectionLine1.computeOverlap(emptyLine, emptyLine));
       assertFalse(mainLine.computeOverlap(separateLine, emptyLine));
 
@@ -82,8 +83,8 @@ public class LineSegment1DTest
       LineSegment1D intersectionLine2 = mainLine.computeOverlap(otherLine1);
       LineSegment1D intersectionLine3 = mainLine.computeOverlap(separateLine);
 
-      assertEquals(intersectionLine1.getMaxPoint(), intersectionLine2.getMaxPoint(), 0.001);
-      assertEquals(intersectionLine1.getMinPoint(), intersectionLine2.getMinPoint(), 0.001);
+      assertEqualsDelta(intersectionLine1.getMaxPoint(), intersectionLine2.getMaxPoint(), 0.001);
+      assertEqualsDelta(intersectionLine1.getMinPoint(), intersectionLine2.getMinPoint(), 0.001);
       assertEquals(null, intersectionLine3);
 
       assertFalse(mainLine.isBetweenEndpointsExclusive(mainLine));
@@ -293,10 +294,10 @@ public class LineSegment1DTest
       LineSegment1D mainLine = new LineSegment1D(firstPoint, secondPoint);
       LineSegment1D secondLine = new LineSegment1D(secondPoint, firstPoint);
 
-      assertEquals(mainLine.signedDistance(p1), 5, 0.001);
-      assertEquals(mainLine.signedDistance(p2), 5, 0.001);
-      assertEquals(mainLine.signedDistance(p3), -8, 0.001);
-      assertEquals(mainLine.signedDistance(firstPoint), 0, 0.001);
+      assertEqualsDelta(mainLine.signedDistance(p1), 5, 0.001);
+      assertEqualsDelta(mainLine.signedDistance(p2), 5, 0.001);
+      assertEqualsDelta(mainLine.signedDistance(p3), -8, 0.001);
+      assertEqualsDelta(mainLine.signedDistance(firstPoint), 0, 0.001);
 
       assertTrue(mainLine.isBefore(p2));
       assertTrue(mainLine.isAfter(p1));
@@ -312,7 +313,7 @@ public class LineSegment1DTest
       assertFalse(secondLine.isBefore(secondPoint));
       assertFalse(secondLine.isAfter(firstPoint));
 
-      assertEquals(mainLine.length(), 20, 0.001);
+      assertEqualsDelta(mainLine.length(), 20, 0.001);
    }
 
    @Test
@@ -327,12 +328,12 @@ public class LineSegment1DTest
       LineSegment1D mainLine = new LineSegment1D(firstPoint, secondPoint);
 
       mainLine.extendSegmentToPoint(p1);
-      assertEquals(mainLine.getMaxPoint(), p1, 0.001);
+      assertEqualsDelta(mainLine.getMaxPoint(), p1, 0.001);
       mainLine.extendSegmentToPoint(p2);
-      assertEquals(mainLine.getMinPoint(), p2, 0.001);
+      assertEqualsDelta(mainLine.getMinPoint(), p2, 0.001);
       mainLine.extendSegmentToPoint(p3);
-      assertEquals(mainLine.getMaxPoint(), p1, 0.001);
-      assertEquals(mainLine.getMinPoint(), p2, 0.001);
+      assertEqualsDelta(mainLine.getMaxPoint(), p1, 0.001);
+      assertEqualsDelta(mainLine.getMinPoint(), p2, 0.001);
 
    }
 
@@ -348,15 +349,15 @@ public class LineSegment1DTest
       line1.setFirstEndpoint(p1);
       line1.setSecondEndpoint(p2);
 
-      assertEquals(line1.getFirstEndpoint(), p1, 0.001);
-      assertEquals(line1.getSecondEndpoint(), p2, 0.001);
+      assertEqualsDelta(line1.getFirstEndpoint(), p1, 0.001);
+      assertEqualsDelta(line1.getSecondEndpoint(), p2, 0.001);
 
       line1.setMaxPoint(17);
       line1.setMinPoint(-17);
-      assertEquals(line1.length(), 34, 0.001);
+      assertEqualsDelta(line1.length(), 34, 0.001);
 
       line2.setMaxPoint(17);
-      assertEquals(line2.length(), 27, 0.001);
+      assertEqualsDelta(line2.length(), 27, 0.001);
 
       try
       {

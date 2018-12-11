@@ -1,7 +1,8 @@
 package us.ihmc.euclid.rotationConversion;
 
 import static java.lang.Math.*;
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -53,10 +54,10 @@ public class AxisAngleConversionTest
             axisAngle.negate();
          }
 
-         assertEquals(ux, axisAngle.getX(), EPSILON);
-         assertEquals(uy, axisAngle.getY(), EPSILON);
-         assertEquals(uz, axisAngle.getZ(), EPSILON);
-         assertEquals(angle, axisAngle.getAngle(), EPSILON);
+         assertEqualsDelta(ux, axisAngle.getX(), EPSILON);
+         assertEqualsDelta(uy, axisAngle.getY(), EPSILON);
+         assertEqualsDelta(uz, axisAngle.getZ(), EPSILON);
+         assertEqualsDelta(angle, axisAngle.getAngle(), EPSILON);
          EuclidCoreTestTools.assertAxisUnitary(axisAngle, EPSILON);
       }
 
@@ -100,10 +101,10 @@ public class AxisAngleConversionTest
          axisAngle.negate();
       }
 
-      assertEquals(ux, axisAngle.getX(), EPSILON);
-      assertEquals(uy, axisAngle.getY(), EPSILON);
-      assertEquals(uz, axisAngle.getZ(), EPSILON);
-      assertEquals(angle, axisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(ux, axisAngle.getX(), EPSILON);
+      assertEqualsDelta(uy, axisAngle.getY(), EPSILON);
+      assertEqualsDelta(uz, axisAngle.getZ(), EPSILON);
+      assertEqualsDelta(angle, axisAngle.getAngle(), EPSILON);
       EuclidCoreTestTools.assertAxisUnitary(axisAngle, EPSILON);
 
       quaternion.setUnsafe(0.0, 0.0, 0.0, 0.0);
@@ -270,10 +271,10 @@ public class AxisAngleConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(1.0, actualAxisAngle.getX(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getY(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI / 2.0, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(1.0, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI / 2.0, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi around x
       m00 = 1.0;
@@ -287,10 +288,10 @@ public class AxisAngleConversionTest
       m22 = -1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(1.0, actualAxisAngle.getX(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getY(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(1.0, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi/2 around y
       m00 = 0.0;
@@ -304,10 +305,10 @@ public class AxisAngleConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(0.0, actualAxisAngle.getX(), EPSILON);
-      assertEquals(1.0, actualAxisAngle.getY(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI / 2.0, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(1.0, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI / 2.0, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi around z
       m00 = -1.0;
@@ -321,10 +322,10 @@ public class AxisAngleConversionTest
       m22 = -1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(0.0, actualAxisAngle.getX(), EPSILON);
-      assertEquals(1.0, actualAxisAngle.getY(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(1.0, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi/2 around z
       m00 = 0.0;
@@ -338,10 +339,10 @@ public class AxisAngleConversionTest
       m22 = 1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(0.0, actualAxisAngle.getX(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getY(), EPSILON);
-      assertEquals(1.0, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI / 2.0, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(1.0, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI / 2.0, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi around z
       m00 = -1.0;
@@ -355,10 +356,10 @@ public class AxisAngleConversionTest
       m22 = 1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(0.0, actualAxisAngle.getX(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getY(), EPSILON);
-      assertEquals(1.0, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(1.0, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi around xy (as axis-angle: (x = sqrt(2)/2, y = sqrt(2)/2, z = 0, angle = Pi)
       double sqrt2Over2 = Math.sqrt(2.0) / 2.0;
@@ -373,10 +374,10 @@ public class AxisAngleConversionTest
       m22 = -1.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(sqrt2Over2, actualAxisAngle.getX(), EPSILON);
-      assertEquals(sqrt2Over2, actualAxisAngle.getY(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(sqrt2Over2, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(sqrt2Over2, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi around xz (as axis-angle: (x = sqrt(2)/2, y = 0, z = sqrt(2)/2, angle = Pi)
       m00 = 0.0;
@@ -390,10 +391,10 @@ public class AxisAngleConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(sqrt2Over2, actualAxisAngle.getX(), EPSILON);
-      assertEquals(0.0, actualAxisAngle.getY(), EPSILON);
-      assertEquals(sqrt2Over2, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(sqrt2Over2, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(sqrt2Over2, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi around yz (as axis-angle: (x = 0, y = sqrt(2)/2, z = sqrt(2)/2, angle = Pi)
       m00 = -1.0;
@@ -407,10 +408,10 @@ public class AxisAngleConversionTest
       m22 = 0.0;
       rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);
-      assertEquals(0.0, actualAxisAngle.getX(), EPSILON);
-      assertEquals(sqrt2Over2, actualAxisAngle.getY(), EPSILON);
-      assertEquals(sqrt2Over2, actualAxisAngle.getZ(), EPSILON);
-      assertEquals(Math.PI, actualAxisAngle.getAngle(), EPSILON);
+      assertEqualsDelta(0.0, actualAxisAngle.getX(), EPSILON);
+      assertEqualsDelta(sqrt2Over2, actualAxisAngle.getY(), EPSILON);
+      assertEqualsDelta(sqrt2Over2, actualAxisAngle.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI, actualAxisAngle.getAngle(), EPSILON);
 
       rotationMatrix.setUnsafe(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       AxisAngleConversion.convertMatrixToAxisAngle(rotationMatrix, actualAxisAngle);

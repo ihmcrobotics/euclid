@@ -1,6 +1,7 @@
 package us.ihmc.euclid.yawPitchRoll;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -32,9 +33,9 @@ public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
       {
          Quaternion q = EuclidCoreRandomTools.nextQuaternion(random);
          YawPitchRoll ypr = new YawPitchRoll(q);
-         assertEquals(ypr.getYaw(), q.getYaw(), getEpsilon());
-         assertEquals(ypr.getPitch(), q.getPitch(), getEpsilon());
-         assertEquals(ypr.getRoll(), q.getRoll(), getEpsilon());
+         assertEqualsDelta(ypr.getYaw(), q.getYaw(), getEpsilon());
+         assertEqualsDelta(ypr.getPitch(), q.getPitch(), getEpsilon());
+         assertEqualsDelta(ypr.getRoll(), q.getRoll(), getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -97,7 +98,7 @@ public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
       {
          ypr.setElement(i % 3, random.nextDouble());
          newHashCode = ypr.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

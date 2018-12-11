@@ -1,6 +1,7 @@
 package us.ihmc.euclid;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import java.util.Random;
 
@@ -20,9 +21,9 @@ public class AxisTest
    @Test
    public void testOrdinals()
    {
-      assertEquals(xAxis.ordinal(), 0, allowedDelta);
-      assertEquals(yAxis.ordinal(), 1, allowedDelta);
-      assertEquals(zAxis.ordinal(), 2, allowedDelta);
+      assertEqualsDelta(xAxis.ordinal(), 0, allowedDelta);
+      assertEqualsDelta(yAxis.ordinal(), 1, allowedDelta);
+      assertEqualsDelta(zAxis.ordinal(), 2, allowedDelta);
    }
 
    @Test
@@ -106,15 +107,15 @@ public class AxisTest
       assertTrue(yAxisVector != null);
       assertTrue(zAxisVector != null);
 
-      assertEquals(1.0, xAxisVector.getX(), allowedDelta);
-      assertEquals(0.0, xAxisVector.getY(), allowedDelta);
-      assertEquals(0.0, xAxisVector.getZ(), allowedDelta);
-      assertEquals(0.0, yAxisVector.getX(), allowedDelta);
-      assertEquals(1.0, yAxisVector.getY(), allowedDelta);
-      assertEquals(0.0, yAxisVector.getZ(), allowedDelta);
-      assertEquals(0.0, zAxisVector.getX(), allowedDelta);
-      assertEquals(0.0, zAxisVector.getY(), allowedDelta);
-      assertEquals(1.0, zAxisVector.getZ(), allowedDelta);
+      assertEqualsDelta(1.0, xAxisVector.getX(), allowedDelta);
+      assertEqualsDelta(0.0, xAxisVector.getY(), allowedDelta);
+      assertEqualsDelta(0.0, xAxisVector.getZ(), allowedDelta);
+      assertEqualsDelta(0.0, yAxisVector.getX(), allowedDelta);
+      assertEqualsDelta(1.0, yAxisVector.getY(), allowedDelta);
+      assertEqualsDelta(0.0, yAxisVector.getZ(), allowedDelta);
+      assertEqualsDelta(0.0, zAxisVector.getX(), allowedDelta);
+      assertEqualsDelta(0.0, zAxisVector.getY(), allowedDelta);
+      assertEqualsDelta(1.0, zAxisVector.getZ(), allowedDelta);
    }
 
    @Test
@@ -126,17 +127,17 @@ public class AxisTest
       Axis.set(randomVector, Axis.Y, newYValue);
       Axis.set(randomVector, Axis.Z, newZValue);
 
-      assertEquals(newXValue, randomVector.getX(), allowedDelta);
-      assertEquals(newYValue, randomVector.getY(), allowedDelta);
-      assertEquals(newZValue, randomVector.getZ(), allowedDelta);
+      assertEqualsDelta(newXValue, randomVector.getX(), allowedDelta);
+      assertEqualsDelta(newYValue, randomVector.getY(), allowedDelta);
+      assertEqualsDelta(newZValue, randomVector.getZ(), allowedDelta);
    }
 
    @Test
    public void testAxisGetterWorks()
    {
-      assertEquals(randomVector.getX(), Axis.get(randomVector, Axis.X), allowedDelta);
-      assertEquals(randomVector.getY(), Axis.get(randomVector, Axis.Y), allowedDelta);
-      assertEquals(randomVector.getZ(), Axis.get(randomVector, Axis.Z), allowedDelta);
+      assertEqualsDelta(randomVector.getX(), Axis.get(randomVector, Axis.X), allowedDelta);
+      assertEqualsDelta(randomVector.getY(), Axis.get(randomVector, Axis.Y), allowedDelta);
+      assertEqualsDelta(randomVector.getZ(), Axis.get(randomVector, Axis.Z), allowedDelta);
    }
 
    @Test

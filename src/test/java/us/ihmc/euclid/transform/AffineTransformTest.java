@@ -1,6 +1,7 @@
 package us.ihmc.euclid.transform;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -609,7 +610,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          for (int row = 0; row < 3; row++)
          {
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationScaleMatrix.getElement(row, column), actual.getElement(row, column), EPS);
+               assertEqualsDelta(rotationScaleMatrix.getElement(row, column), actual.getElement(row, column), EPS);
             assertTrue(translation.getElement(row) == actual.getElement(row, 3));
          }
       }
@@ -627,7 +628,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          for (int row = 0; row < 3; row++)
          {
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationScaleMatrix.getElement(row, column), actual.getElement(row, column), EPS);
+               assertEqualsDelta(rotationScaleMatrix.getElement(row, column), actual.getElement(row, column), EPS);
             assertTrue(translation.getElement(row) == actual.getElement(row, 3));
          }
       }
@@ -643,7 +644,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          for (int row = 0; row < 3; row++)
          {
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationScaleMatrix.getElement(row, column), actual.getElement(row, column), EPS);
+               assertEqualsDelta(rotationScaleMatrix.getElement(row, column), actual.getElement(row, column), EPS);
             assertTrue(translation.getElement(row) == actual.getElement(row, 3));
          }
       }
@@ -1355,7 +1356,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
-               assertEquals(m3.get(row, column), t3.getElement(row, column), EPS);
+               assertEqualsDelta(m3.get(row, column), t3.getElement(row, column), EPS);
       }
    }
 
@@ -1561,7 +1562,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          CommonOps.mult(matrix, ejmlPoint, ejmlTransformedPoint);
 
          for (int i = 0; i < 3; i++)
-            assertEquals(ejmlTransformedPoint.get(i, 0), point.getElement(i), EPS);
+            assertEqualsDelta(ejmlTransformedPoint.get(i, 0), point.getElement(i), EPS);
       }
 
       { // Test transform(PointReadOnly pointOriginal, PointBasics pointTransformed)
@@ -1577,7 +1578,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          CommonOps.mult(matrix, ejmlPoint, ejmlTransformedPoint);
 
          for (int i = 0; i < 3; i++)
-            assertEquals(ejmlTransformedPoint.get(i, 0), pointTransformed.getElement(i), EPS);
+            assertEqualsDelta(ejmlTransformedPoint.get(i, 0), pointTransformed.getElement(i), EPS);
       }
 
       { // Test transform(VectorBasics vectorToTransform)
@@ -1591,7 +1592,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          CommonOps.mult(matrix, ejmlVector, ejmlTransformedVector);
 
          for (int i = 0; i < 3; i++)
-            assertEquals(ejmlTransformedVector.get(i, 0), vector.getElement(i), EPS);
+            assertEqualsDelta(ejmlTransformedVector.get(i, 0), vector.getElement(i), EPS);
       }
 
       { // Test transform(VectorReadOnly vectorOriginal, VectorBasics vectorTransformed)
@@ -1606,7 +1607,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          CommonOps.mult(matrix, ejmlVector, ejmlTransformedVector);
 
          for (int i = 0; i < 3; i++)
-            assertEquals(ejmlTransformedVector.get(i, 0), vectorTransformed.getElement(i), EPS);
+            assertEqualsDelta(ejmlTransformedVector.get(i, 0), vectorTransformed.getElement(i), EPS);
       }
    }
 
@@ -2013,7 +2014,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          rotationMatrix.set(quaternion);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
+               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
       }
 
       { // Test getRotation(AxisAngleBasics axisAngleToPack)
@@ -2023,7 +2024,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          rotationMatrix.set(axisAngle);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
+               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
       }
 
       { // Test getRotation(VectorBasics rotationVectorToPack)
@@ -2033,7 +2034,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          rotationMatrix.setRotationVector(rotationVector);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
+               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
       }
 
       { // Test getRotationEuler(Tuple3DBasics eulerAnglesToPack)
@@ -2043,7 +2044,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          rotationMatrix.setEuler(eulerAngles);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
+               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
       }
 
       { // Test getRotationYawPitchRoll(double[] yawPitchRollToPack)
@@ -2053,7 +2054,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          rotationMatrix.setYawPitchRoll(yawPitchRoll);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-               assertEquals(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
+               assertEqualsDelta(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
       }
    }
 
@@ -2123,9 +2124,9 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       affineTransform.setScale(scales);
       EuclidCoreTestTools.assertTuple3DEquals(scales, affineTransform.getScale(), EPS);
 
-      assertEquals(scales.getX(), affineTransform.getScaleX(), EPS);
-      assertEquals(scales.getY(), affineTransform.getScaleY(), EPS);
-      assertEquals(scales.getZ(), affineTransform.getScaleZ(), EPS);
+      assertEqualsDelta(scales.getX(), affineTransform.getScaleX(), EPS);
+      assertEqualsDelta(scales.getY(), affineTransform.getScaleY(), EPS);
+      assertEqualsDelta(scales.getZ(), affineTransform.getScaleZ(), EPS);
 
       Vector3D actualScales = new Vector3D();
       affineTransform.getScale(actualScales);
@@ -2537,7 +2538,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          translation = EuclidCoreRandomTools.nextVector3D(random);
          affine = new AffineTransform(rsm, translation);
          newHashCode = affine.hashCode();
-         assertNotEquals(previousHashCode, newHashCode);
+         assertNotEquals((long) previousHashCode, (long) newHashCode);
 
          previousHashCode = newHashCode;
       }

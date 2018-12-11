@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -133,7 +134,7 @@ public class Quaternion32Test extends QuaternionBasicsTest<Quaternion32>
          }
          q.setUnsafe(qx, qy, qz, qs);
          newHashCode = q.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

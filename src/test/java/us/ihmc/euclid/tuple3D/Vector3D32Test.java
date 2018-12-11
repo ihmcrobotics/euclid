@@ -1,12 +1,13 @@
 package us.ihmc.euclid.tuple3D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -21,9 +22,9 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
       Vector3D32 vector = new Vector3D32();
 
       { // Test Vector32()
-         Assert.assertTrue(0 == vector.getX32());
-         Assert.assertTrue(0 == vector.getY32());
-         Assert.assertTrue(0 == vector.getZ32());
+         assertTrue(0 == vector.getX32());
+         assertTrue(0 == vector.getY32());
+         assertTrue(0 == vector.getZ32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -34,9 +35,9 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
 
          vector = new Vector3D32(newX, newY, newZ);
 
-         Assert.assertTrue(newX == vector.getX32());
-         Assert.assertTrue(newY == vector.getY32());
-         Assert.assertTrue(newZ == vector.getZ32());
+         assertTrue(newX == vector.getX32());
+         assertTrue(newY == vector.getY32());
+         assertTrue(newZ == vector.getZ32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -49,13 +50,13 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
 
          Vector3D32 vectorArray = new Vector3D32(randomVector32Array);
 
-         Assert.assertTrue(randomVector32Array[0] == vectorArray.getX32());
-         Assert.assertTrue(randomVector32Array[1] == vectorArray.getY32());
-         Assert.assertTrue(randomVector32Array[2] == vectorArray.getZ32());
+         assertTrue(randomVector32Array[0] == vectorArray.getX32());
+         assertTrue(randomVector32Array[1] == vectorArray.getY32());
+         assertTrue(randomVector32Array[2] == vectorArray.getZ32());
 
-         Assert.assertTrue(copyRandomVector32Array[0] == randomVector32Array[0]);
-         Assert.assertTrue(copyRandomVector32Array[1] == randomVector32Array[1]);
-         Assert.assertTrue(copyRandomVector32Array[2] == randomVector32Array[2]);
+         assertTrue(copyRandomVector32Array[0] == randomVector32Array[0]);
+         assertTrue(copyRandomVector32Array[1] == randomVector32Array[1]);
+         assertTrue(copyRandomVector32Array[2] == randomVector32Array[2]);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -64,9 +65,9 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
 
          vector = new Vector3D32(vector2);
 
-         Assert.assertTrue(vector.getX32() == vector2.getX32());
-         Assert.assertTrue(vector.getY32() == vector2.getY32());
-         Assert.assertTrue(vector.getZ32() == vector2.getZ32());
+         assertTrue(vector.getX32() == vector2.getX32());
+         assertTrue(vector.getY32() == vector2.getY32());
+         assertTrue(vector.getZ32() == vector2.getZ32());
       }
    }
 
@@ -82,21 +83,21 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
-         assertEquals(tuple1.getX32(), x, getEpsilon());
+         assertEqualsDelta(tuple1.getX32(), x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
-         assertEquals(tuple1.getY32(), y, getEpsilon());
+         assertEqualsDelta(tuple1.getY32(), y, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setZ(float z)
          float z = random.nextFloat();
          tuple1.setZ(z);
-         assertEquals(tuple1.getZ32(), z, getEpsilon());
+         assertEqualsDelta(tuple1.getZ32(), z, getEpsilon());
       }
    }
 
@@ -116,7 +117,7 @@ public class Vector3D32Test extends Vector3DBasicsTest<Vector3D32>
       {
          tuple1.setElement(i % 3, random.nextFloat());
          newHashCode = tuple1.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

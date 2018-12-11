@@ -1,12 +1,13 @@
 package us.ihmc.euclid.tuple2D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -21,8 +22,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
       Vector2D32 vector = new Vector2D32();
 
       { // Test Vector2D32()
-         Assert.assertTrue(0 == vector.getX32());
-         Assert.assertTrue(0 == vector.getY32());
+         assertTrue(0 == vector.getX32());
+         assertTrue(0 == vector.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -32,8 +33,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
 
          vector = new Vector2D32(newX, newY);
 
-         Assert.assertTrue(newX == vector.getX32());
-         Assert.assertTrue(newY == vector.getY32());
+         assertTrue(newX == vector.getX32());
+         assertTrue(newY == vector.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -42,8 +43,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
 
          Vector2D32 vectorArray = new Vector2D32(randomVector2DArray);
 
-         Assert.assertTrue(randomVector2DArray[0] == vectorArray.getX32());
-         Assert.assertTrue(randomVector2DArray[1] == vectorArray.getY32());
+         assertTrue(randomVector2DArray[0] == vectorArray.getX32());
+         assertTrue(randomVector2DArray[1] == vectorArray.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -51,8 +52,8 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
          Vector2D32 vector2 = EuclidCoreRandomTools.nextVector2D32(random);
          vector = new Vector2D32(vector2);
 
-         Assert.assertTrue(vector.getX32() == vector2.getX32());
-         Assert.assertTrue(vector.getY32() == vector2.getY32());
+         assertTrue(vector.getX32() == vector2.getX32());
+         assertTrue(vector.getY32() == vector2.getY32());
       }
    }
 
@@ -68,14 +69,14 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
       { // Test setX(float x)
          float x = random.nextFloat();
          tuple1.setX(x);
-         assertEquals(tuple1.getX32(), x, getEpsilon());
+         assertEqualsDelta(tuple1.getX32(), x, getEpsilon());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test setY(float y)
          float y = random.nextFloat();
          tuple1.setY(y);
-         assertEquals(tuple1.getY32(), y, getEpsilon());
+         assertEqualsDelta(tuple1.getY32(), y, getEpsilon());
       }
    }
 
@@ -95,7 +96,7 @@ public class Vector2D32Test extends Vector2DBasicsTest<Vector2D32>
       {
          point.setElement(i % 2, random.nextFloat());
          newHashCode = point.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

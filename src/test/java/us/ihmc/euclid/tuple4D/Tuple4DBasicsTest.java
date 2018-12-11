@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -44,7 +45,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
 
          double expectedLength = 1.0;
          double actualLength = tuple1.norm();
-         assertEquals(expectedLength, actualLength, getEpsilon());
+         assertEqualsDelta(expectedLength, actualLength, getEpsilon());
 
          T tuple2 = createRandomTuple(random);
          tuple2.normalize();
@@ -68,7 +69,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
 
          double expectedLength = 1.0;
          double actualLength = tuple2.norm();
-         assertEquals(expectedLength, actualLength, getEpsilon());
+         assertEqualsDelta(expectedLength, actualLength, getEpsilon());
 
          tuple2 = createRandomTuple(random);
          tuple2.normalize();
@@ -109,20 +110,20 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
                   tuple1 = createTuple(signX * xPos, signY * yPos, signZ * zPos, signS * sPos);
 
                   tuple2.setAndAbsolute(tuple1);
-                  assertEquals(tuple2.getX(), xPos, getEpsilon());
-                  assertEquals(tuple2.getY(), yPos, getEpsilon());
-                  assertEquals(tuple2.getZ(), zPos, getEpsilon());
-                  assertEquals(tuple2.getS(), sPos, getEpsilon());
-                  assertEquals(tuple1.getX(), signX * xPos, getEpsilon());
-                  assertEquals(tuple1.getY(), signY * yPos, getEpsilon());
-                  assertEquals(tuple1.getZ(), signZ * zPos, getEpsilon());
-                  assertEquals(tuple1.getS(), signS * sPos, getEpsilon());
+                  assertEqualsDelta(tuple2.getX(), xPos, getEpsilon());
+                  assertEqualsDelta(tuple2.getY(), yPos, getEpsilon());
+                  assertEqualsDelta(tuple2.getZ(), zPos, getEpsilon());
+                  assertEqualsDelta(tuple2.getS(), sPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getX(), signX * xPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getY(), signY * yPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getZ(), signZ * zPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getS(), signS * sPos, getEpsilon());
 
                   tuple1.absolute();
-                  assertEquals(tuple1.getX(), xPos, getEpsilon());
-                  assertEquals(tuple1.getY(), yPos, getEpsilon());
-                  assertEquals(tuple1.getZ(), zPos, getEpsilon());
-                  assertEquals(tuple1.getS(), sPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getX(), xPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getY(), yPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getZ(), zPos, getEpsilon());
+                  assertEqualsDelta(tuple1.getS(), sPos, getEpsilon());
                }
             }
          }
@@ -153,20 +154,20 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
 
                   tuple2.setToNaN();
                   tuple2.setAndNegate(tuple1);
-                  assertEquals(tuple2.getX(), -xOriginal, getEpsilon());
-                  assertEquals(tuple2.getY(), -yOriginal, getEpsilon());
-                  assertEquals(tuple2.getZ(), -zOriginal, getEpsilon());
-                  assertEquals(tuple2.getS(), -sOriginal, getEpsilon());
-                  assertEquals(tuple1.getX(), xOriginal, getEpsilon());
-                  assertEquals(tuple1.getY(), yOriginal, getEpsilon());
-                  assertEquals(tuple1.getZ(), zOriginal, getEpsilon());
-                  assertEquals(tuple1.getS(), sOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getX(), -xOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getY(), -yOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getZ(), -zOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getS(), -sOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getX(), xOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getY(), yOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getZ(), zOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getS(), sOriginal, getEpsilon());
 
                   tuple1.negate();
-                  assertEquals(tuple1.getX(), -xOriginal, getEpsilon());
-                  assertEquals(tuple1.getY(), -yOriginal, getEpsilon());
-                  assertEquals(tuple1.getZ(), -zOriginal, getEpsilon());
-                  assertEquals(tuple1.getS(), -sOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getX(), -xOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getY(), -yOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getZ(), -zOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getS(), -sOriginal, getEpsilon());
                }
             }
          }
@@ -219,7 +220,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
          tuple2.get(tupleArray);
          tuple1.set(tupleArray);
          for (int index = 0; index < 4; index++)
-            assertEquals(tuple2.getElement32(index), tuple1.getElement32(index), Math.max(getEpsilon(), 1.0e-6));
+            assertEqualsDelta(tuple2.getElement32(index), tuple1.getElement32(index), Math.max(getEpsilon(), 1.0e-6));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -229,7 +230,7 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
          tuple2.get(2, tupleArray);
          tuple1.set(2, tupleArray);
          for (int index = 0; index < 4; index++)
-            assertEquals(tuple2.getElement32(index), tuple1.getElement32(index), Math.max(getEpsilon(), 1.0e-6));
+            assertEqualsDelta(tuple2.getElement32(index), tuple1.getElement32(index), Math.max(getEpsilon(), 1.0e-6));
       }
 
       for (int i = 0; i < ITERATIONS; i++)

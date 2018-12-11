@@ -1,7 +1,8 @@
 package us.ihmc.euclid.rotationConversion;
 
 import static java.lang.Math.*;
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -37,10 +38,10 @@ public class RotationVectorConversionTest
          double angle = axisAngle.getAngle();
          RotationVectorConversion.convertAxisAngleToRotationVectorImpl(ux, uy, uz, angle, rotationVector);
 
-         assertEquals(rotationVector.length(), Math.abs(angle), EPSILON);
-         assertEquals(rotationVector.getX(), angle * ux, EPSILON);
-         assertEquals(rotationVector.getY(), angle * uy, EPSILON);
-         assertEquals(rotationVector.getZ(), angle * uz, EPSILON);
+         assertEqualsDelta(rotationVector.length(), Math.abs(angle), EPSILON);
+         assertEqualsDelta(rotationVector.getX(), angle * ux, EPSILON);
+         assertEqualsDelta(rotationVector.getY(), angle * uy, EPSILON);
+         assertEqualsDelta(rotationVector.getZ(), angle * uz, EPSILON);
       }
 
       // Test with a non-unitary axis.
@@ -258,9 +259,9 @@ public class RotationVectorConversionTest
       m21 = 1.0;
       m22 = 0.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(Math.PI / 2.0, actualRotationVector.getX(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getY(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI / 2.0, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getZ(), EPSILON);
 
       // Pi around x
       m00 = 1.0;
@@ -273,9 +274,9 @@ public class RotationVectorConversionTest
       m21 = 0.0;
       m22 = -1.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(Math.PI, actualRotationVector.getX(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getY(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getZ(), EPSILON);
 
       // Pi/2 around y
       m00 = 0.0;
@@ -288,9 +289,9 @@ public class RotationVectorConversionTest
       m21 = 0.0;
       m22 = 0.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(0.0, actualRotationVector.getX(), EPSILON);
-      assertEquals(Math.PI / 2.0, actualRotationVector.getY(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(Math.PI / 2.0, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getZ(), EPSILON);
 
       // Pi around z
       m00 = -1.0;
@@ -303,9 +304,9 @@ public class RotationVectorConversionTest
       m21 = 0.0;
       m22 = -1.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(0.0, actualRotationVector.getX(), EPSILON);
-      assertEquals(Math.PI, actualRotationVector.getY(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(Math.PI, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getZ(), EPSILON);
 
       // Pi/2 around z
       m00 = 0.0;
@@ -318,9 +319,9 @@ public class RotationVectorConversionTest
       m21 = 0.0;
       m22 = 1.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(0.0, actualRotationVector.getX(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getY(), EPSILON);
-      assertEquals(Math.PI / 2.0, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(Math.PI / 2.0, actualRotationVector.getZ(), EPSILON);
 
       // Pi around z
       m00 = -1.0;
@@ -333,9 +334,9 @@ public class RotationVectorConversionTest
       m21 = 0.0;
       m22 = 1.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(0.0, actualRotationVector.getX(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getY(), EPSILON);
-      assertEquals(Math.PI, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(Math.PI, actualRotationVector.getZ(), EPSILON);
 
       // Pi around xy (as axis-angle: (x = sqrt(2)/2, y = sqrt(2)/2, z = 0, angle = Pi)
       double sqrt2Over2 = Math.sqrt(2.0) / 2.0;
@@ -349,9 +350,9 @@ public class RotationVectorConversionTest
       m21 = 0.0;
       m22 = -1.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getX(), EPSILON);
-      assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getY(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI * sqrt2Over2, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(Math.PI * sqrt2Over2, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getZ(), EPSILON);
 
       // Pi around xz (as axis-angle: (x = sqrt(2)/2, y = 0, z = sqrt(2)/2, angle = Pi)
       m00 = 0.0;
@@ -364,9 +365,9 @@ public class RotationVectorConversionTest
       m21 = 0.0;
       m22 = 0.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getX(), EPSILON);
-      assertEquals(0.0, actualRotationVector.getY(), EPSILON);
-      assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(Math.PI * sqrt2Over2, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(Math.PI * sqrt2Over2, actualRotationVector.getZ(), EPSILON);
 
       // Pi around yz (as axis-angle: (x = 0, y = sqrt(2)/2, z = sqrt(2)/2, angle = Pi)
       m00 = -1.0;
@@ -379,9 +380,9 @@ public class RotationVectorConversionTest
       m21 = 1.0;
       m22 = 0.0;
       RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, actualRotationVector);
-      assertEquals(0.0, actualRotationVector.getX(), EPSILON);
-      assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getY(), EPSILON);
-      assertEquals(Math.PI * sqrt2Over2, actualRotationVector.getZ(), EPSILON);
+      assertEqualsDelta(0.0, actualRotationVector.getX(), EPSILON);
+      assertEqualsDelta(Math.PI * sqrt2Over2, actualRotationVector.getY(), EPSILON);
+      assertEqualsDelta(Math.PI * sqrt2Over2, actualRotationVector.getZ(), EPSILON);
 
       RotationVectorConversion.convertMatrixToRotationVectorImpl(Double.NaN, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, actualRotationVector);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualRotationVector);

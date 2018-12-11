@@ -1,12 +1,13 @@
 package us.ihmc.euclid.axisAngle;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
@@ -27,10 +28,10 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       Random random = new Random(613615L);
       AxisAngle axisAngle = new AxisAngle(), expected;
       { // Test AxisAngle()
-         Assert.assertTrue(axisAngle.getX() == 1.0);
-         Assert.assertTrue(axisAngle.getY() == 0.0);
-         Assert.assertTrue(axisAngle.getZ() == 0.0);
-         Assert.assertTrue(axisAngle.getAngle() == 0.0);
+         assertTrue(axisAngle.getX() == 1.0);
+         assertTrue(axisAngle.getY() == 0.0);
+         assertTrue(axisAngle.getZ() == 0.0);
+         assertTrue(axisAngle.getAngle() == 0.0);
       }
 
       { // Test AxisAngle(AxisAngleBasics other)
@@ -68,7 +69,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
             EuclidCoreTestTools.assertAxisAngleEquals(axisAngle, expected, EPS);
 
             for (int j = 0; j < axisAngleArray.length; j++)
-               Assert.assertTrue(axisAngleArray[j] == axisAngleArrayCopy[j]);
+               assertTrue(axisAngleArray[j] == axisAngleArrayCopy[j]);
          }
       }
 
@@ -83,13 +84,13 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
 
             axisAngle = new AxisAngle(vectorAxis, angle);
 
-            Assert.assertTrue(axisAngle.getX() == vectorAxis.getX());
-            Assert.assertTrue(axisAngle.getY() == vectorAxis.getY());
-            Assert.assertTrue(axisAngle.getZ() == vectorAxis.getZ());
-            Assert.assertTrue(axisAngle.getAngle() == angle);
+            assertTrue(axisAngle.getX() == vectorAxis.getX());
+            assertTrue(axisAngle.getY() == vectorAxis.getY());
+            assertTrue(axisAngle.getZ() == vectorAxis.getZ());
+            assertTrue(axisAngle.getAngle() == angle);
 
             EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(vectorAxis, vectorAxisCopy, EPS);
-            Assert.assertTrue(angle == angleCopy);
+            assertTrue(angle == angleCopy);
          }
       }
 
@@ -124,7 +125,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
 
             EuclidCoreTestTools.assertAxisAngleEquals(axisAngle, expectedAxisAngle, EPS);
 
-            Assert.assertTrue(angle == angleCopy);
+            assertTrue(angle == angleCopy);
 
             EuclidCoreTestTools.assertMatrix3DEquals(matrix, matrixCopy, EPS);
          }
@@ -175,7 +176,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       {
          axisAngle.setElement(random.nextInt(4), random.nextDouble());
          newHashCode = axisAngle.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }

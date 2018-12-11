@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -47,27 +48,27 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
       double m22 = random.nextDouble();
       T matrix = createMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22);
 
-      assertEquals(m00, matrix.getM00(), SMALL_EPS);
-      assertEquals(m01, matrix.getM01(), SMALL_EPS);
-      assertEquals(m02, matrix.getM02(), SMALL_EPS);
+      assertEqualsDelta(m00, matrix.getM00(), SMALL_EPS);
+      assertEqualsDelta(m01, matrix.getM01(), SMALL_EPS);
+      assertEqualsDelta(m02, matrix.getM02(), SMALL_EPS);
 
-      assertEquals(m10, matrix.getM10(), SMALL_EPS);
-      assertEquals(m11, matrix.getM11(), SMALL_EPS);
-      assertEquals(m12, matrix.getM12(), SMALL_EPS);
+      assertEqualsDelta(m10, matrix.getM10(), SMALL_EPS);
+      assertEqualsDelta(m11, matrix.getM11(), SMALL_EPS);
+      assertEqualsDelta(m12, matrix.getM12(), SMALL_EPS);
 
-      assertEquals(m20, matrix.getM20(), SMALL_EPS);
-      assertEquals(m21, matrix.getM21(), SMALL_EPS);
-      assertEquals(m22, matrix.getM22(), SMALL_EPS);
+      assertEqualsDelta(m20, matrix.getM20(), SMALL_EPS);
+      assertEqualsDelta(m21, matrix.getM21(), SMALL_EPS);
+      assertEqualsDelta(m22, matrix.getM22(), SMALL_EPS);
 
-      assertEquals(m00, matrix.getElement(0, 0), SMALL_EPS);
-      assertEquals(m01, matrix.getElement(0, 1), SMALL_EPS);
-      assertEquals(m02, matrix.getElement(0, 2), SMALL_EPS);
-      assertEquals(m10, matrix.getElement(1, 0), SMALL_EPS);
-      assertEquals(m11, matrix.getElement(1, 1), SMALL_EPS);
-      assertEquals(m12, matrix.getElement(1, 2), SMALL_EPS);
-      assertEquals(m20, matrix.getElement(2, 0), SMALL_EPS);
-      assertEquals(m21, matrix.getElement(2, 1), SMALL_EPS);
-      assertEquals(m22, matrix.getElement(2, 2), SMALL_EPS);
+      assertEqualsDelta(m00, matrix.getElement(0, 0), SMALL_EPS);
+      assertEqualsDelta(m01, matrix.getElement(0, 1), SMALL_EPS);
+      assertEqualsDelta(m02, matrix.getElement(0, 2), SMALL_EPS);
+      assertEqualsDelta(m10, matrix.getElement(1, 0), SMALL_EPS);
+      assertEqualsDelta(m11, matrix.getElement(1, 1), SMALL_EPS);
+      assertEqualsDelta(m12, matrix.getElement(1, 2), SMALL_EPS);
+      assertEqualsDelta(m20, matrix.getElement(2, 0), SMALL_EPS);
+      assertEqualsDelta(m21, matrix.getElement(2, 1), SMALL_EPS);
+      assertEqualsDelta(m22, matrix.getElement(2, 2), SMALL_EPS);
 
       for (int j = 0; j < 3; j++)
       {
@@ -255,7 +256,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          double actualDeterminant = matrix.determinant();
          double expectedDeterminant = Matrix3DFeatures.determinant(matrix.getM00(), matrix.getM01(), matrix.getM02(), matrix.getM10(), matrix.getM11(),
                                                                    matrix.getM12(), matrix.getM20(), matrix.getM21(), matrix.getM22());
-         assertEquals(expectedDeterminant, actualDeterminant, SMALL_EPS);
+         assertEqualsDelta(expectedDeterminant, actualDeterminant, SMALL_EPS);
       }
    }
 

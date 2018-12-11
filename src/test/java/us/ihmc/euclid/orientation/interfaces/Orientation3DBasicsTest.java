@@ -1,6 +1,7 @@
 package us.ihmc.euclid.orientation.interfaces;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -108,9 +109,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setRotationMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(rotationMatrix.getYaw(), orientation.getYaw(), yprEpsilon);
-         assertEquals(rotationMatrix.getPitch(), orientation.getPitch(), yprEpsilon);
-         assertEquals(rotationMatrix.getRoll(), orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(rotationMatrix.getYaw(), orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(rotationMatrix.getPitch(), orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(rotationMatrix.getRoll(), orientation.getRoll(), yprEpsilon);
       }
    }
 
@@ -150,9 +151,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setAxisAngle(x, y, z, angle);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(axisAngle.getYaw(), orientation.getYaw(), yprEpsilon);
-         assertEquals(axisAngle.getPitch(), orientation.getPitch(), yprEpsilon);
-         assertEquals(axisAngle.getRoll(), orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(axisAngle.getYaw(), orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(axisAngle.getPitch(), orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(axisAngle.getRoll(), orientation.getRoll(), yprEpsilon);
       }
    }
 
@@ -192,9 +193,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setQuaternion(x, y, z, s);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(quaternion.getYaw(), orientation.getYaw(), yprEpsilon);
-         assertEquals(quaternion.getPitch(), orientation.getPitch(), yprEpsilon);
-         assertEquals(quaternion.getRoll(), orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(quaternion.getYaw(), orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(quaternion.getPitch(), orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(quaternion.getRoll(), orientation.getRoll(), yprEpsilon);
       }
    }
 
@@ -232,9 +233,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setRotationVector(x, y, z);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(new RotationMatrix(rotationVector).getYaw(), orientation.getYaw(), yprEpsilon);
-         assertEquals(new Quaternion(rotationVector).getPitch(), orientation.getPitch(), yprEpsilon);
-         assertEquals(new AxisAngle(rotationVector).getRoll(), orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(new RotationMatrix(rotationVector).getYaw(), orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(new Quaternion(rotationVector).getPitch(), orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(new AxisAngle(rotationVector).getRoll(), orientation.getRoll(), yprEpsilon);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -244,9 +245,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setRotationVector(rotationVector);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(new RotationMatrix(rotationVector).getYaw(), orientation.getYaw(), yprEpsilon);
-         assertEquals(new Quaternion(rotationVector).getPitch(), orientation.getPitch(), yprEpsilon);
-         assertEquals(new AxisAngle(rotationVector).getRoll(), orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(new RotationMatrix(rotationVector).getYaw(), orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(new Quaternion(rotationVector).getPitch(), orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(new AxisAngle(rotationVector).getRoll(), orientation.getRoll(), yprEpsilon);
       }
    }
 
@@ -286,9 +287,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setYawPitchRoll(yaw, pitch, roll);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(yawPitchRoll[0], orientation.getYaw(), yprEpsilon);
-         assertEquals(yawPitchRoll[1], orientation.getPitch(), yprEpsilon);
-         assertEquals(yawPitchRoll[2], orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(yawPitchRoll[0], orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(yawPitchRoll[1], orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(yawPitchRoll[2], orientation.getRoll(), yprEpsilon);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -298,9 +299,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setYawPitchRoll(yawPitchRoll);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(yawPitchRoll[0], orientation.getYaw(), yprEpsilon);
-         assertEquals(yawPitchRoll[1], orientation.getPitch(), yprEpsilon);
-         assertEquals(yawPitchRoll[2], orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(yawPitchRoll[0], orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(yawPitchRoll[1], orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(yawPitchRoll[2], orientation.getRoll(), yprEpsilon);
       }
    }
 
@@ -340,9 +341,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setEuler(rotX, rotY, rotZ);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(rotZ, orientation.getYaw(), yprEpsilon);
-         assertEquals(rotY, orientation.getPitch(), yprEpsilon);
-         assertEquals(rotX, orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(rotZ, orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(rotY, orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(rotX, orientation.getRoll(), yprEpsilon);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -352,9 +353,9 @@ public abstract class Orientation3DBasicsTest
          orientation.setEuler(eulerAngles);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(eulerAngles.getZ(), orientation.getYaw(), yprEpsilon);
-         assertEquals(eulerAngles.getY(), orientation.getPitch(), yprEpsilon);
-         assertEquals(eulerAngles.getX(), orientation.getRoll(), yprEpsilon);
+         assertEqualsDelta(eulerAngles.getZ(), orientation.getYaw(), yprEpsilon);
+         assertEqualsDelta(eulerAngles.getY(), orientation.getPitch(), yprEpsilon);
+         assertEqualsDelta(eulerAngles.getX(), orientation.getRoll(), yprEpsilon);
       }
    }
 

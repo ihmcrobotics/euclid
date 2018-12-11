@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
@@ -9,7 +10,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -192,8 +193,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             }
             double expectedAngle = qDiff.getAngle();
             double actualAngle = q1.distance(q2);
-            assertEquals(expectedAngle, actualAngle, 75.0 * getEpsilon());
-            assertEquals(0.0, q1.distance(q1), 1.0e-3);
+            assertEqualsDelta(expectedAngle, actualAngle, 75.0 * getEpsilon());
+            assertEqualsDelta(0.0, q1.distance(q1), 1.0e-3);
          }
       }
 
@@ -209,7 +210,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             q2.set(aa);
             q2.preMultiply(q1);
             double actualAngle = q1.distance(q2);
-            assertEquals(expectedAngle, actualAngle, 10000 * getEpsilon());
+            assertEqualsDelta(expectedAngle, actualAngle, 10000 * getEpsilon());
          }
       }
    }
@@ -231,8 +232,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             q2.set(aa);
             q2.preMultiply(q1);
             double actualAngle = q1.distancePrecise(q2);
-            assertEquals(expectedAngle, actualAngle, getEpsilon());
-            assertEquals(0.0, q1.distance(q1), 1.0e-3);
+            assertEqualsDelta(expectedAngle, actualAngle, getEpsilon());
+            assertEqualsDelta(0.0, q1.distance(q1), 1.0e-3);
          }
       }
    }
@@ -252,7 +253,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       double qs = c;
       q.setUnsafe(qx, qy, qz, qs);
 
-      assertEquals(expectedAngle, q.getAngle(), getEpsilon());
+      assertEqualsDelta(expectedAngle, q.getAngle(), getEpsilon());
    }
 
    @Test
@@ -288,7 +289,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, expectedYawPitchRoll);
 
             for (int j = 0; j < yawPitchRoll.length; j++)
-               Assert.assertEquals(yawPitchRoll[j], expectedYawPitchRoll[j], getEpsilon());
+               assertEqualsDelta(yawPitchRoll[j], expectedYawPitchRoll[j], getEpsilon());
          }
 
          { // Test getEuler(Vector3DBasics eulerAnglesToPack)
@@ -302,19 +303,19 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          { // Test getYaw()
             double yaw = quaternion.getYaw();
             double expectedYaw = YawPitchRollConversion.computeYaw(quaternion);
-            Assert.assertEquals(yaw, expectedYaw, getEpsilon());
+            assertEqualsDelta(yaw, expectedYaw, getEpsilon());
          }
 
          { // Test getPitch()
             double pitch = quaternion.getPitch();
             double expectedPitch = YawPitchRollConversion.computePitch(quaternion);
-            Assert.assertEquals(pitch, expectedPitch, getEpsilon());
+            assertEqualsDelta(pitch, expectedPitch, getEpsilon());
          }
 
          { // Test getRoll()
             double roll = quaternion.getRoll();
             double expectedRoll = YawPitchRollConversion.computeRoll(quaternion);
-            Assert.assertEquals(roll, expectedRoll, getEpsilon());
+            assertEqualsDelta(roll, expectedRoll, getEpsilon());
          }
       }
    }
@@ -809,20 +810,20 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
                   tuple2.setToNaN();
                   tuple2.setAndNegate(tuple1);
-                  assertEquals(tuple2.getX(), -xOriginal, getEpsilon());
-                  assertEquals(tuple2.getY(), -yOriginal, getEpsilon());
-                  assertEquals(tuple2.getZ(), -zOriginal, getEpsilon());
-                  assertEquals(tuple2.getS(), -sOriginal, getEpsilon());
-                  assertEquals(tuple1.getX(), xOriginal, getEpsilon());
-                  assertEquals(tuple1.getY(), yOriginal, getEpsilon());
-                  assertEquals(tuple1.getZ(), zOriginal, getEpsilon());
-                  assertEquals(tuple1.getS(), sOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getX(), -xOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getY(), -yOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getZ(), -zOriginal, getEpsilon());
+                  assertEqualsDelta(tuple2.getS(), -sOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getX(), xOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getY(), yOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getZ(), zOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getS(), sOriginal, getEpsilon());
 
                   tuple1.negate();
-                  assertEquals(tuple1.getX(), -xOriginal, getEpsilon());
-                  assertEquals(tuple1.getY(), -yOriginal, getEpsilon());
-                  assertEquals(tuple1.getZ(), -zOriginal, getEpsilon());
-                  assertEquals(tuple1.getS(), -sOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getX(), -xOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getY(), -yOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getZ(), -zOriginal, getEpsilon());
+                  assertEqualsDelta(tuple1.getS(), -sOriginal, getEpsilon());
                }
             }
          }
@@ -877,10 +878,10 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          { // Test conjugate()
             quaternion.conjugate();
 
-            assertEquals(quaternion.getX(), -quaternionCopy.getX(), getEpsilon());
-            assertEquals(quaternion.getY(), -quaternionCopy.getY(), getEpsilon());
-            assertEquals(quaternion.getZ(), -quaternionCopy.getZ(), getEpsilon());
-            assertEquals(quaternion.getS(), quaternionCopy.getS(), getEpsilon());
+            assertEqualsDelta(quaternion.getX(), -quaternionCopy.getX(), getEpsilon());
+            assertEqualsDelta(quaternion.getY(), -quaternionCopy.getY(), getEpsilon());
+            assertEqualsDelta(quaternion.getZ(), -quaternionCopy.getZ(), getEpsilon());
+            assertEqualsDelta(quaternion.getS(), quaternionCopy.getS(), getEpsilon());
          }
 
          { // Test conjugate (QuaternionBasics other)
@@ -980,7 +981,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       qActual.setUnsafe(scale * qx, scale * qy, scale * qz, scale * qs);
       qActual.normalizeAndLimitToPi();
 
-      assertEquals(1.0, qActual.norm(), getEpsilon());
+      assertEqualsDelta(1.0, qActual.norm(), getEpsilon());
       EuclidCoreTestTools.assertQuaternionEquals(qExpected, qActual, getEpsilon());
 
       // Test that the quaternion is kept within [-Pi, Pi]
@@ -1046,11 +1047,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          quaternion.set(x, y, z, s);
 
          // The method should normalize, so assertNotEquals is used.
-         assertNotEquals(quaternion.getX(), x, getEpsilon());
-         assertNotEquals(quaternion.getY(), y, getEpsilon());
-         assertNotEquals(quaternion.getZ(), z, getEpsilon());
-         assertNotEquals(quaternion.getS(), s, getEpsilon());
-         assertEquals(1.0, quaternion.norm(), getEpsilon());
+         assertNotEquals(quaternion.getX(), x);
+         assertNotEquals(quaternion.getY(), y);
+         assertNotEquals(quaternion.getZ(), z);
+         assertNotEquals(quaternion.getS(), s);
+         assertEqualsDelta(1.0, quaternion.norm(), getEpsilon());
 
          T original = createRandomTuple(random);
          x = original.getX();
@@ -1718,9 +1719,9 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          quaternionB = createTuple(quaternionT.getX(), quaternionT.getY(), quaternionT.getZ(), quaternionT.getS());
 
-         assertTrue("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertTrue(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          quaternionB.negate();
-         assertTrue("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertTrue(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          assertTrue(quaternionA.geometricallyEquals(quaternionA, 0.0));
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
@@ -1737,9 +1738,9 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          quaternionB = createTuple(quaternionT.getX(), quaternionT.getY(), quaternionT.getZ(), quaternionT.getS());
 
-         assertFalse("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertFalse(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          quaternionB.negate();
-         assertFalse("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertFalse(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          assertTrue(quaternionA.geometricallyEquals(quaternionA, 0.0));
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
@@ -1756,9 +1757,9 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          quaternionB = createTuple(quaternionT.getX(), quaternionT.getY(), quaternionT.getZ(), quaternionT.getS());
 
-         assertTrue("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertTrue(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          quaternionB.negate();
-         assertTrue("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertTrue(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          assertTrue(quaternionA.geometricallyEquals(quaternionA, 0.0));
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
@@ -1775,9 +1776,9 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          quaternionB = createTuple(quaternionT.getX(), quaternionT.getY(), quaternionT.getZ(), quaternionT.getS());
 
-         assertFalse("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertFalse(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          quaternionB.negate();
-         assertFalse("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertFalse(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          assertTrue(quaternionA.geometricallyEquals(quaternionA, 0.0));
          assertTrue(quaternionB.geometricallyEquals(quaternionB, 0.0));
       }
@@ -1788,9 +1789,9 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          quaternionA = createRandomTuple(random);
          quaternionB = createRandomTuple(random);
 
-         assertTrue("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertTrue(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
          quaternionB.negate();
-         assertTrue("Epsilon = " + epsilon, quaternionA.geometricallyEquals(quaternionB, epsilon));
+         assertTrue(quaternionA.geometricallyEquals(quaternionB, epsilon), "Epsilon = " + epsilon);
       }
    }
 

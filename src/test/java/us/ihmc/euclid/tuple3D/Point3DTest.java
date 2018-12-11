@@ -1,12 +1,13 @@
 package us.ihmc.euclid.tuple3D;
 
-import static us.ihmc.robotics.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.tools.EuclidJUnitTools.*;
 
 import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
 
 import java.util.Random;
 
-import us.ihmc.robotics.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -21,9 +22,9 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
       Point3D point = new Point3D();
 
       { // Test Point()
-         Assert.assertTrue(0 == point.getX());
-         Assert.assertTrue(0 == point.getY());
-         Assert.assertTrue(0 == point.getZ());
+         assertTrue(0 == point.getX());
+         assertTrue(0 == point.getY());
+         assertTrue(0 == point.getZ());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -34,9 +35,9 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
 
          point = new Point3D(newX, newY, newZ);
 
-         Assert.assertTrue(newX == point.getX());
-         Assert.assertTrue(newY == point.getY());
-         Assert.assertTrue(newZ == point.getZ());
+         assertTrue(newX == point.getX());
+         assertTrue(newY == point.getY());
+         assertTrue(newZ == point.getZ());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -49,13 +50,13 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
 
          Point3D pointArray = new Point3D(randomPointArray);
 
-         Assert.assertTrue(randomPointArray[0] == pointArray.getX());
-         Assert.assertTrue(randomPointArray[1] == pointArray.getY());
-         Assert.assertTrue(randomPointArray[2] == pointArray.getZ());
+         assertTrue(randomPointArray[0] == pointArray.getX());
+         assertTrue(randomPointArray[1] == pointArray.getY());
+         assertTrue(randomPointArray[2] == pointArray.getZ());
 
-         Assert.assertTrue(copyRandomPointArray[0] == randomPointArray[0]);
-         Assert.assertTrue(copyRandomPointArray[1] == randomPointArray[1]);
-         Assert.assertTrue(copyRandomPointArray[2] == randomPointArray[2]);
+         assertTrue(copyRandomPointArray[0] == randomPointArray[0]);
+         assertTrue(copyRandomPointArray[1] == randomPointArray[1]);
+         assertTrue(copyRandomPointArray[2] == randomPointArray[2]);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -67,9 +68,9 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
 
          point = new Point3D(point2);
 
-         Assert.assertTrue(point.getX() == point2.getX());
-         Assert.assertTrue(point.getY() == point2.getY());
-         Assert.assertTrue(point.getZ() == point2.getZ());
+         assertTrue(point.getX() == point2.getX());
+         assertTrue(point.getY() == point2.getY());
+         assertTrue(point.getZ() == point2.getZ());
       }
    }
 
@@ -93,7 +94,7 @@ public class Point3DTest extends Point3DBasicsTest<Point3D>
       {
          tuple1.setElement(i % 3, random.nextDouble());
          newHashCode = tuple1.hashCode();
-         assertNotEquals(newHashCode, previousHashCode);
+         assertNotEquals((long) newHashCode, (long) previousHashCode);
          previousHashCode = newHashCode;
       }
    }
