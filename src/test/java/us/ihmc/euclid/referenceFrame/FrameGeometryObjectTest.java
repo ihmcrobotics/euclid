@@ -516,23 +516,27 @@ public abstract class FrameGeometryObjectTest<F extends FrameGeometryObject<F, G
          F frameGeometry1 = createFrameGeometryObject(worldFrame, expectedGeometry);
          F frameGeometry2 = createFrameGeometryObject(worldFrame, expectedGeometry);
 
-         assertFalse(frameGeometry1.equals(null));
+         Object nullAsObject = null;
+         assertFalse(frameGeometry1.equals(nullAsObject));
          assertFalse(frameGeometry1.equals((F) null));
          assertFalse(frameGeometry1.equals(new Object()));
 
          assertTrue(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
          assertTrue(frameGeometry1.equals(frameGeometry2));
-         assertTrue(frameGeometry1.equals(frameGeometry2));
+         Object frameGeometry2AsObject = frameGeometry2;
+         assertTrue(frameGeometry1.equals(frameGeometry2AsObject));
 
          frameGeometry2 = createFrameGeometryObject(randomFrame, expectedGeometry);
          assertTrue(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
          assertFalse(frameGeometry1.equals(frameGeometry2));
-         assertFalse(frameGeometry1.equals(frameGeometry2));
+         frameGeometry2AsObject = frameGeometry2;
+         assertTrue(frameGeometry1.equals(frameGeometry2AsObject));
 
          frameGeometry2 = createRandomFrameGeometryObject(random, randomFrame);
          assertFalse(frameGeometry1.getGeometryObject().equals(frameGeometry2.getGeometryObject()));
          assertFalse(frameGeometry1.equals(frameGeometry2));
-         assertFalse(frameGeometry1.equals(frameGeometry2));
+         frameGeometry2AsObject = frameGeometry2;
+         assertTrue(frameGeometry1.equals(frameGeometry2AsObject));
       }
    }
 }

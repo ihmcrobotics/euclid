@@ -325,10 +325,13 @@ public class Line3DTest
          Line3D line2 = new Line3D(line1);
          double epsilon = 1.0e-12;
          //assertTrue(line1.equals(line2));
-         //assertTrue(line1.equals(line2));
+         //Object line2AsObject = line2;
+         //assertTrue(line1.equals(line2AsObject));
 
-         assertFalse(line1.equals((Line3D) null));
-         assertFalse(line1.equals(null));
+         Line3D nullAsLine3D = null;
+         assertFalse(line1.equals(nullAsLine3D));
+         Object nullAsObject = null;
+         assertFalse(line1.equals(nullAsObject));
          assertFalse(line1.equals(new double[3]));
 
          for (int j = 0; j < 3; j++)

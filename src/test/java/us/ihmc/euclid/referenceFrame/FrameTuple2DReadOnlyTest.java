@@ -96,10 +96,13 @@ public abstract class FrameTuple2DReadOnlyTest<F extends FrameTuple2DReadOnly>
       assertFalse(tuple3.equals(tuple2));
       assertTrue(tuple3.equals(tuple4));
 
-      assertTrue(tuple1.equals(tuple2));
-      assertFalse(tuple1.equals(tuple3));
-      assertFalse(tuple3.equals(tuple2));
-      assertTrue(tuple3.equals(tuple4));
+      Object tuple2AsObject = tuple2;
+      Object tuple3AsObject = tuple3;
+      Object tuple4AsObject = tuple4;
+      assertTrue(tuple1.equals(tuple2AsObject));
+      assertFalse(tuple1.equals(tuple3AsObject));
+      assertFalse(tuple3.equals(tuple2AsObject));
+      assertTrue(tuple3.equals(tuple4AsObject));
    }
 
    @Test

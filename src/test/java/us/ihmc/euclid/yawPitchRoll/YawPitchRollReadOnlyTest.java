@@ -577,8 +577,10 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
       T ypr = createRandomYawPitchRoll(random);
 
       assertFalse(ypr.equals(createEmptyYawPitchRoll()));
-      assertFalse(ypr.equals(createEmptyYawPitchRoll()));
-      assertTrue(ypr.equals(ypr));
+      Object emptyYawPitchRollAsObject = createEmptyYawPitchRoll();
+      assertFalse(ypr.equals(emptyYawPitchRollAsObject));
+      Object yprAsObject = ypr;
+      assertTrue(ypr.equals(yprAsObject));
       assertFalse(ypr.equals(null));
       assertFalse(ypr.equals(new double[5]));
 

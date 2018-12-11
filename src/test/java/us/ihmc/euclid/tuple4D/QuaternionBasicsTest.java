@@ -181,7 +181,6 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          for (int j = 0; j < ITERATIONS; j++)
          {
             QuaternionReadOnly q2 = createRandomTuple(random);
-            ;
             qDiff.difference(q1, q2);
 
             while (qDiff.getAngle() < 0.01)

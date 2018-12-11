@@ -1815,7 +1815,8 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       assertFalse(m1.equals(new double[4]));
       m2.set(m1);
       assertTrue(m1.equals(m2));
-      assertTrue(m1.equals(m2));
+      Object m2AsObject = m2;
+      assertTrue(m1.equals(m2AsObject));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[9];

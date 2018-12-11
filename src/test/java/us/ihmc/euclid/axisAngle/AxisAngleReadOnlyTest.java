@@ -992,8 +992,10 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       T axisAngle = createRandomAxisAngle(random);
 
       assertFalse(axisAngle.equals(createEmptyAxisAngle()));
-      assertFalse(axisAngle.equals(createEmptyAxisAngle()));
-      assertTrue(axisAngle.equals(axisAngle));
+      Object emptyAxisAngleAsObject = createEmptyAxisAngle();
+      assertFalse(axisAngle.equals(emptyAxisAngleAsObject));
+      Object axisAngleAsObject = axisAngle;
+      assertTrue(axisAngle.equals(axisAngleAsObject));
       assertFalse(axisAngle.equals(null));
       assertFalse(axisAngle.equals(new double[5]));
 

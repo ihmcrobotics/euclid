@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -81,10 +82,10 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
       assertFalse(tuple3.epsilonEquals(tuple2, epsilon));
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
 
-      assertTrue(tuple1.epsilonEquals(tuple2, epsilon));
-      assertFalse(tuple1.epsilonEquals(tuple3, epsilon));
-      assertFalse(tuple3.epsilonEquals(tuple2, epsilon));
-      assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
+      assertTrue(tuple1.epsilonEquals((FrameTuple4DReadOnly) tuple2, epsilon));
+      assertFalse(tuple1.epsilonEquals((FrameTuple4DReadOnly) tuple3, epsilon));
+      assertFalse(tuple3.epsilonEquals((FrameTuple4DReadOnly) tuple2, epsilon));
+      assertTrue(tuple3.epsilonEquals((FrameTuple4DReadOnly) tuple4, epsilon));
    }
 
    @Override
@@ -113,10 +114,13 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
       assertFalse(tuple3.equals(tuple2));
       assertTrue(tuple3.equals(tuple4));
 
-      assertTrue(tuple1.equals(tuple2));
-      assertFalse(tuple1.equals(tuple3));
-      assertFalse(tuple3.equals(tuple2));
-      assertTrue(tuple3.equals(tuple4));
+      Object tuple2AsObject = tuple2;
+      Object tuple3AsObject = tuple3;
+      Object tuple4AsObject = tuple4;
+      assertTrue(tuple1.equals(tuple2AsObject));
+      assertFalse(tuple1.equals(tuple3AsObject));
+      assertFalse(tuple3.equals(tuple2AsObject));
+      assertTrue(tuple3.equals(tuple4AsObject));
    }
 
 }

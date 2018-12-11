@@ -1936,7 +1936,8 @@ public class BoundingBox3DTest
       double smallestEpsilon = 8.8888e-16;
 
       assertTrue(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ)));
-      assertTrue(boundingBox3D.equals(new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ)));
+      Object bbxAsObject = new BoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ);
+      assertTrue(boundingBox3D.equals(bbxAsObject));
       assertFalse(boundingBox3D.equals(null));
       assertFalse(boundingBox3D.equals(new double[5]));
 

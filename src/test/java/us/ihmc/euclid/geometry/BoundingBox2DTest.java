@@ -1350,7 +1350,8 @@ public class BoundingBox2DTest
       double smallestEpsilon = 8.8888e-16;
 
       assertTrue(boundingBox2D.equals(new BoundingBox2D(minX, minY, maxX, maxY)));
-      assertTrue(boundingBox2D.equals(new BoundingBox2D(minX, minY, maxX, maxY)));
+      Object bbxAxObject = new BoundingBox2D(minX, minY, maxX, maxY);
+      assertTrue(boundingBox2D.equals(bbxAxObject));
       assertFalse(boundingBox2D.equals(null));
       assertFalse(boundingBox2D.equals(new double[5]));
 
