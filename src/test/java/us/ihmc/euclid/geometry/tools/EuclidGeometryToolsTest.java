@@ -129,15 +129,15 @@ public class EuclidGeometryToolsTest
          boolean expectedCollinear = rotationAngle < angleEpsilon && distance < distanceEspilon;
          boolean actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2,
                                                                            angleEpsilon, distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
 
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
 
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, lineDirection1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
       }
 
       // Test only the distance with parallel line segments.
@@ -168,29 +168,29 @@ public class EuclidGeometryToolsTest
          boolean actualCollinear;
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, secondPointOnLine1, secondPointOnLine2, firstPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(secondPointOnLine1, firstPointOnLine1, secondPointOnLine2, firstPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(secondPointOnLine1, firstPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
 
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine2, secondPointOnLine2, firstPointOnLine1, secondPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(secondPointOnLine2, firstPointOnLine2, firstPointOnLine1, secondPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(secondPointOnLine2, firstPointOnLine2, secondPointOnLine1, firstPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine2, secondPointOnLine2, secondPointOnLine1, firstPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
       }
    }
 
@@ -230,10 +230,10 @@ public class EuclidGeometryToolsTest
          boolean expectedCollinear = rotationAngle < angleEpsilon && distance < distanceEspilon;
          boolean actualCollinear = EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2,
                                                                            angleEpsilon, distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1, lineDirection1, firstPointOnLine2, lineDirection2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
       }
 
       // Test only the distance with parallel line segments.
@@ -263,29 +263,29 @@ public class EuclidGeometryToolsTest
          boolean actualCollinear;
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1, secondPointOnLine1, secondPointOnLine2, firstPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(secondPointOnLine1, firstPointOnLine1, secondPointOnLine2, firstPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(secondPointOnLine1, firstPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
 
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine2, secondPointOnLine2, firstPointOnLine1, secondPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(secondPointOnLine2, firstPointOnLine2, firstPointOnLine1, secondPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(secondPointOnLine2, firstPointOnLine2, secondPointOnLine1, firstPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
          actualCollinear = EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine2, secondPointOnLine2, secondPointOnLine1, firstPointOnLine1, angleEpsilon,
                                                                    distanceEspilon);
-         assertEquals((Object) expectedCollinear, (Object) actualCollinear);
+         assertEquals(expectedCollinear, actualCollinear);
       }
    }
 
@@ -321,7 +321,7 @@ public class EuclidGeometryToolsTest
          boolean expectedCoincidentResult = Math.abs(distanceBetweenPlanes) < distanceEpsilon && rotationAngle < angleEpsilon;
          boolean actualCoincidentResult = EuclidGeometryTools.arePlane3DsCoincident(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, angleEpsilon,
                                                                                     distanceEpsilon);
-         assertEquals((Object) expectedCoincidentResult, (Object) actualCoincidentResult);
+         assertEquals(expectedCoincidentResult, actualCoincidentResult);
       }
    }
 
@@ -343,7 +343,7 @@ public class EuclidGeometryToolsTest
          secondVector.normalize();
          secondVector.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
 
-         assertEquals((Object) (rotationAngle < angleEpsilon), (Object) EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, angleEpsilon));
+         assertEquals((rotationAngle < angleEpsilon), EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, angleEpsilon));
       }
 
       // Try again with small values
@@ -360,7 +360,7 @@ public class EuclidGeometryToolsTest
          Vector2D secondVector = new Vector2D();
          RotationMatrixTools.applyYawRotation(rotationAngle, firstVector, secondVector);
 
-         assertEquals((Object) (rotationAngle < angleEpsilon), (Object) EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, angleEpsilon));
+         assertEquals((rotationAngle < angleEpsilon), EuclidGeometryTools.areVector2DsParallel(firstVector, secondVector, angleEpsilon));
       }
 
       Vector2D unitVector = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
@@ -418,7 +418,7 @@ public class EuclidGeometryToolsTest
          secondVector.normalize();
          secondVector.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
 
-         assertEquals((Object) (rotationAngle < angleEpsilon), (Object) EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
+         assertEquals((rotationAngle < angleEpsilon), EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
       }
 
       // Try again with small values
@@ -440,7 +440,7 @@ public class EuclidGeometryToolsTest
          Vector3D secondVector = new Vector3D();
          rotationMatrix.transform(firstVector, secondVector);
 
-         assertEquals((Object) (rotationAngle < angleEpsilon), (Object) EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
+         assertEquals((rotationAngle < angleEpsilon), EuclidGeometryTools.areVector3DsParallel(firstVector, secondVector, angleEpsilon));
       }
 
       Vector3D unitVector = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
@@ -7410,11 +7410,11 @@ public class EuclidGeometryToolsTest
       a = 1.0;
       b = 10.0;
       boolean actual = EuclidGeometryTools.isFormingTriangle(b, a, a);
-      assertEquals((Object) false, (Object) actual);
+      assertEquals(false, actual);
 
       a = 1.0;
       actual = EuclidGeometryTools.isFormingTriangle(a, a, a);
-      assertEquals((Object) true, (Object) actual);
+      assertEquals(true, actual);
 
       Random random = new Random(3242L);
 

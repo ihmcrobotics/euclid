@@ -90,28 +90,28 @@ public class Line2DTest
       frontDirection.set(0.0, 1.0);
 
       point3.set(0.0, 1.0);
-      assertEquals((Object) true, (Object) line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
+      assertEquals(true, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point3.set(0.0, -1.0);
-      assertEquals((Object) false, (Object) line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
+      assertEquals(false, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point1.set(0.0, 0.0);
       point2.set(-1.0, 1.0);
       line2d.set(point1, point2);
 
       point3.set(0.0, 1.0);
-      assertEquals((Object) true, (Object) line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
+      assertEquals(true, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point3.set(0.0, -1.0);
-      assertEquals((Object) false, (Object) line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
+      assertEquals(false, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       frontDirection.set(0.0, -1.0);
 
       point3.set(0.0, 1.0);
-      assertEquals((Object) false, (Object) line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
+      assertEquals(false, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
 
       point3.set(0.0, -1.0);
-      assertEquals((Object) true, (Object) line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
+      assertEquals(true, line2d.isPointInFrontOfLine(frontDirection, point3), "not equal");
    }
 
    @Test

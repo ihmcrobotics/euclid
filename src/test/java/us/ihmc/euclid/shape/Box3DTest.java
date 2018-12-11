@@ -371,7 +371,7 @@ public class Box3DTest
             box.transformToLocal(pointTransformed);
             boxTransformed.transformToWorld(pointTransformed);
 
-            assertEquals((Object) box.isInsideOrOnSurface(point), (Object) boxTransformed.isInsideOrOnSurface(pointTransformed));
+            assertEquals(box.isInsideOrOnSurface(point), boxTransformed.isInsideOrOnSurface(pointTransformed));
          }
       }
    }

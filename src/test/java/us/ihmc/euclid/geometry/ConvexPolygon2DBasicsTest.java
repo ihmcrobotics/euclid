@@ -905,7 +905,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       // TODO this may fail, if the point is really close to the "true" biSecotor and the biSector float calc error moves it to the wrong side...
       // TODO edge cases unsolved...
-      assertEquals((Object) isPointBehindLine, (Object) isOtherEdgeVertexBehindLine);
+      assertEquals(isPointBehindLine, isOtherEdgeVertexBehindLine);
 
    }
 

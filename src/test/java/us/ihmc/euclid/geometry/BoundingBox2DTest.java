@@ -779,39 +779,39 @@ public class BoundingBox2DTest
 
          Point2DReadOnly minPoint = boundingBoxEpsilon.getMinPoint();
          Point2DReadOnly maxPoint = boundingBoxEpsilon.getMaxPoint();
-         assertEquals((Object) boundingBoxExclusive.isInsideExclusive(minPoint), (Object) boundingBoxEpsilon.isInsideEpsilon(minPoint, epsilon));
-         assertEquals((Object) boundingBoxExclusive.isInsideExclusive(maxPoint), (Object) boundingBoxEpsilon.isInsideEpsilon(maxPoint, epsilon));
-         assertEquals((Object) boundingBoxExclusive.isInsideExclusive(minPoint), (Object) boundingBoxEpsilon.isInsideEpsilon(minPoint.getX(), minPoint.getY(), epsilon));
-         assertEquals((Object) boundingBoxExclusive.isInsideExclusive(maxPoint), (Object) boundingBoxEpsilon.isInsideEpsilon(maxPoint.getX(), maxPoint.getY(), epsilon));
+         assertEquals(boundingBoxExclusive.isInsideExclusive(minPoint), boundingBoxEpsilon.isInsideEpsilon(minPoint, epsilon));
+         assertEquals(boundingBoxExclusive.isInsideExclusive(maxPoint), boundingBoxEpsilon.isInsideEpsilon(maxPoint, epsilon));
+         assertEquals(boundingBoxExclusive.isInsideExclusive(minPoint), boundingBoxEpsilon.isInsideEpsilon(minPoint.getX(), minPoint.getY(), epsilon));
+         assertEquals(boundingBoxExclusive.isInsideExclusive(maxPoint), boundingBoxEpsilon.isInsideEpsilon(maxPoint.getX(), maxPoint.getY(), epsilon));
 
          Point2D alpha = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 1.0);
          Point2D query = new Point2D();
          boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), query);
-         assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
-         assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
+         assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
+         assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
 
          for (int axisIndex = 0; axisIndex < 2; axisIndex++)
          {
             alpha = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 1.0);
             alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), query);
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
 
             alpha.setElement(axisIndex, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), query);
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
 
             alpha = EuclidCoreRandomTools.nextPoint2D(random, 0.0, 1.0);
             boundingBoxEpsilon.getPointGivenParameters(alpha.getX(), alpha.getY(), query);
             query.setElement(axisIndex, minPoint.getElement(axisIndex));
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
 
             query.setElement(axisIndex, maxPoint.getElement(axisIndex));
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
-            assertEquals((Object) boundingBoxExclusive.isInsideExclusive(query), (Object) boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query, epsilon));
+            assertEquals(boundingBoxExclusive.isInsideExclusive(query), boundingBoxEpsilon.isInsideEpsilon(query.getX(), query.getY(), epsilon));
          }
 
          // Simple tests to verify the exclusive feature
@@ -1019,7 +1019,7 @@ public class BoundingBox2DTest
          boolean expected = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), pointOnLine,
                                                                                           lineDirection, null, null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithLine2D(pointOnLine, lineDirection);
-         assertEquals((Object) expected, (Object) actual);
+         assertEquals(expected, actual);
       }
    }
 
@@ -1036,7 +1036,7 @@ public class BoundingBox2DTest
          boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(),
                                                                                                  lineSegmentStart, lineSegmentEnd, null, null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithLineSegment2D(lineSegmentStart, lineSegmentEnd);
-         assertEquals((Object) expected, (Object) actual);
+         assertEquals(expected, actual);
       }
    }
 
@@ -1053,7 +1053,7 @@ public class BoundingBox2DTest
          boolean expected = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), rayOrigin,
                                                                                          rayDirection, null, null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithRay2D(rayOrigin, rayDirection);
-         assertEquals((Object) expected, (Object) actual);
+         assertEquals(expected, actual);
       }
    }
 

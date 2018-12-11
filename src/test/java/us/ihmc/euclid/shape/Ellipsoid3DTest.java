@@ -154,14 +154,14 @@ public class Ellipsoid3DTest
    private void assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(boolean invertResult, double[] radii, double[] translations, double[] offsets,
                                                                    Ellipsoid3D ellipsoid)
    {
-      assertEquals((Object) !invertResult, (Object) ellipsoid.isInsideOrOnSurface(new Point3D(translations[0] + radii[0] + offsets[0], translations[1], translations[2])));
-      assertEquals((Object) !invertResult, (Object) ellipsoid.isInsideOrOnSurface(new Point3D(translations[0] - (radii[0] + offsets[0]), translations[1], translations[2])));
+      assertEquals(!invertResult, ellipsoid.isInsideOrOnSurface(new Point3D(translations[0] + radii[0] + offsets[0], translations[1], translations[2])));
+      assertEquals(!invertResult, ellipsoid.isInsideOrOnSurface(new Point3D(translations[0] - (radii[0] + offsets[0]), translations[1], translations[2])));
 
-      assertEquals((Object) !invertResult, (Object) ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1] + radii[1] + offsets[1], translations[2])));
-      assertEquals((Object) !invertResult, (Object) ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1] - (radii[1] + offsets[1]), translations[2])));
+      assertEquals(!invertResult, ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1] + radii[1] + offsets[1], translations[2])));
+      assertEquals(!invertResult, ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1] - (radii[1] + offsets[1]), translations[2])));
 
-      assertEquals((Object) !invertResult, (Object) ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1], translations[2] + radii[2] + offsets[2])));
-      assertEquals((Object) !invertResult, (Object) ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1], translations[2] - (radii[2] + offsets[2]))));
+      assertEquals(!invertResult, ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1], translations[2] + radii[2] + offsets[2])));
+      assertEquals(!invertResult, ellipsoid.isInsideOrOnSurface(new Point3D(translations[0], translations[1], translations[2] - (radii[2] + offsets[2]))));
    }
 
    @Test
