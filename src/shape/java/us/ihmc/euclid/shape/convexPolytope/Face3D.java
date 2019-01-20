@@ -164,14 +164,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       List<? extends Vertex3DReadOnly> vertices = getVertices();
 
       if (vertices.size() > 3)
-      {
          EuclidPolytopeTools.updateFace3DNormal(vertices, null, normal);
-      }
-      else
-      {
-         if (vertices.size() == 3)
-            EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
-      }
+      else if (vertices.size() == 3)
+         EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
 
       area = EuclidPolytopeTools.computeConvexPolygon3DArea(vertices, normal, vertices.size(), true, centroid);
 
@@ -292,6 +287,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       for (int i = 0; i < edges.size(); i++)
          edges.get(i).setToNaN();
+      centroid.setToNaN();
+      normal.setToNaN();
+      area = Double.NaN;
    }
 
    @Override
@@ -299,6 +297,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       for (int i = 0; i < edges.size(); i++)
          edges.get(i).setToZero();
+      centroid.setToZero();
+      normal.setToZero();
+      area = 0.0;;
    }
 
    public void mark()

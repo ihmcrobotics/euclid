@@ -106,13 +106,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return vertices;
    }
 
-   public void getVertices(List<Point3D> verticesToPack)
-   {
-      updateVertices();
-      for (int i = 0; i < vertices.size(); i++)
-         verticesToPack.get(i).set(vertices.get(i));
-   }
-
    private void updateVertices()
    {
       unmarkAllFaces();
@@ -216,29 +209,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       for (int i = 0; i < faces.size(); i++)
          faces.get(i).unmark();
-   }
-
-   public void addVertices(double epsilon, Point3D... vertices)
-   {
-      for (int i = 0; i < vertices.length; i++)
-         addVertex(vertices[i], epsilon);
-   }
-
-   public void addVertices(double epsilon, List<Point3D> vertices)
-   {
-      for (int i = 0; i < vertices.size(); i++)
-         addVertex(vertices.get(i), epsilon);
-   }
-
-   public void addVertices(List<Vertex3D> vertices, double epsilon)
-   {
-      for (int i = 0; i < vertices.size(); i++)
-         addVertex(vertices.get(i), epsilon);
-   }
-
-   public void addVertex(double epsilon, double... coordinates)
-   {
-      addVertex(new Vertex3D(coordinates[0], coordinates[1], coordinates[2]), epsilon);
    }
 
    public void addVertex(double x, double y, double z, double epsilon)
