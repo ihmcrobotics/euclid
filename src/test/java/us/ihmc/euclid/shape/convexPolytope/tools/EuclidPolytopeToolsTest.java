@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Random;
@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.Line2D;
@@ -110,7 +110,7 @@ public class EuclidPolytopeToolsTest
             assertEquals(1.0, actual[j].length(), EPSILON);
 
             String errorMessage = "Iteration" + i + ", nPoints: " + numberOfPoints + ", angle: " + expected[j].angle(actual[j]);
-            assertTrue(errorMessage, EuclidGeometryTools.areVector3DsParallel(expected[j], actual[j], 0.30));
+            assertTrue(EuclidGeometryTools.areVector3DsParallel(expected[j], actual[j], 0.30), errorMessage);
          }
       }
    }
@@ -137,7 +137,7 @@ public class EuclidPolytopeToolsTest
             assertTrue(eigenValues.getY() > eigenValues.getZ());
 
             String errorMessage = "Iteration" + i + ", nPoints: " + j + ", angle: " + expectedNormal.angle(actualNormal);
-            assertTrue(errorMessage, EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5));
+            assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5), errorMessage);
          }
       }
    }
