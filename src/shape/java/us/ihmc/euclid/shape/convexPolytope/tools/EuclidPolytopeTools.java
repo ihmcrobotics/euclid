@@ -1,5 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
+
 import java.util.List;
 
 import org.ejml.data.DenseMatrix64F;
@@ -11,6 +13,7 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -323,5 +326,115 @@ public class EuclidPolytopeTools
          covarianceToPack.addM12(covYZ);
          covarianceToPack.addM21(covYZ);
       }
+   }
+
+   public static double computeConvexPolygon3DArea(List<? extends Point3DReadOnly> convexPolygon3D, Vector3DReadOnly normal, int numberOfVertices,
+                                                   boolean clockwiseOrdered, Point3DBasics centroidToPack)
+   {
+      checkNumberOfVertices(convexPolygon3D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+      {
+         if (centroidToPack != null)
+            centroidToPack.setToNaN();
+         return Double.NaN;
+      }
+      else if (numberOfVertices < 3)
+      {
+         if (centroidToPack != null)
+         {
+            centroidToPack.setToZero();
+            for (int i = 0; i < numberOfVertices; i++)
+               centroidToPack.add(convexPolygon3D.get(i));
+            centroidToPack.scale(1.0 / numberOfVertices);
+         }
+         return 0.0;
+      }
+      else
+      {
+         double area = 0.0;
+         double Cx = 0.0;
+         double Cy = 0.0;
+         double Cz = 0.0;
+
+         if (clockwiseOrdered)
+         {
+            for (int i = 0; i < numberOfVertices; i++)
+            {
+               Point3DReadOnly ci = convexPolygon3D.get(i);
+               Point3DReadOnly ciMinus1 = convexPolygon3D.get(previous(i, numberOfVertices));
+
+               double wx = ci.getY() * ciMinus1.getZ() - ci.getZ() * ciMinus1.getY();
+               double wy = ci.getZ() * ciMinus1.getX() - ci.getX() * ciMinus1.getZ();
+               double wz = ci.getX() * ciMinus1.getY() - ci.getY() * ciMinus1.getX();
+               double weight = TupleTools.dot(wx, wy, wz, normal);
+
+               Cx += (ci.getX() + ciMinus1.getX()) * weight;
+               Cy += (ci.getY() + ciMinus1.getY()) * weight;
+               Cz += (ci.getZ() + ciMinus1.getZ()) * weight;
+
+               area += weight;
+            }
+         }
+         else
+         {
+            for (int i = 0; i < numberOfVertices; i++)
+            {
+               Point3DReadOnly ci = convexPolygon3D.get(i);
+               Point3DReadOnly ciPlus1 = convexPolygon3D.get(next(i, numberOfVertices));
+
+               double wx = ci.getY() * ciPlus1.getZ() - ci.getZ() * ciPlus1.getY();
+               double wy = ci.getZ() * ciPlus1.getX() - ci.getX() * ciPlus1.getZ();
+               double wz = ci.getX() * ciPlus1.getY() - ci.getY() * ciPlus1.getX();
+               double weight = TupleTools.dot(wx, wy, wz, normal);
+
+               Cx += (ci.getX() + ciPlus1.getX()) * weight;
+               Cy += (ci.getY() + ciPlus1.getY()) * weight;
+               Cz += (ci.getZ() + ciPlus1.getZ()) * weight;
+
+               area += weight;
+            }
+         }
+
+         area *= 0.5;
+
+         if (centroidToPack != null)
+         {
+            if (area < 1.0e-5)
+            {
+               centroidToPack.set(convexPolygon3D.get(0));
+            }
+            else
+            {
+               double scale = 1.0 / (6.0 * area);
+               Cx *= scale;
+               Cy *= scale;
+               Cz *= scale;
+
+               centroidToPack.set(Cx, Cy, Cz);
+
+               double dot = TupleTools.dot(Cx, Cy, Cz, normal);
+               centroidToPack.scaleAdd(-dot, normal, centroidToPack);
+
+               double average = 0.0;
+
+               for (int i = 0; i < numberOfVertices; i++)
+               {
+                  Point3DReadOnly vertex = convexPolygon3D.get(i);
+                  average += TupleTools.dot(vertex, normal) / numberOfVertices;
+               }
+
+               centroidToPack.scaleAdd(average, normal, centroidToPack);
+            }
+         }
+
+         return area;
+      }
+   }
+
+   private static void checkNumberOfVertices(List<? extends Point3DReadOnly> convexPolygon3D, int numberOfVertices)
+   {
+      if (numberOfVertices < 0 || numberOfVertices > convexPolygon3D.size())
+         throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + convexPolygon3D.size() + "].");
    }
 }

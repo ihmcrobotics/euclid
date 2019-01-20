@@ -14,12 +14,14 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -172,6 +174,50 @@ public class EuclidPolytopeToolsTest
          }
 
          EuclidCoreTestTools.assertMatrix3DEquals(expectedCovariance, actualCovariance, EPSILON * maxValue);
+      }
+   }
+
+   @Test
+   void testComputeConvexPolygon3DArea() throws Exception
+   {
+      Random random = new Random(3534);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Comparing when staying in the XY-plane
+         List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 20);
+         List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
+
+         Point2D centroid2D = new Point2D();
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true, centroid2D);
+         Point3D expectedCentroid3D = new Point3D(centroid2D);
+
+         Point3D actualCentroid3D = new Point3D();
+         double actualArea = EuclidPolytopeTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, Axis.Z, circleBasedConvexPolygon3D.size(), true, actualCentroid3D);
+
+         assertEquals(expectedArea, actualArea, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Applying a transform when switching to 3D
+         List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 20);
+         Point2D centroid2D = new Point2D();
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true, centroid2D);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Vector3D normal = new Vector3D();
+         transform.getRotation().getColumn(2, normal);
+
+         List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).peek(transform::transform).collect(Collectors.toList());
+         
+         Point3D expectedCentroid3D = new Point3D(centroid2D);
+         expectedCentroid3D.applyTransform(transform);
+         
+         Point3D actualCentroid3D = new Point3D();
+         double actualArea = EuclidPolytopeTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, normal, circleBasedConvexPolygon3D.size(), true, actualCentroid3D);
+         
+         assertEquals(expectedArea, actualArea, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
       }
    }
 

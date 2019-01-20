@@ -42,6 +42,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     */
    private final Point3D centroid = new Point3D();
 
+   private double area;
+
    private final BoundingBox3D boundingBox = new BoundingBox3D();
 
    // Temporary variables for calculations
@@ -163,17 +165,15 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
       if (vertices.size() > 3)
       {
-         EuclidPolytopeTools.updateFace3DNormal(vertices, centroid, normal);
+         EuclidPolytopeTools.updateFace3DNormal(vertices, null, normal);
       }
       else
       {
          if (vertices.size() == 3)
             EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
-
-         centroid.setToZero();
-         vertices.forEach(centroid::add);
-         centroid.scale(1.0 / vertices.size());
       }
+
+      area = EuclidPolytopeTools.computeConvexPolygon3DArea(vertices, normal, vertices.size(), true, centroid);
 
       boundingBox.updateToIncludePoint(vertexToAdd);
    }
@@ -267,6 +267,12 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    public Vector3D getNormal()
    {
       return normal;
+   }
+
+   @Override
+   public double getArea()
+   {
+      return area;
    }
 
    @Override

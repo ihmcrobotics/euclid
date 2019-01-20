@@ -30,6 +30,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     */
    Vector3DReadOnly getNormal();
 
+   double getArea();
+
    BoundingBox3DReadOnly getBoundingBox();
 
    /**
