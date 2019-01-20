@@ -271,7 +271,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
 
    /**
     * Compute centroid and area of this polygon. Formula taken from
-    * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
+    * <a href= "https://www.seas.upenn.edu/~sys502/extra_materials/Polygon%20Area%20and%20Centroid.pdf">here</a>.
     */
    public void updateCentroidAndArea()
    {
