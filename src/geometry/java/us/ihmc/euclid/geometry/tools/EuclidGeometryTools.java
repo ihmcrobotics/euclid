@@ -6440,7 +6440,6 @@ public class EuclidGeometryTools
          return 1.0;
       else
          return alpha;
-
    }
 
    /**

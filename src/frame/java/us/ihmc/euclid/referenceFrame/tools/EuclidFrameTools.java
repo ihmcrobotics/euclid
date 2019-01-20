@@ -1001,6 +1001,53 @@ public class EuclidFrameTools
    }
 
    /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query. Not modified.
+    * @param pointY the y-coordinate of the query. Not modified.
+    * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                                           FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeFirstTangent);
+      pointOnPlane.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent);
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param point the query. Not modified.
+    * @param pointOnPlane a point located on the plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane,
+                                                           FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane);
+      point.checkReferenceFrameMatch(planeFirstTangent);
+      point.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent);
+   }
+
+   /**
     * Returns the square of the minimum distance between a point and a given line segment.
     * <p>
     * Edge cases:
@@ -4227,6 +4274,374 @@ public class EuclidFrameTools
    }
 
    /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeNormal, boolean testForAbove)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeNormal);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
+                                                      boolean testForAbove)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane);
+      point.checkReferenceFrameMatch(planeNormal);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, false);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, false);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent, boolean testForAbove)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeFirstTangent);
+      pointOnPlane.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point the coordinates of the query point. Not modified.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *           above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+                                                      FrameVector3DReadOnly planeSecondTangent, boolean testForAbove)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane);
+      point.checkReferenceFrameMatch(planeFirstTangent);
+      point.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+                                               FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeFirstTangent a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+                                               FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+   }
+
+   /**
     * Computes the normal of a plane that is defined by three points.
     * <p>
     * Edge cases:
@@ -5079,6 +5494,66 @@ public class EuclidFrameTools
    }
 
    /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double percentageAlongLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   {
+      point.checkReferenceFrameMatch(pointOnLine);
+      point.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine2D(point, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double percentageAlongLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   {
+      pointOnLine.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine2D(pointX, pointY, pointOnLine, lineDirection);
+   }
+
+   /**
     * Computes a percentage along the line segment representing the location of the projection onto the
     * line segment of the given point. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0}
     * representing {@code lineSegmentStart}, and {@code 1.0} representing {@code lineSegmentEnd}.
@@ -5148,6 +5623,68 @@ public class EuclidFrameTools
       point.checkReferenceFrameMatch(lineSegmentStart);
       point.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.percentageAlongLineSegment2D(point, lineSegmentStart, lineSegmentEnd);
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param point the coordinates of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double percentageAlongLine3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
+   {
+      point.checkReferenceFrameMatch(pointOnLine);
+      point.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine3D(point, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query point.
+    * @param pointY the y-coordinate of the query point.
+    * @param pointZ the z-coordinate of the query point.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double percentageAlongLine3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnLine,
+                                              FrameVector3DReadOnly lineDirection)
+   {
+      pointOnLine.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine3D(pointX, pointY, pointZ, pointOnLine, lineDirection);
    }
 
    /**
