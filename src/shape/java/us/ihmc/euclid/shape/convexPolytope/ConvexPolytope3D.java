@@ -285,7 +285,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          else
          {
             if (firstFace.canObserverSeeFace(vertexToAdd))
-               firstFace.reverseFaceNormal();
+               firstFace.flip();
 
             visibleSilhouetteList.clear();
             HalfEdge3D halfEdge = firstFace.getEdge(0);

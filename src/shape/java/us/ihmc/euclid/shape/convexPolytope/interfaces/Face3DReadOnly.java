@@ -15,13 +15,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 {
    /**
-    * Gets a list of all half edges that constitute the face
-    * 
-    * @return a list of read only references to the half edges
-    */
-   List<? extends HalfEdge3DReadOnly> getEdges();
-
-   /**
     * Gets the centroid of the face
     * 
     * @return read only point object indicating the spatial location of the face centroid
@@ -40,6 +33,13 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    BoundingBox3DReadOnly getBoundingBox();
 
    /**
+    * Gets a list of all half edges that constitute the face
+    * 
+    * @return a list of read only references to the half edges
+    */
+   List<? extends HalfEdge3DReadOnly> getEdges();
+
+   /**
     * Gets a particular half edge that is part of the face
     * 
     * @param index the index of the half edge that is required. Should be less than value returned by
@@ -54,6 +54,11 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    default List<? extends Vertex3DReadOnly> getVertices()
    {
       return getEdges().stream().map(HalfEdge3DReadOnly::getOrigin).collect(Collectors.toList());
+   }
+
+   default Vertex3DReadOnly getVertex(int index)
+   {
+      return getEdge(index).getOrigin();
    }
 
    /**
@@ -85,17 +90,17 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       return false;
    }
 
-   default List<? extends HalfEdge3DReadOnly> lineOfSight(Point3DReadOnly vertex)
+   default List<? extends HalfEdge3DReadOnly> lineOfSight(Point3DReadOnly observer)
    {
       List<HalfEdge3DReadOnly> lineOfSight = new ArrayList<>();
 
-      HalfEdge3DReadOnly currentEdge = lineOfSightStart(vertex);
+      HalfEdge3DReadOnly currentEdge = lineOfSightStart(observer);
 
       for (int i = 0; currentEdge != null && i < getNumberOfEdges(); i++)
       {
          lineOfSight.add(currentEdge);
          currentEdge = currentEdge.getNextEdge();
-         if (!canObserverSeeEdge(vertex, currentEdge))
+         if (!canObserverSeeEdge(observer, currentEdge))
             break;
       }
 
@@ -123,10 +128,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly currentEdge = startEdge;
-      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge);
-      currentEdge = currentEdge.getNextEdge();
+      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPreviousEdge());
 
-      while (currentEdge != startEdge)
+      do
       {
          boolean edgeVisible = canObserverSeeEdge(observer, currentEdge);
 
@@ -136,6 +140,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
          previousEdgeVisible = edgeVisible;
          currentEdge = currentEdge.getNextEdge();
       }
+      while (currentEdge != startEdge);
 
       return null;
    }
@@ -149,19 +154,19 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly currentEdge = startEdge;
-      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge);
-      currentEdge = currentEdge.getNextEdge();
+      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPreviousEdge());
 
-      while (currentEdge != startEdge)
+      do
       {
          boolean edgeVisible = canObserverSeeEdge(observer, currentEdge);
 
          if (previousEdgeVisible && !edgeVisible)
-            return currentEdge;
+            return currentEdge.getPreviousEdge();
 
          previousEdgeVisible = edgeVisible;
          currentEdge = currentEdge.getNextEdge();
       }
+      while (currentEdge != startEdge);
 
       return null;
    }

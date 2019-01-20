@@ -402,6 +402,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
          nextEdge.setPreviousEdge(null);
       if (previousEdge != null)
          previousEdge.setNextEdge(null);
+
       setTwinEdge(null);
       setNextEdge(null);
       setPreviousEdge(null);
@@ -416,7 +417,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * {@code previousHalfEdge} are also updated as its the twin edge. Reference to the {@code face} is
     * not changed
     */
-   public void reverseEdge()
+   public void flip()
    {
       Vertex3D newDestinationVertex = origin;
       setOrigin(destination);

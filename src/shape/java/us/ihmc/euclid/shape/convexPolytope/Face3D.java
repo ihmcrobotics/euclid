@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
@@ -28,9 +29,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class Face3D implements Face3DReadOnly, Clearable, Transformable
 {
-   /**
-    * Unordered list of half edges that bound the face
-    */
    private final List<HalfEdge3D> edges = new ArrayList<>();
 
    /**
@@ -99,7 +97,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
                                                                                      firstEdge.getDestination(), vertexToAdd);
          if (resultingNormal.dot(normal) > 0.0)
          { // Counter-clockwise, need to reverse the ordering.
-            firstEdge.reverseEdge();
+            firstEdge.flip();
             secondEdge.setOrigin(firstEdge.getDestination());
          }
 
@@ -180,12 +178,13 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       boundingBox.updateToIncludePoint(vertexToAdd);
    }
 
-   public void reverseFaceNormal()
+   public void flip()
    {
       for (int i = 0; i < edges.size(); i++)
       {
-         edges.get(i).reverseEdge();
+         edges.get(i).flip();
       }
+      Collections.reverse(edges);
       normal.negate();
    }
 
@@ -199,17 +198,17 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
-   public List<HalfEdge3D> lineOfSight(Point3DReadOnly vertex)
+   public List<HalfEdge3D> lineOfSight(Point3DReadOnly observer)
    {
       List<HalfEdge3D> lineOfSight = new ArrayList<>();
 
-      HalfEdge3D edgeUnderConsideration = lineOfSightStart(vertex);
+      HalfEdge3D edgeUnderConsideration = lineOfSightStart(observer);
 
       for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
       {
          lineOfSight.add(edgeUnderConsideration);
          edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
-         if (!canObserverSeeEdge(vertex, edgeUnderConsideration))
+         if (!canObserverSeeEdge(observer, edgeUnderConsideration))
             break;
       }
 
