@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -30,6 +31,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Face3DTest
 {
@@ -343,6 +345,36 @@ public class Face3DTest
          assertEquals(numberOfVertices, face.getNumberOfEdges());
 
          face.flip();
+
+         List<HalfEdge3D> edges = face.getEdges();
+
+         for (int edgeIndex = 0; edgeIndex < numberOfVertices; edgeIndex++)
+         {
+            int previousIndex = EuclidGeometryPolygonTools.previous(edgeIndex, edges.size());
+            int nextIndex = EuclidGeometryPolygonTools.next(edgeIndex, edges.size());
+
+            HalfEdge3D prevEdge = edges.get(previousIndex);
+            HalfEdge3D nextEdge = edges.get(nextIndex);
+            HalfEdge3D edge = edges.get(edgeIndex);
+
+            assertTrue(edge.getPreviousEdge() == prevEdge);
+            assertTrue(edge.getNextEdge() == nextEdge);
+            assertTrue(edge.getFace() == face);
+
+            assertTrue(prevEdge.getDestination() == edge.getOrigin());
+            assertTrue(nextEdge.getOrigin() == edge.getDestination());
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Now the vertices are shuffled so they're not nicely ordered.
+         int numberOfVertices = 10;
+         Vector3DReadOnly faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         List<Point3D> vertices = EuclidPolytopeRandomTools.nextCircleBasedConvexPolygon3D(random, 1.0, 1.0, numberOfVertices, faceNormal);
+         Collections.shuffle(vertices, random);
+         Face3D face = new Face3D(faceNormal);
+         vertices.forEach(vertex -> face.addVertex(new Vertex3D(vertex), 0.0));
+         assertEquals(numberOfVertices, face.getNumberOfEdges());
 
          List<HalfEdge3D> edges = face.getEdges();
 
