@@ -24,6 +24,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidPolytopeTools
 {
+   // From nVertices - nEdges + nFaces = 2
+   public static int computeConvexPolytopeNumberOfVertices(int numberOfFaces, int numberOfEdges)
+   {
+      return numberOfEdges - numberOfFaces + 2;
+   }
+
    public static Vector3D crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
                                                        Point3DReadOnly lineSegmentEnd2)
    {
