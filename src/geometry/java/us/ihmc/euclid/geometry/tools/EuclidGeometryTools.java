@@ -1002,17 +1002,89 @@ public class EuclidGeometryTools
    }
 
    /**
-    * Compute the area of a triangle defined by its three vertices: a, b, and c. No specific ordering
+    * Computes the area of a triangle defined by its three vertices: a, b, and c. No specific ordering
     * of the vertices is required.
     *
     * @param a first vertex of the triangle. Not modified.
     * @param b second vertex of the triangle. Not modified.
     * @param c third vertex of the triangle. Not modified.
-    * @return the are of the triangle.
+    * @return the area of the triangle.
     */
    public static double triangleArea(Point2DReadOnly a, Point2DReadOnly b, Point2DReadOnly c)
    {
       return Math.abs(0.5 * (a.getX() * (b.getY() - c.getY()) + b.getX() * (c.getY() - a.getY()) + c.getX() * (a.getY() - b.getY())));
+   }
+
+   /**
+    * Computes the area of a triangle defined by its three vertices: a, b, and c. No specific ordering
+    * of the vertices is required.
+    * <p>
+    * This method uses {@link #triangleAreaHeron2(double, double, double)}.
+    * </p>
+    *
+    * @param a first vertex of the triangle. Not modified.
+    * @param b second vertex of the triangle. Not modified.
+    * @param c third vertex of the triangle. Not modified.
+    * @return the area of the triangle.
+    */
+   public static double triangleArea(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c)
+   {
+      return triangleAreaHeron2(a.distanceSquared(b), b.distanceSquared(c), c.distanceSquared(a));
+   }
+
+   /**
+    * Computes the area of a triangle defined by the length of each of its side using Heron's formula:
+    * 
+    * <pre>
+    * s = 0.5(a + b + c)
+    * A = &radic;{s(s - a)(s - b)(s - c)}
+    * </pre>
+    * 
+    * No specific ordering of the arguments is required.
+    * <p>
+    * Note that the method {@link #triangleArea(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)} is
+    * computationally cheaper.
+    * </p>
+    * 
+    * @param lengthA the length of the first side.
+    * @param lengthB the length of the second side.
+    * @param lengthC the length of the third side.
+    * @return the area of the triangle.
+    */
+   public static double triangleAreaHeron1(double lengthA, double lengthB, double lengthC)
+   {
+      double s = 0.5 * (lengthA + lengthB + lengthC);
+      return Math.sqrt(s * (s - lengthA) * (s - lengthB) * (s - lengthC));
+   }
+
+   /**
+    * Computes the area of a triangle defined by the length <b>squared</b> of each of its side using a
+    * derivation from Heron's formula:
+    * 
+    * <pre>
+    * A = 0.25 * &radic;{4(a<sup>2</sup>b<sup>2</sup> + a<sup>2</sup>c<sup>2</sup> + b<sup>2</sup>c<sup>2</sup>) - (a<sup>2</sup> + b<sup>2</sup> + c<sup>2</sup>)<sup>2</sup>}
+    * </pre>
+    * 
+    * No specific ordering of the arguments is required.
+    * <p>
+    * Note that the method {@link #triangleArea(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)} is
+    * computationally cheaper.
+    * </p>
+    * 
+    * @param lengthSquaredA the square of the length of the first side.
+    * @param lengthSquaredB the square of the length of the second side.
+    * @param lengthSquaredC the square of the length of the third side.
+    * @return the area of the triangle.
+    */
+   public static double triangleAreaHeron2(double lengthSquaredA, double lengthSquaredB, double lengthSquaredC)
+   {
+      double areaPt1 = lengthSquaredA * lengthSquaredB;
+      areaPt1 += lengthSquaredA * lengthSquaredC;
+      areaPt1 += lengthSquaredB * lengthSquaredC;
+
+      double areaPt2 = lengthSquaredA + lengthSquaredB + lengthSquaredC;
+
+      return 0.25 * Math.sqrt(4.0 * areaPt1 - areaPt2 * areaPt2);
    }
 
    /**

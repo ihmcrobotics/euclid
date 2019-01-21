@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +20,7 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -1187,6 +1189,46 @@ public class EuclidGeometryToolsTest
 
          // Just an annoying case
          assertEquals(0.0, EuclidGeometryTools.triangleArea(a, a, c), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Compare the methods
+         Point2D a = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D b = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D c = EuclidCoreRandomTools.nextPoint2D(random);
+
+         double lengthA = a.distance(b);
+         double lengthB = b.distance(c);
+         double lengthC = c.distance(a);
+
+         double areaMethod1 = EuclidGeometryTools.triangleArea(a, b, c);
+         double areaMethod2 = EuclidGeometryTools.triangleAreaHeron1(lengthA, lengthB, lengthC);
+         double areaMethod3 = EuclidGeometryTools.triangleAreaHeron1(lengthA, lengthB, lengthC);
+         assertEquals(areaMethod1, areaMethod2, EPSILON);
+         assertEquals(areaMethod1, areaMethod3, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Compare 2D and 3D
+         Point2D a2D = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D b2D = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D c2D = EuclidCoreRandomTools.nextPoint2D(random);
+
+         double expectedArea = EuclidGeometryTools.triangleArea(a2D, b2D, c2D);
+
+         // Go to 3D
+         Point3D a3D = new Point3D(a2D);
+         Point3D b3D = new Point3D(b2D);
+         Point3D c3D = new Point3D(c2D);
+         double actualArea = EuclidGeometryTools.triangleArea(a3D, b3D, c3D);
+         assertEquals(expectedArea, actualArea, EPSILON);
+
+         // Transform the triangle which does not affect its area
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Stream.of(a3D, b3D, c3D).forEach(transform::transform);
+
+         actualArea = EuclidGeometryTools.triangleArea(a3D, b3D, c3D);
+         assertEquals(expectedArea, actualArea, EPSILON);
       }
    }
 
