@@ -132,6 +132,11 @@ public class IcoSphereFactory
          return vertices;
       }
 
+      public int getNumberOfVertices()
+      {
+         return vertices.size();
+      }
+
       public int getNumberOfTriangles()
       {
          return faces.size();

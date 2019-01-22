@@ -112,16 +112,4 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
     * @return string indicating the spatial coordinates for this vertex
     */
    String toString();
-
-   /**
-    * Checks if any of the associated faces for this vertex have been marked.
-    * <p>
-    * Marking is simply a boolean value being set to {@code true} or {@code false} Useful for some
-    * operations that need a temporary list to be stored but you're lazy and don't want to make that
-    * list and look it up all the time
-    * </p>
-    * 
-    * @return {@code true} if the face is not null and marked. Otherwise {@code false}
-    */
-   boolean isAnyFaceMarked();
 }

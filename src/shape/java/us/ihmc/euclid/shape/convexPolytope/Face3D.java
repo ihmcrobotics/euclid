@@ -10,7 +10,6 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -30,6 +29,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class Face3D implements Face3DReadOnly, Clearable, Transformable
 {
    private final List<HalfEdge3D> edges = new ArrayList<>();
+   private final List<Vertex3D> vertices = new ArrayList<>();
 
    /**
     * A vector normal to the plane that this face lies on. Do not access directly since this is updated
@@ -45,9 +45,6 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    private double area;
 
    private final BoundingBox3D boundingBox = new BoundingBox3D();
-
-   // Temporary variables for calculations
-   private boolean marked = false;
 
    public Face3D(Vector3DReadOnly initialGuessNormal)
    {
@@ -89,7 +86,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       else if (edges.size() == 2)
       {
          HalfEdge3D firstEdge = edges.get(0);
-         if (firstEdge.getOrigin().epsilonEquals(vertexToAdd, epsilon) || firstEdge.getDestination().epsilonEquals(vertexToAdd, epsilon))
+         if (firstEdge.distance(vertexToAdd) < epsilon)
             return;
 
          HalfEdge3D secondEdge = edges.get(1);
@@ -161,7 +158,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          currentEdge = currentEdge.getNextEdge();
       }
 
-      List<? extends Vertex3DReadOnly> vertices = getVertices();
+      vertices.clear();
+      edges.forEach(edge -> vertices.add(edge.getOrigin()));
 
       if (vertices.size() > 3)
          EuclidPolytopeTools.updateFace3DNormal(vertices, null, normal);
@@ -234,6 +232,18 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       return (HalfEdge3D) Face3DReadOnly.super.getClosestEdge(point);
    }
 
+   @Override
+   public List<Vertex3D> getVertices()
+   {
+      return vertices;
+   }
+
+   @Override
+   public Vertex3D getVertex(int index)
+   {
+      return vertices.get(index);
+   }
+
    /**
     * {@inheritDoc}
     */
@@ -299,29 +309,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          edges.get(i).setToZero();
       centroid.setToZero();
       normal.setToZero();
-      area = 0.0;;
-   }
-
-   public void mark()
-   {
-      marked = true;
-   }
-
-   public void unmark()
-   {
-      marked = false;
-   }
-
-   @Override
-   public boolean isMarked()
-   {
-      return marked;
-   }
-
-   @Override
-   public boolean isNotMarked()
-   {
-      return !marked;
+      area = 0.0;
    }
 
    @Override

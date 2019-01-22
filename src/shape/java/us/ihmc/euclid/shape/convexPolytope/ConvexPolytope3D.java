@@ -1,7 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import us.ihmc.euclid.Axis;
@@ -10,10 +9,10 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeListener;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -44,24 +43,15 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    private Vector3D tempVector = new Vector3D();
    private Point3D centroid = new Point3D();
-   private final PolytopeListener listener;
 
    public ConvexPolytope3D()
    {
-      listener = null;
-   }
-
-   public ConvexPolytope3D(PolytopeListener listener)
-   {
-      this.listener = listener;
-      this.listener.attachPolytope(this);
    }
 
    public ConvexPolytope3D(ConvexPolytope3DReadOnly polytope)
    {
       set(polytope);
       boundingBoxNeedsUpdating = true;
-      listener = null;
    }
 
    public void getBoundingBox(BoundingBox3D boundingBoxToPack)
@@ -90,7 +80,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       if (getNumberOfFaces() < 2)
       {
-         updateVertices();
          return vertices.size();
       }
       else
@@ -102,30 +91,11 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    @Override
    public List<Vertex3D> getVertices()
    {
-      updateVertices();
       return vertices;
-   }
-
-   private void updateVertices()
-   {
-      unmarkAllFaces();
-      vertices.clear();
-      for (int i = 0; i < faces.size(); i++)
-      {
-         for (int j = 0; j < faces.get(i).getNumberOfEdges(); j++)
-         {
-            if (!faces.get(i).getEdge(j).getOrigin().isAnyFaceMarked())
-            {
-               vertices.add(faces.get(i).getEdge(j).getOrigin());
-            }
-         }
-         faces.get(i).mark();
-      }
    }
 
    public Vertex3D getVertex(int index)
    {
-      updateVertices();
       return vertices.get(index);
    }
 
@@ -189,7 +159,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    public void applyTransform(Transform transform)
    {
       // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
-      updateVertices();
       for (int i = 0; i < vertices.size(); i++)
          vertices.get(i).applyTransform(transform);
       boundingBoxNeedsUpdating = true;
@@ -199,16 +168,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    public void applyInverseTransform(Transform transform)
    {
       // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
-      updateVertices();
       for (int i = 0; i < vertices.size(); i++)
          vertices.get(i).applyInverseTransform(transform);
       boundingBoxNeedsUpdating = true;
-   }
-
-   private void unmarkAllFaces()
-   {
-      for (int i = 0; i < faces.size(); i++)
-         faces.get(i).unmark();
    }
 
    public void addVertex(double x, double y, double z, double epsilon)
@@ -218,7 +180,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    public void addVertex(Point3D vertexToAdd, double epsilon)
    {
-      addVertex(new Vertex3D(vertexToAdd), epsilon);
+      Vertex3D vertex = new Vertex3D(vertexToAdd);
+      addVertex(vertex, epsilon);
    }
 
    /**
@@ -238,19 +201,22 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          newFace.addVertex(vertexToAdd, epsilon);
          faces.add(newFace);
          boundingBoxNeedsUpdating = true;
-         updateListener();
+         vertices.clear();
+         faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
          return;
       }
       else if (faces.size() == 1)
       {
          Face3D firstFace = faces.get(0);
 
-         if (firstFace.isPointInFacePlane(vertexToAdd, epsilon))
+         if (firstFace.getNumberOfEdges() <= 2)
+         {
+            firstFace.addVertex(vertexToAdd, epsilon);
+         }
+         else if (firstFace.isPointInFacePlane(vertexToAdd, epsilon))
          {
             if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
                firstFace.addVertex(vertexToAdd, epsilon);
-            updateListener();
-            return;
          }
          else
          {
@@ -259,75 +225,69 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
             visibleSilhouetteList.clear();
             HalfEdge3D halfEdge = firstFace.getEdge(0);
-            if (listener != null)
-               listener.udpateVisibleEdgeSeed(halfEdge);
 
             for (int i = 0; i < firstFace.getNumberOfEdges(); i++)
             {
                visibleSilhouetteList.add(halfEdge);
                halfEdge = halfEdge.getPreviousEdge();
             }
-            if (listener != null)
-               listener.updateVisibleSilhouette(visibleSilhouetteList);
 
             onFaceList.clear();
             createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
          }
+
          boundingBoxNeedsUpdating = true;
-         updateListener();
+         vertices.clear();
+         faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
          return;
-      }
-
-      Face3D visibleFaceSeed = getVisibleFaces(visibleFaces, vertexToAdd, epsilon);
-      if (visibleFaces.isEmpty())
-      {
-         updateListener();
-         return;
-      }
-      getFacesWhichPointIsOn(vertexToAdd, onFaceList, epsilon);
-
-      getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
-      HalfEdge3D firstHalfEdgeForSilhouette = null;
-      if (listener != null)
-      {
-         listener.updateOnFaceList(onFaceList);
-         listener.updateVisibleFaceList(Arrays.asList(visibleFaceSeed));
-      }
-      if (onFaceList.size() > 0)
-      {
-         if (checkIsInteriorPointOf(onFaceList, vertexToAdd, epsilon))
-            return;
-         HalfEdge3D firstVisibleEdge = getFirstVisibleEdgeFromOnFaceList(onFaceList, visibleFaces); //onFaceList.get(0).getFirstVisibleEdge(vertexToAdd);
-         if (firstVisibleEdge == null)
-            return;
-         firstHalfEdgeForSilhouette = firstVisibleEdge.getTwinEdge();
       }
       else
       {
-         firstHalfEdgeForSilhouette = getSeedEdgeForSilhouetteCalculation(visibleFaces, silhouetteFaces.get(0));
+         getVisibleFaces(visibleFaces, vertexToAdd, epsilon);
+
+         if (visibleFaces.isEmpty())
+         {
+            return;
+         }
+         getFacesWhichPointIsOn(vertexToAdd, onFaceList, epsilon);
+
+         getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
+         HalfEdge3D firstHalfEdgeForSilhouette = null;
+
+         if (onFaceList.size() > 0)
+         {
+            if (checkIsInteriorPointOf(onFaceList, vertexToAdd, epsilon))
+               return;
+            HalfEdge3D firstVisibleEdge = getFirstVisibleEdgeFromOnFaceList(onFaceList, visibleFaces);
+            if (firstVisibleEdge == null)
+               return;
+            firstHalfEdgeForSilhouette = firstVisibleEdge.getTwinEdge();
+         }
+         else
+         {
+            firstHalfEdgeForSilhouette = getSeedEdgeForSilhouetteCalculation(visibleFaces, silhouetteFaces.get(0));
+         }
+
+         if (firstHalfEdgeForSilhouette == null)
+            return;
+
+         getVisibleSilhouetteUsingSeed(visibleSilhouetteList, firstHalfEdgeForSilhouette, visibleFaces);
+
+         if (visibleSilhouetteList.isEmpty())
+            return;
+
+         removeFaces(nonSilhouetteFaces);
+         removeFaces(silhouetteFaces);
+         createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
+
+         boundingBoxNeedsUpdating = true;
+         vertices.clear();
+         faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
       }
-      if (listener != null)
-         listener.udpateVisibleEdgeSeed(firstHalfEdgeForSilhouette);
-      if (firstHalfEdgeForSilhouette == null)
-      {
-         return;
-      }
-      getVisibleSilhouetteUsingSeed(visibleSilhouetteList, firstHalfEdgeForSilhouette, visibleFaces);
-      if (listener != null)
-         listener.updateVisibleSilhouette(visibleSilhouetteList);
-      if (visibleSilhouetteList.isEmpty())
-      {
-         updateListener();
-         return;
-      }
-      removeFaces(nonSilhouetteFaces);
-      removeFaces(silhouetteFaces);
-      createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
-      boundingBoxNeedsUpdating = true;
-      updateListener();
+
    }
 
-   private boolean checkIsInteriorPointOf(ArrayList<Face3D> onFaceList, Point3DReadOnly vertexToAdd, double epsilon)
+   private boolean checkIsInteriorPointOf(List<Face3D> onFaceList, Point3DReadOnly vertexToAdd, double epsilon)
    {
       for (int i = 0; i < onFaceList.size(); i++)
       {
@@ -337,7 +297,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return false;
    }
 
-   private HalfEdge3D getFirstVisibleEdgeFromOnFaceList(ArrayList<Face3D> onFaceList, ArrayList<Face3D> visibleFaces)
+   private HalfEdge3D getFirstVisibleEdgeFromOnFaceList(List<Face3D> onFaceList, List<Face3D> visibleFaces)
    {
       Face3D firstFace = onFaceList.get(0);
       HalfEdge3D edgeUnderConsideration = firstFace.getEdge(0);
@@ -351,14 +311,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
             edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
       }
       return null;
-   }
-
-   public void updateListener()
-   {
-      if (listener != null)
-      {
-         listener.updateAll();
-      }
    }
 
    public void getSilhouetteFaces(List<Face3D> silhouetteFacesToPack, List<Face3D> nonSilhouetteFacesToPack, List<Face3D> visibleFaceList)
@@ -424,12 +376,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
       if (count == numberOfEdges && faces.size() > 1)
       {
-         if (listener != null)
-         {
-            listener.updateOnFaceList(onFaceList);
-            listener.updateVisibleFaceList(visibleFaces);
-            listener.updateVisibleSilhouette(visibleSilhouetteToPack);
-         }
          visibleSilhouetteToPack.clear();
       }
    }
@@ -448,33 +394,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
       return seedEdge;
    }
-
-   //   public S getSeedEdgeForSilhouetteCalculation(List<U> silhouetteFaceList)
-   //   {
-   //      U seedFaceCandidate = silhouetteFaceList.get(0);
-   //      S seedEdgeCandidate = seedFaceCandidate.getEdge(0);
-   //      for (int i = 0; i < seedFaceCandidate.getNumberOfEdges(); i++)
-   //      {
-   //         if (silhouetteFaceList.contains(seedEdgeCandidate.getTwinHalfEdge().getFace())
-   //               && !silhouetteFaceList.contains(seedEdgeCandidate.getNextHalfEdge().getTwinHalfEdge().getFace()))
-   //            break;
-   //         seedEdgeCandidate = seedEdgeCandidate.getNextHalfEdge();
-   //      }
-   //      seedEdgeCandidate = seedEdgeCandidate.getNextHalfEdge();
-   //      return seedEdgeCandidate;
-   //   }
-
-   //   private void createFacesFromVisibleSilhouette(PolytopeVertex vertexToAdd)
-   //   {
-   //      U firstNewFace = createFaceFromTwinEdgeAndVertex(vertexToAdd, visibleSilhouetteList.get(0));
-   //      twinEdges(visibleSilhouetteList.get(0), firstNewFace.getEdge(0));
-   //      for (int i = 1; i < visibleSilhouetteList.size(); i++)
-   //      {
-   //         U newFace = createFaceFromTwinEdgeAndVertex(vertexToAdd, visibleSilhouetteList.get(i));
-   //         twinEdges(visibleSilhouetteList.get(i - 1).getTwinHalfEdge().getNextHalfEdge(), newFace.getEdge(0).getPreviousHalfEdge());
-   //      }
-   //      twinEdges(visibleSilhouetteList.get(visibleSilhouetteList.size() - 1).getTwinHalfEdge().getNextHalfEdge(), firstNewFace.getEdge(0).getPreviousHalfEdge());
-   //   }
 
    private void createFacesFromVisibleSilhouetteAndOnFaceList(List<HalfEdge3D> silhouetteEdges, List<Face3D> onFaceList, Vertex3D vertexToAdd, double epsilon)
    {
@@ -523,8 +442,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    private void twinEdges(HalfEdge3D halfEdge1, HalfEdge3D halfEdge2)
    {
-      if (halfEdge1.getOrigin() != halfEdge2.getDestination() && halfEdge1.getDestination() != halfEdge2.getOrigin())
-         System.out.println("This should print \n\n\n\n");
+      assert halfEdge1.getOrigin() == halfEdge2.getDestination() && halfEdge1.getDestination() == halfEdge2.getOrigin(); // TODO
       halfEdge1.setTwinEdge(halfEdge2);
       halfEdge2.setTwinEdge(halfEdge1);
    }
@@ -550,38 +468,26 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
    }
 
+   /*
+    * TODO: The visibility factor is based on the distance from the query to the face's support plane.
+    * Maybe, a better metric is the consideration of the angle at which the face is seen:
+    * atan(face.distanceToPlane(query) / face.distance(face.orthogonalProjectionToPlane(query)). As a
+    * result, the farther the observer is away from the face, the greater the distance from the face's
+    * support plane has to be conserve the same visibility factor.
+    * 
+    * However, the way of computing the least visible face may not even matter.
+    */
    public Face3D getVisibleFaces(List<Face3D> faceReferencesToPack, Point3DReadOnly vertexUnderConsideration, double epsilon)
    {
-      Face3D leastVisibleFace = null;
-      double minimumVisibilityProduct = Double.POSITIVE_INFINITY;
       faceReferencesToPack.clear();
-      for (int i = 0; i < faces.size(); i++)
-      {
-         double visibilityProduct = faces.get(i).signedDistanceToPlane(vertexUnderConsideration);
-         if (visibilityProduct > epsilon)
-         {
-            faceReferencesToPack.add(faces.get(i));
-            if (visibilityProduct < minimumVisibilityProduct)
-            {
-               leastVisibleFace = faces.get(i);
-               minimumVisibilityProduct = visibilityProduct;
-            }
-         }
-      }
-      return leastVisibleFace;
+      faceReferencesToPack.addAll(EuclidPolytopeTools.getVisibleFaces(faces, vertexUnderConsideration, epsilon));
+      return faceReferencesToPack.isEmpty() ? null : faceReferencesToPack.get(0);
    }
 
    public void getFacesWhichPointIsOn(Point3DReadOnly vertexUnderConsideration, List<Face3D> faceReferenceToPack, double epsilon)
    {
       faceReferenceToPack.clear();
-
-      for (int i = 0; i < faces.size(); i++)
-      {
-         if (faces.get(i).isPointInFacePlane(vertexUnderConsideration, epsilon))
-         {
-            faceReferenceToPack.add(faces.get(i));
-         }
-      }
+      faceReferenceToPack.addAll(EuclidPolytopeTools.getInPlaneFaces(faces, vertexUnderConsideration, epsilon));
    }
 
    public void removeFace(Face3D faceToRemove)
@@ -700,43 +606,30 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       if (faces.size() == 0)
          return null;
-      else if (faces.size() == 1)
-      {
+      if (faces.size() == 1)
          return faces.get(0);
-      }
 
-      unmarkAllFaces();
-      Face3D currentBestFace = faces.get(0);
-      Face3D faceUnderConsideration = currentBestFace;
-      double minDistance = faceUnderConsideration.distance(point);
-      faceUnderConsideration.mark();
+      Face3D closestFace = null;
+      double minDistance = Double.POSITIVE_INFINITY;
 
-      for (int i = 0; i < faces.size(); i++)
+      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
       {
-         for (int j = 0; j < currentBestFace.getNumberOfEdges(); j++)
+         Face3D face = faces.get(faceIndex);
+         double distance = face.distance(point);
+
+         if (distance < minDistance)
          {
-            if (currentBestFace.getNeighbouringFace(j) != null && currentBestFace.getNeighbouringFace(j).isNotMarked())
-            {
-               double distance = currentBestFace.getNeighbouringFace(j).distance(point);
-               if (distance < minDistance)
-               {
-                  minDistance = distance;
-                  faceUnderConsideration = currentBestFace.getNeighbouringFace(j);
-               }
-               currentBestFace.getNeighbouringFace(j).mark();
-            }
+            closestFace = face;
+            minDistance = distance;
          }
-         if (faceUnderConsideration == currentBestFace)
-            break;
-         else
-            currentBestFace = faceUnderConsideration;
+         // TODO Consider doing a 
       }
-      return currentBestFace;
+
+      return closestFace;
    }
 
    private void updateCentroid()
    {
-      updateVertices();
       centroid.setToZero();
       for (int i = 0; i < vertices.size(); i++)
          centroid.add(vertices.get(i));

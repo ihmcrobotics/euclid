@@ -115,20 +115,6 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
       return getAssociatedEdges().size();
    }
 
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public boolean isAnyFaceMarked()
-   {
-      boolean isMarked = false;
-      for (int i = 0; !isMarked && i < associatedEdges.size(); i++)
-      {
-         isMarked |= associatedEdges.get(i).getFace().isMarked();
-      }
-      return isMarked;
-   }
-
    @Override
    public void setX(double x)
    {

@@ -332,20 +332,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    }
 
    /**
-    * Check if the face is marked
-    * 
-    * @return {@code true} if marked, else {@code false}
-    */
-   boolean isMarked();
-
-   /**
-    * Check if the face is not marked
-    * 
-    * @return {@code true} if not marked, else {@code false}
-    */
-   boolean isNotMarked();
-
-   /**
     * Returns the shortest distance to the point specified
     * 
     * @param point the point to which the distance is required

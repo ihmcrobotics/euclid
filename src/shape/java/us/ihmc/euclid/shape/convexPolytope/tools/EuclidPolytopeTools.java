@@ -2,7 +2,10 @@ package us.ihmc.euclid.shape.convexPolytope.tools;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
@@ -12,6 +15,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -442,5 +446,57 @@ public class EuclidPolytopeTools
    {
       if (numberOfVertices < 0 || numberOfVertices > convexPolygon3D.size())
          throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + convexPolygon3D.size() + "].");
+   }
+
+   /**
+    * Filters the given {@code faces} to only return the ones that the given {@code observer} can see.
+    * <p>
+    * The least visible face is the first element of the returned list. Besides the latter, the
+    * returned list follows no particular order.
+    * </p>
+    * 
+    * @param faces the list of faces to be tested. Not modified.
+    * @param observer the location of the observer looking at the faces. Not modified.
+    * @param visibilityThreshold the minimum distance between the observer and a face's plane before
+    *           the face is consider visible. When negative, the observer can be below the face's plane
+    *           and still be able to see the face.
+    * @return the list of visible faces with in first position the least visible face.
+    */
+   public static <F extends Face3DReadOnly> List<F> getVisibleFaces(List<F> faces, Point3DReadOnly observer, double visibilityThreshold)
+   {
+      List<F> visibleFaces = new ArrayList<>();
+
+      int leastVisibleFaceIndex = -1;
+      double minimumDistance = Double.POSITIVE_INFINITY;
+
+      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
+      {
+         F face = faces.get(faceIndex);
+
+         double signedDistance = face.signedDistanceToPlane(observer);
+
+         if (signedDistance <= visibilityThreshold)
+            continue;
+
+         if (signedDistance < minimumDistance)
+         {
+            leastVisibleFaceIndex = visibleFaces.size();
+            minimumDistance = signedDistance;
+         }
+
+         visibleFaces.add(face);
+      }
+
+      if (!visibleFaces.isEmpty())
+      { // Moving the least visible to first position
+         Collections.swap(visibleFaces, 0, leastVisibleFaceIndex);
+      }
+
+      return visibleFaces;
+   }
+
+   public static <F extends Face3DReadOnly> List<F> getInPlaneFaces(List<F> faces, Point3DReadOnly query, double distanceThreshold)
+   {
+      return faces.stream().filter(face -> face.isPointInFacePlane(query, distanceThreshold)).collect(Collectors.toList());
    }
 }

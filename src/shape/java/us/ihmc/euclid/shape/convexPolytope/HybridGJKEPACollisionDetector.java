@@ -2,7 +2,6 @@ package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.PolytopeListener;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -55,7 +54,6 @@ public class HybridGJKEPACollisionDetector
 
    private Vector3D previousSupportVectorDirection = new Vector3D();
    private final int iterations = 1000;
-   private final PolytopeListener listener;
 
    public void setSupportVectorDirection(Vector3DReadOnly vectorToSet)
    {
@@ -80,8 +78,6 @@ public class HybridGJKEPACollisionDetector
    public void setSimplex(SimplexPolytope3D simplex)
    {
       this.simplex = simplex;
-      if (listener != null)
-         listener.attachPolytope(getSimplex());
    }
 
    public void setPolytopeA(ConvexPolytope3DReadOnly polytopeA)
@@ -104,11 +100,6 @@ public class HybridGJKEPACollisionDetector
       return epsilon;
    }
 
-   public HybridGJKEPACollisionDetector(PolytopeListener listener)
-   {
-      this(null, defaultCollisionEpsilon, listener);
-   }
-
    public HybridGJKEPACollisionDetector()
    {
       this(null, defaultCollisionEpsilon);
@@ -126,14 +117,8 @@ public class HybridGJKEPACollisionDetector
 
    public HybridGJKEPACollisionDetector(SimplexPolytope3D simplex, double epsilon)
    {
-      this(simplex, epsilon, null);
-   }
-
-   public HybridGJKEPACollisionDetector(SimplexPolytope3D simplex, double epsilon, PolytopeListener listener)
-   {
       setSimplex(simplex);
       setEpsilon(epsilon);
-      this.listener = listener;
    }
 
    public boolean checkCollision()
@@ -151,8 +136,6 @@ public class HybridGJKEPACollisionDetector
 
       for (int i = 0; i < iterations; i++)
       {
-         updateListeners();
-
          Vertex3DReadOnly supportingPolytopeVertexA = polytopeA.getSupportingVertex(supportVectorDirection);
          Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingVertex(supportVectorDirectionNegative);
          simplex.addVertex(supportingPolytopeVertexA, supportingPolytopeVertexB);
@@ -168,12 +151,6 @@ public class HybridGJKEPACollisionDetector
             previousSupportVectorDirection.set(supportVectorDirection);
       }
       return false;
-   }
-
-   private void updateListeners()
-   {
-      if (listener != null)
-         listener.updateAll();
    }
 
    public void runEPAExpansion()
