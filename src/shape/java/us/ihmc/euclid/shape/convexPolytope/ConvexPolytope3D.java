@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import us.ihmc.euclid.Axis;
@@ -12,6 +13,7 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DFactories;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -360,7 +362,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       getVisibleSilhouetteUsingSeed(visibleSilhouetteToPack, firstHalfEdgeForSilhouette, visibleFaces);
    }
 
-   public void getVisibleSilhouetteUsingSeed(List<HalfEdge3D> visibleSilhouetteToPack, HalfEdge3D seedHalfEdge, List<Face3D> silhouetteFaceList)
+   public void getVisibleSilhouetteUsingSeed(List<HalfEdge3D> visibleSilhouetteToPack, HalfEdge3D seedHalfEdge, Collection<Face3D> silhouetteFaceList)
    {
       HalfEdge3D halfEdgeUnderConsideration = seedHalfEdge;
       visibleSilhouetteToPack.clear();
@@ -406,6 +408,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    private void createFacesFromVisibleSilhouetteAndOnFaceList(List<HalfEdge3D> silhouetteEdges, List<Face3D> onFaceList, Vertex3D vertexToAdd, double epsilon)
    {
       HalfEdge3D previousLeadingEdge = null, trailingEdge = null;
+
       if (onFaceList.contains(silhouetteEdges.get(0).getFace()))
       {
          previousLeadingEdge = silhouetteEdges.get(0).getFace().lineOfSightStart(vertexToAdd);
@@ -424,6 +427,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          previousLeadingEdge = firstFace.getEdge(0).getNextEdge();
          trailingEdge = firstFace.getEdge(0).getPreviousEdge();
       }
+
       for (int i = 1; i < silhouetteEdges.size(); i++)
       {
          if (onFaceList.contains(silhouetteEdges.get(i).getFace()))
@@ -457,14 +461,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    private Face3D createFaceFromTwinEdgeAndVertex(Vertex3D vertex, HalfEdge3D twinEdge, double epsilon)
    {
-      Vector3D initialNormal = new Vector3D();
-      initialNormal.sub(vertex, centroid);
-      Face3D newFace = new Face3D(initialNormal);
+      Face3D newFace = ConvexPolytope3DFactories.newFace3DFromVertexAndTwinEdge(centroid, vertex, twinEdge, epsilon);
       faces.add(newFace);
-      newFace.addVertex(twinEdge.getDestination(), epsilon);
-      newFace.addVertex(twinEdge.getOrigin(), epsilon);
-      newFace.addVertex(vertex, epsilon);
-      twinEdges(newFace.getEdge(0), twinEdge);
       return newFace;
    }
 
