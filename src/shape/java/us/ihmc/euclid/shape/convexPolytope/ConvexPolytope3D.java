@@ -58,15 +58,17 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return boundingBox;
    }
 
-   private void updateBoundingBox()
+   @Override
+   public int getNumberOfFaces()
    {
-      boundingBox.setToNaN();
-      if (faces.isEmpty())
-         return;
-      boundingBox.set(faces.get(0).getBoundingBox());
+      return faces.size();
+   }
 
-      for (int faceIndex = 1; faceIndex < faces.size(); faceIndex++)
-         boundingBox.combine(faces.get(faceIndex).getBoundingBox());
+   @Override
+   public int getNumberOfEdges()
+   {
+      updateEdges();
+      return edges.size() / 2;
    }
 
    @Override
@@ -83,53 +85,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    }
 
    @Override
-   public List<Vertex3D> getVertices()
+   public Face3D getFace(int index)
    {
-      return vertices;
-   }
-
-   public Vertex3D getVertex(int index)
-   {
-      return vertices.get(index);
-   }
-
-   @Override
-   public int getNumberOfEdges()
-   {
-      updateEdges();
-      return edges.size() / 2;
-   }
-
-   @Override
-   public List<HalfEdge3D> getEdges()
-   {
-      updateEdges();
-      return edges;
-   }
-
-   public HalfEdge3D getEdge(int index)
-   {
-      updateEdges();
-      return edges.get(index);
-   }
-
-   private void updateEdges()
-   {
-      edges.clear();
-      for (int i = 0; i < faces.size(); i++)
-      {
-         List<HalfEdge3D> faceEdgeList = faces.get(i).getEdges();
-         for (int j = 0; j < faceEdgeList.size(); j++)
-         {
-            edges.add(faceEdgeList.get(j));
-         }
-      }
-   }
-
-   @Override
-   public int getNumberOfFaces()
-   {
-      return faces.size();
+      return faces.get(index);
    }
 
    @Override
@@ -138,10 +96,27 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return faces;
    }
 
-   @Override
-   public Face3D getFace(int index)
+   public HalfEdge3D getEdge(int index)
    {
-      return faces.get(index);
+      return edges.get(index);
+   }
+
+   @Override
+   public List<HalfEdge3D> getEdges()
+   {
+      return edges;
+   }
+
+   @Override
+   public Vertex3D getVertex(int index)
+   {
+      return vertices.get(index);
+   }
+
+   @Override
+   public List<Vertex3D> getVertices()
+   {
+      return vertices;
    }
 
    public Vector3DReadOnly getFaceNormalAt(Point3DReadOnly point)
@@ -196,9 +171,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          Face3D newFace = new Face3D(Axis.Z);
          newFace.addVertex(vertexToAdd, epsilon);
          faces.add(newFace);
+         updateEdges();
+         updateVertices();
          updateBoundingBox();
-         vertices.clear();
-         faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
          return;
       }
       else if (faces.size() == 1)
@@ -232,9 +207,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
             createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
          }
 
+         updateEdges();
+         updateVertices();
          updateBoundingBox();
-         vertices.clear();
-         faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
          return;
       }
       else
@@ -276,11 +251,33 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          removeFaces(silhouetteFaces);
          createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
 
+         updateEdges();
+         updateVertices();
          updateBoundingBox();
-         vertices.clear();
-         faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
       }
+   }
 
+   private void updateVertices()
+   {
+      vertices.clear();
+      faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
+   }
+
+   private void updateEdges()
+   {
+      edges.clear();
+      faces.stream().flatMap(face -> face.getEdges().stream()).distinct().forEach(edges::add);
+   }
+
+   private void updateBoundingBox()
+   {
+      boundingBox.setToNaN();
+      if (faces.isEmpty())
+         return;
+      boundingBox.set(faces.get(0).getBoundingBox());
+
+      for (int faceIndex = 1; faceIndex < faces.size(); faceIndex++)
+         boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
    private boolean checkIsInteriorPointOf(List<Face3D> onFaceList, Point3DReadOnly vertexToAdd, double epsilon)
@@ -617,7 +614,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
             closestFace = face;
             minDistance = distance;
          }
-         // TODO Consider doing a 
+         // TODO Consider doing a
       }
 
       return closestFace;

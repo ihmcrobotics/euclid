@@ -10,11 +10,49 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simplex3D
 {
    /**
+    * Returns the number of vertices that are in the polytope
+    * 
+    * @return integer number of vertices in the polytope
+    */
+   int getNumberOfVertices();
+
+   /**
+    * Returns the number of edge that are part of the polytope Note: number of edges is half the number
+    * of half edges
+    * 
+    * @return integer number of edges in the face
+    */
+   int getNumberOfEdges();
+
+   /**
+    * Returns the number of face that are constitute the polytope
+    * 
+    * @return integer number of faces
+    */
+   int getNumberOfFaces();
+
+   /**
+    * Gets a specified face of polytope
+    * 
+    * @param index the index of the polytope. Should be smaller than {@code getNumberOfFaces()}
+    * @return
+    */
+   default Face3DReadOnly getFace(int index)
+   {
+      return getFaces().get(index);
+   }
+
+   /**
     * Get a list of faces that constitute the polytope
     * 
     * @return a list of read only references to the faces of the polytope
     */
    List<? extends Face3DReadOnly> getFaces();
+
+   default HalfEdge3DReadOnly getEdge(int index)
+   {
+      return getEdges().get(index);
+   }
 
    /**
     * Get a list of half edges that are part of this polytope. List will contain the half edge and its
@@ -23,6 +61,11 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     * @return a list of read only references to the half edges that make up the faces of this polytope
     */
    List<? extends HalfEdge3DReadOnly> getEdges();
+
+   default Vertex3DReadOnly getVertex(int index)
+   {
+      return getVertices().get(index);
+   }
 
    /**
     * Get a list of vertices that are part of this polytope. List does not contain any repetitions
@@ -54,36 +97,6 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
             return false;
       return true;
    }
-
-   /**
-    * Returns the number of vertices that are in the polytope
-    * 
-    * @return integer number of vertices in the polytope
-    */
-   int getNumberOfVertices();
-
-   /**
-    * Returns the number of edge that are part of the polytope Note: number of edges is half the number
-    * of half edges
-    * 
-    * @return integer number of edges in the face
-    */
-   int getNumberOfEdges();
-
-   /**
-    * Returns the number of face that are constitute the polytope
-    * 
-    * @return integer number of faces
-    */
-   int getNumberOfFaces();
-
-   /**
-    * Gets a specified face of polytope
-    * 
-    * @param index the index of the polytope. Should be smaller than {@code getNumberOfFaces()}
-    * @return
-    */
-   Face3DReadOnly getFace(int index);
 
    default boolean equals(ConvexPolytope3DReadOnly other)
    {
