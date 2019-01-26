@@ -5,6 +5,7 @@ import java.util.List;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -33,7 +34,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    /**
     * Bounding box for the polytope
     */
-   private boolean boundingBoxNeedsUpdating = false;
    private final BoundingBox3D boundingBox = new BoundingBox3D();
    private final ArrayList<Face3D> visibleFaces = new ArrayList<>();
    private final ArrayList<Face3D> silhouetteFaces = new ArrayList<>();
@@ -51,17 +51,11 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    public ConvexPolytope3D(ConvexPolytope3DReadOnly polytope)
    {
       set(polytope);
-      boundingBoxNeedsUpdating = true;
    }
 
-   public void getBoundingBox(BoundingBox3D boundingBoxToPack)
+   public BoundingBox3DReadOnly getBoundingBox()
    {
-      if (boundingBoxNeedsUpdating)
-      {
-         updateBoundingBox();
-         boundingBoxNeedsUpdating = false;
-      }
-      boundingBoxToPack.set(boundingBox);
+      return boundingBox;
    }
 
    private void updateBoundingBox()
@@ -161,7 +155,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
       for (int i = 0; i < vertices.size(); i++)
          vertices.get(i).applyTransform(transform);
-      boundingBoxNeedsUpdating = true;
+      updateBoundingBox();
+      // FIXME this method introduces inconsistency in Face3D.
    }
 
    @Override
@@ -170,7 +165,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
       for (int i = 0; i < vertices.size(); i++)
          vertices.get(i).applyInverseTransform(transform);
-      boundingBoxNeedsUpdating = true;
+      updateBoundingBox();
+      // FIXME this method introduces inconsistency in Face3D.
    }
 
    public void addVertex(double x, double y, double z, double epsilon)
@@ -200,7 +196,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          Face3D newFace = new Face3D(Axis.Z);
          newFace.addVertex(vertexToAdd, epsilon);
          faces.add(newFace);
-         boundingBoxNeedsUpdating = true;
+         updateBoundingBox();
          vertices.clear();
          faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
          return;
@@ -236,7 +232,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
             createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
          }
 
-         boundingBoxNeedsUpdating = true;
+         updateBoundingBox();
          vertices.clear();
          faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
          return;
@@ -280,7 +276,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          removeFaces(silhouetteFaces);
          createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
 
-         boundingBoxNeedsUpdating = true;
+         updateBoundingBox();
          vertices.clear();
          faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
       }
@@ -473,9 +469,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
     * Maybe, a better metric is the consideration of the angle at which the face is seen:
     * atan(face.distanceToPlane(query) / face.distance(face.orthogonalProjectionToPlane(query)). As a
     * result, the farther the observer is away from the face, the greater the distance from the face's
-    * support plane has to be conserve the same visibility factor.
-    * 
-    * However, the way of computing the least visible face may not even matter.
+    * support plane has to be conserve the same visibility factor. However, the way of computing the
+    * least visible face may not even matter.
     */
    public Face3D getVisibleFaces(List<Face3D> faceReferencesToPack, Point3DReadOnly vertexUnderConsideration, double epsilon)
    {
