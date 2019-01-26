@@ -72,98 +72,111 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
     * @param epsilon
     * @return
     */
-   public void addVertex(Vertex3D vertexToAdd, double epsilon)
+   public boolean addVertex(Vertex3D vertexToAdd, double epsilon)
    {
+      boolean isPolytopeModified;
+
       if (faces.size() == 0)
-      {
-         // Polytope is empty. Creating face and adding the vertex
-         Face3D newFace = new Face3D(Axis.Z);
-         newFace.addVertex(vertexToAdd, epsilon);
-         faces.add(newFace);
-         updateEdges();
-         updateVertices();
-         updateBoundingBox();
-         return;
-      }
+         isPolytopeModified = handleNoFaceCase(vertexToAdd, epsilon);
       else if (faces.size() == 1)
+         isPolytopeModified = handleSingleFaceCase(vertexToAdd, epsilon);
+      else
+         isPolytopeModified = handleMultipleFaceCase(vertexToAdd, epsilon);
+
+      if (isPolytopeModified)
       {
-         Face3D firstFace = faces.get(0);
-
-         if (firstFace.getNumberOfEdges() <= 2)
-         {
-            firstFace.addVertex(vertexToAdd, epsilon);
-         }
-         else if (firstFace.isPointInFacePlane(vertexToAdd, epsilon))
-         {
-            if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
-               firstFace.addVertex(vertexToAdd, epsilon);
-         }
-         else
-         {
-            if (firstFace.canObserverSeeFace(vertexToAdd))
-               firstFace.flip();
-
-            visibleSilhouetteList.clear();
-            HalfEdge3D halfEdge = firstFace.getEdge(0);
-
-            for (int i = 0; i < firstFace.getNumberOfEdges(); i++)
-            {
-               visibleSilhouetteList.add(halfEdge);
-               halfEdge = halfEdge.getPreviousEdge();
-            }
-
-            onFaceList.clear();
-            createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
-         }
-
          updateEdges();
          updateVertices();
          updateBoundingBox();
-         return;
+      }
+
+      return isPolytopeModified;
+   }
+
+   private boolean handleNoFaceCase(Vertex3D vertexToAdd, double epsilon)
+   {
+      // Polytope is empty. Creating face and adding the vertex
+      Face3D newFace = new Face3D(Axis.Z);
+      newFace.addVertex(vertexToAdd, epsilon);
+      faces.add(newFace);
+
+      return true;
+   }
+
+   private boolean handleSingleFaceCase(Vertex3D vertexToAdd, double epsilon)
+   {
+      Face3D firstFace = faces.get(0);
+
+      if (firstFace.getNumberOfEdges() <= 2)
+      {
+         firstFace.addVertex(vertexToAdd, epsilon);
+      }
+      else if (firstFace.isPointInFacePlane(vertexToAdd, epsilon))
+      {
+         if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
+            firstFace.addVertex(vertexToAdd, epsilon);
       }
       else
       {
-         getVisibleFaces(visibleFaces, vertexToAdd, epsilon);
+         if (firstFace.canObserverSeeFace(vertexToAdd))
+            firstFace.flip();
 
-         if (visibleFaces.isEmpty())
-         {
-            return;
-         }
-         getFacesWhichPointIsOn(vertexToAdd, onFaceList, epsilon);
+         visibleSilhouetteList.clear();
+         HalfEdge3D halfEdge = firstFace.getEdge(0);
 
-         getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
-         HalfEdge3D firstHalfEdgeForSilhouette = null;
-
-         if (onFaceList.size() > 0)
+         for (int i = 0; i < firstFace.getNumberOfEdges(); i++)
          {
-            if (checkIsInteriorPointOf(onFaceList, vertexToAdd, epsilon))
-               return;
-            HalfEdge3D firstVisibleEdge = getFirstVisibleEdgeFromOnFaceList(onFaceList, visibleFaces);
-            if (firstVisibleEdge == null)
-               return;
-            firstHalfEdgeForSilhouette = firstVisibleEdge.getTwinEdge();
-         }
-         else
-         {
-            firstHalfEdgeForSilhouette = getSeedEdgeForSilhouetteCalculation(visibleFaces, silhouetteFaces.get(0));
+            visibleSilhouetteList.add(halfEdge);
+            halfEdge = halfEdge.getPreviousEdge();
          }
 
-         if (firstHalfEdgeForSilhouette == null)
-            return;
-
-         getVisibleSilhouetteUsingSeed(visibleSilhouetteList, firstHalfEdgeForSilhouette, visibleFaces);
-
-         if (visibleSilhouetteList.isEmpty())
-            return;
-
-         removeFaces(nonSilhouetteFaces);
-         removeFaces(silhouetteFaces);
+         onFaceList.clear();
          createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
-
-         updateEdges();
-         updateVertices();
-         updateBoundingBox();
       }
+
+      return true;
+   }
+
+   private boolean handleMultipleFaceCase(Vertex3D vertexToAdd, double epsilon)
+   {
+      getVisibleFaces(visibleFaces, vertexToAdd, epsilon);
+
+      if (visibleFaces.isEmpty())
+      {
+         return false;
+      }
+      getFacesWhichPointIsOn(vertexToAdd, onFaceList, epsilon);
+
+      getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
+      HalfEdge3D firstHalfEdgeForSilhouette = null;
+
+      if (onFaceList.size() > 0)
+      {
+         if (checkIsInteriorPointOf(onFaceList, vertexToAdd, epsilon))
+            return false;
+         HalfEdge3D firstVisibleEdge = getFirstVisibleEdgeFromOnFaceList(onFaceList, visibleFaces);
+         if (firstVisibleEdge == null)
+            return false;
+         firstHalfEdgeForSilhouette = firstVisibleEdge.getTwinEdge();
+      }
+      else
+      {
+         firstHalfEdgeForSilhouette = getSeedEdgeForSilhouetteCalculation(visibleFaces, silhouetteFaces.get(0));
+      }
+
+      if (firstHalfEdgeForSilhouette == null)
+         return false;
+
+      getVisibleSilhouetteUsingSeed(visibleSilhouetteList, firstHalfEdgeForSilhouette, visibleFaces);
+
+      if (visibleSilhouetteList.isEmpty())
+         return false;
+
+      removeFaces(nonSilhouetteFaces);
+      removeFaces(silhouetteFaces);
+      createFacesFromVisibleSilhouetteAndOnFaceList(visibleSilhouetteList, onFaceList, vertexToAdd, epsilon);
+
+      return true;
    }
 
    @Override
