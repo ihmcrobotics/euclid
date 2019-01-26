@@ -53,97 +53,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       set(polytope);
    }
 
-   public BoundingBox3DReadOnly getBoundingBox()
-   {
-      return boundingBox;
-   }
-
-   @Override
-   public int getNumberOfFaces()
-   {
-      return faces.size();
-   }
-
-   @Override
-   public int getNumberOfEdges()
-   {
-      updateEdges();
-      return edges.size() / 2;
-   }
-
-   @Override
-   public int getNumberOfVertices()
-   {
-      if (getNumberOfFaces() < 2)
-      {
-         return vertices.size();
-      }
-      else
-      { // Polyhedron formula for quick calc
-         return getNumberOfEdges() - getNumberOfFaces() + 2;
-      }
-   }
-
-   @Override
-   public Face3D getFace(int index)
-   {
-      return faces.get(index);
-   }
-
-   @Override
-   public List<Face3D> getFaces()
-   {
-      return faces;
-   }
-
-   public HalfEdge3D getEdge(int index)
-   {
-      return edges.get(index);
-   }
-
-   @Override
-   public List<HalfEdge3D> getEdges()
-   {
-      return edges;
-   }
-
-   @Override
-   public Vertex3D getVertex(int index)
-   {
-      return vertices.get(index);
-   }
-
-   @Override
-   public List<Vertex3D> getVertices()
-   {
-      return vertices;
-   }
-
-   public Vector3DReadOnly getFaceNormalAt(Point3DReadOnly point)
-   {
-      return getFaceContainingPointClosestTo(point).getNormal();
-   }
-
-   @Override
-   public void applyTransform(Transform transform)
-   {
-      // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
-      for (int i = 0; i < vertices.size(); i++)
-         vertices.get(i).applyTransform(transform);
-      updateBoundingBox();
-      // FIXME this method introduces inconsistency in Face3D.
-   }
-
-   @Override
-   public void applyInverseTransform(Transform transform)
-   {
-      // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
-      for (int i = 0; i < vertices.size(); i++)
-         vertices.get(i).applyInverseTransform(transform);
-      updateBoundingBox();
-      // FIXME this method introduces inconsistency in Face3D.
-   }
-
    public void addVertex(double x, double y, double z, double epsilon)
    {
       addVertex(new Vertex3D(x, y, z), epsilon);
@@ -255,6 +164,99 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          updateVertices();
          updateBoundingBox();
       }
+   }
+
+   @Override
+   public int getNumberOfFaces()
+   {
+      return faces.size();
+   }
+
+   @Override
+   public int getNumberOfEdges()
+   {
+      updateEdges();
+      return edges.size() / 2;
+   }
+
+   @Override
+   public int getNumberOfVertices()
+   {
+      if (getNumberOfFaces() < 2)
+      {
+         return vertices.size();
+      }
+      else
+      { // Polyhedron formula for quick calc
+         return getNumberOfEdges() - getNumberOfFaces() + 2;
+      }
+   }
+
+   @Override
+   public Face3D getFace(int index)
+   {
+      return faces.get(index);
+   }
+
+   @Override
+   public List<Face3D> getFaces()
+   {
+      return faces;
+   }
+
+   @Override
+   public HalfEdge3D getEdge(int index)
+   {
+      return edges.get(index);
+   }
+
+   @Override
+   public List<HalfEdge3D> getEdges()
+   {
+      return edges;
+   }
+
+   @Override
+   public Vertex3D getVertex(int index)
+   {
+      return vertices.get(index);
+   }
+
+   @Override
+   public List<Vertex3D> getVertices()
+   {
+      return vertices;
+   }
+
+   @Override
+   public BoundingBox3DReadOnly getBoundingBox()
+   {
+      return boundingBox;
+   }
+
+   public Vector3DReadOnly getFaceNormalAt(Point3DReadOnly point)
+   {
+      return getFaceContainingPointClosestTo(point).getNormal();
+   }
+
+   @Override
+   public void applyTransform(Transform transform)
+   {
+      // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
+      for (int i = 0; i < vertices.size(); i++)
+         vertices.get(i).applyTransform(transform);
+      updateBoundingBox();
+      // FIXME this method introduces inconsistency in Face3D.
+   }
+
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
+      for (int i = 0; i < vertices.size(); i++)
+         vertices.get(i).applyInverseTransform(transform);
+      updateBoundingBox();
+      // FIXME this method introduces inconsistency in Face3D.
    }
 
    private void updateVertices()

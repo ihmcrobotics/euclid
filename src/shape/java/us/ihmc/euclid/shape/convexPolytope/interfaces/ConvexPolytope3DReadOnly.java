@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.List;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -73,6 +74,8 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     * @return a list of read only reference to the vertices of the polytope
     */
    List<? extends Vertex3DReadOnly> getVertices();
+
+   BoundingBox3DReadOnly getBoundingBox();
 
    /**
     * Returns a reference to the polytope vertex that is further along the direction indicated by the
