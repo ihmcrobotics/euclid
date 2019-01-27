@@ -188,6 +188,11 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          edges.get(i).detroy();
       }
       edges.clear();
+      normal.setToNaN();
+      centroid.setToNaN();
+      boundingBox.setToNaN();
+      vertices.clear();
+      area = Double.NaN;
    }
 
    @Override
