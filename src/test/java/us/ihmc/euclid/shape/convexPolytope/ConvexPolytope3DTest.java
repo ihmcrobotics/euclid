@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +20,8 @@ import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
@@ -447,6 +451,148 @@ public class ConvexPolytope3DTest
 
             assertTrue(edge.getOrigin().getAssociatedEdges().contains(edge));
          }
+      }
+   }
+
+   @Test
+   void testConstructingCone() throws Exception
+   {
+      Random random = new Random(435);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Testing that face expansion to include more than 3 vertices on 1 face is working properly.
+         Point3D top = new Point3D(0.0, 0.0, 1.0);
+
+         List<Point3D> bottom = new ArrayList<>();
+
+         int bottomSize = 10;
+         double deltaTheta = 2.0 * Math.PI / bottomSize;
+
+         for (double theta = 0.0; theta < 2.0 * Math.PI; theta += deltaTheta)
+         {
+            bottom.add(new Point3D(Math.cos(theta), Math.sin(theta), 0.0));
+         }
+
+         assertEquals(bottomSize, bottom.size());
+
+         List<Point3D> allVertices = new ArrayList<>(bottom);
+         allVertices.add(top);
+         Collections.shuffle(allVertices, random);
+
+         Vector3D bottomNormal = new Vector3D(0, 0, -1);
+         Point3D bottomCentroid = new Point3D(0, 0, 0);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         allVertices.forEach(transform::transform);
+         bottomNormal.applyTransform(transform);
+         bottomCentroid.applyTransform(transform);
+
+         // Now testing convex polytope class
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         allVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+
+         assertEquals(allVertices.size(), convexPolytope3D.getNumberOfVertices());
+
+         Optional<Face3D> searchResult = convexPolytope3D.getFaces().stream().filter(face -> face.getNumberOfEdges() == bottomSize).findFirst();
+
+         assertTrue(searchResult.isPresent());
+         Face3D bottomFace = searchResult.get();
+         EuclidCoreTestTools.assertTuple3DEquals(bottomNormal, bottomFace.getNormal(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(bottomCentroid, bottomFace.getCentroid(), EPSILON);
+
+         for (Vertex3D vertex : bottomFace.getVertices())
+            assertTrue(bottom.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
+
+         List<Face3D> sideFaces = convexPolytope3D.getFaces().stream().filter(face -> face != bottomFace).collect(Collectors.toList());
+
+         for (Face3D sideFace : sideFaces)
+         {
+            assertEquals(3, sideFace.getNumberOfEdges());
+            assertTrue(sideFace.getVertices().stream().anyMatch(vertex -> vertex.epsilonEquals(top, EPSILON)));
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // First generating a truncated cone. Then add the top vertex at the very end and check that all the intermediate vertices have been removed to form a full cone.
+
+         Point3D top = new Point3D(0.0, 0.0, 1.0);
+
+         List<Point3D> bottom = new ArrayList<>();
+         List<Point3D> intermediate = new ArrayList<>();
+
+         int bottomSize = 10;
+         double deltaTheta = 2.0 * Math.PI / bottomSize;
+         double bottomRadius = 1.0;
+         double intermediateZ = 0.5;
+         double intermediateRadius = bottomRadius * (top.getZ() - intermediateZ) / top.getZ(); // Thales' theorem
+
+         for (double theta = 0.0; theta < 2.0 * Math.PI; theta += deltaTheta)
+         {
+            bottom.add(new Point3D(bottomRadius * Math.cos(theta), bottomRadius * Math.sin(theta), 0.0));
+            intermediate.add(new Point3D(intermediateRadius * Math.cos(theta), intermediateRadius * Math.sin(theta), intermediateZ));
+         }
+
+         assertEquals(bottomSize, bottom.size());
+
+         List<Point3D> truncatedConeVertices = new ArrayList<>();
+         truncatedConeVertices.addAll(bottom);
+         truncatedConeVertices.addAll(intermediate);
+         Collections.shuffle(intermediate, random);
+
+         Vector3D bottomNormal = new Vector3D(0, 0, -1);
+         Point3D bottomCentroid = new Point3D(0, 0, 0);
+
+         Vector3D intermediateNormal = new Vector3D(0, 0, 1);
+         Point3D intermediateCentroid = new Point3D(0, 0, intermediateZ);
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         truncatedConeVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+
+         assertEquals(truncatedConeVertices.size(), convexPolytope3D.getNumberOfVertices());
+
+         Optional<Face3D> searchResult = convexPolytope3D.getFaces().stream().filter(face -> face.getNumberOfEdges() == bottomSize)
+                                                         .filter(face -> EuclidCoreTools.epsilonEquals(0.0, face.getVertex(0).getZ(), EPSILON)).findFirst();
+         assertTrue(searchResult.isPresent());
+         Face3D bottomFace = searchResult.get();
+         EuclidCoreTestTools.assertTuple3DEquals(bottomNormal, bottomFace.getNormal(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(bottomCentroid, bottomFace.getCentroid(), EPSILON);
+
+         for (Vertex3D vertex : bottomFace.getVertices())
+            assertTrue(bottom.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
+
+         searchResult = convexPolytope3D.getFaces().stream().filter(face -> face.getNumberOfEdges() == bottomSize)
+                                        .filter(face -> EuclidCoreTools.epsilonEquals(intermediateZ, face.getVertex(0).getZ(), EPSILON)).findFirst();
+         assertTrue(searchResult.isPresent());
+         Face3D intermediateFace = searchResult.get();
+         EuclidCoreTestTools.assertTuple3DEquals(intermediateNormal, intermediateFace.getNormal(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(intermediateCentroid, intermediateFace.getCentroid(), EPSILON);
+
+         for (Vertex3D vertex : intermediateFace.getVertices())
+            assertTrue(intermediate.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
+
+         List<Face3D> sideFaces = convexPolytope3D.getFaces().stream().filter(face -> face != bottomFace).filter(face -> face != intermediateFace)
+                                                  .collect(Collectors.toList());
+
+         for (Face3D sideFace : sideFaces)
+         {
+            assertEquals(4, sideFace.getNumberOfEdges());
+            assertEquals(2, sideFace.getVertices().stream().filter(v -> EuclidCoreTools.epsilonEquals(0.0, v.getZ(), EPSILON)).count());
+            assertEquals(2, sideFace.getVertices().stream().filter(v -> EuclidCoreTools.epsilonEquals(intermediateZ, v.getZ(), EPSILON)).count());
+         }
+
+         // Now let's add the top and check that the intermediate face/vertices/edges are all gone.
+         convexPolytope3D.addVertex(top, 1.0e-10);
+
+         /*
+          * FIXME The top vertex is being rejected. the test passes when reducing (even just slightly)
+          * intermediateRadius, making the sides visible from the top. When increasing intermediateRadius,
+          * the resulting polytope is also acceptable, i.e. the intermediateVertices remain and the top is
+          * added with an extra layer of side faces. However, when intermediateResult is left unchanged, the
+          * sides are identified as not visible and the top is identified as being on the sides, when that
+          * happens, the logic seems to be wrong and the top end up being rejected.
+          */
+         assertEquals(bottomSize + 1, convexPolytope3D.getNumberOfVertices());
       }
    }
 
