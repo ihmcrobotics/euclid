@@ -21,9 +21,9 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
 {
    private double x, y, z;
    /**
-    * List of edges that start at this vertex. May be part of different faces
+    * List of edges that start at this vertex. May be part of different faces.
     */
-   private final List<HalfEdge3D> associatedEdges = new ArrayList<>();
+   private final List<HalfEdge3D> associatedEdges = new ArrayList<>(); // TODO Consider using HashSet.
 
    public Vertex3D()
    {
@@ -103,7 +103,11 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
    public void addAssociatedEdge(HalfEdge3D edge)
    {
       if (!isAssociatedWithEdge(edge))
+      {
+         if (edge.getOrigin() != this)
+            throw new IllegalArgumentException("A vertex's associated edges should originate from this same vertex.");
          associatedEdges.add(edge);
+      }
    }
 
    /**

@@ -461,7 +461,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    private Face3D createFaceFromTwinEdgeAndVertex(Vertex3D vertex, HalfEdge3D twinEdge, double epsilon)
    {
-      Face3D newFace = ConvexPolytope3DFactories.newFace3DFromVertexAndTwinEdge(centroid, vertex, twinEdge, epsilon);
+      Face3D newFace = ConvexPolytope3DFactories.newFace3DFromVertexAndTwinEdge(vertex, twinEdge, epsilon);
       faces.add(newFace);
       return newFace;
    }
