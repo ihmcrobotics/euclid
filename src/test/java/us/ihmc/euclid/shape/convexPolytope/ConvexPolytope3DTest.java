@@ -1,8 +1,11 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -593,6 +596,137 @@ public class ConvexPolytope3DTest
           * happens, the logic seems to be wrong and the top end up being rejected.
           */
          assertEquals(bottomSize + 1, convexPolytope3D.getNumberOfVertices());
+      }
+   }
+
+   @Test
+   void testConstructingCylinder() throws Exception
+   {
+      Random random = new Random(34);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double topZ = 1.0;
+
+         List<Point3D> bottom = new ArrayList<>();
+
+         int bottomSize = 10;
+         double deltaTheta = 2.0 * Math.PI / bottomSize;
+
+         for (double theta = 0.0; theta < 2.0 * Math.PI; theta += deltaTheta)
+         {
+            bottom.add(new Point3D(Math.cos(theta), Math.sin(theta), 0.0));
+         }
+
+         assertEquals(bottomSize, bottom.size());
+
+         List<Point3D> top = bottom.stream().map(Point3D::new).peek(p -> p.setZ(topZ)).collect(Collectors.toList());
+
+         List<Point3D> allVertices = new ArrayList<>();
+         allVertices.addAll(top);
+         allVertices.addAll(bottom);
+         Collections.shuffle(allVertices, random);
+
+         Vector3D bottomNormal = new Vector3D(0.0, 0.0, -1.0);
+         Point3D bottomCentroid = new Point3D(0.0, 0.0, 0.0);
+
+         Vector3D topNormal = new Vector3D(0.0, 0.0, 1.0);
+         Point3D topCentroid = new Point3D(0.0, 0.0, topZ);
+
+         double extensionZ = 0.3;
+         Point3D aboveTop = new Point3D(0.0, 0.0, topZ + extensionZ);
+         Point3D belowBottom = new Point3D(0.0, 0.0, -extensionZ);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         allVertices.forEach(transform::transform);
+         Arrays.asList(bottomNormal, bottomCentroid, topNormal, topCentroid, aboveTop, belowBottom).forEach(o -> o.applyTransform(transform));
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         allVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+
+         assertEquals(allVertices.size(), convexPolytope3D.getNumberOfVertices());
+         assertEquals(bottomSize + 2, convexPolytope3D.getNumberOfFaces());
+
+         Optional<Face3D> searchResult = convexPolytope3D.getFaces().stream().filter(face -> face.getNumberOfEdges() == bottomSize)
+                                                         .filter(face -> face.getCentroid().epsilonEquals(bottomCentroid, EPSILON)).findFirst();
+         assertTrue(searchResult.isPresent());
+         Face3D bottomFace = searchResult.get();
+         EuclidCoreTestTools.assertTuple3DEquals(bottomNormal, bottomFace.getNormal(), EPSILON);
+
+         for (Vertex3D vertex : bottomFace.getVertices())
+            assertTrue(bottom.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
+
+         searchResult = convexPolytope3D.getFaces().stream().filter(face -> face.getNumberOfEdges() == bottomSize)
+                                        .filter(face -> face.getCentroid().epsilonEquals(topCentroid, EPSILON)).findFirst();
+         assertTrue(searchResult.isPresent());
+         Face3D topFace = searchResult.get();
+         EuclidCoreTestTools.assertTuple3DEquals(topNormal, topFace.getNormal(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(topCentroid, topFace.getCentroid(), EPSILON);
+
+         for (Vertex3D vertex : topFace.getVertices())
+            assertTrue(top.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
+
+         List<Face3D> sideFaces = convexPolytope3D.getFaces().stream().filter(face -> face != bottomFace).filter(face -> face != topFace)
+                                                  .collect(Collectors.toList());
+
+         for (Face3D sideFace : sideFaces)
+         {
+            assertEquals(4, sideFace.getNumberOfEdges());
+            List<Vertex3D> vertices = sideFace.getVertices();
+            assertEquals(2, vertices.stream().filter(v -> epsilonEquals(0.0, percentageAlongLineSegment3D(v, bottomCentroid, topCentroid), EPSILON)).count());
+            assertEquals(2, vertices.stream().filter(v -> epsilonEquals(1.0, percentageAlongLineSegment3D(v, bottomCentroid, topCentroid), EPSILON)).count());
+         }
+
+         // Let's tweak the cylinder to be extended by a cone at the top:
+         convexPolytope3D.addVertex(aboveTop, 1.0e-10);
+
+         assertEquals(allVertices.size() + 1, convexPolytope3D.getNumberOfVertices());
+         assertEquals(2 * bottomSize + 1, convexPolytope3D.getNumberOfFaces());
+         assertTrue(convexPolytope3D.getFaces().contains(bottomFace));
+         assertFalse(convexPolytope3D.getFaces().contains(topFace));
+         assertTrue(convexPolytope3D.getFaces().containsAll(sideFaces));
+
+         List<Face3D> topConeFaces = convexPolytope3D.getFaces().stream().filter(face -> face != bottomFace && !sideFaces.contains(face))
+                                                     .collect(Collectors.toList());
+
+         for (Face3D topConeFace : topConeFaces)
+         {
+            assertEquals(3, topConeFace.getNumberOfEdges());
+            List<Vertex3D> vertices = topConeFace.getVertices();
+            assertEquals(1, vertices.stream().filter(v -> aboveTop.epsilonEquals(v, EPSILON)).count());
+            assertEquals(2, vertices.stream().filter(v -> epsilonEquals(0.0, percentageAlongLineSegment3D(v, topCentroid, aboveTop), EPSILON)).count());
+         }
+
+         for (Face3D sideFace : sideFaces)
+         {
+            assertEquals(4, sideFace.getNumberOfEdges());
+            List<Vertex3D> vertices = sideFace.getVertices();
+            assertEquals(2, vertices.stream().filter(v -> epsilonEquals(0.0, percentageAlongLineSegment3D(v, bottomCentroid, topCentroid), EPSILON)).count());
+            assertEquals(2, vertices.stream().filter(v -> epsilonEquals(1.0, percentageAlongLineSegment3D(v, bottomCentroid, topCentroid), EPSILON)).count());
+         }
+
+         // Let's tweak the cylinder to be extended by a cone at the bottom:
+         convexPolytope3D.addVertex(belowBottom, 1.0e-10);
+
+         assertEquals(allVertices.size() + 2, convexPolytope3D.getNumberOfVertices());
+         assertEquals(3 * bottomSize, convexPolytope3D.getNumberOfFaces());
+         assertFalse(convexPolytope3D.getFaces().contains(bottomFace));
+         assertFalse(convexPolytope3D.getFaces().contains(topFace));
+         assertTrue(convexPolytope3D.getFaces().containsAll(topConeFaces));
+         assertTrue(convexPolytope3D.getFaces().containsAll(sideFaces));
+
+         List<Face3D> bottomConeFaces = convexPolytope3D.getFaces().stream().filter(face -> !topConeFaces.contains(face) && !sideFaces.contains(face))
+                                                        .collect(Collectors.toList());
+
+         for (Face3D bottomConeFace : bottomConeFaces)
+         {
+            assertEquals(3, bottomConeFace.getNumberOfEdges());
+            List<Vertex3D> vertices = bottomConeFace.getVertices();
+            assertEquals(1, vertices.stream().filter(v -> belowBottom.epsilonEquals(v, EPSILON)).count());
+            assertEquals(2, vertices.stream().filter(v -> epsilonEquals(0.0, percentageAlongLineSegment3D(v, bottomCentroid, belowBottom), EPSILON)).count());
+         }
+
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwinEdge()));
       }
    }
 
