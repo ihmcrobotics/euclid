@@ -154,7 +154,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
       if (onFaceList.size() > 0)
       {
-         if (isPointDirectlyAboveOrBelowAnyFace(onFaceList, vertexToAdd))
+         if (EuclidPolytopeTools.isPointDirectlyAboveOrBelowAnyFace(onFaceList, vertexToAdd))
          {
             /*
              * @formatter:off
@@ -319,16 +319,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
       for (int faceIndex = 1; faceIndex < faces.size(); faceIndex++)
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
-   }
-
-   private static boolean isPointDirectlyAboveOrBelowAnyFace(List<Face3D> faces, Point3DReadOnly query)
-   {
-      for (int i = 0; i < faces.size(); i++)
-      {
-         if (faces.get(i).isPointDirectlyAboveOrBelow(query))
-            return true;
-      }
-      return false;
    }
 
    public void getSilhouetteFaces(List<Face3D> silhouetteFacesToPack, List<Face3D> nonSilhouetteFacesToPack, List<Face3D> visibleFaceList)

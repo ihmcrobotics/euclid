@@ -499,4 +499,14 @@ public class EuclidPolytopeTools
    {
       return faces.stream().filter(face -> face.isPointInFacePlane(query, distanceThreshold)).collect(Collectors.toList());
    }
+
+   public static boolean isPointDirectlyAboveOrBelowAnyFace(List<? extends Face3DReadOnly> faces, Point3DReadOnly query)
+   {
+      for (int i = 0; i < faces.size(); i++)
+      {
+         if (faces.get(i).isPointDirectlyAboveOrBelow(query))
+            return true;
+      }
+      return false;
+   }
 }
