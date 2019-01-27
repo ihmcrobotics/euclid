@@ -305,34 +305,94 @@ public class ConvexPolytope3DTest
          assertEquals(4, convexPolytope3D.getNumberOfVertices());
          assertEquals(6, convexPolytope3D.getNumberOfEdges());
          assertEquals(4, convexPolytope3D.getNumberOfFaces());
+         assertTrue(convexPolytope3D.getVertices().stream().anyMatch(vertex -> vertex.epsilonEquals(newVertex, EPSILON)));
          assertFalse(convexPolytope3D.getVertices().contains(expectedVertexRemoved));
       }
    }
 
+   @SuppressWarnings("unlikely-arg-type")
    @Test
    void testConstructingCube() throws Exception
    {
-      Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
-      Point3D bottomP1 = new Point3D(-0.5, 0.5, 0.0);
-      Point3D bottomP2 = new Point3D(0.5, 0.5, 0.0);
-      Point3D bottomP3 = new Point3D(0.5, -0.5, 0.0);
+      Random random = new Random(5464566);
 
-      Point3D topP0 = new Point3D(-0.5, -0.5, 1.0);
-      Point3D topP1 = new Point3D(-0.5, 0.5, 1.0);
-      Point3D topP2 = new Point3D(0.5, 0.5, 1.0);
-      Point3D topP3 = new Point3D(0.5, -0.5, 1.0);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Trivial test with a unit-length side cube
+         Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
+         Point3D bottomP1 = new Point3D(-0.5, 0.5, 0.0);
+         Point3D bottomP2 = new Point3D(0.5, 0.5, 0.0);
+         Point3D bottomP3 = new Point3D(0.5, -0.5, 0.0);
 
-      double buildEpsilon = 1.0e-10;
-      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-      convexPolytope3D.addVertex(bottomP0, buildEpsilon);
-      convexPolytope3D.addVertex(bottomP1, buildEpsilon);
-      convexPolytope3D.addVertex(bottomP2, buildEpsilon);
-      convexPolytope3D.addVertex(bottomP3, buildEpsilon);
+         Point3D topP0 = new Point3D(-0.5, -0.5, 1.0);
+         Point3D topP1 = new Point3D(-0.5, 0.5, 1.0);
+         Point3D topP2 = new Point3D(0.5, 0.5, 1.0);
+         Point3D topP3 = new Point3D(0.5, -0.5, 1.0);
 
-      convexPolytope3D.addVertex(topP0, buildEpsilon);
-      convexPolytope3D.addVertex(topP1, buildEpsilon);
-      convexPolytope3D.addVertex(topP2, buildEpsilon);
-      convexPolytope3D.addVertex(topP3, buildEpsilon);
+         Vector3D bottomNormal = new Vector3D(0, 0, -1);
+         Vector3D topNormal = new Vector3D(0, 0, 1);
+         Vector3D xPlusSideNormal = new Vector3D(1, 0, 0);
+         Vector3D xMinusSideNormal = new Vector3D(-1, 0, 0);
+         Vector3D yPlusSideNormal = new Vector3D(0, 1, 0);
+         Vector3D yMinusSideNormal = new Vector3D(0, -1, 0);
+
+         Point3D bottomCenter = new Point3D(0, 0, 0);
+         Point3D topCenter = new Point3D(0, 0, 1);
+         Point3D xPlusSideCenter = new Point3D(0.5, 0, 0.5);
+         Point3D xMinusSideCenter = new Point3D(-0.5, 0, 0.5);
+         Point3D yPlusSideCenter = new Point3D(0, 0.5, 0.5);
+         Point3D yMinusSideCenter = new Point3D(0, -0.5, 0.5);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Arrays.asList(bottomP0, bottomP1, bottomP2, bottomP3, topP0, topP1, topP2, topP3, bottomNormal, topNormal, xPlusSideNormal, xMinusSideNormal,
+                       yPlusSideNormal, yMinusSideNormal, bottomCenter, topCenter, xPlusSideCenter, xMinusSideCenter, yPlusSideCenter, yMinusSideCenter)
+               .forEach(o -> o.applyTransform(transform));
+
+         double buildEpsilon = 1.0e-10;
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         convexPolytope3D.addVertex(bottomP0, buildEpsilon);
+         convexPolytope3D.addVertex(bottomP1, buildEpsilon);
+         convexPolytope3D.addVertex(bottomP2, buildEpsilon);
+         convexPolytope3D.addVertex(bottomP3, buildEpsilon);
+
+         convexPolytope3D.addVertex(topP0, buildEpsilon);
+         convexPolytope3D.addVertex(topP1, buildEpsilon);
+         convexPolytope3D.addVertex(topP2, buildEpsilon);
+         convexPolytope3D.addVertex(topP3, buildEpsilon);
+
+         assertEquals(6, convexPolytope3D.getNumberOfFaces());
+         assertEquals(8, convexPolytope3D.getNumberOfVertices());
+         assertEquals(12, convexPolytope3D.getNumberOfEdges());
+
+         List<Face3D> allFaces = convexPolytope3D.getFaces();
+         allFaces.forEach(face -> assertEquals(4, face.getNumberOfEdges()));
+
+         Face3D bottomFace = allFaces.stream().filter(face -> face.getNormal().epsilonEquals(bottomNormal, EPSILON)).findFirst().get();
+         Face3D topFace = allFaces.stream().filter(face -> face.getNormal().epsilonEquals(topNormal, EPSILON)).findFirst().get();
+         Face3D xPlusSideFace = allFaces.stream().filter(face -> face.getNormal().epsilonEquals(xPlusSideNormal, EPSILON)).findFirst().get();
+         Face3D xMinusSideFace = allFaces.stream().filter(face -> face.getNormal().epsilonEquals(xMinusSideNormal, EPSILON)).findFirst().get();
+         Face3D yPlusSideFace = allFaces.stream().filter(face -> face.getNormal().epsilonEquals(yPlusSideNormal, EPSILON)).findFirst().get();
+         Face3D yMinusSideFace = allFaces.stream().filter(face -> face.getNormal().epsilonEquals(yMinusSideNormal, EPSILON)).findFirst().get();
+
+         EuclidCoreTestTools.assertTuple3DEquals(bottomCenter, bottomFace.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(topCenter, topFace.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(xPlusSideCenter, xPlusSideFace.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(xMinusSideCenter, xMinusSideFace.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(yPlusSideCenter, yPlusSideFace.getCentroid(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(yMinusSideCenter, yMinusSideFace.getCentroid(), EPSILON);
+
+         assertTrue(bottomFace.getVertices().containsAll(Arrays.asList(bottomP0, bottomP1, bottomP2, bottomP3)));
+         assertTrue(topFace.getVertices().containsAll(Arrays.asList(topP0, topP1, topP2, topP3)));
+         assertTrue(xPlusSideFace.getVertices().containsAll(Arrays.asList(topP2, topP3, bottomP2, bottomP3)));
+         assertTrue(xMinusSideFace.getVertices().containsAll(Arrays.asList(topP0, topP1, bottomP0, bottomP1)));
+         assertTrue(yPlusSideFace.getVertices().containsAll(Arrays.asList(topP1, topP2, bottomP1, bottomP2)));
+         assertTrue(yMinusSideFace.getVertices().containsAll(Arrays.asList(topP0, topP3, bottomP0, bottomP3)));
+         
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwinEdge()));
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getNextEdge()));
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getPreviousEdge()));
+
+         convexPolytope3D.getVertices().forEach(vertex -> assertEquals(3, vertex.getNumberOfAssociatedEdges()));
+      }
    }
 
    @Test

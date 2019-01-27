@@ -149,6 +149,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
       getFacesWhichPointIsOn(vertexToAdd, onFaceList, epsilon);
 
+      assert onFaceList.stream().noneMatch(face -> visibleFaces.contains(face));
+
       getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
       HalfEdge3D firstHalfEdgeForSilhouette = null;
 
@@ -176,7 +178,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
             return false;
          }
 
-         HalfEdge3D firstVisibleEdge = onFaceList.get(0).lineOfSightStart(vertexToAdd);
+         HalfEdge3D firstVisibleEdge = getFirstVisibleEdgeFromOnFaceList(onFaceList, visibleFaces);
 
          if (firstVisibleEdge == null)
             return false;
@@ -321,6 +323,39 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
+   private static HalfEdge3D getFirstVisibleEdgeFromOnFaceList(Collection<Face3D> onFaceList, Collection<Face3D> visibleFaces)
+   {
+      Face3D firstFace = onFaceList.iterator().next();
+      HalfEdge3D edge = firstFace.getEdge(0);
+
+      for (int edgeIndex = 0; edgeIndex < firstFace.getNumberOfEdges(); edgeIndex++)
+      {
+         HalfEdge3D previousEdge = edge.getPreviousEdge();
+
+         Face3D neighbouringFace = edge.getTwinEdge().getFace();
+
+         if (!visibleFaces.contains(neighbouringFace))
+         { // This edge is not visible, got to the previous.
+            edge = previousEdge;
+            continue;
+         }
+
+         Face3D previousNeighbouringFace = previousEdge.getTwinEdge().getFace();
+
+         // TODO the condition used to be as follows but I think if a face is visible it should not be in onFaceList.
+         //         if (visibleFaces.contains(previousNeighbouringFace) || onFaceList.contains(previousNeighbouringFace))
+         if (visibleFaces.contains(previousNeighbouringFace))
+         { // The previous edge is visible, so it might be the  
+            edge = previousEdge;
+            continue;
+         }
+
+         return edge;
+      }
+
+      return null;
+   }
+
    public void getSilhouetteFaces(List<Face3D> silhouetteFacesToPack, List<Face3D> nonSilhouetteFacesToPack, List<Face3D> visibleFaceList)
    {
       if (silhouetteFacesToPack != null)
@@ -407,42 +442,37 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       HalfEdge3D previousLeadingEdge = null, trailingEdge = null;
 
-      if (onFaceList.contains(silhouetteEdges.get(0).getFace()))
-      {
-         previousLeadingEdge = silhouetteEdges.get(0).getFace().lineOfSightStart(vertexToAdd);
-         if (previousLeadingEdge == null)
-         {
-            System.out.println("vertex to add: " + vertexToAdd);
-            System.out.println("Face: " + silhouetteEdges.get(0).getFace().toString());
-            System.out.println("Polytope: " + toString());
-         }
-         silhouetteEdges.get(0).getFace().addVertex(vertexToAdd, epsilon);
+      HalfEdge3D silhouetteEdge = silhouetteEdges.get(0);
+
+      if (onFaceList.contains(silhouetteEdge.getFace()))
+      { // The face has to be extended to include the new vertex
+         Face3D faceToExtend = silhouetteEdge.getFace();
+         previousLeadingEdge = faceToExtend.lineOfSightStart(vertexToAdd);
+         faceToExtend.addVertex(vertexToAdd, epsilon);
          trailingEdge = previousLeadingEdge.getNextEdge();
       }
       else
-      {
-         Face3D firstFace = createFaceFromTwinEdgeAndVertex(vertexToAdd, silhouetteEdges.get(0), epsilon);
+      { // Creating a new face.
+         Face3D firstFace = createFaceFromTwinEdgeAndVertex(vertexToAdd, silhouetteEdge, epsilon);
          previousLeadingEdge = firstFace.getEdge(0).getNextEdge();
          trailingEdge = firstFace.getEdge(0).getPreviousEdge();
       }
 
       for (int i = 1; i < silhouetteEdges.size(); i++)
       {
-         if (onFaceList.contains(silhouetteEdges.get(i).getFace()))
-         {
-            Face3D faceToExtend = silhouetteEdges.get(i).getFace();
+         silhouetteEdge = silhouetteEdges.get(i);
+
+         if (onFaceList.contains(silhouetteEdge.getFace()))
+         { // The face has to be extended to include the new vertex
+            Face3D faceToExtend = silhouetteEdge.getFace();
             HalfEdge3D tempEdge = faceToExtend.lineOfSightStart(vertexToAdd);
             faceToExtend.addVertex(vertexToAdd, epsilon);
-            if (tempEdge == null)
-               System.out.println("This again");
-            if (tempEdge.getNextEdge() == null)
-               System.out.println("WTF");
             twinEdges(previousLeadingEdge, tempEdge.getNextEdge());
             previousLeadingEdge = tempEdge;
          }
          else
-         {
-            Face3D newFace = createFaceFromTwinEdgeAndVertex(vertexToAdd, silhouetteEdges.get(i), epsilon);
+         { // Creating a new face.
+            Face3D newFace = createFaceFromTwinEdgeAndVertex(vertexToAdd, silhouetteEdge, epsilon);
             twinEdges(previousLeadingEdge, newFace.getEdge(0).getPreviousEdge());
             previousLeadingEdge = newFace.getEdge(0).getNextEdge();
          }
