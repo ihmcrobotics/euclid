@@ -109,6 +109,35 @@ public class IcoSphereFactory
 
          return EuclidCoreTools.epsilonEquals(acSquare, bcSquare, epsilon);
       }
+
+      public boolean geometryEquals(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c, double epsilon)
+      {
+         if (this.a.geometricallyEquals(a, epsilon))
+         {
+            if (this.b.geometricallyEquals(b, epsilon))
+               return this.c.geometricallyEquals(c, epsilon);
+            else
+               return this.b.geometricallyEquals(c, epsilon) && this.c.geometricallyEquals(b, epsilon);
+         }
+         else if (this.a.geometricallyEquals(b, epsilon))
+         {
+            if (this.b.geometricallyEquals(a, epsilon))
+               return this.c.geometricallyEquals(c, epsilon);
+            else
+               return this.b.geometricallyEquals(c, epsilon) && this.c.geometricallyEquals(a, epsilon);
+         }
+         else if (this.a.geometricallyEquals(c, epsilon))
+         {
+            if (this.b.geometricallyEquals(a, epsilon))
+               return this.c.geometricallyEquals(b, epsilon);
+            else
+               return this.b.geometricallyEquals(b, epsilon) && this.c.geometricallyEquals(a, epsilon);
+         }
+         else
+         {
+            return false;
+         }
+      }
    }
 
    public static class GeometryMesh3D

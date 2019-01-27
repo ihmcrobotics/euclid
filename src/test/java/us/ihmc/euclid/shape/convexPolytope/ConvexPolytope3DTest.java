@@ -3,12 +3,14 @@ package us.ihmc.euclid.shape.convexPolytope;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTestTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
@@ -290,14 +292,40 @@ public class ConvexPolytope3DTest
    @Test
    void testConstructIcosahedron() throws Exception
    {
+      Random random = new Random(23423);
       GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
 
-      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-
-      for (int vertexIndex = 0; vertexIndex < icosahedron.getNumberOfVertices(); vertexIndex++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D vertex = icosahedron.getVertex(vertexIndex);
-         convexPolytope3D.addVertex(vertex, 1.0e-10);
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         List<Point3D> shuffledVertices = new ArrayList<>(icosahedron.getVertices());
+         Collections.shuffle(shuffledVertices, random);
+         
+         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+         
+         // https://en.wikipedia.org/wiki/Icosahedron
+         assertEquals(12, convexPolytope3D.getNumberOfVertices());
+         assertEquals(30, convexPolytope3D.getNumberOfEdges());
+         assertEquals(20, convexPolytope3D.getNumberOfFaces());
+         
+         for (Vertex3DReadOnly vertex : convexPolytope3D.getVertices())
+         {
+            assertTrue(icosahedron.getVertices().stream().anyMatch(p -> p.epsilonEquals(vertex, EPSILON)));
+         }
+         
+         for (Face3D face : convexPolytope3D.getFaces())
+         {
+            assertEquals(3, face.getNumberOfEdges());
+            
+            Vector3D normalDirectionGuess = new Vector3D();
+            normalDirectionGuess.sub(face.getCentroid(), convexPolytope3D.getCentroid());
+            assertTrue(normalDirectionGuess.dot(face.getNormal()) > 0.0);
+            
+            Vertex3D a = face.getVertex(0);
+            Vertex3D b = face.getVertex(1);
+            Vertex3D c = face.getVertex(2);
+            assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
+         }
       }
    }
 
@@ -459,7 +487,7 @@ public class ConvexPolytope3DTest
                }
 
                { // Case #1: Shifting equidistantPoint slightly (not too much or the face won't be visible) away from firstFace so it is the least visible face.
-                  // TODO The construction used here is not reliable, the least visible face 
+                 // TODO The construction used here is not reliable, the least visible face 
                   Vector3D oppositeEdgeNormal = new Vector3D();
                   oppositeEdgeNormal.interpolate(secondFace.getNormal(), thirdFace.getNormal(), 0.5);
                   oppositeEdgeNormal.normalize();
@@ -471,10 +499,10 @@ public class ConvexPolytope3DTest
                   limitDirection.normalize();
                   assertEquals(0.0, limitDirection.dot(firstFace.getNormal()), EPSILON);
                   assertTrue(oppositeEdgeNormal.dot(limitDirection) > 0.0);
-                  
+
                   Vector3D extrusionDirection = new Vector3D();
                   extrusionDirection.interpolate(limitDirection, vertexNormal, EuclidCoreRandomTools.nextDouble(random, 0.001, 0.999));
-                  
+
                   Point3D pointOutside = new Point3D();
                   pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), extrusionDirection, vertex);
 
