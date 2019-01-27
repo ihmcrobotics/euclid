@@ -293,6 +293,7 @@ public class ConvexPolytope3DTest
    void testConstructIcosahedron() throws Exception
    {
       Random random = new Random(23423);
+
       GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -300,31 +301,137 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
          List<Point3D> shuffledVertices = new ArrayList<>(icosahedron.getVertices());
          Collections.shuffle(shuffledVertices, random);
-         
+
          shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
-         
+
          // https://en.wikipedia.org/wiki/Icosahedron
          assertEquals(12, convexPolytope3D.getNumberOfVertices());
          assertEquals(30, convexPolytope3D.getNumberOfEdges());
          assertEquals(20, convexPolytope3D.getNumberOfFaces());
-         
+
          for (Vertex3DReadOnly vertex : convexPolytope3D.getVertices())
          {
             assertTrue(icosahedron.getVertices().stream().anyMatch(p -> p.epsilonEquals(vertex, EPSILON)));
          }
-         
+
          for (Face3D face : convexPolytope3D.getFaces())
          {
             assertEquals(3, face.getNumberOfEdges());
-            
+
             Vector3D normalDirectionGuess = new Vector3D();
             normalDirectionGuess.sub(face.getCentroid(), convexPolytope3D.getCentroid());
             assertTrue(normalDirectionGuess.dot(face.getNormal()) > 0.0);
-            
+
             Vertex3D a = face.getVertex(0);
             Vertex3D b = face.getVertex(1);
             Vertex3D c = face.getVertex(2);
             assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
+         }
+
+         for (HalfEdge3D edge : convexPolytope3D.getEdges())
+         {
+            assertNotNull(edge.getTwinEdge());
+            Vertex3D a0 = edge.getOrigin();
+            Vertex3D b0 = edge.getDestination();
+            Vertex3D a1 = edge.getTwinEdge().getDestination();
+            Vertex3D b1 = edge.getTwinEdge().getOrigin();
+
+            assertTrue(a0 == a1);
+            assertTrue(b0 == b1);
+
+            assertTrue(edge.getOrigin().getAssociatedEdges().contains(edge));
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Now we transform the icosahedron
+         icosahedron = IcoSphereFactory.newIcoSphere(0);
+         icosahedron.applyTransform(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         List<Point3D> shuffledVertices = new ArrayList<>(icosahedron.getVertices());
+         Collections.shuffle(shuffledVertices, random);
+
+         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+
+         // https://en.wikipedia.org/wiki/Icosahedron
+         assertEquals(12, convexPolytope3D.getNumberOfVertices());
+         assertEquals(30, convexPolytope3D.getNumberOfEdges());
+         assertEquals(20, convexPolytope3D.getNumberOfFaces());
+
+         for (Vertex3DReadOnly vertex : convexPolytope3D.getVertices())
+         {
+            assertTrue(icosahedron.getVertices().stream().anyMatch(p -> p.epsilonEquals(vertex, EPSILON)));
+         }
+
+         for (Face3D face : convexPolytope3D.getFaces())
+         {
+            assertEquals(3, face.getNumberOfEdges());
+
+            Vector3D normalDirectionGuess = new Vector3D();
+            normalDirectionGuess.sub(face.getCentroid(), convexPolytope3D.getCentroid());
+            assertTrue(normalDirectionGuess.dot(face.getNormal()) > 0.0);
+
+            Vertex3D a = face.getVertex(0);
+            Vertex3D b = face.getVertex(1);
+            Vertex3D c = face.getVertex(2);
+            assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
+         }
+
+         for (HalfEdge3D edge : convexPolytope3D.getEdges())
+         {
+            assertNotNull(edge.getTwinEdge());
+            Vertex3D a0 = edge.getOrigin();
+            Vertex3D b0 = edge.getDestination();
+            Vertex3D a1 = edge.getTwinEdge().getDestination();
+            Vertex3D b1 = edge.getTwinEdge().getOrigin();
+
+            assertTrue(a0 == a1);
+            assertTrue(b0 == b1);
+
+            assertTrue(edge.getOrigin().getAssociatedEdges().contains(edge));
+         }
+      }
+   }
+
+   @Test
+   void testConstructIcosphere() throws Exception
+   {
+      Random random = new Random(23423);
+
+      for (int i = 0; i < ITERATIONS / 10; i++)
+      { // Now we transform the ico-sphere
+         GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(random.nextInt(2) + 1);
+         icoSphere.applyTransform(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         List<Point3D> shuffledVertices = new ArrayList<>(icoSphere.getVertices());
+         Collections.shuffle(shuffledVertices, random);
+
+         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+
+         // https://en.wikipedia.org/wiki/Icosahedron
+         assertEquals(icoSphere.getNumberOfVertices(), convexPolytope3D.getNumberOfVertices());
+         assertEquals(icoSphere.getNumberOfTriangles() * 3 / 2, convexPolytope3D.getNumberOfEdges());
+         assertEquals(icoSphere.getNumberOfTriangles(), convexPolytope3D.getNumberOfFaces());
+
+         for (Vertex3DReadOnly vertex : convexPolytope3D.getVertices())
+         {
+            assertTrue(icoSphere.getVertices().stream().anyMatch(p -> p.epsilonEquals(vertex, EPSILON)));
+         }
+
+         for (Face3D face : convexPolytope3D.getFaces())
+         {
+            assertEquals(3, face.getNumberOfEdges());
+
+            Vector3D normalDirectionGuess = new Vector3D();
+            normalDirectionGuess.sub(face.getCentroid(), convexPolytope3D.getCentroid());
+            assertTrue(normalDirectionGuess.dot(face.getNormal()) > 0.0);
+
+            Vertex3D a = face.getVertex(0);
+            Vertex3D b = face.getVertex(1);
+            Vertex3D c = face.getVertex(2);
+            assertTrue(icoSphere.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
          }
 
          for (HalfEdge3D edge : convexPolytope3D.getEdges())
@@ -528,8 +635,8 @@ public class ConvexPolytope3DTest
                   assertTrue(actualVisibleFaces.contains(secondFace));
                   assertTrue(actualVisibleFaces.contains(thirdFace));
                   // Problem with the construction.
-//                  String errorMessage = "Iteration: " + i + ", vertex index: " + vertexIndex;
-//                  assertTrue(firstFace == leastVisibleFace, errorMessage);
+                  //                  String errorMessage = "Iteration: " + i + ", vertex index: " + vertexIndex;
+                  //                  assertTrue(firstFace == leastVisibleFace, errorMessage);
                }
 
             }

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -140,7 +142,7 @@ public class IcoSphereFactory
       }
    }
 
-   public static class GeometryMesh3D
+   public static class GeometryMesh3D implements Transformable
    {
       private final List<Point3D> vertices = new ArrayList<>();
       private final List<TriangleIndices> faces = new ArrayList<>();
@@ -188,6 +190,18 @@ public class IcoSphereFactory
             triangles.add(getTriangle(index));
 
          return triangles;
+      }
+
+      @Override
+      public void applyTransform(Transform transform)
+      {
+         vertices.forEach(transform::transform);
+      }
+
+      @Override
+      public void applyInverseTransform(Transform transform)
+      {
+         vertices.forEach(transform::inverseTransform);
       }
    }
 
