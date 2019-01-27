@@ -60,7 +60,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       addVertex(new Vertex3D(x, y, z), epsilon);
    }
 
-   public void addVertex(Point3D vertexToAdd, double epsilon)
+   public void addVertex(Point3DReadOnly vertexToAdd, double epsilon)
    {
       Vertex3D vertex = new Vertex3D(vertexToAdd);
       addVertex(vertex, epsilon);
@@ -154,11 +154,33 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
       if (onFaceList.size() > 0)
       {
-         if (checkIsInteriorPointOf(onFaceList, vertexToAdd, epsilon))
+         if (isPointDirectlyAboveOrBelowAnyFace(onFaceList, vertexToAdd))
+         {
+            /*
+             * @formatter:off
+             * TODO I believe this test is unnecessary as it seems evident that the new point either belongs to none or all of onFaceList.
+             * So checking only one is enough, which is done right after when testing if firstVisibleEdge == null.
+             * For instance:
+             *    1- onFaceList.size() == 1: trivial.
+             *    2- onFaceList.size() == 2: then if the point belongs to 1 face and still be on the plane of the second
+             *       then it has to belong to their common edge which the only set of coordinates where both planes intersect.
+             *       So it has to belong to both faces.
+             *    3- onFaceList.size() == 3: then if the point belongs to 1 face and still be on the planes of the two other faces,
+             *       then it has to be on their vertex (onFaceList.size() == 3) which is the only point where all three planes intersect.
+             *       in both cases, the point belongs to all faces. So it belongs to all faces.
+             *    4- onFaceList.size() > 3: it is the same a the previous case, only one location exists where all planes intersect,
+             *       so the new vertex either belongs to none or all faces.
+             * @formatter:on
+             */
+            // The point actually belongs to one of the faces.
             return false;
-         HalfEdge3D firstVisibleEdge = getFirstVisibleEdgeFromOnFaceList(onFaceList, visibleFaces);
+         }
+
+         HalfEdge3D firstVisibleEdge = onFaceList.get(0).lineOfSightStart(vertexToAdd);
+
          if (firstVisibleEdge == null)
             return false;
+
          firstHalfEdgeForSilhouette = firstVisibleEdge.getTwinEdge();
       }
       else
@@ -190,8 +212,10 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    @Override
    public int getNumberOfEdges()
    {
-      updateEdges();
-      return edges.size() / 2;
+      if (getNumberOfFaces() < 2)
+         return edges.size();
+      else
+         return edges.size() / 2;
    }
 
    @Override
@@ -297,30 +321,14 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
-   private boolean checkIsInteriorPointOf(List<Face3D> onFaceList, Point3DReadOnly vertexToAdd, double epsilon)
+   private static boolean isPointDirectlyAboveOrBelowAnyFace(List<Face3D> faces, Point3DReadOnly query)
    {
-      for (int i = 0; i < onFaceList.size(); i++)
+      for (int i = 0; i < faces.size(); i++)
       {
-         if (onFaceList.get(i).lineOfSightStart(vertexToAdd) == null)
+         if (faces.get(i).isPointDirectlyAboveOrBelow(query))
             return true;
       }
       return false;
-   }
-
-   private HalfEdge3D getFirstVisibleEdgeFromOnFaceList(List<Face3D> onFaceList, List<Face3D> visibleFaces)
-   {
-      Face3D firstFace = onFaceList.get(0);
-      HalfEdge3D edgeUnderConsideration = firstFace.getEdge(0);
-      for (int i = 0; i < firstFace.getNumberOfEdges(); i++)
-      {
-         if (!visibleFaces.contains(edgeUnderConsideration.getNextEdge().getTwinEdge().getFace())
-               && !onFaceList.contains(edgeUnderConsideration.getNextEdge().getTwinEdge().getFace())
-               && visibleFaces.contains(edgeUnderConsideration.getTwinEdge().getFace()))
-            return edgeUnderConsideration;
-         else
-            edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
-      }
-      return null;
    }
 
    public void getSilhouetteFaces(List<Face3D> silhouetteFacesToPack, List<Face3D> nonSilhouetteFacesToPack, List<Face3D> visibleFaceList)

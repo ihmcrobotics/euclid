@@ -27,6 +27,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 public class ConvexPolytope3DTest
 {
@@ -38,240 +39,278 @@ public class ConvexPolytope3DTest
    {
       Random random = new Random(4533543);
 
-      ConvexPolytope3D polytope = new ConvexPolytope3D();
+      { // Series of basic queries and assertions.
+         ConvexPolytope3D polytope = new ConvexPolytope3D();
 
-      // Testing properties for empty polytope.
-      assertEquals(0, polytope.getNumberOfVertices());
-      assertEquals(0, polytope.getNumberOfEdges());
-      assertEquals(0, polytope.getNumberOfFaces());
+         // Testing properties for empty polytope.
+         assertEquals(0, polytope.getNumberOfVertices());
+         assertEquals(0, polytope.getNumberOfEdges());
+         assertEquals(0, polytope.getNumberOfFaces());
 
-      List<Point3D> pointsAdded = new ArrayList<>();
+         List<Point3D> pointsAdded = new ArrayList<>();
 
-      // Testing properties for single vertex polytope.
-      Point3D firstVertex = EuclidCoreRandomTools.nextPoint3D(random);
-      polytope.addVertex(firstVertex, 0.0);
-      pointsAdded.add(firstVertex);
+         // Testing properties for single vertex polytope.
+         Point3D firstVertex = EuclidCoreRandomTools.nextPoint3D(random);
+         polytope.addVertex(firstVertex, 0.0);
+         pointsAdded.add(firstVertex);
 
-      assertEquals(1, polytope.getNumberOfVertices());
-      assertEquals(0, polytope.getNumberOfEdges());
-      assertEquals(1, polytope.getNumberOfFaces());
-      EuclidCoreTestTools.assertTuple3DEquals(firstVertex, polytope.getCentroid(), EPSILON);
-
-      for (int vertexIndex = 0; vertexIndex < pointsAdded.size(); vertexIndex++)
-      {
-         EuclidCoreTestTools.assertTuple3DEquals(pointsAdded.get(vertexIndex), polytope.getVertex(vertexIndex), EPSILON);
-      }
-
-      // Assert that adding the same point twice does not change anything
-      polytope.addVertex(firstVertex, 0.0);
-      assertEquals(1, polytope.getNumberOfVertices());
-      assertEquals(0, polytope.getNumberOfEdges());
-      assertEquals(1, polytope.getNumberOfFaces());
-
-      // Testing properties for single edge polytope.
-      Point3D secondVertex = EuclidCoreRandomTools.nextPoint3D(random);
-      polytope.addVertex(secondVertex, 0.0);
-      pointsAdded.add(secondVertex);
-
-      assertEquals(2, polytope.getNumberOfVertices());
-      assertEquals(1, polytope.getNumberOfEdges());
-      assertEquals(1, polytope.getNumberOfFaces());
-      EuclidCoreTestTools.assertTuple3DEquals(EuclidGeometryTools.averagePoint3Ds(pointsAdded), polytope.getCentroid(), EPSILON);
-
-      for (int vertexIndex = 0; vertexIndex < pointsAdded.size(); vertexIndex++)
-      {
-         EuclidCoreTestTools.assertTuple3DEquals(pointsAdded.get(vertexIndex), polytope.getVertex(vertexIndex), EPSILON);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Assert that adding a point that is on the edge does not change anything.
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, pointsAdded);
-         polytope.addVertex(pointInside, 1.0e-12);
-
-         assertEquals(2, polytope.getNumberOfVertices());
+         assertEquals(1, polytope.getNumberOfVertices());
          assertEquals(1, polytope.getNumberOfEdges());
          assertEquals(1, polytope.getNumberOfFaces());
-      }
+         EuclidCoreTestTools.assertTuple3DEquals(firstVertex, polytope.getCentroid(), EPSILON);
 
-      // Testing properties for single triangle face polytope
-      Point3D thirdVertex = EuclidCoreRandomTools.nextPoint3D(random);
-      polytope.addVertex(thirdVertex, 0.0);
-      pointsAdded.add(thirdVertex);
+         for (int vertexIndex = 0; vertexIndex < pointsAdded.size(); vertexIndex++)
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(pointsAdded.get(vertexIndex), polytope.getVertex(vertexIndex), EPSILON);
+         }
 
-      assertEquals(3, polytope.getNumberOfVertices());
-      //      assertEquals(3, polytope.getNumberOfEdges()); // FIXME
-      assertEquals(1, polytope.getNumberOfFaces());
-      Point3D expectedCentroid = EuclidGeometryTools.averagePoint3Ds(pointsAdded);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getCentroid(), EPSILON);
+         // Assert that adding the same point twice does not change anything
+         polytope.addVertex(firstVertex, 0.0);
+         assertEquals(1, polytope.getNumberOfVertices());
+         assertEquals(1, polytope.getNumberOfEdges());
+         assertEquals(1, polytope.getNumberOfFaces());
 
-      for (int vertexIndex = 0; vertexIndex < pointsAdded.size(); vertexIndex++)
-      {
-         EuclidCoreTestTools.assertTuple3DEquals(pointsAdded.get(vertexIndex), polytope.getVertex(vertexIndex), EPSILON);
-      }
+         // Testing properties for single edge polytope.
+         Point3D secondVertex = EuclidCoreRandomTools.nextPoint3D(random);
+         polytope.addVertex(secondVertex, 0.0);
+         pointsAdded.add(secondVertex);
 
-      EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getFace(0).getCentroid(), EPSILON);
-      Vector3D expectedNormal = EuclidGeometryTools.normal3DFromThreePoint3Ds(firstVertex, secondVertex, thirdVertex);
-      if (expectedNormal.dot(polytope.getFace(0).getNormal()) < 0.0)
-         expectedNormal.negate();
-      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, polytope.getFace(0).getNormal(), EPSILON);
+         assertEquals(2, polytope.getNumberOfVertices());
+         assertEquals(2, polytope.getNumberOfEdges());
+         assertEquals(1, polytope.getNumberOfFaces());
+         EuclidCoreTestTools.assertTuple3DEquals(EuclidGeometryTools.averagePoint3Ds(pointsAdded), polytope.getCentroid(), EPSILON);
 
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Assert that adding a point that is on the face does not change anything.
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, pointsAdded);
-         polytope.addVertex(pointInside, 1.0e-12);
+         for (int vertexIndex = 0; vertexIndex < pointsAdded.size(); vertexIndex++)
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(pointsAdded.get(vertexIndex), polytope.getVertex(vertexIndex), EPSILON);
+         }
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Assert that adding a point that is on the edge does not change anything.
+            Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, pointsAdded);
+            polytope.addVertex(pointInside, 1.0e-12);
+
+            assertEquals(2, polytope.getNumberOfVertices());
+            assertEquals(2, polytope.getNumberOfEdges());
+            assertEquals(1, polytope.getNumberOfFaces());
+         }
+
+         // Testing properties for single triangle face polytope
+         Point3D thirdVertex = EuclidCoreRandomTools.nextPoint3D(random);
+         polytope.addVertex(thirdVertex, 0.0);
+         pointsAdded.add(thirdVertex);
 
          assertEquals(3, polytope.getNumberOfVertices());
-         //      assertEquals(3, polytope.getNumberOfEdges()); // FIXME
+         assertEquals(3, polytope.getNumberOfEdges());
          assertEquals(1, polytope.getNumberOfFaces());
-      }
+         Point3D expectedCentroid = EuclidGeometryTools.averagePoint3Ds(pointsAdded);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getCentroid(), EPSILON);
 
-      // We finally have an usual polytope: a tetrahedron
-      Point3D fourthVertex = EuclidCoreRandomTools.nextPoint3D(random);
-      polytope.addVertex(fourthVertex, 0.0);
-      pointsAdded.add(fourthVertex);
-
-      assertEquals(4, polytope.getNumberOfVertices());
-      assertEquals(6, polytope.getNumberOfEdges());
-      assertEquals(4, polytope.getNumberOfFaces());
-      expectedCentroid = EuclidGeometryTools.averagePoint3Ds(pointsAdded);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getCentroid(), EPSILON);
-
-      for (int vertexIndex = 0; vertexIndex < polytope.getVertices().size(); vertexIndex++)
-      {
-         Vertex3D vertex = polytope.getVertex(vertexIndex);
-         // Assert that each vertex is unique
-         assertTrue(polytope.getVertices().stream().noneMatch(otherVertex -> (otherVertex != vertex && otherVertex.epsilonEquals(vertex, EPSILON))));
-         // Assert that all vertex are from the points added
-         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
-
-         for (HalfEdge3D edge : vertex.getAssociatedEdges())
-            assertTrue(edge.getOrigin() == vertex);
-      }
-
-      for (int edgeIndex = 0; edgeIndex < polytope.getEdges().size(); edgeIndex++)
-      {
-         HalfEdge3D edge = polytope.getEdge(edgeIndex);
-         // Assert that each vertex is unique
-         assertTrue(polytope.getEdges().stream().noneMatch(otherEdge -> (otherEdge != edge && otherEdge.epsilonEquals(edge, EPSILON))));
-         // Assert that all vertex are from the points added
-         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
-         assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
-
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getDestination(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getOrigin(), EPSILON);
-
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getDestination(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getOrigin(), EPSILON);
-
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getTwinEdge().getOrigin(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getTwinEdge().getDestination(), EPSILON);
-
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getNextEdge().getOrigin(), EPSILON);
-         EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getPreviousEdge().getDestination(), EPSILON);
-
-         assertTrue(edge.getTwinEdge().getTwinEdge() == edge);
-         assertTrue(edge.getNextEdge().getPreviousEdge() == edge);
-         assertTrue(edge.getPreviousEdge().getNextEdge() == edge);
-      }
-
-      for (int faceIndex = 0; faceIndex < polytope.getFaces().size(); faceIndex++)
-      {
-         Face3D face = polytope.getFace(faceIndex);
-         assertTrue(polytope.getFaces().stream().noneMatch(otherFace -> (otherFace != face && otherFace.epsilonEquals(face, EPSILON))));
-         // Assert that all vertex are from the points added
-         for (HalfEdge3D edge : face.getEdges())
+         for (int vertexIndex = 0; vertexIndex < pointsAdded.size(); vertexIndex++)
          {
-            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
-            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
+            EuclidCoreTestTools.assertTuple3DEquals(pointsAdded.get(vertexIndex), polytope.getVertex(vertexIndex), EPSILON);
          }
-      }
 
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Assert that adding a point that is inside the polytope does not change anything.
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, pointsAdded);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getFace(0).getCentroid(), EPSILON);
+         Vector3D expectedNormal = EuclidGeometryTools.normal3DFromThreePoint3Ds(firstVertex, secondVertex, thirdVertex);
+         if (expectedNormal.dot(polytope.getFace(0).getNormal()) < 0.0)
+            expectedNormal.negate();
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, polytope.getFace(0).getNormal(), EPSILON);
 
-         assertTrue(polytope.isInteriorPoint(pointInside, EPSILON));
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Assert that adding a point that is on the face does not change anything.
+            Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, pointsAdded);
+            polytope.addVertex(pointInside, 1.0e-12);
 
-         polytope.addVertex(pointInside, 0.0);
+            assertEquals(3, polytope.getNumberOfVertices());
+            assertEquals(3, polytope.getNumberOfEdges());
+            assertEquals(1, polytope.getNumberOfFaces());
+         }
+
+         // We finally have an usual polytope: a tetrahedron
+         Point3D fourthVertex = EuclidCoreRandomTools.nextPoint3D(random);
+         polytope.addVertex(fourthVertex, 0.0);
+         pointsAdded.add(fourthVertex);
 
          assertEquals(4, polytope.getNumberOfVertices());
          assertEquals(6, polytope.getNumberOfEdges());
          assertEquals(4, polytope.getNumberOfFaces());
+         expectedCentroid = EuclidGeometryTools.averagePoint3Ds(pointsAdded);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, polytope.getCentroid(), EPSILON);
+
+         for (int vertexIndex = 0; vertexIndex < polytope.getVertices().size(); vertexIndex++)
+         {
+            Vertex3D vertex = polytope.getVertex(vertexIndex);
+            // Assert that each vertex is unique
+            assertTrue(polytope.getVertices().stream().noneMatch(otherVertex -> (otherVertex != vertex && otherVertex.epsilonEquals(vertex, EPSILON))));
+            // Assert that all vertex are from the points added
+            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(vertex, EPSILON)));
+
+            for (HalfEdge3D edge : vertex.getAssociatedEdges())
+               assertTrue(edge.getOrigin() == vertex);
+         }
+
+         for (int edgeIndex = 0; edgeIndex < polytope.getEdges().size(); edgeIndex++)
+         {
+            HalfEdge3D edge = polytope.getEdge(edgeIndex);
+            // Assert that each vertex is unique
+            assertTrue(polytope.getEdges().stream().noneMatch(otherEdge -> (otherEdge != edge && otherEdge.epsilonEquals(edge, EPSILON))));
+            // Assert that all vertex are from the points added
+            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
+            assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
+
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getDestination(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getOrigin(), EPSILON);
+
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getDestination(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getOrigin(), EPSILON);
+
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getTwinEdge().getOrigin(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getTwinEdge().getDestination(), EPSILON);
+
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getNextEdge().getOrigin(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getPreviousEdge().getDestination(), EPSILON);
+
+            assertTrue(edge.getTwinEdge().getTwinEdge() == edge);
+            assertTrue(edge.getNextEdge().getPreviousEdge() == edge);
+            assertTrue(edge.getPreviousEdge().getNextEdge() == edge);
+         }
+
+         for (int faceIndex = 0; faceIndex < polytope.getFaces().size(); faceIndex++)
+         {
+            Face3D face = polytope.getFace(faceIndex);
+            assertTrue(polytope.getFaces().stream().noneMatch(otherFace -> (otherFace != face && otherFace.epsilonEquals(face, EPSILON))));
+            // Assert that all vertex are from the points added
+            for (HalfEdge3D edge : face.getEdges())
+            {
+               assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
+               assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
+            }
+         }
+
+         for (int i = 0; i < ITERATIONS; i++)
+         { // Assert that adding a point that is inside the polytope does not change anything.
+            Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, firstVertex, secondVertex, thirdVertex, fourthVertex);
+
+            assertTrue(polytope.isInteriorPoint(pointInside, EPSILON));
+
+            polytope.addVertex(pointInside, 0.0);
+
+            assertEquals(4, polytope.getNumberOfVertices());
+            assertEquals(6, polytope.getNumberOfEdges());
+            assertEquals(4, polytope.getNumberOfFaces());
+         }
       }
    }
 
    @SuppressWarnings("unlikely-arg-type")
    @Test
-   void testTetrahedron() throws Exception
+   void testConstructingTetrahedron() throws Exception
    {
-      Point3D top = new Point3D(0.0, 0.0, 1.0);
-      Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
-      Point3D bottomP1 = new Point3D(0.5, -0.5, 0.0);
-      Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
+      Random random = new Random(34636);
 
-      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-      convexPolytope3D.addVertex(bottomP0, 0.0);
-      convexPolytope3D.addVertex(bottomP1, 0.0);
-      convexPolytope3D.addVertex(bottomP2, 0.0);
-      convexPolytope3D.addVertex(top, 0.0);
+      { // Trivial tests.
+         Point3D top = new Point3D(0.0, 0.0, 1.0);
+         Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
+         Point3D bottomP1 = new Point3D(0.5, -0.5, 0.0);
+         Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
 
-      assertTrue(convexPolytope3D.getVertices().contains(top));
-      assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
-      assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
-      assertTrue(convexPolytope3D.getVertices().contains(bottomP2));
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         convexPolytope3D.addVertex(bottomP0, 0.0);
+         convexPolytope3D.addVertex(bottomP1, 0.0);
+         convexPolytope3D.addVertex(bottomP2, 0.0);
+         convexPolytope3D.addVertex(top, 0.0);
 
-      assertEquals(4, convexPolytope3D.getNumberOfVertices());
-      assertEquals(6, convexPolytope3D.getNumberOfEdges());
-      assertEquals(4, convexPolytope3D.getNumberOfFaces());
+         assertTrue(convexPolytope3D.getVertices().contains(top));
+         assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
+         assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
+         assertTrue(convexPolytope3D.getVertices().contains(bottomP2));
 
-      Vector3D bottomNormal = new Vector3D(0.0, 0.0, -1.0);
-      Vector3D sideYMinusNormal = EuclidGeometryTools.normal3DFromThreePoint3Ds(top, bottomP0, bottomP1);
-      if (sideYMinusNormal.getY() > 0.0)
-         sideYMinusNormal.negate();
-      Vector3D sideXMinusNormal = EuclidGeometryTools.normal3DFromThreePoint3Ds(top, bottomP0, bottomP2);
-      if (sideXMinusNormal.getX() > 0.0)
-         sideXMinusNormal.negate();
-      Vector3D sideXPlusNormal = new Vector3D(sideXMinusNormal);
-      sideXPlusNormal.setX(-sideXPlusNormal.getX());
+         assertEquals(4, convexPolytope3D.getNumberOfVertices());
+         assertEquals(6, convexPolytope3D.getNumberOfEdges());
+         assertEquals(4, convexPolytope3D.getNumberOfFaces());
 
-      for (int faceIndex = 0; faceIndex < 4; faceIndex++)
+         Vector3D bottomNormal = new Vector3D(0.0, 0.0, -1.0);
+         Vector3D sideYMinusNormal = EuclidGeometryTools.normal3DFromThreePoint3Ds(top, bottomP0, bottomP1);
+         if (sideYMinusNormal.getY() > 0.0)
+            sideYMinusNormal.negate();
+         Vector3D sideXMinusNormal = EuclidGeometryTools.normal3DFromThreePoint3Ds(top, bottomP0, bottomP2);
+         if (sideXMinusNormal.getX() > 0.0)
+            sideXMinusNormal.negate();
+         Vector3D sideXPlusNormal = new Vector3D(sideXMinusNormal);
+         sideXPlusNormal.setX(-sideXPlusNormal.getX());
+
+         for (int faceIndex = 0; faceIndex < 4; faceIndex++)
+         {
+            Face3D face = convexPolytope3D.getFace(faceIndex);
+            Vector3D normal = face.getNormal();
+
+            if (normal.epsilonEquals(bottomNormal, EPSILON))
+            {
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP2));
+            }
+            else if (normal.epsilonEquals(sideYMinusNormal, EPSILON))
+            {
+               assertTrue(convexPolytope3D.getVertices().contains(top));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
+            }
+            else if (normal.epsilonEquals(sideXMinusNormal, EPSILON))
+            {
+               assertTrue(convexPolytope3D.getVertices().contains(top));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP2));
+            }
+            else if (normal.epsilonEquals(sideXPlusNormal, EPSILON))
+            {
+               assertTrue(convexPolytope3D.getVertices().contains(top));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
+               assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
+            }
+            else
+            {
+               fail("Unexpected face normal: " + normal);
+            }
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         Face3D face = convexPolytope3D.getFace(faceIndex);
-         Vector3D normal = face.getNormal();
+         /*
+          * We start from a tetrahedron, then add a vertex that is outside but lies on the support line of
+          * one the edges. So the result should be a bigger tetrahedron.
+          */
 
-         if (normal.epsilonEquals(bottomNormal, EPSILON))
-         {
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP2));
-         }
-         else if (normal.epsilonEquals(sideYMinusNormal, EPSILON))
-         {
-            assertTrue(convexPolytope3D.getVertices().contains(top));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
-         }
-         else if (normal.epsilonEquals(sideXMinusNormal, EPSILON))
-         {
-            assertTrue(convexPolytope3D.getVertices().contains(top));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP2));
-         }
-         else if (normal.epsilonEquals(sideXPlusNormal, EPSILON))
-         {
-            assertTrue(convexPolytope3D.getVertices().contains(top));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
-            assertTrue(convexPolytope3D.getVertices().contains(bottomP1));
-         }
-         else
-         {
-            fail("Unexpected face normal: " + normal);
-         }
+         List<Point3D> vertices = new ArrayList<>();
+         vertices.add(EuclidCoreRandomTools.nextPoint3D(random));
+         vertices.add(EuclidCoreRandomTools.nextPoint3D(random));
+         vertices.add(EuclidCoreRandomTools.nextPoint3D(random));
+         vertices.add(EuclidCoreRandomTools.nextPoint3D(random));
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         vertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 0.0));
+
+         assertEquals(4, convexPolytope3D.getNumberOfVertices());
+         assertEquals(6, convexPolytope3D.getNumberOfEdges());
+         assertEquals(4, convexPolytope3D.getNumberOfFaces());
+
+         HalfEdge3D edge = convexPolytope3D.getEdge(random.nextInt(convexPolytope3D.getNumberOfEdges()));
+         Point3DBasics newVertex = edge.pointOnLineGivenPercentage(1.0 + random.nextDouble());
+         Vertex3D expectedVertexRemoved = edge.getDestination();
+
+         convexPolytope3D.addVertex(newVertex, 1.0e-10);
+
+         assertEquals(4, convexPolytope3D.getNumberOfVertices());
+         assertEquals(6, convexPolytope3D.getNumberOfEdges());
+         assertEquals(4, convexPolytope3D.getNumberOfFaces());
+         assertFalse(convexPolytope3D.getVertices().contains(expectedVertexRemoved));
       }
    }
 
    @Test
-   void testUnitLengthCube() throws Exception
+   void testConstructingCube() throws Exception
    {
       Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
       Point3D bottomP1 = new Point3D(-0.5, 0.5, 0.0);
@@ -297,7 +336,7 @@ public class ConvexPolytope3DTest
    }
 
    @Test
-   void testConstructIcosahedron() throws Exception
+   void testConstructingIcosahedron() throws Exception
    {
       Random random = new Random(23423);
 
@@ -402,7 +441,7 @@ public class ConvexPolytope3DTest
    }
 
    @Test
-   void testConstructIcosphere() throws Exception
+   void testConstructingIcosphere() throws Exception
    {
       Random random = new Random(23423);
 
@@ -888,7 +927,7 @@ public class ConvexPolytope3DTest
                }
 
                { // Case #1: Shifting equidistantPoint slightly (not too much or the face won't be visible) away from firstFace so it is the least visible face.
-                 // TODO The construction used here is not reliable, the least visible face 
+                 // TODO The construction used here is not reliable, the least visible face
                   Vector3D oppositeEdgeNormal = new Vector3D();
                   oppositeEdgeNormal.interpolate(secondFace.getNormal(), thirdFace.getNormal(), 0.5);
                   oppositeEdgeNormal.normalize();
@@ -908,7 +947,7 @@ public class ConvexPolytope3DTest
                   pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), extrusionDirection, vertex);
 
                   List<Face3D> actualVisibleFaces = new ArrayList<>();
-                  Face3D leastVisibleFace = convexPolytope3D.getVisibleFaces(actualVisibleFaces, pointOutside, 0.0);
+                  convexPolytope3D.getVisibleFaces(actualVisibleFaces, pointOutside, 0.0);
 
                   assertEquals(3, actualVisibleFaces.size());
                   assertTrue(actualVisibleFaces.contains(firstFace));
