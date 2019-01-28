@@ -551,8 +551,6 @@ public class EuclidPolytopeTools
       { // Going through the new edges and associating the twins.
          HalfEdge3D endingTo = startingFrom.getDestination().getEdgeTo(vertex);
 
-         assert startingFrom.getOrigin() == endingTo.getDestination() && startingFrom.getDestination() == endingTo.getOrigin(); // TODO
-
          startingFrom.setTwinEdge(endingTo);
          endingTo.setTwinEdge(startingFrom);
       }

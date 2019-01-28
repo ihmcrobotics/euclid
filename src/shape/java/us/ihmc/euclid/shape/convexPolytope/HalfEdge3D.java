@@ -78,29 +78,12 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
       setDestination(destination);
    }
 
-   /**
-    * Creates a half edge using the {@code createTwinHalfEdge{} function and stores a reference to the
-    * new object in the twin edge field @return a twin edge
-    */
-   public HalfEdge3D setAndCreateTwinHalfEdge()
+   public HalfEdge3D(Vertex3D origin, Vertex3D destination, HalfEdge3D previousEdge, HalfEdge3D nextEdge, Face3D face)
    {
-      HalfEdge3D twinEdge = createTwinEdge();
-      setTwinEdge(twinEdge);
-      return twinEdge;
-   }
-
-   /**
-    * Creates a half edge from a twin edge and the face that the new half edge is to be a part of
-    *
-    * @param twinEdge the edge that is to be the twin of the new half edgegetShortestDistanceTo
-    * @param face the face that the new half edge is to be a part of
-    */
-   public HalfEdge3D(HalfEdge3D twinEdge, Face3D face)
-   {
-      setTwinEdge(twinEdge);
-      setOrigin(twinEdge.getDestination());
-      setDestination(twinEdge.getOrigin());
+      this(origin, destination);
       setFace(face);
+      setPreviousEdge(previousEdge);
+      setNextEdge(nextEdge);
    }
 
    /**
@@ -122,40 +105,8 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public HalfEdge3D(Vertex3D origin, Vertex3D destination, HalfEdge3D twinEdge, HalfEdge3D nextEdge, HalfEdge3D previousEdge, Face3D face)
    {
-      setOrigin(origin);
-      setDestination(destination);
+      this(origin, destination, previousEdge, nextEdge, face);
       setTwinEdge(twinEdge);
-      setNextEdge(nextEdge);
-      setPreviousEdge(previousEdge);
-      setFace(face);
-   }
-
-   /**
-    * Takes a edge, clears all its fields and assigns it all the values that a twin edge for this half
-    * edge would have i.e. {@code originVertex}, {@code destinationVertex}, {@code twinEdge = this}
-    *
-    * @param twinEdge
-    */
-   public void setToTwin(HalfEdge3D twinEdge)
-   {
-      twinEdge.detroy();
-      twinEdge.setOrigin(destination);
-      twinEdge.setDestination(origin);
-      twinEdge.setTwinEdge(this);
-   }
-
-   /**
-    *
-    * @return a twin edge that can be used to generate a adjacent face. The twin edge generated stores
-    *         references to the {@code originVertex} and {@code destinationVertex}. Half edge generated
-    *         stores this edge as its twin but this half edge does not store the generated half edge as
-    *         its twin
-    */
-   public HalfEdge3D createTwinEdge()
-   {
-      HalfEdge3D twinEdge = new HalfEdge3D(getDestination(), getOrigin());
-      twinEdge.setTwinEdge(this);
-      return twinEdge;
    }
 
    /**
@@ -169,50 +120,9 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    {
       if (this.origin != null)
          this.origin.removeAssociatedEdge(this);
-      setOriginUnsafe(origin);
+      this.origin = origin;
       if (this.origin != null)
          this.origin.addAssociatedEdge(this);
-      updateTwinDestination();
-   }
-
-   /**
-    * Update the reference to the {@code originVertex} to the specified value. Associations are not
-    * updated
-    *
-    * @param origin the new vertex that the half edge originates at. Can be null. Is not modified in
-    *           this function
-    */
-   public void setOriginUnsafe(Vertex3D origin)
-   {
-      this.origin = origin;
-   }
-
-   /**
-    * Internal function to update the origin of the twin edge only if the twin is not null. Is needed
-    * since the public versions that can set the origin would lead to a cyclic non-terminating call.
-    * Also updates the requisite references.
-    */
-   private void updateTwinOrigin()
-   {
-      if (twinEdge != null)
-      {
-         if (twinEdge.getOrigin() != null)
-            twinEdge.getOrigin().removeAssociatedEdge(twinEdge);
-         twinEdge.setOriginUnsafe(destination);
-         if (twinEdge.getOrigin() != null)
-            twinEdge.getOrigin().addAssociatedEdge(twinEdge);
-      }
-   }
-
-   /**
-    * Internal function to update the destination vertex of the twin edge only if the twin is not null.
-    * Is needed since the public versions that can set the destination would lead to a cyclic
-    * non-terminating call.
-    */
-   private void updateTwinDestination()
-   {
-      if (twinEdge != null)
-         twinEdge.setDestinationUnsafe(origin);
    }
 
    /**
@@ -234,20 +144,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    public void setDestination(Vertex3D destination)
    {
       this.destination = destination;
-      updateTwinOrigin();
-   }
-
-   /**
-    * Update the reference to the {@code destinationVertex} to the specified value. Associations of the
-    * specified vertex and of this object are not updated
-    *
-    * @param destination the new vertex that the half edge originates at. Can be null. Is not modified
-    *           in this function
-    * @param destination
-    */
-   public void setDestinationUnsafe(Vertex3D destination)
-   {
-      this.destination = destination;
    }
 
    /**
@@ -260,13 +156,14 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Store a reference to the specified half edge as a twin of this half edge. No checks are performed
-    * while updating the twin edge.
+    * Store a reference to the specified half edge as a twin of this half edge.
     *
     * @param twinEdge the half edge to be stored as a twin edge of this half edge.
     */
    public void setTwinEdge(HalfEdge3D twinEdge)
    {
+      if (twinEdge != null && (twinEdge.getDestination() != origin || twinEdge.getOrigin() != destination))
+         throw new IllegalArgumentException("Twin-edge does not match: this edge:\n" + this + "\ntwin-edge:\n" + twinEdge);
       this.twinEdge = twinEdge;
    }
 

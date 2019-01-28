@@ -101,11 +101,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          }
 
          secondEdge.setDestination(vertexToAdd);
-         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
-         newEdge.setFace(this);
-         newEdge.setNextEdge(firstEdge);
+         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin(), secondEdge, firstEdge, this);
          firstEdge.setPreviousEdge(newEdge);
-         newEdge.setPreviousEdge(secondEdge);
          secondEdge.setNextEdge(newEdge);
          edges.add(newEdge);
       }

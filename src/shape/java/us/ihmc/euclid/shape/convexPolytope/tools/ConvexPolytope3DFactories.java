@@ -39,9 +39,6 @@ public class ConvexPolytope3DFactories
 
       HalfEdge3D faceFirstEdge = face.getEdge(0);
 
-      // TODO Remove once tested
-      assert twinEdge.getOrigin() == faceFirstEdge.getDestination() && twinEdge.getDestination() == faceFirstEdge.getOrigin();
-
       twinEdge.setTwinEdge(faceFirstEdge);
       faceFirstEdge.setTwinEdge(twinEdge);
 
