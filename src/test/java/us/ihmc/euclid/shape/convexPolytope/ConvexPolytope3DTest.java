@@ -302,11 +302,12 @@ public class ConvexPolytope3DTest
 
          convexPolytope3D.addVertex(newVertex, 1.0e-10);
 
-         assertEquals(4, convexPolytope3D.getNumberOfVertices());
-         assertEquals(6, convexPolytope3D.getNumberOfEdges());
-         assertEquals(4, convexPolytope3D.getNumberOfFaces());
-         assertTrue(convexPolytope3D.getVertices().stream().anyMatch(vertex -> vertex.epsilonEquals(newVertex, EPSILON)));
-         assertFalse(convexPolytope3D.getVertices().contains(expectedVertexRemoved));
+         String errorMessage = "Iteration: " + i;
+         assertEquals(4, convexPolytope3D.getNumberOfVertices(), errorMessage);
+         assertEquals(6, convexPolytope3D.getNumberOfEdges(), errorMessage);
+         assertEquals(4, convexPolytope3D.getNumberOfFaces(), errorMessage);
+         assertTrue(convexPolytope3D.getVertices().stream().anyMatch(vertex -> vertex.epsilonEquals(newVertex, EPSILON)), errorMessage);
+         assertFalse(convexPolytope3D.getVertices().contains(expectedVertexRemoved), errorMessage);
       }
    }
 
@@ -386,7 +387,7 @@ public class ConvexPolytope3DTest
          assertTrue(xMinusSideFace.getVertices().containsAll(Arrays.asList(topP0, topP1, bottomP0, bottomP1)));
          assertTrue(yPlusSideFace.getVertices().containsAll(Arrays.asList(topP1, topP2, bottomP1, bottomP2)));
          assertTrue(yMinusSideFace.getVertices().containsAll(Arrays.asList(topP0, topP3, bottomP0, bottomP3)));
-         
+
          convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwinEdge()));
          convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getNextEdge()));
          convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getPreviousEdge()));
@@ -961,9 +962,11 @@ public class ConvexPolytope3DTest
             { // Expecting 3 visible faces
                Vertex3D vertex = convexPolytope3D.getVertex(vertexIndex);
 
-               Face3D firstFace = vertex.getAssociatedEdge(0).getFace();
-               Face3D secondFace = vertex.getAssociatedEdge(1).getFace();
-               Face3D thirdFace = vertex.getAssociatedEdge(2).getFace();
+               List<HalfEdge3D> edges = new ArrayList<>(vertex.getAssociatedEdges());
+
+               Face3D firstFace = edges.get(0).getFace();
+               Face3D secondFace = edges.get(1).getFace();
+               Face3D thirdFace = edges.get(2).getFace();
                assertTrue(firstFace != secondFace);
                assertTrue(secondFace != thirdFace);
                assertTrue(thirdFace != firstFace);

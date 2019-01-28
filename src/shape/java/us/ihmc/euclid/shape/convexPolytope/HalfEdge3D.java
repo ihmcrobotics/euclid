@@ -1,11 +1,13 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -388,6 +390,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    {
       edgeVector.sub(destination, origin);
       return edgeVector;
+   }
+
+   public double distanceFromSupportLine(Point3DReadOnly point)
+   {
+      return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, origin, destination);
    }
 
    /**

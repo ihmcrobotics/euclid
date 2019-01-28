@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
-import java.util.List;
+import java.util.Collection;
 
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -13,7 +13,7 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
     * 
     * @return a list of read only references to the edges that originate at this edge
     */
-   List<? extends HalfEdge3DReadOnly> getAssociatedEdges();
+   Collection<? extends HalfEdge3DReadOnly> getAssociatedEdges();
 
    /**
     * Get a particular associated edge based on its index in the associated edge list held by the
@@ -35,25 +35,6 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
    default boolean isAssociatedWithEdge(HalfEdge3DReadOnly edgeToCheck)
    {
       return getAssociatedEdges().contains(edgeToCheck);
-   }
-
-   /**
-    * An associated edge is sufficiently close if its origin and destination are within a
-    * {@code epsilon} distance of the corresponding points for the specified edge
-    * 
-    * @param edgeToCheck
-    * @param epsilon
-    * @return {@code true} if the specified edge is geometrically close to any of the associated edges.
-    *         Otherwise {@code false}
-    */
-   default boolean isAssociatedWithEdge(HalfEdge3DReadOnly edgeToCheck, double epsilon)
-   {
-      for (int i = 0; i < getAssociatedEdges().size(); i++)
-      {
-         if (getAssociatedEdges().get(i).epsilonEquals(edgeToCheck, epsilon))
-            return true;
-      }
-      return false;
    }
 
    /**

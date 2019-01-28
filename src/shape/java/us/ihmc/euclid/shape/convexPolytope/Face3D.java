@@ -116,6 +116,12 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          if (lineOfSight.isEmpty())
             return;
 
+         // TODO Maybe do line-of-sight with epsilon?
+         if (lineOfSight.get(0).getPreviousEdge().distanceFromSupportLine(vertexToAdd) < epsilon)
+            lineOfSight.add(0, lineOfSight.get(0).getPreviousEdge());
+         if (lineOfSight.get(lineOfSight.size() - 1).getNextEdge().distanceFromSupportLine(vertexToAdd) < epsilon)
+            lineOfSight.add(lineOfSight.get(lineOfSight.size() - 1).getNextEdge());
+
          HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
          HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
 
