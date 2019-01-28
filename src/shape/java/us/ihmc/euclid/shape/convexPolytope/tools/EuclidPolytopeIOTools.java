@@ -2,7 +2,8 @@ package us.ihmc.euclid.shape.convexPolytope.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.function.Function;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
@@ -27,10 +28,10 @@ public class EuclidPolytopeIOTools
       return getVertex3DString(format, vertex3D, vertex3D.getAssociatedEdges());
    }
 
-   public static String getVertex3DString(String format, Tuple3DReadOnly vertex3DPosition, List<? extends HalfEdge3DReadOnly> vertexHalfEdges)
+   public static String getVertex3DString(String format, Tuple3DReadOnly vertex3DPosition, Collection<? extends HalfEdge3DReadOnly> vertexHalfEdges)
    {
       String string = "Vertex 3D: " + getTuple3DString(format, vertex3DPosition) + ", number of edges: " + vertexHalfEdges.size();
-      string += getHalfEdge3DListString(format, "\n\t", vertexHalfEdges);
+      string += getHalfEdge3DCollectionString(format, "\n\t", vertexHalfEdges);
       return string;
    }
 
@@ -43,8 +44,7 @@ public class EuclidPolytopeIOTools
    {
       if (halfEdge3D == null)
          return "null";
-      return getHalfEdge3DString(format, halfEdge3D, halfEdge3D.getTwinEdge(), halfEdge3D.getNextEdge(), halfEdge3D.getPreviousEdge(),
-                                 halfEdge3D.getFace());
+      return getHalfEdge3DString(format, halfEdge3D, halfEdge3D.getTwinEdge(), halfEdge3D.getNextEdge(), halfEdge3D.getPreviousEdge(), halfEdge3D.getFace());
    }
 
    public static String getHalfEdge3DString(String format, LineSegment3DReadOnly edgeSupportingSegment, HalfEdge3DReadOnly twinEdge,
@@ -70,10 +70,10 @@ public class EuclidPolytopeIOTools
       return getFace3DString(format, face3D.getCentroid(), face3D.getNormal(), face3D.getEdges());
    }
 
-   public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, List<? extends HalfEdge3DReadOnly> faceEdges)
+   public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, Collection<? extends HalfEdge3DReadOnly> faceEdges)
    {
       String string = "Face 3D: " + getFace3DShortString(format, centroid, normal) + ", number of edges: " + faceEdges.size()
-            + getHalfEdge3DListString(format, "\n\t", faceEdges);
+            + getHalfEdge3DCollectionString(format, "\n\t", faceEdges);
       return string;
    }
 
@@ -89,45 +89,46 @@ public class EuclidPolytopeIOTools
       return getConvexPolytope3DString(format, convexPolytope3D.getVertices(), convexPolytope3D.getEdges(), convexPolytope3D.getFaces());
    }
 
-   public static String getConvexPolytope3DString(String format, List<? extends Vertex3DReadOnly> polytopeVertices,
-                                                  List<? extends HalfEdge3DReadOnly> polytopeEdges, List<? extends Face3DReadOnly> polytopeFaces)
+   public static String getConvexPolytope3DString(String format, Collection<? extends Vertex3DReadOnly> polytopeVertices,
+                                                  Collection<? extends HalfEdge3DReadOnly> polytopeEdges, Collection<? extends Face3DReadOnly> polytopeFaces)
    {
       String string = "Convex polytope 3D: number of: [faces: " + polytopeFaces.size() + ", edges: " + polytopeEdges.size() + ", vertices: "
             + polytopeVertices.size();
       String linePrefix = "\n\t";
-      string += "\nFace list: " + getFace3DListString(format, linePrefix, polytopeFaces);
-      string += "\nEdge list: " + getHalfEdge3DListString(format, linePrefix, polytopeEdges);
-      string += "\nVertex list: " + getVertex3DListString(format, linePrefix, polytopeVertices);
+      string += "\nFace list: " + getFace3DCollectionString(format, linePrefix, polytopeFaces);
+      string += "\nEdge list: " + getHalfEdge3DCollectionString(format, linePrefix, polytopeEdges);
+      string += "\nVertex list: " + getVertex3DCollectionString(format, linePrefix, polytopeVertices);
       return string;
    }
 
-   private static String getVertex3DListString(String format, String linePrefix, List<? extends Vertex3DReadOnly> vertices)
+   private static String getVertex3DCollectionString(String format, String linePrefix, Collection<? extends Vertex3DReadOnly> vertices)
    {
-      return getListString(linePrefix, null, linePrefix, format, vertices, vertex -> getTuple3DString(format, vertex));
+      return getCollectionString(linePrefix, null, linePrefix, format, vertices, vertex -> getTuple3DString(format, vertex));
    }
 
-   private static String getHalfEdge3DListString(String format, String linePrefix, List<? extends HalfEdge3DReadOnly> halfEdges)
+   private static String getHalfEdge3DCollectionString(String format, String linePrefix, Collection<? extends HalfEdge3DReadOnly> halfEdges)
    {
-      return getListString(linePrefix, null, linePrefix, format, halfEdges, halfEdge -> getLineSegment3DShortString(format, halfEdge));
+      return getCollectionString(linePrefix, null, linePrefix, format, halfEdges, halfEdge -> getLineSegment3DShortString(format, halfEdge));
    }
 
-   private static String getFace3DListString(String format, String linePrefix, List<? extends Face3DReadOnly> faces)
+   private static String getFace3DCollectionString(String format, String linePrefix, Collection<? extends Face3DReadOnly> faces)
    {
-      return getListString(linePrefix, null, linePrefix, format, faces, face -> getFace3DShortString(format, face));
+      return getCollectionString(linePrefix, null, linePrefix, format, faces, face -> getFace3DShortString(format, face));
    }
 
-   public static <T> String getListString(String prefix, String suffix, String separator, List<T> list, Function<T, String> elementToStringFunction)
+   public static <T> String getCollectionString(String prefix, String suffix, String separator, Collection<T> collection,
+                                                Function<T, String> elementToStringFunction)
    {
-      return getListString(prefix, suffix, separator, DEFAULT_FORMAT, list, elementToStringFunction);
+      return getCollectionString(prefix, suffix, separator, DEFAULT_FORMAT, collection, elementToStringFunction);
    }
 
-   public static <T> String getListString(String prefix, String suffix, String separator, String format, List<T> list,
-                                          Function<T, String> elementToStringFunction)
+   public static <T> String getCollectionString(String prefix, String suffix, String separator, String format, Collection<T> collection,
+                                                Function<T, String> elementToStringFunction)
    {
-      if (list == null)
+      if (collection == null)
          return "null";
 
-      String ret = getListString(separator, format, list, elementToStringFunction);
+      String ret = getCollectionString(separator, format, collection, elementToStringFunction);
 
       if (prefix != null)
          ret = prefix + ret;
@@ -138,16 +139,17 @@ public class EuclidPolytopeIOTools
       return ret;
    }
 
-   public static <T> String getListString(String separator, String format, List<T> list, Function<T, String> elementToStringFunction)
+   public static <T> String getCollectionString(String separator, String format, Collection<T> collection, Function<T, String> elementToStringFunction)
    {
-      if (list == null)
+      if (collection == null)
          return "null";
-      if (list.isEmpty())
+      if (collection.isEmpty())
          return "";
 
-      String ret = elementToStringFunction.apply(list.get(0));
-      for (int i = 1; i < list.size(); i++)
-         ret += separator + elementToStringFunction.apply(list.get(i));
+      Iterator<T> iterator = collection.iterator();
+      String ret = elementToStringFunction.apply(iterator.next());
+      while (iterator.hasNext())
+         ret += separator + elementToStringFunction.apply(iterator.next());
       return ret;
    }
 
