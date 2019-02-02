@@ -164,7 +164,9 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
    @Override
    public boolean equals(Object object)
    {
-      if (object instanceof Vertex3DReadOnly)
+      if (object == this)
+         return true;
+      else if (object instanceof Vertex3DReadOnly)
          return equals((Vertex3DReadOnly) object);
       else
          return false;

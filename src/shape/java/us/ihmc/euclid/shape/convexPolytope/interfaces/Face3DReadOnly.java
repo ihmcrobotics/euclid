@@ -340,9 +340,14 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    default double distance(Point3DReadOnly point)
    {
       if (isPointDirectlyAboveOrBelow(point))
-         return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
+         return distanceToPlane(point);
       else
          return getClosestEdge(point).distance(point);
+   }
+
+   default double distanceToPlane(Point3DReadOnly point)
+   {
+      return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
    }
 
    /**

@@ -339,6 +339,17 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
+   public boolean equals(Object object)
+   {
+      if (object == this)
+         return true;
+      else if (object instanceof Face3DReadOnly)
+         return Face3DReadOnly.super.equals((Face3DReadOnly) object);
+      else
+         return false;
+   }
+
+   @Override
    public String toString()
    {
       return EuclidPolytopeIOTools.getFace3DString(this);

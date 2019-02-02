@@ -334,7 +334,9 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    @Override
    public boolean equals(Object object)
    {
-      if (object instanceof HalfEdge3DReadOnly)
+      if (object == this)
+         return true;
+      else if (object instanceof HalfEdge3DReadOnly)
          return HalfEdge3DReadOnly.super.equals((HalfEdge3DReadOnly) object);
       else
          return false;

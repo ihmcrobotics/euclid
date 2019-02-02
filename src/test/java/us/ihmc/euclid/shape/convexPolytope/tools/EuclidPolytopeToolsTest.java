@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.convexPolytope.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -18,6 +19,9 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
+import us.ihmc.euclid.shape.convexPolytope.Face3D;
+import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -178,6 +182,106 @@ public class EuclidPolytopeToolsTest
    }
 
    @Test
+   void testGetSilhouette() throws Exception
+   {
+      Random random = new Random(454353);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
+         // First we build an observer that is outside the polytope
+         // We pick a face at random and create a point that is above the face's support plane.
+         Face3D aFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         Point3D observer = new Point3D(aFace.getCentroid());
+         Vector3D tangential = EuclidCoreRandomTools.nextOrthogonalVector3D(random, aFace.getNormal(), true);
+         observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), tangential, observer);
+         observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, epsilon, 10.0), aFace.getNormal(), observer);
+
+         // Evaluate the silhouette using brute force
+         List<HalfEdge3D> expectedSilhouette = new ArrayList<>();
+
+         for (HalfEdge3D edge : convexPolytope3D.getEdges())
+         { // This edge is part of the silhouette if its face is not visible and the face of its twin is visible
+            boolean isEdgeFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getFace(), epsilon);
+            boolean isTwinFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getTwinEdge().getFace(), epsilon);
+
+            if (!isEdgeFaceVisible && isTwinFaceVisible)
+               expectedSilhouette.add(edge);
+         }
+
+         List<HalfEdge3D> actualSilhouette = EuclidPolytopeTools.getSilhouette(convexPolytope3D.getFaces(), observer, epsilon);
+
+         if (expectedSilhouette.isEmpty())
+         {
+            assertNull(actualSilhouette);
+         }
+         else
+         {
+            assertEquals(expectedSilhouette.size(), actualSilhouette.size());
+
+            for (HalfEdge3D expectedSilhouetteEdge : expectedSilhouette)
+            {
+               assertTrue(actualSilhouette.contains(expectedSilhouetteEdge));
+            }
+         }
+      }
+   }
+
+   @Test
+   void testGetVisibleFaces() throws Exception
+   {
+      Random random = new Random(4456453);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
+         // First we build an observer that is outside the polytope
+         // We pick a face at random and create a point that is above the face's support plane.
+         Face3D aFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         Point3D observer = new Point3D(aFace.getCentroid());
+         Vector3D tangential = EuclidCoreRandomTools.nextOrthogonalVector3D(random, aFace.getNormal(), true);
+         observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), tangential, observer);
+         observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, epsilon, 10.0), aFace.getNormal(), observer);
+
+         List<Face3D> visibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), observer, epsilon);
+         List<Face3D> hiddenFaces = convexPolytope3D.getFaces().stream().filter(face -> !visibleFaces.contains(face)).collect(Collectors.toList());
+
+         // Check consistency with EuclidPolytopeTools.canObserverSeeFace(...)
+         assertTrue(visibleFaces.stream().allMatch(face -> EuclidPolytopeTools.canObserverSeeFace(observer, face, epsilon)));
+         assertTrue(hiddenFaces.stream().noneMatch(face -> EuclidPolytopeTools.canObserverSeeFace(observer, face, epsilon)));
+
+         // Check that the set of visible faces form a continuous set without isolated faces.
+         if (visibleFaces.size() == 1)
+         {
+            Face3D visibleFace = visibleFaces.get(0);
+            for (int neighborIndex = 0; neighborIndex < visibleFace.getNumberOfEdges(); neighborIndex++)
+            {
+               assertFalse(EuclidPolytopeTools.canObserverSeeFace(observer, visibleFace.getNeighboringFace(neighborIndex), epsilon));
+            }
+         }
+         else
+         {
+            for (Face3D visibleFace : visibleFaces)
+            {
+               int numberOfVisibleNeighbors = 0;
+
+               for (int neighborIndex = 0; neighborIndex < visibleFace.getNumberOfEdges(); neighborIndex++)
+               {
+                  Face3D neighbor = visibleFace.getNeighboringFace(neighborIndex);
+
+                  if (EuclidPolytopeTools.canObserverSeeFace(observer, neighbor, epsilon))
+                     numberOfVisibleNeighbors++;
+               }
+
+               assertTrue(numberOfVisibleNeighbors > 0);
+            }
+         }
+      }
+   }
+
+   @Test
    void testComputeConvexPolygon3DArea() throws Exception
    {
       Random random = new Random(3534);
@@ -188,34 +292,39 @@ public class EuclidPolytopeToolsTest
          List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
 
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true, centroid2D);
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true,
+                                                                                     centroid2D);
          Point3D expectedCentroid3D = new Point3D(centroid2D);
 
          Point3D actualCentroid3D = new Point3D();
-         double actualArea = EuclidPolytopeTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, Axis.Z, circleBasedConvexPolygon3D.size(), true, actualCentroid3D);
+         double actualArea = EuclidPolytopeTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, Axis.Z, circleBasedConvexPolygon3D.size(), true,
+                                                                            actualCentroid3D);
 
          assertEquals(expectedArea, actualArea, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Applying a transform when switching to 3D
          List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 20);
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true, centroid2D);
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true,
+                                                                                     centroid2D);
 
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          Vector3D normal = new Vector3D();
          transform.getRotation().getColumn(2, normal);
 
-         List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).peek(transform::transform).collect(Collectors.toList());
-         
+         List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).peek(transform::transform)
+                                                                              .collect(Collectors.toList());
+
          Point3D expectedCentroid3D = new Point3D(centroid2D);
          expectedCentroid3D.applyTransform(transform);
-         
+
          Point3D actualCentroid3D = new Point3D();
-         double actualArea = EuclidPolytopeTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, normal, circleBasedConvexPolygon3D.size(), true, actualCentroid3D);
-         
+         double actualArea = EuclidPolytopeTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, normal, circleBasedConvexPolygon3D.size(), true,
+                                                                            actualCentroid3D);
+
          assertEquals(expectedArea, actualArea, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
       }

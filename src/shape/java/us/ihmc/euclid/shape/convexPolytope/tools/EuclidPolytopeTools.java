@@ -5,6 +5,7 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -454,6 +455,16 @@ public class EuclidPolytopeTools
          throw new IllegalArgumentException("Illegal numberOfVertices: " + numberOfVertices + ", expected a value in ] 0, " + convexPolygon3D.size() + "].");
    }
 
+   public static boolean canObserverSeeFace(Point3DReadOnly observer, Face3DReadOnly face, double epsilon)
+   {
+      return face.signedDistanceToPlane(observer) > epsilon;
+   }
+
+   public static boolean isOnFaceSupportPlane(Point3DReadOnly observer, Face3DReadOnly face, double epsilon)
+   {
+      return face.distanceToPlane(observer) <= epsilon;
+   }
+
    /**
     * Filters the given {@code faces} to only return the ones that the given {@code observer} can see.
     * <p>
@@ -510,7 +521,7 @@ public class EuclidPolytopeTools
     * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
     *           face's support plane, or a face is not visible.
     * @param visibleFacesToPack the list used to store the visible faces. It is cleared before starting
-    *           the search.
+    *           the search. The least visible face is packed as the first element of the list.
     * @param inPlaneFacesToPack the list used to store the faces for which the observer lies in their
     *           support plane. It is cleared before starting the search.
     * @return {@code true} if the observer cannot see any of the faces or if the observer is inside one
@@ -521,6 +532,9 @@ public class EuclidPolytopeTools
    {
       visibleFacesToPack.clear();
       inPlaneFacesToPack.clear();
+
+      int leastVisibleFaceIndex = -1;
+      double minimumDistance = Double.POSITIVE_INFINITY;
 
       for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
       {
@@ -539,10 +553,41 @@ public class EuclidPolytopeTools
             continue;
          }
 
+         if (signedDistance < minimumDistance)
+         {
+            leastVisibleFaceIndex = visibleFacesToPack.size();
+            minimumDistance = signedDistance;
+         }
+
          visibleFacesToPack.add(face);
       }
 
-      return visibleFacesToPack.isEmpty();
+      if (!visibleFacesToPack.isEmpty())
+      { // Moving the least visible to first position
+         Collections.swap(visibleFacesToPack, 0, leastVisibleFaceIndex);
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   /**
+    * Finds the silhouette representing the border of the visible set of faces from the perspective of
+    * an observer.
+    * 
+    * @param faces the list of faces to search the silhouette from.
+    * @param observer the coordinates of the observer.
+    * @param observer the coordinates from where we look at the faces.
+    * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
+    *           face's support plane, or a face is not visible.
+    * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
+    *         any face or if the observer is inside one of the faces.
+    */
+   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<E> getSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon)
+   {
+      return getSilhouette(faces, observer, epsilon, null, null);
    }
 
    /**
@@ -556,9 +601,12 @@ public class EuclidPolytopeTools
     *           face's support plane, or a face is not visible.
     * @param visibleFacesToPack the collection used to store the visible faces. It is cleared before
     *           starting the search. It preferable to provide an implementation that supports fast
-    *           queries for {@link Collection#contains(Object)}.
+    *           queries for {@link Collection#contains(Object)}. Can be {@code null}.
     * @param inPlaneFacesToPack the list used to store the faces for which the observer lies in their
-    *           support plane. It is cleared before starting the search.
+    *           support plane. It is cleared before starting the search. Can be {@code null}.
+    * @param <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
+    * @param <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly} and has to
+    *           be common to all the faces' edges.
     * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
     *         any face or if the observer is inside one of the faces.
     */
@@ -570,8 +618,12 @@ public class EuclidPolytopeTools
       Face3DReadOnly leastVisibleFace = null;
       double minimumDistance = Double.POSITIVE_INFINITY;
 
+      if (visibleFacesToPack == null)
+         visibleFacesToPack = new HashSet<>();
+
       visibleFacesToPack.clear();
-      inPlaneFacesToPack.clear();
+      if (inPlaneFacesToPack != null)
+         inPlaneFacesToPack.clear();
 
       for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
       { // First we go through the faces and sort them into 2 categories: visible faces, faces which support plane contains the observer.
@@ -583,7 +635,8 @@ public class EuclidPolytopeTools
          {
             if (signedDistance > -epsilon)
             {
-               inPlaneFacesToPack.add(face);
+               if (inPlaneFacesToPack != null)
+                  inPlaneFacesToPack.add(face);
 
                if (face.isPointDirectlyAboveOrBelow(observer))
                   return null; // The observer belongs to that face => no silhouette.

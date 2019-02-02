@@ -45,6 +45,21 @@ public class EuclidPolytopeRandomTools
       return circleBasedConvexPolygon3D;
    }
 
+   public static ConvexPolytope3D nextIcosahedronBasedConvexPolytope3D(Random random)
+   {
+      return nextIcosahedronBasedConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextIcosahedronBasedConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextIcosahedronBasedConvexPolytope3D(random, centerMinMax, 0.1, 5.0);
+   }
+
+   public static ConvexPolytope3D nextIcosahedronBasedConvexPolytope3D(Random random, double centerMinMax, double radiusMin, double radiusMax)
+   {
+      return nextIcoSphereBasedConvexPolytope3D(random, centerMinMax, 0, radiusMin, radiusMax);
+   }
+
    public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random)
    {
       return nextIcoSphereBasedConvexPolytope3D(random, 5.0);
@@ -57,7 +72,7 @@ public class EuclidPolytopeRandomTools
 
    public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax, double radiusMin, double radiusMax)
    {
-      return nextIcoSphereBasedConvexPolytope3D(random, centerMinMax, random.nextInt(4) + 1, radiusMin, radiusMax);
+      return nextIcoSphereBasedConvexPolytope3D(random, centerMinMax, random.nextInt(3), radiusMin, radiusMax);
    }
 
    public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax, int recursionLevel, double radiusMin, double radiusMax)
@@ -69,7 +84,7 @@ public class EuclidPolytopeRandomTools
       icoSphere.applyTransform(transform);
 
       ConvexPolytope3D next = new ConvexPolytope3D();
-      icoSphere.getVertices().forEach(vertex -> next.addVertex(vertex, 0.0));
+      icoSphere.getVertices().forEach(vertex -> next.addVertex(vertex, 1.0e-10));
       return next;
    }
 }
