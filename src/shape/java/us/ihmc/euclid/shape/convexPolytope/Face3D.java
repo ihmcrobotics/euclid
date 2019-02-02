@@ -49,6 +49,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    public Face3D(Vector3DReadOnly initialGuessNormal)
    {
       normal.setAndNormalize(initialGuessNormal);
+      boundingBox.setToNaN();
    }
 
    /**
@@ -164,14 +165,33 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       vertices.clear();
       edges.forEach(edge -> vertices.add(edge.getOrigin()));
 
+      updateNormal();
+      updateCentroiAndArea();
+
+      boundingBox.updateToIncludePoint(vertexToAdd);
+   }
+
+   public void updateNormal()
+   {
       if (vertices.size() > 3)
          EuclidPolytopeTools.updateFace3DNormal(vertices, null, normal);
       else if (vertices.size() == 3)
          EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
+   }
 
+   public void updateCentroiAndArea()
+   {
       area = EuclidPolytopeTools.computeConvexPolygon3DArea(vertices, normal, vertices.size(), true, centroid);
+   }
 
-      boundingBox.updateToIncludePoint(vertexToAdd);
+   public void refreshBoundingBox()
+   {
+      boundingBox.setToNaN();
+
+      for (int i = 0; i < vertices.size(); i++)
+      {
+         boundingBox.updateToIncludePoint(vertices.get(i));
+      }
    }
 
    public void flip()

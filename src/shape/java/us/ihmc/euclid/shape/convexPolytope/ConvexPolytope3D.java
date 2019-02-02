@@ -45,6 +45,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    public ConvexPolytope3D()
    {
+      boundingBox.setToNaN();
    }
 
    public ConvexPolytope3D(ConvexPolytope3DReadOnly polytope)
@@ -228,7 +229,18 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
       for (int i = 0; i < vertices.size(); i++)
+      {
          vertices.get(i).applyTransform(transform);
+      }
+
+      for (int i = 0; i < faces.size(); i++)
+      {
+         Face3D face = faces.get(i);
+         face.updateNormal();
+         face.updateCentroiAndArea();
+         face.refreshBoundingBox();
+      }
+
       updateBoundingBox();
       // FIXME this method introduces inconsistency in Face3D.
    }
@@ -238,13 +250,24 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
       for (int i = 0; i < vertices.size(); i++)
+      {
          vertices.get(i).applyInverseTransform(transform);
+      }
+
+      for (int i = 0; i < faces.size(); i++)
+      {
+         Face3D face = faces.get(i);
+         face.updateNormal();
+         face.updateCentroiAndArea();
+         face.refreshBoundingBox();
+      }
+
       updateBoundingBox();
       // FIXME this method introduces inconsistency in Face3D.
    }
 
    private void updateVertices()
-   {
+   { // FIXME this is slow, maybe there's a way to keep track of the vertices as the polytope is being built.
       vertices.clear();
       faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
    }

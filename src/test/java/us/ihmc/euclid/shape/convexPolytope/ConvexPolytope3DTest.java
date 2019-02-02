@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTestTools;
@@ -831,7 +832,7 @@ public class ConvexPolytope3DTest
    }
 
    @Test
-   void testGetFaceContainingPointClosestTo() throws Exception
+   void testGetClosestFace() throws Exception
    {
       Random random = new Random(34656);
 
@@ -864,5 +865,56 @@ public class ConvexPolytope3DTest
          }
       }
       // TODO need to add tests with more complicated polytope
+   }
+
+   @Test
+   void testApplyTransform() throws Exception
+   {
+      Random random = new Random(2342);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Translation only
+         GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
+         ConvexPolytope3D originalPolytope = new ConvexPolytope3D();
+         icosahedron.getVertices().forEach(vertex -> originalPolytope.addVertex(vertex, 1.0e-10));
+         ConvexPolytope3D actualPolytope = new ConvexPolytope3D();
+         icosahedron.getVertices().forEach(vertex -> actualPolytope.addVertex(vertex, 1.0e-10));
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         actualPolytope.applyTransform(transform);
+
+         icosahedron.applyTransform(transform);
+         ConvexPolytope3D expectedPolytope = new ConvexPolytope3D();
+         icosahedron.getVertices().forEach(vertex -> expectedPolytope.addVertex(vertex, 1.0e-10));
+
+         EuclidPolytopeTestTools.assertConvexPolytope3DEquals(expectedPolytope, actualPolytope, EPSILON);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
+
+         for (int faceIndex = 0; faceIndex < expectedPolytope.getNumberOfFaces(); faceIndex++)
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(),
+                                                    EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
+            EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedPolytope.getFace(faceIndex).getBoundingBox(),
+                                                              actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+            assertEquals(expectedPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
+         }
+
+         actualPolytope.applyInverseTransform(transform);
+
+         EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, actualPolytope, EPSILON);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
+
+         for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(),
+                                                    EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
+            EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getFace(faceIndex).getBoundingBox(),
+                                                              actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+            assertEquals(originalPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
+         }
+      }
    }
 }
