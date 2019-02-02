@@ -11,19 +11,17 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class EuclidPolytopeFactories
 {
-   private static final double EPSILON = 1.0e-9;
-
    public static ConvexPolytope3D constructUnitCube()
    {
       ConvexPolytope3D polytope = new ConvexPolytope3D();
-      polytope.addVertex(new Vertex3D(0.0, 0.0, 0.0), EPSILON);
-      polytope.addVertex(new Vertex3D(1.0, 0.0, 0.0), EPSILON);
-      polytope.addVertex(new Vertex3D(0.0, 1.0, 0.0), EPSILON);
-      polytope.addVertex(new Vertex3D(1.0, 1.0, 0.0), EPSILON);
-      polytope.addVertex(new Vertex3D(0.0, 0.0, 1.0), EPSILON);
-      polytope.addVertex(new Vertex3D(1.0, 0.0, 1.0), EPSILON);
-      polytope.addVertex(new Vertex3D(0.0, 1.0, 1.0), EPSILON);
-      polytope.addVertex(new Vertex3D(1.0, 1.0, 1.0), EPSILON);
+      polytope.addVertex(new Vertex3D(0.0, 0.0, 0.0));
+      polytope.addVertex(new Vertex3D(1.0, 0.0, 0.0));
+      polytope.addVertex(new Vertex3D(0.0, 1.0, 0.0));
+      polytope.addVertex(new Vertex3D(1.0, 1.0, 0.0));
+      polytope.addVertex(new Vertex3D(0.0, 0.0, 1.0));
+      polytope.addVertex(new Vertex3D(1.0, 0.0, 1.0));
+      polytope.addVertex(new Vertex3D(0.0, 1.0, 1.0));
+      polytope.addVertex(new Vertex3D(1.0, 1.0, 1.0));
       return polytope;
    }
 
@@ -33,14 +31,14 @@ public class EuclidPolytopeFactories
       ConvexPolytope3D polytope = new ConvexPolytope3D();
       RigidBodyTransform transform = new RigidBodyTransform();
       transform.setRotation(orientation);
-      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() - edgeLengthZ / 2, EPSILON);
-      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() - edgeLengthZ / 2, EPSILON);
-      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() - edgeLengthZ / 2, EPSILON);
-      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() - edgeLengthZ / 2, EPSILON);
-      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() + edgeLengthZ / 2, EPSILON);
-      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() + edgeLengthZ / 2, EPSILON);
-      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() + edgeLengthZ / 2, EPSILON);
-      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() + edgeLengthZ / 2, EPSILON);
+      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() - edgeLengthZ / 2);
+      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() - edgeLengthZ / 2);
+      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() - edgeLengthZ / 2);
+      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() - edgeLengthZ / 2);
+      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() + edgeLengthZ / 2);
+      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() - edgeLengthY / 2, center.getZ() + edgeLengthZ / 2);
+      polytope.addVertex(center.getX() + edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() + edgeLengthZ / 2);
+      polytope.addVertex(center.getX() - edgeLengthX / 2, center.getY() + edgeLengthY / 2, center.getZ() + edgeLengthZ / 2);
       polytope.applyTransform(transform);
       return polytope;
    }
@@ -95,7 +93,7 @@ public class EuclidPolytopeFactories
          vertex.setX(vertex.getX() * radius / mag);
          vertex.setY(vertex.getY() * radius / mag);
          vertex.setZ(vertex.getZ() * radius / mag);
-         polytope.addVertex(vertex, EPSILON);
+         polytope.addVertex(vertex);
       }
       return polytope;
    }
@@ -107,13 +105,11 @@ public class EuclidPolytopeFactories
       double enclosingRadius = radius / Math.cos(vertexAngle / 2.0);
       for (int i = 0; i < numberOfDivisionsForCurvedSurface; i++)
          polytope.addVertex(new Vertex3D(center.getX() + enclosingRadius * Math.cos(i * vertexAngle),
-                                         center.getY() + enclosingRadius * Math.sin(i * vertexAngle), center.getZ() - length / 2.0),
-                            EPSILON);
+                                         center.getY() + enclosingRadius * Math.sin(i * vertexAngle), center.getZ() - length / 2.0));
       for (int i = 0; i < numberOfDivisionsForCurvedSurface; i++)
       {
          polytope.addVertex(new Vertex3D(center.getX() + enclosingRadius * Math.cos(i * vertexAngle),
-                                         center.getY() + enclosingRadius * Math.sin(i * vertexAngle), center.getZ() + length / 2.0),
-                            EPSILON);
+                                         center.getY() + enclosingRadius * Math.sin(i * vertexAngle), center.getZ() + length / 2.0));
       }
       return polytope;
    }

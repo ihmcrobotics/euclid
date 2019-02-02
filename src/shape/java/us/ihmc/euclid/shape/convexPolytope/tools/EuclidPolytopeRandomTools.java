@@ -84,7 +84,7 @@ public class EuclidPolytopeRandomTools
       icoSphere.applyTransform(transform);
 
       ConvexPolytope3D next = new ConvexPolytope3D();
-      icoSphere.getVertices().forEach(vertex -> next.addVertex(vertex, 1.0e-10));
+      icoSphere.getVertices().forEach(vertex -> next.addVertex(vertex));
       return next;
    }
 }

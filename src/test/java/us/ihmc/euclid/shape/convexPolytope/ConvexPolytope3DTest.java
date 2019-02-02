@@ -52,7 +52,7 @@ public class ConvexPolytope3DTest
 
          // Testing properties for single vertex polytope.
          Point3D firstVertex = EuclidCoreRandomTools.nextPoint3D(random);
-         polytope.addVertex(firstVertex, 0.0);
+         polytope.addVertex(firstVertex);
          pointsAdded.add(firstVertex);
 
          assertEquals(1, polytope.getNumberOfVertices());
@@ -66,14 +66,14 @@ public class ConvexPolytope3DTest
          }
 
          // Assert that adding the same point twice does not change anything
-         polytope.addVertex(firstVertex, 0.0);
+         polytope.addVertex(firstVertex);
          assertEquals(1, polytope.getNumberOfVertices());
          assertEquals(1, polytope.getNumberOfEdges());
          assertEquals(1, polytope.getNumberOfFaces());
 
          // Testing properties for single edge polytope.
          Point3D secondVertex = EuclidCoreRandomTools.nextPoint3D(random);
-         polytope.addVertex(secondVertex, 0.0);
+         polytope.addVertex(secondVertex);
          pointsAdded.add(secondVertex);
 
          assertEquals(2, polytope.getNumberOfVertices());
@@ -89,7 +89,7 @@ public class ConvexPolytope3DTest
          for (int i = 0; i < ITERATIONS; i++)
          { // Assert that adding a point that is on the edge does not change anything.
             Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, pointsAdded);
-            polytope.addVertex(pointInside, 1.0e-12);
+            polytope.addVertex(pointInside);
 
             assertEquals(2, polytope.getNumberOfVertices());
             assertEquals(2, polytope.getNumberOfEdges());
@@ -98,7 +98,7 @@ public class ConvexPolytope3DTest
 
          // Testing properties for single triangle face polytope
          Point3D thirdVertex = EuclidCoreRandomTools.nextPoint3D(random);
-         polytope.addVertex(thirdVertex, 0.0);
+         polytope.addVertex(thirdVertex);
          pointsAdded.add(thirdVertex);
 
          assertEquals(3, polytope.getNumberOfVertices());
@@ -121,7 +121,7 @@ public class ConvexPolytope3DTest
          for (int i = 0; i < ITERATIONS; i++)
          { // Assert that adding a point that is on the face does not change anything.
             Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, pointsAdded);
-            polytope.addVertex(pointInside, 1.0e-12);
+            polytope.addVertex(pointInside);
 
             assertEquals(3, polytope.getNumberOfVertices());
             assertEquals(3, polytope.getNumberOfEdges());
@@ -130,7 +130,7 @@ public class ConvexPolytope3DTest
 
          // We finally have an usual polytope: a tetrahedron
          Point3D fourthVertex = EuclidCoreRandomTools.nextPoint3D(random);
-         polytope.addVertex(fourthVertex, 0.0);
+         polytope.addVertex(fourthVertex);
          pointsAdded.add(fourthVertex);
 
          assertEquals(4, polytope.getNumberOfVertices());
@@ -195,7 +195,7 @@ public class ConvexPolytope3DTest
 
             assertTrue(polytope.isPointInside(pointInside, EPSILON));
 
-            polytope.addVertex(pointInside, 0.0);
+            polytope.addVertex(pointInside);
 
             assertEquals(4, polytope.getNumberOfVertices());
             assertEquals(6, polytope.getNumberOfEdges());
@@ -217,10 +217,10 @@ public class ConvexPolytope3DTest
          Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         convexPolytope3D.addVertex(bottomP0, 0.0);
-         convexPolytope3D.addVertex(bottomP1, 0.0);
-         convexPolytope3D.addVertex(bottomP2, 0.0);
-         convexPolytope3D.addVertex(top, 0.0);
+         convexPolytope3D.addVertex(bottomP0);
+         convexPolytope3D.addVertex(bottomP1);
+         convexPolytope3D.addVertex(bottomP2);
+         convexPolytope3D.addVertex(top);
 
          assertTrue(convexPolytope3D.getVertices().contains(top));
          assertTrue(convexPolytope3D.getVertices().contains(bottomP0));
@@ -291,7 +291,7 @@ public class ConvexPolytope3DTest
          vertices.add(EuclidCoreRandomTools.nextPoint3D(random));
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         vertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 0.0));
+         vertices.forEach(vertex -> convexPolytope3D.addVertex(vertex));
 
          assertEquals(4, convexPolytope3D.getNumberOfVertices());
          assertEquals(6, convexPolytope3D.getNumberOfEdges());
@@ -301,7 +301,7 @@ public class ConvexPolytope3DTest
          Point3DBasics newVertex = edge.pointOnLineGivenPercentage(1.0 + random.nextDouble());
          Vertex3D expectedVertexRemoved = edge.getDestination();
 
-         convexPolytope3D.addVertex(newVertex, 1.0e-10);
+         convexPolytope3D.addVertex(newVertex);
 
          String errorMessage = "Iteration: " + i;
          assertEquals(4, convexPolytope3D.getNumberOfVertices(), errorMessage);
@@ -349,17 +349,16 @@ public class ConvexPolytope3DTest
                        yPlusSideNormal, yMinusSideNormal, bottomCenter, topCenter, xPlusSideCenter, xMinusSideCenter, yPlusSideCenter, yMinusSideCenter)
                .forEach(o -> o.applyTransform(transform));
 
-         double buildEpsilon = 1.0e-10;
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         convexPolytope3D.addVertex(bottomP0, buildEpsilon);
-         convexPolytope3D.addVertex(bottomP1, buildEpsilon);
-         convexPolytope3D.addVertex(bottomP2, buildEpsilon);
-         convexPolytope3D.addVertex(bottomP3, buildEpsilon);
+         convexPolytope3D.addVertex(bottomP0);
+         convexPolytope3D.addVertex(bottomP1);
+         convexPolytope3D.addVertex(bottomP2);
+         convexPolytope3D.addVertex(bottomP3);
 
-         convexPolytope3D.addVertex(topP0, buildEpsilon);
-         convexPolytope3D.addVertex(topP1, buildEpsilon);
-         convexPolytope3D.addVertex(topP2, buildEpsilon);
-         convexPolytope3D.addVertex(topP3, buildEpsilon);
+         convexPolytope3D.addVertex(topP0);
+         convexPolytope3D.addVertex(topP1);
+         convexPolytope3D.addVertex(topP2);
+         convexPolytope3D.addVertex(topP3);
 
          assertEquals(6, convexPolytope3D.getNumberOfFaces());
          assertEquals(8, convexPolytope3D.getNumberOfVertices());
@@ -410,7 +409,7 @@ public class ConvexPolytope3DTest
          List<Point3D> shuffledVertices = new ArrayList<>(icosahedron.getVertices());
          Collections.shuffle(shuffledVertices, random);
 
-         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex));
 
          // https://en.wikipedia.org/wiki/Icosahedron
          assertEquals(12, convexPolytope3D.getNumberOfVertices());
@@ -460,7 +459,7 @@ public class ConvexPolytope3DTest
          List<Point3D> shuffledVertices = new ArrayList<>(icosahedron.getVertices());
          Collections.shuffle(shuffledVertices, random);
 
-         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex));
 
          // https://en.wikipedia.org/wiki/Icosahedron
          assertEquals(12, convexPolytope3D.getNumberOfVertices());
@@ -516,7 +515,7 @@ public class ConvexPolytope3DTest
          List<Point3D> shuffledVertices = new ArrayList<>(icoSphere.getVertices());
          Collections.shuffle(shuffledVertices, random);
 
-         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+         shuffledVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex));
 
          // https://en.wikipedia.org/wiki/Icosahedron
          assertEquals(icoSphere.getNumberOfVertices(), convexPolytope3D.getNumberOfVertices());
@@ -594,7 +593,7 @@ public class ConvexPolytope3DTest
          // Now testing convex polytope class
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         allVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+         allVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex));
 
          assertEquals(allVertices.size(), convexPolytope3D.getNumberOfVertices());
 
@@ -651,7 +650,7 @@ public class ConvexPolytope3DTest
          Point3D intermediateCentroid = new Point3D(0, 0, intermediateZ);
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         truncatedConeVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+         truncatedConeVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex));
 
          assertEquals(truncatedConeVertices.size(), convexPolytope3D.getNumberOfVertices());
 
@@ -686,7 +685,7 @@ public class ConvexPolytope3DTest
          }
 
          // Now let's add the top and check that the intermediate face/vertices/edges are all gone.
-         convexPolytope3D.addVertex(top, 1.0e-10);
+         convexPolytope3D.addVertex(top);
 
          /*
           * FIXME The top vertex is being rejected. the test passes when reducing (even just slightly)
@@ -743,7 +742,7 @@ public class ConvexPolytope3DTest
          Arrays.asList(bottomNormal, bottomCentroid, topNormal, topCentroid, aboveTop, belowBottom).forEach(o -> o.applyTransform(transform));
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         allVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex, 1.0e-10));
+         allVertices.forEach(vertex -> convexPolytope3D.addVertex(vertex));
 
          assertEquals(allVertices.size(), convexPolytope3D.getNumberOfVertices());
          assertEquals(bottomSize + 2, convexPolytope3D.getNumberOfFaces());
@@ -779,7 +778,7 @@ public class ConvexPolytope3DTest
          }
 
          // Let's tweak the cylinder to be extended by a cone at the top:
-         convexPolytope3D.addVertex(aboveTop, 1.0e-10);
+         convexPolytope3D.addVertex(aboveTop);
 
          assertEquals(allVertices.size() + 1, convexPolytope3D.getNumberOfVertices());
          assertEquals(2 * bottomSize + 1, convexPolytope3D.getNumberOfFaces());
@@ -807,7 +806,7 @@ public class ConvexPolytope3DTest
          }
 
          // Let's tweak the cylinder to be extended by a cone at the bottom:
-         convexPolytope3D.addVertex(belowBottom, 1.0e-10);
+         convexPolytope3D.addVertex(belowBottom);
 
          assertEquals(allVertices.size() + 2, convexPolytope3D.getNumberOfVertices());
          assertEquals(3 * bottomSize, convexPolytope3D.getNumberOfFaces());
@@ -843,10 +842,10 @@ public class ConvexPolytope3DTest
          Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         convexPolytope3D.addVertex(bottomP0, 0.0);
-         convexPolytope3D.addVertex(bottomP1, 0.0);
-         convexPolytope3D.addVertex(bottomP2, 0.0);
-         convexPolytope3D.addVertex(top, 0.0);
+         convexPolytope3D.addVertex(bottomP0);
+         convexPolytope3D.addVertex(bottomP1);
+         convexPolytope3D.addVertex(bottomP2);
+         convexPolytope3D.addVertex(top);
 
          for (int i = 0; i < ITERATIONS; i++)
          {
@@ -876,9 +875,9 @@ public class ConvexPolytope3DTest
       { // Translation only
          GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
          ConvexPolytope3D originalPolytope = new ConvexPolytope3D();
-         icosahedron.getVertices().forEach(vertex -> originalPolytope.addVertex(vertex, 1.0e-10));
+         icosahedron.getVertices().forEach(vertex -> originalPolytope.addVertex(vertex));
          ConvexPolytope3D actualPolytope = new ConvexPolytope3D();
-         icosahedron.getVertices().forEach(vertex -> actualPolytope.addVertex(vertex, 1.0e-10));
+         icosahedron.getVertices().forEach(vertex -> actualPolytope.addVertex(vertex));
 
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
@@ -886,7 +885,7 @@ public class ConvexPolytope3DTest
 
          icosahedron.applyTransform(transform);
          ConvexPolytope3D expectedPolytope = new ConvexPolytope3D();
-         icosahedron.getVertices().forEach(vertex -> expectedPolytope.addVertex(vertex, 1.0e-10));
+         icosahedron.getVertices().forEach(vertex -> expectedPolytope.addVertex(vertex));
 
          EuclidPolytopeTestTools.assertConvexPolytope3DEquals(expectedPolytope, actualPolytope, EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);

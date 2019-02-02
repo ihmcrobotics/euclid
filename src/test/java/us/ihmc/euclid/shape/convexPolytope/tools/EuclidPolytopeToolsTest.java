@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope.tools;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -211,7 +212,7 @@ public class EuclidPolytopeToolsTest
                expectedSilhouette.add(edge);
          }
 
-         List<HalfEdge3D> actualSilhouette = EuclidPolytopeTools.getSilhouette(convexPolytope3D.getFaces(), observer, epsilon);
+         Collection<HalfEdge3D> actualSilhouette = EuclidPolytopeTools.getSilhouette(convexPolytope3D.getFaces(), observer, epsilon);
 
          if (expectedSilhouette.isEmpty())
          {
@@ -241,10 +242,10 @@ public class EuclidPolytopeToolsTest
          Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         convexPolytope3D.addVertex(bottomP0, 0.0);
-         convexPolytope3D.addVertex(bottomP1, 0.0);
-         convexPolytope3D.addVertex(bottomP2, 0.0);
-         convexPolytope3D.addVertex(top, 0.0);
+         convexPolytope3D.addVertex(bottomP0);
+         convexPolytope3D.addVertex(bottomP1);
+         convexPolytope3D.addVertex(bottomP2);
+         convexPolytope3D.addVertex(top);
 
          for (int i = 0; i < ITERATIONS; i++)
          {

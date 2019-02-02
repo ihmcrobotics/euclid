@@ -79,6 +79,13 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    BoundingBox3DReadOnly getBoundingBox();
 
+   /**
+    * Gets the tolerance used for building this convex polytope.
+    * 
+    * @return the construction tolerance.
+    */
+   double getConstructionEpsilon();
+
    default boolean containsNaN()
    {
       for (int vertexIndex = 0; vertexIndex < getNumberOfVertices(); vertexIndex++)

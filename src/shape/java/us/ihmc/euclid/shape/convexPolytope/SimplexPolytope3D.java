@@ -47,7 +47,7 @@ public class SimplexPolytope3D implements Simplex3D
    {
       SimplexVertex3D newVertex = new SimplexVertex3D();
       newVertex.set(vertexOnPolytopeA, vertexOnPolytopeB);
-      polytope.addVertex(newVertex, epsilon);
+      polytope.addVertex(newVertex);
    }
 
    public void clear()

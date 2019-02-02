@@ -16,6 +16,7 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -40,28 +41,37 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
     */
    private final BoundingBox3D boundingBox = new BoundingBox3D();
 
-   private Vector3D tempVector = new Vector3D();
-   private Point3D centroid = new Point3D();
+   private final Vector3D tempVector = new Vector3D();
+   private final Point3D centroid = new Point3D();
+
+   private final double constructionEpsilon;
 
    public ConvexPolytope3D()
    {
+      this(EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
+   }
+
+   public ConvexPolytope3D(double constructionEpsilon)
+   {
       boundingBox.setToNaN();
+      this.constructionEpsilon = constructionEpsilon;
    }
 
    public ConvexPolytope3D(ConvexPolytope3DReadOnly polytope)
    {
+      constructionEpsilon = polytope.getConstructionEpsilon();
       set(polytope);
    }
 
-   public void addVertex(double x, double y, double z, double epsilon)
+   public void addVertex(double x, double y, double z)
    {
-      addVertex(new Vertex3D(x, y, z), epsilon);
+      addVertex(new Vertex3D(x, y, z));
    }
 
-   public void addVertex(Point3DReadOnly vertexToAdd, double epsilon)
+   public void addVertex(Point3DReadOnly vertexToAdd)
    {
       Vertex3D vertex = new Vertex3D(vertexToAdd);
-      addVertex(vertex, epsilon);
+      addVertex(vertex);
    }
 
    /**
@@ -72,16 +82,16 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
     * @param epsilon
     * @return
     */
-   public boolean addVertex(Vertex3D vertexToAdd, double epsilon)
+   public boolean addVertex(Vertex3D vertexToAdd)
    {
       boolean isPolytopeModified;
 
       if (faces.size() == 0)
-         isPolytopeModified = handleNoFaceCase(vertexToAdd, epsilon);
+         isPolytopeModified = handleNoFaceCase(vertexToAdd);
       else if (faces.size() == 1)
-         isPolytopeModified = handleSingleFaceCase(vertexToAdd, epsilon);
+         isPolytopeModified = handleSingleFaceCase(vertexToAdd);
       else
-         isPolytopeModified = handleMultipleFaceCase(vertexToAdd, epsilon);
+         isPolytopeModified = handleMultipleFaceCase(vertexToAdd);
 
       if (isPolytopeModified)
       {
@@ -93,36 +103,37 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return isPolytopeModified;
    }
 
-   private boolean handleNoFaceCase(Vertex3D vertexToAdd, double epsilon)
+   private boolean handleNoFaceCase(Vertex3D vertexToAdd)
    {
       // Polytope is empty. Creating face and adding the vertex
       Face3D newFace = new Face3D(Axis.Z);
-      newFace.addVertex(vertexToAdd, epsilon);
+      newFace.addVertex(vertexToAdd, constructionEpsilon);
       faces.add(newFace);
 
       return true;
    }
 
-   private boolean handleSingleFaceCase(Vertex3D vertexToAdd, double epsilon)
+   private boolean handleSingleFaceCase(Vertex3D vertexToAdd)
    {
       Face3D firstFace = faces.get(0);
 
       if (firstFace.getNumberOfEdges() <= 2)
       { // The face is not an actual face yet, extend it.
-         firstFace.addVertex(vertexToAdd, epsilon);
+         firstFace.addVertex(vertexToAdd, constructionEpsilon);
          return true;
       }
-      else if (!firstFace.isPointInFacePlane(vertexToAdd, epsilon))
+      else if (!firstFace.isPointInFacePlane(vertexToAdd, constructionEpsilon))
       { // Off the face plane => need to create new faces.
          if (firstFace.canObserverSeeFace(vertexToAdd))
             firstFace.flip();
 
-         faces.addAll(EuclidPolytopeTools.computeVertexNeighborFaces(vertexToAdd, firstFace.getEdges(), Collections.emptyList(), epsilon));
+         faces.addAll(EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, firstFace.getEdges(), Collections.emptyList(),
+                                                                                 constructionEpsilon));
          return true;
       }
       else if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
       { // In face plane => need to extend the existing face.
-         firstFace.addVertex(vertexToAdd, epsilon);
+         firstFace.addVertex(vertexToAdd, constructionEpsilon);
          return true;
       }
       else
@@ -131,16 +142,16 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
    }
 
-   private boolean handleMultipleFaceCase(Vertex3D vertexToAdd, double epsilon)
+   private boolean handleMultipleFaceCase(Vertex3D vertexToAdd)
    {
       Set<Face3D> visibleFaces = new HashSet<>();
       List<Face3D> inPlaneFaces = new ArrayList<>();
-      List<HalfEdge3D> silhouette = EuclidPolytopeTools.getSilhouette(faces, vertexToAdd, epsilon, visibleFaces, inPlaneFaces);
+      Collection<HalfEdge3D> silhouette = EuclidPolytopeTools.getSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
 
       if (silhouette != null)
       {
          removeFaces(visibleFaces);
-         faces.addAll(EuclidPolytopeTools.computeVertexNeighborFaces(vertexToAdd, silhouette, inPlaneFaces, epsilon));
+         faces.addAll(EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, silhouette, inPlaneFaces, constructionEpsilon));
          return true;
       }
       else
@@ -217,6 +228,12 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    public BoundingBox3DReadOnly getBoundingBox()
    {
       return boundingBox;
+   }
+
+   @Override
+   public double getConstructionEpsilon()
+   {
+      return constructionEpsilon;
    }
 
    public Vector3DReadOnly getFaceNormalAt(Point3DReadOnly point)
