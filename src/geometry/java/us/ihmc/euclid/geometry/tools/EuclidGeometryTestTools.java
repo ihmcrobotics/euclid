@@ -2,10 +2,10 @@ package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
 
-import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -821,7 +821,7 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
     */
-   public static void assertBoundingBox3DEquals(BoundingBox3D expected, BoundingBox3D actual, double epsilon)
+   public static void assertBoundingBox3DEquals(BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon)
    {
       assertBoundingBox3DEquals(null, expected, actual, epsilon);
    }
@@ -840,7 +840,7 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
     */
-   public static void assertBoundingBox3DEquals(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, double epsilon)
+   public static void assertBoundingBox3DEquals(String messagePrefix, BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon)
    {
       assertBoundingBox3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -861,7 +861,7 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments
     *            is equal to {@code null}.
     */
-   public static void assertBoundingBox3DEquals(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, double epsilon, String format)
+   public static void assertBoundingBox3DEquals(String messagePrefix, BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -888,7 +888,7 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds do not represent the same geometry. If only
     *            one of the arguments is equal to {@code null}.
     */
-   public static void assertBoundingBox3DGeometricallyEquals(BoundingBox3D expected, BoundingBox3D actual, double epsilon)
+   public static void assertBoundingBox3DGeometricallyEquals(BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon)
    {
       assertBoundingBox3DGeometricallyEquals(null, expected, actual, epsilon);
    }
@@ -907,7 +907,7 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds do not represent the same geometry. If only
     *            one of the arguments is equal to {@code null}.
     */
-   public static void assertBoundingBox3DGeometricallyEquals(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, double epsilon)
+   public static void assertBoundingBox3DGeometricallyEquals(String messagePrefix, BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon)
    {
       assertBoundingBox3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -928,7 +928,7 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds do not represent the same geometry. If only
     *            one of the arguments is equal to {@code null}.
     */
-   public static void assertBoundingBox3DGeometricallyEquals(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, double epsilon, String format)
+   public static void assertBoundingBox3DGeometricallyEquals(String messagePrefix, BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1632,7 +1632,7 @@ public class EuclidGeometryTestTools
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, BoundingBox3D expected, BoundingBox3D actual, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, String format)
    {
       String expectedAsString = getBoundingBox3DString(format, expected);
       String actualAsString = getBoundingBox3DString(format, actual);

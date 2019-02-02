@@ -4,10 +4,10 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import java.util.List;
 
-import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -405,7 +405,7 @@ public class EuclidGeometryIOTools
     * @param boundingBox3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox3DString(BoundingBox3D boundingBox3D)
+   public static String getBoundingBox3DString(BoundingBox3DReadOnly boundingBox3D)
    {
       return getBoundingBox3DString(DEFAULT_FORMAT, boundingBox3D);
    }
@@ -424,7 +424,7 @@ public class EuclidGeometryIOTools
     * @param boundingBox3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox3DString(String format, BoundingBox3D boundingBox3D)
+   public static String getBoundingBox3DString(String format, BoundingBox3DReadOnly boundingBox3D)
    {
       if (boundingBox3D == null)
          return "null";

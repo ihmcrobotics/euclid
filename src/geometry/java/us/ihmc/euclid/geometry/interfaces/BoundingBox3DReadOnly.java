@@ -2,7 +2,6 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
 
-import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -509,7 +508,7 @@ public interface BoundingBox3DReadOnly
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   default boolean intersectsExclusive(BoundingBox3D other)
+   default boolean intersectsExclusive(BoundingBox3DReadOnly other)
    {
       if (other.getMinX() >= getMaxX() || other.getMaxX() <= getMinX())
          return false;
@@ -533,7 +532,7 @@ public interface BoundingBox3DReadOnly
     *           Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   default boolean intersectsInclusive(BoundingBox3D other)
+   default boolean intersectsInclusive(BoundingBox3DReadOnly other)
    {
       if (other.getMinX() > getMaxX() || other.getMaxX() < getMinX())
          return false;
@@ -552,7 +551,7 @@ public interface BoundingBox3DReadOnly
     * <p>
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
-    * {@link #intersectsExclusive(BoundingBox3D)}.
+    * {@link #intersectsExclusive(BoundingBox3DReadOnly)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
     * {@code epsilon} toward the outside.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
@@ -565,7 +564,7 @@ public interface BoundingBox3DReadOnly
     * @param epsilon the tolerance to use in this test.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
-   default boolean intersectsEpsilon(BoundingBox3D other, double epsilon)
+   default boolean intersectsEpsilon(BoundingBox3DReadOnly other, double epsilon)
    {
       if (other.getMinX() >= getMaxX() + epsilon || other.getMaxX() <= getMinX() - epsilon)
          return false;

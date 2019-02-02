@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.interfaces;
 
-import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -169,7 +169,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     *
     * @param boundingBoxToPack the bounding box to pack. Modified.
     */
-   default void getBoundingBox3D(BoundingBox3D boundingBoxToPack)
+   default void getBoundingBox3D(BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxToPack.setToNaN();
       Point3DBasics vertex = getIntermediateVariableSupplier().requestPoint3D();

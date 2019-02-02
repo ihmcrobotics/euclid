@@ -55,7 +55,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     * @param boundingBoxTwo the second bounding box. Not modified.
     * @return the new bounding box.
     */
-   public static BoundingBox3D union(BoundingBox3D boundingBoxOne, BoundingBox3D boundingBoxTwo)
+   public static BoundingBox3D union(BoundingBox3DReadOnly boundingBoxOne, BoundingBox3DReadOnly boundingBoxTwo)
    {
       BoundingBox3D union = new BoundingBox3D();
       union.combine(boundingBoxOne, boundingBoxTwo);
@@ -87,7 +87,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     *
     * @param other the other bounding box used to initialize this. Not modified.
     */
-   public BoundingBox3D(BoundingBox3D other)
+   public BoundingBox3D(BoundingBox3DReadOnly other)
    {
       set(other);
    }
