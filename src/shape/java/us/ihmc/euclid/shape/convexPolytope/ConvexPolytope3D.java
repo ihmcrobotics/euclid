@@ -10,6 +10,7 @@ import java.util.Set;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -63,15 +64,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       set(polytope);
    }
 
-   public void addVertex(double x, double y, double z)
+   public boolean addVertex(Point3DReadOnly vertexToAdd)
    {
-      addVertex(new Vertex3D(x, y, z));
-   }
-
-   public void addVertex(Point3DReadOnly vertexToAdd)
-   {
-      Vertex3D vertex = new Vertex3D(vertexToAdd);
-      addVertex(vertex);
+      return addVertex(new Vertex3D(vertexToAdd));
    }
 
    /**
@@ -84,14 +79,30 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
     */
    public boolean addVertex(Vertex3D vertexToAdd)
    {
-      boolean isPolytopeModified;
+      return addVertices(Collections.singleton(vertexToAdd));
+   }
 
-      if (faces.size() == 0)
-         isPolytopeModified = handleNoFaceCase(vertexToAdd);
-      else if (faces.size() == 1)
-         isPolytopeModified = handleSingleFaceCase(vertexToAdd);
-      else
-         isPolytopeModified = handleMultipleFaceCase(vertexToAdd);
+   public boolean addVertices(Vertex3DSupplier vertex3DSupplier)
+   {
+      List<Vertex3D> vertices = new ArrayList<>(vertex3DSupplier.getNumberOfVertices());
+      for (int i = 0; i < vertex3DSupplier.getNumberOfVertices(); i++)
+         vertices.add(new Vertex3D(vertex3DSupplier.getVertex(i)));
+      return addVertices(vertices);
+   }
+
+   public boolean addVertices(Collection<Vertex3D> verticesToAdd)
+   {
+      boolean isPolytopeModified = false;
+
+      for (Vertex3D vertexToAdd : verticesToAdd)
+      {
+         if (faces.size() == 0)
+            isPolytopeModified |= handleNoFaceCase(vertexToAdd);
+         else if (faces.size() == 1)
+            isPolytopeModified |= handleSingleFaceCase(vertexToAdd);
+         else
+            isPolytopeModified |= handleMultipleFaceCase(vertexToAdd);
+      }
 
       if (isPolytopeModified)
       {
