@@ -170,7 +170,7 @@ public class Face3DTest
          Vertex3DReadOnly expectedLineOfSightStartVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[0]);
          Vertex3DReadOnly expectedLineOfSightEndVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[1]);
          HalfEdge3D expectedLineOfSightStartEdge3D = face3D.getEdge(expectedLineOfSightIndices[0]);
-         HalfEdge3D expectedLineOfSightEndEdge3D = face3D.getEdge(expectedLineOfSightIndices[1]).getPreviousEdge();
+         HalfEdge3D expectedLineOfSightEndEdge3D = face3D.getEdge(expectedLineOfSightIndices[1]).getPrevious();
          EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartVertex3D, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartEdge3D.getOrigin(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndVertex3D, EPSILON);
@@ -181,25 +181,25 @@ public class Face3DTest
                int visibleEdgeIndex = expectedLineOfSightIndices[0];
                HalfEdge3D visibleEdge = expectedLineOfSightStartEdge3D;
 
-               while (visibleEdge != expectedLineOfSightEndEdge3D.getNextEdge())
+               while (visibleEdge != expectedLineOfSightEndEdge3D.getNext())
                {
                   assertTrue(face3D.canObserverSeeEdge(observer3D, visibleEdgeIndex));
                   assertTrue(face3D.canObserverSeeEdge(observer3D, visibleEdge));
                   visibleEdgeIndex = (visibleEdgeIndex + 1) % face3D.getNumberOfEdges();
-                  visibleEdge = visibleEdge.getNextEdge();
+                  visibleEdge = visibleEdge.getNext();
                }
             }
 
             { // Go through the hidden edges.
                int hiddenEdgeIndex = expectedLineOfSightIndices[1];
-               HalfEdge3D hiddenEdge = expectedLineOfSightEndEdge3D.getNextEdge();
+               HalfEdge3D hiddenEdge = expectedLineOfSightEndEdge3D.getNext();
 
                while (hiddenEdge != expectedLineOfSightStartEdge3D)
                {
                   assertFalse(face3D.canObserverSeeEdge(observer3D, hiddenEdgeIndex));
                   assertFalse(face3D.canObserverSeeEdge(observer3D, hiddenEdge));
                   hiddenEdgeIndex = (hiddenEdgeIndex + 1) % face3D.getNumberOfEdges();
-                  hiddenEdge = hiddenEdge.getNextEdge();
+                  hiddenEdge = hiddenEdge.getNext();
                }
             }
          }
@@ -261,7 +261,7 @@ public class Face3DTest
          Vertex3DReadOnly expectedLineOfSightStartVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[0]);
          Vertex3DReadOnly expectedLineOfSightEndVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[1]);
          HalfEdge3D expectedLineOfSightStartEdge3D = face3D.getEdge(expectedLineOfSightIndices[0]);
-         HalfEdge3D expectedLineOfSightEndEdge3D = face3D.getEdge(expectedLineOfSightIndices[1]).getPreviousEdge();
+         HalfEdge3D expectedLineOfSightEndEdge3D = face3D.getEdge(expectedLineOfSightIndices[1]).getPrevious();
          EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartVertex3D, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[0], expectedLineOfSightStartEdge3D.getOrigin(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedLineOfSightVertices3D[1], expectedLineOfSightEndVertex3D, EPSILON);
@@ -272,25 +272,25 @@ public class Face3DTest
                int visibleEdgeIndex = expectedLineOfSightIndices[0];
                HalfEdge3D visibleEdge = expectedLineOfSightStartEdge3D;
 
-               while (visibleEdge != expectedLineOfSightEndEdge3D.getNextEdge())
+               while (visibleEdge != expectedLineOfSightEndEdge3D.getNext())
                {
                   assertTrue(face3D.canObserverSeeEdge(observer3D, visibleEdgeIndex));
                   assertTrue(face3D.canObserverSeeEdge(observer3D, visibleEdge));
                   visibleEdgeIndex = (visibleEdgeIndex + 1) % face3D.getNumberOfEdges();
-                  visibleEdge = visibleEdge.getNextEdge();
+                  visibleEdge = visibleEdge.getNext();
                }
             }
 
             { // Go through the hidden edges.
                int hiddenEdgeIndex = expectedLineOfSightIndices[1];
-               HalfEdge3D hiddenEdge = expectedLineOfSightEndEdge3D.getNextEdge();
+               HalfEdge3D hiddenEdge = expectedLineOfSightEndEdge3D.getNext();
 
                while (hiddenEdge != expectedLineOfSightStartEdge3D)
                {
                   assertFalse(face3D.canObserverSeeEdge(observer3D, hiddenEdgeIndex));
                   assertFalse(face3D.canObserverSeeEdge(observer3D, hiddenEdge));
                   hiddenEdgeIndex = (hiddenEdgeIndex + 1) % face3D.getNumberOfEdges();
-                  hiddenEdge = hiddenEdge.getNextEdge();
+                  hiddenEdge = hiddenEdge.getNext();
                }
             }
          }
@@ -329,8 +329,8 @@ public class Face3DTest
             HalfEdge3D nextEdge = edges.get(nextIndex);
             HalfEdge3D edge = edges.get(edgeIndex);
 
-            assertTrue(edge.getPreviousEdge() == prevEdge);
-            assertTrue(edge.getNextEdge() == nextEdge);
+            assertTrue(edge.getPrevious() == prevEdge);
+            assertTrue(edge.getNext() == nextEdge);
             assertTrue(edge.getFace() == face);
 
             assertTrue(prevEdge.getDestination() == edge.getOrigin());
@@ -357,8 +357,8 @@ public class Face3DTest
             HalfEdge3D nextEdge = edges.get(nextIndex);
             HalfEdge3D edge = edges.get(edgeIndex);
 
-            assertTrue(edge.getPreviousEdge() == prevEdge);
-            assertTrue(edge.getNextEdge() == nextEdge);
+            assertTrue(edge.getPrevious() == prevEdge);
+            assertTrue(edge.getNext() == nextEdge);
             assertTrue(edge.getFace() == face);
 
             assertTrue(prevEdge.getDestination() == edge.getOrigin());
@@ -387,8 +387,8 @@ public class Face3DTest
             HalfEdge3D nextEdge = edges.get(nextIndex);
             HalfEdge3D edge = edges.get(edgeIndex);
 
-            assertTrue(edge.getPreviousEdge() == prevEdge);
-            assertTrue(edge.getNextEdge() == nextEdge);
+            assertTrue(edge.getPrevious() == prevEdge);
+            assertTrue(edge.getNext() == nextEdge);
             assertTrue(edge.getFace() == face);
 
             assertTrue(prevEdge.getDestination() == edge.getOrigin());
@@ -551,7 +551,7 @@ public class Face3DTest
          Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
          HalfEdge3D prevEdge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-         HalfEdge3D nextEdge = prevEdge.getNextEdge();
+         HalfEdge3D nextEdge = prevEdge.getNext();
 
          Vertex3D closestVertex = prevEdge.getDestination();
 

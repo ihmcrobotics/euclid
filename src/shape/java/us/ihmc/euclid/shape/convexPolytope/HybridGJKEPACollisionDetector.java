@@ -140,7 +140,7 @@ public class HybridGJKEPACollisionDetector
          Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingVertex(supportVectorDirectionNegative);
          simplex.addVertex(supportingPolytopeVertexA, supportingPolytopeVertexB);
 
-         if (simplex.isInteriorPoint(origin, epsilon))
+         if (simplex.isPointInside(origin, epsilon))
             return true;
          else
             simplex.getSupportVectorDirectionTo(origin, supportVectorDirection);

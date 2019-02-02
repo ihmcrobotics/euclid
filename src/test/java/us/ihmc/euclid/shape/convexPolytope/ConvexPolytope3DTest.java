@@ -159,21 +159,21 @@ public class ConvexPolytope3DTest
             assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
             assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getDestination(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getOrigin(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwin().getDestination(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwin().getOrigin(), EPSILON);
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getDestination(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getOrigin(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPrevious().getDestination(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNext().getOrigin(), EPSILON);
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPreviousEdge().getTwinEdge().getOrigin(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNextEdge().getTwinEdge().getDestination(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPrevious().getTwin().getOrigin(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNext().getTwin().getDestination(), EPSILON);
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwinEdge().getNextEdge().getOrigin(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwinEdge().getPreviousEdge().getDestination(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwin().getNext().getOrigin(), EPSILON);
+            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwin().getPrevious().getDestination(), EPSILON);
 
-            assertTrue(edge.getTwinEdge().getTwinEdge() == edge);
-            assertTrue(edge.getNextEdge().getPreviousEdge() == edge);
-            assertTrue(edge.getPreviousEdge().getNextEdge() == edge);
+            assertTrue(edge.getTwin().getTwin() == edge);
+            assertTrue(edge.getNext().getPrevious() == edge);
+            assertTrue(edge.getPrevious().getNext() == edge);
          }
 
          for (int faceIndex = 0; faceIndex < polytope.getFaces().size(); faceIndex++)
@@ -192,7 +192,7 @@ public class ConvexPolytope3DTest
          { // Assert that adding a point that is inside the polytope does not change anything.
             Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, firstVertex, secondVertex, thirdVertex, fourthVertex);
 
-            assertTrue(polytope.isInteriorPoint(pointInside, EPSILON));
+            assertTrue(polytope.isPointInside(pointInside, EPSILON));
 
             polytope.addVertex(pointInside, 0.0);
 
@@ -388,9 +388,9 @@ public class ConvexPolytope3DTest
          assertTrue(yPlusSideFace.getVertices().containsAll(Arrays.asList(topP1, topP2, bottomP1, bottomP2)));
          assertTrue(yMinusSideFace.getVertices().containsAll(Arrays.asList(topP0, topP3, bottomP0, bottomP3)));
 
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwinEdge()));
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getNextEdge()));
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getPreviousEdge()));
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwin()));
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getNext()));
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getPrevious()));
 
          convexPolytope3D.getVertices().forEach(vertex -> assertEquals(3, vertex.getNumberOfAssociatedEdges()));
       }
@@ -437,11 +437,11 @@ public class ConvexPolytope3DTest
 
          for (HalfEdge3D edge : convexPolytope3D.getEdges())
          {
-            assertNotNull(edge.getTwinEdge());
+            assertNotNull(edge.getTwin());
             Vertex3D a0 = edge.getOrigin();
             Vertex3D b0 = edge.getDestination();
-            Vertex3D a1 = edge.getTwinEdge().getDestination();
-            Vertex3D b1 = edge.getTwinEdge().getOrigin();
+            Vertex3D a1 = edge.getTwin().getDestination();
+            Vertex3D b1 = edge.getTwin().getOrigin();
 
             assertTrue(a0 == a1);
             assertTrue(b0 == b1);
@@ -487,11 +487,11 @@ public class ConvexPolytope3DTest
 
          for (HalfEdge3D edge : convexPolytope3D.getEdges())
          {
-            assertNotNull(edge.getTwinEdge());
+            assertNotNull(edge.getTwin());
             Vertex3D a0 = edge.getOrigin();
             Vertex3D b0 = edge.getDestination();
-            Vertex3D a1 = edge.getTwinEdge().getDestination();
-            Vertex3D b1 = edge.getTwinEdge().getOrigin();
+            Vertex3D a1 = edge.getTwin().getDestination();
+            Vertex3D b1 = edge.getTwin().getOrigin();
 
             assertTrue(a0 == a1);
             assertTrue(b0 == b1);
@@ -543,11 +543,11 @@ public class ConvexPolytope3DTest
 
          for (HalfEdge3D edge : convexPolytope3D.getEdges())
          {
-            assertNotNull(edge.getTwinEdge());
+            assertNotNull(edge.getTwin());
             Vertex3D a0 = edge.getOrigin();
             Vertex3D b0 = edge.getDestination();
-            Vertex3D a1 = edge.getTwinEdge().getDestination();
-            Vertex3D b1 = edge.getTwinEdge().getOrigin();
+            Vertex3D a1 = edge.getTwin().getDestination();
+            Vertex3D b1 = edge.getTwin().getOrigin();
 
             assertTrue(a0 == a1);
             assertTrue(b0 == b1);
@@ -826,7 +826,7 @@ public class ConvexPolytope3DTest
             assertEquals(2, vertices.stream().filter(v -> epsilonEquals(0.0, percentageAlongLineSegment3D(v, bottomCentroid, belowBottom), EPSILON)).count());
          }
 
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwinEdge()));
+         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwin()));
       }
    }
 
@@ -853,176 +853,16 @@ public class ConvexPolytope3DTest
             {
                Face3D face = convexPolytope3D.getFace(faceIndex);
                Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getVertex(0), face.getVertex(1), face.getVertex(2));
-               assertTrue(face == convexPolytope3D.getFaceContainingPointClosestTo(pointOnFace));
+               assertTrue(face == convexPolytope3D.getClosestFace(pointOnFace));
 
                Point3D pointOutside = new Point3D();
                pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOnFace);
-               assertTrue(face == convexPolytope3D.getFaceContainingPointClosestTo(pointOutside));
+               assertTrue(face == convexPolytope3D.getClosestFace(pointOutside));
             }
 
             // TODO need to add couple with point: closest to an edge, closest to a vertex
          }
       }
       // TODO need to add tests with more complicated polytope
-   }
-
-   @Test
-   void testGetVisibleFaces() throws Exception
-   {
-      Random random = new Random(43656);
-
-      { // Testing with a tetrahedron
-         Point3D top = new Point3D(0.0, 0.0, 1.0);
-         Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
-         Point3D bottomP1 = new Point3D(0.5, -0.5, 0.0);
-         Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
-
-         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         convexPolytope3D.addVertex(bottomP0, 0.0);
-         convexPolytope3D.addVertex(bottomP1, 0.0);
-         convexPolytope3D.addVertex(bottomP2, 0.0);
-         convexPolytope3D.addVertex(top, 0.0);
-
-         for (int i = 0; i < ITERATIONS; i++)
-         {
-            for (int faceIndex = 0; faceIndex < 4; faceIndex++)
-            { // Expecting only 1 visible face
-               Face3D face = convexPolytope3D.getFace(faceIndex);
-               Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getVertex(0), face.getVertex(1), face.getVertex(2));
-               Point3D pointOutside = new Point3D();
-               pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOnFace);
-
-               List<Face3D> actualVisibleFaces = new ArrayList<>();
-               Face3D leastVisibleFace = convexPolytope3D.getVisibleFaces(actualVisibleFaces, pointOutside, 0.0);
-
-               assertEquals(1, actualVisibleFaces.size());
-               assertTrue(face == actualVisibleFaces.get(0));
-               assertTrue(face == leastVisibleFace);
-            }
-
-            for (int faceIndex = 0; faceIndex < 4; faceIndex++)
-            { // Expecting only 2 visible faces
-               Face3D firstFace = convexPolytope3D.getFace(faceIndex);
-               HalfEdge3D edge = firstFace.getEdge(random.nextInt(3));
-               Face3D secondFace = edge.getTwinEdge().getFace();
-
-               Vector3D edgeNormal = new Vector3D();
-               edgeNormal.interpolate(firstFace.getNormal(), secondFace.getNormal(), 0.5);
-               edgeNormal.normalize();
-
-               Point3D pointOnEdge = new Point3D();
-               pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-
-               { // Case #1: the firstFace is the most visible
-                  Vector3D directionLimit = new Vector3D(); // Represents the limit before secondFace becomes invisible.
-                  directionLimit.cross(edge.getDirection(false), secondFace.getNormal());
-                  directionLimit.normalize();
-                  assertTrue(directionLimit.dot(firstFace.getNormal()) > 0.0); // This is only to ensure that we've constructed the limit such that it is on the firstFace side.
-
-                  Vector3D extractionDirection = new Vector3D();
-                  extractionDirection.interpolate(directionLimit, edgeNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-                  extractionDirection.normalize();
-
-                  Point3D pointOutside = new Point3D();
-                  pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
-
-                  List<Face3D> actualVisibleFaces = new ArrayList<>();
-                  Face3D leastVisibleFace = convexPolytope3D.getVisibleFaces(actualVisibleFaces, pointOutside, 0.0);
-
-                  assertEquals(2, actualVisibleFaces.size());
-                  assertTrue(actualVisibleFaces.contains(firstFace));
-                  assertTrue(actualVisibleFaces.contains(secondFace));
-                  assertTrue(secondFace == leastVisibleFace);
-               }
-
-               { // Case #2: the secondFace is the most visible (redundant test)
-                  Vector3D directionLimit = new Vector3D(); // Represents the limit before firstFace becomes invisible.
-                  directionLimit.cross(firstFace.getNormal(), edge.getDirection(false));
-                  directionLimit.normalize();
-                  assertTrue(directionLimit.dot(secondFace.getNormal()) > 0.0); // This is only to ensure that we've constructed the limit such that it is on the secondFace side.
-
-                  Vector3D extractionDirection = new Vector3D();
-                  extractionDirection.interpolate(directionLimit, edgeNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-                  extractionDirection.normalize();
-
-                  Point3D pointOutside = new Point3D();
-                  pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
-
-                  List<Face3D> actualVisibleFaces = new ArrayList<>();
-                  Face3D leastVisibleFace = convexPolytope3D.getVisibleFaces(actualVisibleFaces, pointOutside, 0.0);
-
-                  assertEquals(2, actualVisibleFaces.size());
-                  assertTrue(actualVisibleFaces.contains(firstFace));
-                  assertTrue(actualVisibleFaces.contains(secondFace));
-                  assertTrue(firstFace == leastVisibleFace);
-               }
-            }
-
-            for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++)
-            { // Expecting 3 visible faces
-               Vertex3D vertex = convexPolytope3D.getVertex(vertexIndex);
-
-               List<HalfEdge3D> edges = new ArrayList<>(vertex.getAssociatedEdges());
-
-               Face3D firstFace = edges.get(0).getFace();
-               Face3D secondFace = edges.get(1).getFace();
-               Face3D thirdFace = edges.get(2).getFace();
-               assertTrue(firstFace != secondFace);
-               assertTrue(secondFace != thirdFace);
-               assertTrue(thirdFace != firstFace);
-
-               Vector3D vertexNormal = new Vector3D();
-               vertexNormal.setAndScale(1.0 / 3.0, firstFace.getNormal());
-               vertexNormal.scaleAdd(1.0 / 3.0, secondFace.getNormal(), vertexNormal);
-               vertexNormal.scaleAdd(1.0 / 3.0, thirdFace.getNormal(), vertexNormal);
-               vertexNormal.normalize();
-
-               Point3D equidistantPoint = new Point3D();
-               equidistantPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), vertexNormal, vertex);
-
-               { // Assert that when extruding using vertexNormal, the resulting point is equidistant from the three faces.
-                  double firstDistance = firstFace.distance(equidistantPoint);
-                  double secondDistance = secondFace.distance(equidistantPoint);
-                  double thirdDistance = thirdFace.distance(equidistantPoint);
-                  assertEquals(firstDistance, secondDistance, EPSILON);
-                  assertEquals(secondDistance, thirdDistance, EPSILON);
-                  assertEquals(thirdDistance, firstDistance, EPSILON);
-               }
-
-               { // Case #1: Shifting equidistantPoint slightly (not too much or the face won't be visible) away from firstFace so it is the least visible face.
-                 // TODO The construction used here is not reliable, the least visible face
-                  Vector3D oppositeEdgeNormal = new Vector3D();
-                  oppositeEdgeNormal.interpolate(secondFace.getNormal(), thirdFace.getNormal(), 0.5);
-                  oppositeEdgeNormal.normalize();
-
-                  Vector3D limitDirection = new Vector3D();
-                  limitDirection.cross(firstFace.getNormal(), oppositeEdgeNormal);
-                  limitDirection.normalize();
-                  limitDirection.cross(limitDirection, firstFace.getNormal());
-                  limitDirection.normalize();
-                  assertEquals(0.0, limitDirection.dot(firstFace.getNormal()), EPSILON);
-                  assertTrue(oppositeEdgeNormal.dot(limitDirection) > 0.0);
-
-                  Vector3D extrusionDirection = new Vector3D();
-                  extrusionDirection.interpolate(limitDirection, vertexNormal, EuclidCoreRandomTools.nextDouble(random, 0.001, 0.999));
-
-                  Point3D pointOutside = new Point3D();
-                  pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), extrusionDirection, vertex);
-
-                  List<Face3D> actualVisibleFaces = new ArrayList<>();
-                  convexPolytope3D.getVisibleFaces(actualVisibleFaces, pointOutside, 0.0);
-
-                  assertEquals(3, actualVisibleFaces.size());
-                  assertTrue(actualVisibleFaces.contains(firstFace));
-                  assertTrue(actualVisibleFaces.contains(secondFace));
-                  assertTrue(actualVisibleFaces.contains(thirdFace));
-                  // Problem with the construction.
-                  //                  String errorMessage = "Iteration: " + i + ", vertex index: " + vertexIndex;
-                  //                  assertTrue(firstFace == leastVisibleFace, errorMessage);
-               }
-
-            }
-         }
-      }
    }
 }

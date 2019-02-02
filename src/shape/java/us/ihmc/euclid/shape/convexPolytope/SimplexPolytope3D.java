@@ -56,9 +56,9 @@ public class SimplexPolytope3D implements Simplex3D
       polytope.clear();
    }
 
-   public boolean isInteriorPoint(Point3DReadOnly pointToCheck, double epsilon)
+   public boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
    {
-      return polytope.isInteriorPoint(pointToCheck, epsilon);
+      return polytope.isPointInside(pointToCheck, epsilon);
    }
 
    @Override

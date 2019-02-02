@@ -44,7 +44,7 @@ public class EuclidPolytopeIOTools
    {
       if (halfEdge3D == null)
          return "null";
-      return getHalfEdge3DString(format, halfEdge3D, halfEdge3D.getTwinEdge(), halfEdge3D.getNextEdge(), halfEdge3D.getPreviousEdge(), halfEdge3D.getFace());
+      return getHalfEdge3DString(format, halfEdge3D, halfEdge3D.getTwin(), halfEdge3D.getNext(), halfEdge3D.getPrevious(), halfEdge3D.getFace());
    }
 
    public static String getHalfEdge3DString(String format, LineSegment3DReadOnly edgeSupportingSegment, HalfEdge3DReadOnly twinEdge,

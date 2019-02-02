@@ -39,8 +39,8 @@ public class ConvexPolytope3DFactories
 
       HalfEdge3D faceFirstEdge = face.getEdge(0);
 
-      twinEdge.setTwinEdge(faceFirstEdge);
-      faceFirstEdge.setTwinEdge(twinEdge);
+      twinEdge.setTwin(faceFirstEdge);
+      faceFirstEdge.setTwin(twinEdge);
 
       return face;
    }

@@ -101,7 +101,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       for (int i = 0; currentEdge != null && i < getNumberOfEdges(); i++)
       {
          lineOfSight.add(currentEdge);
-         currentEdge = currentEdge.getNextEdge();
+         currentEdge = currentEdge.getNext();
          if (!canObserverSeeEdge(observer, currentEdge))
             break;
       }
@@ -130,7 +130,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly currentEdge = startEdge;
-      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPreviousEdge());
+      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPrevious());
 
       do
       {
@@ -140,7 +140,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
             return currentEdge;
 
          previousEdgeVisible = edgeVisible;
-         currentEdge = currentEdge.getNextEdge();
+         currentEdge = currentEdge.getNext();
       }
       while (currentEdge != startEdge);
 
@@ -156,17 +156,17 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly currentEdge = startEdge;
-      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPreviousEdge());
+      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPrevious());
 
       do
       {
          boolean edgeVisible = canObserverSeeEdge(observer, currentEdge);
 
          if (previousEdgeVisible && !edgeVisible)
-            return currentEdge.getPreviousEdge();
+            return currentEdge.getPrevious();
 
          previousEdgeVisible = edgeVisible;
-         currentEdge = currentEdge.getNextEdge();
+         currentEdge = currentEdge.getNext();
       }
       while (currentEdge != startEdge);
 
@@ -266,7 +266,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
          if (canObserverSeeEdge(query, edge))
             return false;
 
-         edge = edge.getNextEdge();
+         edge = edge.getNext();
       }
 
       return true;
@@ -278,7 +278,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       HalfEdge3DReadOnly startEdge = getEdge(0);
       Vertex3DReadOnly supportingVertex = startEdge.getOrigin();
       double maxDot = supportingVertex.dot(supportVector);
-      HalfEdge3DReadOnly currentEdge = startEdge.getNextEdge();
+      HalfEdge3DReadOnly currentEdge = startEdge.getNext();
 
       while (currentEdge != startEdge)
       {
@@ -290,7 +290,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
             supportingVertex = candidate;
          }
 
-         currentEdge = currentEdge.getNextEdge();
+         currentEdge = currentEdge.getNext();
       }
 
       return supportingVertex;
@@ -322,9 +322,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     *           {@code getNumberOfEdges()}
     * @return a read only reference to the adjacent face
     */
-   default Face3DReadOnly getNeighboringFace(int index)
+   default Face3DReadOnly getNeighbor(int index)
    {
-      HalfEdge3DReadOnly twinEdge = getEdge(index).getTwinEdge();
+      HalfEdge3DReadOnly twinEdge = getEdge(index).getTwin();
       if (twinEdge == null)
          return null;
       else
@@ -361,7 +361,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly closestEdge = startEdge;
       double minDistanceSquared = startEdge.distanceSquared(point);
-      HalfEdge3DReadOnly currentEdge = startEdge.getNextEdge();
+      HalfEdge3DReadOnly currentEdge = startEdge.getNext();
 
       while (currentEdge != startEdge)
       {
@@ -371,7 +371,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
             closestEdge = currentEdge;
             minDistanceSquared = distanceSquared;
          }
-         currentEdge = currentEdge.getNextEdge();
+         currentEdge = currentEdge.getNext();
       }
 
       return closestEdge;
@@ -438,8 +438,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 
       do
       {
-         otherCurrentEdge.getNextEdge();
-         thisCurrentEdge.getNextEdge();
+         otherCurrentEdge.getNext();
+         thisCurrentEdge.getNext();
          if (!thisCurrentEdge.geometricallyEquals(otherCurrentEdge, epsilon))
             return false;
       }

@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simplex3D
@@ -76,6 +78,51 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    List<? extends Vertex3DReadOnly> getVertices();
 
    BoundingBox3DReadOnly getBoundingBox();
+
+   default boolean containsNaN()
+   {
+      for (int vertexIndex = 0; vertexIndex < getNumberOfVertices(); vertexIndex++)
+      {
+         if (getVertex(vertexIndex).containsNaN())
+            return true;
+      }
+      return false;
+   }
+
+   default boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
+   {
+      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
+      {
+         if (EuclidPolytopeTools.canObserverSeeFace(pointToCheck, getFace(faceIndex), epsilon))
+            return false;
+      }
+      return true;
+   }
+
+   default Face3DReadOnly getClosestFace(Point3DReadOnly point)
+   {
+      if (getNumberOfFaces() == 0)
+         return null;
+      if (getNumberOfFaces() == 1)
+         return getFace(0);
+
+      Face3DReadOnly closestFace = null;
+      double minDistance = Double.POSITIVE_INFINITY;
+
+      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
+      {
+         Face3DReadOnly face = getFace(faceIndex);
+         double distance = face.distance(point);
+
+         if (distance < minDistance)
+         {
+            closestFace = face;
+            minDistance = distance;
+         }
+      }
+
+      return closestFace;
+   }
 
    /**
     * Returns a reference to the polytope vertex that is further along the direction indicated by the

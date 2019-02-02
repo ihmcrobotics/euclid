@@ -38,21 +38,21 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
     * 
     * @return a read only reference to the twin half edge
     */
-   HalfEdge3DReadOnly getTwinEdge();
+   HalfEdge3DReadOnly getTwin();
 
    /**
     * Returns a reference to the {@code nextHalfEdge} in the same {@code face} as this half edge
     * 
     * @return a read only reference to the next half edge
     */
-   HalfEdge3DReadOnly getNextEdge();
+   HalfEdge3DReadOnly getNext();
 
    /**
     * Returns a reference to the {@code previousHalfEdge} in the same {@code face} as this half edge
     * 
     * @return a read only reference to the previous half edge
     */
-   HalfEdge3DReadOnly getPreviousEdge();
+   HalfEdge3DReadOnly getPrevious();
 
    /**
     * Returns the reference to the face that this half edge is a part of
@@ -115,9 +115,9 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
     *         origin and destination are in an {@code epsilon} vicinity of this half edges origin and
     *         destination respectively
     */
-   default boolean isTwin(HalfEdge3DReadOnly twinEdge, double epsilon)
+   default boolean isTwin(HalfEdge3DReadOnly twin, double epsilon)
    {
-      return epsilonEquals(twinEdge.getTwinEdge(), epsilon);
+      return epsilonEquals(twin.getTwin(), epsilon);
    }
 
    default boolean equals(HalfEdge3DReadOnly other)

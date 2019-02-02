@@ -22,6 +22,7 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -204,7 +205,7 @@ public class EuclidPolytopeToolsTest
          for (HalfEdge3D edge : convexPolytope3D.getEdges())
          { // This edge is part of the silhouette if its face is not visible and the face of its twin is visible
             boolean isEdgeFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getFace(), epsilon);
-            boolean isTwinFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getTwinEdge().getFace(), epsilon);
+            boolean isTwinFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getTwin().getFace(), epsilon);
 
             if (!isEdgeFaceVisible && isTwinFaceVisible)
                expectedSilhouette.add(edge);
@@ -233,6 +234,91 @@ public class EuclidPolytopeToolsTest
    {
       Random random = new Random(4456453);
 
+      { // Testing with a tetrahedron
+         Point3D top = new Point3D(0.0, 0.0, 1.0);
+         Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
+         Point3D bottomP1 = new Point3D(0.5, -0.5, 0.0);
+         Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
+         convexPolytope3D.addVertex(bottomP0, 0.0);
+         convexPolytope3D.addVertex(bottomP1, 0.0);
+         convexPolytope3D.addVertex(bottomP2, 0.0);
+         convexPolytope3D.addVertex(top, 0.0);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            for (int faceIndex = 0; faceIndex < 4; faceIndex++)
+            { // Expecting only 1 visible face
+               Face3D face = convexPolytope3D.getFace(faceIndex);
+               Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getVertex(0), face.getVertex(1), face.getVertex(2));
+               Point3D pointOutside = new Point3D();
+               pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOnFace);
+
+               List<Face3D> actualVisibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
+
+               assertEquals(1, actualVisibleFaces.size());
+               assertTrue(face == actualVisibleFaces.get(0));
+            }
+
+            for (int faceIndex = 0; faceIndex < 4; faceIndex++)
+            { // Expecting only 2 visible faces
+               Face3D firstFace = convexPolytope3D.getFace(faceIndex);
+               HalfEdge3D edge = firstFace.getEdge(random.nextInt(3));
+               Face3D secondFace = edge.getTwin().getFace();
+
+               Vector3D edgeNormal = new Vector3D();
+               edgeNormal.interpolate(firstFace.getNormal(), secondFace.getNormal(), 0.5);
+               edgeNormal.normalize();
+
+               Point3D pointOnEdge = new Point3D();
+               pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+               { // Case #1: the firstFace is the most visible
+                  Vector3D directionLimit = new Vector3D(); // Represents the limit before secondFace becomes invisible.
+                  directionLimit.cross(edge.getDirection(false), secondFace.getNormal());
+                  directionLimit.normalize();
+                  assertTrue(directionLimit.dot(firstFace.getNormal()) > 0.0); // This is only to ensure that we've constructed the limit such that it is on the firstFace side.
+
+                  Vector3D extractionDirection = new Vector3D();
+                  extractionDirection.interpolate(directionLimit, edgeNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+                  extractionDirection.normalize();
+
+                  Point3D pointOutside = new Point3D();
+                  pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
+
+                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
+
+                  assertEquals(2, actualVisibleFaces.size());
+                  assertTrue(actualVisibleFaces.contains(firstFace));
+                  assertTrue(actualVisibleFaces.contains(secondFace));
+                  assertTrue(secondFace == actualVisibleFaces.get(0));
+               }
+
+               { // Case #2: the secondFace is the most visible (redundant test)
+                  Vector3D directionLimit = new Vector3D(); // Represents the limit before firstFace becomes invisible.
+                  directionLimit.cross(firstFace.getNormal(), edge.getDirection(false));
+                  directionLimit.normalize();
+                  assertTrue(directionLimit.dot(secondFace.getNormal()) > 0.0); // This is only to ensure that we've constructed the limit such that it is on the secondFace side.
+
+                  Vector3D extractionDirection = new Vector3D();
+                  extractionDirection.interpolate(directionLimit, edgeNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+                  extractionDirection.normalize();
+
+                  Point3D pointOutside = new Point3D();
+                  pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
+
+                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
+
+                  assertEquals(2, actualVisibleFaces.size());
+                  assertTrue(actualVisibleFaces.contains(firstFace));
+                  assertTrue(actualVisibleFaces.contains(secondFace));
+                  assertTrue(firstFace == actualVisibleFaces.get(0));
+               }
+            }
+         }
+      }
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
@@ -258,7 +344,7 @@ public class EuclidPolytopeToolsTest
             Face3D visibleFace = visibleFaces.get(0);
             for (int neighborIndex = 0; neighborIndex < visibleFace.getNumberOfEdges(); neighborIndex++)
             {
-               assertFalse(EuclidPolytopeTools.canObserverSeeFace(observer, visibleFace.getNeighboringFace(neighborIndex), epsilon));
+               assertFalse(EuclidPolytopeTools.canObserverSeeFace(observer, visibleFace.getNeighbor(neighborIndex), epsilon));
             }
          }
          else
@@ -269,7 +355,7 @@ public class EuclidPolytopeToolsTest
 
                for (int neighborIndex = 0; neighborIndex < visibleFace.getNumberOfEdges(); neighborIndex++)
                {
-                  Face3D neighbor = visibleFace.getNeighboringFace(neighborIndex);
+                  Face3D neighbor = visibleFace.getNeighbor(neighborIndex);
 
                   if (EuclidPolytopeTools.canObserverSeeFace(observer, neighbor, epsilon))
                      numberOfVisibleNeighbors++;

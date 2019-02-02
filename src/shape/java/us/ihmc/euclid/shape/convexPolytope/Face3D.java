@@ -63,8 +63,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       {
          HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, vertexToAdd);
          newEdge.setFace(this);
-         newEdge.setNextEdge(newEdge);
-         newEdge.setPreviousEdge(newEdge);
+         newEdge.setNext(newEdge);
+         newEdge.setPrevious(newEdge);
          edges.add(newEdge);
       }
       else if (edges.size() == 1)
@@ -77,10 +77,10 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          firstEdge.setDestination(vertexToAdd);
          HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
          newEdge.setFace(this);
-         newEdge.setNextEdge(firstEdge);
-         newEdge.setPreviousEdge(firstEdge);
-         firstEdge.setNextEdge(newEdge);
-         firstEdge.setPreviousEdge(newEdge);
+         newEdge.setNext(firstEdge);
+         newEdge.setPrevious(firstEdge);
+         firstEdge.setNext(newEdge);
+         firstEdge.setPrevious(newEdge);
          edges.add(newEdge);
       }
       else if (edges.size() == 2)
@@ -102,8 +102,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
          secondEdge.setDestination(vertexToAdd);
          HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin(), secondEdge, firstEdge, this);
-         firstEdge.setPreviousEdge(newEdge);
-         secondEdge.setNextEdge(newEdge);
+         firstEdge.setPrevious(newEdge);
+         secondEdge.setNext(newEdge);
          edges.add(newEdge);
       }
       else
@@ -114,10 +114,10 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
             return;
 
          // TODO Maybe do line-of-sight with epsilon?
-         if (lineOfSight.get(0).getPreviousEdge().distanceFromSupportLine(vertexToAdd) < epsilon)
-            lineOfSight.add(0, lineOfSight.get(0).getPreviousEdge());
-         if (lineOfSight.get(lineOfSight.size() - 1).getNextEdge().distanceFromSupportLine(vertexToAdd) < epsilon)
-            lineOfSight.add(lineOfSight.get(lineOfSight.size() - 1).getNextEdge());
+         if (lineOfSight.get(0).getPrevious().distanceFromSupportLine(vertexToAdd) < epsilon)
+            lineOfSight.add(0, lineOfSight.get(0).getPrevious());
+         if (lineOfSight.get(lineOfSight.size() - 1).getNext().distanceFromSupportLine(vertexToAdd) < epsilon)
+            lineOfSight.add(lineOfSight.get(lineOfSight.size() - 1).getNext());
 
          HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
          HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
@@ -132,18 +132,18 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
             HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
             additionalEdge.setFace(this);
             firstVisibleEdge.setDestination(vertexToAdd);
-            additionalEdge.setNextEdge(firstVisibleEdge.getNextEdge());
-            firstVisibleEdge.getNextEdge().setPreviousEdge(additionalEdge);
-            firstVisibleEdge.setNextEdge(additionalEdge);
-            additionalEdge.setPreviousEdge(firstVisibleEdge);
+            additionalEdge.setNext(firstVisibleEdge.getNext());
+            firstVisibleEdge.getNext().setPrevious(additionalEdge);
+            firstVisibleEdge.setNext(additionalEdge);
+            additionalEdge.setPrevious(firstVisibleEdge);
             edges.add(additionalEdge);
          }
          else
          {
             firstVisibleEdge.setDestination(vertexToAdd);
             lastVisibleEdge.setOrigin(vertexToAdd);
-            firstVisibleEdge.setNextEdge(lastVisibleEdge);
-            lastVisibleEdge.setPreviousEdge(firstVisibleEdge);
+            firstVisibleEdge.setNext(lastVisibleEdge);
+            lastVisibleEdge.setPrevious(firstVisibleEdge);
 
             for (int i = 1; i < lineOfSight.size() - 1; i++)
                edges.remove(lineOfSight.get(i));
@@ -154,11 +154,11 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       edges.clear();
       edges.add(startEdge);
 
-      HalfEdge3D currentEdge = startEdge.getNextEdge();
+      HalfEdge3D currentEdge = startEdge.getNext();
       while (currentEdge != startEdge)
       {
          edges.add(currentEdge);
-         currentEdge = currentEdge.getNextEdge();
+         currentEdge = currentEdge.getNext();
       }
 
       vertices.clear();
@@ -208,7 +208,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
       {
          lineOfSight.add(edgeUnderConsideration);
-         edgeUnderConsideration = edgeUnderConsideration.getNextEdge();
+         edgeUnderConsideration = edgeUnderConsideration.getNext();
          if (!canObserverSeeEdge(observer, edgeUnderConsideration))
             break;
       }
@@ -229,9 +229,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
-   public Face3D getNeighboringFace(int index)
+   public Face3D getNeighbor(int index)
    {
-      return (Face3D) Face3DReadOnly.super.getNeighboringFace(index);
+      return (Face3D) Face3DReadOnly.super.getNeighbor(index);
    }
 
    @Override

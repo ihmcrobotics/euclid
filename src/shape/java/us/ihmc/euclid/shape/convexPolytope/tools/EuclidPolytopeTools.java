@@ -661,11 +661,11 @@ public class EuclidPolytopeTools
 
       for (int neighborIndex = 0; neighborIndex < leastVisibleFace.getNumberOfEdges(); neighborIndex++)
       {
-         Face3DReadOnly neighbor = leastVisibleFace.getNeighboringFace(neighborIndex);
+         Face3DReadOnly neighbor = leastVisibleFace.getNeighbor(neighborIndex);
 
          if (!visibleFacesToPack.contains(neighbor))
          {
-            silhouetteStartEdge = (E) leastVisibleFace.getEdge(neighborIndex).getTwinEdge();
+            silhouetteStartEdge = (E) leastVisibleFace.getEdge(neighborIndex).getTwin();
             break;
          }
       }
@@ -684,7 +684,7 @@ public class EuclidPolytopeTools
          {
             if (visibleFacesToPack.contains(candidate.getFace()))
                continue; // The associated face should not be visible.
-            if (!visibleFacesToPack.contains(candidate.getTwinEdge().getFace()))
+            if (!visibleFacesToPack.contains(candidate.getTwin().getFace()))
                continue; // The associated face to the twin edge should be visible.
 
             silhouette.add((E) candidate);
@@ -749,8 +749,8 @@ public class EuclidPolytopeTools
       { // Going through the new edges and associating the twins.
          HalfEdge3D endingTo = startingFrom.getDestination().getEdgeTo(vertex);
 
-         startingFrom.setTwinEdge(endingTo);
-         endingTo.setTwinEdge(startingFrom);
+         startingFrom.setTwin(endingTo);
+         endingTo.setTwin(startingFrom);
       }
 
       return newFaces;
