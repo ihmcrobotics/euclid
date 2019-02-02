@@ -6,9 +6,12 @@ import java.util.stream.Collectors;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -29,14 +32,44 @@ public class EuclidPolytopeRandomTools
       return face3D;
    }
 
-   public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices, Vector3DReadOnly planeNormal)
+   public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices,
+                                                              Vector3DReadOnly planeNormal)
    {
-      List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, centerMinMax, maxEdgeLength, numberOfVertices);
+      List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, centerMinMax, maxEdgeLength,
+                                                                                                          numberOfVertices);
       List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
       RigidBodyTransform transform = new RigidBodyTransform();
       transform.setTranslationZ(EuclidCoreRandomTools.nextDouble(random, centerMinMax));
       transform.setRotation(EuclidGeometryTools.axisAngleFromZUpToVector3D(planeNormal));
       circleBasedConvexPolygon3D.forEach(transform::transform);
       return circleBasedConvexPolygon3D;
+   }
+
+   public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random)
+   {
+      return nextIcoSphereBasedConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextIcoSphereBasedConvexPolytope3D(random, centerMinMax, 0.1, 5.0);
+   }
+
+   public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax, double radiusMin, double radiusMax)
+   {
+      return nextIcoSphereBasedConvexPolytope3D(random, centerMinMax, random.nextInt(4) + 1, radiusMin, radiusMax);
+   }
+
+   public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax, int recursionLevel, double radiusMin, double radiusMax)
+   {
+      GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
+      AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.setScale(EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax));
+      icoSphere.applyTransform(transform);
+
+      ConvexPolytope3D next = new ConvexPolytope3D();
+      icoSphere.getVertices().forEach(vertex -> next.addVertex(vertex, 0.0));
+      return next;
    }
 }
