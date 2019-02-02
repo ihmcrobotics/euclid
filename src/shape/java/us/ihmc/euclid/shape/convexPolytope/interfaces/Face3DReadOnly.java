@@ -322,7 +322,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     *           {@code getNumberOfEdges()}
     * @return a read only reference to the adjacent face
     */
-   default Face3DReadOnly getNeighbouringFace(int index)
+   default Face3DReadOnly getNeighboringFace(int index)
    {
       HalfEdge3DReadOnly twinEdge = getEdge(index).getTwinEdge();
       if (twinEdge == null)

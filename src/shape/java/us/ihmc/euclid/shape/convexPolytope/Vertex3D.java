@@ -110,17 +110,10 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
       }
    }
 
+   /** @inheritDoc */
    public HalfEdge3D getEdgeTo(Vertex3DReadOnly destination)
    {
-      for (int edgeIndex = 0; edgeIndex < getNumberOfAssociatedEdges(); edgeIndex++)
-      {
-         HalfEdge3D candidate = associatedEdges.get(edgeIndex);
-
-         if (candidate.getDestination() == destination)
-            return candidate;
-      }
-
-      return null;
+      return (HalfEdge3D) Vertex3DReadOnly.super.getEdgeTo(destination);
    }
 
    /**

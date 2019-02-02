@@ -229,9 +229,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
-   public Face3D getNeighbouringFace(int index)
+   public Face3D getNeighboringFace(int index)
    {
-      return (Face3D) Face3DReadOnly.super.getNeighbouringFace(index);
+      return (Face3D) Face3DReadOnly.super.getNeighboringFace(index);
    }
 
    @Override

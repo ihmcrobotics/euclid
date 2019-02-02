@@ -45,6 +45,27 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
    int getNumberOfAssociatedEdges();
 
    /**
+    * Retrieves the half-edge that originates from this vertex and ends at the given
+    * {@code destination}.
+    * 
+    * @param destination the vertex to which the desired half-edge ends at.
+    * @return the half-edge starting from {@code this} and ending at {@code destination}, or
+    *         {@code null} if no such half-edge exists.
+    */
+   default HalfEdge3DReadOnly getEdgeTo(Vertex3DReadOnly destination)
+   {
+      for (int edgeIndex = 0; edgeIndex < getNumberOfAssociatedEdges(); edgeIndex++)
+      {
+         HalfEdge3DReadOnly candidate = getAssociatedEdge(edgeIndex);
+
+         if (candidate.getDestination() == destination)
+            return candidate;
+      }
+
+      return null;
+   }
+
+   /**
     * Calculates the dot product of the specified vector and the vector from the origin to this vertex
     * 
     * @return the resultant dot product

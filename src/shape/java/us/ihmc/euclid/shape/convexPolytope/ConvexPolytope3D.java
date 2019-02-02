@@ -2,7 +2,10 @@ package us.ihmc.euclid.shape.convexPolytope;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.BoundingBox3D;
@@ -131,8 +134,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
             halfEdge = halfEdge.getPreviousEdge();
          }
 
-         onFaceList.clear();
-         faces.addAll(EuclidPolytopeTools.computeVertexFaces(vertexToAdd, visibleSilhouetteList, onFaceList, epsilon));
+         faces.addAll(EuclidPolytopeTools.computeVertexNeighborFaces(vertexToAdd, visibleSilhouetteList, Collections.emptyList(), epsilon));
       }
 
       return true;
@@ -140,68 +142,19 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    private boolean handleMultipleFaceCase(Vertex3D vertexToAdd, double epsilon)
    {
-      getVisibleFaces(visibleFaces, vertexToAdd, epsilon);
+      Set<Face3D> visibleFaces = new HashSet<>();
+      List<HalfEdge3D> silhouette = EuclidPolytopeTools.getSilhouette(faces, vertexToAdd, epsilon, visibleFaces, onFaceList);
 
-      if (visibleFaces.isEmpty())
+      if (silhouette != null)
       {
-         return false;
-      }
-      getFacesWhichPointIsOn(vertexToAdd, onFaceList, epsilon);
-
-      assert onFaceList.stream().noneMatch(face -> visibleFaces.contains(face));
-
-      getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
-      HalfEdge3D firstHalfEdgeForSilhouette = null;
-
-      if (onFaceList.size() > 0)
-      {
-         if (EuclidPolytopeTools.isPointDirectlyAboveOrBelowAnyFace(onFaceList, vertexToAdd))
-         {
-            /*
-             * @formatter:off
-             * TODO I believe this test is unnecessary as it seems evident that the new point either belongs to none or all of onFaceList.
-             * So checking only one is enough, which is done right after when testing if firstVisibleEdge == null.
-             * For instance:
-             *    1- onFaceList.size() == 1: trivial.
-             *    2- onFaceList.size() == 2: then if the point belongs to 1 face and still be on the plane of the second
-             *       then it has to belong to their common edge which the only set of coordinates where both planes intersect.
-             *       So it has to belong to both faces.
-             *    3- onFaceList.size() == 3: then if the point belongs to 1 face and still be on the planes of the two other faces,
-             *       then it has to be on their vertex (onFaceList.size() == 3) which is the only point where all three planes intersect.
-             *       in both cases, the point belongs to all faces. So it belongs to all faces.
-             *    4- onFaceList.size() > 3: it is the same a the previous case, only one location exists where all planes intersect,
-             *       so the new vertex either belongs to none or all faces.
-             * @formatter:on
-             */
-            // The point actually belongs to one of the faces.
-            return false;
-         }
-
-         HalfEdge3D firstVisibleEdge = getFirstVisibleEdgeFromOnFaceList(onFaceList, visibleFaces);
-
-         if (firstVisibleEdge == null)
-            return false;
-
-         firstHalfEdgeForSilhouette = firstVisibleEdge.getTwinEdge();
+         removeFaces(visibleFaces);
+         faces.addAll(EuclidPolytopeTools.computeVertexNeighborFaces(vertexToAdd, silhouette, onFaceList, epsilon));
+         return true;
       }
       else
       {
-         firstHalfEdgeForSilhouette = getSeedEdgeForSilhouetteCalculation(visibleFaces, silhouetteFaces.get(0));
+         return false;
       }
-
-      if (firstHalfEdgeForSilhouette == null)
-         return false;
-
-      getVisibleSilhouetteUsingSeed(visibleSilhouetteList, firstHalfEdgeForSilhouette, visibleFaces);
-
-      if (visibleSilhouetteList.isEmpty())
-         return false;
-
-      removeFaces(nonSilhouetteFaces);
-      removeFaces(silhouetteFaces);
-      faces.addAll(EuclidPolytopeTools.computeVertexFaces(vertexToAdd, visibleSilhouetteList, onFaceList, epsilon));
-
-      return true;
    }
 
    @Override
@@ -322,124 +275,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
-   private static HalfEdge3D getFirstVisibleEdgeFromOnFaceList(Collection<Face3D> onFaceList, Collection<Face3D> visibleFaces)
-   {
-      Face3D firstFace = onFaceList.iterator().next();
-      HalfEdge3D edge = firstFace.getEdge(0);
-
-      for (int edgeIndex = 0; edgeIndex < firstFace.getNumberOfEdges(); edgeIndex++)
-      {
-         HalfEdge3D previousEdge = edge.getPreviousEdge();
-
-         Face3D neighbouringFace = edge.getTwinEdge().getFace();
-
-         if (!visibleFaces.contains(neighbouringFace))
-         { // This edge is not visible, got to the previous.
-            edge = previousEdge;
-            continue;
-         }
-
-         Face3D previousNeighbouringFace = previousEdge.getTwinEdge().getFace();
-
-         // TODO the condition used to be as follows but I think if a face is visible it should not be in onFaceList.
-         //         if (visibleFaces.contains(previousNeighbouringFace) || onFaceList.contains(previousNeighbouringFace))
-         if (visibleFaces.contains(previousNeighbouringFace))
-         { // The previous edge is visible, so it might be the  
-            edge = previousEdge;
-            continue;
-         }
-
-         return edge;
-      }
-
-      return null;
-   }
-
-   public void getSilhouetteFaces(List<Face3D> silhouetteFacesToPack, List<Face3D> nonSilhouetteFacesToPack, List<Face3D> visibleFaceList)
-   {
-      if (silhouetteFacesToPack != null)
-         silhouetteFacesToPack.clear();
-      if (nonSilhouetteFacesToPack != null)
-         nonSilhouetteFacesToPack.clear();
-      for (int i = 0; i < visibleFaceList.size(); i++)
-      {
-         Face3D candidateFace = visibleFaceList.get(i);
-
-         boolean allNeighbouringFacesVisible = true;
-         for (int j = 0; j < candidateFace.getNumberOfEdges(); j++)
-            allNeighbouringFacesVisible &= visibleFaceList.contains(candidateFace.getNeighbouringFace(j));
-
-         if (allNeighbouringFacesVisible && nonSilhouetteFacesToPack != null)
-            nonSilhouetteFacesToPack.add(candidateFace);
-         else if (silhouetteFacesToPack != null)
-            silhouetteFacesToPack.add(candidateFace);
-      }
-   }
-
-   public void getVisibleSilhouette(Point3DReadOnly vertex, List<HalfEdge3D> visibleSilhouetteToPack, double epsilon)
-   {
-      Face3D leastVisibleFace = getVisibleFaces(visibleFaces, vertex, epsilon);
-
-      if (visibleFaces.isEmpty())
-      {
-         return;
-      }
-      getFacesWhichPointIsOn(vertex, onFaceList, epsilon);
-      getSilhouetteFaces(silhouetteFaces, nonSilhouetteFaces, visibleFaces);
-      HalfEdge3D firstHalfEdgeForSilhouette;
-      if (onFaceList.size() > 0)
-         firstHalfEdgeForSilhouette = onFaceList.get(0).lineOfSightStart(vertex).getTwinEdge();
-      else
-         firstHalfEdgeForSilhouette = getSeedEdgeForSilhouetteCalculation(visibleFaces, leastVisibleFace);
-      getVisibleSilhouetteUsingSeed(visibleSilhouetteToPack, firstHalfEdgeForSilhouette, visibleFaces);
-   }
-
-   public void getVisibleSilhouetteUsingSeed(Collection<HalfEdge3D> visibleSilhouetteToPack, HalfEdge3D seedHalfEdge, Collection<Face3D> silhouetteFaceList)
-   {
-      HalfEdge3D halfEdgeUnderConsideration = seedHalfEdge;
-      visibleSilhouetteToPack.clear();
-      int numberOfEdges = getNumberOfEdges();
-      int count;
-
-      for (count = 0; count < numberOfEdges; count++)
-      {
-         visibleSilhouetteToPack.add(halfEdgeUnderConsideration.getTwinEdge());
-         Vertex3D destinationVertex = halfEdgeUnderConsideration.getDestination();
-
-         for (HalfEdge3D candidateEdge : destinationVertex.getAssociatedEdges())
-         {
-            if (silhouetteFaceList.contains(candidateEdge.getFace()) && !silhouetteFaceList.contains(candidateEdge.getTwinEdge().getFace()))
-            {
-               halfEdgeUnderConsideration = candidateEdge;
-               break;
-            }
-         }
-
-         if (halfEdgeUnderConsideration == seedHalfEdge)
-            break;
-      }
-
-      if (count == numberOfEdges && faces.size() > 1)
-      {
-         visibleSilhouetteToPack.clear();
-      }
-   }
-
-   public HalfEdge3D getSeedEdgeForSilhouetteCalculation(List<Face3D> visibleFaceList, Face3D leastVisibleFace)
-   {
-      if (faces.size() == 1)
-         return faces.get(0).getEdge(0);
-      HalfEdge3D seedEdge = null;
-      HalfEdge3D seedEdgeCandidate = leastVisibleFace.getEdge(0);
-      for (int i = 0; seedEdge == null && i < leastVisibleFace.getNumberOfEdges(); i++)
-      {
-         if (!visibleFaceList.contains(seedEdgeCandidate.getTwinEdge().getFace()))
-            seedEdge = seedEdgeCandidate;
-         seedEdgeCandidate = seedEdgeCandidate.getNextEdge();
-      }
-      return seedEdge;
-   }
-
    /*
     * TODO: The visibility factor is based on the distance from the query to the face's support plane.
     * Maybe, a better metric is the consideration of the angle at which the face is seen:
@@ -455,18 +290,10 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return faceReferencesToPack.isEmpty() ? null : faceReferencesToPack.get(0);
    }
 
-   public void getFacesWhichPointIsOn(Point3DReadOnly vertexUnderConsideration, List<Face3D> faceReferenceToPack, double epsilon)
+   private void removeFaces(Collection<Face3D> facesToRemove)
    {
-      faceReferenceToPack.clear();
-      faceReferenceToPack.addAll(EuclidPolytopeTools.getInPlaneFaces(faces, vertexUnderConsideration, epsilon));
-   }
-
-   private void removeFaces(List<Face3D> facesToRemove)
-   {
-      for (int i = 0; i < facesToRemove.size(); i++)
-      {
-         removeFace(facesToRemove.get(i));
-      }
+      for (Face3D face : facesToRemove)
+         removeFace(face);
    }
 
    public void removeFace(Face3D faceToRemove)

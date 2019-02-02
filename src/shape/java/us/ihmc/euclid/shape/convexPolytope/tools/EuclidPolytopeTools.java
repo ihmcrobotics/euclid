@@ -20,6 +20,8 @@ import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -499,6 +501,148 @@ public class EuclidPolytopeTools
       return visibleFaces;
    }
 
+   /**
+    * Finds for the given {@code observer} coordinates the visible faces and the faces for which the
+    * observer lies in their support plane.
+    * 
+    * @param faces the list of faces to search through.
+    * @param observer the coordinates from where we look at the faces.
+    * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
+    *           face's support plane, or a face is not visible.
+    * @param visibleFacesToPack the list used to store the visible faces. It is cleared before starting
+    *           the search.
+    * @param inPlaneFacesToPack the list used to store the faces for which the observer lies in their
+    *           support plane. It is cleared before starting the search.
+    * @return {@code true} if the observer cannot see any of the faces or if the observer is inside one
+    *         of the faces, {@code false} otherwise.
+    */
+   public static <F extends Face3DReadOnly> boolean getVisibleFaces(List<F> faces, Point3DReadOnly observer, double epsilon, List<F> visibleFacesToPack,
+                                                                    List<F> inPlaneFacesToPack)
+   {
+      visibleFacesToPack.clear();
+      inPlaneFacesToPack.clear();
+
+      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
+      {
+         F face = faces.get(faceIndex);
+
+         double signedDistance = face.signedDistanceToPlane(observer);
+
+         if (signedDistance <= epsilon)
+         {
+            if (signedDistance > -epsilon)
+            {
+               inPlaneFacesToPack.add(face);
+               if (face.isPointDirectlyAboveOrBelow(observer))
+                  return true;
+            }
+            continue;
+         }
+
+         visibleFacesToPack.add(face);
+      }
+
+      return visibleFacesToPack.isEmpty();
+   }
+
+   /**
+    * Finds the silhouette representing the border of the visible set of faces from the perspective of
+    * an observer.
+    * 
+    * @param faces the list of faces to search the silhouette from.
+    * @param observer the coordinates of the observer.
+    * @param observer the coordinates from where we look at the faces.
+    * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
+    *           face's support plane, or a face is not visible.
+    * @param visibleFacesToPack the collection used to store the visible faces. It is cleared before
+    *           starting the search. It preferable to provide an implementation that supports fast
+    *           queries for {@link Collection#contains(Object)}.
+    * @param inPlaneFacesToPack the list used to store the faces for which the observer lies in their
+    *           support plane. It is cleared before starting the search.
+    * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
+    *         any face or if the observer is inside one of the faces.
+    */
+   @SuppressWarnings("unchecked")
+   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<E> getSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon,
+                                                                                                Collection<F> visibleFacesToPack,
+                                                                                                Collection<F> inPlaneFacesToPack)
+   {
+      Face3DReadOnly leastVisibleFace = null;
+      double minimumDistance = Double.POSITIVE_INFINITY;
+
+      visibleFacesToPack.clear();
+      inPlaneFacesToPack.clear();
+
+      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
+      { // First we go through the faces and sort them into 2 categories: visible faces, faces which support plane contains the observer.
+         F face = faces.get(faceIndex);
+
+         double signedDistance = face.signedDistanceToPlane(observer);
+
+         if (signedDistance <= epsilon)
+         {
+            if (signedDistance > -epsilon)
+            {
+               inPlaneFacesToPack.add(face);
+
+               if (face.isPointDirectlyAboveOrBelow(observer))
+                  return null; // The observer belongs to that face => no silhouette.
+            }
+            continue;
+         }
+
+         if (signedDistance < minimumDistance)
+         {
+            leastVisibleFace = face;
+            minimumDistance = signedDistance;
+         }
+
+         visibleFacesToPack.add(face);
+      }
+
+      if (visibleFacesToPack.isEmpty())
+         return null; // The observer cannot see any face => no silhouette.
+
+      // Now we search for the silhouette and we start by looking for the first edge.
+      E silhouetteStartEdge = null;
+
+      for (int neighborIndex = 0; neighborIndex < leastVisibleFace.getNumberOfEdges(); neighborIndex++)
+      {
+         Face3DReadOnly neighbor = leastVisibleFace.getNeighboringFace(neighborIndex);
+
+         if (!visibleFacesToPack.contains(neighbor))
+         {
+            silhouetteStartEdge = (E) leastVisibleFace.getEdge(neighborIndex).getTwinEdge();
+            break;
+         }
+      }
+
+      assert silhouetteStartEdge != null;
+
+      // Now we can finally build the silhouette
+      List<E> silhouette = new ArrayList<>();
+      silhouette.add(silhouetteStartEdge);
+
+      Vertex3DReadOnly currentVertex = silhouetteStartEdge.getDestination();
+
+      while (currentVertex != silhouetteStartEdge.getOrigin())
+      {
+         for (HalfEdge3DReadOnly candidate : currentVertex.getAssociatedEdges())
+         {
+            if (visibleFacesToPack.contains(candidate.getFace()))
+               continue; // The associated face should not be visible.
+            if (!visibleFacesToPack.contains(candidate.getTwinEdge().getFace()))
+               continue; // The associated face to the twin edge should be visible.
+
+            silhouette.add((E) candidate);
+            currentVertex = candidate.getDestination();
+            break;
+         }
+      }
+
+      return silhouette;
+   }
+
    public static <F extends Face3DReadOnly> List<F> getInPlaneFaces(List<F> faces, Point3DReadOnly query, double distanceThreshold)
    {
       return faces.stream().filter(face -> face.isPointInFacePlane(query, distanceThreshold)).collect(Collectors.toList());
@@ -531,7 +675,8 @@ public class EuclidPolytopeTools
     *           a line, etc.
     * @return the list of new faces that were created in the the process.
     */
-   public static List<Face3D> computeVertexFaces(Vertex3D vertex, Collection<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
+   public static List<Face3D> computeVertexNeighborFaces(Vertex3D vertex, Collection<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces,
+                                                         double epsilon)
    {
       List<Face3D> newFaces = new ArrayList<>();
 
