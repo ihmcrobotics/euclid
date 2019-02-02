@@ -261,7 +261,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    private void updateEdges()
    {
       edges.clear();
-      faces.stream().flatMap(face -> face.getEdges().stream()).distinct().forEach(edges::add);
+      for (Face3D face : faces)
+         edges.addAll(face.getEdges());
    }
 
    private void updateBoundingBox()
