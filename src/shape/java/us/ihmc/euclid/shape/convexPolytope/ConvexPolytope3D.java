@@ -124,6 +124,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          updateEdges();
          updateVertices();
          updateBoundingBox();
+         updateCentroid();
       }
 
       return isPolytopeModified;
@@ -262,15 +263,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return constructionEpsilon;
    }
 
-   public Vector3DReadOnly getFaceNormalAt(Point3DReadOnly point)
-   {
-      return getClosestFace(point).getNormal();
-   }
-
    @Override
    public void applyTransform(Transform transform)
    {
-      // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
       for (int i = 0; i < vertices.size(); i++)
       {
          vertices.get(i).applyTransform(transform);
@@ -285,13 +280,11 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
 
       updateBoundingBox();
-      // FIXME this method introduces inconsistency in Face3D.
    }
 
    @Override
    public void applyInverseTransform(Transform transform)
    {
-      // Applying the transform to the vertices is less expensive computationally but getting the vertices is hard
       for (int i = 0; i < vertices.size(); i++)
       {
          vertices.get(i).applyInverseTransform(transform);
@@ -306,34 +299,43 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
 
       updateBoundingBox();
-      // FIXME this method introduces inconsistency in Face3D.
    }
 
-   private void updateVertices()
+   public void updateVertices()
    { // FIXME this is slow, maybe there's a way to keep track of the vertices as the polytope is being built.
       vertices.clear();
       faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
    }
 
-   private void updateEdges()
+   public void updateEdges()
    {
       edges.clear();
       for (Face3D face : faces)
          edges.addAll(face.getEdges());
    }
 
-   private void updateBoundingBox()
+   public void updateBoundingBox()
    {
       boundingBox.setToNaN();
+
       if (faces.isEmpty())
          return;
+
       boundingBox.set(faces.get(0).getBoundingBox());
 
       for (int faceIndex = 1; faceIndex < faces.size(); faceIndex++)
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
-   private void removeFaces(Collection<Face3D> facesToRemove)
+   public void updateCentroid()
+   { // TODO This is not the centroid
+      centroid.setToZero();
+      for (int i = 0; i < vertices.size(); i++)
+         centroid.add(vertices.get(i));
+      centroid.scale(1.0 / vertices.size());
+   }
+
+   public void removeFaces(Collection<Face3D> facesToRemove)
    {
       for (Face3D face : facesToRemove)
          removeFace(face);
@@ -486,14 +488,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       return (Face3D) ConvexPolytope3DReadOnly.super.getClosestFace(point);
    }
 
-   private void updateCentroid()
-   { // TODO This is not the centroid
-      centroid.setToZero();
-      for (int i = 0; i < vertices.size(); i++)
-         centroid.add(vertices.get(i));
-      centroid.scale(1.0 / vertices.size());
-   }
-
+   @Override
    public Point3DReadOnly getCentroid()
    {
       updateCentroid();

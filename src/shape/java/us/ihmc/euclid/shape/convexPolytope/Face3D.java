@@ -350,6 +350,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       centroid.setToNaN();
       normal.setToNaN();
       area = Double.NaN;
+      boundingBox.setToNaN();
    }
 
    @Override
@@ -360,6 +361,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       centroid.setToZero();
       normal.setToZero();
       area = 0.0;
+      boundingBox.setToZero();
    }
 
    @Override
