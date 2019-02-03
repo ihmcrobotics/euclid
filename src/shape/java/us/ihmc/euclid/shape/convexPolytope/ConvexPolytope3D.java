@@ -58,6 +58,17 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       this.constructionEpsilon = constructionEpsilon;
    }
 
+   public ConvexPolytope3D(Vertex3DSupplier vertex3DSupplier)
+   {
+      this(vertex3DSupplier, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
+   }
+
+   public ConvexPolytope3D(Vertex3DSupplier vertex3DSupplier, double constructionEpsilon)
+   {
+      this(constructionEpsilon);
+      addVertices(vertex3DSupplier);
+   }
+
    public ConvexPolytope3D(ConvexPolytope3DReadOnly polytope)
    {
       constructionEpsilon = polytope.getConstructionEpsilon();

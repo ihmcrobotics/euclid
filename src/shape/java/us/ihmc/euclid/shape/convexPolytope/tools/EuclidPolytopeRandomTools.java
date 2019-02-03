@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
@@ -83,8 +84,6 @@ public class EuclidPolytopeRandomTools
       transform.setScale(EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax));
       icoSphere.applyTransform(transform);
 
-      ConvexPolytope3D next = new ConvexPolytope3D();
-      icoSphere.getVertices().forEach(vertex -> next.addVertex(vertex));
-      return next;
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(icoSphere.getVertices()));
    }
 }
