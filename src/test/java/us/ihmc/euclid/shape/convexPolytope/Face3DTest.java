@@ -49,26 +49,26 @@ public class Face3DTest
 
       Face3D face = new Face3D(Axis.Z);
 
-      face.addVertex(new Vertex3D(p0), 0);
+      face.addVertex(new Vertex3D(p0));
       assertEquals(p0, face.getVertices().get(0));
       assertEquals(1, face.getNumberOfEdges()); // The first edge is initialized to start and end at the first vertex added.
       EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, face.getNormal(), EPSILON);
 
-      face.addVertex(new Vertex3D(p1), 0);
+      face.addVertex(new Vertex3D(p1));
       assertEquals(p0, face.getVertices().get(0));
       assertEquals(p1, face.getVertices().get(1));
       assertEquals(2, face.getNumberOfEdges());
       EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, face.getNormal(), EPSILON);
 
       // From here we're verifying that the face is re-ordering the vertices so they are clockwise ordered.
-      face.addVertex(new Vertex3D(p2), 0);
+      face.addVertex(new Vertex3D(p2));
       assertEquals(p1, face.getVertices().get(0));
       assertEquals(p0, face.getVertices().get(1));
       assertEquals(p2, face.getVertices().get(2));
       assertEquals(3, face.getNumberOfEdges());
       EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, face.getNormal(), EPSILON);
 
-      face.addVertex(new Vertex3D(p3), 0);
+      face.addVertex(new Vertex3D(p3));
       assertEquals(p1, face.getVertices().get(0));
       assertEquals(p0, face.getVertices().get(1));
       assertEquals(p3, face.getVertices().get(2));
@@ -98,7 +98,7 @@ public class Face3DTest
 
       for (int i = 0; i < numberOfPoints; i++)
       {
-         face.addVertex(new Vertex3D(points.get(i)), 0);
+         face.addVertex(new Vertex3D(points.get(i)));
          assertEquals(i + 1, face.getNumberOfEdges()); // Ensuring that all vertices are added.
          EuclidCoreTestTools.assertTuple3DEquals(points.get(i), face.getVertices().get(i), EPSILON);
       }
@@ -113,7 +113,7 @@ public class Face3DTest
 
       for (int i = 0; i < numberOfPoints; i++)
       {
-         face.addVertex(new Vertex3D(points.get(i)), 0);
+         face.addVertex(new Vertex3D(points.get(i)));
          assertEquals(i + 1, face.getNumberOfEdges());
       }
 
@@ -157,7 +157,7 @@ public class Face3DTest
 
          // Now let's go to 3D
          Face3D face3D = new Face3D(Axis.Z);
-         convexPolygon2D.getPolygonVerticesView().stream().map(Point3D::new).map(Vertex3D::new).forEach(v -> face3D.addVertex(v, 0));
+         convexPolygon2D.getPolygonVerticesView().stream().map(Point3D::new).map(Vertex3D::new).forEach(v -> face3D.addVertex(v));
          assertEquals(numberOfVertices, face3D.getNumberOfEdges());
          EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, face3D.getNormal(), EPSILON);
 
@@ -247,7 +247,7 @@ public class Face3DTest
          transform.getRotation().getColumn(2, faceNormal);
 
          Face3D face3D = new Face3D(faceNormal); // Feeding the expected normal to prevent any flip between expected and actual normal.
-         convexPolygon2D.getPolygonVerticesView().stream().map(Point3D::new).map(Vertex3D::new).peek(transform::transform).forEach(v -> face3D.addVertex(v, 0));
+         convexPolygon2D.getPolygonVerticesView().stream().map(Point3D::new).map(Vertex3D::new).peek(transform::transform).forEach(v -> face3D.addVertex(v));
          assertEquals(numberOfVertices, face3D.getNumberOfEdges());
          EuclidCoreTestTools.assertTuple3DEquals(faceNormal, face3D.getNormal(), EPSILON);
 
@@ -373,7 +373,7 @@ public class Face3DTest
          List<Point3D> vertices = EuclidPolytopeRandomTools.nextCircleBasedConvexPolygon3D(random, 1.0, 1.0, numberOfVertices, faceNormal);
          Collections.shuffle(vertices, random);
          Face3D face = new Face3D(faceNormal);
-         vertices.forEach(vertex -> face.addVertex(new Vertex3D(vertex), 0.0));
+         vertices.forEach(vertex -> face.addVertex(new Vertex3D(vertex)));
          assertEquals(numberOfVertices, face.getNumberOfEdges());
 
          List<HalfEdge3D> edges = face.getEdges();
@@ -411,7 +411,7 @@ public class Face3DTest
          for (int j = 0; j < points.size(); j++)
          {
             Point3D point = points.get(j);
-            face3D.addVertex(new Vertex3D(point), 0.0);
+            face3D.addVertex(new Vertex3D(point));
          }
 
          assertEquals(points.size(), face3D.getNumberOfEdges(), "Iteration: " + i);
@@ -727,7 +727,7 @@ public class Face3DTest
       { // Trivial 2D tests:
          List<Point2D> vertices2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 15);
          Face3D face = new Face3D(Axis.Z);
-         vertices2D.forEach(vertex2D -> face.addVertex(new Vertex3D(new Point3D(vertex2D)), 0.0));
+         vertices2D.forEach(vertex2D -> face.addVertex(new Vertex3D(new Point3D(vertex2D))));
 
          Vector3D supportVector = new Vector3D();
 

@@ -169,7 +169,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          }
          while (currentEdge != firstEdge);
 
-         Face3D face = new Face3D(faceEdges, otherNormal);
+         Face3D face = new Face3D(faceEdges, otherNormal, constructionEpsilon);
          faces.add(face);
       }
 
@@ -231,8 +231,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    private boolean handleNoFaceCase(Vertex3D vertexToAdd)
    {
       // Polytope is empty. Creating face and adding the vertex
-      Face3D newFace = new Face3D(Axis.Z);
-      newFace.addVertex(vertexToAdd, constructionEpsilon);
+      Face3D newFace = new Face3D(Axis.Z, constructionEpsilon);
+      newFace.addVertex(vertexToAdd);
       faces.add(newFace);
 
       return true;
@@ -244,7 +244,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
       if (firstFace.getNumberOfEdges() <= 2)
       { // The face is not an actual face yet, extend it.
-         firstFace.addVertex(vertexToAdd, constructionEpsilon);
+         firstFace.addVertex(vertexToAdd);
          return true;
       }
       else if (!firstFace.isPointInFacePlane(vertexToAdd, constructionEpsilon))
@@ -258,7 +258,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
       else if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
       { // In face plane => need to extend the existing face.
-         firstFace.addVertex(vertexToAdd, constructionEpsilon);
+         firstFace.addVertex(vertexToAdd);
          return true;
       }
       else

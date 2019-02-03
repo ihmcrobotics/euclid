@@ -29,7 +29,7 @@ public class EuclidPolytopeRandomTools
    {
       List<Point3D> vertices = nextCircleBasedConvexPolygon3D(random, centerMinMax, maxEdgeLength, numberOfVertices, faceNormal);
       Face3D face3D = new Face3D(faceNormal);
-      vertices.forEach(vertex -> face3D.addVertex(new Vertex3D(vertex), 0.0));
+      vertices.forEach(vertex -> face3D.addVertex(new Vertex3D(vertex)));
       return face3D;
    }
 

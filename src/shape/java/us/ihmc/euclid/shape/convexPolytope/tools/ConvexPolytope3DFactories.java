@@ -31,11 +31,11 @@ public class ConvexPolytope3DFactories
       // As the vertices are clock-wise ordered the cross-product of 2 successive edges should be negated to obtain the face's normal.
       initialNormal.negate();
 
-      Face3D face = new Face3D(initialNormal);
+      Face3D face = new Face3D(initialNormal, epsilon);
 
-      face.addVertex(v1, epsilon);
-      face.addVertex(v2, epsilon);
-      face.addVertex(v3, epsilon);
+      face.addVertex(v1);
+      face.addVertex(v2);
+      face.addVertex(v3);
 
       HalfEdge3D faceFirstEdge = face.getEdge(0);
 

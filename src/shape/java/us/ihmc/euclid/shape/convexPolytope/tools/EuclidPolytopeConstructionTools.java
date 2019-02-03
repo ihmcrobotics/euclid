@@ -38,7 +38,7 @@ public class EuclidPolytopeConstructionTools
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
          if (inPlaneFaces.contains(silhouetteEdge.getFace()))
          { // The face has to be extended to include the new vertex
-            silhouetteEdge.getFace().addVertex(vertex, epsilon);
+            silhouetteEdge.getFace().addVertex(vertex);
          }
          else
          { // Creating a new face.

@@ -11,6 +11,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -47,14 +48,25 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
    private final BoundingBox3D boundingBox = new BoundingBox3D();
 
+   private final double constructionEpsilon;
+
    public Face3D(Vector3DReadOnly initialGuessNormal)
+   {
+      this(initialGuessNormal, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
+   }
+
+   public Face3D(Vector3DReadOnly initialGuessNormal, double constructionEpsilon)
    {
       normal.setAndNormalize(initialGuessNormal);
       boundingBox.setToNaN();
+      this.constructionEpsilon = constructionEpsilon;
    }
 
-   public Face3D(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal)
+   public Face3D(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal, double constructionEpsilon)
    {
+      boundingBox.setToNaN();
+      this.constructionEpsilon = constructionEpsilon;
+
       set(faceEdges, normal);
    }
 
@@ -76,7 +88,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     * @param vertexToAdd the vertex that must be added to the face
     * @param epsilon
     */
-   public void addVertex(Vertex3D vertexToAdd, double epsilon)
+   public void addVertex(Vertex3D vertexToAdd)
    {
       if (edges.isEmpty())
       {
@@ -89,7 +101,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       else if (edges.size() == 1)
       {
          HalfEdge3D firstEdge = edges.get(0);
-         if (firstEdge.getOrigin().epsilonEquals(vertexToAdd, epsilon))
+         if (firstEdge.getOrigin().epsilonEquals(vertexToAdd, constructionEpsilon))
             return;
 
          // Set the edge for the two points and then create its twin
@@ -105,7 +117,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       else if (edges.size() == 2)
       {
          HalfEdge3D firstEdge = edges.get(0);
-         if (firstEdge.distance(vertexToAdd) < epsilon)
+         if (firstEdge.distance(vertexToAdd) < constructionEpsilon)
             return;
 
          HalfEdge3D secondEdge = edges.get(1);
@@ -133,9 +145,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
             return;
 
          // TODO Maybe do line-of-sight with epsilon?
-         if (lineOfSight.get(0).getPrevious().distanceFromSupportLine(vertexToAdd) < epsilon)
+         if (lineOfSight.get(0).getPrevious().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
             lineOfSight.add(0, lineOfSight.get(0).getPrevious());
-         if (lineOfSight.get(lineOfSight.size() - 1).getNext().distanceFromSupportLine(vertexToAdd) < epsilon)
+         if (lineOfSight.get(lineOfSight.size() - 1).getNext().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
             lineOfSight.add(lineOfSight.get(lineOfSight.size() - 1).getNext());
 
          HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
@@ -143,9 +155,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
          if (lineOfSight.size() == 1)
          {
-            if (firstVisibleEdge.getOrigin().epsilonEquals(vertexToAdd, epsilon))
+            if (firstVisibleEdge.getOrigin().epsilonEquals(vertexToAdd, constructionEpsilon))
                return;
-            if (firstVisibleEdge.getDestination().epsilonEquals(vertexToAdd, epsilon))
+            if (firstVisibleEdge.getDestination().epsilonEquals(vertexToAdd, constructionEpsilon))
                return;
 
             HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
