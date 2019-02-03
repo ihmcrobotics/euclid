@@ -193,6 +193,12 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
    /**
     * Combines this bounding box with {@code other} such that it becomes the smallest bounding box
     * containing this and {@code other}.
+    * <p>
+    * For each coordinates, if it is {@link Double#NaN} for one of the two bounding boxes, then the
+    * coordinate of the other bounding box is used to update this bounding box. As a result, if for
+    * instance {@code this} was set to {@link Double#NaN} beforehand, this operation would be
+    * equivalent to {@code this.set(other}.
+    * </p>
     *
     * @param other the other bounding box to combine with this. Not modified.
     */
@@ -207,19 +213,63 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     * This bounding box is set such that it is the smallest bounding box containing the two given
     * bounding boxes.
     * </p>
+    * <p>
+    * For each coordinates, if it is {@link Double#NaN} for one of the two bounding boxes, then the
+    * coordinate of the other bounding box is used to update this bounding box. As a result, if for
+    * instance {@code boundingBoxOne} was set to {@link Double#NaN} beforehand, this operation would be
+    * equivalent to {@code this.set(boundingBoxTwo}.
+    * </p>
     *
     * @param boundingBoxOne the first bounding box. Can be the same instance as this. Not modified.
     * @param boundingBoxTwo the second bounding box. Can be the same instance as this. Not modified.
     */
    default void combine(BoundingBox3DReadOnly boundingBoxOne, BoundingBox3DReadOnly boundingBoxTwo)
    {
-      double minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
-      double minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
-      double minZ = Math.min(boundingBoxOne.getMinZ(), boundingBoxTwo.getMinZ());
+      double minX, minY, minZ;
 
-      double maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
-      double maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
-      double maxZ = Math.max(boundingBoxOne.getMaxZ(), boundingBoxTwo.getMaxZ());
+      if (Double.isNaN(boundingBoxOne.getMinX()))
+         minX = boundingBoxTwo.getMinX();
+      else if (Double.isNaN(boundingBoxTwo.getMinX()))
+         minX = boundingBoxOne.getMinX();
+      else
+         minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
+
+      if (Double.isNaN(boundingBoxOne.getMinY()))
+         minY = boundingBoxTwo.getMinY();
+      else if (Double.isNaN(boundingBoxTwo.getMinY()))
+         minY = boundingBoxOne.getMinY();
+      else
+         minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
+
+      if (Double.isNaN(boundingBoxOne.getMinZ()))
+         minZ = boundingBoxTwo.getMinZ();
+      else if (Double.isNaN(boundingBoxTwo.getMinZ()))
+         minZ = boundingBoxOne.getMinZ();
+      else
+         minZ = Math.min(boundingBoxOne.getMinZ(), boundingBoxTwo.getMinZ());
+
+      double maxX, maxY, maxZ;
+
+      if (Double.isNaN(boundingBoxOne.getMaxX()))
+         maxX = boundingBoxTwo.getMaxX();
+      else if (Double.isNaN(boundingBoxTwo.getMaxX()))
+         maxX = boundingBoxOne.getMaxX();
+      else
+         maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
+
+      if (Double.isNaN(boundingBoxOne.getMaxY()))
+         maxY = boundingBoxTwo.getMaxY();
+      else if (Double.isNaN(boundingBoxTwo.getMaxY()))
+         maxY = boundingBoxOne.getMaxY();
+      else
+         maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
+
+      if (Double.isNaN(boundingBoxOne.getMaxZ()))
+         maxZ = boundingBoxTwo.getMaxZ();
+      else if (Double.isNaN(boundingBoxTwo.getMaxZ()))
+         maxZ = boundingBoxOne.getMaxZ();
+      else
+         maxZ = Math.max(boundingBoxOne.getMaxZ(), boundingBoxTwo.getMaxZ());
 
       set(minX, minY, minZ, maxX, maxY, maxZ);
    }
