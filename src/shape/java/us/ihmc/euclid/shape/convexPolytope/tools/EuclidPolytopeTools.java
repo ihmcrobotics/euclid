@@ -20,7 +20,6 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -197,22 +196,30 @@ public class EuclidPolytopeTools
                                                planeNormal.getZ());
    }
 
-   public static double updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
+   public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
+   {
+      return updateFace3DNormal(vertices, averageToPack, normalToUpdate, null);
+   }
+
+   public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate,
+                                            Tuple3DBasics eigenValuesToPack)
    {
       Matrix3D covariance = new Matrix3D();
       computeCovariance3D(vertices, averageToPack, covariance);
-      Vector3D eigenValues = new Vector3D();
+      if (eigenValuesToPack == null)
+         eigenValuesToPack = new Vector3D();
+
       Vector3D newNormal = new Vector3D();
-      boolean success = computeEigenVectors(covariance, eigenValues, null, null, newNormal);
+      boolean success = computeEigenVectors(covariance, eigenValuesToPack, null, null, newNormal);
       if (!success)
-         return Double.NaN;
+         return false;
 
       if (newNormal.dot(normalToUpdate) < 0.0)
          newNormal.negate();
 
       normalToUpdate.set(newNormal);
 
-      return EuclidCoreTools.norm(eigenValues.getX(), eigenValues.getY()) / eigenValues.getZ();
+      return true;
    }
 
    public static boolean computeEigenVectors(Matrix3DReadOnly matrix, Tuple3DBasics eigenValues, Vector3DBasics firstEigenVector,
