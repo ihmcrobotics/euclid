@@ -271,7 +271,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       Set<Face3D> visibleFaces = new HashSet<>();
       List<Face3D> inPlaneFaces = new ArrayList<>();
-      Collection<HalfEdge3D> silhouette = EuclidPolytopeTools.getSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
+      Collection<HalfEdge3D> silhouette = EuclidPolytopeTools.computeSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
 
       if (silhouette != null)
       {

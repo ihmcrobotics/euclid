@@ -212,7 +212,7 @@ public class EuclidPolytopeToolsTest
                expectedSilhouette.add(edge);
          }
 
-         Collection<HalfEdge3D> actualSilhouette = EuclidPolytopeTools.getSilhouette(convexPolytope3D.getFaces(), observer, epsilon);
+         Collection<HalfEdge3D> actualSilhouette = EuclidPolytopeTools.computeSilhouette(convexPolytope3D.getFaces(), observer, epsilon);
 
          if (expectedSilhouette.isEmpty())
          {
@@ -256,7 +256,7 @@ public class EuclidPolytopeToolsTest
                Point3D pointOutside = new Point3D();
                pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOnFace);
 
-               List<Face3D> actualVisibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
+               List<Face3D> actualVisibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
 
                assertEquals(1, actualVisibleFaces.size());
                assertTrue(face == actualVisibleFaces.get(0));
@@ -288,7 +288,7 @@ public class EuclidPolytopeToolsTest
                   Point3D pointOutside = new Point3D();
                   pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
 
-                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
+                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
 
                   assertEquals(2, actualVisibleFaces.size());
                   assertTrue(actualVisibleFaces.contains(firstFace));
@@ -309,7 +309,7 @@ public class EuclidPolytopeToolsTest
                   Point3D pointOutside = new Point3D();
                   pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
 
-                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
+                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
 
                   assertEquals(2, actualVisibleFaces.size());
                   assertTrue(actualVisibleFaces.contains(firstFace));
@@ -332,7 +332,7 @@ public class EuclidPolytopeToolsTest
          observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), tangential, observer);
          observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, epsilon, 10.0), aFace.getNormal(), observer);
 
-         List<Face3D> visibleFaces = EuclidPolytopeTools.getVisibleFaces(convexPolytope3D.getFaces(), observer, epsilon);
+         List<Face3D> visibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), observer, epsilon);
          List<Face3D> hiddenFaces = convexPolytope3D.getFaces().stream().filter(face -> !visibleFaces.contains(face)).collect(Collectors.toList());
 
          // Check consistency with EuclidPolytopeTools.canObserverSeeFace(...)

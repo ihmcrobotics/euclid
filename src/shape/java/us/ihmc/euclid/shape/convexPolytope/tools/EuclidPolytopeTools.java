@@ -30,6 +30,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+// TODO Remove unused/untested methods
 public class EuclidPolytopeTools
 {
    // From nVertices - nEdges + nFaces = 2
@@ -476,7 +477,7 @@ public class EuclidPolytopeTools
     *           and still be able to see the face.
     * @return the list of visible faces with in first position the least visible face.
     */
-   public static <F extends Face3DReadOnly> List<F> getVisibleFaces(List<F> faces, Point3DReadOnly observer, double visibilityThreshold)
+   public static <F extends Face3DReadOnly> List<F> extractVisibleFaces(List<F> faces, Point3DReadOnly observer, double visibilityThreshold)
    {
       List<F> visibleFaces = new ArrayList<>();
 
@@ -524,8 +525,8 @@ public class EuclidPolytopeTools
     * @return {@code true} if the observer cannot see any of the faces or if the observer is inside one
     *         of the faces, {@code false} otherwise.
     */
-   public static <F extends Face3DReadOnly> boolean getVisibleFaces(List<F> faces, Point3DReadOnly observer, double epsilon, List<F> visibleFacesToPack,
-                                                                    List<F> inPlaneFacesToPack)
+   public static <F extends Face3DReadOnly> boolean extractVisibleFaces(List<F> faces, Point3DReadOnly observer, double epsilon, List<F> visibleFacesToPack,
+                                                                        List<F> inPlaneFacesToPack)
    {
       visibleFacesToPack.clear();
       inPlaneFacesToPack.clear();
@@ -570,6 +571,11 @@ public class EuclidPolytopeTools
       }
    }
 
+   public static <F extends Face3DReadOnly> List<F> extractInPlaneFaces(List<F> faces, Point3DReadOnly query, double distanceThreshold)
+   {
+      return faces.stream().filter(face -> face.isPointInFacePlane(query, distanceThreshold)).collect(Collectors.toList());
+   }
+
    /**
     * Finds the silhouette representing the border of the visible set of faces from the perspective of
     * an observer.
@@ -582,9 +588,10 @@ public class EuclidPolytopeTools
     * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
     *         any face or if the observer is inside one of the faces.
     */
-   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> Collection<E> getSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon)
+   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> Collection<E> computeSilhouette(List<F> faces, Point3DReadOnly observer,
+                                                                                                          double epsilon)
    {
-      return getSilhouette(faces, observer, epsilon, null, null);
+      return computeSilhouette(faces, observer, epsilon, null, null);
    }
 
    /**
@@ -608,9 +615,9 @@ public class EuclidPolytopeTools
     *         any face or if the observer is inside one of the faces.
     */
    @SuppressWarnings("unchecked")
-   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> Collection<E> getSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon,
-                                                                                                      Collection<F> visibleFacesToPack,
-                                                                                                      Collection<F> inPlaneFacesToPack)
+   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> Collection<E> computeSilhouette(List<F> faces, Point3DReadOnly observer,
+                                                                                                          double epsilon, Collection<F> visibleFacesToPack,
+                                                                                                          Collection<F> inPlaneFacesToPack)
    {
       Face3DReadOnly leastVisibleFace = null;
       double minimumDistance = Double.POSITIVE_INFINITY;
@@ -691,11 +698,6 @@ public class EuclidPolytopeTools
       }
 
       return silhouette;
-   }
-
-   public static <F extends Face3DReadOnly> List<F> getInPlaneFaces(List<F> faces, Point3DReadOnly query, double distanceThreshold)
-   {
-      return faces.stream().filter(face -> face.isPointInFacePlane(query, distanceThreshold)).collect(Collectors.toList());
    }
 
    public static boolean isPointDirectlyAboveOrBelowAnyFace(List<? extends Face3DReadOnly> faces, Point3DReadOnly query)
