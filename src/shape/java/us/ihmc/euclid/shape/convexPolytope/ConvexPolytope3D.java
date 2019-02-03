@@ -318,12 +318,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    {
       boundingBox.setToNaN();
 
-      if (faces.isEmpty())
-         return;
-
-      boundingBox.set(faces.get(0).getBoundingBox());
-
-      for (int faceIndex = 1; faceIndex < faces.size(); faceIndex++)
+      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
@@ -1064,6 +1065,26 @@ public class ConvexPolytope3DTest
                EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
             }
          }
+      }
+   }
+
+   @Test
+   void testBoundingBox() throws Exception
+   {
+      Random random = new Random(435354237);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Check that all the vertices are in the bounding box.
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+
+         convexPolytope3D.getVertices().forEach(vertex -> assertTrue(convexPolytope3D.getBoundingBox().isInsideInclusive(vertex)));
+
+         // Now we assert that the bounding box is as small as possible
+         // Considering the particular approach used to make the BBX in ConvexPolytope3D, we can simply rely on BoundingBox3D.updateToIncludePoint() and use a simple brute-force method.
+         BoundingBox3D expectedBoundingBox = new BoundingBox3D();
+         expectedBoundingBox.setToNaN();
+         convexPolytope3D.getVertices().forEach(vertex -> expectedBoundingBox.updateToIncludePoint(vertex));
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedBoundingBox, convexPolytope3D.getBoundingBox(), EPSILON);
       }
    }
 }
