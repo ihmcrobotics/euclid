@@ -872,7 +872,7 @@ public class ConvexPolytope3DTest
       Random random = new Random(2342);
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Translation only
+      {
          GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
          ConvexPolytope3D originalPolytope = new ConvexPolytope3D();
          icosahedron.getVertices().forEach(vertex -> originalPolytope.addVertex(vertex));
