@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -23,6 +24,8 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.Triangle3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -442,5 +445,87 @@ public class EuclidPolytopeToolsTest
       CommonOps.scale(1.0 / (double) n, covariance);
 
       return new Matrix3D(covariance);
+   }
+
+   @Test
+   void testTetrahedronVolume() throws Exception
+   {
+      Random random = new Random(9654);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // We basically test the calculation by comparing multiple methods
+         Point3D a = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Top vertex
+         Point3D b = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Base vertex
+         Point3D c = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Base vertex
+         Point3D d = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Base vertex
+
+         double ab2 = a.distanceSquared(b);
+         double ac2 = a.distanceSquared(c);
+         double ad2 = a.distanceSquared(d);
+         double bc2 = b.distanceSquared(c);
+         double cd2 = c.distanceSquared(d);
+         double db2 = d.distanceSquared(b);
+
+         // http://mathcentral.uregina.ca/QQ/database/QQ.09.06/haivan1.html
+         // http://mathworld.wolfram.com/Tetrahedron.html
+         // @formatter:off
+         DenseMatrix64F matrix = new DenseMatrix64F(new double[][] {
+            {0, 1, 1, 1, 1},        // | 0   1     1     1     1   |
+            {1, 0, ab2, ac2, ad2},  // | 1   0   d12^2 d13^2 d14^2 |
+            {1, ab2, 0, bc2, db2},  // | 1 d21^2   0   d23^2 d24^2 |
+            {1, ac2, bc2, 0, cd2},  // | 1 d31^2 d32^2   0   d34^2 |
+            {1, ad2, db2, cd2, 0}   // | 1 d41^2 d42^2 d43^2   0   |
+            });
+         // @formatter:on
+
+         double volume1 = Math.sqrt(CommonOps.det(matrix) / 288.0);
+         Plane3D basePlane = new Plane3D(b, c, d);
+         double height = basePlane.distance(a);
+         double baseArea = EuclidGeometryTools.triangleArea(b, c, d);
+         double volume2 = baseArea * height / 3.0;
+         assertEquals(volume1, volume2, 1.0e-7);
+
+         Vector3D v1 = new Vector3D();
+         Vector3D v2 = new Vector3D();
+         Vector3D v3 = new Vector3D();
+
+         v1.sub(b, a);
+         v2.sub(c, a);
+         v3.sub(d, a);
+
+         Vector3D temp = new Vector3D();
+         temp.cross(v2, v3);
+         double volume3 = Math.abs(temp.dot(v1) / 6.0);
+         assertEquals(volume2, volume3, EPSILON);
+
+         assertEquals(volume3, EuclidPolytopeTools.tetrahedronVolume(a, b, c, d), EPSILON);
+      }
+   }
+
+   @Test
+   void testIcosahedronEdgeRadiusCalculation() throws Exception
+   {
+      Random random = new Random(3645646);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         // This generates a icosahedron that has a circumscribed unit-sphere
+         GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
+         // We can easily define the radius simply by scaling the vertices.
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         icosahedron.getVertices().forEach(vertex -> vertex.scale(radius));
+
+         for (Triangle3D triangle : icosahedron.getAllTriangles())
+         {
+            double actualEdgeLength = EuclidPolytopeTools.icosahedronEdgeLength(radius);
+            assertEquals(triangle.getAB(), actualEdgeLength, EPSILON);
+            assertEquals(triangle.getBC(), actualEdgeLength, EPSILON);
+            assertEquals(triangle.getCA(), actualEdgeLength, EPSILON);
+
+            assertEquals(radius, EuclidPolytopeTools.icosahedronRadius(triangle.getAB()), EPSILON);
+            assertEquals(radius, EuclidPolytopeTools.icosahedronRadius(triangle.getBC()), EPSILON);
+            assertEquals(radius, EuclidPolytopeTools.icosahedronRadius(triangle.getCA()), EPSILON);
+         }
+      }
    }
 }

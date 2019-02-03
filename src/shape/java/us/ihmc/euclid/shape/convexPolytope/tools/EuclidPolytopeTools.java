@@ -17,6 +17,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
@@ -454,6 +455,61 @@ public class EuclidPolytopeTools
       }
    }
 
+   public static double computeConvexPolytope3DVolume(ConvexPolytope3DReadOnly convexPolytope3D, Point3DBasics centroidToPack)
+   {
+      centroidToPack.setToZero();
+      double volume = 0.0;
+
+      if (convexPolytope3D.getNumberOfVertices() <= 4)
+      {
+         for (int vertexIndex = 0; vertexIndex < convexPolytope3D.getNumberOfVertices(); vertexIndex++)
+            centroidToPack.add(convexPolytope3D.getVertex(vertexIndex));
+         centroidToPack.scale(1.0 / convexPolytope3D.getNumberOfVertices());
+
+         if (convexPolytope3D.getNumberOfVertices() == 4)
+            volume = EuclidPolytopeTools.tetrahedronVolume(convexPolytope3D.getVertex(0), convexPolytope3D.getVertex(1), convexPolytope3D.getVertex(2),
+                                                           convexPolytope3D.getVertex(3));
+         else
+            volume = 0.0;
+         return volume;
+      }
+
+      Point3DReadOnly a = convexPolytope3D.getFace(0).getVertex(0);
+
+      // We can skip the first face as the vertex 'a' comes from it, so it does not participate in the centroid/volume calculation.
+      for (int faceIndex = 1; faceIndex < convexPolytope3D.getNumberOfFaces(); faceIndex++)
+      {
+         /*
+          * Each face is decomposed into triangles from which form tetrahedrons (a, b, c, d) using each
+          * triangle vertices plus 'a'. We compute the centroid of these tetrahedrons which are then weighted
+          * with their volume.
+          */
+         Face3DReadOnly face = convexPolytope3D.getFace(faceIndex);
+         int numberOfTriangles = face.getNumberOfEdges() - 2;
+         Vertex3DReadOnly b = face.getVertex(0);
+
+         for (int triangleIndex = 0; triangleIndex < numberOfTriangles; triangleIndex++)
+         {
+            Vertex3DReadOnly c = face.getVertex(triangleIndex + 1);
+            Vertex3DReadOnly d = face.getVertex(triangleIndex + 2);
+            double tetrahedronVolume = EuclidPolytopeTools.tetrahedronVolume(a, b, c, d);
+            // The centroid of the tetrahedron is: tetrahedronCentroid = (a + b + c + d) / 4.0
+            // The centroid of the polytope is updated as: centroid += tetrahedronVolume * tetrahedronCentroid
+            // which is equivalent to the following:
+            double scale = 0.25 * tetrahedronVolume;
+            centroidToPack.scaleAdd(scale, a, centroidToPack);
+            centroidToPack.scaleAdd(scale, b, centroidToPack);
+            centroidToPack.scaleAdd(scale, c, centroidToPack);
+            centroidToPack.scaleAdd(scale, d, centroidToPack);
+            volume += tetrahedronVolume;
+         }
+      }
+
+      centroidToPack.scale(1.0 / volume);
+
+      return volume;
+   }
+
    private static void checkNumberOfVertices(List<? extends Point3DReadOnly> convexPolygon3D, int numberOfVertices)
    {
       if (numberOfVertices < 0 || numberOfVertices > convexPolygon3D.size())
@@ -476,7 +532,7 @@ public class EuclidPolytopeTools
     * The least visible face is the first element of the returned list. Besides the latter, the
     * returned list follows no particular order.
     * </p>
-    * 
+    *
     * @param faces the list of faces to be tested. Not modified.
     * @param observer the location of the observer looking at the faces. Not modified.
     * @param visibilityThreshold the minimum distance between the observer and a face's plane before
@@ -520,7 +576,7 @@ public class EuclidPolytopeTools
    /**
     * Finds for the given {@code observer} coordinates the visible faces and the faces for which the
     * observer lies in their support plane.
-    * 
+    *
     * @param faces the list of faces to search through.
     * @param observer the coordinates from where we look at the faces.
     * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
@@ -586,7 +642,7 @@ public class EuclidPolytopeTools
    /**
     * Finds the silhouette representing the border of the visible set of faces from the perspective of
     * an observer.
-    * 
+    *
     * @param faces the list of faces to search the silhouette from.
     * @param observer the coordinates of the observer.
     * @param observer the coordinates from where we look at the faces.
@@ -604,7 +660,7 @@ public class EuclidPolytopeTools
    /**
     * Finds the silhouette representing the border of the visible set of faces from the perspective of
     * an observer.
-    * 
+    *
     * @param faces the list of faces to search the silhouette from.
     * @param observer the coordinates of the observer.
     * @param observer the coordinates from where we look at the faces.
@@ -715,5 +771,49 @@ public class EuclidPolytopeTools
             return true;
       }
       return false;
+   }
+
+   public static double coneVolume(double height, double radius)
+   {
+      return Math.PI * radius * radius * height / 3.0;
+   }
+
+   public static double cylinderVolume(double length, double radius)
+   {
+      return Math.PI * radius * radius * length;
+   }
+
+   public static double icosahedronVolume(double edgeLength)
+   {
+      return edgeLength * edgeLength * edgeLength * (5.0 * (3.0 + Math.sqrt(5.0))) / 12.0;
+   }
+
+   public static double pyramidVolume(double height, double baseLength, double baseWidth)
+   {
+      return baseLength * baseWidth * height / 3.0;
+   }
+
+   public static double tetrahedronVolume(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c, Point3DReadOnly d)
+   {
+      // From: http://mathworld.wolfram.com/Tetrahedron.html
+      // V = 1/3 * | v1 . (v2 x v3)|
+      // where the vectors v1, v2, and v3 are defined as follows:
+      // v1 = b - a
+      // v2 = c - a
+      // v3 = d - a
+      double x = (c.getY() - a.getY()) * (d.getZ() - a.getZ()) - (c.getZ() - a.getZ()) * (d.getY() - a.getY());
+      double y = (c.getZ() - a.getZ()) * (d.getX() - a.getX()) - (c.getX() - a.getX()) * (d.getZ() - a.getZ());
+      double z = (c.getX() - a.getX()) * (d.getY() - a.getY()) - (c.getY() - a.getY()) * (d.getX() - a.getX());
+      return Math.abs(x * (b.getX() - a.getX()) + y * (b.getY() - a.getY()) + z * (b.getZ() - a.getZ())) / 6.0;
+   }
+
+   public static double icosahedronEdgeLength(double radius)
+   {
+      return radius / Math.sin(0.4 * Math.PI);
+   }
+
+   public static double icosahedronRadius(double edgeLength)
+   {
+      return edgeLength * Math.sin(0.4 * Math.PI);
    }
 }

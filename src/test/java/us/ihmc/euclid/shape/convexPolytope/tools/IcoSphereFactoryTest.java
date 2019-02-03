@@ -31,6 +31,14 @@ public class IcoSphereFactoryTest
       assertVerticesAreUnique(vertices, ROUNDING);
       assertVerticesOnUnitSphere(vertices);
       checkTriangleProperties(icoSphere.getAllTriangles(), recursionLevel);
+
+      for (Triangle3D triangle : icoSphere.getAllTriangles())
+      {
+         double expectedEdgeLength = EuclidPolytopeTools.icosahedronEdgeLength(1.0);
+         assertEquals(expectedEdgeLength, triangle.getAB());
+         assertEquals(expectedEdgeLength, triangle.getBC());
+         assertEquals(expectedEdgeLength, triangle.getCA());
+      }
    }
 
    @Test

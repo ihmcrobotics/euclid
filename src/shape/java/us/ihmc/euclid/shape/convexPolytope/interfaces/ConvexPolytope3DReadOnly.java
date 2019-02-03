@@ -98,6 +98,8 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    Point3DReadOnly getCentroid();
 
+   double getVolume();
+
    /**
     * Gets the tolerance used for building this convex polytope.
     * 

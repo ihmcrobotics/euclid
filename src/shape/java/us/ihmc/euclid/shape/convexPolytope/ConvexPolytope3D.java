@@ -48,6 +48,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
    private final Vector3D tempVector = new Vector3D();
    private final Point3D centroid = new Point3D();
+   private double volume;
 
    private final double constructionEpsilon;
 
@@ -85,6 +86,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       edges.clear();
       faces.clear();
       boundingBox.setToNaN();
+      centroid.setToNaN();
+      volume = Double.NaN;
    }
 
    @Override
@@ -96,6 +99,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          faces.get(i).setToNaN();
       }
       boundingBox.setToNaN();
+      centroid.setToNaN();
+      volume = Double.NaN;
    }
 
    @Override
@@ -107,6 +112,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          faces.get(i).setToZero();
       }
       boundingBox.setToZero();
+      centroid.setToZero();
+      volume = 0.0;
    }
 
    @Override
@@ -175,6 +182,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
       boundingBox.set(other.getBoundingBox());
       centroid.set(other.getCentroid());
+      volume = other.getVolume();
    }
 
    public boolean addVertex(Point3DReadOnly vertexToAdd)
@@ -222,7 +230,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          updateEdges();
          updateVertices();
          updateBoundingBox();
-         updateCentroid();
+         updateCentroidAndVolume();
       }
 
       return isPolytopeModified;
@@ -306,12 +314,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          boundingBox.combine(faces.get(faceIndex).getBoundingBox());
    }
 
-   public void updateCentroid()
-   { // TODO This is not the centroid
-      centroid.setToZero();
-      for (int i = 0; i < vertices.size(); i++)
-         centroid.add(vertices.get(i));
-      centroid.scale(1.0 / vertices.size());
+   public void updateCentroidAndVolume()
+   {
+      volume = EuclidPolytopeTools.computeConvexPolytope3DVolume(this, centroid);
    }
 
    public void removeFaces(Collection<Face3D> facesToRemove)
@@ -397,7 +402,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
 
       updateBoundingBox();
-      updateCentroid();
+      updateCentroidAndVolume();
    }
 
    @Override
@@ -417,7 +422,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
 
       updateBoundingBox();
-      updateCentroid();
+      updateCentroidAndVolume();
    }
 
    @Override
@@ -430,6 +435,12 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    public Point3DReadOnly getCentroid()
    {
       return centroid;
+   }
+
+   @Override
+   public double getVolume()
+   {
+      return volume;
    }
 
    @Override

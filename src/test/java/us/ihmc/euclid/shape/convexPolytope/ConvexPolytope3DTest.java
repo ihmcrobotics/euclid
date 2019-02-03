@@ -15,11 +15,14 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTestTools;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
@@ -934,6 +937,8 @@ public class ConvexPolytope3DTest
 
          EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, copyPolytope, EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getCentroid(), copyPolytope.getCentroid(), EPSILON);
+         assertEquals(originalPolytope.getVolume(), copyPolytope.getVolume(), EPSILON);
 
          for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
          {
@@ -1008,6 +1013,8 @@ public class ConvexPolytope3DTest
 
          EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, copyPolytope, EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getCentroid(), copyPolytope.getCentroid(), EPSILON);
+         assertEquals(originalPolytope.getVolume(), copyPolytope.getVolume(), EPSILON);
 
          for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
          {
@@ -1087,6 +1094,119 @@ public class ConvexPolytope3DTest
          expectedBoundingBox.setToNaN();
          convexPolytope3D.getVertices().forEach(vertex -> expectedBoundingBox.updateToIncludePoint(vertex));
          EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedBoundingBox, convexPolytope3D.getBoundingBox(), EPSILON);
+      }
+   }
+
+   @Test
+   void testCentroidAndVolume() throws Exception
+   {
+      Random random = new Random(45);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Trivial case: tetrahedron, the centroid is located at the average of the vertices.
+         Point3D a = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Top vertex
+         Point3D b = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Base vertex
+         Point3D c = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Base vertex
+         Point3D d = EuclidCoreRandomTools.nextPoint3D(random, 5.0); // Base vertex
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Arrays.asList(a, b, c, d).forEach(transform::transform);
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(a, b, c, d));
+         Point3D expectedCentroid = EuclidGeometryTools.averagePoint3Ds(Arrays.asList(a, b, c, d));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
+         assertEquals(EuclidPolytopeTools.tetrahedronVolume(a, b, c, d), convexPolytope3D.getVolume(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Trivial case: cylinder, the centroid is located at the average of the vertices.
+         double length = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         List<Point3D> cylinderVertices = EuclidPolytopeFactories.newCylinderVertices(length, radius, 50);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         cylinderVertices.forEach(transform::transform);
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cylinderVertices));
+         Point3D expectedCentroid = new Point3D(transform.getTranslation());
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
+         double expectedVolume = EuclidPolytopeTools.cylinderVolume(length, radius);
+         assertEquals(expectedVolume, convexPolytope3D.getVolume(), 3.0e-3 * expectedVolume);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Trivial case: icosahedron, the centroid is located at the average of the vertices.
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         List<Point3D> icosahedronVertices = EuclidPolytopeFactories.newIcosahedronVertices(radius);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         icosahedronVertices.forEach(transform::transform);
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(icosahedronVertices));
+
+         Point3D expectedCentroid = new Point3D(transform.getTranslation());
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
+         assertEquals(EuclidPolytopeTools.icosahedronVolume(EuclidPolytopeTools.icosahedronEdgeLength(radius)), convexPolytope3D.getVolume(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // For a cone the centroid at 1/4 of the height from the base.
+         double height = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         int numberOfDivisions = 50;
+         List<Point3D> coneVertices = EuclidPolytopeFactories.newConeVertices(height, radius, numberOfDivisions);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         coneVertices.forEach(transform::transform);
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(coneVertices));
+         // Making sure that the bottom face has "numberOfDivisions" vertices
+         assertEquals(1, convexPolytope3D.getFaces().stream().filter(face -> face.getNumberOfEdges() == numberOfDivisions).count());
+
+         Point3D expectedCentroid = new Point3D(0.0, 0.0, height / 4.0);
+         expectedCentroid.applyTransform(transform);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
+         double expectedVolume = EuclidPolytopeTools.coneVolume(height, radius);
+         assertEquals(expectedVolume, convexPolytope3D.getVolume(), 3.0e-3 * expectedVolume);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // For a pyramid the centroid at 1/4 of the height from the base.
+         double height = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double baseLength = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double baseWidth = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         List<Point3D> pyramidVertices = EuclidPolytopeFactories.newPyramidVertices(height, baseLength, baseWidth);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         pyramidVertices.forEach(transform::transform);
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(pyramidVertices));
+         // Making sure that the bottom face has 4 vertices
+         assertEquals(1, convexPolytope3D.getFaces().stream().filter(face -> face.getNumberOfEdges() == 4).count());
+
+         Point3D expectedCentroid = new Point3D(0.0, 0.0, height / 4.0);
+         expectedCentroid.applyTransform(transform);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
+         assertEquals(EuclidPolytopeTools.pyramidVolume(height, baseLength, baseWidth), convexPolytope3D.getVolume(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // We make a composite shape: cylinder + a cone at one of its ends.
+         double coneHeight = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         int numberOfDivisions = 50;
+         List<Point3D> shapeVertices = EuclidPolytopeFactories.newCylinderVertices(cylinderLength, radius, numberOfDivisions);
+         shapeVertices.add(new Point3D(0.0, 0.0, 0.5 * cylinderLength + coneHeight));
+
+         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(shapeVertices));
+
+         assertEquals(2 * numberOfDivisions + 1, convexPolytope3D.getNumberOfVertices());
+
+         double coneVolume = EuclidPolytopeTools.coneVolume(coneHeight, radius);
+         double cylinderVolume = EuclidPolytopeTools.cylinderVolume(cylinderLength, radius);
+         Point3D coneCentroid = new Point3D(0.0, 0.0, 0.5 * cylinderLength + coneHeight / 4.0);
+         Point3D cylinderCentroid = new Point3D();
+         double shapeVolume = coneVolume + cylinderVolume;
+         Point3D shapeCentroid = new Point3D();
+         shapeCentroid.setAndScale(coneVolume / shapeVolume, coneCentroid);
+         shapeCentroid.scaleAdd(cylinderVolume / shapeVolume, cylinderCentroid, shapeCentroid);
+
+         EuclidCoreTestTools.assertTuple3DEquals(shapeCentroid, convexPolytope3D.getCentroid(), EPSILON);
+         assertEquals(shapeVolume, convexPolytope3D.getVolume(), 3.0e-3 * shapeVolume);
       }
    }
 }
