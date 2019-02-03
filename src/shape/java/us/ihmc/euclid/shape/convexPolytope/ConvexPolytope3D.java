@@ -3,8 +3,10 @@ package us.ihmc.euclid.shape.convexPolytope;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import us.ihmc.euclid.Axis;
@@ -15,6 +17,8 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
@@ -276,7 +280,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       {
          Face3D face = faces.get(i);
          face.updateNormal();
-         face.updateCentroiAndArea();
+         face.updateCentroidAndArea();
          face.refreshBoundingBox();
       }
 
@@ -297,7 +301,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       {
          Face3D face = faces.get(i);
          face.updateNormal();
-         face.updateCentroiAndArea();
+         face.updateCentroidAndArea();
          face.refreshBoundingBox();
       }
 
@@ -397,7 +401,69 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    @Override
    public void set(ConvexPolytope3DReadOnly other)
    {
-      throw new RuntimeException("Unimplemented feature");
+      clear();
+
+      Map<Vertex3DReadOnly, Vertex3D> fromOtherToThisVertices = new HashMap<>(other.getNumberOfVertices());
+      Map<HalfEdge3DReadOnly, HalfEdge3D> fromOtherToThisEdges = new HashMap<>(other.getNumberOfEdges());
+
+      List<? extends Vertex3DReadOnly> otherVertices = other.getVertices();
+
+      for (Vertex3DReadOnly otherVertex : otherVertices)
+      {
+         Vertex3D vertex = new Vertex3D(otherVertex);
+         vertices.add(vertex);
+         fromOtherToThisVertices.put(otherVertex, vertex);
+      }
+
+      for (HalfEdge3DReadOnly otherEdge : other.getEdges())
+      {
+         Vertex3DReadOnly otherOrigin = otherEdge.getOrigin();
+         Vertex3DReadOnly otherDestination = otherEdge.getDestination();
+
+         Vertex3D origin = fromOtherToThisVertices.get(otherOrigin);
+         Vertex3D destination = fromOtherToThisVertices.get(otherDestination);
+
+         HalfEdge3D edge = new HalfEdge3D(origin, destination);
+         edges.add(edge);
+         fromOtherToThisEdges.put(otherEdge, edge);
+      }
+
+      for (int edgeIndex = 0; edgeIndex < other.getEdges().size(); edgeIndex++)
+      {
+         HalfEdge3DReadOnly otherEdge = other.getEdge(edgeIndex);
+         HalfEdge3D edge = edges.get(edgeIndex);
+
+         HalfEdge3D next = fromOtherToThisEdges.get(otherEdge.getNext());
+         HalfEdge3D previous = fromOtherToThisEdges.get(otherEdge.getPrevious());
+         HalfEdge3D twin = fromOtherToThisEdges.get(otherEdge.getTwin());
+
+         edge.setNext(next);
+         edge.setPrevious(previous);
+         edge.setTwin(twin);
+      }
+
+      for (Face3DReadOnly otherFace : other.getFaces())
+      {
+         Vector3DReadOnly otherNormal = otherFace.getNormal();
+         HalfEdge3DReadOnly otherFirstEdge = otherFace.getEdge(0);
+
+         HalfEdge3D firstEdge = fromOtherToThisEdges.get(otherFirstEdge);
+         List<HalfEdge3D> faceEdges = new ArrayList<>();
+         HalfEdge3D currentEdge = firstEdge;
+
+         do
+         {
+            faceEdges.add(currentEdge);
+            currentEdge = currentEdge.getNext();
+         }
+         while (currentEdge != firstEdge);
+
+         Face3D face = new Face3D(faceEdges, otherNormal);
+         faces.add(face);
+      }
+
+      boundingBox.set(other.getBoundingBox());
+      centroid.set(other.getCentroid());
    }
 
    public void clear()
@@ -405,6 +471,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       vertices.clear();
       edges.clear();
       faces.clear();
+      boundingBox.setToNaN();
    }
 
    @Override

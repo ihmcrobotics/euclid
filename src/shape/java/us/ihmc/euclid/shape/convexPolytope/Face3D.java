@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +51,23 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       normal.setAndNormalize(initialGuessNormal);
       boundingBox.setToNaN();
+   }
+
+   public Face3D(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal)
+   {
+      set(faceEdges, normal);
+   }
+
+   public void set(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal)
+   {
+      edges.clear();
+      edges.addAll(faceEdges);
+      edges.forEach(edge -> edge.setFace(this));
+      this.normal.set(normal);
+      updateVertices();
+      updateNormal();
+      updateCentroidAndArea();
+      refreshBoundingBox();
    }
 
    /**
@@ -162,13 +180,17 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          currentEdge = currentEdge.getNext();
       }
 
-      vertices.clear();
-      edges.forEach(edge -> vertices.add(edge.getOrigin()));
-
+      updateVertices();
       updateNormal();
-      updateCentroiAndArea();
+      updateCentroidAndArea();
 
       boundingBox.updateToIncludePoint(vertexToAdd);
+   }
+
+   public void updateVertices()
+   {
+      vertices.clear();
+      edges.forEach(edge -> vertices.add(edge.getOrigin()));
    }
 
    public void updateNormal()
@@ -179,7 +201,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
    }
 
-   public void updateCentroiAndArea()
+   public void updateCentroidAndArea()
    {
       area = EuclidPolytopeTools.computeConvexPolygon3DArea(vertices, normal, vertices.size(), true, centroid);
    }

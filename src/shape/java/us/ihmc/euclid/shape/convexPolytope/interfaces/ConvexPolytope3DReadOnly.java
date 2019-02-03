@@ -79,6 +79,8 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    BoundingBox3DReadOnly getBoundingBox();
 
+   Point3DReadOnly getCentroid();
+
    /**
     * Gets the tolerance used for building this convex polytope.
     * 
