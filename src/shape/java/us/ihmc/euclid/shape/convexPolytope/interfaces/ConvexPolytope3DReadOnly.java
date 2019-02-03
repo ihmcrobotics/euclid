@@ -17,7 +17,10 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     * 
     * @return integer number of vertices in the polytope
     */
-   int getNumberOfVertices();
+   default int getNumberOfVertices()
+   {
+      return getVertices().size();
+   }
 
    /**
     * Returns the number of edge that are part of the polytope Note: number of edges is half the number
@@ -25,14 +28,28 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     * 
     * @return integer number of edges in the face
     */
-   int getNumberOfEdges();
+   default int getNumberOfEdges()
+   {
+      if (getNumberOfFaces() < 2)
+         return getNumberOfHalfEdges();
+      else
+         return getNumberOfHalfEdges() / 2;
+   }
+
+   default int getNumberOfHalfEdges()
+   {
+      return getHalfEdges().size();
+   }
 
    /**
     * Returns the number of face that are constitute the polytope
     * 
     * @return integer number of faces
     */
-   int getNumberOfFaces();
+   default int getNumberOfFaces()
+   {
+      return getFaces().size();
+   }
 
    /**
     * Gets a specified face of polytope
@@ -52,9 +69,9 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     */
    List<? extends Face3DReadOnly> getFaces();
 
-   default HalfEdge3DReadOnly getEdge(int index)
+   default HalfEdge3DReadOnly getHalfEdge(int index)
    {
-      return getEdges().get(index);
+      return getHalfEdges().get(index);
    }
 
    /**
@@ -63,7 +80,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     * 
     * @return a list of read only references to the half edges that make up the faces of this polytope
     */
-   List<? extends HalfEdge3DReadOnly> getEdges();
+   List<? extends HalfEdge3DReadOnly> getHalfEdges();
 
    default Vertex3DReadOnly getVertex(int index)
    {
@@ -108,6 +125,12 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
       return true;
    }
 
+   @Override
+   default double distance(Point3DReadOnly point)
+   {
+      return getClosestFace(point).distance(point);
+   }
+
    default Face3DReadOnly getClosestFace(Point3DReadOnly point)
    {
       if (getNumberOfFaces() == 0)
@@ -150,11 +173,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     */
    default boolean isEmpty()
    {
-      List<? extends Face3DReadOnly> faces = getFaces();
-      for (int i = 0; i < faces.size(); i++)
-         if (faces.get(i).getNumberOfEdges() != 0)
-            return false;
-      return true;
+      return getNumberOfVertices() == 0;
    }
 
    default boolean equals(ConvexPolytope3DReadOnly other)

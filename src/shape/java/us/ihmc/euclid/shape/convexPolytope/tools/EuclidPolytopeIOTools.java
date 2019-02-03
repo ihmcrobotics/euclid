@@ -86,7 +86,7 @@ public class EuclidPolytopeIOTools
    {
       if (convexPolytope3D == null)
          return "null";
-      return getConvexPolytope3DString(format, convexPolytope3D.getVertices(), convexPolytope3D.getEdges(), convexPolytope3D.getFaces());
+      return getConvexPolytope3DString(format, convexPolytope3D.getVertices(), convexPolytope3D.getHalfEdges(), convexPolytope3D.getFaces());
    }
 
    public static String getConvexPolytope3DString(String format, Collection<? extends Vertex3DReadOnly> polytopeVertices,

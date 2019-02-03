@@ -153,11 +153,11 @@ public class ConvexPolytope3DTest
                assertTrue(edge.getOrigin() == vertex);
          }
 
-         for (int edgeIndex = 0; edgeIndex < polytope.getEdges().size(); edgeIndex++)
+         for (int edgeIndex = 0; edgeIndex < polytope.getHalfEdges().size(); edgeIndex++)
          {
-            HalfEdge3D edge = polytope.getEdge(edgeIndex);
+            HalfEdge3D edge = polytope.getHalfEdge(edgeIndex);
             // Assert that each vertex is unique
-            assertTrue(polytope.getEdges().stream().noneMatch(otherEdge -> (otherEdge != edge && otherEdge.epsilonEquals(edge, EPSILON))));
+            assertTrue(polytope.getHalfEdges().stream().noneMatch(otherEdge -> (otherEdge != edge && otherEdge.epsilonEquals(edge, EPSILON))));
             // Assert that all vertex are from the points added
             assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
             assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
@@ -299,7 +299,7 @@ public class ConvexPolytope3DTest
          assertEquals(6, convexPolytope3D.getNumberOfEdges());
          assertEquals(4, convexPolytope3D.getNumberOfFaces());
 
-         HalfEdge3D edge = convexPolytope3D.getEdge(random.nextInt(convexPolytope3D.getNumberOfEdges()));
+         HalfEdge3D edge = convexPolytope3D.getHalfEdge(random.nextInt(convexPolytope3D.getNumberOfEdges()));
          Point3DBasics newVertex = edge.pointOnLineGivenPercentage(1.0 + random.nextDouble());
          Vertex3D expectedVertexRemoved = edge.getDestination();
 
@@ -390,9 +390,9 @@ public class ConvexPolytope3DTest
          assertTrue(yPlusSideFace.getVertices().containsAll(Arrays.asList(topP1, topP2, bottomP1, bottomP2)));
          assertTrue(yMinusSideFace.getVertices().containsAll(Arrays.asList(topP0, topP3, bottomP0, bottomP3)));
 
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwin()));
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getNext()));
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getPrevious()));
+         convexPolytope3D.getHalfEdges().forEach(edge -> assertNotNull(edge.getTwin()));
+         convexPolytope3D.getHalfEdges().forEach(edge -> assertNotNull(edge.getNext()));
+         convexPolytope3D.getHalfEdges().forEach(edge -> assertNotNull(edge.getPrevious()));
 
          convexPolytope3D.getVertices().forEach(vertex -> assertEquals(3, vertex.getNumberOfAssociatedEdges()));
       }
@@ -437,7 +437,7 @@ public class ConvexPolytope3DTest
             assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
          }
 
-         for (HalfEdge3D edge : convexPolytope3D.getEdges())
+         for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
          {
             assertNotNull(edge.getTwin());
             Vertex3D a0 = edge.getOrigin();
@@ -487,7 +487,7 @@ public class ConvexPolytope3DTest
             assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
          }
 
-         for (HalfEdge3D edge : convexPolytope3D.getEdges())
+         for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
          {
             assertNotNull(edge.getTwin());
             Vertex3D a0 = edge.getOrigin();
@@ -543,7 +543,7 @@ public class ConvexPolytope3DTest
             assertTrue(icoSphere.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
          }
 
-         for (HalfEdge3D edge : convexPolytope3D.getEdges())
+         for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
          {
             assertNotNull(edge.getTwin());
             Vertex3D a0 = edge.getOrigin();
@@ -828,7 +828,7 @@ public class ConvexPolytope3DTest
             assertEquals(2, vertices.stream().filter(v -> epsilonEquals(0.0, percentageAlongLineSegment3D(v, bottomCentroid, belowBottom), EPSILON)).count());
          }
 
-         convexPolytope3D.getEdges().forEach(edge -> assertNotNull(edge.getTwin()));
+         convexPolytope3D.getHalfEdges().forEach(edge -> assertNotNull(edge.getTwin()));
       }
    }
 
@@ -890,6 +890,7 @@ public class ConvexPolytope3DTest
          icosahedron.getVertices().forEach(vertex -> expectedPolytope.addVertex(vertex));
 
          EuclidPolytopeTestTools.assertConvexPolytope3DEquals(expectedPolytope, actualPolytope, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
 
          for (int faceIndex = 0; faceIndex < expectedPolytope.getNumberOfFaces(); faceIndex++)
@@ -905,6 +906,7 @@ public class ConvexPolytope3DTest
          actualPolytope.applyInverseTransform(transform);
 
          EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, actualPolytope, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
 
          for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
@@ -946,10 +948,10 @@ public class ConvexPolytope3DTest
             assertEquals(originalFace.getArea(), copyFace.getArea(), EPSILON);
          }
 
-         for (int edgeIndex = 0; edgeIndex < originalPolytope.getEdges().size(); edgeIndex++)
+         for (int edgeIndex = 0; edgeIndex < originalPolytope.getHalfEdges().size(); edgeIndex++)
          {
-            HalfEdge3D originalEdge = originalPolytope.getEdge(edgeIndex);
-            HalfEdge3D copyEdge = copyPolytope.getEdge(edgeIndex);
+            HalfEdge3D originalEdge = originalPolytope.getHalfEdge(edgeIndex);
+            HalfEdge3D copyEdge = copyPolytope.getHalfEdge(edgeIndex);
 
             HalfEdge3D originalNext = originalEdge.getNext();
             HalfEdge3D originalPrevious = originalEdge.getPrevious();
@@ -1020,10 +1022,10 @@ public class ConvexPolytope3DTest
             assertEquals(originalFace.getArea(), copyFace.getArea(), EPSILON);
          }
 
-         for (int edgeIndex = 0; edgeIndex < originalPolytope.getEdges().size(); edgeIndex++)
+         for (int edgeIndex = 0; edgeIndex < originalPolytope.getHalfEdges().size(); edgeIndex++)
          {
-            HalfEdge3D originalEdge = originalPolytope.getEdge(edgeIndex);
-            HalfEdge3D copyEdge = copyPolytope.getEdge(edgeIndex);
+            HalfEdge3D originalEdge = originalPolytope.getHalfEdge(edgeIndex);
+            HalfEdge3D copyEdge = copyPolytope.getHalfEdge(edgeIndex);
 
             HalfEdge3D originalNext = originalEdge.getNext();
             HalfEdge3D originalPrevious = originalEdge.getPrevious();

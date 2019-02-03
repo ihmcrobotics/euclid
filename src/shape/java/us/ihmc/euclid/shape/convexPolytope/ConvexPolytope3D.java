@@ -79,6 +79,104 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       set(polytope);
    }
 
+   public void clear()
+   {
+      vertices.clear();
+      edges.clear();
+      faces.clear();
+      boundingBox.setToNaN();
+   }
+
+   @Override
+   public void setToNaN()
+   {
+      // This should also set all the edges and vertices to NaN assuming all relationships are intact
+      for (int i = 0; i < faces.size(); i++)
+      {
+         faces.get(i).setToNaN();
+      }
+      boundingBox.setToNaN();
+   }
+
+   @Override
+   public void setToZero()
+   {
+      // This should also set all the edges and vertices to zero assuming all relationships are intact
+      for (int i = 0; i < faces.size(); i++)
+      {
+         faces.get(i).setToZero();
+      }
+      boundingBox.setToZero();
+   }
+
+   @Override
+   public void set(ConvexPolytope3DReadOnly other)
+   {
+      clear();
+
+      Map<Vertex3DReadOnly, Vertex3D> fromOtherToThisVertices = new HashMap<>(other.getNumberOfVertices());
+      Map<HalfEdge3DReadOnly, HalfEdge3D> fromOtherToThisEdges = new HashMap<>(other.getNumberOfEdges());
+
+      List<? extends Vertex3DReadOnly> otherVertices = other.getVertices();
+
+      for (Vertex3DReadOnly otherVertex : otherVertices)
+      {
+         Vertex3D vertex = new Vertex3D(otherVertex);
+         vertices.add(vertex);
+         fromOtherToThisVertices.put(otherVertex, vertex);
+      }
+
+      for (HalfEdge3DReadOnly otherEdge : other.getHalfEdges())
+      {
+         Vertex3DReadOnly otherOrigin = otherEdge.getOrigin();
+         Vertex3DReadOnly otherDestination = otherEdge.getDestination();
+
+         Vertex3D origin = fromOtherToThisVertices.get(otherOrigin);
+         Vertex3D destination = fromOtherToThisVertices.get(otherDestination);
+
+         HalfEdge3D edge = new HalfEdge3D(origin, destination);
+         edges.add(edge);
+         fromOtherToThisEdges.put(otherEdge, edge);
+      }
+
+      for (int edgeIndex = 0; edgeIndex < other.getHalfEdges().size(); edgeIndex++)
+      {
+         HalfEdge3DReadOnly otherEdge = other.getHalfEdge(edgeIndex);
+         HalfEdge3D edge = edges.get(edgeIndex);
+
+         HalfEdge3D next = fromOtherToThisEdges.get(otherEdge.getNext());
+         HalfEdge3D previous = fromOtherToThisEdges.get(otherEdge.getPrevious());
+         HalfEdge3D twin = fromOtherToThisEdges.get(otherEdge.getTwin());
+
+         edge.setNext(next);
+         edge.setPrevious(previous);
+         edge.setTwin(twin);
+      }
+
+      for (Face3DReadOnly otherFace : other.getFaces())
+      {
+         Vector3DReadOnly otherNormal = otherFace.getNormal();
+         HalfEdge3DReadOnly otherFirstEdge = otherFace.getEdge(0);
+
+         HalfEdge3D firstEdge = fromOtherToThisEdges.get(otherFirstEdge);
+         List<HalfEdge3D> faceEdges = new ArrayList<>();
+         HalfEdge3D currentEdge = firstEdge;
+
+         do
+         {
+            faceEdges.add(currentEdge);
+            currentEdge = currentEdge.getNext();
+         }
+         while (currentEdge != firstEdge);
+
+         Face3D face = new Face3D(faceEdges, otherNormal);
+         faces.add(face);
+      }
+
+      boundingBox.set(other.getBoundingBox());
+      centroid.set(other.getCentroid());
+   }
+
    public boolean addVertex(Point3DReadOnly vertexToAdd)
    {
       return addVertex(new Vertex3D(vertexToAdd));
@@ -187,32 +285,51 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
    }
 
-   @Override
-   public int getNumberOfFaces()
+   public void updateVertices()
+   { // FIXME this is slow, maybe there's a way to keep track of the vertices as the polytope is being built.
+      vertices.clear();
+      faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
+   }
+
+   public void updateEdges()
    {
-      return faces.size();
+      edges.clear();
+      for (Face3D face : faces)
+         edges.addAll(face.getEdges());
+   }
+
+   public void updateBoundingBox()
+   {
+      boundingBox.setToNaN();
+
+      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
+         boundingBox.combine(faces.get(faceIndex).getBoundingBox());
+   }
+
+   public void updateCentroid()
+   { // TODO This is not the centroid
+      centroid.setToZero();
+      for (int i = 0; i < vertices.size(); i++)
+         centroid.add(vertices.get(i));
+      centroid.scale(1.0 / vertices.size());
+   }
+
+   public void removeFaces(Collection<Face3D> facesToRemove)
+   {
+      for (Face3D face : facesToRemove)
+         removeFace(face);
+   }
+
+   public void removeFace(Face3D faceToRemove)
+   {
+      if (faces.remove(faceToRemove))
+         faceToRemove.destroy();
    }
 
    @Override
-   public int getNumberOfEdges()
+   public boolean containsNaN()
    {
-      if (getNumberOfFaces() < 2)
-         return edges.size();
-      else
-         return edges.size() / 2;
-   }
-
-   @Override
-   public int getNumberOfVertices()
-   {
-      if (getNumberOfFaces() < 2)
-      {
-         return vertices.size();
-      }
-      else
-      { // Polyhedron formula for quick calc
-         return getNumberOfEdges() - getNumberOfFaces() + 2;
-      }
+      return ConvexPolytope3DReadOnly.super.containsNaN();
    }
 
    @Override
@@ -228,13 +345,13 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    }
 
    @Override
-   public HalfEdge3D getEdge(int index)
+   public HalfEdge3D getHalfEdge(int index)
    {
       return edges.get(index);
    }
 
    @Override
-   public List<HalfEdge3D> getEdges()
+   public List<HalfEdge3D> getHalfEdges()
    {
       return edges;
    }
@@ -280,6 +397,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
 
       updateBoundingBox();
+      updateCentroid();
    }
 
    @Override
@@ -299,47 +417,19 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
       }
 
       updateBoundingBox();
+      updateCentroid();
    }
 
-   public void updateVertices()
-   { // FIXME this is slow, maybe there's a way to keep track of the vertices as the polytope is being built.
-      vertices.clear();
-      faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
-   }
-
-   public void updateEdges()
+   @Override
+   public Face3D getClosestFace(Point3DReadOnly point)
    {
-      edges.clear();
-      for (Face3D face : faces)
-         edges.addAll(face.getEdges());
+      return (Face3D) ConvexPolytope3DReadOnly.super.getClosestFace(point);
    }
 
-   public void updateBoundingBox()
+   @Override
+   public Point3DReadOnly getCentroid()
    {
-      boundingBox.setToNaN();
-
-      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
-         boundingBox.combine(faces.get(faceIndex).getBoundingBox());
-   }
-
-   public void updateCentroid()
-   { // TODO This is not the centroid
-      centroid.setToZero();
-      for (int i = 0; i < vertices.size(); i++)
-         centroid.add(vertices.get(i));
-      centroid.scale(1.0 / vertices.size());
-   }
-
-   public void removeFaces(Collection<Face3D> facesToRemove)
-   {
-      for (Face3D face : facesToRemove)
-         removeFace(face);
-   }
-
-   public void removeFace(Face3D faceToRemove)
-   {
-      if (faces.remove(faceToRemove))
-         faceToRemove.destroy();
+      return centroid;
    }
 
    @Override
@@ -367,127 +457,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
          else
             bestVertex = vertexCandidate;
       }
-   }
-
-   @Override
-   public boolean containsNaN()
-   {
-      return ConvexPolytope3DReadOnly.super.containsNaN();
-   }
-
-   @Override
-   public void setToNaN()
-   {
-      // This should also set all the edges and vertices to NaN assuming all relationships are intact
-      for (int i = 0; i < faces.size(); i++)
-      {
-         faces.get(i).setToNaN();
-      }
-   }
-
-   @Override
-   public void setToZero()
-   {
-      // This should also set all the edges and vertices to zero assuming all relationships are intact
-      for (int i = 0; i < faces.size(); i++)
-      {
-         faces.get(i).setToZero();
-      }
-   }
-
-   @Override
-   public void set(ConvexPolytope3DReadOnly other)
-   {
-      clear();
-
-      Map<Vertex3DReadOnly, Vertex3D> fromOtherToThisVertices = new HashMap<>(other.getNumberOfVertices());
-      Map<HalfEdge3DReadOnly, HalfEdge3D> fromOtherToThisEdges = new HashMap<>(other.getNumberOfEdges());
-
-      List<? extends Vertex3DReadOnly> otherVertices = other.getVertices();
-
-      for (Vertex3DReadOnly otherVertex : otherVertices)
-      {
-         Vertex3D vertex = new Vertex3D(otherVertex);
-         vertices.add(vertex);
-         fromOtherToThisVertices.put(otherVertex, vertex);
-      }
-
-      for (HalfEdge3DReadOnly otherEdge : other.getEdges())
-      {
-         Vertex3DReadOnly otherOrigin = otherEdge.getOrigin();
-         Vertex3DReadOnly otherDestination = otherEdge.getDestination();
-
-         Vertex3D origin = fromOtherToThisVertices.get(otherOrigin);
-         Vertex3D destination = fromOtherToThisVertices.get(otherDestination);
-
-         HalfEdge3D edge = new HalfEdge3D(origin, destination);
-         edges.add(edge);
-         fromOtherToThisEdges.put(otherEdge, edge);
-      }
-
-      for (int edgeIndex = 0; edgeIndex < other.getEdges().size(); edgeIndex++)
-      {
-         HalfEdge3DReadOnly otherEdge = other.getEdge(edgeIndex);
-         HalfEdge3D edge = edges.get(edgeIndex);
-
-         HalfEdge3D next = fromOtherToThisEdges.get(otherEdge.getNext());
-         HalfEdge3D previous = fromOtherToThisEdges.get(otherEdge.getPrevious());
-         HalfEdge3D twin = fromOtherToThisEdges.get(otherEdge.getTwin());
-
-         edge.setNext(next);
-         edge.setPrevious(previous);
-         edge.setTwin(twin);
-      }
-
-      for (Face3DReadOnly otherFace : other.getFaces())
-      {
-         Vector3DReadOnly otherNormal = otherFace.getNormal();
-         HalfEdge3DReadOnly otherFirstEdge = otherFace.getEdge(0);
-
-         HalfEdge3D firstEdge = fromOtherToThisEdges.get(otherFirstEdge);
-         List<HalfEdge3D> faceEdges = new ArrayList<>();
-         HalfEdge3D currentEdge = firstEdge;
-
-         do
-         {
-            faceEdges.add(currentEdge);
-            currentEdge = currentEdge.getNext();
-         }
-         while (currentEdge != firstEdge);
-
-         Face3D face = new Face3D(faceEdges, otherNormal);
-         faces.add(face);
-      }
-
-      boundingBox.set(other.getBoundingBox());
-      centroid.set(other.getCentroid());
-   }
-
-   public void clear()
-   {
-      vertices.clear();
-      edges.clear();
-      faces.clear();
-      boundingBox.setToNaN();
-   }
-
-   @Override
-   public double distance(Point3DReadOnly point)
-   {
-      return getClosestFace(point).distance(point);
-   }
-
-   @Override
-   public Face3D getClosestFace(Point3DReadOnly point)
-   {
-      return (Face3D) ConvexPolytope3DReadOnly.super.getClosestFace(point);
-   }
-
-   @Override
-   public Point3DReadOnly getCentroid()
-   {
-      updateCentroid();
-      return centroid;
    }
 
    @Override

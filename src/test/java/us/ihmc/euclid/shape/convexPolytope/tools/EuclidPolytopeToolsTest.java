@@ -203,7 +203,7 @@ public class EuclidPolytopeToolsTest
          // Evaluate the silhouette using brute force
          List<HalfEdge3D> expectedSilhouette = new ArrayList<>();
 
-         for (HalfEdge3D edge : convexPolytope3D.getEdges())
+         for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
          { // This edge is part of the silhouette if its face is not visible and the face of its twin is visible
             boolean isEdgeFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getFace(), epsilon);
             boolean isTwinFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getTwin().getFace(), epsilon);
