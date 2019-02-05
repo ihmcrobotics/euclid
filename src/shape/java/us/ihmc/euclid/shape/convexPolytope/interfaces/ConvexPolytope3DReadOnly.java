@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simplex3D
@@ -166,7 +167,46 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
     *           performed
     * @return a read only reference to the required vertex
     */
-   Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportingVertexDirection);
+   @Override
+   default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
+   {
+      Vertex3DReadOnly bestVertex = getFace(0).getEdge(0).getOrigin();
+      double maxDotProduct = bestVertex.dot(supportDirection);
+      Vertex3DReadOnly vertexCandidate = bestVertex;
+
+      while (true)
+      {
+         for (HalfEdge3DReadOnly currentEdge : bestVertex.getAssociatedEdges())
+         {
+            Vertex3DReadOnly candidate = currentEdge.getDestination();
+
+            double dotProduct = candidate.dot(supportDirection);
+
+            if (dotProduct > maxDotProduct)
+            {
+               vertexCandidate = candidate;
+               maxDotProduct = dotProduct;
+            }
+         }
+
+         if (bestVertex == vertexCandidate)
+            return bestVertex;
+         else
+            bestVertex = vertexCandidate;
+      }
+   }
+
+   @Override
+   default void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   {
+      getClosestFace(point).getSupportVectorDirectionTo(point, supportVectorToPack);
+   }
+
+   @Override
+   default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
+   {
+      return getClosestFace(point).getSmallestSimplexMemberReference(point);
+   }
 
    /**
     * Check is the polytope is empty (contains no vertices / edges)

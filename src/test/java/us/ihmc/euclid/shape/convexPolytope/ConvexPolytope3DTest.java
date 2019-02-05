@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
@@ -1207,6 +1208,73 @@ public class ConvexPolytope3DTest
 
          EuclidCoreTestTools.assertTuple3DEquals(shapeCentroid, convexPolytope3D.getCentroid(), EPSILON);
          assertEquals(shapeVolume, convexPolytope3D.getVolume(), 3.0e-3 * shapeVolume);
+      }
+   }
+
+   @Test
+   void testGetSupportingVertex() throws Exception
+   {
+      Random random = new Random(3409736);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         Vertex3DReadOnly expectedSupportVertex, actualSupportVertex;
+         Vector3D supportDirection = new Vector3D();
+
+         // Trivial case #1: supportingVector = +X
+         supportDirection.set(Axis.X);
+         expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v2.getX(), v1.getX())).findFirst().get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
+         // Trivial case #2: supportingVector = -X
+         supportDirection.setAndNegate(Axis.X);
+         expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getX(), v2.getX())).findFirst().get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
+         // Trivial case #1: supportingVector = +Y
+         supportDirection.set(Axis.Y);
+         expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v2.getY(), v1.getY())).findFirst().get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
+         // Trivial case #2: supportingVector = -Y
+         supportDirection.setAndNegate(Axis.Y);
+         expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getY(), v2.getY())).findFirst().get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
+         // Trivial case #1: supportingVector = +Z
+         supportDirection.set(Axis.Z);
+         expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v2.getZ(), v1.getZ())).findFirst().get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
+         // Trivial case #2: supportingVector = -Z
+         supportDirection.setAndNegate(Axis.Z);
+         expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getZ(), v2.getZ())).findFirst().get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
+         // We apply a similar method compared to the one to be tested except that here we use brute force:
+         supportDirection.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0)));
+         expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v2.dot(supportDirection), v1.dot(supportDirection)))
+                                                 .findFirst().get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
+         // We create a point that is far away from the polytope in the supportDirection and find the closest vertex to that point.
+         supportDirection.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0)));
+         Point3D pointFarFarAway = new Point3D();
+         pointFarFarAway.scaleAdd(500.0, supportDirection, convexPolytope3D.getCentroid());
+         expectedSupportVertex = convexPolytope3D.getVertices().stream()
+                                                 .sorted((v1, v2) -> Double.compare(v1.distance(pointFarFarAway), v2.distance(pointFarFarAway))).findFirst()
+                                                 .get();
+         actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
+         assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+
       }
    }
 }

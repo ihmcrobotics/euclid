@@ -46,6 +46,90 @@ public class EuclidPolytopeRandomTools
       return circleBasedConvexPolygon3D;
    }
 
+   public static ConvexPolytope3D nextConvexPolytope3D(Random random)
+   {
+      switch (random.nextInt(6))
+      {
+      case 0:
+         return nextConeConvexPolytope3D(random);
+      case 1:
+         return nextCubeConvexPolytope3D(random);
+      case 2:
+         return nextCylinderConvexPolytope3D(random);
+      case 3:
+         return nextIcosahedronBasedConvexPolytope3D(random);
+      case 4:
+         return nextIcoSphereBasedConvexPolytope3D(random);
+      case 5:
+         return nextPyramidConvexPolytope3D(random);
+      default:
+         throw new RuntimeException("Unexpected state.");
+      }
+   }
+
+   public static ConvexPolytope3D nextConeConvexPolytope3D(Random random)
+   {
+      return nextConeConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextConeConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextConeConvexPolytope3D(random, centerMinMax, 0.1, 5.0, 0.1, 5.0, 3, 50);
+   }
+
+   public static ConvexPolytope3D nextConeConvexPolytope3D(Random random, double centerMinMax, double heightMin, double heightMax, double radiusMin,
+                                                           double radiusMax, int divisionsMin, int divisionsMax)
+   {
+      List<Point3D> coneVertices = EuclidPolytopeFactories.newConeVertices(EuclidCoreRandomTools.nextDouble(random, heightMin, heightMax),
+                                                                           EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
+                                                                           random.nextInt(divisionsMax - divisionsMin + 1) + divisionsMin);
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      coneVertices.forEach(transform::transform);
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(coneVertices));
+   }
+
+   public static ConvexPolytope3D nextCubeConvexPolytope3D(Random random)
+   {
+      return nextCubeConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextCubeConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextCubeConvexPolytope3D(random, centerMinMax, 0.1, 5.0);
+   }
+
+   public static ConvexPolytope3D nextCubeConvexPolytope3D(Random random, double centerMinMax, double edgeLengthMin, double edgeLengthMax)
+   {
+      List<Point3D> cubeVertices = EuclidPolytopeFactories.newCubeVertices(EuclidCoreRandomTools.nextDouble(random, edgeLengthMin, edgeLengthMax));
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      cubeVertices.forEach(transform::transform);
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cubeVertices));
+   }
+
+   public static ConvexPolytope3D nextCylinderConvexPolytope3D(Random random)
+   {
+      return nextCylinderConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextCylinderConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextCylinderConvexPolytope3D(random, centerMinMax, 0.1, 5.0, 0.1, 5.0, 3, 50);
+   }
+
+   public static ConvexPolytope3D nextCylinderConvexPolytope3D(Random random, double centerMinMax, double lengthMin, double lengthMax, double radiusMin,
+                                                               double radiusMax, int divisionsMin, int divisionsMax)
+   {
+      List<Point3D> cylinderVertices = EuclidPolytopeFactories.newCylinderVertices(EuclidCoreRandomTools.nextDouble(random, lengthMin, lengthMax),
+                                                                                   EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
+                                                                                   random.nextInt(divisionsMax - divisionsMin + 1) + divisionsMin);
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      cylinderVertices.forEach(transform::transform);
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cylinderVertices));
+   }
+
    public static ConvexPolytope3D nextIcosahedronBasedConvexPolytope3D(Random random)
    {
       return nextIcosahedronBasedConvexPolytope3D(random, 5.0);
@@ -85,5 +169,27 @@ public class EuclidPolytopeRandomTools
       icoSphere.applyTransform(transform);
 
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(icoSphere.getVertices()));
+   }
+
+   public static ConvexPolytope3D nextPyramidConvexPolytope3D(Random random)
+   {
+      return nextPyramidConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextPyramidConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextPyramidConvexPolytope3D(random, centerMinMax, 0.1, 5.0, 0.1, 5.0, 0.1, 5.0);
+   }
+
+   public static ConvexPolytope3D nextPyramidConvexPolytope3D(Random random, double centerMinMax, double heightMin, double heightMax, double baseLengthMin,
+                                                              double baseLengthMax, double baseWidthMin, double baseWidthMax)
+   {
+      List<Point3D> pyramidVertices = EuclidPolytopeFactories.newPyramidVertices(EuclidCoreRandomTools.nextDouble(random, heightMin, heightMax),
+                                                                                 EuclidCoreRandomTools.nextDouble(random, baseLengthMin, baseLengthMax),
+                                                                                 EuclidCoreRandomTools.nextDouble(random, baseWidthMin, baseWidthMax));
+      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      pyramidVertices.forEach(transform::transform);
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(pyramidVertices));
    }
 }

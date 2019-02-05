@@ -19,16 +19,13 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -46,7 +43,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
     */
    private final BoundingBox3D boundingBox = new BoundingBox3D();
 
-   private final Vector3D tempVector = new Vector3D();
    private final Point3D centroid = new Point3D();
    private double volume;
 
@@ -386,6 +382,24 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    }
 
    @Override
+   public Face3D getClosestFace(Point3DReadOnly point)
+   {
+      return (Face3D) ConvexPolytope3DReadOnly.super.getClosestFace(point);
+   }
+
+   @Override
+   public Point3DReadOnly getCentroid()
+   {
+      return centroid;
+   }
+
+   @Override
+   public double getVolume()
+   {
+      return volume;
+   }
+
+   @Override
    public void applyTransform(Transform transform)
    {
       for (int i = 0; i < vertices.size(); i++)
@@ -423,63 +437,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
       updateBoundingBox();
       updateCentroidAndVolume();
-   }
-
-   @Override
-   public Face3D getClosestFace(Point3DReadOnly point)
-   {
-      return (Face3D) ConvexPolytope3DReadOnly.super.getClosestFace(point);
-   }
-
-   @Override
-   public Point3DReadOnly getCentroid()
-   {
-      return centroid;
-   }
-
-   @Override
-   public double getVolume()
-   {
-      return volume;
-   }
-
-   @Override
-   public Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
-   {
-      Vertex3D bestVertex = faces.get(0).getEdge(0).getOrigin();
-      tempVector.set(bestVertex);
-      double maxDotProduct = supportDirection.dot(tempVector);
-      Vertex3D vertexCandidate = bestVertex;
-
-      while (true)
-      {
-         for (HalfEdge3D currentEdge : bestVertex.getAssociatedEdges())
-         {
-            tempVector.set(currentEdge.getDestination());
-            double dotProduct = supportDirection.dot(tempVector);
-            if (dotProduct > maxDotProduct)
-            {
-               vertexCandidate = currentEdge.getDestination();
-               maxDotProduct = dotProduct;
-            }
-         }
-         if (bestVertex == vertexCandidate)
-            return bestVertex;
-         else
-            bestVertex = vertexCandidate;
-      }
-   }
-
-   @Override
-   public void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
-   {
-      getClosestFace(point).getSupportVectorDirectionTo(point, supportVectorToPack);
-   }
-
-   @Override
-   public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
-   {
-      return getClosestFace(point).getSmallestSimplexMemberReference(point);
    }
 
    @Override

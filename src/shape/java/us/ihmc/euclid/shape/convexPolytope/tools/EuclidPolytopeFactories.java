@@ -9,19 +9,6 @@ import us.ihmc.euclid.tuple3D.Point3D;
 
 public class EuclidPolytopeFactories
 {
-   public static List<Point3D> newIcosahedronVertices(double radius)
-   {
-      return newIcoSphereVertices(radius, 0);
-   }
-
-   public static List<Point3D> newIcoSphereVertices(double radius, int recursionLevel)
-   {
-      List<Point3D> vertices = IcoSphereFactory.newIcoSphere(recursionLevel).getVertices();
-      if (radius != 1.0)
-         vertices.forEach(vertex -> vertex.scale(radius));
-      return vertices;
-   }
-
    public static List<Point3D> newConeVertices(double height, double radius, int numberOfDivisions)
    {
       List<Point3D> vertices = new ArrayList<>();
@@ -68,6 +55,19 @@ public class EuclidPolytopeFactories
          vertices.add(top);
          vertices.add(bottom);
       }
+      return vertices;
+   }
+
+   public static List<Point3D> newIcosahedronVertices(double radius)
+   {
+      return newIcoSphereVertices(radius, 0);
+   }
+
+   public static List<Point3D> newIcoSphereVertices(double radius, int recursionLevel)
+   {
+      List<Point3D> vertices = IcoSphereFactory.newIcoSphere(recursionLevel).getVertices();
+      if (radius != 1.0)
+         vertices.forEach(vertex -> vertex.scale(radius));
       return vertices;
    }
 
