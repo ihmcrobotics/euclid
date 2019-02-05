@@ -3,7 +3,6 @@ package us.ihmc.euclid.shape.convexPolytope.interfaces;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
 {
@@ -60,14 +59,6 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
     * @return a read only reference to the face
     */
    Face3DReadOnly getFace();
-
-   /**
-    * Returns a vector that represents the spatial direction that this edge points in (from origin to
-    * destination). Length of the returned vector is equal to the length of the half edge
-    * 
-    * @return a read only 3D vector
-    */
-   Vector3DReadOnly getEdgeVector();
 
    @Override
    default double distance(Point3DReadOnly point)

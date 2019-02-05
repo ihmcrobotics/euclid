@@ -8,6 +8,8 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -272,6 +274,86 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       return true;
    }
 
+   /**
+    * Return a reference to an adjacent face if this face is part of a polytope. If not can return a
+    * {@code null} or throw a {@code NullPointerException}
+    * 
+    * @param index the index of the adjacent face that is required. Should be less than
+    *           {@code getNumberOfEdges()}
+    * @return a read only reference to the adjacent face
+    */
+   default Face3DReadOnly getNeighbor(int index)
+   {
+      HalfEdge3DReadOnly twinEdge = getEdge(index).getTwin();
+      if (twinEdge == null)
+         return null;
+      else
+         return twinEdge.getFace();
+   }
+
+   /**
+    * Returns the edge closed to the point specified
+    * 
+    * @param point the point to which the closed edge is required
+    * @return read only reference to the half edge that is closed to the specified point
+    */
+   default HalfEdge3DReadOnly getClosestEdge(Point3DReadOnly point)
+   {
+      HalfEdge3DReadOnly startEdge = getEdge(0);
+      HalfEdge3DReadOnly closestEdge = startEdge;
+      double minDistanceSquared = startEdge.distanceSquared(point);
+      HalfEdge3DReadOnly currentEdge = startEdge.getNext();
+
+      while (currentEdge != startEdge)
+      {
+         double distanceSquared = currentEdge.distanceSquared(point);
+         if (distanceSquared < minDistanceSquared)
+         {
+            closestEdge = currentEdge;
+            minDistanceSquared = distanceSquared;
+         }
+         currentEdge = currentEdge.getNext();
+      }
+
+      return closestEdge;
+   }
+
+   /**
+    * Returns the shortest distance to the point specified
+    * 
+    * @param point the point to which the distance is required
+    * @return the shortest length from the specified point to the face
+    */
+   default double distance(Point3DReadOnly point)
+   {
+      if (isPointDirectlyAboveOrBelow(point))
+         return distanceToPlane(point);
+      else
+         return getClosestEdge(point).distance(point);
+   }
+
+   default double distanceToPlane(Point3DReadOnly point)
+   {
+      return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
+   }
+
+   default Point3DBasics orthogonalProjection(Point3DReadOnly pointToProject)
+   {
+      Point3D projection = new Point3D();
+      if (orthogonalProjection(pointToProject, projection))
+         return projection;
+      else
+         return null;
+   }
+
+   default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   {
+      if (isPointDirectlyAboveOrBelow(pointToProject))
+         return EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, getCentroid(), getNormal(), projectionToPack);
+      else
+         return getClosestEdge(pointToProject).orthogonalProjection(pointToProject, projectionToPack);
+   }
+
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportVector)
    {
@@ -312,69 +394,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
          supportVectorToPack.set(getNormal());
       else
          getClosestEdge(point).getSupportVectorDirectionTo(point, supportVectorToPack);
-   }
-
-   /**
-    * Return a reference to an adjacent face if this face is part of a polytope. If not can return a
-    * {@code null} or throw a {@code NullPointerException}
-    * 
-    * @param index the index of the adjacent face that is required. Should be less than
-    *           {@code getNumberOfEdges()}
-    * @return a read only reference to the adjacent face
-    */
-   default Face3DReadOnly getNeighbor(int index)
-   {
-      HalfEdge3DReadOnly twinEdge = getEdge(index).getTwin();
-      if (twinEdge == null)
-         return null;
-      else
-         return twinEdge.getFace();
-   }
-
-   /**
-    * Returns the shortest distance to the point specified
-    * 
-    * @param point the point to which the distance is required
-    * @return the shortest length from the specified point to the face
-    */
-   default double distance(Point3DReadOnly point)
-   {
-      if (isPointDirectlyAboveOrBelow(point))
-         return distanceToPlane(point);
-      else
-         return getClosestEdge(point).distance(point);
-   }
-
-   default double distanceToPlane(Point3DReadOnly point)
-   {
-      return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
-   }
-
-   /**
-    * Returns the edge closed to the point specified
-    * 
-    * @param point the point to which the closed edge is required
-    * @return read only reference to the half edge that is closed to the specified point
-    */
-   default HalfEdge3DReadOnly getClosestEdge(Point3DReadOnly point)
-   {
-      HalfEdge3DReadOnly startEdge = getEdge(0);
-      HalfEdge3DReadOnly closestEdge = startEdge;
-      double minDistanceSquared = startEdge.distanceSquared(point);
-      HalfEdge3DReadOnly currentEdge = startEdge.getNext();
-
-      while (currentEdge != startEdge)
-      {
-         double distanceSquared = currentEdge.distanceSquared(point);
-         if (distanceSquared < minDistanceSquared)
-         {
-            closestEdge = currentEdge;
-            minDistanceSquared = distanceSquared;
-         }
-         currentEdge = currentEdge.getNext();
-      }
-
-      return closestEdge;
    }
 
    default boolean equals(Face3DReadOnly other)

@@ -20,6 +20,16 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidPolytopeRandomTools
 {
+   public static Face3D nextCircleBasedFace3D(Random random)
+   {
+      return nextCircleBasedFace3D(random, 5.0);
+   }
+
+   public static Face3D nextCircleBasedFace3D(Random random, double centerMinMax)
+   {
+      return nextCircleBasedFace3D(random, centerMinMax, 1.0, 15);
+   }
+
    public static Face3D nextCircleBasedFace3D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices)
    {
       return nextCircleBasedFace3D(random, centerMinMax, maxEdgeLength, numberOfVertices, EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0));

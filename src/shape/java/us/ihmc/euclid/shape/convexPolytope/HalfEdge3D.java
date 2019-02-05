@@ -5,10 +5,8 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * A template that defines the basic structure of a DCEL half edge. A half edge is composed of
@@ -55,11 +53,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * The face that this edge is a part of
     */
    private Face3D face;
-   /**
-    * A vector that represents the direction and lenght of the half edge. Not recomputed on change of
-    * values. Only recomputed when called through its getter
-    */
-   private Vector3D edgeVector = new Vector3D();
 
    public HalfEdge3D()
    {
@@ -257,16 +250,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    public Point3DBasics getSecondEndpoint()
    {
       return getDestination();
-   }
-
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public Vector3DReadOnly getEdgeVector()
-   {
-      edgeVector.sub(destination, origin);
-      return edgeVector;
    }
 
    public double distanceFromSupportLine(Point3DReadOnly point)
