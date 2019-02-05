@@ -54,6 +54,7 @@ public class EuclidPolytopeFactories
    public static List<Point3D> newCylinderVertices(double length, double radius, int numberOfDivisions)
    {
       List<Point3D> vertices = new ArrayList<>();
+      double halfL = 0.5 * length;
 
       for (int i = 0; i < numberOfDivisions; i++)
       {
@@ -61,8 +62,8 @@ public class EuclidPolytopeFactories
 
          double x = radius * Math.cos(theta);
          double y = radius * Math.sin(theta);
-         Point3D top = new Point3D(x, y, 0.5 * length);
-         Point3D bottom = new Point3D(x, y, -0.5 * length);
+         Point3D top = new Point3D(x, y, halfL);
+         Point3D bottom = new Point3D(x, y, -halfL);
 
          vertices.add(top);
          vertices.add(bottom);
@@ -73,11 +74,14 @@ public class EuclidPolytopeFactories
    public static List<Point3D> newPyramidVertices(double height, double baseLength, double baseWidth)
    {
       List<Point3D> vertices = new ArrayList<>();
+      double halfL = 0.5 * baseLength;
+      double halfW = 0.5 * baseWidth;
+
       vertices.add(new Point3D(0.0, 0.0, height));
-      vertices.add(new Point3D(0.5 * baseLength, 0.5 * baseWidth, 0.0));
-      vertices.add(new Point3D(0.5 * baseLength, -0.5 * baseWidth, 0.0));
-      vertices.add(new Point3D(-0.5 * baseLength, 0.5 * baseWidth, 0.0));
-      vertices.add(new Point3D(-0.5 * baseLength, -0.5 * baseWidth, 0.0));
+      vertices.add(new Point3D(halfL, halfW, 0.0));
+      vertices.add(new Point3D(halfL, -halfW, 0.0));
+      vertices.add(new Point3D(-halfL, halfW, 0.0));
+      vertices.add(new Point3D(-halfL, -halfW, 0.0));
       return vertices;
    }
 

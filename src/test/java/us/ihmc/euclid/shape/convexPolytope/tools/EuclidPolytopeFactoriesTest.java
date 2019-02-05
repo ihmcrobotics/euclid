@@ -6,9 +6,13 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
+import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
@@ -79,6 +83,8 @@ class EuclidPolytopeFactoriesTest
 
          Vector3D baseNormal = new Vector3D(0, 0, -1);
          assertEquals(1, cone.getFaces().stream().filter(face -> face.getNormal().epsilonEquals(baseNormal, EPSILON)).count());
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.25 * height), cone.getCentroid(), EPSILON);
       }
    }
 
@@ -100,7 +106,112 @@ class EuclidPolytopeFactoriesTest
          absoluteVertex.scale(0.5);
          cube.getVertices().stream().map(Point3D::new).peek(Point3D::absolute)
              .forEach(vertex -> EuclidCoreTestTools.assertTuple3DEquals(vertex, absoluteVertex, EPSILON));
+         assertEquals(edgeLength * edgeLength * edgeLength, cube.getVolume(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), cube.getCentroid(), EPSILON);
+
+         for (Face3D face : cube.getFaces())
+         {
+            if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getX()), EPSILON))
+            {
+               Vector3D expectedNormal = new Vector3D(Axis.X);
+               if (face.getCentroid().getX() < 0.0)
+                  expectedNormal.negate();
+               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+            }
+            else if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getY()), EPSILON))
+            {
+               Vector3D expectedNormal = new Vector3D(Axis.Y);
+               if (face.getCentroid().getY() < 0.0)
+                  expectedNormal.negate();
+               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+            }
+            else if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getZ()), EPSILON))
+            {
+               Vector3D expectedNormal = new Vector3D(Axis.Z);
+               if (face.getCentroid().getZ() < 0.0)
+                  expectedNormal.negate();
+               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+            }
+            else
+            {
+               fail("Unexpected face's centroid: " + face.getCentroid() + ", edge length: " + edgeLength);
+            }
+         }
+      }
+   }
+
+   @Test
+   void testNewCylinder() throws Exception
+   {
+      Random random = new Random(345343);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double length = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         int numberOfDivisions = random.nextInt(100) + 3;
+         ConvexPolytope3D cylinder = EuclidPolytopeFactories.newCylinder(length, radius, numberOfDivisions);
+
+         assertEquals(2 * numberOfDivisions, cylinder.getNumberOfVertices());
+         assertEquals(3 * numberOfDivisions, cylinder.getNumberOfEdges());
+         assertEquals(numberOfDivisions + 2, cylinder.getNumberOfFaces());
+
+         cylinder.getVertices().stream().map(Point2D::new).forEach(vertex -> assertEquals(radius, vertex.distanceFromOrigin(), EPSILON));
+         cylinder.getVertices().stream().forEach(vertex -> assertEquals(0.5 * length, Math.abs(vertex.getZ()), EPSILON));
+         for (Face3D face : cylinder.getFaces())
+         {
+            // The expected distance of the face's centroid from the cylinder's axis is less than the radius because of the discretization.
+            if (EuclidCoreTools.epsilonEquals(radius * Math.cos(Math.PI / numberOfDivisions), face.getCentroid().distanceXY(new Point2D()), EPSILON))
+            {
+               assertEquals(0.0, face.getNormal().getZ(), EPSILON);
+               Vector3D expectedNormal = new Vector3D(face.getCentroid());
+               expectedNormal.normalize();
+               EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
+            }
+            else if (EuclidCoreTools.epsilonEquals(0.0, face.getCentroid().distanceXY(new Point2D()), EPSILON))
+            {
+               if (face.getCentroid().getZ() < 0.0)
+                  assertEquals(-1.0, face.getNormal().getZ(), EPSILON);
+               else
+                  assertEquals(1.0, face.getNormal().getZ(), EPSILON);
+            }
+            else
+            {
+               fail("Unexpected face's centroid: " + face.getCentroid());
+            }
+         }
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), cylinder.getCentroid(), EPSILON);
+      }
+   }
+
+   @Test
+   void testNewPyramid() throws Exception
+   {
+      Random random = new Random(354355);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double height = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double baseLength = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double baseWidth = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         ConvexPolytope3D pyramid = EuclidPolytopeFactories.newPyramid(height, baseLength, baseWidth);
+
+         assertEquals(5, pyramid.getNumberOfVertices());
+         assertEquals(5, pyramid.getNumberOfFaces());
+         assertEquals(8, pyramid.getNumberOfEdges());
+
+         Point3D topVertex = new Point3D(0, 0, height);
+         assertEquals(1, pyramid.getVertices().stream().filter(vertex -> vertex.epsilonEquals(topVertex, EPSILON)).count());
+
+         pyramid.getVertices().stream().filter(vertex -> !vertex.epsilonEquals(topVertex, EPSILON))
+                 .peek(baseVertex -> assertEquals(0.5 * baseLength, Math.abs(baseVertex.getX()), EPSILON))
+                 .peek(baseVertex -> assertEquals(0.5 * baseWidth, Math.abs(baseVertex.getY()), EPSILON))
+                 .forEach(baseVertex -> assertEquals(0.0, baseVertex.getZ(), EPSILON));
+
+         assertEquals(EuclidPolytopeTools.pyramidVolume(height, baseLength, baseWidth), pyramid.getVolume(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.25 * height), pyramid.getCentroid(), EPSILON);
+
       }
    }
 }
