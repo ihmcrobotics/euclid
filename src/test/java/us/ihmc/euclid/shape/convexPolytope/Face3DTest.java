@@ -858,6 +858,101 @@ public class Face3DTest
       }
    }
 
+   @Test
+   void testGetSupportVectorDirectionTo() throws Exception
+   {
+      Random random = new Random(4589342);
+      // We will use the already tested Face3DReadOnly.orthogonalProjection() to test this method.
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {// Point to project is directly above the face
+         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+
+         HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         Point3D pointAbove = new Point3D();
+         pointAbove.interpolate(face3D.getCentroid(), pointOnEdge, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         pointAbove.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointAbove);
+
+         Vector3D expectedSupportVector = new Vector3D();
+         expectedSupportVector.sub(pointAbove, face3D.orthogonalProjection(pointAbove));
+         expectedSupportVector.normalize();
+         Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointAbove);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {// Point to project is directly below the face
+         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+
+         HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         Point3D pointBelow = new Point3D();
+         pointBelow.interpolate(face3D.getCentroid(), pointOnEdge, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         pointBelow.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointBelow);
+
+         Vector3D expectedSupportVector = new Vector3D();
+         expectedSupportVector.sub(pointBelow, face3D.orthogonalProjection(pointBelow));
+         expectedSupportVector.normalize();
+         Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointBelow);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {// Point to project is outside closest to an edge
+         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+
+         HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         Vector3D towardOutside = new Vector3D();
+         towardOutside.cross(face3D.getNormal(), edge.getDirection(true));
+         towardOutside.normalize();
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOnEdge);
+
+         Vector3D expectedSupportVector = new Vector3D();
+         expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
+//         expectedSupportVector.normalize();
+         Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {// Point to project is outside closest to a vertex
+         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+
+         HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
+         HalfEdge3D next = edge.getNext();
+         Vertex3D closestVertex = edge.getDestination();
+
+         Vector3D edgeOut = new Vector3D();
+         edgeOut.cross(face3D.getNormal(), edge.getDirection(true));
+         edgeOut.normalize();
+         Vector3D nextOut = new Vector3D();
+         nextOut.cross(face3D.getNormal(), next.getDirection(true));
+         nextOut.normalize();
+         Vector3D towardOutside = new Vector3D();
+         towardOutside.interpolate(edgeOut, nextOut, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         towardOutside.normalize();
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), nextOut, closestVertex);
+
+         Vector3D expectedSupportVector = new Vector3D();
+         expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
+//         expectedSupportVector.normalize(); TODO So sometimes it is normalized sometimes not, not sure that is accepetable
+         Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
+      }
+   }
+
    private static class LinePercentageComparator implements Comparator<Point3DReadOnly>
    {
       private final Line3D line;

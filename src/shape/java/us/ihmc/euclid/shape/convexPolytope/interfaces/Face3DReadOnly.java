@@ -391,9 +391,15 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    default void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
       if (isPointDirectlyAboveOrBelow(point))
+      {
          supportVectorToPack.set(getNormal());
+         if (EuclidGeometryTools.isPoint3DBelowPlane3D(point, getCentroid(), getNormal()))
+            supportVectorToPack.negate();
+      }
       else
+      {
          getClosestEdge(point).getSupportVectorDirectionTo(point, supportVectorToPack);
+      }
    }
 
    default boolean equals(Face3DReadOnly other)
