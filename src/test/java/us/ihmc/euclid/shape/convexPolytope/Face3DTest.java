@@ -817,6 +817,7 @@ public class Face3DTest
 
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOnEdge);
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnLine3D(pointOutside, edge.getOrigin(), edge.getDirection(true));
          Point3DBasics actualProjection = face3D.orthogonalProjection(pointOutside);
@@ -843,6 +844,7 @@ public class Face3DTest
 
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), nextOut, closestVertex);
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Point3DReadOnly expectedProjection = closestVertex;
          Point3DBasics actualProjection = face3D.orthogonalProjection(pointOutside);
@@ -900,6 +902,7 @@ public class Face3DTest
 
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOnEdge);
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Vector3D expectedSupportVector = new Vector3D();
          expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
@@ -928,6 +931,7 @@ public class Face3DTest
 
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), nextOut, closestVertex);
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Vector3D expectedSupportVector = new Vector3D();
          expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
