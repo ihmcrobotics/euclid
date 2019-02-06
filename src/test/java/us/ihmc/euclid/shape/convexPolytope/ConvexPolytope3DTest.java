@@ -1274,7 +1274,78 @@ public class ConvexPolytope3DTest
                                                  .get();
          actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
          assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
+      }
+   }
 
+   @Test
+   void testOrthogonalProjection() throws Exception
+   {
+      Random random = new Random(34535);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point directly above a face
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+         Point3D pointOutside = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(), edge.getDestination());
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOutside);
+
+         Point3DBasics expectedProjection = face.orthogonalProjection(pointOutside);
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point directly below a face
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+         Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
+                                                                               edge.getDestination());
+
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointInside);
+         assertNull(actualProjection);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to an edge
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
+         Face3D secondFace = closestEdge.getTwin().getFace();
+
+         Vector3D towardOutside = new Vector3D();
+         towardOutside.interpolate(firstFace.getNormal(), secondFace.getNormal(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         towardOutside.normalize();
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOutside);
+
+         Point3DBasics expectedProjection = closestEdge.orthogonalProjectionCopy(pointOutside);
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to a vertex
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+
+         Vector3D towardOutside = new Vector3D();
+         closestVertex.getAssociatedEdges().stream().forEach(edge -> towardOutside.scaleAdd(random.nextDouble(), edge.getFace().getNormal(), towardOutside));
+         towardOutside.normalize();
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, closestVertex);
+
+         Point3DBasics expectedProjection = closestVertex;
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
    }
 }

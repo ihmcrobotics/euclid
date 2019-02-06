@@ -5,8 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -118,6 +120,18 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
       return false;
    }
 
+   default boolean isPointInside(Point3DReadOnly pointToCheck)
+   {
+      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
+      {
+         Face3DReadOnly face = getFace(faceIndex);
+
+         if (EuclidGeometryTools.isPoint3DAbovePlane3D(pointToCheck, face.getCentroid(), face.getNormal()))
+            return false;
+      }
+      return true;
+   }
+
    default boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
    {
       for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
@@ -132,6 +146,22 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    default double distance(Point3DReadOnly point)
    {
       return getClosestFace(point).distance(point);
+   }
+
+   default Point3DBasics orthogonalProjection(Point3DReadOnly pointToProject)
+   {
+      if (isPointInside(pointToProject))
+         return null;
+      else
+         return getClosestFace(pointToProject).orthogonalProjection(pointToProject);
+   }
+
+   default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   {
+      if (isPointInside(pointToProject))
+         return false;
+      else
+         return getClosestFace(pointToProject).orthogonalProjection(pointToProject, projectionToPack);
    }
 
    default Face3DReadOnly getClosestFace(Point3DReadOnly point)
