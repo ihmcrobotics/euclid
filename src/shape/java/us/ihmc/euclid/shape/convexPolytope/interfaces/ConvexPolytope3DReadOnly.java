@@ -134,6 +134,12 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    default boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
    {
+      if (isEmpty())
+         return false;
+
+      if (getNumberOfFaces() <= 2)
+         return getFace(0).isPointInside(pointToCheck, epsilon);
+      
       for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
       {
          if (EuclidPolytopeTools.canObserverSeeFace(pointToCheck, getFace(faceIndex), epsilon))

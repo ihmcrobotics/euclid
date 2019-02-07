@@ -235,12 +235,12 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     * @param epsilon the error value that is acceptable (units should be distance)
     * @return {@code true} if the point is in the same plane as the face. {@code false} otherwise
     */
-   default boolean isPointInFacePlane(Point3DReadOnly vertexToCheck, double epsilon)
+   default boolean isPointInFacePlane(Point3DReadOnly query, double epsilon)
    {
       if (getNumberOfEdges() < 3)
-         return getEdge(0).distanceSquared(vertexToCheck) < epsilon * epsilon;
+         return getEdge(0).distanceSquared(query) < epsilon * epsilon;
       else
-         return EuclidGeometryTools.distanceFromPoint3DToPlane3D(vertexToCheck, getCentroid(), getNormal()) < epsilon;
+         return EuclidGeometryTools.distanceFromPoint3DToPlane3D(query, getCentroid(), getNormal()) < epsilon;
    }
 
    /**
@@ -253,7 +253,10 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     */
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
-      return isPointInFacePlane(query, epsilon) && isPointDirectlyAboveOrBelow(query);
+      if (getNumberOfEdges() < 3)
+         return getEdge(0).distanceSquared(query) < epsilon * epsilon;
+      else
+         return isPointInFacePlane(query, epsilon) && isPointDirectlyAboveOrBelow(query);
    }
 
    default boolean isPointDirectlyAboveOrBelow(Point3DReadOnly query)

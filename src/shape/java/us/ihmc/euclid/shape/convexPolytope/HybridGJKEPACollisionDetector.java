@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -27,29 +28,33 @@ public class HybridGJKEPACollisionDetector
    private SimplexPolytope3D simplex;
    private ConvexPolytope3DReadOnly polytopeA;
    private ConvexPolytope3DReadOnly polytopeB;
-   private Vector3D supportVectorDirectionNegative = new Vector3D();
-   private Vector3D supportVectorDirection = new Vector3D()
+   private Vector3D supportVectorDirection = new Vector3D();
+
+   private Vector3DReadOnly supportVectorDirectionNegative = new Vector3DReadOnly()
    {
       @Override
-      public final void setX(double x)
+      public double getX()
       {
-         super.setX(x);
-         supportVectorDirectionNegative.setX(-x);
-      };
+         return -supportVectorDirection.getX();
+      }
 
       @Override
-      public final void setY(double y)
+      public double getY()
       {
-         super.setY(y);
-         supportVectorDirectionNegative.setY(-y);
-      };
+         return -supportVectorDirection.getY();
+      }
 
       @Override
-      public final void setZ(double z)
+      public double getZ()
       {
-         super.setZ(z);
-         supportVectorDirectionNegative.setZ(-z);
-      };
+         return -supportVectorDirection.getZ();
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
+      }
    };
 
    private Vector3D previousSupportVectorDirection = new Vector3D();
@@ -132,13 +137,17 @@ public class HybridGJKEPACollisionDetector
          supportVectorDirection.set(Axis.Y);
       else
          simplex.getSupportVectorDirectionTo(origin, supportVectorDirection);
+
       previousSupportVectorDirection.set(supportVectorDirection);
 
       for (int i = 0; i < iterations; i++)
       {
          Vertex3DReadOnly supportingPolytopeVertexA = polytopeA.getSupportingVertex(supportVectorDirection);
          Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingVertex(supportVectorDirectionNegative);
-         simplex.addVertex(supportingPolytopeVertexA, supportingPolytopeVertexB);
+         SimplexVertex3D newVertex = simplex.addVertex(supportingPolytopeVertexA, supportingPolytopeVertexB);
+
+         if (newVertex.dot(supportVectorDirection) < 0.0)
+            return false;
 
          if (simplex.isPointInside(origin, epsilon))
             return true;

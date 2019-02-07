@@ -16,7 +16,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class SimplexPolytope3D implements Simplex3D
 {
-   private double epsilon = 1.0e-12;
    private ConvexPolytope3D polytope = new ConvexPolytope3D();
    private List<SimplexVertex3D> vertices = new ArrayList<>();
    private final Vector3D basisVector1 = new Vector3D();
@@ -33,21 +32,12 @@ public class SimplexPolytope3D implements Simplex3D
       super();
    }
 
-   public void setEpsilon(double epsilon)
-   {
-      this.epsilon = epsilon;
-   }
-
-   public void addVertex(Vertex3DReadOnly vertexOnPolytopeA, Vertex3DReadOnly vertexOnPolytopeB)
-   {
-      addVertex(vertexOnPolytopeA, vertexOnPolytopeB, epsilon);
-   }
-
-   public void addVertex(Vertex3DReadOnly vertexOnPolytopeA, Vertex3DReadOnly vertexOnPolytopeB, double epsilon)
+   public SimplexVertex3D addVertex(Vertex3DReadOnly vertexOnPolytopeA, Vertex3DReadOnly vertexOnPolytopeB)
    {
       SimplexVertex3D newVertex = new SimplexVertex3D();
       newVertex.set(vertexOnPolytopeA, vertexOnPolytopeB);
       polytope.addVertex(newVertex);
+      return newVertex;
    }
 
    public void clear()
