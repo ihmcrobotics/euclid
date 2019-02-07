@@ -35,6 +35,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class ConvexPolytope3DTest
 {
@@ -1346,6 +1347,93 @@ public class ConvexPolytope3DTest
          Point3DBasics expectedProjection = closestVertex;
          Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+      }
+   }
+
+   @Test
+   void testGetSupportVectorDirectionTo() throws Exception
+   {
+      Random random = new Random(34535);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point directly above a face
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+         Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(), edge.getDestination());
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOnFace);
+
+         Vector3D expectedSupportVector = new Vector3D();
+         expectedSupportVector.sub(pointOutside, pointOnFace);
+         expectedSupportVector.normalize();
+         Vector3DBasics actualSupportVector = convexPolytope3D.getSupportVectorDirectionTo(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point directly below a face
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+         Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
+                                                                               edge.getDestination());
+
+         // It is tricky to generate a point that is closest to a given face.
+         // So we use brute force to find the closest face and the support vector should be the face's normal.
+
+         Vector3D expectedSupportVector = new Vector3D(convexPolytope3D.getFaces().stream()
+                                                                       .sorted((f1, f2) -> Double.compare(f1.distance(pointInside), f2.distance(pointInside)))
+                                                                       .findFirst().get().getNormal());
+         expectedSupportVector.negate();
+         Vector3DBasics actualSupportVector = convexPolytope3D.getSupportVectorDirectionTo(pointInside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to an edge
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+         HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
+         Face3D secondFace = closestEdge.getTwin().getFace();
+
+         Vector3D towardOutside = new Vector3D();
+         towardOutside.interpolate(firstFace.getNormal(), secondFace.getNormal(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         towardOutside.normalize();
+
+         Point3D pointOnEdge = new Point3D();
+         pointOnEdge.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOnEdge);
+
+         Vector3D expectedSupportVector = new Vector3D();
+         expectedSupportVector.sub(pointOutside, pointOnEdge);
+//         expectedSupportVector.normalize();
+         Vector3DBasics actualSupportVector = convexPolytope3D.getSupportVectorDirectionTo(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to a vertex
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+
+         Vector3D towardOutside = new Vector3D();
+         closestVertex.getAssociatedEdges().stream().forEach(edge -> towardOutside.scaleAdd(random.nextDouble(), edge.getFace().getNormal(), towardOutside));
+         towardOutside.normalize();
+
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, closestVertex);
+
+         Vector3D expectedSupportVector = new Vector3D();
+         expectedSupportVector.sub(pointOutside, closestVertex);
+//         expectedSupportVector.normalize();
+         Vector3DBasics actualSupportVector = convexPolytope3D.getSupportVectorDirectionTo(pointOutside);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
       }
    }
 }
