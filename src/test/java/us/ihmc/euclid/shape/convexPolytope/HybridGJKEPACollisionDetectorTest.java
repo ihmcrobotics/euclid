@@ -25,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 class HybridGJKEPACollisionDetectorTest
 {
-   private static final int ITERATIONS = 1000;
+   private static final int ITERATIONS = 10000;
    private static final double EPSILON = 1.0e-12;
 
    @Test
@@ -121,6 +121,9 @@ class HybridGJKEPACollisionDetectorTest
    {
       Random random = new Random(45345);
 
+      double iterationsMean = 0.0;
+      double iterationsMax = 0.0;
+
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron to have its top vertex closest to a face. 
          ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
@@ -137,7 +140,13 @@ class HybridGJKEPACollisionDetectorTest
          collisionDetector.setPolytopeB(tetrahedron);
          collisionDetector.setSimplex(new SimplexPolytope3D());
          assertFalse(collisionDetector.checkCollision());
+         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
+
+      iterationsMean = 0.0;
+      iterationsMax = 0.0;
+      System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron to have its top vertex closest to an edge. 
@@ -162,7 +171,13 @@ class HybridGJKEPACollisionDetectorTest
          collisionDetector.setPolytopeB(tetrahedron);
          collisionDetector.setSimplex(new SimplexPolytope3D());
          assertFalse(collisionDetector.checkCollision());
+         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
+
+      iterationsMean = 0.0;
+      iterationsMax = 0.0;
+      System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to a vertex
@@ -184,13 +199,20 @@ class HybridGJKEPACollisionDetectorTest
          collisionDetector.setPolytopeB(tetrahedron);
          collisionDetector.setSimplex(new SimplexPolytope3D());
          assertFalse(collisionDetector.checkCollision());
+         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
+
+      System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
    }
 
    @Test
    void testVertexCollidingConvexPolytope3DWithTetrahedron() throws Exception
    {
       Random random = new Random(45345);
+
+      double iterationsMean = 0.0;
+      double iterationsMax = 0.0;
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex lying inside the polytope 
@@ -208,7 +230,13 @@ class HybridGJKEPACollisionDetectorTest
          collisionDetector.setPolytopeB(tetrahedron);
          collisionDetector.setSimplex(new SimplexPolytope3D());
          assertTrue(collisionDetector.checkCollision());
+         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
+
+      iterationsMean = 0.0;
+      iterationsMax = 0.0;
+      System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex: 1- make it lie on an edge, 2- go inside slightly
@@ -237,7 +265,13 @@ class HybridGJKEPACollisionDetectorTest
          collisionDetector.setPolytopeB(tetrahedron);
          collisionDetector.setSimplex(new SimplexPolytope3D());
          assertTrue(collisionDetector.checkCollision());
+         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
+
+      iterationsMean = 0.0;
+      iterationsMax = 0.0;
+      System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex: 1- make it to be at a vertex, 2- go inside slightly
@@ -261,13 +295,20 @@ class HybridGJKEPACollisionDetectorTest
          collisionDetector.setPolytopeB(tetrahedron);
          collisionDetector.setSimplex(new SimplexPolytope3D());
          assertTrue(collisionDetector.checkCollision());
+         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
+
+      System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
    }
 
    @Test
    void testEdgeCollidingWithIcosahedronAndTetrahedron() throws Exception
    {
       Random random = new Random(54675476);
+
+      double iterationsMean = 0.0;
+      double iterationsMax = 0.0;
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -307,7 +348,11 @@ class HybridGJKEPACollisionDetectorTest
          collisionDetector.setPolytopeB(tetrahedron);
          collisionDetector.setSimplex(new SimplexPolytope3D());
          assertTrue(collisionDetector.checkCollision());
+         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
+
+      System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
    }
 
    public static ConvexPolytope3D newTetrahedron(Random random, Point3DReadOnly topVertex, Vector3DReadOnly topToBaseCentroid, double baseSize)

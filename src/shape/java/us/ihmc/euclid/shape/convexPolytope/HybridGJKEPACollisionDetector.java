@@ -6,6 +6,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -22,7 +23,7 @@ public class HybridGJKEPACollisionDetector
 {
    private static final double defaultCollisionEpsilon = 1.0e-12;
 
-   private static final Point3D origin = new Point3D();
+   private static final Point3DReadOnly origin = new Point3D();
 
    private double epsilon;
    private SimplexPolytope3D simplex;
@@ -58,7 +59,7 @@ public class HybridGJKEPACollisionDetector
    };
 
    private Vector3D previousSupportVectorDirection = new Vector3D();
-   private final int iterations = 1000;
+   private final int maxIterations = 1000;
 
    public void setSupportVectorDirection(Vector3DReadOnly vectorToSet)
    {
@@ -126,6 +127,8 @@ public class HybridGJKEPACollisionDetector
       setEpsilon(epsilon);
    }
 
+   private int iterations;
+
    public boolean checkCollision()
    {
       if (polytopeA.isEmpty() || polytopeB.isEmpty())
@@ -138,9 +141,7 @@ public class HybridGJKEPACollisionDetector
       else
          simplex.getSupportVectorDirectionTo(origin, supportVectorDirection);
 
-      previousSupportVectorDirection.set(supportVectorDirection);
-
-      for (int i = 0; i < iterations; i++)
+      for (iterations = 0; iterations < maxIterations; iterations++)
       {
          Vertex3DReadOnly supportingPolytopeVertexA = polytopeA.getSupportingVertex(supportVectorDirection);
          Vertex3DReadOnly supportingPolytopeVertexB = polytopeB.getSupportingVertex(supportVectorDirectionNegative);
@@ -149,17 +150,18 @@ public class HybridGJKEPACollisionDetector
          if (newVertex.dot(supportVectorDirection) < 0.0)
             return false;
 
+         // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
          if (simplex.isPointInside(origin, epsilon))
             return true;
-         else
-            simplex.getSupportVectorDirectionTo(origin, supportVectorDirection);
 
-         if (previousSupportVectorDirection.epsilonEquals(supportVectorDirection, epsilon))
-            return false;
-         else
-            previousSupportVectorDirection.set(supportVectorDirection);
+         simplex.getSupportVectorDirectionTo(origin, supportVectorDirection);
       }
       return false;
+   }
+
+   public int getIterations()
+   {
+      return iterations;
    }
 
    public void runEPAExpansion()
