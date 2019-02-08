@@ -1,13 +1,6 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint3D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextQuaternion;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3D;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -408,12 +401,12 @@ public abstract class EuclidGeometryRandomTools
     * </p>
     * 
     * @param random the random generator to use.
-    * @param maxAbsoluteX the maximum absolute value for the x-coordinate of the position part of
-    *           the pose 3D.
-    * @param maxAbsoluteY the maximum absolute value for the y-coordinate of the position part of
-    *           the pose 3D.
-    * @param maxAbsoluteZ the maximum absolute value for the z-coordinate of the position part of
-    *           the pose 3D.
+    * @param maxAbsoluteX the maximum absolute value for the x-coordinate of the position part of the
+    *           pose 3D.
+    * @param maxAbsoluteY the maximum absolute value for the y-coordinate of the position part of the
+    *           pose 3D.
+    * @param maxAbsoluteZ the maximum absolute value for the z-coordinate of the position part of the
+    *           pose 3D.
     * @return the random pose 3D.
     */
    public static Pose3D nextPose3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
@@ -426,8 +419,7 @@ public abstract class EuclidGeometryRandomTools
     * <p>
     * <ul>
     * <li>{@code position}<sub>i</sub> &in; [-{@code positionMinMax}; {@code positionMinMax}].
-    * <li>{@code orientation.getAngle()} &in; [-{@code orientationMinMax};
-    * {@code orientationMinMax}].
+    * <li>{@code orientation.getAngle()} &in; [-{@code orientationMinMax}; {@code orientationMinMax}].
     * </ul>
     * </p>
     *
@@ -444,14 +436,14 @@ public abstract class EuclidGeometryRandomTools
    }
 
    /**
-    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices
-    * and the size of the point cloud from which it is generated.
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
     *
     * @param random the random generator to use.
     * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
-    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for
-    *           computing the random convex polygon. The size of the resulting convex polygon will
-    *           be less than {@code numberOfPossiblePoints}.
+    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
+    *           the random convex polygon. The size of the resulting convex polygon will be less than
+    *           {@code numberOfPossiblePoints}.
     * @return the random convex polygon.
     * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
     */
@@ -475,6 +467,7 @@ public abstract class EuclidGeometryRandomTools
       List<Point2D> pointCloud2D = new ArrayList<>();
 
       Point2D center = nextPoint2D(random, centerMinMax);
+
       for (int i = 0; i < numberOfPoints; i++)
       {
          Point2D point = nextPoint2D(random, minMax);
@@ -483,6 +476,31 @@ public abstract class EuclidGeometryRandomTools
       }
 
       return pointCloud2D;
+   }
+
+   /**
+    * Generates a random 3D point cloud given a random average, range, and size.
+    *
+    * @param random the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the random average.
+    * @param minMax the range of the point cloud in the three directions.
+    * @param numberOfPoints the size of the point cloud to generate.
+    * @return the random 3D point cloud.
+    */
+   public static List<Point3D> nextPointCloud3D(Random random, double centerMinMax, double minMax, int numberOfPoints)
+   {
+      List<Point3D> pointCloud3D = new ArrayList<>();
+
+      Point3D center = nextPoint3D(random, centerMinMax);
+
+      for (int i = 0; i < numberOfPoints; i++)
+      {
+         Point3D point = nextPoint3D(random, minMax);
+         point.add(center);
+         pointCloud3D.add(point);
+      }
+
+      return pointCloud3D;
    }
 
    /**

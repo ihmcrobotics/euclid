@@ -58,7 +58,7 @@ public class EuclidPolytopeRandomTools
 
    public static ConvexPolytope3D nextConvexPolytope3D(Random random)
    {
-      switch (random.nextInt(6))
+      switch (random.nextInt(7))
       {
       case 0:
          return nextConeConvexPolytope3D(random);
@@ -71,6 +71,8 @@ public class EuclidPolytopeRandomTools
       case 4:
          return nextIcoSphereBasedConvexPolytope3D(random);
       case 5:
+         return nextPointCloudBasedConvexPolytope3D(random);
+      case 6:
          return nextPyramidConvexPolytope3D(random);
       default:
          throw new RuntimeException("Unexpected state.");
@@ -179,6 +181,27 @@ public class EuclidPolytopeRandomTools
       icoSphere.applyTransform(transform);
 
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(icoSphere.getVertices()));
+   }
+
+   public static ConvexPolytope3D nextPointCloudBasedConvexPolytope3D(Random random)
+   {
+      return nextPointCloudBasedConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextPointCloudBasedConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextPointCloudBasedConvexPolytope3D(random, centerMinMax, 5.0);
+   }
+
+   public static ConvexPolytope3D nextPointCloudBasedConvexPolytope3D(Random random, double centerMinMax, double minMax)
+   {
+      return nextPointCloudBasedConvexPolytope3D(random, centerMinMax, minMax, 100);
+   }
+
+   public static ConvexPolytope3D nextPointCloudBasedConvexPolytope3D(Random random, double centerMinMax, double minMax, int numberOfPossiblePoints)
+   {
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(EuclidGeometryRandomTools.nextPointCloud3D(random, centerMinMax, minMax,
+                                                                                                                 numberOfPossiblePoints)));
    }
 
    public static ConvexPolytope3D nextPyramidConvexPolytope3D(Random random)
