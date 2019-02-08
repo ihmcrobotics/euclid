@@ -21,6 +21,7 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 class HybridGJKEPACollisionDetectorTest
@@ -126,22 +127,32 @@ class HybridGJKEPACollisionDetectorTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron to have its top vertex closest to a face. 
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
-         Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
-         HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-         Point3D pointOutside = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(), edge.getDestination());
-         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), face.getNormal(), pointOutside);
+         if (convexPolytope3D.isEmpty())
+         {
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
+            assertFalse(collisionDetector.checkCollision());
+         }
+         else
+         {
+            Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+            HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+            Point3D pointOutside = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(), edge.getDestination());
+            pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), face.getNormal(), pointOutside);
 
-         ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, face.getNormal(), 1.0);
+            ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, face.getNormal(), 1.0);
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(convexPolytope3D);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertFalse(collisionDetector.checkCollision());
-         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
-         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(tetrahedron);
+            collisionDetector.setSimplex(new SimplexPolytope3D());
+            assertFalse(collisionDetector.checkCollision());
+            iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+            iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+         }
       }
 
       iterationsMean = 0.0;
@@ -150,29 +161,52 @@ class HybridGJKEPACollisionDetectorTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron to have its top vertex closest to an edge. 
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
-         Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
-         HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
-         Face3D secondFace = closestEdge.getTwin().getFace();
+         if (convexPolytope3D.isEmpty())
+         {
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
+            assertFalse(collisionDetector.checkCollision());
+         }
+         else
+         {
+            Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+            HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
 
-         Vector3D towardOutside = new Vector3D();
-         towardOutside.interpolate(firstFace.getNormal(), secondFace.getNormal(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-         towardOutside.normalize();
+            Vector3D towardOutside = new Vector3D();
+            if (closestEdge.getTwin() != null)
+            {
+               Face3D secondFace = closestEdge.getTwin().getFace();
+               towardOutside.interpolate(firstFace.getNormal(), secondFace.getNormal(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+            }
+            else
+            {
+               Vector3D faceNormal = new Vector3D(firstFace.getNormal());
+               towardOutside.cross(faceNormal, closestEdge.getDirection(false));
+               if (random.nextBoolean())
+                  faceNormal.negate();
+               towardOutside.interpolate(faceNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+            }
 
-         Point3D pointOutside = new Point3D();
-         pointOutside.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, pointOutside);
+            towardOutside.normalize();
 
-         ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, towardOutside, 1.0);
+            Point3D pointOnEdge = new Point3D();
+            pointOnEdge.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+            Point3D pointOutside = new Point3D();
+            pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOnEdge);
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(convexPolytope3D);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertFalse(collisionDetector.checkCollision());
-         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
-         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+            ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, towardOutside, 1.0);
+
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(tetrahedron);
+            collisionDetector.setSimplex(new SimplexPolytope3D());
+            assertFalse(collisionDetector.checkCollision());
+            iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+            iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+         }
       }
 
       iterationsMean = 0.0;
@@ -181,26 +215,36 @@ class HybridGJKEPACollisionDetectorTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to a vertex
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
-         Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+         if (convexPolytope3D.isEmpty())
+         {
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
+            assertFalse(collisionDetector.checkCollision());
+         }
+         else
+         {
+            Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
 
-         Vector3D towardOutside = new Vector3D();
-         closestVertex.getAssociatedEdges().stream().forEach(edge -> towardOutside.scaleAdd(random.nextDouble(), edge.getFace().getNormal(), towardOutside));
-         towardOutside.normalize();
+            Vector3D towardOutside = new Vector3D();
+            closestVertex.getAssociatedEdges().stream().forEach(edge -> towardOutside.scaleAdd(random.nextDouble(), edge.getFace().getNormal(), towardOutside));
+            towardOutside.normalize();
 
-         Point3D pointOutside = new Point3D();
-         pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, closestVertex);
+            Point3D pointOutside = new Point3D();
+            pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, closestVertex);
 
-         ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, towardOutside, 1.0);
+            ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, towardOutside, 1.0);
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(convexPolytope3D);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertFalse(collisionDetector.checkCollision());
-         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
-         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(tetrahedron);
+            collisionDetector.setSimplex(new SimplexPolytope3D());
+            assertFalse(collisionDetector.checkCollision());
+            iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+            iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+         }
       }
 
       System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
@@ -216,22 +260,69 @@ class HybridGJKEPACollisionDetectorTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex lying inside the polytope 
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D tetrahedron;
 
-         Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
-         HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-         Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
-                                                                               edge.getDestination());
+         if (convexPolytope3D.isEmpty())
+         {
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
+            assertFalse(collisionDetector.checkCollision());
+         }
+         else
+         {
+            if (convexPolytope3D.getNumberOfVertices() == 1)
+            {
+               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
+               assertTrue(tetrahedron.isPointInside(convexPolytope3D.getVertex(0)));
+            }
+            else if (convexPolytope3D.getNumberOfVertices() == 2)
+            {
+               HalfEdge3D edge = convexPolytope3D.getHalfEdge(0);
+               Vector3DBasics edgeDirection = edge.getDirection(true);
+               Vector3D firstOrthogonalToEdge = EuclidCoreRandomTools.nextOrthogonalVector3D(random, edgeDirection, true);
+               Vector3D secondOrthogonalToEdge = new Vector3D();
+               secondOrthogonalToEdge.cross(firstOrthogonalToEdge, edgeDirection);
 
-         ConvexPolytope3D tetrahedron = newTetrahedron(random, pointInside, face.getNormal(), 1.0);
+               LineSegment3D firstTetraSegment = new LineSegment3D();
+               firstTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), edgeDirection, edge.midpoint());
+               firstTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), edgeDirection, edge.midpoint());
+               firstTetraSegment.translate(firstOrthogonalToEdge);
+               LineSegment3D secondTetraSegment = new LineSegment3D();
+               secondTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
+               secondTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
+               firstOrthogonalToEdge.negate();
+               secondTetraSegment.translate(firstOrthogonalToEdge);
+               tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTetraSegment.getFirstEndpoint(),
+                                                                                      firstTetraSegment.getSecondEndpoint(),
+                                                                                      secondTetraSegment.getFirstEndpoint(),
+                                                                                      secondTetraSegment.getSecondEndpoint()));
+            }
+            else if (convexPolytope3D.getNumberOfFaces() == 1)
+            {
+               Face3D face = convexPolytope3D.getFace(0);
+               Point3D pointOnFace = EuclidPolytopeRandomTools.nextPoint3DOnFace3D(random, face);
+               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
+            }
+            else
+            {
+               Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+               HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+               Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(),
+                                                                                     edge.getOrigin(), edge.getDestination());
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(convexPolytope3D);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertTrue(collisionDetector.checkCollision());
-         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
-         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+               tetrahedron = newTetrahedron(random, pointInside, face.getNormal(), 1.0);
+            }
+
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(tetrahedron);
+            collisionDetector.setSimplex(new SimplexPolytope3D());
+            assertTrue(collisionDetector.checkCollision());
+            iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+            iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+         }
       }
 
       iterationsMean = 0.0;
@@ -240,33 +331,78 @@ class HybridGJKEPACollisionDetectorTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex: 1- make it lie on an edge, 2- go inside slightly
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D tetrahedron;
 
-         Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
-         HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
+         if (convexPolytope3D.isEmpty())
+         {
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
+            assertFalse(collisionDetector.checkCollision());
+         }
+         else
+         {
+            if (convexPolytope3D.getNumberOfVertices() == 1)
+            {
+               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
+               assertTrue(tetrahedron.isPointInside(convexPolytope3D.getVertex(0)));
+            }
+            else if (convexPolytope3D.getNumberOfVertices() == 2)
+            {
+               HalfEdge3D edge = convexPolytope3D.getHalfEdge(0);
+               Vector3DBasics edgeDirection = edge.getDirection(true);
+               Vector3D firstOrthogonalToEdge = EuclidCoreRandomTools.nextOrthogonalVector3D(random, edgeDirection, true);
+               Vector3D secondOrthogonalToEdge = new Vector3D();
+               secondOrthogonalToEdge.cross(firstOrthogonalToEdge, edgeDirection);
 
-         Point3D pointOnEdge = new Point3D();
-         pointOnEdge.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               LineSegment3D firstTetraSegment = new LineSegment3D();
+               firstTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), edgeDirection, edge.midpoint());
+               firstTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), edgeDirection, edge.midpoint());
+               firstTetraSegment.translate(firstOrthogonalToEdge);
+               LineSegment3D secondTetraSegment = new LineSegment3D();
+               secondTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
+               secondTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
+               firstOrthogonalToEdge.negate();
+               secondTetraSegment.translate(firstOrthogonalToEdge);
+               tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTetraSegment.getFirstEndpoint(),
+                                                                                      firstTetraSegment.getSecondEndpoint(),
+                                                                                      secondTetraSegment.getFirstEndpoint(),
+                                                                                      secondTetraSegment.getSecondEndpoint()));
+            }
+            else if (convexPolytope3D.getNumberOfFaces() == 1)
+            {
+               Face3D face = convexPolytope3D.getFace(0);
+               Point3D pointOnFace = EuclidPolytopeRandomTools.nextPoint3DOnFace3D(random, face);
+               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
+            }
+            else
+            {
+               Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+               HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
 
-         Vector3D towardInside = new Vector3D();
-         towardInside.sub(convexPolytope3D.getCentroid(), pointOnEdge);
-         towardInside.normalize();
+               Point3D pointOnEdge = new Point3D();
+               pointOnEdge.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
 
-         Point3D pointInside = new Point3D();
-         double distanceInside = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
-         pointInside.scaleAdd(distanceInside, towardInside, pointOnEdge);
+               Vector3D towardInside = new Vector3D();
+               towardInside.sub(convexPolytope3D.getCentroid(), pointOnEdge);
+               towardInside.normalize();
 
-         assertTrue(convexPolytope3D.isPointInside(pointInside), "Iteration: " + i);
+               Point3D pointInside = new Point3D();
+               double distanceInside = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
+               pointInside.scaleAdd(distanceInside, towardInside, pointOnEdge);
 
-         ConvexPolytope3D tetrahedron = newTetrahedron(random, pointInside, towardInside, 1.0);
+               tetrahedron = newTetrahedron(random, pointInside, towardInside, 1.0);
+            }
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(convexPolytope3D);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertTrue(collisionDetector.checkCollision());
-         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
-         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(tetrahedron);
+            collisionDetector.setSimplex(new SimplexPolytope3D());
+            assertTrue(collisionDetector.checkCollision());
+            iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+            iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+         }
       }
 
       iterationsMean = 0.0;
@@ -275,28 +411,73 @@ class HybridGJKEPACollisionDetectorTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex: 1- make it to be at a vertex, 2- go inside slightly
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D tetrahedron;
 
-         Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+         if (convexPolytope3D.isEmpty())
+         {
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
+            assertFalse(collisionDetector.checkCollision());
+         }
+         else
+         {
+            if (convexPolytope3D.getNumberOfVertices() == 1)
+            {
+               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
+               assertTrue(tetrahedron.isPointInside(convexPolytope3D.getVertex(0)));
+            }
+            else if (convexPolytope3D.getNumberOfVertices() == 2)
+            {
+               HalfEdge3D edge = convexPolytope3D.getHalfEdge(0);
+               Vector3DBasics edgeDirection = edge.getDirection(true);
+               Vector3D firstOrthogonalToEdge = EuclidCoreRandomTools.nextOrthogonalVector3D(random, edgeDirection, true);
+               Vector3D secondOrthogonalToEdge = new Vector3D();
+               secondOrthogonalToEdge.cross(firstOrthogonalToEdge, edgeDirection);
 
-         Vector3D towardInside = new Vector3D();
-         towardInside.sub(convexPolytope3D.getCentroid(), closestVertex);
+               LineSegment3D firstTetraSegment = new LineSegment3D();
+               firstTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), edgeDirection, edge.midpoint());
+               firstTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), edgeDirection, edge.midpoint());
+               firstTetraSegment.translate(firstOrthogonalToEdge);
+               LineSegment3D secondTetraSegment = new LineSegment3D();
+               secondTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
+               secondTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
+               firstOrthogonalToEdge.negate();
+               secondTetraSegment.translate(firstOrthogonalToEdge);
+               tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTetraSegment.getFirstEndpoint(),
+                                                                                      firstTetraSegment.getSecondEndpoint(),
+                                                                                      secondTetraSegment.getFirstEndpoint(),
+                                                                                      secondTetraSegment.getSecondEndpoint()));
+            }
+            else if (convexPolytope3D.getNumberOfFaces() == 1)
+            {
+               Face3D face = convexPolytope3D.getFace(0);
+               Point3D pointOnFace = EuclidPolytopeRandomTools.nextPoint3DOnFace3D(random, face);
+               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
+            }
+            else
+            {
+               Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
 
-         Point3D pointInside = new Point3D();
-         double distanceInside = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
-         pointInside.scaleAdd(distanceInside, towardInside, closestVertex);
+               Vector3D towardInside = new Vector3D();
+               towardInside.sub(convexPolytope3D.getCentroid(), closestVertex);
 
-         assertTrue(convexPolytope3D.isPointInside(pointInside), "Iteration: " + i);
+               Point3D pointInside = new Point3D();
+               double distanceInside = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
+               pointInside.scaleAdd(distanceInside, towardInside, closestVertex);
 
-         ConvexPolytope3D tetrahedron = newTetrahedron(random, pointInside, towardInside, 1.0);
+               tetrahedron = newTetrahedron(random, pointInside, towardInside, 1.0);
+            }
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(convexPolytope3D);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertTrue(collisionDetector.checkCollision());
-         iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
-         iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
+            collisionDetector.setPolytopeA(convexPolytope3D);
+            collisionDetector.setPolytopeB(tetrahedron);
+            collisionDetector.setSimplex(new SimplexPolytope3D());
+            assertTrue(collisionDetector.checkCollision());
+            iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
+            iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
+         }
       }
 
       System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);

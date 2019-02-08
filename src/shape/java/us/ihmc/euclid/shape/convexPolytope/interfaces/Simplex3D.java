@@ -23,8 +23,10 @@ public interface Simplex3D
    default Vector3DBasics getSupportVectorDirectionTo(Point3DReadOnly point)
    {
       Vector3D supportVector = new Vector3D();
-      getSupportVectorDirectionTo(point, supportVector);
-      return supportVector;
+      if (getSupportVectorDirectionTo(point, supportVector))
+         return supportVector;
+      else
+         return null;
    }
 
    /**
@@ -34,7 +36,7 @@ public interface Simplex3D
     * @param supportVectorToPack the vector in which the computed result is to be stored
     */
    // TODO So sometimes it is normalized sometimes the support vector's length is the distance between the query and the closest point, not sure that is acceptable.
-   void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack);
+   boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack);
 
    /**
     * The smallest simplex member on which the projection of the specified point lies. Generally a

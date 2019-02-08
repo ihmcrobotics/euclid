@@ -82,9 +82,10 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, Simplex3D
    }
 
    @Override
-   default void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
       supportVectorToPack.sub(point, this);
+      return true;
    }
 
    @Override

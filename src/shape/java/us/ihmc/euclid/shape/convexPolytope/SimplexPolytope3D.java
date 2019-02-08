@@ -58,9 +58,9 @@ public class SimplexPolytope3D implements Simplex3D
    }
 
    @Override
-   public void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   public boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
-      polytope.getSupportVectorDirectionTo(point, supportVectorToPack);
+      return polytope.getSupportVectorDirectionTo(point, supportVectorToPack);
    }
 
    public boolean isEmpty()

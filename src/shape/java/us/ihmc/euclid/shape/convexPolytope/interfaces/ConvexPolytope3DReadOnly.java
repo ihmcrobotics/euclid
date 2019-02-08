@@ -122,6 +122,12 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    default boolean isPointInside(Point3DReadOnly pointToCheck)
    {
+      if (isEmpty())
+         return false;
+
+      if (getNumberOfFaces() <= 2)
+         return getFace(0).isPointInside(pointToCheck, 0.0);
+
       for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
       {
          Face3DReadOnly face = getFace(faceIndex);
@@ -139,7 +145,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
       if (getNumberOfFaces() <= 2)
          return getFace(0).isPointInside(pointToCheck, epsilon);
-      
+
       for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
       {
          if (EuclidPolytopeTools.canObserverSeeFace(pointToCheck, getFace(faceIndex), epsilon))
@@ -156,7 +162,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    default Point3DBasics orthogonalProjection(Point3DReadOnly pointToProject)
    {
-      if (isPointInside(pointToProject))
+      if (isEmpty() || isPointInside(pointToProject))
          return null;
       else
          return getClosestFace(pointToProject).orthogonalProjection(pointToProject);
@@ -164,7 +170,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      if (isPointInside(pointToProject))
+      if (isEmpty() || isPointInside(pointToProject))
          return false;
       else
          return getClosestFace(pointToProject).orthogonalProjection(pointToProject, projectionToPack);
@@ -206,7 +212,16 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
+      if (isEmpty())
+         return null;
+      if (getNumberOfFaces() == 1)
+         return getFace(0).getSupportingVertex(supportDirection);
+
       Vertex3DReadOnly bestVertex = getFace(0).getEdge(0).getOrigin();
+
+      if (getNumberOfVertices() == 1)
+         return bestVertex;
+
       double maxDotProduct = bestVertex.dot(supportDirection);
       Vertex3DReadOnly vertexCandidate = bestVertex;
 
@@ -233,15 +248,21 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    }
 
    @Override
-   default void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
-      getClosestFace(point).getSupportVectorDirectionTo(point, supportVectorToPack);
+      if (isEmpty())
+         return false;
+      else
+         return getClosestFace(point).getSupportVectorDirectionTo(point, supportVectorToPack);
    }
 
    @Override
    default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
    {
-      return getClosestFace(point).getSmallestSimplexMemberReference(point);
+      if (isEmpty())
+         return null;
+      else
+         return getClosestFace(point).getSmallestSimplexMemberReference(point);
    }
 
    /**

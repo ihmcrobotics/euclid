@@ -4,18 +4,23 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidPolytopeRandomTools
@@ -56,6 +61,19 @@ public class EuclidPolytopeRandomTools
       return circleBasedConvexPolygon3D;
    }
 
+   public static Point3D nextPoint3DOnFace3D(Random random, Face3DReadOnly face3D)
+   {
+      if (face3D.isEmpty())
+      {
+         return null;
+      }
+      else
+      {
+         HalfEdge3DReadOnly edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
+         return EuclidShapeRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
+      }
+   }
+
    public static ConvexPolytope3D nextConvexPolytope3D(Random random)
    {
       switch (random.nextInt(7))
@@ -74,6 +92,31 @@ public class EuclidPolytopeRandomTools
          return nextPointCloudBasedConvexPolytope3D(random);
       case 6:
          return nextPyramidConvexPolytope3D(random);
+      default:
+         throw new RuntimeException("Unexpected state.");
+      }
+   }
+
+   public static ConvexPolytope3D nextConvexPolytope3DWithEdgeCases(Random random)
+   {
+      switch (random.nextInt(8))
+      {
+      case 0:
+         return nextConeConvexPolytope3D(random);
+      case 1:
+         return nextCubeConvexPolytope3D(random);
+      case 2:
+         return nextCylinderConvexPolytope3D(random);
+      case 3:
+         return nextIcosahedronBasedConvexPolytope3D(random);
+      case 4:
+         return nextIcoSphereBasedConvexPolytope3D(random);
+      case 5:
+         return nextPointCloudBasedConvexPolytope3D(random, 5.0, 5.0, random.nextInt(101));
+      case 6:
+         return nextPyramidConvexPolytope3D(random);
+      case 7:
+         return nextSingleEdgeConvexPolytope3D(random);
       default:
          throw new RuntimeException("Unexpected state.");
       }
@@ -224,5 +267,44 @@ public class EuclidPolytopeRandomTools
       transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       pyramidVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(pyramidVertices));
+   }
+
+   public static ConvexPolytope3D nextSingleEdgeConvexPolytope3D(Random random)
+   {
+      return nextSingleEdgeConvexPolytope3D(random, 5.0);
+   }
+
+   public static ConvexPolytope3D nextSingleEdgeConvexPolytope3D(Random random, double centerMinMax)
+   {
+      return nextSingleEdgeConvexPolytope3D(random, centerMinMax, 5.0);
+   }
+
+   public static ConvexPolytope3D nextSingleEdgeConvexPolytope3D(Random random, double centerMinMax, double minMax)
+   {
+      LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, minMax);
+      lineSegment3D.translate(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint()));
+   }
+
+   public static ConvexPolytope3D nextTetrahedronContainingPoint3D(Random random, Point3DReadOnly point)
+   {
+      return nextTetrahedronContainingPoint3D(random, point, 5.0);
+   }
+
+   public static ConvexPolytope3D nextTetrahedronContainingPoint3D(Random random, Point3DReadOnly point, double minMax)
+   {
+      List<Point3D> vertices = EuclidGeometryRandomTools.nextPointCloud3D(random, 0.0, minMax, 4);
+      ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices));
+
+      assert tetrahedron.getNumberOfVertices() == 4;
+
+      RigidBodyTransform transform = new RigidBodyTransform();
+      transform.getTranslation()
+               .sub(point, EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, vertices.get(0), vertices.get(1), vertices.get(2), vertices.get(3)));
+      tetrahedron.applyTransform(transform);
+
+      assert tetrahedron.isPointInside(point);
+
+      return tetrahedron;
    }
 }

@@ -238,7 +238,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    default boolean isPointInFacePlane(Point3DReadOnly query, double epsilon)
    {
       if (getNumberOfEdges() < 3)
-         return getEdge(0).distanceSquared(query) < epsilon * epsilon;
+         return getEdge(0).distanceSquared(query) <= epsilon * epsilon;
       else
          return EuclidGeometryTools.distanceFromPoint3DToPlane3D(query, getCentroid(), getNormal()) < epsilon;
    }
@@ -254,7 +254,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       if (getNumberOfEdges() < 3)
-         return getEdge(0).distanceSquared(query) < epsilon * epsilon;
+         return getEdge(0).distanceSquared(query) <= epsilon * epsilon;
       else
          return isPointInFacePlane(query, epsilon) && isPointDirectlyAboveOrBelow(query);
    }
@@ -369,6 +369,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       {
          Vertex3DReadOnly candidate = currentEdge.getOrigin();
          double currentDot = candidate.dot(supportVector);
+
          if (currentDot > maxDot)
          {
             maxDot = currentDot;
@@ -391,17 +392,21 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    }
 
    @Override
-   default void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
+      if (isEmpty())
+         return false;
+
       if (isPointDirectlyAboveOrBelow(point))
       {
          supportVectorToPack.set(getNormal());
          if (EuclidGeometryTools.isPoint3DBelowPlane3D(point, getCentroid(), getNormal()))
             supportVectorToPack.negate();
+         return true;
       }
       else
       {
-         getClosestEdge(point).getSupportVectorDirectionTo(point, supportVectorToPack);
+         return getClosestEdge(point).getSupportVectorDirectionTo(point, supportVectorToPack);
       }
    }
 

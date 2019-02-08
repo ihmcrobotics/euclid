@@ -18,6 +18,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.testSuite.EuclidTestSuite;
@@ -365,6 +366,11 @@ public class Face3DTest
             assertTrue(prevEdge.getDestination() == edge.getOrigin());
             assertTrue(nextEdge.getOrigin() == edge.getDestination());
          }
+
+         // Assert that the normal remains consistent with the edge ordering
+         Vector3D originalNormal = new Vector3D(face.getNormal());
+         face.updateNormal();
+         EuclidCoreTestTools.assertTuple3DEquals(originalNormal, face.getNormal(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -906,7 +912,7 @@ public class Face3DTest
 
          Vector3D expectedSupportVector = new Vector3D();
          expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
-//         expectedSupportVector.normalize();
+         //         expectedSupportVector.normalize();
          Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
       }
@@ -935,10 +941,53 @@ public class Face3DTest
 
          Vector3D expectedSupportVector = new Vector3D();
          expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
-//         expectedSupportVector.normalize(); TODO So sometimes it is normalized sometimes not, not sure that is accepetable
+         //         expectedSupportVector.normalize(); TODO So sometimes it is normalized sometimes not, not sure that is accepetable
          Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
       }
+   }
+
+   @Test
+   void testFlipNormalBug() throws Exception
+   {
+      Vector3D initialGuessNormal = new Vector3D(Axis.Z);
+      Vertex3D v0 = new Vertex3D(-3.312, -1.978, -4.144);
+      Vertex3D v1 = new Vertex3D(-1.407, -0.586, 5.206);
+      Vertex3D v2 = new Vertex3D(-2.234, -2.474, -0.586);
+      Face3D face = new Face3D(initialGuessNormal, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
+
+      face.addVertex(v0);
+      face.addVertex(v1);
+      face.addVertex(v2);
+
+      assertTrue(v0 == face.getVertex(0));
+      assertTrue(v1 == face.getVertex(1));
+      assertTrue(v2 == face.getVertex(2));
+
+      assertTrue(v0 == face.getEdge(0).getOrigin());
+      assertTrue(v1 == face.getEdge(0).getDestination());
+      assertTrue(v1 == face.getEdge(1).getOrigin());
+      assertTrue(v2 == face.getEdge(1).getDestination());
+      assertTrue(v2 == face.getEdge(2).getOrigin());
+      assertTrue(v0 == face.getEdge(2).getDestination());
+
+      Vector3D faceNormalBeforeFlip = new Vector3D(face.getNormal());
+      face.flip();
+
+      assertTrue(v0 == face.getVertex(0));
+      assertTrue(v2 == face.getVertex(1));
+      assertTrue(v1 == face.getVertex(2));
+
+      assertTrue(v0 == face.getEdge(0).getOrigin());
+      assertTrue(v2 == face.getEdge(0).getDestination());
+      assertTrue(v2 == face.getEdge(1).getOrigin());
+      assertTrue(v1 == face.getEdge(1).getDestination());
+      assertTrue(v1 == face.getEdge(2).getOrigin());
+      assertTrue(v0 == face.getEdge(2).getDestination());
+
+      assertEquals(-1.0, faceNormalBeforeFlip.dot(face.getNormal()));
+      face.updateNormal(); // The bug would show up initially because the normal would be pointing the wrong direction.
+      assertEquals(-1.0, faceNormalBeforeFlip.dot(face.getNormal()));
    }
 
    private static class LinePercentageComparator implements Comparator<Point3DReadOnly>

@@ -18,6 +18,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -208,9 +209,20 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    public void updateNormal()
    {
       if (vertices.size() > 3)
+      {
          EuclidPolytopeTools.updateFace3DNormal(vertices, null, normal);
+      }
       else if (vertices.size() == 3)
+      {
          EuclidGeometryTools.normal3DFromThreePoint3Ds(vertices.get(0), vertices.get(2), vertices.get(1), normal);
+      }
+      else if (vertices.size() == 2)
+      { // Redirect the normal so it is orthogonal to the edge.
+         Vector3DBasics edgeDirection = getEdge(0).getDirection(false);
+         normal.cross(edgeDirection, normal);
+         normal.cross(normal, edgeDirection);
+         normal.normalize();
+      }
    }
 
    public void updateCentroidAndArea()
@@ -235,6 +247,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          edges.get(i).flip();
       }
       Collections.reverse(edges);
+      updateVertices();
       normal.negate();
    }
 

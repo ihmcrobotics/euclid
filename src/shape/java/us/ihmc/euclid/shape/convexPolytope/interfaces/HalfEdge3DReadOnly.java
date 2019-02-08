@@ -79,9 +79,10 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
    }
 
    @Override
-   default void getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
       double alpha = percentageAlongLineSegment(point);
+
       if (alpha >= 1.0)
       {
          supportVectorToPack.sub(point, getDestination());
@@ -95,6 +96,8 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
          supportVectorToPack.interpolate(getOrigin(), getDestination(), alpha);
          supportVectorToPack.sub(point, supportVectorToPack);
       }
+
+      return true;
    }
 
    /**
