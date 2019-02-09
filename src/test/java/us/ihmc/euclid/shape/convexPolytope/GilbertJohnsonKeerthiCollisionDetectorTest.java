@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-class HybridGJKEPACollisionDetectorTest
+class GilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final int ITERATIONS = 10000;
    private static final double EPSILON = 1.0e-12;
