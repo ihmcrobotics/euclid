@@ -26,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 class GilbertJohnsonKeerthiCollisionDetectorTest
 {
-   private static final int ITERATIONS = 10000;
+   private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
 
    @Test
@@ -77,11 +77,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          assertEquals(translation.getX(), distance, EPSILON);
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(cube);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertFalse(collisionDetector.checkCollision());
+         GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+         assertFalse(collisionDetector.doCollisionTest(cube, tetrahedron));
+         assertFalse(collisionDetector.doCollisionTest(tetrahedron, cube));
       }
    }
 
@@ -109,11 +107,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(tetrahedronClosest, tetrahedronFarthest0, tetrahedronFarthest1,
                                                                                                  tetrahedronFarthest2));
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(cube);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertTrue(collisionDetector.checkCollision());
+         GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+         assertTrue(collisionDetector.doCollisionTest(cube, tetrahedron));
+         assertTrue(collisionDetector.doCollisionTest(tetrahedron, cube));
       }
    }
 
@@ -131,10 +127,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          if (convexPolytope3D.isEmpty())
          {
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random)));
+            assertFalse(collisionDetector.doCollisionTest(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D));
          }
          else
          {
@@ -145,11 +140,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
             ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, face.getNormal(), 1.0);
 
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(tetrahedron);
-            collisionDetector.setSimplex(new SimplexPolytope3D());
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, tetrahedron));
+            assertFalse(collisionDetector.doCollisionTest(tetrahedron, convexPolytope3D));
             iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
             iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
          }
@@ -165,10 +158,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          if (convexPolytope3D.isEmpty())
          {
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random)));
+            assertFalse(collisionDetector.doCollisionTest(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D));
          }
          else
          {
@@ -199,11 +191,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
             ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, towardOutside, 1.0);
 
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(tetrahedron);
-            collisionDetector.setSimplex(new SimplexPolytope3D());
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, tetrahedron));
+            assertFalse(collisionDetector.doCollisionTest(tetrahedron, convexPolytope3D));
             iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
             iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
          }
@@ -219,10 +209,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          if (convexPolytope3D.isEmpty())
          {
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random)));
+            assertFalse(collisionDetector.doCollisionTest(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D));
          }
          else
          {
@@ -237,11 +226,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
             ConvexPolytope3D tetrahedron = newTetrahedron(random, pointOutside, towardOutside, 1.0);
 
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(tetrahedron);
-            collisionDetector.setSimplex(new SimplexPolytope3D());
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, tetrahedron));
+            assertFalse(collisionDetector.doCollisionTest(tetrahedron, convexPolytope3D));
             iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
             iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
          }
@@ -265,10 +252,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          if (convexPolytope3D.isEmpty())
          {
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random)));
+            assertFalse(collisionDetector.doCollisionTest(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D));
          }
          else
          {
@@ -315,11 +301,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                tetrahedron = newTetrahedron(random, pointInside, face.getNormal(), 1.0);
             }
 
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(tetrahedron);
-            collisionDetector.setSimplex(new SimplexPolytope3D());
-            assertTrue(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertTrue(collisionDetector.doCollisionTest(convexPolytope3D, tetrahedron));
+            assertTrue(collisionDetector.doCollisionTest(tetrahedron, convexPolytope3D));
             iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
             iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
          }
@@ -336,10 +320,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          if (convexPolytope3D.isEmpty())
          {
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random)));
+            assertFalse(collisionDetector.doCollisionTest(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D));
          }
          else
          {
@@ -395,11 +378,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                tetrahedron = newTetrahedron(random, pointInside, towardInside, 1.0);
             }
 
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(tetrahedron);
-            collisionDetector.setSimplex(new SimplexPolytope3D());
-            assertTrue(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertTrue(collisionDetector.doCollisionTest(convexPolytope3D, tetrahedron));
+            assertTrue(collisionDetector.doCollisionTest(tetrahedron, convexPolytope3D));
             iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
             iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
          }
@@ -416,10 +397,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          if (convexPolytope3D.isEmpty())
          {
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random));
-            assertFalse(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertFalse(collisionDetector.doCollisionTest(convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random)));
+            assertFalse(collisionDetector.doCollisionTest(EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D));
          }
          else
          {
@@ -470,11 +450,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                tetrahedron = newTetrahedron(random, pointInside, towardInside, 1.0);
             }
 
-            HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-            collisionDetector.setPolytopeA(convexPolytope3D);
-            collisionDetector.setPolytopeB(tetrahedron);
-            collisionDetector.setSimplex(new SimplexPolytope3D());
-            assertTrue(collisionDetector.checkCollision());
+            GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+            assertTrue(collisionDetector.doCollisionTest(convexPolytope3D, tetrahedron));
+            assertTrue(collisionDetector.doCollisionTest(tetrahedron, convexPolytope3D));
             iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
             iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
          }
@@ -524,16 +502,84 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                                                                                                  secondTetrahedronEdge.getFirstEndpoint(),
                                                                                                  secondTetrahedronEdge.getSecondEndpoint()));
 
-         HybridGJKEPACollisionDetector collisionDetector = new HybridGJKEPACollisionDetector(1.0e-10);
-         collisionDetector.setPolytopeA(icosahedron);
-         collisionDetector.setPolytopeB(tetrahedron);
-         collisionDetector.setSimplex(new SimplexPolytope3D());
-         assertTrue(collisionDetector.checkCollision());
+         GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+         assertTrue(collisionDetector.doCollisionTest(icosahedron, tetrahedron));
+         assertTrue(collisionDetector.doCollisionTest(tetrahedron, icosahedron));
          iterationsMean += (double) collisionDetector.getIterations() / (double) ITERATIONS;
          iterationsMax = Math.max(iterationsMax, collisionDetector.getIterations());
       }
 
       System.out.println("Iterations on average: " + iterationsMean + ", max number of iterations: " + iterationsMax);
+   }
+
+   @Test
+   void testCollidingLineSegmentAndTriangle() throws Exception
+   {
+      Random random = new Random(34534);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D triangleA = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D triangleB = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D triangleC = EuclidCoreRandomTools.nextPoint3D(random);
+         ConvexPolytope3D triangle = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(triangleA, triangleB, triangleC));
+
+         Point3D pointOnTriangle = EuclidShapeRandomTools.nextPoint3DInTriangle(random, triangleA, triangleB, triangleC);
+
+         Vector3D orthogonalToNormal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, triangle.getFace(0).getNormal(), true);
+
+         Vector3D direction = new Vector3D();
+         direction.interpolate(triangle.getFace(0).getNormal(), orthogonalToNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         direction.normalize();
+
+         Point3D segmentStart = new Point3D();
+         segmentStart.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), direction, pointOnTriangle);
+         Point3D segmentEnd = new Point3D();
+         segmentEnd.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), direction, pointOnTriangle);
+
+         ConvexPolytope3D lineSegment = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(segmentStart, segmentEnd));
+
+         GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+         assertTrue(collisionDetector.doCollisionTest(triangle, lineSegment));
+      }
+   }
+
+   @Test
+   void testCollidingTriangles() throws Exception
+   {
+      Random random = new Random(34534);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D firstTriangleA = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D firstTriangleB = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D firstTriangleC = EuclidCoreRandomTools.nextPoint3D(random);
+         ConvexPolytope3D firstTriangle = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTriangleA, firstTriangleB, firstTriangleC));
+
+         Point3D pointOnTriangle = EuclidShapeRandomTools.nextPoint3DInTriangle(random, firstTriangleA, firstTriangleB, firstTriangleC);
+
+         Vector3D orthogonalToNormal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstTriangle.getFace(0).getNormal(), true);
+
+         Vector3D direction = new Vector3D();
+         direction.interpolate(firstTriangle.getFace(0).getNormal(), orthogonalToNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         direction.normalize();
+
+         Point3D secondTriangleA = new Point3D();
+         Point3D secondTriangleBase = new Point3D();
+         secondTriangleA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), direction, pointOnTriangle);
+         secondTriangleBase.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), direction, pointOnTriangle);
+
+         Vector3D secondTriangleBaseDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, direction, true);
+         Point3D secondTriangleB = new Point3D();
+         Point3D secondTriangleC = new Point3D();
+         secondTriangleB.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), secondTriangleBaseDirection, secondTriangleBase);
+         secondTriangleC.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), secondTriangleBaseDirection, secondTriangleBase);
+
+         ConvexPolytope3D secondTriangle = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(secondTriangleA, secondTriangleB, secondTriangleC));
+
+         GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+         assertTrue(collisionDetector.doCollisionTest(firstTriangle, secondTriangle));
+      }
    }
 
    public static ConvexPolytope3D newTetrahedron(Random random, Point3DReadOnly topVertex, Vector3DReadOnly topToBaseCentroid, double baseSize)

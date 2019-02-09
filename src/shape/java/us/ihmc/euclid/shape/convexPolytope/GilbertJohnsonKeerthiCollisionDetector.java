@@ -11,34 +11,35 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class GilbertJohnsonKeerthiCollisionDetector
 {
-   private static final double defaultCollisionEpsilon = 1.0e-12;
+   private static final double defaultCollisionEpsilon = 1.0e-10;
 
    private static final Point3DReadOnly origin = new Point3D();
 
+   private int iterations;
    private final int maxIterations = 1000;
-   private double epsilon = defaultCollisionEpsilon;
+   private double epsilon;
 
    private SimplexPolytope3D simplex;
-   private Vector3D supportVectorDirection = new Vector3D();
+   private Vector3D supportDirection = new Vector3D();
 
-   private Vector3DReadOnly supportVectorDirectionNegative = new Vector3DReadOnly()
+   private Vector3DReadOnly supportDirectionNegative = new Vector3DReadOnly()
    {
       @Override
       public double getX()
       {
-         return -supportVectorDirection.getX();
+         return -supportDirection.getX();
       }
 
       @Override
       public double getY()
       {
-         return -supportVectorDirection.getY();
+         return -supportDirection.getY();
       }
 
       @Override
       public double getZ()
       {
-         return -supportVectorDirection.getZ();
+         return -supportDirection.getZ();
       }
 
       @Override
@@ -73,31 +74,34 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return epsilon;
    }
 
-   private int iterations;
-
    public boolean doCollisionTest(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
    {
       if (convexPolytopeA.isEmpty() || convexPolytopeB.isEmpty())
          return false;
 
       simplex = new SimplexPolytope3D();
-      supportVectorDirection.set(Axis.Y);
+      supportDirection.set(Axis.Y);
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
-         Vertex3DReadOnly supportingPolytopeVertexA = convexPolytopeA.getSupportingVertex(supportVectorDirection);
-         Vertex3DReadOnly supportingPolytopeVertexB = convexPolytopeB.getSupportingVertex(supportVectorDirectionNegative);
-         SimplexVertex3D newVertex = simplex.addVertex(supportingPolytopeVertexA, supportingPolytopeVertexB);
+         Vertex3DReadOnly supportingVertexA = convexPolytopeA.getSupportingVertex(supportDirection);
+         Vertex3DReadOnly supportingVertexB = convexPolytopeB.getSupportingVertex(supportDirectionNegative);
+         SimplexVertex3D newVertex = simplex.addVertex(supportingVertexA, supportingVertexB);
 
-         if (newVertex.dot(supportVectorDirection) < 0.0)
+         if (newVertex.dot(supportDirection) < 0.0)
             return false;
 
          // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
-         if (simplex.isPointInside(origin, epsilon))
+         if (simplex.getPolytope().getNumberOfVertices() >= 4 && simplex.isPointInside(origin, epsilon))
             return true;
 
-         simplex.getSupportVectorDirectionTo(origin, supportVectorDirection);
+         simplex.getSupportVectorDirectionTo(origin, supportDirection);
       }
       return false;
+   }
+
+   public int getIterations()
+   {
+      return iterations;
    }
 }
