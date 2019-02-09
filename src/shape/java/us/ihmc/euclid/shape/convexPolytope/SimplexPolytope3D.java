@@ -11,6 +11,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -85,7 +86,7 @@ public class SimplexPolytope3D implements Simplex3D
       return polytope;
    }
 
-   public void getCollidingPointsOnSimplex(Point3DReadOnly point, Point3D pointOnA, Point3D pointOnB)
+   public void getCollidingPointsOnSimplex(Point3DReadOnly point, Point3DBasics pointOnA, Point3DBasics pointOnB)
    {
       Simplex3D member = getSmallestSimplexMemberReference(point);
       // Assuming linearity between the simplex and polytope points
@@ -140,8 +141,8 @@ public class SimplexPolytope3D implements Simplex3D
       }
    }
 
-   private void setByInterpolation(Point3D pointOnA, Vertex3DReadOnly polytopeAVertex1, Vertex3DReadOnly polytopeAVertex2, Vertex3DReadOnly polytopeAVertex3,
-                                   double a, double b)
+   private void setByInterpolation(Point3DBasics pointOnA, Vertex3DReadOnly polytopeAVertex1, Vertex3DReadOnly polytopeAVertex2,
+                                   Vertex3DReadOnly polytopeAVertex3, double a, double b)
    {
       basisVector1.sub(polytopeAVertex1, polytopeAVertex2);
       basisVector2.sub(polytopeAVertex3, polytopeAVertex2);
