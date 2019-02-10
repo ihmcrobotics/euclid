@@ -1,10 +1,10 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.CommonOps;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
@@ -13,20 +13,17 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class SimplexPolytope3D implements Simplex3D
 {
    private ConvexPolytope3D polytope = new ConvexPolytope3D();
    private List<SimplexVertex3D> vertices = new ArrayList<>();
-   private final Vector3D basisVector1 = new Vector3D();
-   private final Vector3D basisVector2 = new Vector3D();
-   private final Vector3D pointVector = new Vector3D();
    private final Point3D projection = new Point3D();
-   private final DenseMatrix64F basis = new DenseMatrix64F(3, 2);
-   private final DenseMatrix64F basisInverse = new DenseMatrix64F(2, 3);
-   private final DenseMatrix64F vector = new DenseMatrix64F(3, 1);
-   private final DenseMatrix64F coordinates = new DenseMatrix64F(2, 1);
+   private final DenseMatrix64F verticesMatrix = new DenseMatrix64F(3, 3);
+   private final DenseMatrix64F projectionMatrix = new DenseMatrix64F(3, 1);
+   private final DenseMatrix64F weigths = new DenseMatrix64F(3, 1);
 
    public SimplexPolytope3D()
    {
@@ -88,33 +85,80 @@ public class SimplexPolytope3D implements Simplex3D
 
    public void getCollidingPointsOnSimplex(Point3DReadOnly point, Point3DBasics pointOnA, Point3DBasics pointOnB)
    {
+      polytope.getFaces().forEach(face -> {
+         Vector3D normalExpected = new Vector3D();
+         normalExpected.sub(face.getCentroid(), polytope.getCentroid());
+         assert face.getNormal().dot(normalExpected) > 0.0;
+         face.updateNormal();
+         face.updateCentroidAndArea();
+         face.updateVertices();
+         
+         assert face.getNormal().dot(normalExpected) > 0.0;
+      });
+
       Simplex3D member = getSmallestSimplexMemberReference(point);
       // Assuming linearity between the simplex and polytope points
       if (member instanceof Face3D)
       {
-         // TODO fix this nasty type casting
-         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getOrigin();
+         Face3D face = (Face3D) member;
+
+         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) face.getEdge(0).getOrigin();
+         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) face.getEdge(1).getOrigin();
+         SimplexVertex3D simplexVertex3 = (SimplexVertex3D) face.getEdge(2).getOrigin();
+
          Vertex3DReadOnly polytopeAVertex1 = simplexVertex1.getVertexOnPolytopeA();
-         Vertex3DReadOnly polytopeBVertex1 = simplexVertex1.getVertexOnPolytopeB();
-         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((Face3D) member).getEdge(0).getDestination();
          Vertex3DReadOnly polytopeAVertex2 = simplexVertex2.getVertexOnPolytopeA();
-         Vertex3DReadOnly polytopeBVertex2 = simplexVertex2.getVertexOnPolytopeB();
-         SimplexVertex3D simplexVertex3 = (SimplexVertex3D) ((Face3D) member).getEdge(1).getDestination();
          Vertex3DReadOnly polytopeAVertex3 = simplexVertex3.getVertexOnPolytopeA();
+
+         Vertex3DReadOnly polytopeBVertex1 = simplexVertex1.getVertexOnPolytopeB();
+         Vertex3DReadOnly polytopeBVertex2 = simplexVertex2.getVertexOnPolytopeB();
          Vertex3DReadOnly polytopeBVertex3 = simplexVertex3.getVertexOnPolytopeB();
 
-         // Computing the coordinate vector for the face basis (using the first two edges as the basis)
-         EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, simplexVertex2, ((Face3D) member).getNormal(), projection);
-         for (int i = 0; i < 3; i++)
-         {
-            basis.set(i, 0, simplexVertex1.getElement(i) - simplexVertex2.getElement(i));
-            basis.set(i, 1, simplexVertex3.getElement(i) - simplexVertex2.getElement(i));
-            vector.set(i, 0, projection.getElement(i) - simplexVertex2.getElement(i));
-         }
-         CommonOps.pinv(basis, basisInverse);
-         CommonOps.mult(basisInverse, vector, coordinates);
-         setByInterpolation(pointOnA, polytopeAVertex1, polytopeAVertex2, polytopeAVertex3, coordinates.get(0, 0), coordinates.get(1, 0));
-         setByInterpolation(pointOnB, polytopeBVertex1, polytopeBVertex2, polytopeBVertex3, coordinates.get(0, 0), coordinates.get(1, 0));
+         Point3D testPoint = new Point3D();
+         testPoint.sub(polytopeAVertex1, polytopeBVertex1);
+         assert testPoint.epsilonEquals(simplexVertex1, 1.0e-12);
+         testPoint.sub(polytopeAVertex2, polytopeBVertex2);
+         assert testPoint.epsilonEquals(simplexVertex2, 1.0e-12);
+         testPoint.sub(polytopeAVertex3, polytopeBVertex3);
+         assert testPoint.epsilonEquals(simplexVertex3, 1.0e-12);
+
+         double[] lambdas = new double[3];
+         projectOriginOntoFace(simplexVertex1, simplexVertex2, simplexVertex3, projection, lambdas);
+         System.out.println(Arrays.toString(lambdas));
+
+         pointOnA.setAndScale(lambdas[0], polytopeAVertex1);
+         pointOnA.scaleAdd(lambdas[1], polytopeAVertex2, pointOnA);
+         pointOnA.scaleAdd(lambdas[2], polytopeAVertex3, pointOnA);
+
+         pointOnB.setAndScale(lambdas[0], polytopeBVertex1);
+         pointOnB.scaleAdd(lambdas[1], polytopeBVertex2, pointOnB);
+         pointOnB.scaleAdd(lambdas[2], polytopeBVertex3, pointOnB);
+
+         //         // Computing the coordinate vector for the face basis (using the first two edges as the basis)
+         //         EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, face.getCentroid(), face.getNormal(), projection);
+         //         assert projection.epsilonEquals(polytope.getClosestFace(point).orthogonalProjection(point), 1.0e-12);
+         //         assert face.isPointDirectlyAboveOrBelow(point);
+         //
+         //         simplexVertex1.get(0, 0, verticesMatrix);
+         //         simplexVertex2.get(0, 1, verticesMatrix);
+         //         simplexVertex3.get(0, 2, verticesMatrix);
+         //         projection.get(projectionMatrix);
+         //         UnrolledInverseFromMinor.inv3(verticesMatrix, verticesMatrix, 1.0);
+         //         CommonOps.mult(verticesMatrix, projectionMatrix, weigths);
+         //
+         //         System.out.println(new Point3D(weigths.data));
+         //
+         //         pointOnA.setAndScale(weigths.get(0), polytopeAVertex1);
+         //         pointOnA.scaleAdd(weigths.get(1), polytopeAVertex2, pointOnA);
+         //         pointOnA.scaleAdd(weigths.get(2), polytopeAVertex3, pointOnA);
+         //
+         //         pointOnB.setAndScale(weigths.get(0), polytopeBVertex1);
+         //         pointOnB.scaleAdd(weigths.get(1), polytopeBVertex2, pointOnB);
+         //         pointOnB.scaleAdd(weigths.get(2), polytopeBVertex3, pointOnB);
+         //
+         //         Point3D testPoint = new Point3D();
+         //         testPoint.sub(pointOnA, pointOnB);
+         //         assert testPoint.epsilonEquals(projection, 1.0e-12);
       }
       else if (member instanceof HalfEdge3D)
       {
@@ -141,13 +185,56 @@ public class SimplexPolytope3D implements Simplex3D
       }
    }
 
-   private void setByInterpolation(Point3DBasics pointOnA, Vertex3DReadOnly polytopeAVertex1, Vertex3DReadOnly polytopeAVertex2,
-                                   Vertex3DReadOnly polytopeAVertex3, double a, double b)
+   private final Vector3D u = new Vector3D();
+   private final Vector3D v = new Vector3D();
+   private final Vector3D tempVector3 = new Vector3D();
+   private final Vector3D tempVector4 = new Vector3D();
+   private final Vector3D tempNormalVector1 = new Vector3D();
+
+   private void projectOriginOntoFace(Point3DReadOnly vertexOne, Point3DReadOnly vertexTwo, Point3DReadOnly vertexThree, Tuple3DBasics closestPointToOrigin,
+                                      double[] lambdas)
    {
-      basisVector1.sub(polytopeAVertex1, polytopeAVertex2);
-      basisVector2.sub(polytopeAVertex3, polytopeAVertex2);
-      pointVector.setAndScale(a, basisVector1);
-      pointVector.scaleAdd(b, basisVector2, pointVector);
-      pointOnA.add(pointVector, polytopeAVertex2);
+      // Using barycentric coordinates as described in https://www.cs.ubc.ca/~heidrich/Papers/JGT.05.pdf
+      u.sub(vertexTwo, vertexOne);
+      v.sub(vertexThree, vertexOne);
+
+      tempNormalVector1.cross(u, v);
+      double fourASquared = tempNormalVector1.dot(tempNormalVector1);
+
+      //TODO: Magic number for checking affinely Dependent...
+      // Probably a better way to check this than just the area of the triangle.
+      // Something relative. 
+      //      this.affinelyDependent = fourASquared < 1e-10;
+
+      double oneOver4ASquared = 1.0 / (fourASquared);
+
+      tempVector3.set(vertexOne);
+      tempVector3.scale(-1.0); //w
+
+      tempVector4.cross(u, tempVector3);
+      double lambdaThree = tempVector4.dot(tempNormalVector1) * oneOver4ASquared;
+
+      tempVector4.cross(tempVector3, v);
+      double lambdaTwo = tempVector4.dot(tempNormalVector1) * oneOver4ASquared;
+
+      double lambdaOne = 1.0 - lambdaTwo - lambdaThree;
+
+      lambdas[0] = lambdaOne;
+      lambdas[1] = lambdaTwo;
+      lambdas[2] = lambdaThree;
+
+      closestPointToOrigin.set(0.0, 0.0, 0.0);
+
+      u.set(vertexOne);
+      u.scale(lambdaOne);
+      closestPointToOrigin.add(u);
+
+      u.set(vertexTwo);
+      u.scale(lambdaTwo);
+      closestPointToOrigin.add(u);
+
+      u.set(vertexThree);
+      u.scale(lambdaThree);
+      closestPointToOrigin.add(u);
    }
 }
