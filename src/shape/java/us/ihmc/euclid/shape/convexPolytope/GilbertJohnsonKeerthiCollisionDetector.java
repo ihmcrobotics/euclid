@@ -21,6 +21,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    private SimplexPolytope3D simplex;
    private Vector3D supportDirection = new Vector3D();
+   private Vector3D previousSupportDirection = new Vector3D();
 
    private Vector3DReadOnly supportDirectionNegative = new Vector3DReadOnly()
    {
@@ -77,7 +78,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
    public boolean doCollisionTest(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
    {
       if (convexPolytopeA.isEmpty() || convexPolytopeB.isEmpty())
+      {
+         simplex = null;
          return false;
+      }
 
       simplex = new SimplexPolytope3D();
       supportDirection.set(Axis.Y);
@@ -86,16 +90,18 @@ public class GilbertJohnsonKeerthiCollisionDetector
       {
          Vertex3DReadOnly supportingVertexA = convexPolytopeA.getSupportingVertex(supportDirection);
          Vertex3DReadOnly supportingVertexB = convexPolytopeB.getSupportingVertex(supportDirectionNegative);
-         SimplexVertex3D newVertex = simplex.addVertex(supportingVertexA, supportingVertexB);
-
-         if (newVertex.dot(supportDirection) < 0.0)
-            return false;
+         simplex.addVertex(supportingVertexA, supportingVertexB);
 
          // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
-         if (simplex.getPolytope().getNumberOfVertices() >= 4 && simplex.isPointInside(origin, epsilon))
+         if (simplex.isPointInside(origin, epsilon))
             return true;
 
          simplex.getSupportVectorDirectionTo(origin, supportDirection);
+
+         if (previousSupportDirection.epsilonEquals(supportDirection, epsilon))
+            return false;
+
+         previousSupportDirection.set(supportDirection);
       }
       return false;
    }
@@ -103,5 +109,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
    public int getIterations()
    {
       return iterations;
+   }
+
+   public Vector3DReadOnly getSupportDirection()
+   {
+      return supportDirection;
    }
 }

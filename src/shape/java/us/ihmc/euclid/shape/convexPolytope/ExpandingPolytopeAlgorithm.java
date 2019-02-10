@@ -22,6 +22,7 @@ public class ExpandingPolytopeAlgorithm
    private SimplexPolytope3D simplex;
    private Vector3D supportDirection = new Vector3D();
    private Vector3D previousSupportDirection = new Vector3D();
+   private GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector;
 
    private Vector3DReadOnly supportDirectionNegative = new Vector3DReadOnly()
    {
@@ -57,6 +58,7 @@ public class ExpandingPolytopeAlgorithm
 
    public ExpandingPolytopeAlgorithm(double epsilon)
    {
+      gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector(epsilon);
       setEpsilon(epsilon);
    }
 
@@ -72,37 +74,28 @@ public class ExpandingPolytopeAlgorithm
 
    public void runEPAExpansion(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
    {
-      runEPAExpansion(convexPolytopeA, convexPolytopeB, null);
-   }
-
-   public void runEPAExpansion(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB, SimplexPolytope3D simplex)
-   {
-      if (simplex == null)
+      if (convexPolytopeA.isEmpty() || convexPolytopeB.isEmpty())
       {
-         GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector(epsilon);
-         gjkCollisionDetector.doCollisionTest(convexPolytopeA, convexPolytopeB);
-         simplex = gjkCollisionDetector.getSimplex();
+         this.simplex = null;
+         return;
       }
 
-      this.simplex = simplex;
+      gjkCollisionDetector.setEpsilon(epsilon);
+      boolean areShapesColliding = gjkCollisionDetector.doCollisionTest(convexPolytopeA, convexPolytopeB);
+      simplex = gjkCollisionDetector.getSimplex();
+      supportDirection.set(gjkCollisionDetector.getSupportDirection());
 
-      boolean areShapesColliding = simplex.isPointInside(origin, epsilon);
+      if (!areShapesColliding)
+         return;
 
       previousSupportDirection.setToNaN();
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
          simplex.getSupportVectorDirectionTo(origin, supportDirection);
+         // We need to negate the support direction to point toward the outside of the simplex and thus force the expansion.
+         supportDirection.negate();
 
-         if (areShapesColliding)
-         {
-            /*
-             * Two possible scenarios here: 1- the shapes are not colliding, the objective is to expand the
-             * simplex towards the origin; 2- the shapes are colliding, the objective is to expand the closest
-             * feature of the simplex away from the origin, thus the negate.
-             */
-            supportDirection.negate();
-         }
          supportDirection.normalize();
 
          if (supportDirection.epsilonEquals(previousSupportDirection, epsilon))
@@ -114,6 +107,7 @@ public class ExpandingPolytopeAlgorithm
 
          previousSupportDirection.set(supportDirection);
       }
+      System.out.println(iterations);
    }
 
    public boolean getCollisionVector(Vector3DBasics collisionVectorToPack)

@@ -23,7 +23,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 class ExpandingPolytopeAlgorithmTest
 {
    private static final int ITERATIONS = 1000;
-   private static final double EPSILON = 1.0e-11;
+   private static final double EPSILON = 1.0e-10;
 
    @Test
    void testNonCollidingCubeAndTetrahedron()

@@ -400,7 +400,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       if (isPointDirectlyAboveOrBelow(point))
       {
          supportVectorToPack.set(getNormal());
-         if (EuclidGeometryTools.isPoint3DBelowPlane3D(point, getCentroid(), getNormal()))
+         if (!EuclidGeometryTools.isPoint3DAbovePlane3D(point, getCentroid(), getNormal()))
             supportVectorToPack.negate();
          return true;
       }
