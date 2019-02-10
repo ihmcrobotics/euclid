@@ -2,7 +2,7 @@ package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -19,37 +19,12 @@ public class ExpandingPolytopeAlgorithm
    private int iterations;
    private final int maxIterations = 1000;
    private double epsilon;
+
    private SimplexPolytope3D simplex;
-   private Vector3D supportDirection = new Vector3D();
-   private Vector3D previousSupportDirection = new Vector3D();
-   private GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector;
-
-   private Vector3DReadOnly supportDirectionNegative = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return -supportDirection.getX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return -supportDirection.getY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return -supportDirection.getZ();
-      }
-
-      @Override
-      public String toString()
-      {
-         return EuclidCoreIOTools.getTuple3DString(this);
-      }
-   };
+   private final Vector3D supportDirection = new Vector3D();
+   private final Vector3D previousSupportDirection = new Vector3D();
+   private final Vector3DReadOnly supportDirectionNegative = EuclidPolytopeFactories.newNegativeLinkedVector3D(supportDirection);
+   private final GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector;
 
    public ExpandingPolytopeAlgorithm()
    {

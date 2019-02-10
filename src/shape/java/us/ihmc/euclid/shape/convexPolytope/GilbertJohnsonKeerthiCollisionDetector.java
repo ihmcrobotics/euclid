@@ -3,7 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -18,37 +18,18 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private int iterations;
    private final int maxIterations = 1000;
    private double epsilon;
+   private boolean latestCollisionTestResult;
 
    private SimplexPolytope3D simplex;
-   private Vector3D supportDirection = new Vector3D();
-   private Vector3D previousSupportDirection = new Vector3D();
+   private final Vector3D supportDirection = new Vector3D();
+   private final Vector3D previousSupportDirection = new Vector3D();
+   private final Vector3DReadOnly supportDirectionNegative = EuclidPolytopeFactories.newNegativeLinkedVector3D(supportDirection);
 
-   private Vector3DReadOnly supportDirectionNegative = new Vector3DReadOnly()
-   {
-      @Override
-      public double getX()
-      {
-         return -supportDirection.getX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return -supportDirection.getY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return -supportDirection.getZ();
-      }
-
-      @Override
-      public String toString()
-      {
-         return EuclidCoreIOTools.getTuple3DString(this);
-      }
-   };
+   private final Vector3D separationVector = new Vector3D();
+   private final Point3D closestPointOnA = new Point3D();
+   private final Point3D closestPointOnB = new Point3D();
+   private boolean isSeparationVectorUpToDate = false;
+   private boolean areClosestPointsUpToDate = false;
 
    public GilbertJohnsonKeerthiCollisionDetector()
    {
@@ -77,6 +58,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public boolean doCollisionTest(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
    {
+      latestCollisionTestResult = false;
+      isSeparationVectorUpToDate = false;
+      areClosestPointsUpToDate = false;
+
       if (convexPolytopeA.isEmpty() || convexPolytopeB.isEmpty())
       {
          simplex = null;
@@ -94,7 +79,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
          // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
          if (simplex.isPointInside(origin, epsilon))
+         {
+            latestCollisionTestResult = true;
             return true;
+         }
 
          simplex.getSupportVectorDirectionTo(origin, supportDirection);
 
@@ -114,5 +102,50 @@ public class GilbertJohnsonKeerthiCollisionDetector
    public Vector3DReadOnly getSupportDirection()
    {
       return supportDirection;
+   }
+
+   public Vector3DReadOnly getSeparationVector()
+   {
+      if (simplex == null || latestCollisionTestResult)
+         return null;
+
+      if (!isSeparationVectorUpToDate)
+      {
+         separationVector.set(supportDirection);
+         separationVector.normalize();
+         separationVector.scale(simplex.getSmallestSimplexMemberReference(origin).distance(origin));
+         isSeparationVectorUpToDate = true;
+      }
+
+      return separationVector;
+   }
+
+   public Point3DReadOnly getClosestPointOnA()
+   {
+      if (simplex == null || latestCollisionTestResult)
+         return null;
+
+      updateClosestPoints();
+
+      return closestPointOnA;
+   }
+
+   public Point3DReadOnly getClosestPointOnB()
+   {
+      if (simplex == null || latestCollisionTestResult)
+         return null;
+
+      updateClosestPoints();
+
+      return closestPointOnB;
+   }
+
+   private void updateClosestPoints()
+   {
+      if (areClosestPointsUpToDate)
+         return;
+
+      simplex.getCollidingPointsOnSimplex(origin, closestPointOnA, closestPointOnB);
+      areClosestPointsUpToDate = true;
    }
 }
