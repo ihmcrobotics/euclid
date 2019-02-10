@@ -816,4 +816,39 @@ public class EuclidPolytopeTools
    {
       return edgeLength * Math.sin(0.4 * Math.PI);
    }
+
+   public static double[] barycentricCoordinates(Face3DReadOnly face, Point3DReadOnly pointInside)
+   {
+      // From: A general construction of barycentric coordinates over convex polygons:
+      // https://pdfs.semanticscholar.org/d747/c8ad5a16c25d6fe4e4bbaddba7216b633023.pdf
+      double[] coordinates = new double[face.getNumberOfEdges()];
+      double[] subTriangleAreas = new double[face.getNumberOfEdges()];
+
+      for (int i = 0; i < face.getNumberOfEdges(); i++)
+      {
+         HalfEdge3DReadOnly edge = face.getEdge(i);
+         subTriangleAreas[i] = EuclidGeometryTools.triangleArea(pointInside, edge.getOrigin(), edge.getDestination());
+      }
+
+      double sum = 0.0;
+
+      for (int i = 0; i < face.getNumberOfEdges(); i++)
+      {
+         HalfEdge3DReadOnly edge = face.getEdge(i);
+         double w = EuclidGeometryTools.triangleArea(edge.getPrevious().getOrigin(), edge.getOrigin(), edge.getDestination());
+         if (i == 0)
+            w = w / (subTriangleAreas[face.getNumberOfEdges() - 1] * subTriangleAreas[i]);
+         else
+            w = w / (subTriangleAreas[i - 1] * subTriangleAreas[i]);
+         coordinates[i] = w;
+         sum += w;
+      }
+
+      for (int i = 0; i < face.getNumberOfEdges(); i++)
+      {
+         coordinates[i] /= sum;
+      }
+
+      return coordinates;
+   }
 }
