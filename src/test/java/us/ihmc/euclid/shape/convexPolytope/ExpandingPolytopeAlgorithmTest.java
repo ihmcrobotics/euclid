@@ -75,11 +75,9 @@ class ExpandingPolytopeAlgorithmTest
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
          epa.runEPAExpansion(cube, tetrahedron);
-         Vector3D collisionVector = new Vector3D();
-         epa.getCollisionVector(collisionVector);
-         Point3D pointOnCube = new Point3D();
-         Point3D pointOnTetrahedron = new Point3D();
-         epa.getCollisionPoints(pointOnCube, pointOnTetrahedron);
+         Vector3D collisionVector = new Vector3D(epa.getCollisionVector());
+         Point3D pointOnCube = new Point3D(epa.getCollisionPointOnA());
+         Point3D pointOnTetrahedron = new Point3D(epa.getCollisionPointOnB());
 
          double separatingDistance = collisionVector.length();
          assertEquals(0.0, cube.distance(pointOnCube), EPSILON);
@@ -105,11 +103,9 @@ class ExpandingPolytopeAlgorithmTest
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
          epa.runEPAExpansion(cube, singleton);
-         Vector3D collisionVector = new Vector3D();
-         epa.getCollisionVector(collisionVector);
-         Point3D pointOnCube = new Point3D();
-         Point3D pointOnSingleton = new Point3D();
-         epa.getCollisionPoints(pointOnCube, pointOnSingleton);
+         Vector3D collisionVector = new Vector3D(epa.getCollisionVector());
+         Point3D pointOnCube = new Point3D(epa.getCollisionPointOnA());
+         Point3D pointOnSingleton = new Point3D(epa.getCollisionPointOnB());
 
          assertEquals(0.0, cube.distance(pointOnCube), EPSILON);
          assertEquals(0.0, singleton.distance(pointOnSingleton), EPSILON);
@@ -131,11 +127,9 @@ class ExpandingPolytopeAlgorithmTest
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
          epa.runEPAExpansion(cube, tetrahedron);
-         Vector3D collisionVector = new Vector3D();
-         epa.getCollisionVector(collisionVector);
-         Point3D pointOnCube = new Point3D();
-         Point3D pointOnSingleton = new Point3D();
-         epa.getCollisionPoints(pointOnCube, pointOnSingleton);
+         Vector3D collisionVector = new Vector3D(epa.getCollisionVector());
+         Point3D pointOnCube = new Point3D(epa.getCollisionPointOnA());
+         Point3D pointOnSingleton = new Point3D(epa.getCollisionPointOnB());
 
          double separatingDistance = collisionVector.length();
          assertEquals(pointOnCube.distance(pointOnSingleton), separatingDistance, EPSILON);
@@ -173,11 +167,9 @@ class ExpandingPolytopeAlgorithmTest
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
          epa.runEPAExpansion(cube, tetrahedron);
-         Vector3D collisionVector = new Vector3D();
-         epa.getCollisionVector(collisionVector);
-         Point3D pointOnCube = new Point3D();
-         Point3D pointOnTetrahedron = new Point3D();
-         epa.getCollisionPoints(pointOnCube, pointOnTetrahedron);
+         Vector3D collisionVector = new Vector3D(epa.getCollisionVector());
+         Point3D pointOnCube = new Point3D(epa.getCollisionPointOnA());
+         Point3D pointOnTetrahedron = new Point3D(epa.getCollisionPointOnB());
 
          double penetrationDistance = collisionVector.length();
          assertEquals(pointOnCube.distance(pointOnTetrahedron), penetrationDistance, EPSILON);
@@ -308,28 +300,19 @@ class ExpandingPolytopeAlgorithmTest
    {
       ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
       epa.runEPAExpansion(polytopeA, polytopeB);
-      Point3D argumentCollisionPointA = EuclidCoreRandomTools.nextPoint3D(random);
-      Point3D argumentCollisionPointB = EuclidCoreRandomTools.nextPoint3D(random);
-      Point3D actualPointOnA = new Point3D(argumentCollisionPointA);
-      Point3D actualPointOnB = new Point3D(argumentCollisionPointB);
-      Vector3D argumentCollisionVector = EuclidCoreRandomTools.nextVector3D(random);
-      Vector3D actualCollisionVector = new Vector3D(argumentCollisionVector);
       Vector3D expectedCollisionVector = new Vector3D();
-      boolean hasCollisionPoints = epa.getCollisionPoints(actualPointOnA, actualPointOnB);
-      boolean hasCollisionVector = epa.getCollisionVector(actualCollisionVector);
 
       if (polytopeA.isEmpty() || polytopeB.isEmpty())
       {
-         assertFalse(hasCollisionPoints);
-         assertFalse(hasCollisionVector);
-         assertEquals(argumentCollisionPointA, actualPointOnA);
-         assertEquals(argumentCollisionPointB, actualPointOnB);
-         assertEquals(argumentCollisionVector, actualCollisionVector);
+         assertNull(epa.getCollisionVector());
+         assertNull(epa.getCollisionPointOnA());
+         assertNull(epa.getCollisionPointOnB());
       }
       else
       {
-         assertTrue(hasCollisionPoints);
-         assertTrue(hasCollisionVector);
+         Point3D actualPointOnA = new Point3D(epa.getCollisionPointOnA());
+         Point3D actualPointOnB = new Point3D(epa.getCollisionPointOnB());
+         Vector3D actualCollisionVector = new Vector3D(epa.getCollisionVector());
 
          assertEquals(0.0, polytopeA.distance(actualPointOnA), EPSILON);
          assertEquals(0.0, polytopeB.distance(actualPointOnB), EPSILON);
@@ -346,16 +329,10 @@ class ExpandingPolytopeAlgorithmTest
 
       ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
       epa.runEPAExpansion(polytopeA, polytopeB);
-      Point3D pointOnA = new Point3D();
-      Point3D pointOnB = new Point3D();
-      Vector3D actualCollisionVector = new Vector3D();
+      Point3D pointOnA = new Point3D(epa.getCollisionPointOnA());
+      Point3D pointOnB = new Point3D(epa.getCollisionPointOnB());
+      Vector3D actualCollisionVector = new Vector3D(epa.getCollisionVector());
       Vector3D expectedCollisionVector = new Vector3D();
-
-      boolean hasCollisionPoints = epa.getCollisionPoints(pointOnA, pointOnB);
-      boolean hasCollisionVector = epa.getCollisionVector(actualCollisionVector);
-
-      assertTrue(hasCollisionPoints);
-      assertTrue(hasCollisionVector);
 
       expectedCollisionVector.sub(pointOnA, pointOnB);
       EuclidCoreTestTools.assertTuple3DEquals(expectedCollisionVector, actualCollisionVector, EPSILON);

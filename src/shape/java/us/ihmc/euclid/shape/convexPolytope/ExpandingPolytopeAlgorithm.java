@@ -5,9 +5,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class ExpandingPolytopeAlgorithm
@@ -25,6 +23,12 @@ public class ExpandingPolytopeAlgorithm
    private final Vector3D previousSupportDirection = new Vector3D();
    private final Vector3DReadOnly supportDirectionNegative = EuclidPolytopeFactories.newNegativeLinkedVector3D(supportDirection);
    private final GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector;
+
+   private final Vector3D collisionVector = new Vector3D();
+   private final Point3D pointOnA = new Point3D();
+   private final Point3D pointOnB = new Point3D();
+   private boolean isCollisionVectorUpToDate = false;
+   private boolean areCollisionPointsUpToDate = false;
 
    public ExpandingPolytopeAlgorithm()
    {
@@ -49,6 +53,9 @@ public class ExpandingPolytopeAlgorithm
 
    public void runEPAExpansion(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
    {
+      isCollisionVectorUpToDate = false;
+      areCollisionPointsUpToDate = false;
+
       if (convexPolytopeA.isEmpty() || convexPolytopeB.isEmpty())
       {
          this.simplex = null;
@@ -82,27 +89,51 @@ public class ExpandingPolytopeAlgorithm
 
          previousSupportDirection.set(supportDirection);
       }
-      System.out.println(iterations);
    }
 
-   public boolean getCollisionVector(Vector3DBasics collisionVectorToPack)
+   public Vector3DReadOnly getCollisionVector()
    {
       if (simplex == null)
-         return false;
+         return null;
 
-      collisionVectorToPack.set(supportDirection);
-      collisionVectorToPack.normalize();
-      collisionVectorToPack.scale(simplex.getSmallestSimplexMemberReference(origin).distance(origin));
-      return true;
+      if (!isCollisionVectorUpToDate)
+      {
+         collisionVector.set(supportDirection);
+         collisionVector.normalize();
+         collisionVector.scale(simplex.getSmallestSimplexMemberReference(origin).distance(origin));
+         isCollisionVectorUpToDate = true;
+      }
+
+      return collisionVector;
    }
 
-   public boolean getCollisionPoints(Point3DBasics pointOnAToPack, Point3DBasics pointOnBToPack)
+   public Point3DReadOnly getCollisionPointOnA()
    {
       if (simplex == null)
-         return false;
+         return null;
 
-      simplex.getCollidingPointsOnSimplex(origin, pointOnAToPack, pointOnBToPack);
-      return true;
+      updatePoints();
+
+      return pointOnA;
+   }
+
+   public Point3DReadOnly getCollisionPointOnB()
+   {
+      if (simplex == null)
+         return null;
+
+      updatePoints();
+
+      return pointOnB;
+   }
+
+   private void updatePoints()
+   {
+      if (areCollisionPointsUpToDate)
+         return;
+
+      simplex.getCollidingPointsOnSimplex(origin, pointOnA, pointOnB);
+      areCollisionPointsUpToDate = true;
    }
 
    public int getIterations()
