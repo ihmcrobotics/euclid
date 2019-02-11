@@ -51,7 +51,7 @@ public class ExpandingPolytopeAlgorithm
       return epsilon;
    }
 
-   public void runEPAExpansion(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
+   public void doCollisionTest(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
    {
       isCollisionVectorUpToDate = false;
       areCollisionPointsUpToDate = false;
@@ -77,8 +77,6 @@ public class ExpandingPolytopeAlgorithm
          simplex.getSupportVectorDirectionTo(origin, supportDirection);
          // We need to negate the support direction to point toward the outside of the simplex and thus force the expansion.
          supportDirection.negate();
-
-         supportDirection.normalize();
 
          if (supportDirection.epsilonEquals(previousSupportDirection, epsilon))
             break;
