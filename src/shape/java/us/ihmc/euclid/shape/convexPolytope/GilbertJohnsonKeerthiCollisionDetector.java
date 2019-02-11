@@ -3,7 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -23,7 +23,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private SimplexPolytope3D simplex;
    private final Vector3D supportDirection = new Vector3D();
    private final Vector3D previousSupportDirection = new Vector3D();
-   private final Vector3DReadOnly supportDirectionNegative = EuclidPolytopeFactories.newNegativeLinkedVector3D(supportDirection);
+   private final Vector3DReadOnly supportDirectionNegative = EuclidCoreFactories.newNegativeLinkedVector3D(supportDirection);
 
    private final Vector3D separationVector = new Vector3D();
    private final Point3D closestPointOnA = new Point3D();

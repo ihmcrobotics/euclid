@@ -6,6 +6,7 @@ import static us.ihmc.euclid.EuclidTestConstants.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,11 @@ import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
@@ -648,6 +651,44 @@ public class Box3DTest
          Box3D box2 = new Box3D(pose2, widthY, heightZ, lengthX);
 
          assertTrue(box1.geometricallyEquals(box2, EPSILON), "Iteration: " + i);
+      }
+   }
+
+   @Test
+   void testGetSupportingVertex() throws Exception
+   {
+      Random random = new Random(546161);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D box = EuclidShapeRandomTools.nextBox3D(random);
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
+         Point3D expectedSupportingVertex = Stream.of(box.getVertices())
+                                                  .sorted((v1,
+                                                           v2) -> -Double.compare(TupleTools.dot(supportDirection, v1), TupleTools.dot(supportDirection, v2)))
+                                                  .findFirst().get();
+         Point3DReadOnly actualSupportingVertex = box.getSupportingVertex(supportDirection);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedSupportingVertex, actualSupportingVertex, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D box = EuclidShapeRandomTools.nextBox3D(random);
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
+         Point3DReadOnly supportingVertex = box.getSupportingVertex(supportDirection);
+         Point3D supportingVertexTranslated = new Point3D();
+         supportDirection.normalize();
+         assertTrue(box.isInsideOrOnSurface(supportingVertex));
+         supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
+         assertFalse(box.isInsideOrOnSurface(supportingVertexTranslated));
+         supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
+         Vector3D expectedNormal = new Vector3D();
+         expectedNormal.sub(supportingVertexTranslated, supportingVertex);
+         expectedNormal.normalize();
+
+         Vector3D actualNormal = new Vector3D();
+         box.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 

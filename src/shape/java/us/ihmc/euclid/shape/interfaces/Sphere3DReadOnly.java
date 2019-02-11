@@ -35,6 +35,15 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      supportingVertexToPack.set(supportDirection);
+      supportingVertexToPack.scale(getRadius() / supportDirection.length());
+      supportingVertexToPack.add(getPosition());
+      return true;
+   }
+
+   @Override
    default double signedDistance(Point3DReadOnly point)
    {
       return EuclidShapeTools.signedDistanceBetweenPoint3DAndSphere3D(getPosition(), getRadius(), point);
@@ -92,7 +101,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     */
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
-   {
+   { // FIXME The orientation part of the pose should be ignored here.
       Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
       Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
       getPose().inverseTransform(pointOnLine, pointOnLineInLocal);

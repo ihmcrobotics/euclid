@@ -358,17 +358,20 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    }
 
    @Override
-   default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportVector)
+   default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
+      if (isEmpty())
+         return null;
+
       HalfEdge3DReadOnly startEdge = getEdge(0);
       Vertex3DReadOnly supportingVertex = startEdge.getOrigin();
-      double maxDot = supportingVertex.dot(supportVector);
+      double maxDot = supportingVertex.dot(supportDirection);
       HalfEdge3DReadOnly currentEdge = startEdge.getNext();
 
       while (currentEdge != startEdge)
       {
          Vertex3DReadOnly candidate = currentEdge.getOrigin();
-         double currentDot = candidate.dot(supportVector);
+         double currentDot = candidate.dot(supportDirection);
 
          if (currentDot > maxDot)
          {
@@ -380,6 +383,15 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       }
 
       return supportingVertex;
+   }
+
+   @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      if (isEmpty())
+         return false;
+      supportingVertexToPack.set(getSupportingVertex(supportDirection));
+      return true;
    }
 
    @Override

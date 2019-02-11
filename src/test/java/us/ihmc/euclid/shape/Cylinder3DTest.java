@@ -14,11 +14,12 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Cylinder3DTest
 {
-   private static final double EPSILON = 1e-14;
+   private static final double EPSILON = 1e-12;
 
    @Test
    public void testCommonShape3dFunctionality()
@@ -455,6 +456,29 @@ public class Cylinder3DTest
          secondCylinder.appendTranslation(translation);
 
          assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
+      }
+   }
+
+   @Test
+   void testGetSupportingVertex() throws Exception
+   {
+      Random random = new Random(546161);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Cylinder3D cylinder = EuclidShapeRandomTools.nextCylinder3D(random);
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
+         Point3DReadOnly supportingVertex = cylinder.getSupportingVertex(supportDirection);
+         assertTrue(cylinder.isInsideOrOnSurface(supportingVertex));
+
+         Point3D supportingVertexTranslated = new Point3D();
+         supportDirection.normalize();
+         supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
+         assertFalse(cylinder.isInsideOrOnSurface(supportingVertexTranslated));
+
+         Vector3D actualNormal = new Vector3D();
+         cylinder.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
       }
    }
 }

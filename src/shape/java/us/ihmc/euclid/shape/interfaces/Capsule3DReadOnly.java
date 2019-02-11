@@ -35,7 +35,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    default Point3DReadOnly getBottomCenter()
    {
       Point3D bottomCenter = new Point3D();
-      bottomCenter.scaleAdd(getHalfLength(), getAxis(), getPosition());
+      bottomCenter.scaleAdd(-getHalfLength(), getAxis(), getPosition());
       return bottomCenter;
    }
 
@@ -52,6 +52,21 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    {
       return EuclidShapeTools.doPoint3DCapsule3DCollisionTest(getPosition(), getAxis(), getLength(), getRadius(), pointToCheck, closestPointOnSurfaceToPack,
                                                               normalAtClosestPointToPack) <= 0.0;
+   }
+
+   @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      // TODO Should we consider the edge case where supportDirection is orthogonal to the cylinder's axis and return a vertex that is on the middle of the cylinder part?
+      supportingVertexToPack.set(supportDirection);
+      supportingVertexToPack.scale(getRadius() / supportDirection.length());
+
+      if (supportDirection.dot(getAxis()) > 0.0)
+         supportingVertexToPack.add(getTopCenter());
+      else
+         supportingVertexToPack.add(getBottomCenter());
+
+      return true;
    }
 
    /** {@inheritDoc} */

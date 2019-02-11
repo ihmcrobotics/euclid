@@ -6,7 +6,9 @@ import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
  * {@code Cylinder3D} represents a cylinder defined by its radius and length.
@@ -30,6 +32,13 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * at {@code - 0.5 * length}.
     */
    private double length;
+
+   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPositionX(),
+                                                                                          () -> getHalfLength() * getAxis().getY() + getPositionY(),
+                                                                                          () -> getHalfLength() * getAxis().getZ() + getPositionZ());
+   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPositionX(),
+                                                                                             () -> -getHalfLength() * getAxis().getY() + getPositionY(),
+                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPositionZ());
 
    /**
     * Creates a new cylinder with length of {@code 1} and radius of {@code 0.5}.
@@ -152,6 +161,18 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public double getLength()
    {
       return length;
+   }
+
+   @Override
+   public Point3DReadOnly getTopCenter()
+   {
+      return topCenter;
+   }
+
+   @Override
+   public Point3DReadOnly getBottomCenter()
+   {
+      return bottomCenter;
    }
 
    @Override

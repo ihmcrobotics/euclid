@@ -13,9 +13,12 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class Sphere3DTest
 {
+   private static final double EPSILON = 1.0e-12;
+
    @Test
    public void testCommonShape3dFunctionality()
    {
@@ -190,6 +193,32 @@ public class Sphere3DTest
          secondSphere.appendTransform(rotationOnly);
 
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
+      }
+   }
+
+   @Test
+   void testGetSupportingVertex() throws Exception
+   {
+      Random random = new Random(546161);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Sphere3D sphere = EuclidShapeRandomTools.nextSphere3D(random);
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
+         Point3DReadOnly supportingVertex = sphere.getSupportingVertex(supportDirection);
+         Point3D supportingVertexTranslated = new Point3D();
+         supportDirection.normalize();
+         assertTrue(sphere.isInsideOrOnSurface(supportingVertex));
+         supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
+         assertFalse(sphere.isInsideOrOnSurface(supportingVertexTranslated));
+         supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
+         Vector3D expectedNormal = new Vector3D();
+         expectedNormal.sub(supportingVertexTranslated, supportingVertex);
+         expectedNormal.normalize();
+
+         Vector3D actualNormal = new Vector3D();
+         sphere.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
 }

@@ -30,6 +30,25 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
+
+      // TODO Should we consider the case xSupportDirection == 0.0 by setting the resulting vertex coordinate to 0.0?
+      supportingVertexToPack.setX(supportDirectionInLocal.getX() > 0.0 ? getSizeX() : -getSizeX());
+      supportingVertexToPack.setY(supportDirectionInLocal.getY() > 0.0 ? getSizeY() : -getSizeY());
+      supportingVertexToPack.setZ(supportDirectionInLocal.getZ() > 0.0 ? getSizeZ() : -getSizeZ());
+      supportingVertexToPack.scale(0.5);
+
+      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+
+      transformToWorld(supportingVertexToPack);
+
+      return true;
+   }
+
+   @Override
    default double signedDistance(Point3DReadOnly point)
    {
       return EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(getPose(), getSize(), point);

@@ -44,6 +44,12 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      throw new UnsupportedOperationException("Torus3D being a concave shape cannot implement the supporting vertex feature.");
+   }
+
+   @Override
    default double signedDistance(Point3DReadOnly point)
    {
       return EuclidShapeTools.signedDistanceBetweenPoint3DAndTorus3D(getPosition(), getAxis(), getRadius(), getTubeRadius(), point);

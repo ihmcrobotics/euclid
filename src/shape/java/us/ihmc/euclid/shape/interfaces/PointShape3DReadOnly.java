@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.interfaces;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
 {
@@ -48,6 +49,13 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
       if (closestPointOnSurfaceToPack != null)
          closestPointOnSurfaceToPack.set(this);
       return false;
+   }
+
+   @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      supportingVertexToPack.set(this);
+      return true;
    }
 
    @Override

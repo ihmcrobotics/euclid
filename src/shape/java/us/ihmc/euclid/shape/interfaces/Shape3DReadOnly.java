@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public interface Shape3DReadOnly
+public interface Shape3DReadOnly extends SupportingVertexHolder
 {
    static final double IS_INSIDE_EPS = 1.0e-12;
 

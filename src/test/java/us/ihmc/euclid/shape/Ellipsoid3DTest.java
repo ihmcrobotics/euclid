@@ -14,6 +14,7 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class Ellipsoid3DTest
 {
@@ -902,5 +903,34 @@ public class Ellipsoid3DTest
       matrix[11] = random.nextDouble();
 
       return transform;
+   }
+
+   @Test
+   void testGetSupportingVertex() throws Exception
+   {
+      Random random = new Random(546161);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Ellipsoid3D ellipsoid = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         ellipsoid.setRadii(1.0, 1.0, 0.5);
+         ellipsoid.getPose().setToZero();
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
+         Point3DReadOnly supportingVertex = ellipsoid.getSupportingVertex(supportDirection);
+         assertTrue(ellipsoid.isInsideOrOnSurface(supportingVertex));
+
+         Point3D supportingVertexTranslated = new Point3D();
+         supportDirection.normalize();
+         supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
+         assertFalse(ellipsoid.isInsideOrOnSurface(supportingVertexTranslated));
+         supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
+         assertFalse(ellipsoid.isInsideOrOnSurface(supportingVertexTranslated));
+
+         
+
+         Vector3D actualNormal = new Vector3D();
+         ellipsoid.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
+      }
    }
 }

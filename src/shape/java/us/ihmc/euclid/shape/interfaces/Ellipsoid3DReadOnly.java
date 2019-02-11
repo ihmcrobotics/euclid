@@ -31,6 +31,21 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
+
+      double sumOfSquares = EuclidCoreTools.normSquared(supportDirectionInLocal.getX() / getRadiusX(), supportDirectionInLocal.getY() / getRadiusY(), supportDirectionInLocal.getZ() / getRadiusZ());
+      supportingVertexToPack.setAndScale(1.0 / Math.sqrt(sumOfSquares), supportDirection);
+      supportingVertexToPack.add(getPosition());
+
+      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+
+      return false;
+   }
+
+   @Override
    default double signedDistance(Point3DReadOnly point)
    {
       return EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(getPose(), getRadii(), point);

@@ -248,6 +248,15 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    }
 
    @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      if (isEmpty())
+         return false;
+      supportingVertexToPack.set(getSupportingVertex(supportDirection));
+      return true;
+   }
+
+   @Override
    default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
       if (isEmpty())
