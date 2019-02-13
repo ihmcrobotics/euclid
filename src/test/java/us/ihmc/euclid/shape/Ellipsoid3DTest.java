@@ -913,9 +913,8 @@ public class Ellipsoid3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Ellipsoid3D ellipsoid = EuclidShapeRandomTools.nextEllipsoid3D(random);
-         ellipsoid.setRadii(1.0, 1.0, 0.5);
-         ellipsoid.getPose().setToZero();
          Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
+         supportDirection.normalize();
          Point3DReadOnly supportingVertex = ellipsoid.getSupportingVertex(supportDirection);
          assertTrue(ellipsoid.isInsideOrOnSurface(supportingVertex));
 
@@ -923,13 +922,21 @@ public class Ellipsoid3DTest
          supportDirection.normalize();
          supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
          assertFalse(ellipsoid.isInsideOrOnSurface(supportingVertexTranslated));
-         supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
+
+         for (int j = 0; j < 100; j++)
+         {
+            // Slightly translated the supporting vertex on plane orthogonal to the direction and asserting that the resulting point isn't inside.
+            Vector3D orthogonalToSupportDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, supportDirection, true);
+            Point3D pointSupposedlyOutside = new Point3D();
+            pointSupposedlyOutside.scaleAdd(1.0e-4 * ellipsoid.getRadii().length(), orthogonalToSupportDirection, supportingVertex);
+            assertFalse(ellipsoid.isInsideOrOnSurface(pointSupposedlyOutside));
+         }
+
+         supportingVertexTranslated.scaleAdd(1.0e-8, supportDirection, supportingVertex);
          assertFalse(ellipsoid.isInsideOrOnSurface(supportingVertexTranslated));
 
-         
-
          Vector3D actualNormal = new Vector3D();
-         ellipsoid.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         ellipsoid.doPoint3DCollisionTest(supportingVertex, null, actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
       }
    }
