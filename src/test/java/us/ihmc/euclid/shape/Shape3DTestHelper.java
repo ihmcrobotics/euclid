@@ -161,7 +161,7 @@ public class Shape3DTestHelper
       { // When dealing with sharp edges, the point can jump on the other side of the shape even when shifting only by a little.
         // If that's the case, computing the normal for this point should reveal that by having the normal having a much different orientation.
          Vector3D problematicNormal = new Vector3D();
-         shape3d.doPoint3DCollisionTest(pointALittleInside, null, problematicNormal);
+         shape3d.doPoint3DCollisionTest(pointALittleInside, new Point3D(), problematicNormal);
          isNormalWayDifferent = problematicNormal.angle(surfaceNormal) > Math.toRadians(90.0);
       }
 

@@ -477,7 +477,7 @@ public class Cylinder3DTest
          assertFalse(cylinder.isInsideOrOnSurface(supportingVertexTranslated));
 
          Vector3D actualNormal = new Vector3D();
-         cylinder.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         cylinder.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
       }
    }

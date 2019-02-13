@@ -1330,6 +1330,12 @@ public class ConvexPolytope3DTest
       { // Point directly below a face
          ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
 
+         if (convexPolytope3D.isEmpty())
+         {
+            assertNull(convexPolytope3D.orthogonalProjection(EuclidCoreRandomTools.nextPoint3D(random)));
+            continue;
+         }
+
          Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
          HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
          Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
@@ -1342,6 +1348,12 @@ public class ConvexPolytope3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to an edge
          ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+
+         if (convexPolytope3D.isEmpty())
+         {
+            assertNull(convexPolytope3D.orthogonalProjection(EuclidCoreRandomTools.nextPoint3D(random)));
+            continue;
+         }
 
          Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
          HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
@@ -1363,6 +1375,12 @@ public class ConvexPolytope3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to a vertex
          ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+
+         if (convexPolytope3D.isEmpty())
+         {
+            assertNull(convexPolytope3D.orthogonalProjection(EuclidCoreRandomTools.nextPoint3D(random)));
+            continue;
+         }
 
          Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
 

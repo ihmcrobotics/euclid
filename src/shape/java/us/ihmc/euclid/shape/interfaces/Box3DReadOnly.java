@@ -26,45 +26,33 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DBox3DCollisionTest(getPose(), getSize(), pointToCheck, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
+      return EuclidShapeTools.doPoint3DBox3DCollisionTest(pointToCheck, this, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
    }
 
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
-      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
-
-      // TODO Should we consider the case xSupportDirection == 0.0 by setting the resulting vertex coordinate to 0.0?
-      supportingVertexToPack.setX(supportDirectionInLocal.getX() > 0.0 ? getSizeX() : -getSizeX());
-      supportingVertexToPack.setY(supportDirectionInLocal.getY() > 0.0 ? getSizeY() : -getSizeY());
-      supportingVertexToPack.setZ(supportDirectionInLocal.getZ() > 0.0 ? getSizeZ() : -getSizeZ());
-      supportingVertexToPack.scale(0.5);
-
-      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
-
-      transformToWorld(supportingVertexToPack);
-
+      EuclidShapeTools.supportingVertexBox3D(supportDirection, this, supportingVertexToPack);
       return true;
    }
 
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(getPose(), getSize(), point);
+      return EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(point, this);
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      return EuclidShapeTools.isPoint3DInsideBox3D(getPose(), getSize(), query, epsilon);
+      return EuclidShapeTools.isPoint3DInsideBox3D(query, this, epsilon);
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return EuclidShapeTools.orthogonalProjectionOntoBox3D(getPose(), getSize(), pointToProject, projectionToPack);
+      return EuclidShapeTools.orthogonalProjectionOntoBox3D(pointToProject, this, projectionToPack);
    }
 
    /**

@@ -50,7 +50,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DCapsule3DCollisionTest(getPosition(), getAxis(), getLength(), getRadius(), pointToCheck, closestPointOnSurfaceToPack,
+      return EuclidShapeTools.doPoint3DCapsule3DCollisionTest(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
                                                               normalAtClosestPointToPack) <= 0.0;
    }
 
@@ -73,21 +73,21 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndCapsule3D(getPosition(), getAxis(), getLength(), getRadius(), point);
+      return EuclidShapeTools.signedDistanceBetweenPoint3DAndCapsule3D(point, getPosition(), getAxis(), getLength(), getRadius());
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      return EuclidShapeTools.isPoint3DInsideCapsule3D(getPosition(), getAxis(), getLength(), getRadius(), query, epsilon);
+      return EuclidShapeTools.isPoint3DInsideCapsule3D(query, getPosition(), getAxis(), getLength(), getRadius(), epsilon);
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return EuclidShapeTools.orthogonalProjectionOntoCapsule3D(getPosition(), getAxis(), getLength(), getRadius(), pointToProject, projectionToPack);
+      return EuclidShapeTools.orthogonalProjectionOntoCapsule3D(pointToProject, getPosition(), getAxis(), getLength(), getRadius(), projectionToPack);
    }
 
    default boolean epsilonEquals(Capsule3DReadOnly other, double epsilon)

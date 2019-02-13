@@ -51,7 +51,7 @@ class Capsule3DTest
          assertFalse(capsule.isInsideOrOnSurface(supportingVertexTranslated));
 
          Vector3D actualNormal = new Vector3D();
-         capsule.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         capsule.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
       }
    }
