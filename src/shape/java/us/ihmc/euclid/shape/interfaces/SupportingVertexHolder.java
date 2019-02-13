@@ -16,8 +16,11 @@ public interface SupportingVertexHolder
    default Point3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
       Point3D supportingVertex = new Point3D();
-      getSupportingVertex(supportDirection, supportingVertex);
-      return supportingVertex;
+      boolean success = getSupportingVertex(supportDirection, supportingVertex);
+      if (success)
+         return supportingVertex;
+      else
+         return null;
    }
 
    boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack);
