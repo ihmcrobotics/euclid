@@ -10,6 +10,8 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
 {
    Vector3DReadOnly getSize();
 
+   IntermediateVariableSupplier getIntermediateVariableSupplier();
+
    /**
     * Gets the length of this ramp's slope part.
     * <p>

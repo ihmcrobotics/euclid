@@ -10,6 +10,8 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    @Override
    Vector3DBasics getSize();
 
+   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
+
    @Override
    default boolean containsNaN()
    {
