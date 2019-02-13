@@ -34,7 +34,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     */
    default double getRampIncline()
    {
-      return EuclidShapeTools.computeRanp3DIncline(getSize());
+      return EuclidShapeTools.computeRamp3DIncline(getSize());
    }
 
    /** {@inheritDoc} */

@@ -883,7 +883,7 @@ public class EuclidShapeTools
       return Math.sqrt(EuclidCoreTools.normSquared(ramp3DSizeX, ramp3DSizeZ));
    }
 
-   public static double computeRanp3DIncline(Vector3DReadOnly ramp3DSize)
+   public static double computeRamp3DIncline(Vector3DReadOnly ramp3DSize)
    {
       return computeRanp3DIncline(ramp3DSize.getX(), ramp3DSize.getZ());
    }
