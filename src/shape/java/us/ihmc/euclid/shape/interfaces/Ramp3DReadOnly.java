@@ -53,6 +53,47 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
+   default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
+   {
+      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
+
+      if (supportDirectionInLocal.getZ() < 0.0)
+      {
+         supportingVertexToPack.setX(supportDirectionInLocal.getX() > 0.0 ? getSizeX() : 0.0);
+         supportingVertexToPack.setZ(0.0);
+      }
+      else if (supportDirectionInLocal.getX() > 0.0)
+      {
+         supportingVertexToPack.setX(getSizeX());
+         supportingVertexToPack.setZ(supportDirectionInLocal.getZ() > 0.0 ? getSizeZ() : 0.0);
+      }
+      else
+      { // Look at a the incline of the direction. 
+         double directionInclineTanArgument = -supportDirectionInLocal.getX() / supportDirectionInLocal.getZ();
+         double rampInclineTanArgument = getSizeZ() / getSizeX();
+
+         if (directionInclineTanArgument > rampInclineTanArgument)
+         { // Pointing toward the bottom of the ramp
+            supportingVertexToPack.setX(0.0);
+            supportingVertexToPack.setZ(0.0);
+         }
+         else
+         { // Pointing toward the top of the ramp
+            supportingVertexToPack.setX(getSizeX());
+            supportingVertexToPack.setZ(getSizeZ());
+         }
+      }
+
+      supportingVertexToPack.setY(supportDirectionInLocal.getY() > 0.0 ? 0.5 * getSizeY() : -0.5 * getSizeY());
+      transformToWorld(supportingVertexToPack);
+
+      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+
+      return true;
+   }
+
+   @Override
    default double signedDistance(Point3DReadOnly point)
    {
       return EuclidShapeTools.signedDistanceBetweenPoint3DAndRamp3D(getPose(), getSize(), point);

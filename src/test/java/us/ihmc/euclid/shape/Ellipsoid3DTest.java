@@ -914,7 +914,6 @@ public class Ellipsoid3DTest
       {
          Ellipsoid3D ellipsoid = EuclidShapeRandomTools.nextEllipsoid3D(random);
          Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
-         supportDirection.normalize();
          Point3DReadOnly supportingVertex = ellipsoid.getSupportingVertex(supportDirection);
          assertTrue(ellipsoid.isInsideOrOnSurface(supportingVertex));
 

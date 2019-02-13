@@ -17,11 +17,13 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Ramp3DTest
 {
    private static final boolean DEBUG = false;
+   private static final double EPSILON = 1.0e-12;
 
    /**
     * Ramp3d needs a little more work and the tests improve. It's hard to do really good surface normal
@@ -572,4 +574,29 @@ public class Ramp3DTest
          System.out.println(string);
    }
 
+   @Test
+   void testGetSupportingVertex() throws Exception
+   {
+      Random random = new Random(546161);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Ramp3D ramp = EuclidShapeRandomTools.nextRamp3D(random);
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
+         Point3DReadOnly supportingVertex = ramp.getSupportingVertex(supportDirection);
+         Point3D supportingVertexTranslated = new Point3D();
+         supportDirection.normalize();
+         assertTrue(ramp.isInsideOrOnSurface(supportingVertex));
+         supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
+         assertFalse(ramp.isInsideOrOnSurface(supportingVertexTranslated));
+         supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
+         Vector3D expectedNormal = new Vector3D();
+         expectedNormal.sub(supportingVertexTranslated, supportingVertex);
+         expectedNormal.normalize();
+
+         Vector3D actualNormal = new Vector3D();
+         ramp.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+   }
 }
