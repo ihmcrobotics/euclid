@@ -36,6 +36,6 @@ testDependencies {
     compile ihmc.sourceSetProject("frame")
     compile ihmc.sourceSetProject("shape")
 
-    compile group: "org.pitest", name: "pitest", version: "1.2.0"
-    compile group: "org.pitest", name: "pitest-command-line", version: "1.2.0"
+    compile group: "org.pitest", name: "pitest", version: "1.4.3"
+    compile group: "org.pitest", name: "pitest-command-line", version: "1.4.3"
 }
