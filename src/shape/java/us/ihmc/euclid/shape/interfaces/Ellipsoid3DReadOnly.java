@@ -26,25 +26,27 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DEllipsoid3DCollisionTest(getPose(), getRadii(), pointToCheck, closestPointOnSurfaceToPack,
-                                                                normalAtClosestPointToPack) <= 0.0;
+      Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
+
+      double distance = EuclidShapeTools.doPoint3DEllipsoid3DCollisionTest(pointToCheckInLocal, getRadii(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
+
+      transformToWorld(closestPointOnSurfaceToPack);
+      transformToWorld(normalAtClosestPointToPack);
+      getIntermediateVariableSupplier().releasePoint3D(pointToCheckInLocal);
+      
+      return distance <= 0.0;
    }
 
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      Vector3DBasics n = getIntermediateVariableSupplier().requestVector3D();
-      getPose().inverseTransform(supportDirection, n);
+      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
 
-      n.normalize();
-      n.scale(getRadiusX(), getRadiusY(), getRadiusZ());
-      supportingVertexToPack.set(n);
-      supportingVertexToPack.scale(getRadiusX(), getRadiusY(), getRadiusZ());
-      supportingVertexToPack.scale(1.0 / n.length());
+      EuclidShapeTools.supportingVertexEllipsoid3D(supportDirectionInLocal, getRadii(), supportingVertexToPack);
 
       transformToWorld(supportingVertexToPack);
-
-      getIntermediateVariableSupplier().releaseVector3D(n);
 
       return true;
    }
@@ -52,20 +54,46 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(getPose(), getRadii(), point);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(point, queryInLocal);
+
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(queryInLocal, getRadii());
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+
+      return signedDistance;
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      return EuclidShapeTools.isPoint3DInsideEllipsoid3D(getPose(), getRadii(), query, epsilon);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(query, queryInLocal);
+
+      boolean isInside = EuclidShapeTools.isPoint3DInsideEllipsoid3D(queryInLocal, getRadii(), epsilon);
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+
+      return isInside;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return EuclidShapeTools.orthogonalProjectionOntoEllipsoid3D(getPose(), getRadii(), pointToProject, projectionToPack);
+      Point3DBasics pointToProjectInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(pointToProject, pointToProjectInLocal);
+
+      boolean hasBeenProjected = EuclidShapeTools.orthogonalProjectionOntoEllipsoid3D(pointToProjectInLocal, getRadii(), projectionToPack);
+
+      if (hasBeenProjected)
+      {
+         transformToWorld(projectionToPack);
+      }
+
+      getIntermediateVariableSupplier().releasePoint3D(pointToProjectInLocal);
+
+      return hasBeenProjected;
    }
 
    /**

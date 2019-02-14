@@ -46,20 +46,20 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndSphere3D(getPosition(), getRadius(), point);
+      return EuclidShapeTools.signedDistanceBetweenPoint3DAndSphere3D(point, getPosition(), getRadius());
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      return EuclidShapeTools.isPoint3DInsideSphere3D(getPosition(), getRadius(), query, epsilon);
+      return EuclidShapeTools.isPoint3DInsideSphere3D(query, getPosition(), getRadius(), epsilon);
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return !EuclidShapeTools.orthogonalProjectionOntoSphere3D(getPosition(), getRadius(), pointToProject, projectionToPack);
+      return !EuclidShapeTools.orthogonalProjectionOntoSphere3D(pointToProject, getPosition(), getRadius(), projectionToPack);
    }
 
    /**

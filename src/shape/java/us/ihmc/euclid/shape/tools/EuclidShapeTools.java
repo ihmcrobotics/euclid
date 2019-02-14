@@ -3,11 +3,11 @@ package us.ihmc.euclid.shape.tools;
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 import static us.ihmc.euclid.tools.TupleTools.*;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -16,30 +16,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class EuclidShapeTools
 {
    private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
-
-   public static boolean isPoint3DInsideBox3D(Point3DReadOnly query, Box3DReadOnly box3D, double epsilon)
-   {
-      double dX = query.getX() - box3D.getPositionX();
-      double dY = query.getY() - box3D.getPositionY();
-      double dZ = query.getZ() - box3D.getPositionZ();
-
-      if (box3D.getPose().getShapeOrientation().isIdentity())
-         return isPoint3DInsideBox3D(dX, dY, dZ, box3D.getSize(), epsilon);
-
-      double xLocalQuery = dot(dX, dY, dZ, box3D.getPose().getXAxis());
-
-      if (Math.abs(xLocalQuery) <= 0.5 * box3D.getSizeX() + epsilon)
-      {
-         double yLocalQuery = dot(dX, dY, dZ, box3D.getPose().getYAxis());
-
-         if (Math.abs(yLocalQuery) <= 0.5 * box3D.getSizeY() + epsilon)
-         {
-            double zLocalQuery = dot(dX, dY, dZ, box3D.getPose().getZAxis());
-            return Math.abs(zLocalQuery) <= 0.5 * box3D.getSizeZ() + epsilon;
-         }
-      }
-      return false;
-   }
 
    public static boolean isPoint3DInsideBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize, double epsilon)
    {
@@ -56,18 +32,6 @@ public class EuclidShapeTools
          }
       }
       return false;
-   }
-
-   public static double signedDistanceBetweenPoint3DAndBox3D(Point3DReadOnly query, Box3DReadOnly box3D)
-   {
-      Point3DBasics queryInLocal = box3D.getIntermediateVariableSupplier().requestPoint3D();
-      box3D.getPose().inverseTransform(query, queryInLocal);
-
-      double signedDistance = signedDistanceBetweenPoint3DAndBox3D(queryInLocal, box3D.getSize());
-
-      box3D.getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
-
-      return signedDistance;
    }
 
    public static double signedDistanceBetweenPoint3DAndBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize)
@@ -96,20 +60,6 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean orthogonalProjectionOntoBox3D(Point3DReadOnly pointToProject, Box3DReadOnly box3D, Point3DBasics projectionToPack)
-   {
-      Point3DBasics pointToProjectInLocal = box3D.getIntermediateVariableSupplier().requestPoint3D();
-      box3D.getPose().inverseTransform(pointToProject, pointToProjectInLocal);
-
-      boolean hasBeenProjected = orthogonalProjectionOntoBox3D(pointToProjectInLocal, box3D.getSize(), projectionToPack);
-
-      if (hasBeenProjected)
-         box3D.transformToWorld(projectionToPack);
-
-      box3D.getIntermediateVariableSupplier().releasePoint3D(pointToProjectInLocal);
-      return hasBeenProjected;
-   }
-
    public static boolean orthogonalProjectionOntoBox3D(Point3DReadOnly pointToProject, Vector3DReadOnly box3DSize, Point3DBasics projectionToPack)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
@@ -136,36 +86,12 @@ public class EuclidShapeTools
       }
    }
 
-   public static void supportingVertexBox3D(Vector3DReadOnly supportDirection, Box3DReadOnly box3D, Point3DBasics supportingVertexToPack)
-   {
-      Vector3DBasics supportDirectionInLocal = box3D.getIntermediateVariableSupplier().requestVector3D();
-      box3D.getPose().inverseTransform(supportDirection, supportDirectionInLocal);
-
-      supportingVertexBox3D(supportDirectionInLocal, box3D.getSize(), supportingVertexToPack);
-
-      box3D.transformToWorld(supportingVertexToPack);
-      box3D.getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
-   }
-
    public static void supportingVertexBox3D(Vector3DReadOnly supportDirection, Vector3DReadOnly box3DSize, Point3DBasics supportingVertexToPack)
    {
       supportingVertexToPack.setX(supportDirection.getX() > 0.0 ? box3DSize.getX() : -box3DSize.getX());
       supportingVertexToPack.setY(supportDirection.getY() > 0.0 ? box3DSize.getY() : -box3DSize.getY());
       supportingVertexToPack.setZ(supportDirection.getZ() > 0.0 ? box3DSize.getZ() : -box3DSize.getZ());
       supportingVertexToPack.scale(0.5);
-   }
-
-   public static double doPoint3DBox3DCollisionTest(Point3DReadOnly query, Box3DReadOnly box3D, Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
-   {
-      Point3DBasics queryInLocal = box3D.getIntermediateVariableSupplier().requestPoint3D();
-      box3D.getPose().inverseTransform(query, queryInLocal);
-
-      double distance = doPoint3DBox3DCollisionTest(queryInLocal, box3D.getSize(), closestPointToPack, normalToPack);
-
-      box3D.transformToWorld(closestPointToPack);
-      box3D.transformToWorld(normalToPack);
-      box3D.getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
-      return distance;
    }
 
    public static double doPoint3DBox3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly box3DSize, Point3DBasics closestPointToPack,
@@ -357,6 +283,18 @@ public class EuclidShapeTools
          projectionToPack.add(bottomCenterX, bottomCenterY, bottomCenterZ);
          return true;
       }
+   }
+
+   public static void supportingVertexCapsule3D(Vector3DReadOnly supportDirection, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
+                                                double capsule3DLength, double capsule3DRadius, Point3DBasics supportingVertexToPack)
+   {
+      supportingVertexToPack.setAndScale(capsule3DRadius / supportDirection.length(), supportDirection);
+      supportingVertexToPack.add(capsule3DPosition);
+
+      if (supportDirection.dot(capsule3DAxis) > 0.0)
+         supportingVertexToPack.scaleAdd(0.5 * capsule3DLength, capsule3DAxis, supportingVertexToPack);
+      else
+         supportingVertexToPack.scaleAdd(-0.5 * capsule3DLength, capsule3DAxis, supportingVertexToPack);
    }
 
    public static double doPoint3DCapsule3DCollisionTest(Point3DReadOnly query, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
@@ -604,6 +542,22 @@ public class EuclidShapeTools
       }
    }
 
+   public static void supportingVertexCylinder3D(Vector3DReadOnly supportDirection, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
+                                                 double cylinder3DLength, double cylinder3DRadius, Point3DBasics supportingVertexToPack)
+   {
+      supportingVertexToPack.set(supportDirection);
+      double dot = supportDirection.dot(cylinder3DAxis);
+      supportingVertexToPack.setAndScale(dot, cylinder3DAxis);
+      supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
+      supportingVertexToPack.scale(cylinder3DRadius / supportingVertexToPack.distanceFromOrigin());
+      supportingVertexToPack.add(cylinder3DPosition);
+
+      if (supportDirection.dot(cylinder3DAxis) > 0.0)
+         supportingVertexToPack.scaleAdd(0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
+      else
+         supportingVertexToPack.scaleAdd(-0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
+   }
+
    public static double doPoint3DCylinder3DCollisionTest(Point3DReadOnly query, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
                                                          double cylinder3DLength, double cylinder3DRadius, Point3DBasics closestPointOnSurfaceToPack,
                                                          Vector3DBasics normalToPack)
@@ -731,66 +685,37 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean isPoint3DInsideEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly query,
-                                                    double epsilon)
+   public static boolean isPoint3DInsideEllipsoid3D(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, double epsilon)
    {
-      double dX = query.getX() - ellipsoid3DPose.getTranslationX();
-      double dY = query.getY() - ellipsoid3DPose.getTranslationY();
-      double dZ = query.getZ() - ellipsoid3DPose.getTranslationZ();
-
-      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
-      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
-      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
-
-      double scaledX = xLocalQuery / (ellipsoid3DRadii.getX() + epsilon);
-      double scaledY = yLocalQuery / (ellipsoid3DRadii.getY() + epsilon);
-      double scaledZ = zLocalQuery / (ellipsoid3DRadii.getZ() + epsilon);
+      double scaledX = query.getX() / (ellipsoid3DRadii.getX() + epsilon);
+      double scaledY = query.getY() / (ellipsoid3DRadii.getY() + epsilon);
+      double scaledZ = query.getZ() / (ellipsoid3DRadii.getZ() + epsilon);
 
       return EuclidCoreTools.normSquared(scaledX, scaledY, scaledZ) <= 1.0;
    }
 
-   public static double signedDistanceBetweenPoint3DAndEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii,
-                                                                   Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndEllipsoid3D(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii)
    {
       double xRadius = ellipsoid3DRadii.getX();
       double yRadius = ellipsoid3DRadii.getY();
       double zRadius = ellipsoid3DRadii.getZ();
 
-      double dX = query.getX() - ellipsoid3DPose.getTranslationX();
-      double dY = query.getY() - ellipsoid3DPose.getTranslationY();
-      double dZ = query.getZ() - ellipsoid3DPose.getTranslationZ();
-      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
-      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
-      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
+      double scaleFactor = 1.0 / Math.sqrt(EuclidCoreTools.normSquared(query.getX() / xRadius, query.getY() / yRadius, query.getZ() / zRadius));
 
-      double scaleFactor = 1.0 / Math.sqrt(EuclidCoreTools.normSquared(xLocalQuery / xRadius, yLocalQuery / yRadius, zLocalQuery / zRadius));
-
-      return query.distance(ellipsoid3DPose.getShapePosition()) * (1.0 - scaleFactor);
+      return query.distanceFromOrigin() * (1.0 - scaleFactor);
    }
 
-   public static boolean orthogonalProjectionOntoEllipsoid3D(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii,
-                                                             Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOntoEllipsoid3D(Point3DReadOnly pointToProject, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics projectionToPack)
    {
       double xRadius = ellipsoid3DRadii.getX();
       double yRadius = ellipsoid3DRadii.getY();
       double zRadius = ellipsoid3DRadii.getZ();
 
-      double dX = pointToProject.getX() - ellipsoid3DPose.getTranslationX();
-      double dY = pointToProject.getY() - ellipsoid3DPose.getTranslationY();
-      double dZ = pointToProject.getZ() - ellipsoid3DPose.getTranslationZ();
-
-      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
-      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
-      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
-
-      double sumOfSquares = EuclidCoreTools.normSquared(xLocalQuery / xRadius, yLocalQuery / yRadius, zLocalQuery / zRadius);
+      double sumOfSquares = EuclidCoreTools.normSquared(pointToProject.getX() / xRadius, pointToProject.getY() / yRadius, pointToProject.getZ() / zRadius);
 
       if (sumOfSquares > 1.0)
       {
-         double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
-         projectionToPack.sub(pointToProject, ellipsoid3DPose.getShapePosition());
-         projectionToPack.scale(scaleFactor);
-         projectionToPack.add(ellipsoid3DPose.getShapePosition());
+         projectionToPack.scale(1.0 / Math.sqrt(sumOfSquares));
          return true;
       }
       else
@@ -799,60 +724,52 @@ public class EuclidShapeTools
       }
    }
 
-   public static double doPoint3DEllipsoid3DCollisionTest(Shape3DPoseReadOnly ellipsoid3DPose, Vector3DReadOnly ellipsoid3DRadii, Point3DReadOnly query,
-                                                          Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   public static void supportingVertexEllipsoid3D(Vector3DReadOnly supportDirection, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics supportingVertexToPack)
+   {
+      double nx = supportDirection.getX();
+      double ny = supportDirection.getY();
+      double nz = supportDirection.getZ();
+      double nLength = Math.sqrt(EuclidCoreTools.normSquared(nx, ny, nz));
+      nx *= ellipsoid3DRadii.getX() / nLength;
+      ny *= ellipsoid3DRadii.getY() / nLength;
+      nz *= ellipsoid3DRadii.getZ() / nLength;
+
+      supportingVertexToPack.set(nx, ny, nz);
+      supportingVertexToPack.scale(ellipsoid3DRadii.getX(), ellipsoid3DRadii.getY(), ellipsoid3DRadii.getZ());
+      supportingVertexToPack.scale(1.0 / Math.sqrt(EuclidCoreTools.normSquared(nx, ny, nz)));
+   }
+
+   public static double doPoint3DEllipsoid3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics closestPointToPack,
+                                                          Vector3DBasics normalToPack)
    {
       double xRadius = ellipsoid3DRadii.getX();
       double yRadius = ellipsoid3DRadii.getY();
       double zRadius = ellipsoid3DRadii.getZ();
 
-      double dX = query.getX() - ellipsoid3DPose.getTranslationX();
-      double dY = query.getY() - ellipsoid3DPose.getTranslationY();
-      double dZ = query.getZ() - ellipsoid3DPose.getTranslationZ();
-      double xLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getXAxis());
-      double yLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getYAxis());
-      double zLocalQuery = dot(dX, dY, dZ, ellipsoid3DPose.getZAxis());
-
-      double sumOfSquares = EuclidCoreTools.normSquared(xLocalQuery / xRadius, yLocalQuery / yRadius, zLocalQuery / zRadius);
+      double sumOfSquares = EuclidCoreTools.normSquared(query.getX() / xRadius, query.getY() / yRadius, query.getZ() / zRadius);
 
       if (sumOfSquares > 1.0e-10)
       {
          double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
 
-         if (closestPointToPack != null)
-         {
-            closestPointToPack.sub(query, ellipsoid3DPose.getShapePosition());
-            closestPointToPack.scale(scaleFactor);
-            closestPointToPack.add(ellipsoid3DPose.getShapePosition());
-         }
+         closestPointToPack.scale(scaleFactor);
 
-         if (normalToPack != null)
-         {
-            double xScale = 1.0 / (xRadius * xRadius);
-            double yScale = 1.0 / (yRadius * yRadius);
-            double zScale = 1.0 / (zRadius * zRadius);
+         double xScale = 1.0 / (xRadius * xRadius);
+         double yScale = 1.0 / (yRadius * yRadius);
+         double zScale = 1.0 / (zRadius * zRadius);
 
-            normalToPack.set(xLocalQuery, yLocalQuery, zLocalQuery);
-            normalToPack.scale(xScale, yScale, zScale);
-            normalToPack.normalize();
-            ellipsoid3DPose.transform(normalToPack);
-         }
+         normalToPack.set(query);
+         normalToPack.scale(xScale, yScale, zScale);
+         normalToPack.normalize();
 
-         return query.distance(ellipsoid3DPose.getShapePosition()) * (1.0 - scaleFactor);
+         return query.distanceFromOrigin() * (1.0 - scaleFactor);
       }
       else
       {
-         if (closestPointToPack != null)
-         {
-            closestPointToPack.scaleAdd(zRadius, ellipsoid3DPose.getZAxis(), ellipsoid3DPose.getShapePosition());
-         }
+         closestPointToPack.set(0.0, 0.0, ellipsoid3DRadii.getZ());
+         normalToPack.set(Axis.Z);
 
-         if (normalToPack != null)
-         {
-            normalToPack.set(ellipsoid3DPose.getZAxis());
-         }
-
-         return zLocalQuery - zRadius;
+         return query.getZ() - zRadius;
       }
    }
 
@@ -876,24 +793,17 @@ public class EuclidShapeTools
       return Math.atan(ramp3DSizeZ / ramp3DSizeX);
    }
 
-   public static boolean isPoint3DInsideRamp3D(Shape3DPoseReadOnly ramp3DPose, Vector3DReadOnly ramp3DSize, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideRamp3D(Point3DReadOnly query, Vector3DReadOnly ramp3DSize, double epsilon)
    {
-      double dX = query.getX() - ramp3DPose.getTranslationX();
-      double dY = query.getY() - ramp3DPose.getTranslationY();
-      double dZ = query.getZ() - ramp3DPose.getTranslationZ();
-
-      double zLocalQuery = dot(dX, dY, dZ, ramp3DPose.getZAxis());
-      if (zLocalQuery < -epsilon)
+      if (query.getZ() < -epsilon)
          return false;
 
-      double xLocalQuery = dot(dX, dY, dZ, ramp3DPose.getXAxis());
-      if (xLocalQuery > ramp3DSize.getX() + epsilon)
+      if (query.getX() > ramp3DSize.getX() + epsilon)
          return false;
 
       double halfWidth = 0.5 * ramp3DSize.getY() + epsilon;
 
-      double yLocalQuery = dot(dX, dY, dZ, ramp3DPose.getYAxis());
-      if (yLocalQuery < -halfWidth || yLocalQuery > halfWidth)
+      if (query.getY() < -halfWidth || query.getY() > halfWidth)
          return false;
 
       double rampLength = computeRamp3DLength(ramp3DSize);
@@ -901,10 +811,10 @@ public class EuclidShapeTools
       double rampDirectionZ = ramp3DSize.getZ() / rampLength;
 
       // Computing the signed distance between the query and the slope face, negative value means the query is below the slope.
-      return rampDirectionX * zLocalQuery - xLocalQuery * rampDirectionZ <= epsilon;
+      return rampDirectionX * query.getZ() - query.getX() * rampDirectionZ <= epsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndRamp3D(Shape3DPoseReadOnly ramp3DPose, Vector3DReadOnly ramp3DSize, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndRamp3D(Point3DReadOnly query, Vector3DReadOnly ramp3DSize)
    {
       double rampLength = computeRamp3DLength(ramp3DSize);
       double rampDirectionX = ramp3DSize.getX() / rampLength;
@@ -912,74 +822,67 @@ public class EuclidShapeTools
       double rampNormalX = -rampDirectionZ;
       double rampNormalZ = rampDirectionX;
 
-      double dX = query.getX() - ramp3DPose.getTranslationX();
-      double dY = query.getY() - ramp3DPose.getTranslationY();
-      double dZ = query.getZ() - ramp3DPose.getTranslationZ();
-      double xLocalQuery = dot(dX, dY, dZ, ramp3DPose.getXAxis());
-      double yLocalQuery = dot(dX, dY, dZ, ramp3DPose.getYAxis());
-      double zLocalQuery = dot(dX, dY, dZ, ramp3DPose.getZAxis());
-
       double halfWidth = 0.5 * ramp3DSize.getY();
 
-      if (zLocalQuery < 0.0)
+      if (query.getZ() < 0.0)
       { // Query is below the ramp
-         double xClosest = EuclidCoreTools.clamp(xLocalQuery, 0.0, ramp3DSize.getX());
-         double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
+         double xClosest = EuclidCoreTools.clamp(query.getX(), 0.0, ramp3DSize.getX());
+         double yClosest = EuclidCoreTools.clamp(query.getY(), -halfWidth, halfWidth);
          double zClosest = 0.0;
 
-         if (xClosest == xLocalQuery && yClosest == yLocalQuery)
-            return -zLocalQuery;
+         if (xClosest == query.getX() && yClosest == query.getY())
+            return -query.getZ();
          else
-            return EuclidGeometryTools.distanceBetweenPoint3Ds(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest);
+            return EuclidGeometryTools.distanceBetweenPoint3Ds(xClosest, yClosest, zClosest, query);
       }
-      else if (xLocalQuery > ramp3DSize.getX()
-            || EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, ramp3DSize.getX(), ramp3DSize.getZ(), rampNormalX, rampNormalZ, false))
+      else if (query.getX() > ramp3DSize.getX()
+            || EuclidGeometryTools.isPoint2DOnSideOfLine2D(query.getX(), query.getZ(), ramp3DSize.getX(), ramp3DSize.getZ(), rampNormalX, rampNormalZ, false))
       { // Query is beyond the ramp
          double xClosest = ramp3DSize.getX();
-         double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
-         double zClosest = EuclidCoreTools.clamp(zLocalQuery, 0.0, ramp3DSize.getZ());
+         double yClosest = EuclidCoreTools.clamp(query.getY(), -halfWidth, halfWidth);
+         double zClosest = EuclidCoreTools.clamp(query.getZ(), 0.0, ramp3DSize.getZ());
 
-         if (yClosest == yLocalQuery && zClosest == zLocalQuery)
-            return xLocalQuery - ramp3DSize.getX();
+         if (yClosest == query.getY() && zClosest == query.getZ())
+            return query.getX() - ramp3DSize.getX();
          else
-            return EuclidGeometryTools.distanceBetweenPoint3Ds(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest);
+            return EuclidGeometryTools.distanceBetweenPoint3Ds(xClosest, yClosest, zClosest, query);
       }
-      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampNormalX, rampNormalZ, true))
+      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(query.getX(), query.getZ(), 0.0, 0.0, rampNormalX, rampNormalZ, true))
       { // Query is before ramp and the closest point lies on starting edge
          double xClosest = 0.0;
-         double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
+         double yClosest = EuclidCoreTools.clamp(query.getY(), -halfWidth, halfWidth);
          double zClosest = 0.0;
 
-         return EuclidGeometryTools.distanceBetweenPoint3Ds(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest);
+         return EuclidGeometryTools.distanceBetweenPoint3Ds(xClosest, yClosest, zClosest, query);
       }
-      else if (Math.abs(yLocalQuery) > halfWidth)
+      else if (Math.abs(query.getY()) > halfWidth)
       { // Query is on either side of the ramp
-         double yClosest = Math.copySign(halfWidth, yLocalQuery);
+         double yClosest = Math.copySign(halfWidth, query.getY());
 
-         if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampDirectionX, rampDirectionZ, false))
+         if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(query.getX(), query.getZ(), 0.0, 0.0, rampDirectionX, rampDirectionZ, false))
          { // Query is below the slope
-            return Math.abs(yLocalQuery) - halfWidth;
+            return Math.abs(query.getY()) - halfWidth;
          }
          else
          { // Query is above the slope
-            double dot = xLocalQuery * rampDirectionX + zLocalQuery * rampDirectionZ;
+            double dot = query.getX() * rampDirectionX + query.getZ() * rampDirectionZ;
             double xClosest = dot * rampDirectionX;
             double zClosest = dot * rampDirectionZ;
 
-            return EuclidGeometryTools.distanceBetweenPoint3Ds(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest);
+            return EuclidGeometryTools.distanceBetweenPoint3Ds(xClosest, yClosest, zClosest, query);
          }
       }
-      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampDirectionX, rampDirectionZ, true))
+      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(query.getX(), query.getZ(), 0.0, 0.0, rampDirectionX, rampDirectionZ, true))
       { // Query is directly above the slope part
-         return rampDirectionX * zLocalQuery - xLocalQuery * rampDirectionZ;
+         return rampDirectionX * query.getZ() - query.getX() * rampDirectionZ;
       }
       else
       { // Query is inside the ramp
-         double distanceToRightFace = -(-halfWidth - yLocalQuery);
-         double distanceToLeftFace = halfWidth - yLocalQuery;
-         double distanceToRearFace = ramp3DSize.getX() - xLocalQuery;
-         double distanceToBottomFace = zLocalQuery;
-         double distanceToSlopeFace = -(rampDirectionX * zLocalQuery - xLocalQuery * rampDirectionZ);
+         double distanceToRightFace = -(-halfWidth - query.getY());
+         double distanceToLeftFace = halfWidth - query.getY();
+         double distanceToRearFace = ramp3DSize.getX() - query.getX();
+         double distanceToBottomFace = query.getZ();
+         double distanceToSlopeFace = -(rampDirectionX * query.getZ() - query.getX() * rampDirectionZ);
 
          double minDistance = distanceToRightFace;
          if (minDistance > distanceToLeftFace)
@@ -994,8 +897,7 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean orthogonalProjectionOntoRamp3D(Shape3DPoseReadOnly ramp3DPose, Vector3DReadOnly ramp3DSize, Point3DReadOnly pointToProject,
-                                                        Point3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOntoRamp3D(Point3DReadOnly pointToProject, Vector3DReadOnly ramp3DSize, Point3DBasics projectionToPack)
    {
       double rampLength = computeRamp3DLength(ramp3DSize);
       double rampDirectionX = ramp3DSize.getX() / rampLength;
@@ -1003,79 +905,70 @@ public class EuclidShapeTools
       double rampNormalX = -rampDirectionZ;
       double rampNormalZ = rampDirectionX;
 
-      double dX = pointToProject.getX() - ramp3DPose.getTranslationX();
-      double dY = pointToProject.getY() - ramp3DPose.getTranslationY();
-      double dZ = pointToProject.getZ() - ramp3DPose.getTranslationZ();
-      double xLocalQuery = dot(dX, dY, dZ, ramp3DPose.getXAxis());
-      double yLocalQuery = dot(dX, dY, dZ, ramp3DPose.getYAxis());
-      double zLocalQuery = dot(dX, dY, dZ, ramp3DPose.getZAxis());
+      double xQuery = pointToProject.getX();
+      double yQuery = pointToProject.getY();
+      double zQuery = pointToProject.getZ();
 
       double halfWidth = 0.5 * ramp3DSize.getY();
 
-      if (zLocalQuery < 0.0)
+      if (zQuery < 0.0)
       { // Query is below the ramp
-         double xClosest = EuclidCoreTools.clamp(xLocalQuery, 0.0, ramp3DSize.getX());
-         double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
+         double xClosest = EuclidCoreTools.clamp(xQuery, 0.0, ramp3DSize.getX());
+         double yClosest = EuclidCoreTools.clamp(yQuery, -halfWidth, halfWidth);
          double zClosest = 0.0;
 
          projectionToPack.set(xClosest, yClosest, zClosest);
-         ramp3DPose.transform(projectionToPack);
          return true;
       }
-      else if (xLocalQuery > ramp3DSize.getX()
-            || EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, ramp3DSize.getX(), ramp3DSize.getZ(), rampNormalX, rampNormalZ, false))
+      else if (xQuery > ramp3DSize.getX()
+            || EuclidGeometryTools.isPoint2DOnSideOfLine2D(xQuery, zQuery, ramp3DSize.getX(), ramp3DSize.getZ(), rampNormalX, rampNormalZ, false))
       { // Query is beyond the ramp
          double xClosest = ramp3DSize.getX();
-         double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
-         double zClosest = EuclidCoreTools.clamp(zLocalQuery, 0.0, ramp3DSize.getZ());
+         double yClosest = EuclidCoreTools.clamp(yQuery, -halfWidth, halfWidth);
+         double zClosest = EuclidCoreTools.clamp(zQuery, 0.0, ramp3DSize.getZ());
 
          projectionToPack.set(xClosest, yClosest, zClosest);
-         ramp3DPose.transform(projectionToPack);
          return true;
       }
-      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampNormalX, rampNormalZ, true))
+      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xQuery, zQuery, 0.0, 0.0, rampNormalX, rampNormalZ, true))
       { // Query is before ramp and the closest point lies on starting edge
          double xClosest = 0.0;
-         double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
+         double yClosest = EuclidCoreTools.clamp(yQuery, -halfWidth, halfWidth);
          double zClosest = 0.0;
 
          projectionToPack.set(xClosest, yClosest, zClosest);
-         ramp3DPose.transform(projectionToPack);
          return true;
       }
-      else if (Math.abs(yLocalQuery) > halfWidth)
+      else if (Math.abs(yQuery) > halfWidth)
       { // Query is on either side of the ramp
-         double yClosest = Math.copySign(halfWidth, yLocalQuery);
+         double yClosest = Math.copySign(halfWidth, yQuery);
 
-         if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampDirectionX, rampDirectionZ, false))
+         if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xQuery, zQuery, 0.0, 0.0, rampDirectionX, rampDirectionZ, false))
          { // Query is below the slope
-            double xClosest = xLocalQuery;
-            double zClosest = zLocalQuery;
+            double xClosest = xQuery;
+            double zClosest = zQuery;
 
             projectionToPack.set(xClosest, yClosest, zClosest);
-            ramp3DPose.transform(projectionToPack);
             return true;
          }
          else
          { // Query is above the slope
-            double dot = xLocalQuery * rampDirectionX + zLocalQuery * rampDirectionZ;
+            double dot = xQuery * rampDirectionX + zQuery * rampDirectionZ;
             double xClosest = dot * rampDirectionX;
             double zClosest = dot * rampDirectionZ;
 
             projectionToPack.set(xClosest, yClosest, zClosest);
-            ramp3DPose.transform(projectionToPack);
             return true;
          }
       }
-      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampDirectionX, rampDirectionZ, true))
+      else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xQuery, zQuery, 0.0, 0.0, rampDirectionX, rampDirectionZ, true))
       { // Query is directly above the slope part
-         double dot = xLocalQuery * rampDirectionX + zLocalQuery * rampDirectionZ;
+         double dot = xQuery * rampDirectionX + zQuery * rampDirectionZ;
          double xClosest = dot * rampDirectionX;
-         double yClosest = yLocalQuery;
+         double yClosest = yQuery;
          double zClosest = dot * rampDirectionZ;
 
          projectionToPack.set(xClosest, yClosest, zClosest);
-         ramp3DPose.transform(projectionToPack);
          return true;
       }
       else
@@ -1084,8 +977,40 @@ public class EuclidShapeTools
       }
    }
 
-   public static double doPoint3DRamp3DCollisionTest(Shape3DPoseReadOnly ramp3DPose, Vector3DReadOnly ramp3DSize, Point3DReadOnly query,
-                                                     Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
+   public static void supportingVectexRamp3D(Vector3DReadOnly supportDirection, Vector3DReadOnly ramp3DSize, Point3DBasics supportingVertexToPack)
+   {
+      if (supportDirection.getZ() < 0.0)
+      {
+         supportingVertexToPack.setX(supportDirection.getX() > 0.0 ? ramp3DSize.getX() : 0.0);
+         supportingVertexToPack.setZ(0.0);
+      }
+      else if (supportDirection.getX() > 0.0)
+      {
+         supportingVertexToPack.setX(ramp3DSize.getX());
+         supportingVertexToPack.setZ(supportDirection.getZ() > 0.0 ? ramp3DSize.getZ() : 0.0);
+      }
+      else
+      { // Look at a the incline of the direction. 
+         double directionInclineTanArgument = -supportDirection.getX() / supportDirection.getZ();
+         double rampInclineTanArgument = ramp3DSize.getZ() / ramp3DSize.getX();
+
+         if (directionInclineTanArgument > rampInclineTanArgument)
+         { // Pointing toward the bottom of the ramp
+            supportingVertexToPack.setX(0.0);
+            supportingVertexToPack.setZ(0.0);
+         }
+         else
+         { // Pointing toward the top of the ramp
+            supportingVertexToPack.setX(ramp3DSize.getX());
+            supportingVertexToPack.setZ(ramp3DSize.getZ());
+         }
+      }
+
+      supportingVertexToPack.setY(supportDirection.getY() > 0.0 ? 0.5 * ramp3DSize.getY() : -0.5 * ramp3DSize.getY());
+   }
+
+   public static double doPoint3DRamp3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly ramp3DSize, Point3DBasics closestPointOnSurfaceToPack,
+                                                     Vector3DBasics normalToPack)
    {
       double rampLength = computeRamp3DLength(ramp3DSize);
       double rampDirectionX = ramp3DSize.getX() / rampLength;
@@ -1093,12 +1018,9 @@ public class EuclidShapeTools
       double rampNormalX = -rampDirectionZ;
       double rampNormalZ = rampDirectionX;
 
-      double dX = query.getX() - ramp3DPose.getTranslationX();
-      double dY = query.getY() - ramp3DPose.getTranslationY();
-      double dZ = query.getZ() - ramp3DPose.getTranslationZ();
-      double xLocalQuery = dot(dX, dY, dZ, ramp3DPose.getXAxis());
-      double yLocalQuery = dot(dX, dY, dZ, ramp3DPose.getYAxis());
-      double zLocalQuery = dot(dX, dY, dZ, ramp3DPose.getZAxis());
+      double xLocalQuery = query.getX();
+      double yLocalQuery = query.getY();
+      double zLocalQuery = query.getZ();
 
       double halfWidth = 0.5 * ramp3DSize.getY();
 
@@ -1108,24 +1030,16 @@ public class EuclidShapeTools
          double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
          double zClosest = 0.0;
 
-         if (closestPointOnSurfaceToPack != null)
-         {
-            closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-            ramp3DPose.transform(closestPointOnSurfaceToPack);
-         }
+         closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
 
          if (xClosest == xLocalQuery && yClosest == yLocalQuery)
          {
-            if (normalToPack != null)
-            {
-               normalToPack.setAndNegate(ramp3DPose.getZAxis());
-            }
-
+            normalToPack.setAndNegate(Axis.Z);
             return -zLocalQuery;
          }
          else
          {
-            return computeNormalAndDistanceFromClosestPoint(ramp3DPose, xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
+            return computeNormalAndDistanceFromClosestPoint(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
          }
       }
       else if (xLocalQuery > ramp3DSize.getX()
@@ -1135,24 +1049,16 @@ public class EuclidShapeTools
          double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
          double zClosest = EuclidCoreTools.clamp(zLocalQuery, 0.0, ramp3DSize.getZ());
 
-         if (closestPointOnSurfaceToPack != null)
-         {
-            closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-            ramp3DPose.transform(closestPointOnSurfaceToPack);
-         }
+         closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
 
          if (yClosest == yLocalQuery && zClosest == zLocalQuery)
          {
-            if (normalToPack != null)
-            {
-               normalToPack.set(ramp3DPose.getXAxis());
-            }
-
+            normalToPack.set(Axis.X);
             return xLocalQuery - ramp3DSize.getX();
          }
          else
          {
-            return computeNormalAndDistanceFromClosestPoint(ramp3DPose, xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
+            return computeNormalAndDistanceFromClosestPoint(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
          }
       }
       else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampNormalX, rampNormalZ, true))
@@ -1161,13 +1067,8 @@ public class EuclidShapeTools
          double yClosest = EuclidCoreTools.clamp(yLocalQuery, -halfWidth, halfWidth);
          double zClosest = 0.0;
 
-         if (closestPointOnSurfaceToPack != null)
-         {
-            closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-            ramp3DPose.transform(closestPointOnSurfaceToPack);
-         }
-
-         return computeNormalAndDistanceFromClosestPoint(ramp3DPose, xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
+         closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
+         return computeNormalAndDistanceFromClosestPoint(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
       }
       else if (Math.abs(yLocalQuery) > halfWidth)
       { // Query is on either side of the ramp
@@ -1178,19 +1079,12 @@ public class EuclidShapeTools
             double xClosest = xLocalQuery;
             double zClosest = zLocalQuery;
 
-            if (closestPointOnSurfaceToPack != null)
-            {
-               closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-               ramp3DPose.transform(closestPointOnSurfaceToPack);
-            }
+            closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
 
-            if (normalToPack != null)
-            {
-               if (yLocalQuery >= 0.0)
-                  normalToPack.set(ramp3DPose.getYAxis());
-               else
-                  normalToPack.setAndNegate(ramp3DPose.getYAxis());
-            }
+            if (yLocalQuery >= 0.0)
+               normalToPack.set(Axis.Y);
+            else
+               normalToPack.setAndNegate(Axis.Y);
 
             return Math.abs(yLocalQuery) - halfWidth;
          }
@@ -1200,13 +1094,8 @@ public class EuclidShapeTools
             double xClosest = dot * rampDirectionX;
             double zClosest = dot * rampDirectionZ;
 
-            if (closestPointOnSurfaceToPack != null)
-            {
-               closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-               ramp3DPose.transform(closestPointOnSurfaceToPack);
-            }
-
-            return computeNormalAndDistanceFromClosestPoint(ramp3DPose, xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
+            closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
+            return computeNormalAndDistanceFromClosestPoint(xLocalQuery, yLocalQuery, zLocalQuery, xClosest, yClosest, zClosest, normalToPack);
          }
       }
       else if (EuclidGeometryTools.isPoint2DOnSideOfLine2D(xLocalQuery, zLocalQuery, 0.0, 0.0, rampDirectionX, rampDirectionZ, true))
@@ -1216,17 +1105,8 @@ public class EuclidShapeTools
          double yClosest = yLocalQuery;
          double zClosest = dot * rampDirectionZ;
 
-         if (closestPointOnSurfaceToPack != null)
-         {
-            closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-            ramp3DPose.transform(closestPointOnSurfaceToPack);
-         }
-
-         if (normalToPack != null)
-         {
-            normalToPack.set(rampNormalX, 0.0, rampNormalZ);
-            ramp3DPose.transform(normalToPack);
-         }
+         closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
+         normalToPack.set(rampNormalX, 0.0, rampNormalZ);
 
          return rampDirectionX * zLocalQuery - xLocalQuery * rampDirectionZ;
       }
@@ -1240,91 +1120,44 @@ public class EuclidShapeTools
 
          if (isFirstValueMinimum(distanceToRightFace, distanceToLeftFace, distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
          { // Query is closer to the right face
-            if (closestPointOnSurfaceToPack != null)
-            {
-               closestPointOnSurfaceToPack.set(xLocalQuery, -halfWidth, zLocalQuery);
-               ramp3DPose.transform(closestPointOnSurfaceToPack);
-            }
-
-            if (normalToPack != null)
-            {
-               normalToPack.setAndNegate(ramp3DPose.getYAxis());
-            }
-
+            closestPointOnSurfaceToPack.set(xLocalQuery, -halfWidth, zLocalQuery);
+            normalToPack.setAndNegate(Axis.Y);
             return -distanceToRightFace;
          }
          else if (isFirstValueMinimum(distanceToLeftFace, distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
          { // Query is closer to the left face
-            if (closestPointOnSurfaceToPack != null)
-            {
-               closestPointOnSurfaceToPack.set(xLocalQuery, halfWidth, zLocalQuery);
-               ramp3DPose.transform(closestPointOnSurfaceToPack);
-            }
-
-            if (normalToPack != null)
-            {
-               normalToPack.set(ramp3DPose.getYAxis());
-            }
-
+            closestPointOnSurfaceToPack.set(xLocalQuery, halfWidth, zLocalQuery);
+            normalToPack.set(Axis.Y);
             return -distanceToLeftFace;
          }
          else if (isFirstValueMinimum(distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
          { // Query is closer to the rear face
-            if (closestPointOnSurfaceToPack != null)
-            {
-               closestPointOnSurfaceToPack.set(ramp3DSize.getX(), yLocalQuery, zLocalQuery);
-               ramp3DPose.transform(closestPointOnSurfaceToPack);
-            }
-
-            if (normalToPack != null)
-            {
-               normalToPack.set(ramp3DPose.getXAxis());
-            }
-
+            closestPointOnSurfaceToPack.set(ramp3DSize.getX(), yLocalQuery, zLocalQuery);
+            normalToPack.set(Axis.X);
             return -distanceToRearFace;
          }
          else if (distanceToBottomFace <= distanceToSlopeFace)
          { // Query is closer to the bottom face
-            if (closestPointOnSurfaceToPack != null)
-            {
-               closestPointOnSurfaceToPack.set(xLocalQuery, yLocalQuery, 0.0);
-               ramp3DPose.transform(closestPointOnSurfaceToPack);
-            }
-
-            if (normalToPack != null)
-            {
-               normalToPack.setAndNegate(ramp3DPose.getZAxis());
-            }
-
+            closestPointOnSurfaceToPack.set(xLocalQuery, yLocalQuery, 0.0);
+            normalToPack.setAndNegate(Axis.Z);
             return -distanceToBottomFace;
          }
          else
          { // Query is closer to the slope face
-            if (closestPointOnSurfaceToPack != null)
-            {
-               double dot = xLocalQuery * rampDirectionX + zLocalQuery * rampDirectionZ;
-               double xClosest = dot * rampDirectionX;
-               double yClosest = yLocalQuery;
-               double zClosest = dot * rampDirectionZ;
+            double dot = xLocalQuery * rampDirectionX + zLocalQuery * rampDirectionZ;
+            double xClosest = dot * rampDirectionX;
+            double yClosest = yLocalQuery;
+            double zClosest = dot * rampDirectionZ;
 
-               closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
-               ramp3DPose.transform(closestPointOnSurfaceToPack);
-            }
-
-            if (normalToPack != null)
-            {
-               normalToPack.set(rampNormalX, 0.0, rampNormalZ);
-               ramp3DPose.transform(normalToPack);
-            }
-
+            closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
+            normalToPack.set(rampNormalX, 0.0, rampNormalZ);
             return -distanceToSlopeFace;
          }
       }
    }
 
-   private static double computeNormalAndDistanceFromClosestPoint(RigidBodyTransformReadOnly transformToWorld, double xLocalQuery, double yLocalQuery,
-                                                                  double zLocalQuery, double xLocalClosest, double yLocalClosest, double zLocalClosest,
-                                                                  Vector3DBasics normalToPack)
+   private static double computeNormalAndDistanceFromClosestPoint(double xLocalQuery, double yLocalQuery, double zLocalQuery, double xLocalClosest,
+                                                                  double yLocalClosest, double zLocalClosest, Vector3DBasics normalToPack)
    {
       double dx = xLocalQuery - xLocalClosest;
       double dy = yLocalQuery - yLocalClosest;
@@ -1332,12 +1165,8 @@ public class EuclidShapeTools
 
       double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
 
-      if (normalToPack != null)
-      {
-         normalToPack.set(dx, dy, dz);
-         normalToPack.scale(1.0 / distance);
-         transformToWorld.transform(normalToPack);
-      }
+      normalToPack.set(dx, dy, dz);
+      normalToPack.scale(1.0 / distance);
 
       return distance;
    }
@@ -1357,18 +1186,18 @@ public class EuclidShapeTools
       return possibleMin <= value1 && possibleMin <= value2;
    }
 
-   public static boolean isPoint3DInsideSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideSphere3D(Point3DReadOnly query, Point3DReadOnly spherePosition, double sphereRadius, double epsilon)
    {
       double radiusWithEpsilon = sphereRadius + epsilon;
       return spherePosition.distanceSquared(query) <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly query, Point3DReadOnly spherePosition, double sphereRadius)
    {
       return spherePosition.distance(query) - sphereRadius;
    }
 
-   public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly pointToProject,
+   public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly pointToProject, Point3DReadOnly spherePosition, double sphereRadius,
                                                           Point3DBasics projectionToPack)
    {
       double distanceSquared = spherePosition.distanceSquared(pointToProject);
@@ -1384,302 +1213,27 @@ public class EuclidShapeTools
    public static double doPoint3DSphere3DCollisionTest(Point3DReadOnly query, Point3DReadOnly spherePosition, double sphereRadius,
                                                        Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      double distance = EuclidGeometryTools.distanceBetweenPoint3Ds(spherePosition.getX(), spherePosition.getY(), spherePosition.getZ(), query);
+      double distance = spherePosition.distance(query);
 
-      if (closestPointToPack != null)
+      if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
       {
-         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            closestPointToPack.sub(query, spherePosition);
-            closestPointToPack.scale(sphereRadius / distance);
-         }
-         else
-         {
-            closestPointToPack.set(0.0, 0.0, sphereRadius);
-         }
-         closestPointToPack.add(spherePosition);
+         closestPointToPack.sub(query, spherePosition);
+         closestPointToPack.scale(sphereRadius / distance);
+         normalToPack.sub(query, spherePosition);
+         normalToPack.scale(1.0 / distance);
       }
-
-      if (normalToPack != null)
+      else
       {
-         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            normalToPack.sub(query, spherePosition);
-            normalToPack.scale(1.0 / distance);
-         }
-         else
-         {
-            normalToPack.set(0.0, 0.0, 1.0);
-         }
+         closestPointToPack.set(0.0, 0.0, sphereRadius);
+         normalToPack.set(0.0, 0.0, 1.0);
       }
+      closestPointToPack.add(spherePosition);
 
       return distance - sphereRadius;
    }
 
-   public static double doSphere3DSphere3DCollisionTest(Point3DReadOnly firstSpherePosition, double firstSphereRadius, Point3DReadOnly secondSpherePosition,
-                                                        double secondSphereRadius, Point3DBasics firstClosestPointToPack,
-                                                        Point3DBasics secondClosestPointToPack, Vector3DBasics firstNormalToPack,
-                                                        Vector3DBasics secondNormalToPack)
-   {
-      double distance = EuclidGeometryTools.distanceBetweenPoint3Ds(firstSpherePosition.getX(), firstSpherePosition.getY(), firstSpherePosition.getZ(),
-                                                                    secondSpherePosition.getX(), secondSpherePosition.getY(), secondSpherePosition.getZ());
-
-      if (firstClosestPointToPack != null)
-      {
-         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            firstClosestPointToPack.sub(secondSpherePosition, firstSpherePosition);
-            firstClosestPointToPack.scale(firstSphereRadius / distance);
-         }
-         else
-         {
-            firstClosestPointToPack.set(0.0, 0.0, firstSphereRadius);
-         }
-         firstClosestPointToPack.add(firstSpherePosition);
-      }
-
-      if (secondClosestPointToPack != null)
-      {
-         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            secondClosestPointToPack.sub(firstSpherePosition, secondSpherePosition);
-            secondClosestPointToPack.scale(secondSphereRadius / distance);
-         }
-         else
-         {
-            secondClosestPointToPack.set(0.0, 0.0, secondSphereRadius);
-         }
-         secondClosestPointToPack.add(secondSpherePosition);
-      }
-
-      if (firstNormalToPack != null)
-      {
-         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            firstNormalToPack.sub(secondSpherePosition, firstSpherePosition);
-            firstNormalToPack.scale(1.0 / distance);
-         }
-         else
-         {
-            firstNormalToPack.set(0.0, 0.0, 1.0);
-         }
-
-         if (secondNormalToPack != null)
-            secondNormalToPack.setAndNegate(firstNormalToPack);
-      }
-      else if (secondClosestPointToPack != null)
-      {
-         if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
-         {
-            secondNormalToPack.sub(firstSpherePosition, secondSpherePosition);
-            secondNormalToPack.scale(1.0 / distance);
-         }
-         else
-         {
-            secondNormalToPack.set(0.0, 0.0, 1.0);
-         }
-      }
-
-      return distance - firstSphereRadius - secondSphereRadius;
-   }
-
-   public static double doSphere3DCylinder3DCollisionTest(Point3DReadOnly spherePosition, double sphereRadius, Point3DReadOnly cylinderPosition,
-                                                          Vector3DReadOnly cylinderAxis, double cylinderLength, double cylinderRadius,
-                                                          Point3DBasics firstClosestPointToPack, Point3DBasics secondClosestPointToPack,
-                                                          Vector3DBasics firstNormalToPack, Vector3DBasics secondNormalToPack)
-   {
-      double cylinderHalfLength = 0.5 * cylinderLength;
-      double cylinderAxisMagnitude = cylinderAxis.length();
-
-      double dx = spherePosition.getX() - cylinderPosition.getX();
-      double dy = spherePosition.getY() - cylinderPosition.getY();
-      double dz = spherePosition.getZ() - cylinderPosition.getZ();
-
-      double crossX = cylinderAxis.getY() * dz - cylinderAxis.getZ() * dy;
-      double crossY = cylinderAxis.getZ() * dx - cylinderAxis.getX() * dz;
-      double crossZ = cylinderAxis.getX() * dy - cylinderAxis.getY() * dx;
-      double distanceSquaredFromCylinderAxis = normSquared(crossX, crossY, crossZ) / cylinderAxisMagnitude;
-      double positionOnCylinderAxis = (dx * cylinderAxis.getX() + dy * cylinderAxis.getY() + dz * cylinderAxis.getZ()) / cylinderAxisMagnitude;
-
-      if (distanceSquaredFromCylinderAxis <= cylinderRadius * cylinderRadius)
-      { // The sphere's center is contained by the cylinder with infinite length.
-         if (positionOnCylinderAxis < -cylinderHalfLength)
-         { // The sphere's center is below the cylinder
-            if (firstClosestPointToPack != null)
-               firstClosestPointToPack.scaleAdd(sphereRadius, cylinderAxis, spherePosition);
-            if (secondClosestPointToPack != null)
-               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfLength, cylinderAxis, spherePosition);
-            if (firstNormalToPack != null)
-               firstNormalToPack.set(cylinderAxis);
-            if (secondNormalToPack != null)
-               secondNormalToPack.setAndNegate(cylinderAxis);
-            return -positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
-         }
-
-         if (positionOnCylinderAxis > cylinderHalfLength)
-         { // The sphere's center is above the cylinder
-            if (firstClosestPointToPack != null)
-               firstClosestPointToPack.scaleAdd(-sphereRadius, cylinderAxis, spherePosition);
-            if (secondClosestPointToPack != null)
-               secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfLength, cylinderAxis, spherePosition);
-            if (firstNormalToPack != null)
-               firstNormalToPack.setAndNegate(cylinderAxis);
-            if (secondNormalToPack != null)
-               secondNormalToPack.set(cylinderAxis);
-            return positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
-         }
-
-         // The sphere's center is inside the cylinder
-         double distanceFromCylinderAxis = Math.sqrt(distanceSquaredFromCylinderAxis);
-         double dh = cylinderHalfLength - Math.abs(positionOnCylinderAxis);
-         double dr = cylinderRadius - distanceFromCylinderAxis;
-
-         if (dh < dr)
-         { // Closer to either top or bottom face of the cylinder
-            if (positionOnCylinderAxis < 0.0)
-            { // Closer to the bottom face
-               if (firstClosestPointToPack != null)
-                  firstClosestPointToPack.scaleAdd(sphereRadius, cylinderAxis, spherePosition);
-               if (secondClosestPointToPack != null)
-                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis - cylinderHalfLength, cylinderAxis, spherePosition);
-               if (firstNormalToPack != null)
-                  firstNormalToPack.set(cylinderAxis);
-               if (secondNormalToPack != null)
-                  secondNormalToPack.setAndNegate(cylinderAxis);
-               return -positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
-            }
-            else
-            { // Closer to the top face
-               if (firstClosestPointToPack != null)
-                  firstClosestPointToPack.scaleAdd(-sphereRadius, cylinderAxis, spherePosition);
-               if (secondClosestPointToPack != null)
-                  secondClosestPointToPack.scaleAdd(-positionOnCylinderAxis + cylinderHalfLength, cylinderAxis, spherePosition);
-               if (firstNormalToPack != null)
-                  firstNormalToPack.setAndNegate(cylinderAxis);
-               if (secondNormalToPack != null)
-                  secondNormalToPack.set(cylinderAxis);
-               return positionOnCylinderAxis - cylinderHalfLength - sphereRadius;
-            }
-         }
-         else
-         { // Closer to the cylinder's side
-            double sphereProjectionOnCylinderAxisX = positionOnCylinderAxis * cylinderAxis.getX() + cylinderPosition.getX();
-            double sphereProjectionOnCylinderAxisY = positionOnCylinderAxis * cylinderAxis.getY() + cylinderPosition.getY();
-            double sphereProjectionOnCylinderAxisZ = positionOnCylinderAxis * cylinderAxis.getZ() + cylinderPosition.getZ();
-            double normalToSphereX = (spherePosition.getX() - sphereProjectionOnCylinderAxisX) / distanceFromCylinderAxis;
-            double normalToSphereY = (spherePosition.getY() - sphereProjectionOnCylinderAxisY) / distanceFromCylinderAxis;
-            double normalToSphereZ = (spherePosition.getZ() - sphereProjectionOnCylinderAxisZ) / distanceFromCylinderAxis;
-
-            if (firstClosestPointToPack != null)
-            {
-               firstClosestPointToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
-               firstClosestPointToPack.scaleAdd(sphereRadius, firstClosestPointToPack, spherePosition);
-            }
-
-            if (secondClosestPointToPack != null)
-            {
-               secondClosestPointToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
-               secondClosestPointToPack.scale(cylinderRadius);
-               secondClosestPointToPack.add(sphereProjectionOnCylinderAxisX, sphereProjectionOnCylinderAxisY, sphereProjectionOnCylinderAxisZ);
-            }
-
-            if (firstNormalToPack != null)
-               firstNormalToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
-
-            if (secondNormalToPack != null)
-               secondNormalToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
-
-            return distanceFromCylinderAxis - sphereRadius;
-         }
-      }
-      else
-      { // The sphere's center is outside the cylinder's side, maybe touching or not.
-         double distanceFromCylinderAxis = Math.sqrt(distanceSquaredFromCylinderAxis);
-
-         double positionOnCylinderAxisClamped = positionOnCylinderAxis;
-         if (positionOnCylinderAxisClamped < -cylinderHalfLength)
-            positionOnCylinderAxisClamped = -cylinderHalfLength;
-         else if (positionOnCylinderAxisClamped > cylinderHalfLength)
-            positionOnCylinderAxisClamped = cylinderHalfLength;
-
-         if (positionOnCylinderAxisClamped != positionOnCylinderAxis)
-         { // Closest point is on the circle adjacent to the cylinder and top or bottom face.
-            double sphereProjectionOnCylinderAxisX = positionOnCylinderAxis * cylinderAxis.getX() + cylinderPosition.getX();
-            double sphereProjectionOnCylinderAxisY = positionOnCylinderAxis * cylinderAxis.getY() + cylinderPosition.getY();
-            double sphereProjectionOnCylinderAxisZ = positionOnCylinderAxis * cylinderAxis.getZ() + cylinderPosition.getZ();
-
-            double sphereProjectionOnCylinderAxisClampedX = positionOnCylinderAxisClamped * cylinderAxis.getX() + cylinderPosition.getX();
-            double sphereProjectionOnCylinderAxisClampedY = positionOnCylinderAxisClamped * cylinderAxis.getY() + cylinderPosition.getY();
-            double sphereProjectionOnCylinderAxisClampedZ = positionOnCylinderAxisClamped * cylinderAxis.getZ() + cylinderPosition.getZ();
-
-            dx = spherePosition.getX() - sphereProjectionOnCylinderAxisClampedX;
-            dy = spherePosition.getY() - sphereProjectionOnCylinderAxisClampedY;
-            dz = spherePosition.getZ() - sphereProjectionOnCylinderAxisClampedZ;
-            double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
-
-            double normalToSphereX = (spherePosition.getX() - sphereProjectionOnCylinderAxisClampedX) / distance;
-            double normalToSphereY = (spherePosition.getY() - sphereProjectionOnCylinderAxisClampedY) / distance;
-            double normalToSphereZ = (spherePosition.getZ() - sphereProjectionOnCylinderAxisClampedZ) / distance;
-
-            if (firstClosestPointToPack != null)
-            {
-               firstClosestPointToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
-               firstClosestPointToPack.scaleAdd(sphereRadius, firstClosestPointToPack, spherePosition);
-            }
-
-            if (secondClosestPointToPack != null)
-            {
-               secondClosestPointToPack.set(sphereProjectionOnCylinderAxisX, sphereProjectionOnCylinderAxisY, sphereProjectionOnCylinderAxisZ);
-               secondClosestPointToPack.sub(spherePosition);
-               secondClosestPointToPack.scale(cylinderRadius / distanceFromCylinderAxis);
-               secondClosestPointToPack.add(sphereProjectionOnCylinderAxisClampedX, sphereProjectionOnCylinderAxisClampedY,
-                                            sphereProjectionOnCylinderAxisClampedZ);
-            }
-
-            if (firstNormalToPack != null)
-               firstNormalToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
-
-            if (secondNormalToPack != null)
-               secondNormalToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
-
-            return distance - sphereRadius;
-         }
-         else
-         { // Closest point is on the cylinder's side.
-            double sphereProjectionOnCylinderAxisX = positionOnCylinderAxis * cylinderAxis.getX() + cylinderPosition.getX();
-            double sphereProjectionOnCylinderAxisY = positionOnCylinderAxis * cylinderAxis.getY() + cylinderPosition.getY();
-            double sphereProjectionOnCylinderAxisZ = positionOnCylinderAxis * cylinderAxis.getZ() + cylinderPosition.getZ();
-
-            double normalToSphereX = (spherePosition.getX() - sphereProjectionOnCylinderAxisX) / distanceFromCylinderAxis;
-            double normalToSphereY = (spherePosition.getY() - sphereProjectionOnCylinderAxisY) / distanceFromCylinderAxis;
-            double normalToSphereZ = (spherePosition.getZ() - sphereProjectionOnCylinderAxisZ) / distanceFromCylinderAxis;
-
-            if (firstClosestPointToPack != null)
-            {
-               firstClosestPointToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
-               firstClosestPointToPack.scaleAdd(sphereRadius, firstClosestPointToPack, spherePosition);
-            }
-
-            if (secondClosestPointToPack != null)
-            {
-               secondClosestPointToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
-               secondClosestPointToPack.scale(cylinderRadius);
-               secondClosestPointToPack.add(sphereProjectionOnCylinderAxisX, sphereProjectionOnCylinderAxisY, sphereProjectionOnCylinderAxisZ);
-            }
-
-            if (firstNormalToPack != null)
-               firstNormalToPack.set(-normalToSphereX, -normalToSphereY, -normalToSphereZ);
-
-            if (secondNormalToPack != null)
-               secondNormalToPack.set(normalToSphereX, normalToSphereY, normalToSphereZ);
-
-            return distanceFromCylinderAxis - sphereRadius;
-         }
-      }
-   }
-
-   public static boolean isPoint3DInsideTorus3D(Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis, double torus3DRadius, double torus3DTubeRadius,
-                                                Point3DReadOnly query, double epsilon)
+   public static boolean isPoint3DInsideTorus3D(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis, double torus3DRadius,
+                                                double torus3DTubeRadius, double epsilon)
    {
       double positionOnAxis = EuclidGeometryTools.percentageAlongLine3D(query, torus3DPosition, torus3DAxis);
       double projectionOnAxisX = torus3DPosition.getX() + positionOnAxis * torus3DAxis.getX();
@@ -1698,8 +1252,8 @@ public class EuclidShapeTools
       return EuclidCoreTools.normSquared(distanceFromAxis - torus3DRadius, positionOnAxis) <= tubeRadiusWithEpsilon * tubeRadiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndTorus3D(Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis, double torus3DRadius,
-                                                               double torus3DTubeRadius, Point3DReadOnly query)
+   public static double signedDistanceBetweenPoint3DAndTorus3D(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
+                                                               double torus3DRadius, double torus3DTubeRadius)
    {
       double positionOnAxis = EuclidGeometryTools.percentageAlongLine3D(query, torus3DPosition, torus3DAxis);
       double projectionOnAxisX = torus3DPosition.getX() + positionOnAxis * torus3DAxis.getX();
@@ -1718,16 +1272,12 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean orthogonalProjectionOntoTorus3D(Shape3DPoseReadOnly torus3DPose, double torus3DRadius, double torus3DTubeRadius,
-                                                         Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOntoTorus3D(Point3DReadOnly pointToProject, double torus3DRadius, double torus3DTubeRadius,
+                                                         Point3DBasics projectionToPack)
    {
-      double dx = pointToProject.getX() - torus3DPose.getTranslationX();
-      double dy = pointToProject.getY() - torus3DPose.getTranslationY();
-      double dz = pointToProject.getZ() - torus3DPose.getTranslationZ();
-
-      double xLocal = dot(dx, dy, dz, torus3DPose.getXAxis());
-      double yLocal = dot(dx, dy, dz, torus3DPose.getYAxis());
-      double zLocal = dot(dx, dy, dz, torus3DPose.getZAxis());
+      double xLocal = pointToProject.getX();
+      double yLocal = pointToProject.getY();
+      double zLocal = pointToProject.getZ();
 
       double xyLengthSquared = normSquared(xLocal, yLocal);
 
@@ -1759,9 +1309,9 @@ public class EuclidShapeTools
          double closestTubeCenterX = xLocal * xyScale;
          double closestTubeCenterY = yLocal * xyScale;
 
-         dx = xLocal - closestTubeCenterX;
-         dy = yLocal - closestTubeCenterY;
-         dz = zLocal;
+         double dx = xLocal - closestTubeCenterX;
+         double dy = yLocal - closestTubeCenterY;
+         double dz = zLocal;
 
          double distance = Math.sqrt(normSquared(dx, dy, dz));
 
@@ -1801,12 +1351,14 @@ public class EuclidShapeTools
 
             closestPointToPack.set(closestTubeCenterX, closestTubeCenterY, 0.0);
             closestPointToPack.add(tubeCenterToSurfaceX, tubeCenterToSurfaceY, tubeCenterToSurfaceZ);
+            torus3DPose.transform(closestPointToPack);
          }
 
          if (normalToPack != null)
          {
             normalToPack.set(-torus3DRadius, 0.0, zLocal);
             normalToPack.scale(1.0 / xzLength);
+            torus3DPose.transform(normalToPack);
          }
 
          return xzLength - torus3DTubeRadius;
@@ -1831,12 +1383,14 @@ public class EuclidShapeTools
             closestPointToPack.set(dx, dy, dz);
             closestPointToPack.scale(torus3DTubeRadius * distanceInv);
             closestPointToPack.add(closestTubeCenterX, closestTubeCenterY, 0.0);
+            torus3DPose.transform(closestPointToPack);
          }
 
          if (normalToPack != null)
          {
             normalToPack.set(dx, dy, dz);
             normalToPack.scale(distanceInv);
+            torus3DPose.transform(normalToPack);
          }
 
          return distance - torus3DTubeRadius;

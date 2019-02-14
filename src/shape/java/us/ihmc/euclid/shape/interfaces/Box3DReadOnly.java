@@ -1,5 +1,7 @@
 package us.ihmc.euclid.shape.interfaces;
 
+import static us.ihmc.euclid.tools.TupleTools.*;
+
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -26,33 +28,83 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DBox3DCollisionTest(pointToCheck, this, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(pointToCheck, queryInLocal);
+
+      double distance = EuclidShapeTools.doPoint3DBox3DCollisionTest(queryInLocal, getSize(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
+
+      transformToWorld(closestPointOnSurfaceToPack);
+      transformToWorld(normalAtClosestPointToPack);
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+
+      return distance <= 0.0;
    }
 
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      EuclidShapeTools.supportingVertexBox3D(supportDirection, this, supportingVertexToPack);
+      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
+
+      EuclidShapeTools.supportingVertexBox3D(supportDirectionInLocal, getSize(), supportingVertexToPack);
+
+      transformToWorld(supportingVertexToPack);
+      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
       return true;
    }
 
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(point, this);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(point, queryInLocal);
+
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndBox3D(queryInLocal, getSize());
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+
+      return signedDistance;
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      return EuclidShapeTools.isPoint3DInsideBox3D(query, this, epsilon);
+      double dX = query.getX() - getPositionX();
+      double dY = query.getY() - getPositionY();
+      double dZ = query.getZ() - getPositionZ();
+
+      if (getPose().getShapeOrientation().isIdentity())
+         return EuclidShapeTools.isPoint3DInsideBox3D(dX, dY, dZ, getSize(), epsilon);
+
+      double xLocalQuery = dot(dX, dY, dZ, getPose().getXAxis());
+
+      if (Math.abs(xLocalQuery) <= 0.5 * getSizeX() + epsilon)
+      {
+         double yLocalQuery = dot(dX, dY, dZ, getPose().getYAxis());
+
+         if (Math.abs(yLocalQuery) <= 0.5 * getSizeY() + epsilon)
+         {
+            double zLocalQuery = dot(dX, dY, dZ, getPose().getZAxis());
+            return Math.abs(zLocalQuery) <= 0.5 * getSizeZ() + epsilon;
+         }
+      }
+      return false;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return EuclidShapeTools.orthogonalProjectionOntoBox3D(pointToProject, this, projectionToPack);
+      Point3DBasics pointToProjectInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(pointToProject, pointToProjectInLocal);
+
+      boolean hasBeenProjected = EuclidShapeTools.orthogonalProjectionOntoBox3D(pointToProjectInLocal, getSize(), projectionToPack);
+
+      if (hasBeenProjected)
+         transformToWorld(projectionToPack);
+
+      getIntermediateVariableSupplier().releasePoint3D(pointToProjectInLocal);
+      return hasBeenProjected;
    }
 
    /**

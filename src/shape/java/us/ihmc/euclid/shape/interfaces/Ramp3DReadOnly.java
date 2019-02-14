@@ -49,7 +49,17 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DRamp3DCollisionTest(getPose(), getSize(), pointToCheck, closestPointOnSurfaceToPack, normalAtClosestPointToPack) <= 0.0;
+      Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
+
+      double distance = EuclidShapeTools.doPoint3DRamp3DCollisionTest(pointToCheckInLocal, getSize(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
+
+      transformToWorld(closestPointOnSurfaceToPack);
+      transformToWorld(normalAtClosestPointToPack);
+
+      getIntermediateVariableSupplier().releasePoint3D(pointToCheckInLocal);
+
+      return distance <= 0.0;
    }
 
    @Override
@@ -58,34 +68,8 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
       getPose().inverseTransform(supportDirection, supportDirectionInLocal);
 
-      if (supportDirectionInLocal.getZ() < 0.0)
-      {
-         supportingVertexToPack.setX(supportDirectionInLocal.getX() > 0.0 ? getSizeX() : 0.0);
-         supportingVertexToPack.setZ(0.0);
-      }
-      else if (supportDirectionInLocal.getX() > 0.0)
-      {
-         supportingVertexToPack.setX(getSizeX());
-         supportingVertexToPack.setZ(supportDirectionInLocal.getZ() > 0.0 ? getSizeZ() : 0.0);
-      }
-      else
-      { // Look at a the incline of the direction. 
-         double directionInclineTanArgument = -supportDirectionInLocal.getX() / supportDirectionInLocal.getZ();
-         double rampInclineTanArgument = getSizeZ() / getSizeX();
+      EuclidShapeTools.supportingVectexRamp3D(supportDirectionInLocal, getSize(), supportingVertexToPack);
 
-         if (directionInclineTanArgument > rampInclineTanArgument)
-         { // Pointing toward the bottom of the ramp
-            supportingVertexToPack.setX(0.0);
-            supportingVertexToPack.setZ(0.0);
-         }
-         else
-         { // Pointing toward the top of the ramp
-            supportingVertexToPack.setX(getSizeX());
-            supportingVertexToPack.setZ(getSizeZ());
-         }
-      }
-
-      supportingVertexToPack.setY(supportDirectionInLocal.getY() > 0.0 ? 0.5 * getSizeY() : -0.5 * getSizeY());
       transformToWorld(supportingVertexToPack);
 
       getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
@@ -96,20 +80,44 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      return EuclidShapeTools.signedDistanceBetweenPoint3DAndRamp3D(getPose(), getSize(), point);
+      Point3DBasics pointInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(point, pointInLocal);
+
+      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndRamp3D(pointInLocal, getSize());
+
+      getIntermediateVariableSupplier().releasePoint3D(pointInLocal);
+
+      return signedDistance;
    }
 
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      return EuclidShapeTools.isPoint3DInsideRamp3D(getPose(), getSize(), query, epsilon);
+      Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(query, queryInLocal);
+
+      boolean isInside = EuclidShapeTools.isPoint3DInsideRamp3D(queryInLocal, getSize(), epsilon);
+
+      getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
+
+      return isInside;
    }
 
    /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return !EuclidShapeTools.orthogonalProjectionOntoRamp3D(getPose(), getSize(), pointToProject, projectionToPack);
+      Point3DBasics pointToProjectInLocal = getIntermediateVariableSupplier().requestPoint3D();
+      getPose().inverseTransform(pointToProject, pointToProjectInLocal);
+
+      boolean hasBeenProjected = EuclidShapeTools.orthogonalProjectionOntoRamp3D(pointToProjectInLocal, getSize(), projectionToPack);
+
+      if (hasBeenProjected)
+         transformToWorld(projectionToPack);
+
+      getIntermediateVariableSupplier().releasePoint3D(pointToProjectInLocal);
+
+      return hasBeenProjected;
    }
 
    /**

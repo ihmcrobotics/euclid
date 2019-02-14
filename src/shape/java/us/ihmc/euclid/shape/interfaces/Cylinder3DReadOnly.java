@@ -4,7 +4,6 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -70,17 +69,8 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
 
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
-   { // TODO Should consider the ring in the middle of the cylinder part, and the top and bottom centers?
-      supportingVertexToPack.set(supportDirection);
-      double dot = TupleTools.dot(supportingVertexToPack, getAxis());
-      supportingVertexToPack.setAndScale(dot, getAxis());
-      supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
-      supportingVertexToPack.scale(getRadius() / supportingVertexToPack.distanceFromOrigin());
-      if (supportDirection.dot(getAxis()) > 0.0)
-         supportingVertexToPack.add(getTopCenter());
-      else
-         supportingVertexToPack.add(getBottomCenter());
-
+   {
+      EuclidShapeTools.supportingVertexCylinder3D(supportDirection, getPosition(), getAxis(), getLength(), getRadius(), supportingVertexToPack);
       return true;
    }
 

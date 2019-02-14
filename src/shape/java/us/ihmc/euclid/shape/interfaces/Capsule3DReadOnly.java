@@ -57,15 +57,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      // TODO Should we consider the edge case where supportDirection is orthogonal to the cylinder's axis and return a vertex that is on the middle of the cylinder part?
-      supportingVertexToPack.set(supportDirection);
-      supportingVertexToPack.scale(getRadius() / supportDirection.length());
-
-      if (supportDirection.dot(getAxis()) > 0.0)
-         supportingVertexToPack.add(getTopCenter());
-      else
-         supportingVertexToPack.add(getBottomCenter());
-
+      EuclidShapeTools.supportingVertexCapsule3D(supportDirection, getPosition(), getAxis(), getLength(), getRadius(), supportingVertexToPack);
       return true;
    }
 
