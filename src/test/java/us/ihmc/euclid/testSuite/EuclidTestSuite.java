@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 
 import us.ihmc.euclid.AxisTest;
@@ -87,45 +85,45 @@ import us.ihmc.euclid.tuple4D.Vector4D32Test;
 import us.ihmc.euclid.tuple4D.Vector4DTest;
 import us.ihmc.euclid.utils.NameBasedHashCodeToolsTest;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-      // Core
-      Point3DTest.class, Point3D32Test.class, Point2DTest.class, Point2D32Test.class, Vector3DTest.class, Vector3D32Test.class, Vector2DTest.class,
-      Vector2D32Test.class, Vector4DTest.class, Vector4D32Test.class, AxisAngleTest.class, AxisAngle32Test.class, QuaternionTest.class, Quaternion32Test.class,
-      Matrix3DTest.class, RotationMatrixTest.class, RotationScaleMatrixTest.class, RigidBodyTransformTest.class, QuaternionBasedTransformTest.class,
-      AffineTransformTest.class,
-      // Core: Tools
-      EuclidCoreToolsTest.class, EuclidCoreTestToolsTest.class, QuaternionToolsTest.class, Matrix3DToolsTest.class, Matrix3DFeaturesTest.class,
-      RotationMatrixToolsTest.class, RotationScaleMatrixToolsTest.class, TupleToolsTest.class, TransformationToolsTest.class, AxisAngleToolsTest.class,
-      // Core: conversion
-      AxisAngleConversionTest.class, RotationVectorConversionTest.class, QuaternionConversionTest.class, RotationMatrixConversionTest.class,
-      YawPitchRollConversionTest.class, CyclingConversionTest.class,
-      // Geometry class tests
-      // 1D
-      LineSegment1DTest.class,
-      // 2D
-      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class, Orientation2DTest.class, Pose2DTest.class,
-      // 3D
-      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Pose3DTest.class, Plane3DTest.class,
-      // Shapes
-      Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class,
-      // Tools tests
-      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class, EuclidGeometryTestToolsTest.class,
-      // Reference frame framework tests
-      ReferenceFrameTest.class,
-      // 1D
-      // 2D
-      FramePoint2DTest.class, FrameVector2DTest.class, FramePose2DTest.class, FrameOrientation2DTest.class, FrameLineSegment2DTest.class, FrameLine2DTest.class,
-      // 3D
-      FramePoint3DTest.class, FrameVector3DTest.class, FramePose3DTest.class, FrameLineSegment3DTest.class, FrameLine3DTest.class,
-      // 4D
-      FrameQuaternionTest.class, FrameVector4DTest.class,
-      // Tools tests
-      EuclidFrameToolsTest.class, NameBasedHashCodeToolsTest.class, EuclidFrameTestToolsTest.class,
-      // Exceptions tests
-      BoundingBoxExceptionTest.class,
-      // Axis test
-      AxisTest.class})
+//@RunWith(Suite.class)
+//@Suite.SuiteClasses({
+//      // Core
+//      Point3DTest.class, Point3D32Test.class, Point2DTest.class, Point2D32Test.class, Vector3DTest.class, Vector3D32Test.class, Vector2DTest.class,
+//      Vector2D32Test.class, Vector4DTest.class, Vector4D32Test.class, AxisAngleTest.class, AxisAngle32Test.class, QuaternionTest.class, Quaternion32Test.class,
+//      Matrix3DTest.class, RotationMatrixTest.class, RotationScaleMatrixTest.class, RigidBodyTransformTest.class, QuaternionBasedTransformTest.class,
+//      AffineTransformTest.class,
+//      // Core: Tools
+//      EuclidCoreToolsTest.class, EuclidCoreTestToolsTest.class, QuaternionToolsTest.class, Matrix3DToolsTest.class, Matrix3DFeaturesTest.class,
+//      RotationMatrixToolsTest.class, RotationScaleMatrixToolsTest.class, TupleToolsTest.class, TransformationToolsTest.class, AxisAngleToolsTest.class,
+//      // Core: conversion
+//      AxisAngleConversionTest.class, RotationVectorConversionTest.class, QuaternionConversionTest.class, RotationMatrixConversionTest.class,
+//      YawPitchRollConversionTest.class, CyclingConversionTest.class,
+//      // Geometry class tests
+//      // 1D
+//      LineSegment1DTest.class,
+//      // 2D
+//      Line2DTest.class, LineSegment2DTest.class, ConvexPolygon2DTest.class, BoundingBox2DTest.class, Orientation2DTest.class, Pose2DTest.class,
+//      // 3D
+//      Line3DTest.class, LineSegment3DTest.class, BoundingBox3DTest.class, Pose3DTest.class, Plane3DTest.class,
+//      // Shapes
+//      Box3DTest.class, Cylinder3DTest.class, Ellipsoid3DTest.class, Ramp3DTest.class, Sphere3DTest.class, Torus3DTest.class,
+//      // Tools tests
+//      EuclidGeometryToolsTest.class, EuclidGeometryPolygonToolsTest.class, EuclidGeometryTestToolsTest.class,
+//      // Reference frame framework tests
+//      ReferenceFrameTest.class,
+//      // 1D
+//      // 2D
+//      FramePoint2DTest.class, FrameVector2DTest.class, FramePose2DTest.class, FrameOrientation2DTest.class, FrameLineSegment2DTest.class, FrameLine2DTest.class,
+//      // 3D
+//      FramePoint3DTest.class, FrameVector3DTest.class, FramePose3DTest.class, FrameLineSegment3DTest.class, FrameLine3DTest.class,
+//      // 4D
+//      FrameQuaternionTest.class, FrameVector4DTest.class,
+//      // Tools tests
+//      EuclidFrameToolsTest.class, NameBasedHashCodeToolsTest.class, EuclidFrameTestToolsTest.class,
+//      // Exceptions tests
+//      BoundingBoxExceptionTest.class,
+//      // Axis test
+//      AxisTest.class})
 
 public class EuclidTestSuite
 {
