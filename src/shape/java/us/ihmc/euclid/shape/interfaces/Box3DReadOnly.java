@@ -5,6 +5,7 @@ import static us.ihmc.euclid.tools.TupleTools.*;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -332,5 +333,29 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       boolean result = getSize().geometricallyEquals(otherSize, epsilon);
       getIntermediateVariableSupplier().releaseVector3D(otherSize);
       return result;
+   }
+
+   /**
+    * Changes the given {@code transformable} from being expressed in world to being expressed in this
+    * shape local coordinates.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToLocal(Transformable transformable)
+   {
+      transformable.applyInverseTransform(getPose());
+   }
+
+   /**
+    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
+    * being expressed in world.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToWorld(Transformable transformable)
+   {
+      transformable.applyTransform(getPose());
    }
 }

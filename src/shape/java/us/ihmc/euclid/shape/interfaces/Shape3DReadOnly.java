@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.interfaces;
 
-import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -153,28 +152,4 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @return whether the method succeeded or not.
     */
    boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack);
-
-   /**
-    * Changes the given {@code transformable} from being expressed in world to being expressed in this
-    * shape local coordinates.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToLocal(Transformable transformable)
-   {
-      transformable.applyInverseTransform(getPose());
-   }
-
-   /**
-    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
-    * being expressed in world.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToWorld(Transformable transformable)
-   {
-      transformable.applyTransform(getPose());
-   }
 }

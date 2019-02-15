@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.interfaces;
 
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -189,5 +190,29 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    {
       return getSize().epsilonEquals(other.getSize(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon)
             && getOrientation().geometricallyEquals(other.getOrientation(), epsilon);
+   }
+
+   /**
+    * Changes the given {@code transformable} from being expressed in world to being expressed in this
+    * shape local coordinates.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToLocal(Transformable transformable)
+   {
+      transformable.applyInverseTransform(getPose());
+   }
+
+   /**
+    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
+    * being expressed in world.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToWorld(Transformable transformable)
+   {
+      transformable.applyTransform(getPose());
    }
 }

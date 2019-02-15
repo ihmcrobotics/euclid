@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -97,5 +98,29 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
+   }
+
+   /**
+    * Changes the given {@code transformable} from being expressed in world to being expressed in this
+    * shape local coordinates.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToLocal(Transformable transformable)
+   {
+      transformable.applyInverseTransform(getPose());
+   }
+
+   /**
+    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
+    * being expressed in world.
+    *
+    * @param transformable the transformable to change the coordinates in which it is expressed.
+    *           Modified.
+    */
+   default void transformToWorld(Transformable transformable)
+   {
+      transformable.applyTransform(getPose());
    }
 }
