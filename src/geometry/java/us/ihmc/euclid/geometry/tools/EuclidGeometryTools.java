@@ -3484,9 +3484,11 @@ public class EuclidGeometryTools
       if (cylinderLength == 0.0 || cylinderRadius == 0.0)
          return 0;
 
-      double axisX = cylinderAxisX;
-      double axisY = cylinderAxisY;
-      double axisZ = cylinderAxisZ;
+      double axisNormInv = 1.0 / Math.sqrt(normSquared(cylinderAxisX, cylinderAxisY, cylinderAxisZ));
+      double axisX = cylinderAxisX * axisNormInv;
+      double axisY = cylinderAxisY * axisNormInv;
+      double axisZ = cylinderAxisZ * axisNormInv;
+
       double halfLength = 0.5 * cylinderLength;
       double radiusSquared = cylinderRadius * cylinderRadius;
 
