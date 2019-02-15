@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -115,4 +116,17 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
       getSize().set(sizeX, sizeY, sizeZ);
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      transform.inverseTransform(getPose());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      transform.transform(getPose());
+   }
 }

@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -95,4 +96,17 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
       getSize().scale(scale);
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      transform.inverseTransform(getPose());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      transform.transform(getPose());
+   }
 }

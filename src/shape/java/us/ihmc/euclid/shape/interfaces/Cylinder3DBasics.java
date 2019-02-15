@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.Transform;
 
 public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
 {
@@ -73,5 +74,19 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    {
       getPose().set(pose);
       setSize(length, radius);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      transform.inverseTransform(getPose());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      transform.transform(getPose());
    }
 }

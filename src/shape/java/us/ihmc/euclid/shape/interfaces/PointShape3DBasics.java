@@ -41,15 +41,17 @@ public interface PointShape3DBasics extends PointShape3DReadOnly, Shape3DBasics,
       return PointShape3DReadOnly.super.containsNaN();
    }
 
-   @Override
-   default void applyTransform(Transform transform)
-   {
-      Shape3DBasics.super.applyTransform(transform);
-   }
-
+   /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)
    {
-      Shape3DBasics.super.applyInverseTransform(transform);
+      transform.inverseTransform(getPose());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      transform.transform(getPose());
    }
 }

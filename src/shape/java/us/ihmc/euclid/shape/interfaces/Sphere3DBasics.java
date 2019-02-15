@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.interfaces;
 
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
@@ -51,5 +52,19 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
    {
       getPose().setTranslation(center);
       setRadius(radius);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void applyInverseTransform(Transform transform)
+   {
+      transform.inverseTransform(getPose());
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void applyTransform(Transform transform)
+   {
+      transform.transform(getPose());
    }
 }
