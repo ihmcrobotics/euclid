@@ -1981,17 +1981,21 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
-                                                            FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly firstPointOnLine,
+                                                            FramePoint3DReadOnly secondPointOnLine, FixedFramePoint3DBasics firstIntersectionToPack,
+                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(firstPointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(secondPointOnLine);
+
       if (firstIntersectionToPack != null)
          firstPointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          firstPointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, firstPointOnLine,
-                                                                                             secondPointOnLine, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition, cylinderAxis,
+                                                                                             firstPointOnLine, secondPointOnLine, firstIntersectionToPack,
                                                                                              secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -2039,13 +2043,16 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
-                                                            FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly firstPointOnLine,
+                                                            FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics firstIntersectionToPack,
+                                                            FramePoint3DBasics secondIntersectionToPack)
    {
-      firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, firstPointOnLine,
-                                                                                             secondPointOnLine, firstIntersectionToPack,
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(firstPointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(secondPointOnLine);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition, cylinderAxis,
+                                                                                             firstPointOnLine, secondPointOnLine, firstIntersectionToPack,
                                                                                              secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -2099,17 +2106,21 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
-                                                            FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly pointOnLine,
+                                                            FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      pointOnLine.checkReferenceFrameMatch(lineDirection);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(pointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(lineDirection);
       if (firstIntersectionToPack != null)
          pointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          pointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, pointOnLine,
-                                                                                             lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition, cylinderAxis,
+                                                                                             pointOnLine, lineDirection, firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2156,13 +2167,17 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
-                                                            FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly pointOnLine,
+                                                            FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+                                                            FramePoint3DBasics secondIntersectionToPack)
    {
-      pointOnLine.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, pointOnLine,
-                                                                                             lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(pointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(lineDirection);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition, cylinderAxis,
+                                                                                             pointOnLine, lineDirection, firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -2747,19 +2762,21 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                                   FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                                                   FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                                   FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly lineSegmentStart,
+                                                                   FramePoint3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics firstIntersectionToPack,
                                                                    FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentStart);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentEnd);
       if (firstIntersectionToPack != null)
          lineSegmentStart.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          lineSegmentStart.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius,
-                                                                                                    lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
-                                                                                                    secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition,
+                                                                                                    cylinderAxis, lineSegmentStart, lineSegmentEnd,
+                                                                                                    firstIntersectionToPack, secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2806,14 +2823,17 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                                   FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                                                   FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                                   FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly lineSegmentStart,
+                                                                   FramePoint3DReadOnly lineSegmentEnd, FramePoint3DBasics firstIntersectionToPack,
+                                                                   FramePoint3DBasics secondIntersectionToPack)
    {
-      lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius,
-                                                                                                    lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
-                                                                                                    secondIntersectionToPack);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentStart);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentEnd);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition,
+                                                                                                    cylinderAxis, lineSegmentStart, lineSegmentEnd,
+                                                                                                    firstIntersectionToPack, secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -3354,17 +3374,21 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, FramePoint3DReadOnly rayOrigin,
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                           FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly rayOrigin,
                                                            FrameVector3DReadOnly rayDirection, FixedFramePoint3DBasics firstIntersectionToPack,
                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      rayOrigin.checkReferenceFrameMatch(rayDirection);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(rayOrigin);
+      cylinderPosition.checkReferenceFrameMatch(rayDirection);
       if (firstIntersectionToPack != null)
          rayOrigin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          rayOrigin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, rayOrigin,
-                                                                                            rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition, cylinderAxis,
+                                                                                            rayOrigin, rayDirection, firstIntersectionToPack,
+                                                                                            secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3411,13 +3435,17 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, FramePoint3DReadOnly rayOrigin,
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                           FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly rayOrigin,
                                                            FrameVector3DReadOnly rayDirection, FramePoint3DBasics firstIntersectionToPack,
                                                            FramePoint3DBasics secondIntersectionToPack)
    {
-      rayOrigin.checkReferenceFrameMatch(rayDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, rayOrigin,
-                                                                                            rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(rayOrigin);
+      cylinderPosition.checkReferenceFrameMatch(rayDirection);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderLength, cylinderRadius, cylinderPosition, cylinderAxis,
+                                                                                            rayOrigin, rayDirection, firstIntersectionToPack,
+                                                                                            secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)

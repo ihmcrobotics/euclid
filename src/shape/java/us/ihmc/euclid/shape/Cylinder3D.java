@@ -4,7 +4,6 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -23,7 +22,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
 {
    private final Shape3DPose pose = new Shape3DPose();
-   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** Radius of the cylinder part. */
    private double radius;
@@ -173,18 +171,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public Point3DReadOnly getBottomCenter()
    {
       return bottomCenter;
-   }
-
-   @Override
-   public IntermediateVariableSupplier getIntermediateVariableSupplier()
-   {
-      return supplier;
-   }
-
-   @Override
-   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
-   {
-      supplier = newSupplier;
    }
 
    /**

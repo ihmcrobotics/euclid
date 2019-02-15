@@ -3268,9 +3268,10 @@ public class EuclidGeometryTools
     * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
     *            {@code cylinderRadius < 0}.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, double pointOnLineX,
-                                                            double pointOnLineY, double pointOnLineZ, double lineDirectionX, double lineDirectionY,
-                                                            double lineDirectionZ, Point3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, double cylinderPositionX, double cylinderPositionY,
+                                                            double cylinderPositionZ, double cylinderAxisX, double cylinderAxisY, double cylinderAxisZ,
+                                                            double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX,
+                                                            double lineDirectionY, double lineDirectionZ, Point3DBasics firstIntersectionToPack,
                                                             Point3DBasics secondIntersectionToPack)
    {
       double startX = pointOnLineX;
@@ -3279,7 +3280,8 @@ public class EuclidGeometryTools
       double endX = pointOnLineX + lineDirectionX;
       double endY = pointOnLineY + lineDirectionY;
       double endZ = pointOnLineZ + lineDirectionZ;
-      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderBottomZ, cylinderTopZ, cylinderRadius, startX, startY, startZ, true, endX, endY, endZ, true,
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderLength, cylinderRadius, cylinderPositionX, cylinderPositionY, cylinderPositionZ, cylinderAxisX,
+                                                        cylinderAxisY, cylinderAxisZ, startX, startY, startZ, true, endX, endY, endZ, true,
                                                         firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -3323,17 +3325,24 @@ public class EuclidGeometryTools
     * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
     *            {@code cylinderRadius < 0}.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, Point3DReadOnly cylinderPosition,
+                                                            Vector3DReadOnly cylinderAxis, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
                                                             Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
+      double cylinderPositionX = cylinderPosition.getX();
+      double cylinderPositionY = cylinderPosition.getY();
+      double cylinderPositionZ = cylinderPosition.getZ();
+      double cylinderAxisX = cylinderAxis.getX();
+      double cylinderAxisY = cylinderAxis.getY();
+      double cylinderAxisZ = cylinderAxis.getZ();
       double startX = firstPointOnLine.getX();
       double startY = firstPointOnLine.getY();
       double startZ = firstPointOnLine.getZ();
       double endX = secondPointOnLine.getX();
       double endY = secondPointOnLine.getY();
       double endZ = secondPointOnLine.getZ();
-      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderBottomZ, cylinderTopZ, cylinderRadius, startX, startY, startZ, true, endX, endY, endZ, true,
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderLength, cylinderRadius, cylinderPositionX, cylinderPositionY, cylinderPositionZ, cylinderAxisX,
+                                                        cylinderAxisY, cylinderAxisZ, startX, startY, startZ, true, endX, endY, endZ, true,
                                                         firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -3377,17 +3386,24 @@ public class EuclidGeometryTools
     * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
     *            {@code cylinderRadius < 0}.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, Point3DReadOnly pointOnLine,
-                                                            Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
-                                                            Point3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, Point3DReadOnly cylinderPosition,
+                                                            Vector3DReadOnly cylinderAxis, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
+                                                            Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
+      double cylinderPositionX = cylinderPosition.getX();
+      double cylinderPositionY = cylinderPosition.getY();
+      double cylinderPositionZ = cylinderPosition.getZ();
+      double cylinderAxisX = cylinderAxis.getX();
+      double cylinderAxisY = cylinderAxis.getY();
+      double cylinderAxisZ = cylinderAxis.getZ();
       double startX = pointOnLine.getX();
       double startY = pointOnLine.getY();
       double startZ = pointOnLine.getZ();
       double endX = pointOnLine.getX() + lineDirection.getX();
       double endY = pointOnLine.getY() + lineDirection.getY();
       double endZ = pointOnLine.getZ() + lineDirection.getZ();
-      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderBottomZ, cylinderTopZ, cylinderRadius, startX, startY, startZ, true, endX, endY, endZ, true,
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderLength, cylinderRadius, cylinderPositionX, cylinderPositionY, cylinderPositionZ, cylinderAxisX,
+                                                        cylinderAxisY, cylinderAxisZ, startX, startY, startZ, true, endX, endY, endZ, true,
                                                         firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -3448,13 +3464,15 @@ public class EuclidGeometryTools
     * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
     *            {@code cylinderRadius < 0}.
     */
-   private static int intersectionBetweenLine3DAndCylinder3DImpl(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, double startX,
-                                                                 double startY, double startZ, boolean canIntersectionOccurBeforeStart, double endX,
-                                                                 double endY, double endZ, boolean canIntersectionOccurAfterEnd,
-                                                                 Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   private static int intersectionBetweenLine3DAndCylinder3DImpl(double cylinderLength, double cylinderRadius, double cylinderPositionX,
+                                                                 double cylinderPositionY, double cylinderPositionZ, double cylinderAxisX, double cylinderAxisY,
+                                                                 double cylinderAxisZ, double startX, double startY, double startZ,
+                                                                 boolean canIntersectionOccurBeforeStart, double endX, double endY, double endZ,
+                                                                 boolean canIntersectionOccurAfterEnd, Point3DBasics firstIntersectionToPack,
+                                                                 Point3DBasics secondIntersectionToPack)
    {
-      if (cylinderTopZ < cylinderBottomZ)
-         throw new IllegalArgumentException("The cylinder height has to be positive.");
+      if (cylinderLength < 0.0)
+         throw new IllegalArgumentException("The cylinder length has to be positive.");
       if (cylinderRadius < 0.0)
          throw new IllegalArgumentException("The cylinder radius has to be positive.");
 
@@ -3463,9 +3481,13 @@ public class EuclidGeometryTools
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setToNaN();
 
-      if (cylinderTopZ == cylinderBottomZ || cylinderRadius == 0.0)
+      if (cylinderLength == 0.0 || cylinderRadius == 0.0)
          return 0;
 
+      double axisX = cylinderAxisX;
+      double axisY = cylinderAxisY;
+      double axisZ = cylinderAxisZ;
+      double halfLength = 0.5 * cylinderLength;
       double radiusSquared = cylinderRadius * cylinderRadius;
 
       double dIntersection1 = Double.NaN;
@@ -3475,14 +3497,25 @@ public class EuclidGeometryTools
       double dy = endY - startY;
       double dz = endZ - startZ;
 
-      if (Math.abs(dz) >= ONE_TRILLIONTH)
+      double topX = halfLength * axisX + cylinderPositionX;
+      double topY = halfLength * axisY + cylinderPositionY;
+      double topZ = halfLength * axisZ + cylinderPositionZ;
+
+      double bottomX = -halfLength * axisX + cylinderPositionX;
+      double bottomY = -halfLength * axisY + cylinderPositionY;
+      double bottomZ = -halfLength * axisZ + cylinderPositionZ;
+      double lineDirectionDotCylinderAxis = dx * axisX + dy * axisY + dz * axisZ;
+
+      if (Math.abs(lineDirectionDotCylinderAxis) >= ONE_TRILLIONTH)
       {
          double dTop = Double.NaN;
-         { // Compute the intersection with the top face using simplified line-plane intersection.
-            dTop = (cylinderTopZ - startZ) / dz;
+         { // Compute the intersection with the top face using line-plane intersection.
+            double numerator = (topX - startX) * axisX + (topY - startY) * axisY + (topZ - startZ) * axisZ;
+            dTop = numerator / lineDirectionDotCylinderAxis;
             double intersectionX = dTop * dx + startX;
             double intersectionY = dTop * dy + startY;
-            if (EuclidCoreTools.normSquared(intersectionX, intersectionY) > radiusSquared)
+            double intersectionZ = dTop * dz + startZ;
+            if (distanceSquaredBetweenPoint3Ds(intersectionX, intersectionY, intersectionZ, topX, topY, topZ) > radiusSquared)
                dTop = Double.NaN;
          }
 
@@ -3491,10 +3524,12 @@ public class EuclidGeometryTools
 
          double dBottom = Double.NaN;
          { // Compute the intersection with the bottom face using simplified line-plane intersection.
-            dBottom = (cylinderBottomZ - startZ) / dz;
+            double numerator = (bottomX - startX) * axisX + (bottomY - startY) * axisY + (bottomZ - startZ) * axisZ;
+            dBottom = numerator / lineDirectionDotCylinderAxis;
             double intersectionX = dBottom * dx + startX;
             double intersectionY = dBottom * dy + startY;
-            if (EuclidCoreTools.normSquared(intersectionX, intersectionY) > radiusSquared)
+            double intersectionZ = dBottom * dz + startZ;
+            if (distanceSquaredBetweenPoint3Ds(intersectionX, intersectionY, intersectionZ, bottomX, bottomY, bottomZ) > radiusSquared)
                dBottom = Double.NaN;
          }
 
@@ -3520,14 +3555,37 @@ public class EuclidGeometryTools
       if (Double.isNaN(dIntersection2))
       { // Compute possible intersections with the cylinder part
         // Notation used: cylinder axis: pa + va * d; line equation: p + v * d
-        // The cylinder is vertical: va = (0, 0, 1), the bottom is at zero: pa = (0, 0, 0)
         // Need to solve quadratic equation of the form A * d^2 + B * d + C = 0
-        // A = (v - (v, va)*va)^2 = ( [v_x, v_y, 0]^T )^2
-         double A = EuclidCoreTools.normSquared(dx, dy);
-         // B = 2*(v - (v, va)*va, p - (p, va)*va) = 2 * ( [p_x, p_y, 0]^T, [v_x, v_y, 0]^T)
-         double B = 2.0 * (startX * dx + startY * dy);
-         // C = (p - (p, va)*va)^2 - r^2 = ( [v_x, v_y, 0]^T )^2 - r^2
-         double C = EuclidCoreTools.normSquared(startX, startY) - radiusSquared;
+
+         // (v, va)*va
+         double scaledAxisX1 = lineDirectionDotCylinderAxis * axisX;
+         double scaledAxisY1 = lineDirectionDotCylinderAxis * axisY;
+         double scaledAxisZ1 = lineDirectionDotCylinderAxis * axisZ;
+         // Vector used for computing A and B: v - (v, va)*va
+         double AX = dx - scaledAxisX1;
+         double AY = dy - scaledAxisY1;
+         double AZ = dz - scaledAxisZ1;
+         // Delta_p
+         double deltaPX = startX - cylinderPositionX;
+         double deltaPY = startY - cylinderPositionY;
+         double deltaPZ = startZ - cylinderPositionZ;
+         // (Delta_p, va)
+         double linePositionToCylinderDotAxis = deltaPX * axisX + deltaPY * axisY + deltaPZ * axisZ;
+         // (Delta_p, va)*va
+         double scaledAxisX2 = linePositionToCylinderDotAxis * axisX;
+         double scaledAxisY2 = linePositionToCylinderDotAxis * axisY;
+         double scaledAxisZ2 = linePositionToCylinderDotAxis * axisZ;
+         // Vector used for computing B and C: Delta_p - (Delta_p, va)*va
+         double CX = deltaPX - scaledAxisX2;
+         double CY = deltaPY - scaledAxisY2;
+         double CZ = deltaPZ - scaledAxisZ2;
+
+         // A = (v - (v, va)*va)^2
+         double A = EuclidCoreTools.normSquared(AX, AY, AZ);
+         // B = 2*(v - (v, va)*va, Delta_p - (Delta_p, va)*va)
+         double B = 2.0 * (AX * CX + AY * CY + AZ * CZ);
+         // C = (p - (Delta_p, va)*va)^2 - r^2
+         double C = EuclidCoreTools.normSquared(CX, CY, CZ) - radiusSquared;
 
          double delta = Math.sqrt(B * B - 4 * A * C);
 
@@ -3537,8 +3595,11 @@ public class EuclidGeometryTools
             double dCylinder1 = (-B + delta) * oneOverTwoA;
             double dCylinder2 = (-B - delta) * oneOverTwoA;
 
+            double intersection1X = dCylinder1 * dx + startX;
+            double intersection1Y = dCylinder1 * dy + startY;
             double intersection1Z = dCylinder1 * dz + startZ;
-            if (intersection1Z < cylinderBottomZ + ONE_TRILLIONTH || intersection1Z > cylinderTopZ - ONE_TRILLIONTH)
+            if (Math.abs(percentageAlongLine3D(intersection1X, intersection1Y, intersection1Z, cylinderPositionX, cylinderPositionY, cylinderPositionZ, axisX,
+                                               axisY, axisZ)) > halfLength - ONE_TRILLIONTH)
                dCylinder1 = Double.NaN;
 
             if (Double.isFinite(dCylinder1))
@@ -3558,8 +3619,11 @@ public class EuclidGeometryTools
                }
             }
 
+            double intersection2X = dCylinder2 * dx + startX;
+            double intersection2Y = dCylinder2 * dy + startY;
             double intersection2Z = dCylinder2 * dz + startZ;
-            if (intersection2Z < cylinderBottomZ + ONE_TRILLIONTH || intersection2Z > cylinderTopZ - ONE_TRILLIONTH)
+            if (Math.abs(percentageAlongLine3D(intersection2X, intersection2Y, intersection2Z, cylinderPositionX, cylinderPositionY, cylinderPositionZ, axisX,
+                                               axisY, axisZ)) > halfLength - ONE_TRILLIONTH)
                dCylinder2 = Double.NaN;
             else if (Math.abs(dCylinder1 - dCylinder2) < ONE_TRILLIONTH)
                dCylinder2 = Double.NaN;
@@ -4144,17 +4208,25 @@ public class EuclidGeometryTools
     * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
     *            {@code cylinderRadius < 0}.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                                   Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd,
-                                                                   Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength, double cylinderRadius, Point3DReadOnly cylinderPosition,
+                                                                   Vector3DReadOnly cylinderAxis, Point3DReadOnly lineSegmentStart,
+                                                                   Point3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
+                                                                   Point3DBasics secondIntersectionToPack)
    {
+      double cylinderPositionX = cylinderPosition.getX();
+      double cylinderPositionY = cylinderPosition.getY();
+      double cylinderPositionZ = cylinderPosition.getZ();
+      double cylinderAxisX = cylinderAxis.getX();
+      double cylinderAxisY = cylinderAxis.getY();
+      double cylinderAxisZ = cylinderAxis.getZ();
       double startX = lineSegmentStart.getX();
       double startY = lineSegmentStart.getY();
       double startZ = lineSegmentStart.getZ();
       double endX = lineSegmentEnd.getX();
       double endY = lineSegmentEnd.getY();
       double endZ = lineSegmentEnd.getZ();
-      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderBottomZ, cylinderTopZ, cylinderRadius, startX, startY, startZ, false, endX, endY, endZ, false,
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderLength, cylinderRadius, cylinderPositionX, cylinderPositionY, cylinderPositionZ, cylinderAxisX,
+                                                        cylinderAxisY, cylinderAxisZ, startX, startY, startZ, false, endX, endY, endZ, false,
                                                         firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -4489,17 +4561,24 @@ public class EuclidGeometryTools
     * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
     *            {@code cylinderRadius < 0}.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, Point3DReadOnly rayOrigin,
-                                                           Vector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
-                                                           Point3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength, double cylinderRadius, Point3DReadOnly cylinderPosition,
+                                                           Vector3DReadOnly cylinderAxis, Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection,
+                                                           Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
+      double cylinderPositionX = cylinderPosition.getX();
+      double cylinderPositionY = cylinderPosition.getY();
+      double cylinderPositionZ = cylinderPosition.getZ();
+      double cylinderAxisX = cylinderAxis.getX();
+      double cylinderAxisY = cylinderAxis.getY();
+      double cylinderAxisZ = cylinderAxis.getZ();
       double startX = rayOrigin.getX();
       double startY = rayOrigin.getY();
       double startZ = rayOrigin.getZ();
       double endX = rayOrigin.getX() + rayDirection.getX();
       double endY = rayOrigin.getY() + rayDirection.getY();
       double endZ = rayOrigin.getZ() + rayDirection.getZ();
-      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderBottomZ, cylinderTopZ, cylinderRadius, startX, startY, startZ, false, endX, endY, endZ, true,
+      return intersectionBetweenLine3DAndCylinder3DImpl(cylinderLength, cylinderRadius, cylinderPositionX, cylinderPositionY, cylinderPositionZ, cylinderAxisX,
+                                                        cylinderAxisY, cylinderAxisZ, startX, startY, startZ, false, endX, endY, endZ, true,
                                                         firstIntersectionToPack, secondIntersectionToPack);
    }
 

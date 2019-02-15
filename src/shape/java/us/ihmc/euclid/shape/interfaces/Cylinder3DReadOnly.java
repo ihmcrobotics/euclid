@@ -26,8 +26,6 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       return 0.5 * getLength();
    }
 
-   IntermediateVariableSupplier getIntermediateVariableSupplier();
-
    /**
     * Gets the radius of this cylinder.
     *
@@ -159,25 +157,8 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
-      Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
-      Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
-
-      getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
-      getPose().inverseTransform(lineDirection, lineDirectionInLocal);
-
-      double halfHeight = 0.5 * getLength();
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(-halfHeight, halfHeight, getRadius(), pointOnLineInLocal,
-                                                                                             lineDirectionInLocal, firstIntersectionToPack,
-                                                                                             secondIntersectionToPack);
-
-      getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
-      getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
-
-      if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         transformToWorld(firstIntersectionToPack);
-      if (secondIntersectionToPack != null && numberOfIntersections == 2)
-         transformToWorld(secondIntersectionToPack);
-      return numberOfIntersections;
+      return EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(getLength(), getRadius(), getPosition(), getAxis(), pointOnLine, lineDirection,
+                                                                        firstIntersectionToPack, secondIntersectionToPack);
    }
 
    /**
