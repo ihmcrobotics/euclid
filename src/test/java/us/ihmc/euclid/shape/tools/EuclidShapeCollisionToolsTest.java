@@ -38,7 +38,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidShapeCollisionToolsTest
 {
-   private static final double EPSILON = 1.0e-11;
+   private static final double EPSILON = 5.0e-11;
 
    @Test
    public void testPointShape3DBox3D() throws Exception

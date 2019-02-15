@@ -12,6 +12,7 @@ import us.ihmc.euclid.shape.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class EuclidShapeTestTools
 {
@@ -393,7 +394,26 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
       if (!expected.epsilonEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      {
+         if (expected.areShapesColliding() != actual.areShapesColliding())
+         {
+            throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         }
+         else
+         {
+            Vector3D differenceNormalOnA = new Vector3D();
+            differenceNormalOnA.sub(expected.getNormalOnA(), actual.getNormalOnA());
+            Vector3D differenceNormalOnB = new Vector3D();
+            differenceNormalOnB.sub(expected.getNormalOnB(), actual.getNormalOnB());
+
+            String difference = "[";
+            difference += "depth: " + Math.abs(expected.getDepth() - actual.getDepth());
+            difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.length();
+            difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.length();
+            difference += "]";
+            throwNotEqualAssertionError(messagePrefix, expected, actual, format, difference);
+         }
+      }
    }
 
    public static void assertCollisionTestResultGeometricallyEquals(CollisionTestResult expected, CollisionTestResult actual, double epsilon)
@@ -478,8 +498,14 @@ public class EuclidShapeTestTools
 
    private static void throwNotEqualAssertionError(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, String format)
    {
+      throwNotEqualAssertionError(messagePrefix, expected, actual, format, null);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, String format,
+                                                   String differenceAsString)
+   {
       String expectedAsString = getCollisionTestResultString(format, expected);
       String actualAsString = getCollisionTestResultString(format, actual);
-      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, differenceAsString);
    }
 }
