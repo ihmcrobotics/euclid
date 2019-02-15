@@ -10,19 +10,19 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    @Override
    default double getX()
    {
-      return getPositionX();
+      return getPose().getTranslationX();
    }
 
    @Override
    default double getY()
    {
-      return getPositionY();
+      return getPose().getTranslationY();
    }
 
    @Override
    default double getZ()
    {
-      return getPositionZ();
+      return getPose().getTranslationZ();
    }
 
    @Override

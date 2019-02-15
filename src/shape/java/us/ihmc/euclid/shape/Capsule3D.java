@@ -17,12 +17,12 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    private double length;
    private double halfLength;
 
-   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPositionX(),
-                                                                                          () -> getHalfLength() * getAxis().getY() + getPositionY(),
-                                                                                          () -> getHalfLength() * getAxis().getZ() + getPositionZ());
-   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPositionX(),
-                                                                                             () -> -getHalfLength() * getAxis().getY() + getPositionY(),
-                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPositionZ());
+   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
+                                                                                          () -> getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
+                                                                                          () -> getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
+   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
+                                                                                             () -> -getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
+                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
 
    public Capsule3D()
    {

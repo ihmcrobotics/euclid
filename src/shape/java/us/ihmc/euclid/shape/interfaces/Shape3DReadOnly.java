@@ -1,14 +1,10 @@
 package us.ihmc.euclid.shape.interfaces;
 
-import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.shape.CollisionTestResult;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface Shape3DReadOnly extends SupportingVertexHolder
@@ -157,139 +153,6 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @return whether the method succeeded or not.
     */
    boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack);
-
-   /**
-    * Packs the orientation of this shape into {@code orientationToPack}.
-    *
-    * @param orientationToPack used to pack the orientation of this shape. Modified.
-    */
-   default void getOrientation(Orientation3DBasics orientationToPack)
-   {
-      orientationToPack.set(getOrientation());
-   }
-
-   /**
-    * Computes and returns the pitch angle from the yaw-pitch-roll representation of this shape
-    * orientation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the pitch angle around the y-axis.
-    */
-   default double getOrientationPitch()
-   {
-      return getOrientation().getPitch();
-   }
-
-   /**
-    * Computes and returns the roll angle from the yaw-pitch-roll representation of this shape
-    * orientation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the roll angle around the x-axis.
-    */
-   default double getOrientationRoll()
-   {
-      return getOrientation().getRoll();
-   }
-
-   /**
-    * Computes and returns the yaw angle from the yaw-pitch-roll representation of this shape
-    * orientation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @return the yaw angle around the z-axis.
-    */
-   default double getOrientationYaw()
-   {
-      return getOrientation().getYaw();
-   }
-
-   /**
-    * Computes and packs the orientation of this shape into the given yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use a {@link YawPitchRoll} that can be set to {@link #getOrientation()}.
-    */
-   @Deprecated
-   default void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      getOrientation().getYawPitchRoll(yawPitchRollToPack);
-   }
-
-   /**
-    * Packs the pose of this shape into the given {@code poseToPack}.
-    *
-    * @param poseToPack the pose in which the position and orientation of this shape are stored.
-    *           Modified.
-    */
-   default void getPose(Pose3DBasics poseToPack)
-   {
-      poseToPack.set(getPosition(), getOrientation());
-   }
-
-   /**
-    * Packs the pose of this shape into the given {@code transformToPack}.
-    *
-    * @param transformToPack the rigid-body transform in which the position and orientation of this
-    *           shape are stored. Modified.
-    */
-   default void getPose(RigidBodyTransformBasics transformToPack)
-   {
-      transformToPack.set(getOrientation(), getPosition());
-   }
-
-   /**
-    * Packs the position of this shape.
-    *
-    * @param tupleToPack the tuple in which the position of this shape is stored. Modified.
-    */
-   default void getPosition(Tuple3DBasics tupleToPack)
-   {
-      tupleToPack.set(getPosition());
-   }
-
-   /**
-    * Gets the x-coordinate of the position of this shape.
-    *
-    * @return the x-coordinate of this shape position.
-    */
-   default double getPositionX()
-   {
-      return getPosition().getX();
-   }
-
-   /**
-    * Gets the y-coordinate of the position of this shape.
-    *
-    * @return the y-coordinate of this shape position.
-    */
-   default double getPositionY()
-   {
-      return getPosition().getY();
-   }
-
-   /**
-    * Gets the z-coordinate of the position of this shape.
-    *
-    * @return the z-coordinate of this shape position.
-    */
-   default double getPositionZ()
-   {
-      return getPosition().getZ();
-   }
 
    /**
     * Changes the given {@code transformable} from being expressed in world to being expressed in this

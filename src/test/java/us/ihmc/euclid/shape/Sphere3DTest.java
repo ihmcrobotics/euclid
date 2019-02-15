@@ -42,7 +42,7 @@ public class Sphere3DTest
       double epsilon = 1e-14;
       assertEquals(sphere3d.getRadius(), 1.0, epsilon);
       Point3D centerCheck = new Point3D();
-      sphere3d.getPosition(centerCheck);
+      centerCheck.set(sphere3d.getPose().getShapePosition());
       EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), centerCheck, epsilon);
    }
 

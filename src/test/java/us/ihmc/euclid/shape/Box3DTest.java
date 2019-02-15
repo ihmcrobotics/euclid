@@ -86,7 +86,7 @@ public class Box3DTest
       box.getPose().set(transform);
 
       RigidBodyTransform transformBack = new RigidBodyTransform();
-      box.getPose(transformBack);
+      transformBack.set(box.getPose());
       EuclidCoreTestTools.assertRigidBodyTransformEquals(transform, transformBack, EPSILON);
 
       RotationMatrix matrix = new RotationMatrix();
@@ -96,7 +96,7 @@ public class Box3DTest
       RotationMatrix matrixBack = new RotationMatrix();
       Point3D pointBack = new Point3D();
 
-      box.getOrientation(matrixBack);
+      matrixBack.set(box.getPose().getShapeOrientation());
       assertTrue(matrix.epsilonEquals(matrixBack, EPSILON));
 
       box.getCenter(pointBack);
@@ -394,8 +394,8 @@ public class Box3DTest
 
       box3d.applyTransform(transform);
 
-      box3d.getPosition(point);
-      box3d.getOrientation(quat);
+      point.set(box3d.getPose().getShapePosition());
+      quat.set(box3d.getPose().getShapeOrientation());
       expectedPosition.applyTransform(transform);
       EuclidCoreTestTools.assertTuple3DEquals(expectedPosition, point, EPSILON);
       EuclidCoreTestTools.assertQuaternionEquals(quat2, quat, EPSILON);
@@ -416,7 +416,7 @@ public class Box3DTest
          box.getPose().setRotationYawPitchRoll(yaw, pitch, roll);
 
          RotationMatrix rotation = new RotationMatrix();
-         box.getOrientation(rotation);
+         rotation.set(box.getPose().getShapeOrientation());
 
          double epsilon = 1e-14;
          assertEquals(yaw, rotation.getYaw(), epsilon);

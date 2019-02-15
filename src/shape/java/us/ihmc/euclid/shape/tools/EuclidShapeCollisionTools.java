@@ -61,9 +61,9 @@ public class EuclidShapeCollisionTools
       double halfSizeY = 0.5 * box3D.getSizeY();
       double halfSizeZ = 0.5 * box3D.getSizeZ();
 
-      double dx = point3D.getX() - box3D.getPositionX();
-      double dy = point3D.getY() - box3D.getPositionY();
-      double dz = point3D.getZ() - box3D.getPositionZ();
+      double dx = point3D.getX() - box3D.getPose().getTranslationX();
+      double dy = point3D.getY() - box3D.getPose().getTranslationY();
+      double dz = point3D.getZ() - box3D.getPose().getTranslationZ();
       double xLocal = dot(dx, dy, dz, box3D.getPose().getXAxis());
       double yLocal = dot(dx, dy, dz, box3D.getPose().getYAxis());
       double zLocal = dot(dx, dy, dz, box3D.getPose().getZAxis());
@@ -871,9 +871,9 @@ public class EuclidShapeCollisionTools
       double torus3DRadius = torus3D.getRadius();
       double torus3DTubeRadius = torus3D.getTubeRadius();
 
-      double dx = point3D.getX() - torus3D.getPositionX();
-      double dy = point3D.getY() - torus3D.getPositionY();
-      double dz = point3D.getZ() - torus3D.getPositionZ();
+      double dx = point3D.getX() - torus3D.getPose().getTranslationX();
+      double dy = point3D.getY() - torus3D.getPose().getTranslationY();
+      double dz = point3D.getZ() - torus3D.getPose().getTranslationZ();
 
       double xLocal = dot(dx, dy, dz, torus3DPose.getXAxis());
       double yLocal = dot(dx, dy, dz, torus3DPose.getYAxis());

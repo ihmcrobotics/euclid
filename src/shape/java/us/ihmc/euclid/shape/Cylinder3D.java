@@ -33,12 +33,12 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     */
    private double length;
 
-   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPositionX(),
-                                                                                          () -> getHalfLength() * getAxis().getY() + getPositionY(),
-                                                                                          () -> getHalfLength() * getAxis().getZ() + getPositionZ());
-   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPositionX(),
-                                                                                             () -> -getHalfLength() * getAxis().getY() + getPositionY(),
-                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPositionZ());
+   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
+                                                                                          () -> getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
+                                                                                          () -> getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
+   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
+                                                                                             () -> -getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
+                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
 
    /**
     * Creates a new cylinder with length of {@code 1} and radius of {@code 0.5}.

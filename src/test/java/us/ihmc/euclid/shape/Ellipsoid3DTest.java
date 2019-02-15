@@ -324,10 +324,10 @@ public class Ellipsoid3DTest
          assertEquals(ellipsoid.getRadiusZ(), ellipsoidCopy.getRadiusZ(), 1e-10);
 
          Point3D center = new Point3D();
-         ellipsoid.getPosition(center);
+         center.set(ellipsoid.getPose().getShapePosition());
 
          Point3D centerCopy = new Point3D();
-         ellipsoidCopy.getPosition(centerCopy);
+         centerCopy.set(ellipsoidCopy.getPose().getShapePosition());
 
          EuclidCoreTestTools.assertTuple3DEquals(center, centerCopy, 1e-10);
       }

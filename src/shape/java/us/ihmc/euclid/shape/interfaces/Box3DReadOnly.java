@@ -68,9 +68,9 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
    {
-      double dX = query.getX() - getPositionX();
-      double dY = query.getY() - getPositionY();
-      double dZ = query.getZ() - getPositionZ();
+      double dX = query.getX() - getPose().getTranslationX();
+      double dY = query.getY() - getPose().getTranslationY();
+      double dZ = query.getZ() - getPose().getTranslationZ();
 
       if (getPose().getShapeOrientation().isIdentity())
          return EuclidShapeTools.isPoint3DInsideBox3D(dX, dY, dZ, getSize(), epsilon);
@@ -184,7 +184,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     */
    default void getCenter(Point3DBasics centerToPack)
    {
-      getPosition(centerToPack);
+      centerToPack.set(getPose().getShapePosition());
    }
 
    /**
