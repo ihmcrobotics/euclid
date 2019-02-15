@@ -61,7 +61,6 @@ public class EuclidShapeCollisionToolsTest
          pointOutside.scaleAdd(distance, shiftDirection, pointOnAFace);
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -99,7 +98,6 @@ public class EuclidShapeCollisionToolsTest
          closestFacePlane.orthogonalProjection(pointInside, pointOnFace);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -146,7 +144,6 @@ public class EuclidShapeCollisionToolsTest
          normal.normalize();
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -194,7 +191,6 @@ public class EuclidShapeCollisionToolsTest
          normal.normalize();
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -244,7 +240,6 @@ public class EuclidShapeCollisionToolsTest
          pointOutside.scaleAdd(distance, normal, pointOnSurface);
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -281,7 +276,6 @@ public class EuclidShapeCollisionToolsTest
          pointOutside.scaleAdd(distance, normal, pointOnSurface);
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -325,7 +319,6 @@ public class EuclidShapeCollisionToolsTest
          double distance = pointOnSurface.distance(pointInside);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -362,7 +355,6 @@ public class EuclidShapeCollisionToolsTest
          double distance = pointInside.distance(pointOnSurface);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -411,7 +403,6 @@ public class EuclidShapeCollisionToolsTest
          pointOutside.scaleAdd(distance, normal, pointOnSurface);
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -447,7 +438,6 @@ public class EuclidShapeCollisionToolsTest
          pointOutside.scaleAdd(distance, normal, pointOnSurface);
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -491,7 +481,6 @@ public class EuclidShapeCollisionToolsTest
          pointOutside.scaleAdd(distance, normal, pointOnEdge);
 
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -565,7 +554,6 @@ public class EuclidShapeCollisionToolsTest
          double distance = pointOnSurface.distance(pointInside);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -625,7 +613,6 @@ public class EuclidShapeCollisionToolsTest
          double distance = pointOnSurface.distance(pointInside);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -668,7 +655,6 @@ public class EuclidShapeCollisionToolsTest
             pointOutside.scaleAdd(distance, normal, pointOnSurface);
 
             PointShape3D pointShape3D = new PointShape3D(pointOutside);
-            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
             CollisionTestResult expected = new CollisionTestResult();
             expected.setToNaN();
@@ -693,7 +679,6 @@ public class EuclidShapeCollisionToolsTest
             double distance = pointInside.distance(pointOnSurface);
 
             PointShape3D pointShape3D = new PointShape3D(pointInside);
-            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
             CollisionTestResult expected = new CollisionTestResult();
             expected.setToNaN();
@@ -742,7 +727,6 @@ public class EuclidShapeCollisionToolsTest
             double distance = pointOnSurface.distance(pointOutside);
 
             PointShape3D pointShape3D = new PointShape3D(pointOutside);
-            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
             CollisionTestResult expected = new CollisionTestResult();
             expected.setToNaN();
@@ -764,7 +748,6 @@ public class EuclidShapeCollisionToolsTest
             double distance = pointInside.distance(pointOnSurface);
 
             PointShape3D pointShape3D = new PointShape3D(pointInside);
-            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
             CollisionTestResult expected = new CollisionTestResult();
             expected.setToNaN();
@@ -1211,7 +1194,6 @@ public class EuclidShapeCollisionToolsTest
          double depth = closestFace.distance(pointInside);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -1238,7 +1220,6 @@ public class EuclidShapeCollisionToolsTest
       pointOutside.scaleAdd(distance, normal, pointOnShape);
 
       PointShape3D pointShape3D = new PointShape3D(pointOutside);
-      pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
       CollisionTestResult expected = new CollisionTestResult();
       expected.setToNaN();
@@ -1275,7 +1256,6 @@ public class EuclidShapeCollisionToolsTest
             pointOutside.scaleAdd(distance, normal, pointOnSurface);
 
             PointShape3D pointShape3D = new PointShape3D(pointOutside);
-            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
             CollisionTestResult expected = new CollisionTestResult();
             expected.setToNaN();
@@ -1300,7 +1280,6 @@ public class EuclidShapeCollisionToolsTest
             double distance = pointInside.distance(pointOnSurface);
 
             PointShape3D pointShape3D = new PointShape3D(pointInside);
-            pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
             CollisionTestResult expected = new CollisionTestResult();
             expected.setToNaN();
@@ -1366,7 +1345,6 @@ public class EuclidShapeCollisionToolsTest
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(distance, normal, pointOnSurface);
          PointShape3D pointShape3D = new PointShape3D(pointOutside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
@@ -1408,7 +1386,6 @@ public class EuclidShapeCollisionToolsTest
          double distance = pointOnSurface.distance(pointInside);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
-         pointShape3D.getOrientation().set(EuclidCoreRandomTools.nextRotationMatrix(random)); // Just to verify that the orientation does not change anything
 
          CollisionTestResult expected = new CollisionTestResult();
          expected.setToNaN();
