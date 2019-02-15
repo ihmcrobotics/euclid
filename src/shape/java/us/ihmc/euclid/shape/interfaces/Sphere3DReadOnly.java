@@ -2,8 +2,6 @@ package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -20,35 +18,18 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     */
    double getRadius();
 
-   Shape3DPoseReadOnly getPose();
-
-   /**
-    * Gets the read-only reference to the orientation of this shape.
-    *
-    * @return the orientation of this shape.
-    */
-   default RotationMatrixReadOnly getOrientation()
-   {
-      return getPose().getShapeOrientation();
-   }
-
    /**
     * Gets the read-only reference of the position of this shape.
     *
     * @return the position of this shape.
     */
-   default Point3DReadOnly getPosition()
-   {
-      return getPose().getShapePosition();
-   }
-
-   IntermediateVariableSupplier getIntermediateVariableSupplier();
+   Point3DReadOnly getPosition();
 
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
    {
-      return getPose().containsNaN() || Double.isNaN(getRadius());
+      return getPosition().containsNaN() || Double.isNaN(getRadius());
    }
 
    @Override
@@ -61,9 +42,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      supportingVertexToPack.set(supportDirection);
-      supportingVertexToPack.scale(getRadius() / supportDirection.length());
-      supportingVertexToPack.add(getPosition());
+      EuclidShapeTools.supportingVertexSphere3D(supportDirection, getPosition(), getRadius(), supportingVertexToPack);
       return true;
    }
 
@@ -125,23 +104,22 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     */
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
-   { // FIXME The orientation part of the pose should be ignored here.
-      Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();
-      Vector3DBasics lineDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
-      getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
-      getPose().inverseTransform(lineDirection, lineDirectionInLocal);
+   {
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(), getRadius(), getRadius(), pointOnLineInLocal,
-                                                                                              lineDirectionInLocal, firstIntersectionToPack,
-                                                                                              secondIntersectionToPack);
-
-      getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
-      getIntermediateVariableSupplier().releaseVector3D(lineDirectionInLocal);
+      double pointOnLineX = pointOnLine.getX() - getPosition().getX();
+      double pointOnLineY = pointOnLine.getY() - getPosition().getY();
+      double pointOnLineZ = pointOnLine.getZ() - getPosition().getZ();
+      double lineDirectionX = lineDirection.getX();
+      double lineDirectionY = lineDirection.getY();
+      double lineDirectionZ = lineDirection.getZ();
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(), getRadius(), getRadius(), pointOnLineX, pointOnLineY,
+                                                                                              pointOnLineZ, lineDirectionX, lineDirectionY, lineDirectionZ,
+                                                                                              firstIntersectionToPack, secondIntersectionToPack);
 
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
-         transformToWorld(firstIntersectionToPack);
+         firstIntersectionToPack.add(getPosition());
       if (secondIntersectionToPack != null && numberOfIntersections == 2)
-         transformToWorld(secondIntersectionToPack);
+         secondIntersectionToPack.add(getPosition());
       return numberOfIntersections;
    }
 
@@ -156,8 +134,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     */
    default boolean epsilonEquals(Sphere3DReadOnly other, double epsilon)
    {
-      return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
-            && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
+      return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon);
    }
 
    /**
@@ -172,29 +149,5 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    default boolean geometricallyEquals(Sphere3DReadOnly other, double epsilon)
    {
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon) && getPosition().geometricallyEquals(other.getPosition(), epsilon);
-   }
-
-   /**
-    * Changes the given {@code transformable} from being expressed in world to being expressed in this
-    * shape local coordinates.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToLocal(Transformable transformable)
-   {
-      transformable.applyInverseTransform(getPose());
-   }
-
-   /**
-    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
-    * being expressed in world.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToWorld(Transformable transformable)
-   {
-      transformable.applyTransform(getPose());
    }
 }

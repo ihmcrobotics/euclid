@@ -1185,50 +1185,58 @@ public class EuclidShapeTools
       return possibleMin <= value1 && possibleMin <= value2;
    }
 
-   public static boolean isPoint3DInsideSphere3D(Point3DReadOnly query, Point3DReadOnly spherePosition, double sphereRadius, double epsilon)
+   public static boolean isPoint3DInsideSphere3D(Point3DReadOnly query, Point3DReadOnly sphere3DPosition, double sphere3DRadius, double epsilon)
    {
-      double radiusWithEpsilon = sphereRadius + epsilon;
-      return spherePosition.distanceSquared(query) <= radiusWithEpsilon * radiusWithEpsilon;
+      double radiusWithEpsilon = sphere3DRadius + epsilon;
+      return sphere3DPosition.distanceSquared(query) <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
-   public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly query, Point3DReadOnly spherePosition, double sphereRadius)
+   public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly query, Point3DReadOnly sphere3DPosition, double sphere3DRadius)
    {
-      return spherePosition.distance(query) - sphereRadius;
+      return sphere3DPosition.distance(query) - sphere3DRadius;
    }
 
-   public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly pointToProject, Point3DReadOnly spherePosition, double sphereRadius,
+   public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly pointToProject, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
                                                           Point3DBasics projectionToPack)
    {
-      double distanceSquared = spherePosition.distanceSquared(pointToProject);
-      if (distanceSquared <= sphereRadius * sphereRadius)
+      double distanceSquared = sphere3DPosition.distanceSquared(pointToProject);
+      if (distanceSquared <= sphere3DRadius * sphere3DRadius)
          return false;
 
-      projectionToPack.sub(pointToProject, spherePosition);
-      projectionToPack.scale(sphereRadius / Math.sqrt(distanceSquared));
-      projectionToPack.add(spherePosition);
+      projectionToPack.sub(pointToProject, sphere3DPosition);
+      projectionToPack.scale(sphere3DRadius / Math.sqrt(distanceSquared));
+      projectionToPack.add(sphere3DPosition);
       return true;
    }
 
-   public static double doPoint3DSphere3DCollisionTest(Point3DReadOnly query, Point3DReadOnly spherePosition, double sphereRadius,
+   public static void supportingVertexSphere3D(Vector3DReadOnly supportDirection, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
+                                               Point3DBasics supportingVertexToPack)
+   {
+      supportingVertexToPack.set(supportDirection);
+      supportingVertexToPack.scale(sphere3DRadius / supportDirection.length());
+      supportingVertexToPack.add(sphere3DPosition);
+   }
+
+   public static double doPoint3DSphere3DCollisionTest(Point3DReadOnly query, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
                                                        Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
    {
-      double distance = spherePosition.distance(query);
+      double distance = sphere3DPosition.distance(query);
 
       if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
       {
-         closestPointToPack.sub(query, spherePosition);
-         closestPointToPack.scale(sphereRadius / distance);
-         normalToPack.sub(query, spherePosition);
+         closestPointToPack.sub(query, sphere3DPosition);
+         closestPointToPack.scale(sphere3DRadius / distance);
+         normalToPack.sub(query, sphere3DPosition);
          normalToPack.scale(1.0 / distance);
       }
       else
       {
-         closestPointToPack.set(0.0, 0.0, sphereRadius);
+         closestPointToPack.set(0.0, 0.0, sphere3DRadius);
          normalToPack.set(0.0, 0.0, 1.0);
       }
-      closestPointToPack.add(spherePosition);
+      closestPointToPack.add(sphere3DPosition);
 
-      return distance - sphereRadius;
+      return distance - sphere3DRadius;
    }
 
    public static boolean isPoint3DInsideTorus3D(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis, double torus3DRadius,

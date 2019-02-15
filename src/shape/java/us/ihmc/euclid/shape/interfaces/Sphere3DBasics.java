@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.interfaces;
 
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -9,32 +8,13 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
 {
    void setRadius(double radius);
 
-   @Override
-   Shape3DPoseBasics getPose();
-
-   /**
-    * Gets the reference to the orientation of this shape.
-    *
-    * @return the orientation of this shape.
-    */
-   @Override
-   default RotationMatrix getOrientation()
-   {
-      return getPose().getShapeOrientation();
-   }
-
    /**
     * Gets the reference of the position of this shape.
     *
     * @return the position of this shape.
     */
    @Override
-   default Point3DBasics getPosition()
-   {
-      return getPose().getShapePosition();
-   }
-
-   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
+   Point3DBasics getPosition();
 
    @Override
    default boolean containsNaN()
@@ -46,7 +26,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
    @Override
    default void setToZero()
    {
-      getPose().setToZero();
+      getPosition().setToZero();
       setRadius(0.0);
    }
 
@@ -54,7 +34,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
    @Override
    default void setToNaN()
    {
-      getPose().setToNaN();
+      getPosition().setToNaN();
       setRadius(Double.NaN);
    }
 
@@ -65,19 +45,19 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
     */
    default void set(Sphere3DReadOnly other)
    {
-      getPose().set(other.getPose());
+      getPosition().set(other.getPosition());
       setRadius(other.getRadius());
    }
 
    default void set(double centerX, double centerY, double centerZ, double radius)
    {
-      getPose().setTranslation(centerX, centerY, centerZ);
+      getPosition().set(centerX, centerY, centerZ);
       setRadius(radius);
    }
 
    default void set(Point3DReadOnly center, double radius)
    {
-      getPose().setTranslation(center);
+      getPosition().set(center);
       setRadius(radius);
    }
 
@@ -85,13 +65,13 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
    @Override
    default void applyInverseTransform(Transform transform)
    {
-      transform.inverseTransform(getPose());
+      transform.inverseTransform(getPosition());
    }
 
    /** {@inheritDoc} */
    @Override
    default void applyTransform(Transform transform)
    {
-      transform.transform(getPose());
+      transform.transform(getPosition());
    }
 }

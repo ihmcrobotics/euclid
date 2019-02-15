@@ -1,9 +1,9 @@
 package us.ihmc.euclid.shape;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.shape.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -11,8 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  */
 public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
 {
-   private final Shape3DPose pose = new Shape3DPose();
-   private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
+   private final Point3D position = new Point3D();
 
    /** The radius of this sphere. */
    private double radius;
@@ -73,9 +72,9 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    }
 
    @Override
-   public Shape3DPose getPose()
+   public Point3D getPosition()
    {
-      return pose;
+      return position;
    }
 
    /**
@@ -87,18 +86,6 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    public double getRadius()
    {
       return radius;
-   }
-
-   @Override
-   public IntermediateVariableSupplier getIntermediateVariableSupplier()
-   {
-      return supplier;
-   }
-
-   @Override
-   public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
-   {
-      this.supplier = newSupplier;
    }
 
    /**
