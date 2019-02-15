@@ -422,14 +422,14 @@ public class Cylinder3DTest
 
          Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, new Vector3D(0, 0, 1), true);
 
-         secondCylinder.appendTransform(new RigidBodyTransform(new AxisAngle(orthogonalToAxis, Math.PI), new Vector3D()));
+         secondCylinder.getPose().multiply(new RigidBodyTransform(new AxisAngle(orthogonalToAxis, Math.PI), new Vector3D()));
 
          assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
 
          secondCylinder = new Cylinder3D(pose, height, radius);
 
-         secondCylinder.appendTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0, 0, 1), EuclidCoreRandomTools.nextDouble(random, Math.PI)),
-                                                               new Vector3D()));
+         secondCylinder.getPose().multiply(new RigidBodyTransform(new AxisAngle(new Vector3D(0, 0, 1), EuclidCoreRandomTools.nextDouble(random, Math.PI)),
+         new Vector3D()));
 
          assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }
@@ -445,7 +445,7 @@ public class Cylinder3DTest
 
          translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon);
 
-         secondCylinder.appendTranslation(translation);
+         secondCylinder.getPose().appendTranslation(translation);
 
          assertTrue(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
 
@@ -453,7 +453,7 @@ public class Cylinder3DTest
 
          translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon);
 
-         secondCylinder.appendTranslation(translation);
+         secondCylinder.getPose().appendTranslation(translation);
 
          assertFalse(firstCylinder.geometricallyEquals(secondCylinder, epsilon));
       }

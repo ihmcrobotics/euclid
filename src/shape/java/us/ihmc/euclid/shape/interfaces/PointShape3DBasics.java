@@ -8,19 +8,19 @@ public interface PointShape3DBasics extends PointShape3DReadOnly, Shape3DBasics,
    @Override
    default void setX(double x)
    {
-      setPositionX(x);
+      getPose().setTranslationX(x);
    }
 
    @Override
    default void setY(double y)
    {
-      setPositionY(y);
+      getPose().setTranslationY(y);
    }
 
    @Override
    default void setZ(double z)
    {
-      setPositionZ(z);
+      getPose().setTranslationZ(z);
    }
 
    @Override

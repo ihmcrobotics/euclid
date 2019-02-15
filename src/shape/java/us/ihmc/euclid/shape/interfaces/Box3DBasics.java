@@ -41,31 +41,31 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
     */
    default void set(Box3DReadOnly other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       getSize().set(other.getSize());
    }
 
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double length, double width, double height)
    {
-      setPose(position, orientation);
+      getPose().set(orientation, position);
       setSize(length, width, height);
    }
 
    default void set(Pose3DReadOnly pose, double length, double width, double height)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, width, height);
    }
 
    default void set(RigidBodyTransformReadOnly pose, double length, double width, double height)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, width, height);
    }
 
    default void set(RigidBodyTransformReadOnly pose, double[] size)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(size[0], size[1], size[2]);
    }
 

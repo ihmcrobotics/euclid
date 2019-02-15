@@ -36,7 +36,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
     */
    default void set(Torus3DReadOnly other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       setRadii(other.getRadius(), other.getTubeRadius());
    }
 
@@ -51,7 +51,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
     */
    default void set(Pose3DReadOnly pose, double radius, double tubeRadius)
    {
-      setPose(pose);
+      getPose().set(pose);
       setRadii(radius, tubeRadius);
    }
 
@@ -66,7 +66,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
     */
    default void set(RigidBodyTransformReadOnly pose, double radius, double tubeRadius)
    {
-      setPose(pose);
+      getPose().set(pose);
       setRadii(radius, tubeRadius);
    }
 

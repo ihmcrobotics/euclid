@@ -127,7 +127,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(sizeX, sizeY, sizeZ);
    }
 

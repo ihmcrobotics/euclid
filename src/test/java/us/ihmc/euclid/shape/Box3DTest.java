@@ -53,7 +53,7 @@ public class Box3DTest
       EuclidShapeTestTools.assertBox3DEquals(box1, box2, 1e-14);
 
       // make sure we're not copying references:
-      box1.setPose(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+      box1.getPose().set(EuclidCoreRandomTools.nextRigidBodyTransform(random));
       box1.setSize(random.nextDouble(), random.nextDouble(), random.nextDouble());
       assertEverythingDifferent(box1, box2, 1e-14);
    }
@@ -71,7 +71,7 @@ public class Box3DTest
       Box3D box1 = new Box3D(transform, length, width, height);
       Box3D box2 = new Box3D(transform, new double[] {length, width, height});
       Box3D box3 = new Box3D(length, width, height);
-      box3.setPose(transform);
+      box3.getPose().set(transform);
 
       EuclidShapeTestTools.assertBox3DEquals(box1, box2, 0.0);
       EuclidShapeTestTools.assertBox3DEquals(box1, box3, 0.0);
@@ -83,7 +83,7 @@ public class Box3DTest
       Random random = new Random(351235L);
       Box3D box = new Box3D();
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      box.setPose(transform);
+      box.getPose().set(transform);
 
       RigidBodyTransform transformBack = new RigidBodyTransform();
       box.getPose(transformBack);
@@ -413,7 +413,7 @@ public class Box3DTest
          double yaw = random.nextDouble();
          double pitch = random.nextDouble();
          double roll = random.nextDouble();
-         box.setOrientationYawPitchRoll(yaw, pitch, roll);
+         box.getPose().setRotationYawPitchRoll(yaw, pitch, roll);
 
          RotationMatrix rotation = new RotationMatrix();
          box.getOrientation(rotation);

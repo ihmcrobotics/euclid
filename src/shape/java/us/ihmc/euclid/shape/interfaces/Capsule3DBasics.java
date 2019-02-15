@@ -39,19 +39,19 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
 
    default void set(Capsule3DReadOnly other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       setSize(other.getLength(), other.getRadius());
    }
 
    default void set(RigidBodyTransformReadOnly pose, double length, double radius)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, radius);
    }
 
    default void set(Pose3DReadOnly pose, double length, double radius)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, radius);
    }
 }

@@ -41,7 +41,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
     */
    default void set(Ramp3DReadOnly other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       setSize(other.getSize());
    }
 
@@ -91,13 +91,13 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
 
    default void set(Pose3DReadOnly pose, double length, double width, double height)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, width, height);
    }
 
    default void set(RigidBodyTransformReadOnly pose, double length, double width, double height)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, width, height);
    }
 

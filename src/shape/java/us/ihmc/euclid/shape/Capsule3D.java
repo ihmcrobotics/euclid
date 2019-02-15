@@ -52,7 +52,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    @Override
    public void set(Capsule3D other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       setRadius(other.getRadius());
       setLength(other.getLength());
    }

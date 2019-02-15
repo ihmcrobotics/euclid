@@ -151,7 +151,7 @@ public class Sphere3DTest
          firstSphere = new Sphere3D(center, radius);
          secondSphere = new Sphere3D(firstSphere);
 
-         secondSphere.appendTransform(new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), new Vector3D()));
+         secondSphere.getPose().multiply(new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), new Vector3D()));
 
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
@@ -166,7 +166,7 @@ public class Sphere3DTest
 
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon);
 
-         secondSphere.appendTranslation(translation);
+         secondSphere.getPose().appendTranslation(translation);
 
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
 
@@ -174,7 +174,7 @@ public class Sphere3DTest
 
          translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon);
 
-         secondSphere.appendTranslation(translation);
+         secondSphere.getPose().appendTranslation(translation);
 
          assertFalse(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
@@ -190,7 +190,7 @@ public class Sphere3DTest
          RigidBodyTransform rotationOnly = new RigidBodyTransform();
          rotationOnly.setRotation(EuclidCoreRandomTools.nextQuaternion(random));
 
-         secondSphere.appendTransform(rotationOnly);
+         secondSphere.getPose().multiply(rotationOnly);
 
          assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }

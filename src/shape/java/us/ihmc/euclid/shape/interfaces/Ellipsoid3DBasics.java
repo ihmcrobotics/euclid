@@ -41,7 +41,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
     */
    default void set(Ellipsoid3DReadOnly other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       getRadii().set(other.getRadii());
    }
 
@@ -56,7 +56,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
     */
    default void set(Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
-      setPose(pose);
+      getPose().set(pose);
       setRadii(radiusX, radiusY, radiusZ);
    }
 
@@ -71,7 +71,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
     */
    default void set(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
-      setPose(pose);
+      getPose().set(pose);
       setRadii(radiusX, radiusY, radiusZ);
    }
 

@@ -37,19 +37,19 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
     */
    default void set(Sphere3DReadOnly other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       setRadius(other.getRadius());
    }
 
    default void set(double centerX, double centerY, double centerZ, double radius)
    {
-      setPosition(centerX, centerY, centerZ);
+      getPose().setTranslation(centerX, centerY, centerZ);
       setRadius(radius);
    }
 
    default void set(Point3DReadOnly center, double radius)
    {
-      setPosition(center);
+      getPose().setTranslation(center);
       setRadius(radius);
    }
 }

@@ -58,20 +58,20 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
     */
    default void set(Cylinder3DReadOnly other)
    {
-      setPose(other);
+      getPose().set(other.getPose());
       setLength(other.getLength());
       setRadius(other.getRadius());
    }
 
    default void set(RigidBodyTransformReadOnly pose, double length, double radius)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, radius);
    }
 
    default void set(Pose3DReadOnly pose, double length, double radius)
    {
-      setPose(pose);
+      getPose().set(pose);
       setSize(length, radius);
    }
 }

@@ -455,7 +455,7 @@ public class Torus3DTest
          // test rotation about x-axis of pi/2
          rotation.setToRollOrientation(Math.PI / 2);
          transform.setRotation(rotation);
-         torus3d.setPose(transform);
+         torus3d.getPose().set(transform);
 
          assertFalse(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, 0.0)));
          assertTrue(torus3d.isInsideOrOnSurface(new Point3D(radius, 0.0, 0.0)));
@@ -466,7 +466,7 @@ public class Torus3DTest
          // test rotation about y-axis of pi/2
          rotation.setToPitchOrientation(Math.PI / 2);
          transform.setRotation(rotation);
-         torus3d.setPose(transform);
+         torus3d.getPose().set(transform);
 
          assertFalse(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, 0.0)));
          assertTrue(torus3d.isInsideOrOnSurface(new Point3D(0.0, radius, 0.0)));
@@ -531,7 +531,7 @@ public class Torus3DTest
                }
 
                transform.setRotation(rotation);
-               torus3d.setPose(transform);
+               torus3d.getPose().set(transform);
 
                for (int j = -1; j < 2; j++)
                {
@@ -599,18 +599,18 @@ public class Torus3DTest
       RigidBodyTransform transform = new RigidBodyTransform();
 
       transform.setTranslation(new Vector3D(translation, 0.0, 0.0));
-      torus3d.setPose(transform);
+      torus3d.getPose().set(transform);
       testPointsInsideWhenOffsetBy(torus3d, translation, 0.0, 0.0);
 
       translation = (random.nextDouble() - 0.5) * 10.0;
       transform.setTranslation(new Vector3D(0.0, translation, 0.0));
-      torus3d.setPose(transform);
+      torus3d.getPose().set(transform);
       testPointsInsideWhenOffsetBy(torus3d, 0.0, translation, 0.0);
 
       translation = (random.nextDouble() - 0.5) * 10.0;
       //      System.out.println("Torus3dTest:testTranslatedPointOnOrInside:" + "0,0," + translation);
       transform.setTranslation(new Vector3D(0.0, 0.0, translation));
-      torus3d.setPose(transform);
+      torus3d.getPose().set(transform);
       testPointsInsideWhenOffsetBy(torus3d, 0.0, 0.0, translation);
 
       translation = (random.nextDouble() - 0.5) * 10.0;
@@ -618,7 +618,7 @@ public class Torus3DTest
       double translationZ = (random.nextDouble() - 0.5) * 10.0;
       //      System.out.println("Torus3dTest:testTranslatedPointOnOrInside:" + translation + "," + translationY + "," + translationZ);
       transform.setTranslation(new Vector3D(translation, translationY, translationZ));
-      torus3d.setPose(transform);
+      torus3d.getPose().set(transform);
       testPointsInsideWhenOffsetBy(torus3d, translation, translationY, translationZ);
    }
 
@@ -704,7 +704,7 @@ public class Torus3DTest
          firstTorus = new Torus3D(pose, radius, tubeRadius);
          secondTorus = new Torus3D(pose, radius, tubeRadius);
 
-         secondTorus.appendTransform(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+         secondTorus.getPose().multiply(EuclidCoreRandomTools.nextRigidBodyTransform(random));
 
          assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
@@ -755,7 +755,7 @@ public class Torus3DTest
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, Axis.Z, true);
-         secondTorus.appendTransform(new RigidBodyTransform(new AxisAngle(rotationAxis, Math.PI), new Vector3D()));
+         secondTorus.getPose().multiply(new RigidBodyTransform(new AxisAngle(rotationAxis, Math.PI), new Vector3D()));
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
@@ -769,7 +769,7 @@ public class Torus3DTest
          firstTorus = new Torus3D(pose, radius, tubeRadius);
          secondTorus = new Torus3D(pose, radius, tubeRadius);
 
-         secondTorus.appendYawRotation(2.0 * Math.PI * random.nextDouble());
+         secondTorus.getPose().appendYawRotation(2.0 * Math.PI * random.nextDouble());
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }

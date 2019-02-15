@@ -68,7 +68,7 @@ public class Ramp3DTest
       ramp2.setSizeY(ramp1.getSizeY());
       ramp2.setSizeX(ramp1.getSizeX());
       ramp2.setSizeZ(ramp1.getSizeZ());
-      ramp2.setPose(ramp1);
+      ramp2.getPose().set(ramp1.getPose());
 
       assertTrue(ramp1.getSizeY() == ramp2.getSizeY());
       assertTrue(ramp1.getSizeX() == ramp2.getSizeX());
@@ -479,14 +479,14 @@ public class Ramp3DTest
          secondRamp = new Ramp3D(firstRamp);
 
          translationVector = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 0.99 * epsilon);
-         secondRamp.appendTranslation(translationVector);
+         secondRamp.getPose().appendTranslation(translationVector);
 
          assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
 
          secondRamp = new Ramp3D(firstRamp);
 
          translationVector = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.01 * epsilon);
-         secondRamp.appendTranslation(translationVector);
+         secondRamp.getPose().appendTranslation(translationVector);
 
          assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       }
@@ -504,14 +504,14 @@ public class Ramp3DTest
 
          axisAngle.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.99 * epsilon);
          transform.setRotation(axisAngle);
-         secondRamp.appendTransform(transform);
+         secondRamp.getPose().multiply(transform);
          assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
 
          secondRamp = new Ramp3D(firstRamp);
 
          axisAngle.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 1.01 * epsilon);
          transform.setRotation(axisAngle);
-         secondRamp.appendTransform(transform);
+         secondRamp.getPose().multiply(transform);
          assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       }
    }
