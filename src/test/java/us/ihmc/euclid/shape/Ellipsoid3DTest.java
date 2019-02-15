@@ -935,7 +935,7 @@ public class Ellipsoid3DTest
          assertFalse(ellipsoid.isInsideOrOnSurface(supportingVertexTranslated));
 
          Vector3D actualNormal = new Vector3D();
-         ellipsoid.doPoint3DCollisionTest(supportingVertex, null, actualNormal);
+         ellipsoid.doPoint3DCollisionTest(supportingVertex, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
       }
    }

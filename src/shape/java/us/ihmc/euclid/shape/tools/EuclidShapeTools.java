@@ -751,7 +751,7 @@ public class EuclidShapeTools
       {
          double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
 
-         closestPointToPack.scale(scaleFactor);
+         closestPointToPack.setAndScale(scaleFactor, query);
 
          double xScale = 1.0 / (xRadius * xRadius);
          double yScale = 1.0 / (yRadius * yRadius);

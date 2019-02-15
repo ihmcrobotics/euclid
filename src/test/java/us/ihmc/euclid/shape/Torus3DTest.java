@@ -8,7 +8,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
-import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
@@ -759,8 +758,7 @@ public class Torus3DTest
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
-         Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, Axis.Z, true);
-         secondTorus.applyTransform(new RigidBodyTransform(new AxisAngle(rotationAxis, Math.PI), new Vector3D()));
+         secondTorus.getAxis().negate();;
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }

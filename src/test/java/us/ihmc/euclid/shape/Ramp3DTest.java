@@ -595,7 +595,7 @@ public class Ramp3DTest
          expectedNormal.normalize();
 
          Vector3D actualNormal = new Vector3D();
-         ramp.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         ramp.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
    }

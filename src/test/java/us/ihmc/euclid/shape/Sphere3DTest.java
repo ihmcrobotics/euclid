@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -144,19 +143,6 @@ public class Sphere3DTest
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
-      { // Spheres are still equal if center, radius, and location are equal but orientations are different
-         center = EuclidCoreRandomTools.nextPoint3D(random);
-         radius = random.nextDouble();
-
-         firstSphere = new Sphere3D(center, radius);
-         secondSphere = new Sphere3D(firstSphere);
-
-         secondSphere.applyTransform(new RigidBodyTransform(EuclidCoreRandomTools.nextAxisAngle(random), new Vector3D()));
-
-         assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
-      }
-
-      for (int i = 0; i < ITERATIONS; ++i)
       { // Spheres are equal only if translations equal within +- epsilon and otherwise the same
          center = EuclidCoreRandomTools.nextPoint3D(random);
          radius = random.nextDouble();
@@ -177,22 +163,6 @@ public class Sphere3DTest
          secondSphere.getPosition().add(translation);
 
          assertFalse(firstSphere.geometricallyEquals(secondSphere, epsilon));
-      }
-
-      for (int i = 0; i < ITERATIONS; ++i)
-      { // Rotations should not affect the assertion
-         center = EuclidCoreRandomTools.nextPoint3D(random);
-         radius = random.nextDouble();
-
-         firstSphere = new Sphere3D(center, radius);
-         secondSphere = new Sphere3D(center, radius);
-
-         RigidBodyTransform rotationOnly = new RigidBodyTransform();
-         rotationOnly.setRotation(EuclidCoreRandomTools.nextQuaternion(random));
-
-         secondSphere.applyTransform(rotationOnly);
-
-         assertTrue(firstSphere.geometricallyEquals(secondSphere, epsilon));
       }
    }
 
@@ -217,7 +187,7 @@ public class Sphere3DTest
          expectedNormal.normalize();
 
          Vector3D actualNormal = new Vector3D();
-         sphere.doPoint3DCollisionTest(supportingVertexTranslated, null, actualNormal);
+         sphere.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
