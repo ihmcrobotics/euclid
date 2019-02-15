@@ -32,9 +32,11 @@ public class Torus3DTest
 
       RigidBodyTransform transform = new RigidBodyTransform();
       transform.setRotationRollAndZeroTranslation(Math.PI / 2.0);
-      transform.setTranslation(new Vector3D(2.0, 0.0, 3.0));
+      Point3D position = new Point3D(2.0, 0.0, 3.0);
+      Vector3D axis = new Vector3D(Axis.Z);
+      transform.transform(axis);
 
-      Torus3D torus3d = new Torus3D(transform, radius, thickness);
+      Torus3D torus3d = new Torus3D(position, axis, radius, thickness);
       Point3D pointToCheck = new Point3D(2.0, 0.0, 4.0);
 
       assertTrue(torus3d.isInsideOrOnSurface(pointToCheck));
@@ -131,6 +133,10 @@ public class Torus3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with queries that are outside
          Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+         torus.getPosition().setToZero();
+         torus.getAxis().set(Axis.Z);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         torus.applyTransform(transform);
 
          Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
          double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -151,8 +157,8 @@ public class Torus3DTest
          Point3D pointToProject = new Point3D();
          pointToProject.add(pointOnTubeAxis, fromTubeAxisToOutsideTorus);
 
-         torus.transformToWorld(expectedProjection);
-         torus.transformToWorld(pointToProject);
+         transform.transform(expectedProjection);
+         transform.transform(pointToProject);
 
          Point3D actualProjection = new Point3D();
          boolean hasBeenProjected = torus.orthogonalProjection(pointToProject, actualProjection);
@@ -163,6 +169,10 @@ public class Torus3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with queries that are inside
          Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+         torus.getPosition().setToZero();
+         torus.getAxis().set(Axis.Z);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         torus.applyTransform(transform);
 
          Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
          double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -180,7 +190,7 @@ public class Torus3DTest
          Point3D pointToProject = new Point3D();
          pointToProject.add(pointOnTubeAxis, fromTubeAxisToInsideTorus);
 
-         torus.transformToWorld(pointToProject);
+         transform.transform(pointToProject);
 
          Point3D originalArgument = EuclidCoreRandomTools.nextPoint3D(random);
          Point3D actualProjection = new Point3D(originalArgument);
@@ -327,6 +337,10 @@ public class Torus3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with queries that are outside
          Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+         torus.getPosition().setToZero();
+         torus.getAxis().set(Axis.Z);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         torus.applyTransform(transform);
 
          Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
          double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -350,9 +364,9 @@ public class Torus3DTest
          Point3D pointToCheck = new Point3D();
          pointToCheck.add(pointOnTubeAxis, fromTubeAxisToOutsideTorus);
 
-         torus.transformToWorld(expectedClosestPoint);
-         torus.transformToWorld(pointToCheck);
-         torus.transformToWorld(expectedNormal);
+         transform.transform(expectedClosestPoint);
+         transform.transform(pointToCheck);
+         transform.transform(expectedNormal);
 
          Point3D actualClosestPoint = new Point3D();
          Vector3D actualNormal = new Vector3D();
@@ -365,6 +379,10 @@ public class Torus3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with queries that are inside
          Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+         torus.getPosition().setToZero();
+         torus.getAxis().set(Axis.Z);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         torus.applyTransform(transform);
 
          Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
          double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
@@ -388,9 +406,9 @@ public class Torus3DTest
          Point3D pointToCheck = new Point3D();
          pointToCheck.add(pointOnTubeAxis, fromTubeAxisToInsideTorus);
 
-         torus.transformToWorld(expectedClosestPoint);
-         torus.transformToWorld(pointToCheck);
-         torus.transformToWorld(expectedNormal);
+         transform.transform(expectedClosestPoint);
+         transform.transform(pointToCheck);
+         transform.transform(expectedNormal);
 
          Point3D actualClosestPoint = new Point3D();
          Vector3D actualNormal = new Vector3D();
@@ -449,13 +467,7 @@ public class Torus3DTest
          // center point should always be false
          assertFalse(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, 0.0)));
 
-         RigidBodyTransform transform = new RigidBodyTransform();
-         RotationMatrix rotation = new RotationMatrix();
-
-         // test rotation about x-axis of pi/2
-         rotation.setToRollOrientation(Math.PI / 2);
-         transform.setRotation(rotation);
-         torus3d.getPose().set(transform);
+         torus3d.getAxis().setAndNegate(Axis.Y);
 
          assertFalse(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, 0.0)));
          assertTrue(torus3d.isInsideOrOnSurface(new Point3D(radius, 0.0, 0.0)));
@@ -463,10 +475,7 @@ public class Torus3DTest
          assertTrue(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, radius)));
          assertTrue(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, -radius)));
 
-         // test rotation about y-axis of pi/2
-         rotation.setToPitchOrientation(Math.PI / 2);
-         transform.setRotation(rotation);
-         torus3d.getPose().set(transform);
+         torus3d.getAxis().set(Axis.X);
 
          assertFalse(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, 0.0)));
          assertTrue(torus3d.isInsideOrOnSurface(new Point3D(0.0, radius, 0.0)));
@@ -503,7 +512,6 @@ public class Torus3DTest
          // center point should always be false
          assertFalse(torus3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, 0.0)));
 
-         RigidBodyTransform transform = new RigidBodyTransform();
          RotationMatrix rotation = new RotationMatrix();
 
          // loop to test rotations of pi/3, pi/4, and pi/6 about x and y-axes respectively
@@ -530,8 +538,7 @@ public class Torus3DTest
                   //                  System.out.println("Rotating " + angle + " rads about Y");
                }
 
-               transform.setRotation(rotation);
-               torus3d.getPose().set(transform);
+               rotation.getColumn(2, torus3d.getAxis());
 
                for (int j = -1; j < 2; j++)
                {
@@ -596,29 +603,23 @@ public class Torus3DTest
       Random random = new Random(1892L);
       double translation = (random.nextDouble() - 0.5) * 100.0;
 
-      RigidBodyTransform transform = new RigidBodyTransform();
-
-      transform.setTranslation(new Vector3D(translation, 0.0, 0.0));
-      torus3d.getPose().set(transform);
+      torus3d.getPosition().set(translation, 0.0, 0.0);
       testPointsInsideWhenOffsetBy(torus3d, translation, 0.0, 0.0);
 
       translation = (random.nextDouble() - 0.5) * 10.0;
-      transform.setTranslation(new Vector3D(0.0, translation, 0.0));
-      torus3d.getPose().set(transform);
+      torus3d.getPosition().set(0.0, translation, 0.0);
       testPointsInsideWhenOffsetBy(torus3d, 0.0, translation, 0.0);
 
       translation = (random.nextDouble() - 0.5) * 10.0;
       //      System.out.println("Torus3dTest:testTranslatedPointOnOrInside:" + "0,0," + translation);
-      transform.setTranslation(new Vector3D(0.0, 0.0, translation));
-      torus3d.getPose().set(transform);
+      torus3d.getPosition().set(0.0, 0.0, translation);
       testPointsInsideWhenOffsetBy(torus3d, 0.0, 0.0, translation);
 
       translation = (random.nextDouble() - 0.5) * 10.0;
       double translationY = (random.nextDouble() - 0.5) * 10.0;
       double translationZ = (random.nextDouble() - 0.5) * 10.0;
       //      System.out.println("Torus3dTest:testTranslatedPointOnOrInside:" + translation + "," + translationY + "," + translationZ);
-      transform.setTranslation(new Vector3D(translation, translationY, translationZ));
-      torus3d.getPose().set(transform);
+      torus3d.getPosition().set(translation, translationY, translationZ);
       testPointsInsideWhenOffsetBy(torus3d, translation, translationY, translationZ);
    }
 
@@ -679,16 +680,18 @@ public class Torus3DTest
    {
       Random random = new Random(89725L);
       Torus3D firstTorus, secondTorus;
-      RigidBodyTransform pose;
+      Point3D position;
+      Vector3D axis;
       double radius, tubeRadius;
       double epsilon = 1e-7;
 
-      pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
       radius = 1.0 + random.nextDouble();
       tubeRadius = random.nextDouble();
 
-      firstTorus = new Torus3D(pose, radius, tubeRadius);
-      secondTorus = new Torus3D(pose, radius, tubeRadius);
+      position = EuclidCoreRandomTools.nextPoint3D(random);
+      axis = EuclidCoreRandomTools.nextVector3D(random);
+      firstTorus = new Torus3D(position, axis, radius, tubeRadius);
+      secondTorus = new Torus3D(position, axis, radius, tubeRadius);
 
       assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       assertTrue(secondTorus.geometricallyEquals(firstTorus, epsilon));
@@ -697,102 +700,69 @@ public class Torus3DTest
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii do not represent the same geometry object
-         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         position = EuclidCoreRandomTools.nextPoint3D(random);
+         axis = EuclidCoreRandomTools.nextVector3D(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
-         firstTorus = new Torus3D(pose, radius, tubeRadius);
-         secondTorus = new Torus3D(pose, radius, tubeRadius);
+         firstTorus = new Torus3D(position, axis, radius, tubeRadius);
+         secondTorus = new Torus3D(position, axis, radius, tubeRadius);
 
-         secondTorus.getPose().multiply(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+         secondTorus.applyTransform(EuclidCoreRandomTools.nextRigidBodyTransform(random));
 
          assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii within +- epsilon are equal
-         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         position = EuclidCoreRandomTools.nextPoint3D(random);
+         axis = EuclidCoreRandomTools.nextVector3D(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
-         firstTorus = new Torus3D(pose, radius, tubeRadius);
-
-         secondTorus = new Torus3D(pose, radius + 0.99 * epsilon, tubeRadius);
+         firstTorus = new Torus3D(position, axis, radius, tubeRadius);
+         secondTorus = new Torus3D(position, axis, radius + 0.99 * epsilon, tubeRadius);
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
-         secondTorus = new Torus3D(pose, radius, tubeRadius + 0.99 * epsilon);
+         secondTorus = new Torus3D(position, axis, radius, tubeRadius + 0.99 * epsilon);
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii outside of +- epsilon are not equal
-         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         position = EuclidCoreRandomTools.nextPoint3D(random);
+         axis = EuclidCoreRandomTools.nextVector3D(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
-         firstTorus = new Torus3D(pose, radius, tubeRadius);
-
-         secondTorus = new Torus3D(pose, radius + 1.01 * epsilon, tubeRadius);
+         firstTorus = new Torus3D(position, axis, radius, tubeRadius);
+         secondTorus = new Torus3D(position, axis, radius + 1.01 * epsilon, tubeRadius);
 
          assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
-         secondTorus = new Torus3D(pose, radius, tubeRadius + 1.01 * epsilon);
+         secondTorus = new Torus3D(position, axis, radius, tubeRadius + 1.01 * epsilon);
 
          assertFalse(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
       { // Torii are equal if in the exact same position, but one is upside-down (w.r.t. reference frame)
-         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         position = EuclidCoreRandomTools.nextPoint3D(random);
+         axis = EuclidCoreRandomTools.nextVector3D(random);
          radius = 1.0 + random.nextDouble();
          tubeRadius = random.nextDouble();
 
-         firstTorus = new Torus3D(pose, radius, tubeRadius);
-         secondTorus = new Torus3D(pose, radius, tubeRadius);
+         firstTorus = new Torus3D(position, axis, radius, tubeRadius);
+         secondTorus = new Torus3D(position, axis, radius, tubeRadius);
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
          Vector3D rotationAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, Axis.Z, true);
-         secondTorus.getPose().multiply(new RigidBodyTransform(new AxisAngle(rotationAxis, Math.PI), new Vector3D()));
+         secondTorus.applyTransform(new RigidBodyTransform(new AxisAngle(rotationAxis, Math.PI), new Vector3D()));
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }
-
-      for (int i = 0; i < ITERATIONS; ++i)
-      { // Torii are equal if yaw differs, but they otherwise represent the same geometry object
-         pose = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         radius = 1.0 + random.nextDouble();
-         tubeRadius = random.nextDouble();
-
-         firstTorus = new Torus3D(pose, radius, tubeRadius);
-         secondTorus = new Torus3D(pose, radius, tubeRadius);
-
-         secondTorus.getPose().appendYawRotation(2.0 * Math.PI * random.nextDouble());
-
-         assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
-      }
-   }
-
-   @Test
-   public void testIndependenceOfCopiedTransforms()
-   {
-      RigidBodyTransform transform = new RigidBodyTransform();
-      transform.setRotationRollAndZeroTranslation(Math.PI / 6);
-      Torus3D torus = new Torus3D(transform, 7.0, 2.0);
-
-      Torus3D torusCopy = new Torus3D(torus);
-      RigidBodyTransform transformAppliedOnlyToCopy = new RigidBodyTransform();
-      transformAppliedOnlyToCopy.setRotationPitchAndZeroTranslation(Math.PI / 4);
-      torusCopy.applyTransform(transformAppliedOnlyToCopy);
-      assertFalse(torusCopy.equals(torus));
-
-      Torus3D torusCopyBySet = new Torus3D(5.0, 1.0);
-      torusCopyBySet.set(torus);
-      RigidBodyTransform transformAppliedOnlyToCopyBySet = new RigidBodyTransform();
-      transformAppliedOnlyToCopyBySet.setRotationYawAndZeroTranslation(Math.PI / 5);
-      torusCopyBySet.applyTransform(transformAppliedOnlyToCopyBySet);
-      assertFalse(torusCopyBySet.equals(torus));
    }
 }

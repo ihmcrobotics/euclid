@@ -1,10 +1,13 @@
 package us.ihmc.euclid.shape;
 
-import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Torus3D} represents a torus in the XY-plane.
@@ -20,7 +23,8 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
  */
 public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
 {
-   private final Shape3DPose pose = new Shape3DPose();
+   private final Point3D position = new Point3D();
+   private final Vector3D axis = new Vector3D(Axis.Z);
 
    /** It is the radius for the center of the torus to the center of the tube. */
    private double radius;
@@ -67,23 +71,9 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
     * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
     *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
     */
-   public Torus3D(RigidBodyTransformReadOnly pose, double radius, double tubeRadius)
+   public Torus3D(Point3DReadOnly position, Vector3DReadOnly axis, double radius, double tubeRadius)
    {
-      set(pose, radius, tubeRadius);
-   }
-
-   /**
-    * Creates a new torus 3D and initializes its pose and radii.
-    *
-    * @param pose the position and orientation of this torus. Not modified.
-    * @param radius radius from the torus center to the tube center.
-    * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
-    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
-    */
-   public Torus3D(Pose3DReadOnly pose, double radius, double tubeRadius)
-   {
-      set(pose, radius, tubeRadius);
+      set(position, axis, radius, tubeRadius);
    }
 
    /**
@@ -116,12 +106,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
       this.tubeRadius = tubeRadius;
    }
 
-   @Override
-   public Shape3DPose getPose()
-   {
-      return pose;
-   }
-
    /**
     * Gets the radius from the torus center to the tube center.
     *
@@ -142,6 +126,18 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    public double getTubeRadius()
    {
       return tubeRadius;
+   }
+
+   @Override
+   public Point3D getPosition()
+   {
+      return position;
+   }
+
+   @Override
+   public Vector3D getAxis()
+   {
+      return axis;
    }
 
    /**

@@ -1,8 +1,6 @@
 package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -26,38 +24,20 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
     */
    double getTubeRadius();
 
-   Shape3DPoseReadOnly getPose();
-
-   /**
-    * Gets the read-only reference to the orientation of this shape.
-    *
-    * @return the orientation of this shape.
-    */
-   default RotationMatrixReadOnly getOrientation()
-   {
-      return getPose().getShapeOrientation();
-   }
-
    /**
     * Gets the read-only reference of the position of this shape.
     *
     * @return the position of this shape.
     */
-   default Point3DReadOnly getPosition()
-   {
-      return getPose().getShapePosition();
-   }
+   Point3DReadOnly getPosition();
 
-   default Vector3DReadOnly getAxis()
-   {
-      return getPose().getZAxis();
-   }
+   Vector3DReadOnly getAxis();
 
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
    {
-      return getPose().containsNaN() || Double.isNaN(getRadius()) || Double.isNaN(getTubeRadius());
+      return getPosition().containsNaN() || getAxis().containsNaN() || Double.isNaN(getRadius()) || Double.isNaN(getTubeRadius());
    }
 
    @Override
@@ -105,7 +85,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    {
       return EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && EuclidCoreTools.epsilonEquals(getTubeRadius(), other.getTubeRadius(), epsilon) && getPosition().epsilonEquals(other.getPosition(), epsilon)
-            && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
+            && getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
 
    /**
@@ -131,29 +111,5 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
-   }
-
-   /**
-    * Changes the given {@code transformable} from being expressed in world to being expressed in this
-    * shape local coordinates.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToLocal(Transformable transformable)
-   {
-      transformable.applyInverseTransform(getPose());
-   }
-
-   /**
-    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
-    * being expressed in world.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToWorld(Transformable transformable)
-   {
-      transformable.applyTransform(getPose());
    }
 }

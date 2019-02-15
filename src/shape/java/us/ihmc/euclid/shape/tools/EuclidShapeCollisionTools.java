@@ -16,6 +16,7 @@ import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -24,6 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class EuclidShapeCollisionTools
 {
    private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
+   private static final double TORUS_SMALLEST_DISTANCE_TO_AXIS = 1.0e-12;
 
    public static void doPointShape3DBox3DCollisionTest(PointShape3DReadOnly pointShape3D, Box3DReadOnly box3D, CollisionTestResult resultToPack)
    {
@@ -867,44 +869,66 @@ public class EuclidShapeCollisionTools
 
    private static void doPoint3DTorus3DCollisionTest(Point3DReadOnly point3D, Torus3DReadOnly torus3D, CollisionTestResult resultToPack)
    {
-      Shape3DPoseReadOnly torus3DPose = torus3D.getPose();
       double torus3DRadius = torus3D.getRadius();
       double torus3DTubeRadius = torus3D.getTubeRadius();
+      Vector3DReadOnly torus3DAxis = torus3D.getAxis();
+      Point3DReadOnly torus3DPosition = torus3D.getPosition();
 
-      double dx = point3D.getX() - torus3D.getPose().getTranslationX();
-      double dy = point3D.getY() - torus3D.getPose().getTranslationY();
-      double dz = point3D.getZ() - torus3D.getPose().getTranslationZ();
+      double x = point3D.getX() - torus3DPosition.getX();
+      double y = point3D.getY() - torus3DPosition.getY();
+      double z = point3D.getZ() - torus3DPosition.getZ();
+      double percentageOnAxis = TupleTools.dot(x, y, z, torus3DAxis);
 
-      double xLocal = dot(dx, dy, dz, torus3DPose.getXAxis());
-      double yLocal = dot(dx, dy, dz, torus3DPose.getYAxis());
-      double zLocal = dot(dx, dy, dz, torus3DPose.getZAxis());
+      double xInPlane = x - percentageOnAxis * torus3DAxis.getX();
+      double yInPlane = y - percentageOnAxis * torus3DAxis.getY();
+      double zInPlane = z - percentageOnAxis * torus3DAxis.getZ();
 
-      double xyLengthSquared = normSquared(xLocal, yLocal);
+      double distanceSquaredFromAxis = EuclidCoreTools.normSquared(xInPlane, yInPlane, zInPlane);
 
       Point3D pointOnB = resultToPack.getPointOnB();
       Vector3D normalOnB = resultToPack.getNormalOnB();
 
-      if (xyLengthSquared < 1.0e-12)
+      if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
       {
-         double xzLength = Math.sqrt(normSquared(torus3DRadius, zLocal));
+         double xNonCollinearToAxis, yNonCollinearToAxis, zNonCollinearToAxis;
 
-         double scale = torus3DTubeRadius / xzLength;
-         double closestTubeCenterX = torus3DRadius;
-         double closestTubeCenterY = 0.0;
+         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
+         if (Math.abs(torus3DAxis.getY()) > 0.1 || Math.abs(torus3DAxis.getZ()) > 0.1)
+         {
+            xNonCollinearToAxis = 1.0;
+            yNonCollinearToAxis = 0.0;
+            zNonCollinearToAxis = 0.0;
+         }
+         else
+         {
+            xNonCollinearToAxis = 0.0;
+            yNonCollinearToAxis = 1.0;
+            zNonCollinearToAxis = 0.0;
+         }
 
-         double tubeCenterToSurfaceX = -torus3DRadius * scale;
-         double tubeCenterToSurfaceY = 0.0;
-         double tubeCenterToSurfaceZ = zLocal * scale;
+         double xOrthogonalToAxis = yNonCollinearToAxis * torus3DAxis.getZ() - zNonCollinearToAxis * torus3DAxis.getY();
+         double yOrthogonalToAxis = zNonCollinearToAxis * torus3DAxis.getX() - xNonCollinearToAxis * torus3DAxis.getZ();
+         double zOrthogonalToAxis = xNonCollinearToAxis * torus3DAxis.getY() - yNonCollinearToAxis * torus3DAxis.getX();
+         double norm = Math.sqrt(EuclidCoreTools.normSquared(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis));
 
-         pointOnB.set(closestTubeCenterX, closestTubeCenterY, 0.0);
-         pointOnB.add(tubeCenterToSurfaceX, tubeCenterToSurfaceY, tubeCenterToSurfaceZ);
-         torus3DPose.transform(pointOnB);
+         double distanceFromTubeCenter = Math.sqrt(normSquared(percentageOnAxis, torus3DRadius));
 
-         normalOnB.set(-torus3DRadius, 0.0, zLocal);
-         normalOnB.scale(1.0 / xzLength);
-         torus3DPose.transform(normalOnB);
+         double scale = torus3DTubeRadius / distanceFromTubeCenter;
+         double resultDistanceFromAxis = torus3DRadius - (torus3DRadius * scale);
+         double resultPositionOnAxis = percentageOnAxis * scale;
 
-         double signedDistance = xzLength - torus3DTubeRadius;
+         pointOnB.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
+         pointOnB.scale(resultDistanceFromAxis / norm);
+         pointOnB.scaleAdd(resultPositionOnAxis, torus3DAxis, pointOnB);
+         pointOnB.add(torus3DPosition);
+
+         normalOnB.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
+         normalOnB.scale(-torus3DRadius / norm);
+         normalOnB.scaleAdd(percentageOnAxis, torus3DAxis, normalOnB);
+         normalOnB.scale(1.0 / distanceFromTubeCenter);
+
+         double signedDistance = distanceFromTubeCenter - torus3DTubeRadius;
+
          if (signedDistance < 0.0)
          {
             resultToPack.setShapesAreColliding(true);
@@ -918,29 +942,24 @@ public class EuclidShapeCollisionTools
       }
       else
       {
-         double xyScale = torus3DRadius / Math.sqrt(xyLengthSquared);
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
 
-         double closestTubeCenterX = xLocal * xyScale;
-         double closestTubeCenterY = yLocal * xyScale;
+         double scale = torus3DRadius / distanceFromAxis;
 
-         dx = xLocal - closestTubeCenterX;
-         dy = yLocal - closestTubeCenterY;
-         dz = zLocal;
+         double xTubeCenter = xInPlane * scale + torus3DPosition.getX();
+         double yTubeCenter = yInPlane * scale + torus3DPosition.getY();
+         double zTubeCenter = zInPlane * scale + torus3DPosition.getZ();
 
-         double distance = Math.sqrt(normSquared(dx, dy, dz));
+         double distanceFromTubeCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(xTubeCenter, yTubeCenter, zTubeCenter, point3D);
 
-         double distanceInv = 1.0 / distance;
+         normalOnB.set(point3D);
+         normalOnB.sub(xTubeCenter, yTubeCenter, zTubeCenter);
+         normalOnB.scale(1.0 / distanceFromTubeCenter);
 
-         pointOnB.set(dx, dy, dz);
-         pointOnB.scale(torus3DTubeRadius * distanceInv);
-         pointOnB.add(closestTubeCenterX, closestTubeCenterY, 0.0);
-         torus3DPose.transform(pointOnB);
+         pointOnB.setAndScale(torus3DTubeRadius, normalOnB);
+         pointOnB.add(xTubeCenter, yTubeCenter, zTubeCenter);
 
-         normalOnB.set(dx, dy, dz);
-         normalOnB.scale(distanceInv);
-         torus3DPose.transform(normalOnB);
-
-         double signedDistance = distance - torus3DTubeRadius;
+         double signedDistance = distanceFromTubeCenter - torus3DTubeRadius;
 
          if (signedDistance < 0.0)
          {

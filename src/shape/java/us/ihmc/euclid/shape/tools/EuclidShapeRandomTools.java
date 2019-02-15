@@ -102,7 +102,8 @@ public class EuclidShapeRandomTools
 
    public static Torus3D nextTorus3D(Random random, double minRadius, double maxRadius, double minTubeRadius, double maxTubeRadius)
    {
-      return new Torus3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
+      return new Torus3D(EuclidCoreRandomTools.nextPoint3D(random), EuclidCoreRandomTools.nextVector3D(random),
+                         EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
                          EuclidCoreRandomTools.nextDouble(random, minTubeRadius, maxTubeRadius));
    }
 
