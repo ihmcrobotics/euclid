@@ -1,19 +1,46 @@
 package us.ihmc.euclid.shape.interfaces;
 
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
 {
+   void setRadius(double radius);
+
+   @Override
+   Shape3DPoseBasics getPose();
+
+   /**
+    * Gets the reference to the orientation of this shape.
+    *
+    * @return the orientation of this shape.
+    */
+   @Override
+   default RotationMatrix getOrientation()
+   {
+      return getPose().getShapeOrientation();
+   }
+
+   /**
+    * Gets the reference of the position of this shape.
+    *
+    * @return the position of this shape.
+    */
+   @Override
+   default Point3DBasics getPosition()
+   {
+      return getPose().getShapePosition();
+   }
+
+   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
+
    @Override
    default boolean containsNaN()
    {
       return Sphere3DReadOnly.super.containsNaN();
    }
-
-   void setRadius(double radius);
-
-   void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
 
    /** {@inheritDoc} */
    @Override

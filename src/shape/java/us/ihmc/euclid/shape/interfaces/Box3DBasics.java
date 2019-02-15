@@ -1,15 +1,42 @@
 package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 {
    Vector3DBasics getSize();
+
+   @Override
+   Shape3DPoseBasics getPose();
+
+   /**
+    * Gets the reference to the orientation of this shape.
+    *
+    * @return the orientation of this shape.
+    */
+   @Override
+   default RotationMatrix getOrientation()
+   {
+      return getPose().getShapeOrientation();
+   }
+
+   /**
+    * Gets the reference of the position of this shape.
+    *
+    * @return the position of this shape.
+    */
+   @Override
+   default Point3DBasics getPosition()
+   {
+      return getPose().getShapePosition();
+   }
 
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
 
