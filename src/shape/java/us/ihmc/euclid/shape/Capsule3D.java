@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
@@ -7,15 +8,13 @@ import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 {
    private final Point3D position = new Point3D();
-   private final Vector3D axis = new Vector3D();
+   private final Vector3D axis = new Vector3D(Axis.Z);
 
    private double radius;
    private double length;
@@ -86,13 +85,13 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    }
 
    @Override
-   public Point3DBasics getPosition()
+   public Point3D getPosition()
    {
       return position;
    }
 
    @Override
-   public Vector3DBasics getAxis()
+   public Vector3D getAxis()
    {
       return axis;
    }

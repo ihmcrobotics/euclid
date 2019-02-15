@@ -1,13 +1,15 @@
 package us.ihmc.euclid.shape;
 
-import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Cylinder3D} represents a cylinder defined by its radius and length.
@@ -21,7 +23,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  */
 public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
 {
-   private final Shape3DPose pose = new Shape3DPose();
+   private final Point3D position = new Point3D();
+   private final Vector3D axis = new Vector3D(Axis.Z);
 
    /** Radius of the cylinder part. */
    private double radius;
@@ -30,13 +33,14 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * at {@code - 0.5 * length}.
     */
    private double length;
+   private double halfLength;
 
-   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
-                                                                                          () -> getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
-                                                                                          () -> getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
-   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
-                                                                                             () -> -getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
-                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
+   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> halfLength * axis.getX() + position.getX(),
+                                                                                          () -> halfLength * axis.getY() + position.getY(),
+                                                                                          () -> halfLength * axis.getZ() + position.getZ());
+   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -halfLength * axis.getX() + position.getX(),
+                                                                                             () -> -halfLength * axis.getY() + position.getY(),
+                                                                                             () -> -halfLength * axis.getZ() + position.getZ());
 
    /**
     * Creates a new cylinder with length of {@code 1} and radius of {@code 0.5}.
@@ -68,30 +72,9 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       setSize(length, radius);
    }
 
-   /**
-    * Creates a new cylinder 3D and initializes its pose, length, and radius.
-    *
-    * @param pose the position and orientation of this cylinder. Not modified.
-    * @param length the cylinder length along the z-axis.
-    * @param radius the radius of the cylinder.
-    * @throws IllegalArgumentException if either {@code length} or {@code radius} is negative.
-    */
-   public Cylinder3D(RigidBodyTransformReadOnly pose, double length, double radius)
+   public Cylinder3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
-      set(pose, length, radius);
-   }
-
-   /**
-    * Creates a new cylinder 3D and initializes its pose, length, and radius.
-    *
-    * @param pose the position and orientation of this cylinder. Not modified.
-    * @param length the cylinder length along the z-axis.
-    * @param radius the radius of the cylinder.
-    * @throws IllegalArgumentException if either {@code length} or {@code radius} is negative.
-    */
-   public Cylinder3D(Pose3DReadOnly pose, double length, double radius)
-   {
-      set(pose, length, radius);
+      set(position, axis, length, radius);
    }
 
    /**
@@ -131,12 +114,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       if (length < 0.0)
          throw new IllegalArgumentException("The length of a Cylinder3D cannot be negative: " + length);
       this.length = length;
-   }
-
-   @Override
-   public Shape3DPose getPose()
-   {
-      return pose;
+      halfLength = 0.5 * length;
    }
 
    /**
@@ -159,6 +137,24 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public double getLength()
    {
       return length;
+   }
+
+   @Override
+   public double getHalfLength()
+   {
+      return halfLength;
+   }
+
+   @Override
+   public Point3D getPosition()
+   {
+      return position;
+   }
+
+   @Override
+   public Vector3D getAxis()
+   {
+      return axis;
    }
 
    @Override

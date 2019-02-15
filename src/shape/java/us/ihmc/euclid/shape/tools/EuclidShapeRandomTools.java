@@ -49,8 +49,8 @@ public class EuclidShapeRandomTools
 
    public static Cylinder3D nextCylinder3D(Random random, double minLength, double maxLength, double minRadius, double maxRadius)
    {
-      return new Cylinder3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minLength, maxLength),
-                            EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
+      return new Cylinder3D(EuclidCoreRandomTools.nextPoint3D(random), EuclidCoreRandomTools.nextVector3D(random),
+                            EuclidCoreRandomTools.nextDouble(random, minLength, maxLength), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
    }
 
    public static Ellipsoid3D nextEllipsoid3D(Random random)

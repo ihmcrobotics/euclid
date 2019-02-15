@@ -2,8 +2,6 @@ package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -33,32 +31,14 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     */
    double getRadius();
 
-   Shape3DPoseReadOnly getPose();
-
-   /**
-    * Gets the read-only reference to the orientation of this shape.
-    *
-    * @return the orientation of this shape.
-    */
-   default RotationMatrixReadOnly getOrientation()
-   {
-      return getPose().getShapeOrientation();
-   }
-
    /**
     * Gets the read-only reference of the position of this shape.
     *
     * @return the position of this shape.
     */
-   default Point3DReadOnly getPosition()
-   {
-      return getPose().getShapePosition();
-   }
+   Point3DReadOnly getPosition();
 
-   default Vector3DReadOnly getAxis()
-   {
-      return getPose().getZAxis();
-   }
+   Vector3DReadOnly getAxis();
 
    default Point3DReadOnly getTopCenter()
    {
@@ -78,7 +58,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean containsNaN()
    {
-      return getPose().containsNaN() || Double.isNaN(getLength()) || Double.isNaN(getRadius());
+      return getPosition().containsNaN() || getAxis().containsNaN() || Double.isNaN(getLength()) || Double.isNaN(getRadius());
    }
 
    /** {@inheritDoc} */
@@ -173,7 +153,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    default boolean epsilonEquals(Cylinder3DReadOnly other, double epsilon)
    {
       return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
-            && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getOrientation().epsilonEquals(other.getOrientation(), epsilon);
+            && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
 
    /**
@@ -198,29 +178,5 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
-   }
-
-   /**
-    * Changes the given {@code transformable} from being expressed in world to being expressed in this
-    * shape local coordinates.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToLocal(Transformable transformable)
-   {
-      transformable.applyInverseTransform(getPose());
-   }
-
-   /**
-    * Changes the given {@code transformable} from being expressed in this shape local coordinates to
-    * being expressed in world.
-    *
-    * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
-    */
-   default void transformToWorld(Transformable transformable)
-   {
-      transformable.applyTransform(getPose());
    }
 }
