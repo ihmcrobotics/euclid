@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.interfaces;
 
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -9,28 +8,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public interface Shape3DReadOnly extends SupportingVertexHolder
 {
    static final double IS_INSIDE_EPS = 1.0e-12;
-
-   Shape3DPoseReadOnly getPose();
-
-   /**
-    * Gets the read-only reference to the orientation of this shape.
-    *
-    * @return the orientation of this shape.
-    */
-   default RotationMatrixReadOnly getOrientation()
-   {
-      return getPose().getShapeOrientation();
-   }
-
-   /**
-    * Gets the read-only reference of the position of this shape.
-    *
-    * @return the position of this shape.
-    */
-   default Point3DReadOnly getPosition()
-   {
-      return getPose().getShapePosition();
-   }
 
    boolean containsNaN();
 

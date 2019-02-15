@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -8,6 +9,28 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
 {
+   Shape3DPoseReadOnly getPose();
+
+   /**
+    * Gets the read-only reference to the orientation of this shape.
+    *
+    * @return the orientation of this shape.
+    */
+   default RotationMatrixReadOnly getOrientation()
+   {
+      return getPose().getShapeOrientation();
+   }
+
+   /**
+    * Gets the read-only reference of the position of this shape.
+    *
+    * @return the position of this shape.
+    */
+   default Point3DReadOnly getPosition()
+   {
+      return getPose().getShapePosition();
+   }
+
    @Override
    default double getX()
    {

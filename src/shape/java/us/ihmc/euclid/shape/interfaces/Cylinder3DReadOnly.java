@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -33,6 +34,28 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * @return the value of the radius.
     */
    double getRadius();
+
+   Shape3DPoseReadOnly getPose();
+
+   /**
+    * Gets the read-only reference to the orientation of this shape.
+    *
+    * @return the orientation of this shape.
+    */
+   default RotationMatrixReadOnly getOrientation()
+   {
+      return getPose().getShapeOrientation();
+   }
+
+   /**
+    * Gets the read-only reference of the position of this shape.
+    *
+    * @return the position of this shape.
+    */
+   default Point3DReadOnly getPosition()
+   {
+      return getPose().getShapePosition();
+   }
 
    default Vector3DReadOnly getAxis()
    {
