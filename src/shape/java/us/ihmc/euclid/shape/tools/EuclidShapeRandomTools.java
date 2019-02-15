@@ -38,8 +38,8 @@ public class EuclidShapeRandomTools
 
    public static Capsule3D nextCapsule3D(Random random, double minLength, double maxLength, double minRadius, double maxRadius)
    {
-      return new Capsule3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minLength, maxLength),
-                           EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
+      return new Capsule3D(EuclidCoreRandomTools.nextPoint3D(random), EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0),
+                           EuclidCoreRandomTools.nextDouble(random, minLength, maxLength), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
    }
 
    public static Cylinder3D nextCylinder3D(Random random)

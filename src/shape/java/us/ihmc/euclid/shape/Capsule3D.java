@@ -1,28 +1,32 @@
 package us.ihmc.euclid.shape;
 
-import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 {
-   private final Shape3DPose pose = new Shape3DPose();
+   private final Point3D position = new Point3D();
+   private final Vector3D axis = new Vector3D();
 
    private double radius;
    private double length;
    private double halfLength;
 
-   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
-                                                                                          () -> getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
-                                                                                          () -> getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
-   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -getHalfLength() * getAxis().getX() + getPose().getTranslationX(),
-                                                                                             () -> -getHalfLength() * getAxis().getY() + getPose().getTranslationY(),
-                                                                                             () -> -getHalfLength() * getAxis().getZ() + getPose().getTranslationZ());
+   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> halfLength * axis.getX() + position.getX(),
+                                                                                          () -> halfLength * axis.getY() + position.getY(),
+                                                                                          () -> halfLength * axis.getZ() + position.getZ());
+   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -halfLength * axis.getX() + position.getX(),
+                                                                                             () -> -halfLength * axis.getY() + position.getY(),
+                                                                                             () -> -halfLength * axis.getZ() + position.getZ());
 
    public Capsule3D()
    {
@@ -39,22 +43,15 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
       setSize(length, radius);
    }
 
-   public Capsule3D(RigidBodyTransformReadOnly pose, double length, double radius)
+   public Capsule3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
-      set(pose, length, radius);
-   }
-
-   public Capsule3D(Pose3DReadOnly pose, double length, double radius)
-   {
-      set(pose, length, radius);
+      set(position, axis, length, radius);
    }
 
    @Override
    public void set(Capsule3D other)
    {
-      getPose().set(other.getPose());
-      setRadius(other.getRadius());
-      setLength(other.getLength());
+      Capsule3DBasics.super.set(other);
    }
 
    @Override
@@ -89,9 +86,15 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    }
 
    @Override
-   public Shape3DPose getPose()
+   public Point3DBasics getPosition()
    {
-      return pose;
+      return position;
+   }
+
+   @Override
+   public Vector3DBasics getAxis()
+   {
+      return axis;
    }
 
    @Override
