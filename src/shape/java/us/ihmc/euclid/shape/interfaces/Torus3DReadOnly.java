@@ -3,7 +3,6 @@ package us.ihmc.euclid.shape.interfaces;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -40,7 +39,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DTorus3DCollisionTest(getPose(), getRadius(), getTubeRadius(), pointToCheck, closestPointOnSurfaceToPack,
+      return EuclidShapeTools.doPoint3DTorus3DCollisionTest(pointToCheck, getPosition(), getAxis(), getRadius(), getTubeRadius(), closestPointOnSurfaceToPack,
                                                             normalAtClosestPointToPack) <= 0.0;
    }
 
@@ -66,16 +65,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      // TODO Get rid of the pointToProjectInLocal
-      Point3D pointToProjectInLocal = new Point3D(pointToProject);
-      transformToLocal(pointToProjectInLocal);
-
-      boolean hasBeenProjected = EuclidShapeTools.orthogonalProjectionOntoTorus3D(pointToProjectInLocal, getRadius(), getTubeRadius(), projectionToPack);
-
-      if (hasBeenProjected)
-         transformToWorld(projectionToPack);
-
-      return hasBeenProjected;
+      return EuclidShapeTools.orthogonalProjectionOntoTorus3D(pointToProject, getPosition(), getAxis(), getRadius(), getTubeRadius(), projectionToPack);
    }
 
    /**

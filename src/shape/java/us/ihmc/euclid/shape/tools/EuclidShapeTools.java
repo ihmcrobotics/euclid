@@ -1,11 +1,9 @@
 package us.ihmc.euclid.shape.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
-import static us.ihmc.euclid.tools.TupleTools.*;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -16,6 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class EuclidShapeTools
 {
    private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
+   private static final double TORUS_SMALLEST_DISTANCE_TO_AXIS = 1.0e-12;
 
    public static boolean isPoint3DInsideBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize, double epsilon)
    {
@@ -990,7 +989,7 @@ public class EuclidShapeTools
          supportingVertexToPack.setZ(supportDirection.getZ() > 0.0 ? ramp3DSize.getZ() : 0.0);
       }
       else
-      { // Look at a the incline of the direction. 
+      { // Look at a the incline of the direction.
          double directionInclineTanArgument = -supportDirection.getX() / supportDirection.getZ();
          double rampInclineTanArgument = ramp3DSize.getZ() / ramp3DSize.getX();
 
@@ -1272,128 +1271,156 @@ public class EuclidShapeTools
       }
    }
 
-   public static boolean orthogonalProjectionOntoTorus3D(Point3DReadOnly pointToProject, double torus3DRadius, double torus3DTubeRadius,
-                                                         Point3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOntoTorus3D(Point3DReadOnly pointToProject, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
+                                                         double torus3DRadius, double torus3DTubeRadius, Point3DBasics projectionToPack)
    {
-      double xLocal = pointToProject.getX();
-      double yLocal = pointToProject.getY();
-      double zLocal = pointToProject.getZ();
+      double x = pointToProject.getX() - torus3DPosition.getX();
+      double y = pointToProject.getY() - torus3DPosition.getY();
+      double z = pointToProject.getZ() - torus3DPosition.getZ();
+      double percentageOnAxis = TupleTools.dot(x, y, z, torus3DAxis);
 
-      double xyLengthSquared = normSquared(xLocal, yLocal);
+      double xInPlane = x - percentageOnAxis * torus3DAxis.getX();
+      double yInPlane = y - percentageOnAxis * torus3DAxis.getY();
+      double zInPlane = z - percentageOnAxis * torus3DAxis.getZ();
 
-      if (xyLengthSquared < 1.0e-12)
-      {
-         double xzLength = Math.sqrt(normSquared(torus3DRadius, zLocal));
+      double distanceSquaredFromAxis = EuclidCoreTools.normSquared(xInPlane, yInPlane, zInPlane);
 
-         double scale = torus3DTubeRadius / xzLength;
-         double closestTubeCenterX = torus3DRadius;
-         double closestTubeCenterY = 0.0;
+      if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      { // We need to setup a vector that is orthogonal to the torus' axis, then we'll perform the projection along that vector.
+         double xNonCollinearToAxis, yNonCollinearToAxis, zNonCollinearToAxis;
 
-         double tubeCenterToSurfaceX = -torus3DRadius * scale;
-         double tubeCenterToSurfaceY = 0.0;
-         double tubeCenterToSurfaceZ = zLocal * scale;
+         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
+         if (Math.abs(torus3DAxis.getY()) > 0.1 || Math.abs(torus3DAxis.getZ()) > 0.1)
+         {
+            xNonCollinearToAxis = 1.0;
+            yNonCollinearToAxis = 0.0;
+            zNonCollinearToAxis = 0.0;
+         }
+         else
+         {
+            xNonCollinearToAxis = 0.0;
+            yNonCollinearToAxis = 1.0;
+            zNonCollinearToAxis = 0.0;
+         }
 
-         projectionToPack.set(closestTubeCenterX, closestTubeCenterY, 0.0);
-         projectionToPack.add(tubeCenterToSurfaceX, tubeCenterToSurfaceY, tubeCenterToSurfaceZ);
+         double xOrthogonalToAxis = yNonCollinearToAxis * torus3DAxis.getZ() - zNonCollinearToAxis * torus3DAxis.getY();
+         double yOrthogonalToAxis = zNonCollinearToAxis * torus3DAxis.getX() - xNonCollinearToAxis * torus3DAxis.getZ();
+         double zOrthogonalToAxis = xNonCollinearToAxis * torus3DAxis.getY() - yNonCollinearToAxis * torus3DAxis.getX();
+         double norm = Math.sqrt(EuclidCoreTools.normSquared(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis));
+
+         double distanceFromTubeCenter = Math.sqrt(normSquared(percentageOnAxis, torus3DRadius));
+
+         double scale = torus3DTubeRadius / distanceFromTubeCenter;
+         double resultDistanceFromAxis = torus3DRadius - (torus3DRadius * scale);
+         double resultPositionOnAxis = percentageOnAxis * scale;
+
+         projectionToPack.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
+         projectionToPack.scale(resultDistanceFromAxis / norm);
+         projectionToPack.scaleAdd(resultPositionOnAxis, torus3DAxis, projectionToPack);
+         projectionToPack.add(torus3DPosition);
+
          return true;
       }
       else
       {
-         double xyLength = Math.sqrt(xyLengthSquared);
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
 
-         if (EuclidCoreTools.normSquared(xyLength - torus3DRadius, zLocal) <= torus3DTubeRadius * torus3DTubeRadius)
+         if (EuclidCoreTools.normSquared(distanceFromAxis - torus3DRadius, percentageOnAxis) <= torus3DTubeRadius * torus3DTubeRadius)
             return false;
 
-         double xyScale = torus3DRadius / xyLength;
+         double scale = torus3DRadius / distanceFromAxis;
 
-         double closestTubeCenterX = xLocal * xyScale;
-         double closestTubeCenterY = yLocal * xyScale;
+         double xTubeCenter = xInPlane * scale + torus3DPosition.getX();
+         double yTubeCenter = yInPlane * scale + torus3DPosition.getY();
+         double zTubeCenter = zInPlane * scale + torus3DPosition.getZ();
 
-         double dx = xLocal - closestTubeCenterX;
-         double dy = yLocal - closestTubeCenterY;
-         double dz = zLocal;
+         double distanceFromTubeCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(xTubeCenter, yTubeCenter, zTubeCenter, pointToProject);
 
-         double distance = Math.sqrt(normSquared(dx, dy, dz));
+         projectionToPack.set(pointToProject);
+         projectionToPack.sub(xTubeCenter, yTubeCenter, zTubeCenter);
+         projectionToPack.scale(torus3DTubeRadius / distanceFromTubeCenter);
+         projectionToPack.add(xTubeCenter, yTubeCenter, zTubeCenter);
 
-         projectionToPack.set(dx, dy, dz);
-         projectionToPack.scale(torus3DTubeRadius / distance);
-         projectionToPack.add(closestTubeCenterX, closestTubeCenterY, 0.0);
          return true;
       }
    }
 
-   public static double doPoint3DTorus3DCollisionTest(Shape3DPoseReadOnly torus3DPose, double torus3DRadius, double torus3DTubeRadius, Point3DReadOnly query,
-                                                      Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   public static double doPoint3DTorus3DCollisionTest(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
+                                                      double torus3DRadius, double torus3DTubeRadius, Point3DBasics closestPointToPack,
+                                                      Vector3DBasics normalToPack)
    {
-      double dx = query.getX() - torus3DPose.getTranslationX();
-      double dy = query.getY() - torus3DPose.getTranslationY();
-      double dz = query.getZ() - torus3DPose.getTranslationZ();
+      double x = query.getX() - torus3DPosition.getX();
+      double y = query.getY() - torus3DPosition.getY();
+      double z = query.getZ() - torus3DPosition.getZ();
+      double percentageOnAxis = TupleTools.dot(x, y, z, torus3DAxis);
 
-      double xLocal = dot(dx, dy, dz, torus3DPose.getXAxis());
-      double yLocal = dot(dx, dy, dz, torus3DPose.getYAxis());
-      double zLocal = dot(dx, dy, dz, torus3DPose.getZAxis());
+      double xInPlane = x - percentageOnAxis * torus3DAxis.getX();
+      double yInPlane = y - percentageOnAxis * torus3DAxis.getY();
+      double zInPlane = z - percentageOnAxis * torus3DAxis.getZ();
 
-      double xyLengthSquared = normSquared(xLocal, yLocal);
+      double distanceSquaredFromAxis = EuclidCoreTools.normSquared(xInPlane, yInPlane, zInPlane);
 
-      if (xyLengthSquared < 1.0e-12)
-      {
-         double xzLength = Math.sqrt(normSquared(torus3DRadius, zLocal));
+      if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      { // We need to setup a vector that is orthogonal to the torus' axis, then we'll perform the projection along that vector.
+         double xNonCollinearToAxis, yNonCollinearToAxis, zNonCollinearToAxis;
 
-         if (closestPointToPack != null)
+         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
+         if (Math.abs(torus3DAxis.getY()) > 0.1 || Math.abs(torus3DAxis.getZ()) > 0.1)
          {
-            double scale = torus3DTubeRadius / xzLength;
-            double closestTubeCenterX = torus3DRadius;
-            double closestTubeCenterY = 0.0;
-
-            double tubeCenterToSurfaceX = -torus3DRadius * scale;
-            double tubeCenterToSurfaceY = 0.0;
-            double tubeCenterToSurfaceZ = zLocal * scale;
-
-            closestPointToPack.set(closestTubeCenterX, closestTubeCenterY, 0.0);
-            closestPointToPack.add(tubeCenterToSurfaceX, tubeCenterToSurfaceY, tubeCenterToSurfaceZ);
-            torus3DPose.transform(closestPointToPack);
+            xNonCollinearToAxis = 1.0;
+            yNonCollinearToAxis = 0.0;
+            zNonCollinearToAxis = 0.0;
+         }
+         else
+         {
+            xNonCollinearToAxis = 0.0;
+            yNonCollinearToAxis = 1.0;
+            zNonCollinearToAxis = 0.0;
          }
 
-         if (normalToPack != null)
-         {
-            normalToPack.set(-torus3DRadius, 0.0, zLocal);
-            normalToPack.scale(1.0 / xzLength);
-            torus3DPose.transform(normalToPack);
-         }
+         double xOrthogonalToAxis = yNonCollinearToAxis * torus3DAxis.getZ() - zNonCollinearToAxis * torus3DAxis.getY();
+         double yOrthogonalToAxis = zNonCollinearToAxis * torus3DAxis.getX() - xNonCollinearToAxis * torus3DAxis.getZ();
+         double zOrthogonalToAxis = xNonCollinearToAxis * torus3DAxis.getY() - yNonCollinearToAxis * torus3DAxis.getX();
+         double norm = Math.sqrt(EuclidCoreTools.normSquared(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis));
 
-         return xzLength - torus3DTubeRadius;
+         double distanceFromTubeCenter = Math.sqrt(normSquared(percentageOnAxis, torus3DRadius));
+
+         double scale = torus3DTubeRadius / distanceFromTubeCenter;
+         double resultDistanceFromAxis = torus3DRadius - (torus3DRadius * scale);
+         double resultPositionOnAxis = percentageOnAxis * scale;
+
+         closestPointToPack.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
+         closestPointToPack.scale(resultDistanceFromAxis / norm);
+         closestPointToPack.scaleAdd(resultPositionOnAxis, torus3DAxis, closestPointToPack);
+         closestPointToPack.add(torus3DPosition);
+
+         normalToPack.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
+         normalToPack.scale(-torus3DRadius / norm);
+         normalToPack.scaleAdd(percentageOnAxis, torus3DAxis, normalToPack);
+         normalToPack.scale(1.0 / distanceFromTubeCenter);
+
+         return distanceFromTubeCenter - torus3DTubeRadius;
       }
       else
       {
-         double xyScale = torus3DRadius / Math.sqrt(xyLengthSquared);
+         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
 
-         double closestTubeCenterX = xLocal * xyScale;
-         double closestTubeCenterY = yLocal * xyScale;
+         double scale = torus3DRadius / distanceFromAxis;
 
-         dx = xLocal - closestTubeCenterX;
-         dy = yLocal - closestTubeCenterY;
-         dz = zLocal;
+         double xTubeCenter = xInPlane * scale + torus3DPosition.getX();
+         double yTubeCenter = yInPlane * scale + torus3DPosition.getY();
+         double zTubeCenter = zInPlane * scale + torus3DPosition.getZ();
 
-         double distance = Math.sqrt(normSquared(dx, dy, dz));
+         double distanceFromTubeCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(xTubeCenter, yTubeCenter, zTubeCenter, query);
 
-         double distanceInv = 1.0 / distance;
+         normalToPack.set(query);
+         normalToPack.sub(xTubeCenter, yTubeCenter, zTubeCenter);
+         normalToPack.scale(1.0 / distanceFromTubeCenter);
 
-         if (closestPointToPack != null)
-         {
-            closestPointToPack.set(dx, dy, dz);
-            closestPointToPack.scale(torus3DTubeRadius * distanceInv);
-            closestPointToPack.add(closestTubeCenterX, closestTubeCenterY, 0.0);
-            torus3DPose.transform(closestPointToPack);
-         }
+         closestPointToPack.setAndScale(torus3DTubeRadius, normalToPack);
+         closestPointToPack.add(xTubeCenter, yTubeCenter, zTubeCenter);
 
-         if (normalToPack != null)
-         {
-            normalToPack.set(dx, dy, dz);
-            normalToPack.scale(distanceInv);
-            torus3DPose.transform(normalToPack);
-         }
-
-         return distance - torus3DTubeRadius;
+         return distanceFromTubeCenter - torus3DTubeRadius;
       }
    }
 }

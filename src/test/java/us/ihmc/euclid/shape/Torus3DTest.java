@@ -9,9 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -81,45 +84,136 @@ public class Torus3DTest
    @Test
    public void testOrthogonalProjection()
    {
-      double radius = 1.0;
-      double thickness = 0.1;
+      {
+         double radius = 1.0;
+         double thickness = 0.1;
 
-      Torus3D torus3d = new Torus3D(radius, thickness);
+         Torus3D torus3d = new Torus3D(radius, thickness);
 
-      Point3D testPoint = new Point3D(1.0, 0.0, 0.0);
-      Point3D projectedPoint = new Point3D(testPoint);
-      torus3d.orthogonalProjection(projectedPoint);
+         Point3D testPoint = new Point3D(1.0, 0.0, 0.0);
+         Point3D projectedPoint = new Point3D(testPoint);
+         torus3d.orthogonalProjection(projectedPoint);
 
-      EuclidCoreTestTools.assertTuple3DEquals(testPoint, projectedPoint, 1e-7);
+         EuclidCoreTestTools.assertTuple3DEquals(testPoint, projectedPoint, 1e-7);
 
-      testPoint = new Point3D(-1.09, 0.0, 0.0);
-      projectedPoint = new Point3D(testPoint);
-      torus3d.orthogonalProjection(projectedPoint);
+         testPoint = new Point3D(-1.09, 0.0, 0.0);
+         projectedPoint = new Point3D(testPoint);
+         torus3d.orthogonalProjection(projectedPoint);
 
-      EuclidCoreTestTools.assertTuple3DEquals(testPoint, projectedPoint, 1e-7);
+         EuclidCoreTestTools.assertTuple3DEquals(testPoint, projectedPoint, 1e-7);
 
-      testPoint = new Point3D(radius + 0.2, 0.0, 0.0);
-      projectedPoint = new Point3D(testPoint);
-      torus3d.orthogonalProjection(projectedPoint);
-      Point3D expectedProjectedPoint = new Point3D(radius + thickness, 0.0, 0.0);
+         testPoint = new Point3D(radius + 0.2, 0.0, 0.0);
+         projectedPoint = new Point3D(testPoint);
+         torus3d.orthogonalProjection(projectedPoint);
+         Point3D expectedProjectedPoint = new Point3D(radius + thickness, 0.0, 0.0);
 
-      EuclidCoreTestTools.assertTuple3DEquals(expectedProjectedPoint, projectedPoint, 1e-7);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjectedPoint, projectedPoint, 1e-7);
 
-      double amountPastCenter = 1.7;
-      testPoint = new Point3D(radius + amountPastCenter, 0.0, amountPastCenter);
-      projectedPoint = new Point3D(testPoint);
-      torus3d.orthogonalProjection(projectedPoint);
-      expectedProjectedPoint = new Point3D(radius + thickness * Math.sqrt(2.0) / 2.0, 0.0, thickness * Math.sqrt(2.0) / 2.0);
+         double amountPastCenter = 1.7;
+         testPoint = new Point3D(radius + amountPastCenter, 0.0, amountPastCenter);
+         projectedPoint = new Point3D(testPoint);
+         torus3d.orthogonalProjection(projectedPoint);
+         expectedProjectedPoint = new Point3D(radius + thickness * Math.sqrt(2.0) / 2.0, 0.0, thickness * Math.sqrt(2.0) / 2.0);
 
-      EuclidCoreTestTools.assertTuple3DEquals(expectedProjectedPoint, projectedPoint, 1e-7);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjectedPoint, projectedPoint, 1e-7);
 
-      // Middle of torus should project to anywhere on the inside ring.
-      testPoint = new Point3D(0.0, 0.0, 0.0);
-      projectedPoint = new Point3D(testPoint);
-      torus3d.orthogonalProjection(projectedPoint);
+         // Middle of torus should project to anywhere on the inside ring.
+         testPoint = new Point3D(0.0, 0.0, 0.0);
+         projectedPoint = new Point3D(testPoint);
+         torus3d.orthogonalProjection(projectedPoint);
 
-      assertEquals(radius - thickness, testPoint.distance(projectedPoint), 1e-7);
-      assertEquals(0.0, projectedPoint.getZ(), 1e-7);
+         assertEquals(radius - thickness, testPoint.distance(projectedPoint), 1e-7);
+         assertEquals(0.0, projectedPoint.getZ(), 1e-7);
+      }
+
+      Random random = new Random(5436564);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with queries that are outside
+         Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+
+         Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
+         double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         RotationMatrixTools.applyYawRotation(majorTheta, pointOnTubeAxis, pointOnTubeAxis);
+
+         double minorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         Vector3D fromTubeAxisToSurface = new Vector3D(torus.getTubeRadius(), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+
+         Point3D expectedProjection = new Point3D();
+         expectedProjection.add(pointOnTubeAxis, fromTubeAxisToSurface);
+
+         Vector3D fromTubeAxisToOutsideTorus = new Vector3D(EuclidCoreRandomTools.nextDouble(random, torus.getTubeRadius(), torus.getRadius()), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToOutsideTorus, fromTubeAxisToOutsideTorus);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToOutsideTorus, fromTubeAxisToOutsideTorus);
+
+         Point3D pointToProject = new Point3D();
+         pointToProject.add(pointOnTubeAxis, fromTubeAxisToOutsideTorus);
+
+         torus.transformToWorld(expectedProjection);
+         torus.transformToWorld(pointToProject);
+
+         Point3D actualProjection = new Point3D();
+         boolean hasBeenProjected = torus.orthogonalProjection(pointToProject, actualProjection);
+         assertTrue(hasBeenProjected);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with queries that are inside
+         Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+
+         Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
+         double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         RotationMatrixTools.applyYawRotation(majorTheta, pointOnTubeAxis, pointOnTubeAxis);
+
+         double minorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         Vector3D fromTubeAxisToSurface = new Vector3D(torus.getTubeRadius(), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+
+         Vector3D fromTubeAxisToInsideTorus = new Vector3D(EuclidCoreRandomTools.nextDouble(random, 0.0, torus.getTubeRadius()), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToInsideTorus, fromTubeAxisToInsideTorus);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToInsideTorus, fromTubeAxisToInsideTorus);
+
+         Point3D pointToProject = new Point3D();
+         pointToProject.add(pointOnTubeAxis, fromTubeAxisToInsideTorus);
+
+         torus.transformToWorld(pointToProject);
+
+         Point3D originalArgument = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D actualProjection = new Point3D(originalArgument);
+         boolean hasBeenProjected = torus.orthogonalProjection(pointToProject, actualProjection);
+         assertFalse(hasBeenProjected);
+         EuclidCoreTestTools.assertTuple3DEquals(originalArgument, actualProjection, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with queries that on the torus' main axis, the result should still be on the torus
+         Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+
+         Point3D pointOnTorusAxis = new Point3D();
+         double positionOnAxis = EuclidCoreRandomTools.nextDouble(random, 1.0);
+         pointOnTorusAxis.scaleAdd(positionOnAxis, torus.getAxis(), torus.getPosition());
+
+         Point3D pointToProject = new Point3D(pointOnTorusAxis);
+
+         Point3D actualProjection = new Point3D();
+         boolean hasBeenProjected = torus.orthogonalProjection(pointToProject, actualProjection);
+         assertTrue(hasBeenProjected);
+         assertEquals(0.0, torus.signedDistance(actualProjection), EPSILON);
+
+         // Using the Thales' theorem to verify the 'height' of the projection based on the known pointOnTorusAxis 'height' and given the torus properties.
+         double expectedPositionOnAxis = positionOnAxis * torus.getTubeRadius() / (torus.getTubeRadius() + actualProjection.distance(pointToProject));
+         double actualPositionOnAxis = EuclidGeometryTools.percentageAlongLine3D(actualProjection, torus.getPosition(), torus.getAxis());
+         assertEquals(expectedPositionOnAxis, actualPositionOnAxis, EPSILON);
+
+         double expectedDistanceFromAxis = torus.getRadius()
+               - (torus.getRadius() * torus.getTubeRadius() / (torus.getTubeRadius() + actualProjection.distance(pointToProject)));
+         double actualDistanceFromAxis = EuclidGeometryTools.distanceFromPoint3DToLine3D(actualProjection, torus.getPosition(), torus.getAxis());
+         assertEquals(expectedDistanceFromAxis, actualDistanceFromAxis, EPSILON);
+      }
    }
 
    @Test
@@ -227,6 +321,116 @@ public class Torus3DTest
       torus3d.doPoint3DCollisionTest(pointInWorldToCheck, closestPointToPack, normalToPack);
       assertTrue(closestPointToPack.epsilonEquals(new Point3D(-radius, 0.0, -thickness), 10e-7));
       assertTrue(normalToPack.epsilonEquals(new Vector3D(0.0, 0.0, -1.0), 10e-7));
+
+      Random random = new Random(5436564);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with queries that are outside
+         Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+
+         Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
+         double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         RotationMatrixTools.applyYawRotation(majorTheta, pointOnTubeAxis, pointOnTubeAxis);
+
+         double minorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         Vector3D fromTubeAxisToSurface = new Vector3D(torus.getTubeRadius(), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+
+         Point3D expectedClosestPoint = new Point3D();
+         expectedClosestPoint.add(pointOnTubeAxis, fromTubeAxisToSurface);
+
+         Vector3D fromTubeAxisToOutsideTorus = new Vector3D(EuclidCoreRandomTools.nextDouble(random, torus.getTubeRadius(), torus.getRadius()), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToOutsideTorus, fromTubeAxisToOutsideTorus);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToOutsideTorus, fromTubeAxisToOutsideTorus);
+
+         Vector3D expectedNormal = new Vector3D();
+         expectedNormal.setAndNormalize(fromTubeAxisToOutsideTorus);
+
+         Point3D pointToCheck = new Point3D();
+         pointToCheck.add(pointOnTubeAxis, fromTubeAxisToOutsideTorus);
+
+         torus.transformToWorld(expectedClosestPoint);
+         torus.transformToWorld(pointToCheck);
+         torus.transformToWorld(expectedNormal);
+
+         Point3D actualClosestPoint = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         boolean areColliding = torus.doPoint3DCollisionTest(pointToCheck, actualClosestPoint, actualNormal);
+         assertFalse(areColliding);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with queries that are inside
+         Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+
+         Point3D pointOnTubeAxis = new Point3D(torus.getRadius(), 0.0, 0.0);
+         double majorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         RotationMatrixTools.applyYawRotation(majorTheta, pointOnTubeAxis, pointOnTubeAxis);
+
+         double minorTheta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         Vector3D fromTubeAxisToSurface = new Vector3D(torus.getTubeRadius(), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToSurface, fromTubeAxisToSurface);
+
+         Point3D expectedClosestPoint = new Point3D();
+         expectedClosestPoint.add(pointOnTubeAxis, fromTubeAxisToSurface);
+
+         Vector3D fromTubeAxisToInsideTorus = new Vector3D(EuclidCoreRandomTools.nextDouble(random, 0.0, torus.getTubeRadius()), 0.0, 0.0);
+         RotationMatrixTools.applyPitchRotation(minorTheta, fromTubeAxisToInsideTorus, fromTubeAxisToInsideTorus);
+         RotationMatrixTools.applyYawRotation(majorTheta, fromTubeAxisToInsideTorus, fromTubeAxisToInsideTorus);
+
+         Vector3D expectedNormal = new Vector3D();
+         expectedNormal.setAndNormalize(fromTubeAxisToInsideTorus);
+
+         Point3D pointToCheck = new Point3D();
+         pointToCheck.add(pointOnTubeAxis, fromTubeAxisToInsideTorus);
+
+         torus.transformToWorld(expectedClosestPoint);
+         torus.transformToWorld(pointToCheck);
+         torus.transformToWorld(expectedNormal);
+
+         Point3D actualClosestPoint = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         boolean areColliding = torus.doPoint3DCollisionTest(pointToCheck, actualClosestPoint, actualNormal);
+         assertTrue(areColliding);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with queries that on the torus' main axis, the result should still be on the torus
+         Torus3D torus = EuclidShapeRandomTools.nextTorus3D(random);
+
+         Point3D pointOnTorusAxis = new Point3D();
+         double positionOnAxis = EuclidCoreRandomTools.nextDouble(random, 1.0);
+         pointOnTorusAxis.scaleAdd(positionOnAxis, torus.getAxis(), torus.getPosition());
+
+         Point3D pointToCheck = new Point3D(pointOnTorusAxis);
+
+         Point3D actualClosestPoint = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         boolean areColliding = torus.doPoint3DCollisionTest(pointToCheck, actualClosestPoint, actualNormal);
+         assertFalse(areColliding);
+         assertEquals(0.0, torus.signedDistance(actualClosestPoint), EPSILON);
+
+         Vector3D expectedNormal = new Vector3D();
+         expectedNormal.sub(pointToCheck, actualClosestPoint);
+         expectedNormal.normalize();
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+
+         // Using the Thales' theorem to verify the 'height' of the projection based on the known pointOnTorusAxis 'height' and given the torus properties.
+         double expectedPositionOnAxis = positionOnAxis * torus.getTubeRadius() / (torus.getTubeRadius() + actualClosestPoint.distance(pointToCheck));
+         double actualPositionOnAxis = EuclidGeometryTools.percentageAlongLine3D(actualClosestPoint, torus.getPosition(), torus.getAxis());
+         assertEquals(expectedPositionOnAxis, actualPositionOnAxis, EPSILON);
+
+         double expectedDistanceFromAxis = torus.getRadius()
+               - (torus.getRadius() * torus.getTubeRadius() / (torus.getTubeRadius() + actualClosestPoint.distance(pointToCheck)));
+         double actualDistanceFromAxis = EuclidGeometryTools.distanceFromPoint3DToLine3D(actualClosestPoint, torus.getPosition(), torus.getAxis());
+         assertEquals(expectedDistanceFromAxis, actualDistanceFromAxis, EPSILON);
+      }
    }
 
    @Test
