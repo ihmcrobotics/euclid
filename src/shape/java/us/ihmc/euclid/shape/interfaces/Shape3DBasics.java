@@ -31,24 +31,4 @@ public interface Shape3DBasics extends Shape3DReadOnly, Clearable, Transformable
    {
       return getPose().getShapePosition();
    }
-
-   @Override
-   default boolean containsNaN()
-   {
-      return Shape3DReadOnly.super.containsNaN();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void setToNaN()
-   {
-      getPose().setToNaN();
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void setToZero()
-   {
-      getPose().setToZero();
-   }
 }

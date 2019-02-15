@@ -23,7 +23,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    @Override
    default void setToNaN()
    {
-      Shape3DBasics.super.setToNaN();
+      getPose().setToNaN();
       getRadii().setToNaN();
    }
 
@@ -31,7 +31,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    @Override
    default void setToZero()
    {
-      Shape3DBasics.super.setToZero();
+      getPose().setToZero();
       getRadii().setToZero();
    }
 

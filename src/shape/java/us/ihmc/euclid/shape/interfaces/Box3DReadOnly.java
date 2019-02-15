@@ -19,10 +19,9 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    IntermediateVariableSupplier getIntermediateVariableSupplier();
 
    /** {@inheritDoc} */
-   @Override
    default boolean containsNaN()
    {
-      return Shape3DReadOnly.super.containsNaN() || getSize().containsNaN();
+      return getPose().containsNaN() || getSize().containsNaN();
    }
 
    @Override

@@ -18,7 +18,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
    @Override
    default void setToZero()
    {
-      Shape3DBasics.super.setToZero();
+      getPose().setToZero();
       setRadii(0.0, 0.0);
    }
 
@@ -26,7 +26,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
    @Override
    default void setToNaN()
    {
-      Shape3DBasics.super.setToNaN();
+      getPose().setToNaN();
       setRadii(Double.NaN, Double.NaN);
    }
 

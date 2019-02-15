@@ -20,7 +20,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean containsNaN()
    {
-      return Shape3DReadOnly.super.containsNaN() || getRadii().containsNaN();
+      return getPose().containsNaN() || getRadii().containsNaN();
    }
 
    @Override

@@ -23,7 +23,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    @Override
    default void setToZero()
    {
-      Shape3DBasics.super.setToZero();
+      getPose().setToZero();
       getSize().setToZero();
    }
 
@@ -31,7 +31,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    @Override
    default void setToNaN()
    {
-      Shape3DBasics.super.setToNaN();
+      getPose().setToNaN();
       getSize().setToNaN();
    }
 

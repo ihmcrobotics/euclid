@@ -26,7 +26,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
    @Override
    default void setToNaN()
    {
-      Shape3DBasics.super.setToNaN();
+      getPose().setToNaN();
       setSize(Double.NaN, Double.NaN);
    }
 
@@ -34,7 +34,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
    @Override
    default void setToZero()
    {
-      Shape3DBasics.super.setToZero();
+      getPose().setToZero();
       setSize(0.0, 0.0);
    }
 

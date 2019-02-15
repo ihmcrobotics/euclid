@@ -26,13 +26,13 @@ public interface PointShape3DBasics extends PointShape3DReadOnly, Shape3DBasics,
    @Override
    default void setToZero()
    {
-      Shape3DBasics.super.setToZero();
+      getPose().setToZero();
    }
 
    @Override
    default void setToNaN()
    {
-      Shape3DBasics.super.setToNaN();
+      getPose().setToNaN();
    }
 
    @Override

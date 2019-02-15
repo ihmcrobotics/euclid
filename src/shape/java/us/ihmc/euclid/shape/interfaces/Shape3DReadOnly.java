@@ -37,10 +37,7 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
       return getPose().getShapePosition();
    }
 
-   default boolean containsNaN()
-   {
-      return getPose().containsNaN();
-   }
+   boolean containsNaN();
 
    /**
     * Evaluates the query point {@code pointToCheck}:

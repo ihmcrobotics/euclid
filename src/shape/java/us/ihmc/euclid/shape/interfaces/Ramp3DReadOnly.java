@@ -43,7 +43,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean containsNaN()
    {
-      return Shape3DReadOnly.super.containsNaN() || getSize().containsNaN();
+      return getPose().containsNaN() || getSize().containsNaN();
    }
 
    @Override

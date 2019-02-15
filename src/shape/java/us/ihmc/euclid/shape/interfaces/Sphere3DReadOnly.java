@@ -24,7 +24,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean containsNaN()
    {
-      return Shape3DReadOnly.super.containsNaN() || Double.isNaN(getRadius());
+      return getPose().containsNaN() || Double.isNaN(getRadius());
    }
 
    @Override

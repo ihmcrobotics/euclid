@@ -33,7 +33,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean containsNaN()
    {
-      return Shape3DReadOnly.super.containsNaN() || Double.isNaN(getRadius()) || Double.isNaN(getTubeRadius());
+      return getPose().containsNaN() || Double.isNaN(getRadius()) || Double.isNaN(getTubeRadius());
    }
 
    @Override

@@ -40,7 +40,7 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    @Override
    default boolean containsNaN()
    {
-      return Shape3DReadOnly.super.containsNaN();
+      return getPose().containsNaN();
    }
 
    @Override

@@ -19,7 +19,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
    @Override
    default void setToZero()
    {
-      Shape3DBasics.super.setToZero();
+      getPose().setToZero();
       setRadius(0.0);
    }
 
@@ -27,7 +27,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
    @Override
    default void setToNaN()
    {
-      Shape3DBasics.super.setToNaN();
+      getPose().setToNaN();
       setRadius(Double.NaN);
    }
 
