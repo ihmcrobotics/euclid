@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -27,7 +28,6 @@ import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
-import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -39,7 +39,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class ConvexPolytope3DTest
 {
-   private static final int ITERATIONS = EuclidTestSuite.ITERATIONS;
+   private static final int ITERATIONS = EuclidTestConstants.ITERATIONS;
    private static final double EPSILON = 1.0e-12;
 
    @Test

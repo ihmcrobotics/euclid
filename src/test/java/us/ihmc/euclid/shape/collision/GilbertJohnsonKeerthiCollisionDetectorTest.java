@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.convexPolytope;
+package us.ihmc.euclid.shape.collision;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,6 +15,10 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetector;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
+import us.ihmc.euclid.shape.convexPolytope.Face3D;
+import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
+import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;

@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape;
+package us.ihmc.euclid.shape.primitives;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.*;

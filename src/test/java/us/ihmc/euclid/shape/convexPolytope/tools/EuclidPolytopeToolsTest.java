@@ -14,6 +14,7 @@ import org.ejml.ops.CommonOps;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.Plane3D;
@@ -27,7 +28,6 @@ import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
-import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -40,7 +40,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidPolytopeToolsTest
 {
-   private final static int ITERATIONS = EuclidTestSuite.ITERATIONS;
+   private final static int ITERATIONS = EuclidTestConstants.ITERATIONS;
    private static final double EPSILON = 1.0e-12;
 
    @Test

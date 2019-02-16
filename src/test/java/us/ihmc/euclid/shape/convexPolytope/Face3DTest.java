@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
@@ -21,7 +22,6 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
-import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -37,7 +37,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Face3DTest
 {
-   private static final int ITERATIONS = EuclidTestSuite.ITERATIONS;
+   private static final int ITERATIONS = EuclidTestConstants.ITERATIONS;
    private static final double EPSILON = 1.0e-12;
 
    @Test
