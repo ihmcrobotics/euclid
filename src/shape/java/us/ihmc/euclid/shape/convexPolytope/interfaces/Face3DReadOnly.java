@@ -206,6 +206,20 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    }
 
    /**
+    * Returns the shortest distance to the point specified
+    * 
+    * @param point the point to which the distance is required
+    * @return the shortest length from the specified point to the face
+    */
+   default double signedDistance(Point3DReadOnly point)
+   {
+      if (isPointDirectlyAboveOrBelow(point))
+         return signedDistanceToPlane(point);
+      else
+         return getClosestEdge(point).distance(point);
+   }
+
+   /**
     * Returns a dot product of the vector from a point on the face to the specified point and the face
     * normal A positive value indicates that the face is visible from the point specified
     * 
@@ -340,7 +354,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
    }
 
-   default Point3DBasics orthogonalProjection(Point3DReadOnly pointToProject)
+   default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
       Point3D projection = new Point3D();
       if (orthogonalProjection(pointToProject, projection))

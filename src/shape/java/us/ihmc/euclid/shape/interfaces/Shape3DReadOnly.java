@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.interfaces;
 
 import us.ihmc.euclid.shape.CollisionTestResult;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -75,9 +76,9 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @param query the coordinates of the query. Not modified.
     * @return true if the point is inside or on the surface, false otherwise.
     */
-   default boolean isInsideOrOnSurface(Point3DReadOnly query)
+   default boolean isPointInside(Point3DReadOnly query)
    {
-      return isInsideEpsilon(query, IS_INSIDE_EPS);
+      return isPointInside(query, 0.0);
    }
 
    /**
@@ -95,7 +96,17 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside this shape, {@code false} otherwise.
     */
-   boolean isInsideEpsilon(Point3DReadOnly query, double epsilon);
+   boolean isPointInside(Point3DReadOnly query, double epsilon);
+
+   default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
+   {
+      Point3D projection = new Point3D();
+
+      if (orthogonalProjection(pointToProject, projection))
+         return projection;
+      else
+         return null;
+   }
 
    /**
     * Computes the orthogonal projection of a point on this shape.

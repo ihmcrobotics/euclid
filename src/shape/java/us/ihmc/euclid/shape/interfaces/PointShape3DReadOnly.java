@@ -49,7 +49,7 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    }
 
    @Override
-   default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
+   default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       return distanceSquared(query) <= epsilon * epsilon;
    }

@@ -52,16 +52,16 @@ public class Sphere3DTest
 
       double justInside = 0.999;
       double justOutside = 1.001;
-      assertTrue(sphere3d.isInsideOrOnSurface(new Point3D(justInside, 0.0, 0.0)));
-      assertTrue(sphere3d.isInsideOrOnSurface(new Point3D(0.0, justInside, 0.0)));
-      assertTrue(sphere3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, justInside)));
+      assertTrue(sphere3d.isPointInside(new Point3D(justInside, 0.0, 0.0)));
+      assertTrue(sphere3d.isPointInside(new Point3D(0.0, justInside, 0.0)));
+      assertTrue(sphere3d.isPointInside(new Point3D(0.0, 0.0, justInside)));
 
-      assertFalse(sphere3d.isInsideOrOnSurface(new Point3D(justOutside, 0.0, 0.0)));
-      assertFalse(sphere3d.isInsideOrOnSurface(new Point3D(0.0, justOutside, 0.0)));
-      assertFalse(sphere3d.isInsideOrOnSurface(new Point3D(0.0, 0.0, justOutside)));
+      assertFalse(sphere3d.isPointInside(new Point3D(justOutside, 0.0, 0.0)));
+      assertFalse(sphere3d.isPointInside(new Point3D(0.0, justOutside, 0.0)));
+      assertFalse(sphere3d.isPointInside(new Point3D(0.0, 0.0, justOutside)));
 
-      assertTrue(sphere3d.isInsideOrOnSurface(new Point3D(Math.sqrt(1.999) / 2.0, Math.sqrt(1.999) / 2.0, 0.0)));
-      assertFalse(sphere3d.isInsideOrOnSurface(new Point3D(Math.sqrt(2.001) / 2.0, Math.sqrt(2.001) / 2.0, 0.0)));
+      assertTrue(sphere3d.isPointInside(new Point3D(Math.sqrt(1.999) / 2.0, Math.sqrt(1.999) / 2.0, 0.0)));
+      assertFalse(sphere3d.isPointInside(new Point3D(Math.sqrt(2.001) / 2.0, Math.sqrt(2.001) / 2.0, 0.0)));
 
    }
 
@@ -178,9 +178,9 @@ public class Sphere3DTest
          Point3DReadOnly supportingVertex = sphere.getSupportingVertex(supportDirection);
          Point3D supportingVertexTranslated = new Point3D();
          supportDirection.normalize();
-         assertTrue(sphere.isInsideOrOnSurface(supportingVertex));
+         assertTrue(sphere.isPointInside(supportingVertex));
          supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
-         assertFalse(sphere.isInsideOrOnSurface(supportingVertexTranslated));
+         assertFalse(sphere.isPointInside(supportingVertexTranslated));
          supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
          Vector3D expectedNormal = new Vector3D();
          expectedNormal.sub(supportingVertexTranslated, supportingVertex);

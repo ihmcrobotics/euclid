@@ -13,9 +13,7 @@ import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.interfaces.Settable;
-import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
@@ -23,6 +21,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
+import us.ihmc.euclid.shape.interfaces.Shape3DBasics;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -33,7 +32,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * @author Apoorv S
  *
  */
-public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Transformable, Settable<ConvexPolytope3DReadOnly>
+public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics, GeometryObject<ConvexPolytope3D>
 {
    private final ArrayList<Vertex3D> vertices = new ArrayList<>();
    private final ArrayList<HalfEdge3D> edges = new ArrayList<>();
@@ -113,6 +112,11 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
    }
 
    @Override
+   public void set(ConvexPolytope3D other)
+   {
+      this.set((ConvexPolytope3DReadOnly) other);
+   }
+
    public void set(ConvexPolytope3DReadOnly other)
    {
       clear();
@@ -437,6 +441,18 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Clearable, Tr
 
       updateBoundingBox();
       updateCentroidAndVolume();
+   }
+
+   @Override
+   public boolean geometricallyEquals(ConvexPolytope3D other, double epsilon)
+   {
+      return ConvexPolytope3DReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
+   @Override
+   public boolean epsilonEquals(ConvexPolytope3D other, double epsilon)
+   {
+      return ConvexPolytope3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    @Override

@@ -25,8 +25,8 @@ public class Shape3DTestHelper
       {
          Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 1.0, 1.0);
 
-         boolean pointIsInside = shape3d.isInsideEpsilon(point, -1e-5);
-         boolean pointIsOutside = !shape3d.isInsideEpsilon(point, 1e-5);
+         boolean pointIsInside = shape3d.isPointInside(point, -1e-5);
+         boolean pointIsOutside = !shape3d.isPointInside(point, 1e-5);
 
          if (pointIsInside && pointIsOutside)
             fail();
@@ -130,7 +130,7 @@ public class Shape3DTestHelper
       }
       else
       {
-         assertTrue(shape3d.isInsideOrOnSurface(newProjection));
+         assertTrue(shape3d.isPointInside(newProjection));
          assertEquals(1.0, newNormal.length(), 1e-7);
       }
       EuclidCoreTestTools.assertTuple3DEquals(pointOnSurface, newProjection, 1e-7);
@@ -142,7 +142,7 @@ public class Shape3DTestHelper
       pointALittleOutside.scaleAdd(1e-4, surfaceNormal, pointALittleOutside);
       pointALittleInside.scaleAdd(-1e-4, surfaceNormal, pointALittleInside);
 
-      boolean isInsideCheck = shape3d.isInsideOrOnSurface(pointALittleOutside);
+      boolean isInsideCheck = shape3d.isPointInside(pointALittleOutside);
       if (isInsideCheck)
       {
          System.out.println("shape3d = " + shape3d);
@@ -154,7 +154,7 @@ public class Shape3DTestHelper
       }
       assertFalse(isInsideCheck);
 
-      boolean insideOrOnSurface = shape3d.isInsideOrOnSurface(pointALittleInside);
+      boolean insideOrOnSurface = shape3d.isPointInside(pointALittleInside);
       boolean isNormalWayDifferent = false;
 
       if (!insideOrOnSurface)
@@ -172,7 +172,7 @@ public class Shape3DTestHelper
          System.out.println("surfaceNormal = " + surfaceNormal);
          System.out.println("newNormal = " + newNormal);
          System.out.println("pointALittleInside = " + pointALittleInside);
-         insideOrOnSurface = shape3d.isInsideOrOnSurface(pointALittleInside);
+         insideOrOnSurface = shape3d.isPointInside(pointALittleInside);
          shape3d.doPoint3DCollisionTest(pointOnSurface, newProjection, newNormal);
          System.out.println("newNormal = " + newNormal);
       }

@@ -43,12 +43,12 @@ class Capsule3DTest
          Capsule3D capsule = EuclidShapeRandomTools.nextCapsule3D(random);
          Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
          Point3DReadOnly supportingVertex = capsule.getSupportingVertex(supportDirection);
-         assertTrue(capsule.isInsideOrOnSurface(supportingVertex));
+         assertTrue(capsule.isPointInside(supportingVertex));
 
          Point3D supportingVertexTranslated = new Point3D();
          supportDirection.normalize();
          supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
-         assertFalse(capsule.isInsideOrOnSurface(supportingVertexTranslated));
+         assertFalse(capsule.isPointInside(supportingVertexTranslated));
 
          Vector3D actualNormal = new Vector3D();
          capsule.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);

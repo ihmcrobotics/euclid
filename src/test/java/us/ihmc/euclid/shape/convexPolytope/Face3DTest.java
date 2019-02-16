@@ -792,7 +792,7 @@ public class Face3DTest
          pointAbove.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointAbove);
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointAbove, face3D.getCentroid(), face3D.getNormal());
-         Point3DBasics actualProjection = face3D.orthogonalProjection(pointAbove);
+         Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointAbove);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
 
@@ -805,7 +805,7 @@ public class Face3DTest
          pointBelow.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointBelow);
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointBelow, face3D.getCentroid(), face3D.getNormal());
-         Point3DBasics actualProjection = face3D.orthogonalProjection(pointBelow);
+         Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointBelow);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
 
@@ -826,7 +826,7 @@ public class Face3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnLine3D(pointOutside, edge.getOrigin(), edge.getDirection(true));
-         Point3DBasics actualProjection = face3D.orthogonalProjection(pointOutside);
+         Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
 
@@ -853,7 +853,7 @@ public class Face3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Point3DReadOnly expectedProjection = closestVertex;
-         Point3DBasics actualProjection = face3D.orthogonalProjection(pointOutside);
+         Point3DBasics actualProjection = face3D.orthogonalProjectionCopy(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
    }
@@ -873,7 +873,7 @@ public class Face3DTest
          pointAbove.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointAbove);
 
          Vector3D expectedSupportVector = new Vector3D();
-         expectedSupportVector.sub(pointAbove, face3D.orthogonalProjection(pointAbove));
+         expectedSupportVector.sub(pointAbove, face3D.orthogonalProjectionCopy(pointAbove));
          expectedSupportVector.normalize();
          Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointAbove);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
@@ -888,7 +888,7 @@ public class Face3DTest
          pointBelow.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointBelow);
 
          Vector3D expectedSupportVector = new Vector3D();
-         expectedSupportVector.sub(pointBelow, face3D.orthogonalProjection(pointBelow));
+         expectedSupportVector.sub(pointBelow, face3D.orthogonalProjectionCopy(pointBelow));
          expectedSupportVector.normalize();
          Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointBelow);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
@@ -911,7 +911,7 @@ public class Face3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Vector3D expectedSupportVector = new Vector3D();
-         expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
+         expectedSupportVector.sub(pointOutside, face3D.orthogonalProjectionCopy(pointOutside));
          //         expectedSupportVector.normalize();
          Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);
@@ -940,7 +940,7 @@ public class Face3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), face3D.getNormal(), pointOutside);
 
          Vector3D expectedSupportVector = new Vector3D();
-         expectedSupportVector.sub(pointOutside, face3D.orthogonalProjection(pointOutside));
+         expectedSupportVector.sub(pointOutside, face3D.orthogonalProjectionCopy(pointOutside));
          //         expectedSupportVector.normalize(); TODO So sometimes it is normalized sometimes not, not sure that is accepetable
          Vector3DBasics actualSupportVector = face3D.getSupportVectorDirectionTo(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSupportVector, actualSupportVector, EPSILON);

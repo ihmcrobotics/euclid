@@ -7,17 +7,17 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
-import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.shape.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simplex3D
+public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
 {
    /**
     * Returns the number of vertices that are in the polytope
-    * 
+    *
     * @return integer number of vertices in the polytope
     */
    default int getNumberOfVertices()
@@ -28,7 +28,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    /**
     * Returns the number of edge that are part of the polytope Note: number of edges is half the number
     * of half edges
-    * 
+    *
     * @return integer number of edges in the face
     */
    default int getNumberOfEdges()
@@ -46,7 +46,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    /**
     * Returns the number of face that are constitute the polytope
-    * 
+    *
     * @return integer number of faces
     */
    default int getNumberOfFaces()
@@ -56,7 +56,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    /**
     * Gets a specified face of polytope
-    * 
+    *
     * @param index the index of the polytope. Should be smaller than {@code getNumberOfFaces()}
     * @return
     */
@@ -67,7 +67,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    /**
     * Get a list of faces that constitute the polytope
-    * 
+    *
     * @return a list of read only references to the faces of the polytope
     */
    List<? extends Face3DReadOnly> getFaces();
@@ -80,7 +80,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    /**
     * Get a list of half edges that are part of this polytope. List will contain the half edge and its
     * twin Size of the list will be twice the number of edges returned by {@code getNumberOfEdges()}
-    * 
+    *
     * @return a list of read only references to the half edges that make up the faces of this polytope
     */
    List<? extends HalfEdge3DReadOnly> getHalfEdges();
@@ -92,7 +92,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    /**
     * Get a list of vertices that are part of this polytope. List does not contain any repetitions
-    * 
+    *
     * @return a list of read only reference to the vertices of the polytope
     */
    List<? extends Vertex3DReadOnly> getVertices();
@@ -105,11 +105,12 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    /**
     * Gets the tolerance used for building this convex polytope.
-    * 
+    *
     * @return the construction tolerance.
     */
    double getConstructionEpsilon();
 
+   @Override
    default boolean containsNaN()
    {
       for (int vertexIndex = 0; vertexIndex < getNumberOfVertices(); vertexIndex++)
@@ -120,6 +121,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
       return false;
    }
 
+   @Override
    default boolean isPointInside(Point3DReadOnly pointToCheck)
    {
       if (isEmpty())
@@ -138,6 +140,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
       return true;
    }
 
+   @Override
    default boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
    {
       if (isEmpty())
@@ -160,20 +163,42 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
       return getClosestFace(point).distance(point);
    }
 
-   default Point3DBasics orthogonalProjection(Point3DReadOnly pointToProject)
+   @Override
+   default double signedDistance(Point3DReadOnly point)
+   {
+      return getClosestFace(point).signedDistance(point);
+   }
+
+   @Override
+   default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
       if (isEmpty() || isPointInside(pointToProject))
          return null;
       else
-         return getClosestFace(pointToProject).orthogonalProjection(pointToProject);
+         return getClosestFace(pointToProject).orthogonalProjectionCopy(pointToProject);
    }
 
+   @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
       if (isEmpty() || isPointInside(pointToProject))
          return false;
       else
          return getClosestFace(pointToProject).orthogonalProjection(pointToProject, projectionToPack);
+   }
+
+   @Override
+   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   {
+      if (isEmpty())
+         return false;
+
+      Face3DReadOnly closestFace = getClosestFace(pointToCheck);
+      closestFace.orthogonalProjection(pointToCheck, closestPointOnSurfaceToPack);
+      closestFace.getSupportVectorDirectionTo(pointToCheck, normalAtClosestPointToPack);
+      normalAtClosestPointToPack.normalize();
+
+      return !EuclidGeometryTools.isPoint3DAbovePlane3D(pointToCheck, closestFace.getCentroid(), closestFace.getNormal());
    }
 
    default Face3DReadOnly getClosestFace(Point3DReadOnly point)
@@ -204,7 +229,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
    /**
     * Returns a reference to the polytope vertex that is further along the direction indicated by the
     * specified vector
-    * 
+    *
     * @param supportingVertexDirection the direction in which the search for said vertex is to be
     *           performed
     * @return a read only reference to the required vertex
@@ -276,7 +301,7 @@ public interface ConvexPolytope3DReadOnly extends SupportingVertexHolder, Simple
 
    /**
     * Check is the polytope is empty (contains no vertices / edges)
-    * 
+    *
     * @return {@code true} if the polytope has faces that contain edges, otherwise {@code false}
     */
    default boolean isEmpty()

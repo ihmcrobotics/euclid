@@ -60,7 +60,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
+   default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       return EuclidShapeTools.isPoint3DInsideTorus3D(query, getPosition(), getAxis(), getRadius(), getTubeRadius(), epsilon);
    }

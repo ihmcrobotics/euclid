@@ -90,7 +90,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
+   default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       double dX = query.getX() - getPose().getTranslationX();
       double dY = query.getY() - getPose().getTranslationY();

@@ -1312,7 +1312,7 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertNull(convexPolytope3D.orthogonalProjection(EuclidCoreRandomTools.nextPoint3D(random)));
+            assertNull(convexPolytope3D.orthogonalProjectionCopy(EuclidCoreRandomTools.nextPoint3D(random)));
             continue;
          }
 
@@ -1321,8 +1321,8 @@ public class ConvexPolytope3DTest
          Point3D pointOutside = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(), edge.getDestination());
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOutside);
 
-         Point3DBasics expectedProjection = face.orthogonalProjection(pointOutside);
-         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointOutside);
+         Point3DBasics expectedProjection = face.orthogonalProjectionCopy(pointOutside);
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjectionCopy(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
 
@@ -1332,7 +1332,7 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertNull(convexPolytope3D.orthogonalProjection(EuclidCoreRandomTools.nextPoint3D(random)));
+            assertNull(convexPolytope3D.orthogonalProjectionCopy(EuclidCoreRandomTools.nextPoint3D(random)));
             continue;
          }
 
@@ -1341,7 +1341,7 @@ public class ConvexPolytope3DTest
          Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
                                                                                edge.getDestination());
 
-         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointInside);
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjectionCopy(pointInside);
          assertNull(actualProjection);
       }
 
@@ -1351,7 +1351,7 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertNull(convexPolytope3D.orthogonalProjection(EuclidCoreRandomTools.nextPoint3D(random)));
+            assertNull(convexPolytope3D.orthogonalProjectionCopy(EuclidCoreRandomTools.nextPoint3D(random)));
             continue;
          }
 
@@ -1368,7 +1368,7 @@ public class ConvexPolytope3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOutside);
 
          Point3DBasics expectedProjection = closestEdge.orthogonalProjectionCopy(pointOutside);
-         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointOutside);
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjectionCopy(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
 
@@ -1378,7 +1378,7 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertNull(convexPolytope3D.orthogonalProjection(EuclidCoreRandomTools.nextPoint3D(random)));
+            assertNull(convexPolytope3D.orthogonalProjectionCopy(EuclidCoreRandomTools.nextPoint3D(random)));
             continue;
          }
 
@@ -1392,7 +1392,7 @@ public class ConvexPolytope3DTest
          pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, closestVertex);
 
          Point3DBasics expectedProjection = closestVertex;
-         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjection(pointOutside);
+         Point3DBasics actualProjection = convexPolytope3D.orthogonalProjectionCopy(pointOutside);
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
    }

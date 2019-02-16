@@ -53,7 +53,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
+   default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       return EuclidShapeTools.isPoint3DInsideSphere3D(query, getPosition(), getRadius(), epsilon);
    }

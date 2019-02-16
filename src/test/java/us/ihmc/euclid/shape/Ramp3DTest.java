@@ -54,7 +54,7 @@ public class Ramp3DTest
       // example use
       Ramp3D ramp3d = new Ramp3D(transform, 1.0, 1.0, 1.0);
       Point3D pointToCheck = new Point3D(2.0, 0.0, 4.0);
-      assertFalse(ramp3d.isInsideOrOnSurface(pointToCheck));
+      assertFalse(ramp3d.isPointInside(pointToCheck));
       assertEquals(Math.toRadians(45.0), ramp3d.getRampIncline(), 1e-7);
    }
 
@@ -111,8 +111,8 @@ public class Ramp3DTest
    public void testSimplePointOutside()
    {
       Ramp3D ramp3d = new Ramp3D(1.0, 1.0, 1.0);
-      assertFalse(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.0, 0.0, 1.0})));
-      assertTrue(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.5, 0.0, 0.1})));
+      assertFalse(ramp3d.isPointInside(new Point3D(new double[] {0.0, 0.0, 1.0})));
+      assertTrue(ramp3d.isPointInside(new Point3D(new double[] {0.5, 0.0, 0.1})));
    }
 
    @Test
@@ -127,12 +127,12 @@ public class Ramp3DTest
       Point3D p1 = new Point3D(new double[] {0.4, 0.2, 0.0});
       Point3D p2 = new Point3D(new double[] {0.4, -0.2, 0.0});
 
-      assertTrue(ramp3d.isInsideOrOnSurface(p1));
-      assertTrue(ramp3d.isInsideOrOnSurface(p2));
+      assertTrue(ramp3d.isPointInside(p1));
+      assertTrue(ramp3d.isPointInside(p2));
 
       ramp3d.applyTransform(transform);
-      assertTrue(ramp3d.isInsideOrOnSurface(p1));
-      assertFalse(ramp3d.isInsideOrOnSurface(p2));
+      assertTrue(ramp3d.isPointInside(p1));
+      assertFalse(ramp3d.isPointInside(p2));
    }
 
    @Test
@@ -140,15 +140,15 @@ public class Ramp3DTest
    {
       // With default epsilon
       Ramp3D ramp3d = new Ramp3D(new RigidBodyTransform(), 1.0, 1.0, 1.0);
-      assertFalse(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.0, 0.0, 1.0})));
-      assertFalse(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.0, 5.0, 1.0})));
-      assertFalse(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.0, -5.0, 1.0})));
-      assertTrue(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {0.5, 0.0, 0.2})));
-      assertTrue(ramp3d.isInsideOrOnSurface(new Point3D(new double[] {1.0, 0.3, 0.8})));
+      assertFalse(ramp3d.isPointInside(new Point3D(new double[] {0.0, 0.0, 1.0})));
+      assertFalse(ramp3d.isPointInside(new Point3D(new double[] {0.0, 5.0, 1.0})));
+      assertFalse(ramp3d.isPointInside(new Point3D(new double[] {0.0, -5.0, 1.0})));
+      assertTrue(ramp3d.isPointInside(new Point3D(new double[] {0.5, 0.0, 0.2})));
+      assertTrue(ramp3d.isPointInside(new Point3D(new double[] {1.0, 0.3, 0.8})));
 
       // With finite epsilon
-      assertTrue(ramp3d.isInsideEpsilon(new Point3D(new double[] {0.0, 0.0, 1.0}), 1.0 / Math.sqrt(2.0) + 0.001));
-      assertFalse(ramp3d.isInsideEpsilon(new Point3D(new double[] {0.0, 0.0, 1.0}), 1.0 / Math.sqrt(2.0) - 0.001));
+      assertTrue(ramp3d.isPointInside(new Point3D(new double[] {0.0, 0.0, 1.0}), 1.0 / Math.sqrt(2.0) + 0.001));
+      assertFalse(ramp3d.isPointInside(new Point3D(new double[] {0.0, 0.0, 1.0}), 1.0 / Math.sqrt(2.0) - 0.001));
 
       // With default epsilon and translation
       RigidBodyTransform transform = new RigidBodyTransform();
@@ -225,61 +225,61 @@ public class Ramp3DTest
 
          // z > 0 (in angled frame) means it's outside the ramp
          pointToTest.set(random.nextDouble(), random.nextDouble(), Math.abs(random.nextDouble()) + 2e-7);
-         assertFalse(ramp.isInsideOrOnSurface(transformFromAngledToWorldFrame(ramp, pointToTest)));
+         assertFalse(ramp.isPointInside(transformFromAngledToWorldFrame(ramp, pointToTest)));
 
          // negative x (in angled frame) means it's outside the ramp
          pointToTest.set(-Math.abs(random.nextDouble()) - 2e-7, random.nextDouble(), random.nextDouble());
-         assertFalse(ramp.isInsideOrOnSurface(transformFromAngledToWorldFrame(ramp, pointToTest)));
+         assertFalse(ramp.isPointInside(transformFromAngledToWorldFrame(ramp, pointToTest)));
 
          // x > ramp length (in angled frame) means it's outside the ramp
          pointToTest.set(Math.abs(random.nextDouble()) + rampLength + 2e-7, random.nextDouble(), random.nextDouble());
-         assertFalse(ramp.isInsideOrOnSurface(transformFromAngledToWorldFrame(ramp, pointToTest)));
+         assertFalse(ramp.isPointInside(transformFromAngledToWorldFrame(ramp, pointToTest)));
 
          // |y| > 0.5 * width (in both angled and ramp frames) means it's
          // outside the ramp
          pointToTest.set(random.nextDouble(), 0.5 * ramp.getSizeY() + Math.abs(random.nextDouble()) + 2e-7, random.nextDouble());
-         assertFalse(ramp.isInsideOrOnSurface(transformFromAngledToWorldFrame(ramp, pointToTest)));
+         assertFalse(ramp.isPointInside(transformFromAngledToWorldFrame(ramp, pointToTest)));
 
          pointToTest.set(random.nextDouble(), -0.5 * ramp.getSizeY() - Math.abs(random.nextDouble()) + 2e-7, random.nextDouble());
-         assertFalse(ramp.isInsideOrOnSurface(transformFromAngledToWorldFrame(ramp, pointToTest)));
+         assertFalse(ramp.isPointInside(transformFromAngledToWorldFrame(ramp, pointToTest)));
 
          // x < 0 (in ramp frame) means it's outside the ramp
          pointToTest.set(-random.nextDouble() - 2e-7, random.nextDouble(), random.nextDouble());
          ramp.transformToWorld(pointToTest);
-         assertFalse(ramp.isInsideOrOnSurface(pointToTest));
+         assertFalse(ramp.isPointInside(pointToTest));
 
          // x > length (in ramp frame) means it's outside the ramp
          pointToTest.set(Math.abs(random.nextDouble()) + ramp.getSizeX() + 2e-7, random.nextDouble(), random.nextDouble());
          ramp.transformToWorld(pointToTest);
-         assertFalse(ramp.isInsideOrOnSurface(pointToTest));
+         assertFalse(ramp.isPointInside(pointToTest));
 
          // z < 0 (in ramp frame) means it's outside the ramp
          pointToTest.set(random.nextDouble(), random.nextDouble(), -random.nextDouble() - 2e-7);
          ramp.transformToWorld(pointToTest);
-         assertFalse(ramp.isInsideOrOnSurface(pointToTest));
+         assertFalse(ramp.isPointInside(pointToTest));
 
          // z > height (in ramp frame) means it's outside the ramp
          pointToTest.set(random.nextDouble(), random.nextDouble(), Math.abs(random.nextDouble()) + ramp.getSizeZ() + 2e-7);
          ramp.transformToWorld(pointToTest);
-         assertFalse(ramp.isInsideOrOnSurface(pointToTest));
+         assertFalse(ramp.isPointInside(pointToTest));
 
          // points below the ramp surface (z < 0 in angled frame) are inside
          pointToTest.set(random.nextDouble() * rampLength, (random.nextDouble() - 0.5) * ramp.getSizeY(), random.nextDouble() * epsilon);
-         assertTrue(ramp.isInsideEpsilon(transformFromAngledToWorldFrame(ramp, pointToTest), epsilon));
+         assertTrue(ramp.isPointInside(transformFromAngledToWorldFrame(ramp, pointToTest), epsilon));
 
          // points barely inside the side (y < 0.5*width in ramp frame and x and z so that they fit into the triangular sides)
          pointInsideRampSide(pointToTest, ramp, epsilon);
-         assertTrue(ramp.isInsideEpsilon(pointToTest, epsilon));
+         assertTrue(ramp.isPointInside(pointToTest, epsilon));
 
          // points barely above the base (small positive z in ramp frame and x and z so that they fit into the rectangular sides) are inside
          pointToTest.set(random.nextDouble() * ramp.getSizeX(), 0.5 * random.nextDouble() * ramp.getSizeY(), random.nextDouble() * epsilon);
          ramp.transformToWorld(pointToTest);
-         assertTrue(ramp.isInsideEpsilon(pointToTest, epsilon));
+         assertTrue(ramp.isPointInside(pointToTest, epsilon));
 
          // points barely inside of the 'backboard', ie x = length
          pointToTest.set(random.nextDouble() * epsilon + ramp.getSizeX(), 0.5 * random.nextDouble() * ramp.getSizeY(), random.nextDouble() * ramp.getSizeZ());
          ramp.transformToWorld(pointToTest);
-         assertTrue(ramp.isInsideEpsilon(pointToTest, epsilon));
+         assertTrue(ramp.isPointInside(pointToTest, epsilon));
       }
    }
 
@@ -586,9 +586,9 @@ public class Ramp3DTest
          Point3DReadOnly supportingVertex = ramp.getSupportingVertex(supportDirection);
          Point3D supportingVertexTranslated = new Point3D();
          supportDirection.normalize();
-         assertTrue(ramp.isInsideOrOnSurface(supportingVertex));
+         assertTrue(ramp.isPointInside(supportingVertex));
          supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
-         assertFalse(ramp.isInsideOrOnSurface(supportingVertexTranslated));
+         assertFalse(ramp.isPointInside(supportingVertexTranslated));
          supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
          Vector3D expectedNormal = new Vector3D();
          expectedNormal.sub(supportingVertexTranslated, supportingVertex);

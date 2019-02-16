@@ -123,7 +123,7 @@ public class Box3DTest
       {
          Point3D pointToTest = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
 
-         assertTrue(box.isInsideOrOnSurface(pointToTest));
+         assertTrue(box.isPointInside(pointToTest));
       }
    }
 
@@ -166,7 +166,7 @@ public class Box3DTest
 
       for (Point3D vertex : vertices)
       {
-         assertTrue(box.isInsideEpsilon(vertex, 1e-14));
+         assertTrue(box.isPointInside(vertex, 1e-14));
       }
    }
 
@@ -198,12 +198,12 @@ public class Box3DTest
             offset.scale(EuclidCoreRandomTools.nextDouble(random, epsilon, maxScale));
             Point3D testPoint = new Point3D(vertex);
             testPoint.add(offset);
-            assertFalse(box.isInsideEpsilon(testPoint, epsilon));
+            assertFalse(box.isPointInside(testPoint, epsilon));
 
             Point3D projection = new Point3D(testPoint);
             box.orthogonalProjection(projection);
             EuclidCoreTestTools.assertTuple3DEquals(vertex, projection, epsilon);
-            assertTrue(box.isInsideEpsilon(projection, epsilon));
+            assertTrue(box.isPointInside(projection, epsilon));
          }
       }
    }
@@ -288,9 +288,9 @@ public class Box3DTest
             // check distance stuff:
             double epsilon = 1e-14;
             assertEquals(box.distance(closestPoint), 0.0, epsilon);
-            assertTrue(box.isInsideEpsilon(closestPoint, epsilon));
-            assertTrue(box.isInsideEpsilon(projectedPoint, epsilon));
-            if (box.isInsideOrOnSurface(point))
+            assertTrue(box.isPointInside(closestPoint, epsilon));
+            assertTrue(box.isPointInside(projectedPoint, epsilon));
+            if (box.isPointInside(point))
             {
                EuclidCoreTestTools.assertTuple3DEquals(point, projectedPoint, 1e-10);
             }
@@ -368,7 +368,7 @@ public class Box3DTest
             box.transformToLocal(pointTransformed);
             boxTransformed.transformToWorld(pointTransformed);
 
-            assertEquals(box.isInsideOrOnSurface(point), boxTransformed.isInsideOrOnSurface(pointTransformed));
+            assertEquals(box.isPointInside(point), boxTransformed.isPointInside(pointTransformed));
          }
       }
    }
@@ -678,9 +678,9 @@ public class Box3DTest
          Point3DReadOnly supportingVertex = box.getSupportingVertex(supportDirection);
          Point3D supportingVertexTranslated = new Point3D();
          supportDirection.normalize();
-         assertTrue(box.isInsideOrOnSurface(supportingVertex));
+         assertTrue(box.isPointInside(supportingVertex));
          supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
-         assertFalse(box.isInsideOrOnSurface(supportingVertexTranslated));
+         assertFalse(box.isPointInside(supportingVertexTranslated));
          supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
          Vector3D expectedNormal = new Vector3D();
          expectedNormal.sub(supportingVertexTranslated, supportingVertex);

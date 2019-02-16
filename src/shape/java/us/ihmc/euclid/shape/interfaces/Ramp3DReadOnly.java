@@ -115,7 +115,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
+   default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(query, queryInLocal);

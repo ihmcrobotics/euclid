@@ -85,7 +85,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default boolean isInsideEpsilon(Point3DReadOnly query, double epsilon)
+   default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       return EuclidShapeTools.isPoint3DInsideCylinder3D(query, getPosition(), getAxis(), getLength(), getRadius(), epsilon);
    }
