@@ -1,5 +1,6 @@
-package us.ihmc.euclid.shape.convexPolytope;
+package us.ihmc.euclid.shape.collision;
 
+import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class SimplexVertex3D extends Vertex3D

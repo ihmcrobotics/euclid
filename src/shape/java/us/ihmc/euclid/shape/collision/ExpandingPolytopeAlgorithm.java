@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.collision;
 
-import us.ihmc.euclid.shape.convexPolytope.SimplexPolytope3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
