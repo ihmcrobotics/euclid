@@ -1,8 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.Axis;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -56,25 +55,26 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return epsilon;
    }
 
-   public boolean doCollisionTest(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
+   public boolean doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
    {
       latestCollisionTestResult = false;
       isSeparationVectorUpToDate = false;
       areClosestPointsUpToDate = false;
 
-      if (convexPolytopeA.isEmpty() || convexPolytopeB.isEmpty())
+      supportDirection.set(Axis.Y);
+      Point3DReadOnly supportingVertexA = shapeA.getSupportingVertex(supportDirection);
+      Point3DReadOnly supportingVertexB = shapeB.getSupportingVertex(supportDirectionNegative);
+
+      if (supportingVertexA == null || supportingVertexB == null)
       {
          simplex = null;
          return false;
       }
 
       simplex = new SimplexPolytope3D();
-      supportDirection.set(Axis.Y);
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
-         Vertex3DReadOnly supportingVertexA = convexPolytopeA.getSupportingVertex(supportDirection);
-         Vertex3DReadOnly supportingVertexB = convexPolytopeB.getSupportingVertex(supportDirectionNegative);
          simplex.addVertex(supportingVertexA, supportingVertexB);
 
          // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
@@ -90,6 +90,9 @@ public class GilbertJohnsonKeerthiCollisionDetector
             return false;
 
          previousSupportDirection.set(supportDirection);
+
+         supportingVertexA = shapeA.getSupportingVertex(supportDirection);
+         supportingVertexB = shapeB.getSupportingVertex(supportDirectionNegative);
       }
       return false;
    }

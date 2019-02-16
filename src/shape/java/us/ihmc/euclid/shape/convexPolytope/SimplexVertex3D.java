@@ -1,36 +1,36 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class SimplexVertex3D extends Vertex3D
 {
-   Vertex3DReadOnly polytopeAVertexReference;
-   Vertex3DReadOnly polytopeBVertexReference;
+   private Point3DReadOnly shapeAVertexReference;
+   private Point3DReadOnly shapeBVertexReference;
 
    public SimplexVertex3D()
    {
       super();
    }
 
-   public SimplexVertex3D(Vertex3D vertexOnPolytopeA, Vertex3D vertexOnPolytopeB)
+   public SimplexVertex3D(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
-      set(vertexOnPolytopeA, vertexOnPolytopeB);
+      set(vertexOnShapeA, vertexOnShapeB);
    }
 
-   public void set(Vertex3DReadOnly vertexOnPolytopeA, Vertex3DReadOnly vertexOnPolytopeB)
+   public void set(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
-      this.polytopeAVertexReference = vertexOnPolytopeA;
-      this.polytopeBVertexReference = vertexOnPolytopeB;
-      sub(vertexOnPolytopeA, vertexOnPolytopeB);
+      this.shapeAVertexReference = vertexOnShapeA;
+      this.shapeBVertexReference = vertexOnShapeB;
+      sub(vertexOnShapeA, vertexOnShapeB);
    }
 
-   public Vertex3DReadOnly getVertexOnPolytopeA()
+   public Point3DReadOnly getVertexOnShapeA()
    {
-      return polytopeAVertexReference;
+      return shapeAVertexReference;
    }
 
-   public Vertex3DReadOnly getVertexOnPolytopeB()
+   public Point3DReadOnly getVertexOnShapeB()
    {
-      return polytopeBVertexReference;
+      return shapeBVertexReference;
    }
 }

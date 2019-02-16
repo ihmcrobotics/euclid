@@ -1,7 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -51,19 +50,13 @@ public class ExpandingPolytopeAlgorithm
       return epsilon;
    }
 
-   public void doCollisionTest(ConvexPolytope3DReadOnly convexPolytopeA, ConvexPolytope3DReadOnly convexPolytopeB)
+   public void doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
    {
       isCollisionVectorUpToDate = false;
       areCollisionPointsUpToDate = false;
 
-      if (convexPolytopeA.isEmpty() || convexPolytopeB.isEmpty())
-      {
-         this.simplex = null;
-         return;
-      }
-
       gjkCollisionDetector.setEpsilon(epsilon);
-      boolean areShapesColliding = gjkCollisionDetector.doCollisionTest(convexPolytopeA, convexPolytopeB);
+      boolean areShapesColliding = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
       simplex = gjkCollisionDetector.getSimplex();
       supportDirection.set(gjkCollisionDetector.getSupportDirection());
 
@@ -81,8 +74,8 @@ public class ExpandingPolytopeAlgorithm
          if (supportDirection.epsilonEquals(previousSupportDirection, epsilon))
             break;
 
-         Vertex3DReadOnly supportingVertexA = convexPolytopeA.getSupportingVertex(supportDirection);
-         Vertex3DReadOnly supportingVertexB = convexPolytopeB.getSupportingVertex(supportDirectionNegative);
+         Point3DReadOnly supportingVertexA = shapeA.getSupportingVertex(supportDirection);
+         Point3DReadOnly supportingVertexB = shapeB.getSupportingVertex(supportDirectionNegative);
          simplex.addVertex(supportingVertexA, supportingVertexB);
 
          previousSupportDirection.set(supportDirection);

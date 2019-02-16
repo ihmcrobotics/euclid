@@ -5,7 +5,6 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -23,10 +22,9 @@ public class SimplexPolytope3D implements Simplex3D
       super();
    }
 
-   public SimplexVertex3D addVertex(Vertex3DReadOnly vertexOnPolytopeA, Vertex3DReadOnly vertexOnPolytopeB)
+   public SimplexVertex3D addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
-      SimplexVertex3D newVertex = new SimplexVertex3D();
-      newVertex.set(vertexOnPolytopeA, vertexOnPolytopeB);
+      SimplexVertex3D newVertex = new SimplexVertex3D(vertexOnShapeA, vertexOnShapeB);
       polytope.addVertex(newVertex);
       return newVertex;
    }
@@ -94,27 +92,25 @@ public class SimplexPolytope3D implements Simplex3D
          {
             SimplexVertex3D vertex = (SimplexVertex3D) face.getEdge(i).getOrigin();
 
-            pointOnA.scaleAdd(coords[i], vertex.getVertexOnPolytopeA(), pointOnA);
-            pointOnB.scaleAdd(coords[i], vertex.getVertexOnPolytopeB(), pointOnB);
+            pointOnA.scaleAdd(coords[i], vertex.getVertexOnShapeA(), pointOnA);
+            pointOnB.scaleAdd(coords[i], vertex.getVertexOnShapeB(), pointOnB);
          }
       }
       else if (member instanceof HalfEdge3D)
       {
-         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) ((HalfEdge3D) member).getOrigin();
-         Vertex3DReadOnly polytopeAVertex1 = simplexVertex1.getVertexOnPolytopeA();
-         Vertex3DReadOnly polytopeBVertex1 = simplexVertex1.getVertexOnPolytopeB();
-         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) ((HalfEdge3D) member).getDestination();
-         Vertex3DReadOnly polytopeAVertex2 = simplexVertex2.getVertexOnPolytopeA();
-         Vertex3DReadOnly polytopeBVertex2 = simplexVertex2.getVertexOnPolytopeB();
+         HalfEdge3D edge = (HalfEdge3D) member;
+         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) edge.getOrigin();
+         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) edge.getDestination();
          double percentage = EuclidGeometryTools.percentageAlongLineSegment3D(point, simplexVertex1, simplexVertex2);
-         pointOnA.interpolate(polytopeAVertex1, polytopeAVertex2, percentage);
-         pointOnB.interpolate(polytopeBVertex1, polytopeBVertex2, percentage);
+
+         pointOnA.interpolate(simplexVertex1.getVertexOnShapeA(), simplexVertex2.getVertexOnShapeA(), percentage);
+         pointOnB.interpolate(simplexVertex1.getVertexOnShapeB(), simplexVertex2.getVertexOnShapeB(), percentage);
       }
       else if (member instanceof SimplexVertex3D)
       {
-         // TODO fix this nasty type casting
-         pointOnA.set(((SimplexVertex3D) member).getVertexOnPolytopeA());
-         pointOnB.set(((SimplexVertex3D) member).getVertexOnPolytopeB());
+         SimplexVertex3D vertex = (SimplexVertex3D) member;
+         pointOnA.set(vertex.getVertexOnShapeA());
+         pointOnB.set(vertex.getVertexOnShapeB());
       }
       else
       {
