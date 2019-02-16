@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
-import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.Triangle3D;
 import us.ihmc.euclid.tuple3D.Point3D;
 
 public class IcoSphereFactoryTest
