@@ -439,7 +439,7 @@ public class ConvexPolytope3DTest
             Vertex3D a = face.getVertex(0);
             Vertex3D b = face.getVertex(1);
             Vertex3D c = face.getVertex(2);
-            assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
+            assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometricallyEquals(a, b, c, EPSILON)));
          }
 
          for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
@@ -489,7 +489,7 @@ public class ConvexPolytope3DTest
             Vertex3D a = face.getVertex(0);
             Vertex3D b = face.getVertex(1);
             Vertex3D c = face.getVertex(2);
-            assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
+            assertTrue(icosahedron.getAllTriangles().stream().anyMatch(triangle -> triangle.geometricallyEquals(a, b, c, EPSILON)));
          }
 
          for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
@@ -545,7 +545,7 @@ public class ConvexPolytope3DTest
             Vertex3D a = face.getVertex(0);
             Vertex3D b = face.getVertex(1);
             Vertex3D c = face.getVertex(2);
-            assertTrue(icoSphere.getAllTriangles().stream().anyMatch(triangle -> triangle.geometryEquals(a, b, c, EPSILON)));
+            assertTrue(icoSphere.getAllTriangles().stream().anyMatch(triangle -> triangle.geometricallyEquals(a, b, c, EPSILON)));
          }
 
          for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())

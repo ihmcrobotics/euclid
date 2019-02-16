@@ -21,6 +21,7 @@ import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -614,6 +615,16 @@ public abstract class EuclidGeometryRandomTools
       }
 
       return convexPolygon2D;
+   }
+
+   public static Triangle3D nextTriangle3D(Random random)
+   {
+      return nextTriangle3D(random, 1.0);
+   }
+
+   public static Triangle3D nextTriangle3D(Random random, double minMax)
+   {
+      return new Triangle3D(nextPoint3D(random, minMax), nextPoint3D(random, minMax), nextPoint3D(random, minMax));
    }
 
    /**

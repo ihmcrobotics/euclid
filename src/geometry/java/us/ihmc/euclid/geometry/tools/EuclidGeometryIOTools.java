@@ -16,6 +16,7 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -202,10 +203,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment1DString(String format, double lineSegmentStart, double lineSegmentEnd)
@@ -263,10 +264,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment2DString(String format, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
@@ -323,10 +324,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment3DString(String format, Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
@@ -621,8 +622,7 @@ public class EuclidGeometryIOTools
     *
     * @param format the format to use for each number.
     * @param position the position part of the pose to get the {@code String} of. Not modified.
-    * @param orientation the orientation part of the pose to get the {@code String} of. Not
-    *           modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getPose2DString(String format, Point2DReadOnly position, double orientation)
@@ -680,8 +680,7 @@ public class EuclidGeometryIOTools
     *
     * @param format the format to use for each number.
     * @param position the position part of the pose to get the {@code String} of. Not modified.
-    * @param orientation the orientation part of the pose to get the {@code String} of. Not
-    *           modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getPose3DString(String format, Point3DReadOnly position, QuaternionReadOnly orientation)
@@ -708,8 +707,7 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to
-    * use.
+    * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
@@ -761,6 +759,24 @@ public class EuclidGeometryIOTools
       return string;
    }
 
+   public static String getTriangle3DString(Triangle3DReadOnly triangle3D)
+   {
+      return getTriangle3DString(DEFAULT_FORMAT, triangle3D);
+   }
+
+   public static String getTriangle3DString(String format, Triangle3DReadOnly triangle3D)
+   {
+      if (triangle3D == null)
+         return "null";
+      else
+         return getTriangle3DString(format, triangle3D.getA(), triangle3D.getB(), triangle3D.getC());
+   }
+
+   public static String getTriangle3DString(String format, Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c)
+   {
+      return "Triangle 3D: [" + getTuple3DString(format, a) + ", " + getTuple3DString(format, b) + ", " + getTuple3DString(format, c) + "]";
+   }
+
    /**
     * Gets a representative {@code String} of {@code vertex2DSupplier} as follows:
     *
@@ -780,8 +796,7 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code vertex2DSupplier} given a specific format to
-    * use.
+    * Gets a representative {@code String} of {@code vertex2DSupplier} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
@@ -830,8 +845,7 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code vertex3DSupplier} given a specific format to
-    * use.
+    * Gets a representative {@code String} of {@code vertex3DSupplier} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

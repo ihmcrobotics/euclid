@@ -1,11 +1,14 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.geometry.interfaces.Triangle3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
+import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
-public class Triangle3D
+public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
 {
    private final Point3D a = new Point3D();
    private final Point3D b = new Point3D();
@@ -20,97 +23,66 @@ public class Triangle3D
       set(a, b, c);
    }
 
-   public Triangle3D(Triangle3D other)
+   public Triangle3D(Triangle3DReadOnly other)
    {
       set(other);
    }
 
    public void set(Triangle3D other)
    {
-      set(other.getA(), other.getB(), other.getC());
+      Triangle3DBasics.super.set(other);
    }
 
-   public void set(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c)
-   {
-      this.a.set(a);
-      this.b.set(b);
-      this.c.set(c);
-   }
-
+   @Override
    public Point3D getA()
    {
       return a;
    }
 
+   @Override
    public Point3D getB()
    {
       return b;
    }
 
+   @Override
    public Point3D getC()
    {
       return c;
    }
 
-   public double getAB()
+   @Override
+   public boolean epsilonEquals(Triangle3D other, double epsilon)
    {
-      return a.distance(b);
+      return Triangle3DBasics.super.epsilonEquals(other, epsilon);
    }
 
-   public double getBC()
+   @Override
+   public boolean geometricallyEquals(Triangle3D other, double epsilon)
    {
-      return b.distance(c);
+      return Triangle3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
-   public double getCA()
+   @Override
+   public boolean equals(Object object)
    {
-      return c.distance(a);
-   }
-
-   public double getArea()
-   {
-      return EuclidGeometryTools.triangleArea(a, b, c);
-   }
-
-   public boolean isEquilateral(double epsilon)
-   {
-      double abSquare = a.distanceSquared(b);
-      double acSquare = a.distanceSquared(c);
-
-      if (!EuclidCoreTools.epsilonEquals(abSquare, acSquare, epsilon))
-         return false;
-
-      double bcSquare = b.distanceSquared(c);
-
-      return EuclidCoreTools.epsilonEquals(acSquare, bcSquare, epsilon);
-   }
-
-   public boolean geometryEquals(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c, double epsilon)
-   {
-      if (this.a.geometricallyEquals(a, epsilon))
-      {
-         if (this.b.geometricallyEquals(b, epsilon))
-            return this.c.geometricallyEquals(c, epsilon);
-         else
-            return this.b.geometricallyEquals(c, epsilon) && this.c.geometricallyEquals(b, epsilon);
-      }
-      else if (this.a.geometricallyEquals(b, epsilon))
-      {
-         if (this.b.geometricallyEquals(a, epsilon))
-            return this.c.geometricallyEquals(c, epsilon);
-         else
-            return this.b.geometricallyEquals(c, epsilon) && this.c.geometricallyEquals(a, epsilon);
-      }
-      else if (this.a.geometricallyEquals(c, epsilon))
-      {
-         if (this.b.geometricallyEquals(a, epsilon))
-            return this.c.geometricallyEquals(b, epsilon);
-         else
-            return this.b.geometricallyEquals(b, epsilon) && this.c.geometricallyEquals(a, epsilon);
-      }
+      if (object instanceof Triangle3DReadOnly)
+         return Triangle3DBasics.super.equals((Triangle3DReadOnly) object);
       else
-      {
          return false;
-      }
+   }
+
+   @Override
+   public int hashCode()
+   {
+      long hashCode = EuclidHashCodeTools.combineHashCode(getA().hashCode(), getB().hashCode());
+      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, getC().hashCode());
+      return EuclidHashCodeTools.toIntHashCode(hashCode);
+   }
+
+   @Override
+   public String toString()
+   {
+      return EuclidGeometryIOTools.getTriangle3DString(this);
    }
 }
