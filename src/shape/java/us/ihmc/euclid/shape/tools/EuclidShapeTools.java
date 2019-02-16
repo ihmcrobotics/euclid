@@ -1431,4 +1431,48 @@ public class EuclidShapeTools
          return distanceFromTubeCenter - torus3DTubeRadius;
       }
    }
+
+   public static double coneVolume(double height, double radius)
+   {
+      return Math.PI * radius * radius * height / 3.0;
+   }
+
+   public static double cylinderVolume(double length, double radius)
+   {
+      return Math.PI * radius * radius * length;
+   }
+
+   public static double icosahedronVolume(double edgeLength)
+   {
+      return edgeLength * edgeLength * edgeLength * (5.0 * (3.0 + Math.sqrt(5.0))) / 12.0;
+   }
+
+   public static double pyramidVolume(double height, double baseLength, double baseWidth)
+   {
+      return baseLength * baseWidth * height / 3.0;
+   }
+
+   public static double tetrahedronVolume(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c, Point3DReadOnly d)
+   {
+      // From: http://mathworld.wolfram.com/Tetrahedron.html
+      // V = 1/3 * | v1 . (v2 x v3)|
+      // where the vectors v1, v2, and v3 are defined as follows:
+      // v1 = b - a
+      // v2 = c - a
+      // v3 = d - a
+      double x = (c.getY() - a.getY()) * (d.getZ() - a.getZ()) - (c.getZ() - a.getZ()) * (d.getY() - a.getY());
+      double y = (c.getZ() - a.getZ()) * (d.getX() - a.getX()) - (c.getX() - a.getX()) * (d.getZ() - a.getZ());
+      double z = (c.getX() - a.getX()) * (d.getY() - a.getY()) - (c.getY() - a.getY()) * (d.getX() - a.getX());
+      return Math.abs(x * (b.getX() - a.getX()) + y * (b.getY() - a.getY()) + z * (b.getZ() - a.getZ())) / 6.0;
+   }
+
+   public static double icosahedronEdgeLength(double radius)
+   {
+      return radius / Math.sin(0.4 * Math.PI);
+   }
+
+   public static double icosahedronRadius(double edgeLength)
+   {
+      return edgeLength * Math.sin(0.4 * Math.PI);
+   }
 }

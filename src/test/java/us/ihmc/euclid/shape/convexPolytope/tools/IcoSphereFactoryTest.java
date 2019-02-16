@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
+import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 
 public class IcoSphereFactoryTest
@@ -34,7 +35,7 @@ public class IcoSphereFactoryTest
 
       for (Triangle3D triangle : icoSphere.getAllTriangles())
       {
-         double expectedEdgeLength = EuclidPolytopeTools.icosahedronEdgeLength(1.0);
+         double expectedEdgeLength = EuclidShapeTools.icosahedronEdgeLength(1.0);
          assertEquals(expectedEdgeLength, triangle.getAB());
          assertEquals(expectedEdgeLength, triangle.getBC());
          assertEquals(expectedEdgeLength, triangle.getCA());

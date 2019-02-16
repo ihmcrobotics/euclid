@@ -316,7 +316,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
 
    public void updateCentroidAndVolume()
    {
-      volume = EuclidPolytopeTools.computeConvexPolytope3DVolume(this, centroid);
+      volume = EuclidPolytopeConstructionTools.computeConvexPolytope3DVolume(this, centroid);
    }
 
    public void removeFaces(Collection<Face3D> facesToRemove)

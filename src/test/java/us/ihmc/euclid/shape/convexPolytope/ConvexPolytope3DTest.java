@@ -22,11 +22,11 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -1131,7 +1131,7 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(a, b, c, d));
          Point3D expectedCentroid = EuclidGeometryTools.averagePoint3Ds(Arrays.asList(a, b, c, d));
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
-         assertEquals(EuclidPolytopeTools.tetrahedronVolume(a, b, c, d), convexPolytope3D.getVolume(), EPSILON);
+         assertEquals(EuclidShapeTools.tetrahedronVolume(a, b, c, d), convexPolytope3D.getVolume(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1145,7 +1145,7 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cylinderVertices));
          Point3D expectedCentroid = new Point3D(transform.getTranslation());
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
-         double expectedVolume = EuclidPolytopeTools.cylinderVolume(length, radius);
+         double expectedVolume = EuclidShapeTools.cylinderVolume(length, radius);
          assertEquals(expectedVolume, convexPolytope3D.getVolume(), 3.0e-3 * expectedVolume);
       }
 
@@ -1160,7 +1160,7 @@ public class ConvexPolytope3DTest
 
          Point3D expectedCentroid = new Point3D(transform.getTranslation());
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
-         assertEquals(EuclidPolytopeTools.icosahedronVolume(EuclidPolytopeTools.icosahedronEdgeLength(radius)), convexPolytope3D.getVolume(), EPSILON);
+         assertEquals(EuclidShapeTools.icosahedronVolume(EuclidShapeTools.icosahedronEdgeLength(radius)), convexPolytope3D.getVolume(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1178,7 +1178,7 @@ public class ConvexPolytope3DTest
          Point3D expectedCentroid = new Point3D(0.0, 0.0, height / 4.0);
          expectedCentroid.applyTransform(transform);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
-         double expectedVolume = EuclidPolytopeTools.coneVolume(height, radius);
+         double expectedVolume = EuclidShapeTools.coneVolume(height, radius);
          assertEquals(expectedVolume, convexPolytope3D.getVolume(), 3.0e-3 * expectedVolume);
       }
 
@@ -1197,7 +1197,7 @@ public class ConvexPolytope3DTest
          Point3D expectedCentroid = new Point3D(0.0, 0.0, height / 4.0);
          expectedCentroid.applyTransform(transform);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid, convexPolytope3D.getCentroid(), EPSILON);
-         assertEquals(EuclidPolytopeTools.pyramidVolume(height, baseLength, baseWidth), convexPolytope3D.getVolume(), EPSILON);
+         assertEquals(EuclidShapeTools.pyramidVolume(height, baseLength, baseWidth), convexPolytope3D.getVolume(), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1213,8 +1213,8 @@ public class ConvexPolytope3DTest
 
          assertEquals(2 * numberOfDivisions + 1, convexPolytope3D.getNumberOfVertices());
 
-         double coneVolume = EuclidPolytopeTools.coneVolume(coneHeight, radius);
-         double cylinderVolume = EuclidPolytopeTools.cylinderVolume(cylinderLength, radius);
+         double coneVolume = EuclidShapeTools.coneVolume(coneHeight, radius);
+         double cylinderVolume = EuclidShapeTools.cylinderVolume(cylinderLength, radius);
          Point3D coneCentroid = new Point3D(0.0, 0.0, 0.5 * cylinderLength + coneHeight / 4.0);
          Point3D cylinderCentroid = new Point3D();
          double shapeVolume = coneVolume + cylinderVolume;

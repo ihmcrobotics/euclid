@@ -210,7 +210,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       if (vertices.size() > 3)
       {
-         EuclidPolytopeTools.updateFace3DNormal(vertices, null, normal);
+         EuclidPolytopeConstructionTools.updateFace3DNormal(vertices, null, normal);
       }
       else if (vertices.size() == 3)
       {
@@ -227,7 +227,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
    public void updateCentroidAndArea()
    {
-      area = EuclidPolytopeTools.computeConvexPolygon3DArea(vertices, normal, vertices.size(), true, centroid);
+      area = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(vertices, normal, vertices.size(), true, centroid);
    }
 
    public void refreshBoundingBox()
