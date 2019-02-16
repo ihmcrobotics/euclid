@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeIOTools.*;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
