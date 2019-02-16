@@ -22,11 +22,11 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTestTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -166,17 +166,17 @@ public class ConvexPolytope3DTest
             assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getOrigin(), EPSILON)));
             assertTrue(pointsAdded.stream().anyMatch(point -> point.epsilonEquals(edge.getDestination(), EPSILON)));
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwin().getDestination(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwin().getOrigin(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwin().getDestination(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwin().getOrigin(), EPSILON);
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPrevious().getDestination(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNext().getOrigin(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPrevious().getDestination(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNext().getOrigin(), EPSILON);
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPrevious().getTwin().getOrigin(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNext().getTwin().getDestination(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getPrevious().getTwin().getOrigin(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getNext().getTwin().getDestination(), EPSILON);
 
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwin().getNext().getOrigin(), EPSILON);
-            EuclidPolytopeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwin().getPrevious().getDestination(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getOrigin(), edge.getTwin().getNext().getOrigin(), EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(edge.getDestination(), edge.getTwin().getPrevious().getDestination(), EPSILON);
 
             assertTrue(edge.getTwin().getTwin() == edge);
             assertTrue(edge.getNext().getPrevious() == edge);
@@ -909,7 +909,7 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D expectedPolytope = new ConvexPolytope3D();
          icosahedron.getVertices().forEach(vertex -> expectedPolytope.addVertex(vertex));
 
-         EuclidPolytopeTestTools.assertConvexPolytope3DEquals(expectedPolytope, actualPolytope, EPSILON);
+         EuclidShapeTestTools.assertConvexPolytope3DEquals(expectedPolytope, actualPolytope, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
 
@@ -925,7 +925,7 @@ public class ConvexPolytope3DTest
 
          actualPolytope.applyInverseTransform(transform);
 
-         EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, actualPolytope, EPSILON);
+         EuclidShapeTestTools.assertConvexPolytope3DEquals(originalPolytope, actualPolytope, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getCentroid(), actualPolytope.getCentroid(), EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getBoundingBox(), actualPolytope.getBoundingBox(), EPSILON);
 
@@ -952,7 +952,7 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D copyPolytope = new ConvexPolytope3D();
          copyPolytope.set(originalPolytope);
 
-         EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, copyPolytope, EPSILON);
+         EuclidShapeTestTools.assertConvexPolytope3DEquals(originalPolytope, copyPolytope, EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getCentroid(), copyPolytope.getCentroid(), EPSILON);
          assertEquals(originalPolytope.getVolume(), copyPolytope.getVolume(), EPSILON);
@@ -992,11 +992,11 @@ public class ConvexPolytope3DTest
             assertTrue(originalTwin != copyTwin);
             assertTrue(originalFace != copyFace);
 
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalNext, copyNext, EPSILON);
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalPrevious, copyPrevious, EPSILON);
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalTwin, copyTwin, EPSILON);
-            EuclidPolytopeTestTools.assertFace3DEquals(originalFace, copyFace, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalNext, copyNext, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalPrevious, copyPrevious, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalTwin, copyTwin, EPSILON);
+            EuclidShapeTestTools.assertFace3DEquals(originalFace, copyFace, EPSILON);
          }
 
          for (int vertexIndex = 0; vertexIndex < originalPolytope.getNumberOfVertices(); vertexIndex++)
@@ -1005,14 +1005,14 @@ public class ConvexPolytope3DTest
             Vertex3D copyVertex = copyPolytope.getVertex(vertexIndex);
 
             assertTrue(originalVertex != copyVertex);
-            EuclidPolytopeTestTools.assertVertex3DEquals(originalVertex, copyVertex, EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(originalVertex, copyVertex, EPSILON);
 
             for (int edgeIndex = 0; edgeIndex < originalVertex.getNumberOfAssociatedEdges(); edgeIndex++)
             {
                HalfEdge3D originalEdge = originalVertex.getAssociatedEdge(edgeIndex);
                HalfEdge3D copyEdge = copyVertex.getAssociatedEdge(edgeIndex);
                assertTrue(originalEdge != copyEdge);
-               EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
+               EuclidShapeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
             }
          }
       }
@@ -1028,7 +1028,7 @@ public class ConvexPolytope3DTest
          ConvexPolytope3D originalPolytope = EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
          ConvexPolytope3D copyPolytope = new ConvexPolytope3D(originalPolytope);
 
-         EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, copyPolytope, EPSILON);
+         EuclidShapeTestTools.assertConvexPolytope3DEquals(originalPolytope, copyPolytope, EPSILON);
          EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getBoundingBox(), copyPolytope.getBoundingBox(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getCentroid(), copyPolytope.getCentroid(), EPSILON);
          assertEquals(originalPolytope.getVolume(), copyPolytope.getVolume(), EPSILON);
@@ -1068,11 +1068,11 @@ public class ConvexPolytope3DTest
             assertTrue(originalTwin != copyTwin);
             assertTrue(originalFace != copyFace);
 
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalNext, copyNext, EPSILON);
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalPrevious, copyPrevious, EPSILON);
-            EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalTwin, copyTwin, EPSILON);
-            EuclidPolytopeTestTools.assertFace3DEquals(originalFace, copyFace, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalNext, copyNext, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalPrevious, copyPrevious, EPSILON);
+            EuclidShapeTestTools.assertHalfEdge3DEquals(originalTwin, copyTwin, EPSILON);
+            EuclidShapeTestTools.assertFace3DEquals(originalFace, copyFace, EPSILON);
          }
 
          for (int vertexIndex = 0; vertexIndex < originalPolytope.getNumberOfVertices(); vertexIndex++)
@@ -1081,14 +1081,14 @@ public class ConvexPolytope3DTest
             Vertex3D copyVertex = copyPolytope.getVertex(vertexIndex);
 
             assertTrue(originalVertex != copyVertex);
-            EuclidPolytopeTestTools.assertVertex3DEquals(originalVertex, copyVertex, EPSILON);
+            EuclidShapeTestTools.assertVertex3DEquals(originalVertex, copyVertex, EPSILON);
 
             for (int edgeIndex = 0; edgeIndex < originalVertex.getNumberOfAssociatedEdges(); edgeIndex++)
             {
                HalfEdge3D originalEdge = originalVertex.getAssociatedEdge(edgeIndex);
                HalfEdge3D copyEdge = copyVertex.getAssociatedEdge(edgeIndex);
                assertTrue(originalEdge != copyEdge);
-               EuclidPolytopeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
+               EuclidShapeTestTools.assertHalfEdge3DEquals(originalEdge, copyEdge, EPSILON);
             }
          }
       }
