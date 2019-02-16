@@ -22,7 +22,6 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTestTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
@@ -949,7 +948,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ConvexPolytope3D originalPolytope = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+         ConvexPolytope3D originalPolytope = EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
          ConvexPolytope3D copyPolytope = new ConvexPolytope3D();
          copyPolytope.set(originalPolytope);
 
@@ -1026,7 +1025,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ConvexPolytope3D originalPolytope = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+         ConvexPolytope3D originalPolytope = EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
          ConvexPolytope3D copyPolytope = new ConvexPolytope3D(originalPolytope);
 
          EuclidPolytopeTestTools.assertConvexPolytope3DEquals(originalPolytope, copyPolytope, EPSILON);
@@ -1102,7 +1101,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Check that all the vertices are in the bounding box.
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
 
          convexPolytope3D.getVertices().forEach(vertex -> assertTrue(convexPolytope3D.getBoundingBox().isInsideInclusive(vertex)));
 
@@ -1235,7 +1234,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1308,7 +1307,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point directly above a face
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1328,7 +1327,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point directly below a face
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1347,7 +1346,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to an edge
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1374,7 +1373,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to a vertex
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1404,7 +1403,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point directly above a face
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1443,7 +1442,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point directly below a face
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1485,7 +1484,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to an edge
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
@@ -1540,7 +1539,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to a vertex
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {

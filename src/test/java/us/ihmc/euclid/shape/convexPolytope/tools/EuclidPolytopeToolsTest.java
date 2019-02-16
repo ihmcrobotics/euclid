@@ -134,7 +134,7 @@ public class EuclidPolytopeToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D expectedNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         List<Point3D> vertices = EuclidPolytopeRandomTools.nextCircleBasedConvexPolygon3D(random, 5.0, 1.0, 15, expectedNormal);
+         List<Point3D> vertices = EuclidShapeRandomTools.nextCircleBasedConvexPolygon3D(random, 5.0, 1.0, 15, expectedNormal);
 
          for (int j = 3; j <= vertices.size(); j++)
          {
@@ -193,7 +193,7 @@ public class EuclidPolytopeToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
          // First we build an observer that is outside the polytope
          // We pick a face at random and create a point that is above the face's support plane.
@@ -325,7 +325,7 @@ public class EuclidPolytopeToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
          double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
          // First we build an observer that is outside the polytope
          // We pick a face at random and create a point that is above the face's support plane.

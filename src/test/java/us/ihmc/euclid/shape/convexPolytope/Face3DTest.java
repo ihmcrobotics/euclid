@@ -20,7 +20,6 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -319,7 +318,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          int numberOfVertices = 10;
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 1.0, 1.0, numberOfVertices, Axis.Z);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 1.0, 1.0, numberOfVertices, Axis.Z);
          assertEquals(numberOfVertices, face.getNumberOfEdges());
 
          List<HalfEdge3D> edges = face.getEdges();
@@ -343,7 +342,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Asserts that the flip feature preserve a proper edge setup.
          int numberOfVertices = 10;
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 1.0, 1.0, numberOfVertices, Axis.Z);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 1.0, 1.0, numberOfVertices, Axis.Z);
          assertEquals(numberOfVertices, face.getNumberOfEdges());
 
          face.flip();
@@ -377,7 +376,7 @@ public class Face3DTest
       { // Now the vertices are shuffled so they're not nicely ordered.
          int numberOfVertices = 10;
          Vector3DReadOnly faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         List<Point3D> vertices = EuclidPolytopeRandomTools.nextCircleBasedConvexPolygon3D(random, 1.0, 1.0, numberOfVertices, faceNormal);
+         List<Point3D> vertices = EuclidShapeRandomTools.nextCircleBasedConvexPolygon3D(random, 1.0, 1.0, numberOfVertices, faceNormal);
          Collections.shuffle(vertices, random);
          Face3D face = new Face3D(faceNormal);
          vertices.forEach(vertex -> face.addVertex(new Vertex3D(vertex)));
@@ -412,7 +411,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         List<Point3D> points = EuclidPolytopeRandomTools.nextCircleBasedConvexPolygon3D(random, 5.0, 1.0, 6, faceNormal);
+         List<Point3D> points = EuclidShapeRandomTools.nextCircleBasedConvexPolygon3D(random, 5.0, 1.0, 6, faceNormal);
 
          Face3D face3D = new Face3D(Axis.Z);
          for (int j = 0; j < points.size(); j++)
@@ -433,7 +432,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3D expectedNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, expectedNormal);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, expectedNormal);
 
          assertTrue(face3D.getNumberOfEdges() >= 3);
 
@@ -453,7 +452,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with the face centroid
          Vector3D faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
 
          for (int edgeIndex = 0; edgeIndex < face3D.getNumberOfEdges(); edgeIndex++)
          {
@@ -464,7 +463,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with point inside the face
          Vector3D faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
          List<? extends Vertex3DReadOnly> vertices = face3D.getVertices();
          Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
 
@@ -477,7 +476,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with point on exterior/interior side of one edge
          Vector3D faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
 
          int edgeIndex = random.nextInt(face.getNumberOfEdges());
          HalfEdge3D edge = face.getEdge(edgeIndex);
@@ -518,7 +517,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with a point inside the face
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
          Point3D pointOnFace = EuclidShapeRandomTools.nextWeightedAverage(random, face.getVertices());
 
          assertEquals(0.0, face.distance(pointOnFace), EPSILON);
@@ -535,7 +534,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to an edge
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
          HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
 
@@ -555,7 +554,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to one of the face's vertices
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
          HalfEdge3D prevEdge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
          HalfEdge3D nextEdge = prevEdge.getNext();
@@ -589,7 +588,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with triangle to get edge-cases
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 3);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 3);
 
          Point3D pointOutside = new Point3D();
          {
@@ -631,7 +630,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test against naive method with point outside closest to an edge
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
          Point3D pointOutside = new Point3D();
          {
@@ -673,7 +672,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
          int expectedEdgeIndex = random.nextInt(face.getNumberOfEdges());
          HalfEdge3D expectedEdge = face.getEdge(expectedEdgeIndex);
@@ -697,7 +696,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test against naive method with point inside
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
          Point3D point = EuclidShapeRandomTools.nextWeightedAverage(random, face.getVertices());
 
@@ -765,7 +764,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Using the projection on a line to predict which vertex is the farthest.
-         Face3D face = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
+         Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
          Vector3D supportVector = EuclidCoreRandomTools.nextVector3D(random);
          LinePercentageComparator comparator = new LinePercentageComparator(new Line3D(new Point3D(), supportVector));
@@ -785,7 +784,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is directly above the face
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          Point3D pointAbove = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
@@ -798,7 +797,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is directly below the face
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          Point3D pointBelow = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
@@ -811,7 +810,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is outside closest to an edge
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          Point3D pointOnEdge = new Point3D();
@@ -832,7 +831,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is outside closest to a vertex
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          HalfEdge3D next = edge.getNext();
@@ -866,7 +865,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is directly above the face
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          Point3D pointAbove = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
@@ -881,7 +880,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is directly below the face
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          Point3D pointBelow = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
@@ -896,7 +895,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is outside closest to an edge
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          Point3D pointOnEdge = new Point3D();
@@ -919,7 +918,7 @@ public class Face3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {// Point to project is outside closest to a vertex
-         Face3D face3D = EuclidPolytopeRandomTools.nextCircleBasedFace3D(random);
+         Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
          HalfEdge3D next = edge.getNext();

@@ -15,7 +15,6 @@ import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -209,12 +208,12 @@ class ExpandingPolytopeAlgorithmTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron to have its top vertex closest to a face. 
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), null, null);
-            performAssertionsOnEPA(random, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
+            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
+            performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
          }
          else
          {
@@ -233,12 +232,12 @@ class ExpandingPolytopeAlgorithmTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron to have its top vertex closest to an edge. 
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), null, null);
-            performAssertionsOnEPA(random, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
+            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
+            performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
          }
          else
          {
@@ -276,12 +275,12 @@ class ExpandingPolytopeAlgorithmTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside closest to a vertex
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), null, null);
-            performAssertionsOnEPA(random, EuclidPolytopeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
+            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
+            performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
          }
          else
          {
@@ -308,18 +307,18 @@ class ExpandingPolytopeAlgorithmTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex lying inside the polytope 
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
          ConvexPolytope3D tetrahedron;
 
          if (convexPolytope3D.isEmpty())
          {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidPolytopeRandomTools.nextConvexPolytope3D(random), null, null);
+            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConvexPolytope3D(random), null, null);
          }
          else
          {
             if (convexPolytope3D.getNumberOfVertices() == 1)
             {
-               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
+               tetrahedron = EuclidShapeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
                assertTrue(tetrahedron.isPointInside(convexPolytope3D.getVertex(0)));
             }
             else if (convexPolytope3D.getNumberOfVertices() == 2)
@@ -347,8 +346,8 @@ class ExpandingPolytopeAlgorithmTest
             else if (convexPolytope3D.getNumberOfFaces() == 1)
             {
                Face3D face = convexPolytope3D.getFace(0);
-               Point3D pointOnFace = EuclidPolytopeRandomTools.nextPoint3DOnFace3D(random, face);
-               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
+               Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DOnFace3D(random, face);
+               tetrahedron = EuclidShapeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
             }
             else
             {
@@ -366,18 +365,18 @@ class ExpandingPolytopeAlgorithmTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex: 1- make it lie on an edge, 2- go inside slightly
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
          ConvexPolytope3D tetrahedron;
 
          if (convexPolytope3D.isEmpty())
          {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidPolytopeRandomTools.nextConvexPolytope3D(random), null, null);
+            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConvexPolytope3D(random), null, null);
          }
          else
          {
             if (convexPolytope3D.getNumberOfVertices() == 1)
             {
-               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
+               tetrahedron = EuclidShapeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
                assertTrue(tetrahedron.isPointInside(convexPolytope3D.getVertex(0)));
             }
             else if (convexPolytope3D.getNumberOfVertices() == 2)
@@ -405,8 +404,8 @@ class ExpandingPolytopeAlgorithmTest
             else if (convexPolytope3D.getNumberOfFaces() == 1)
             {
                Face3D face = convexPolytope3D.getFace(0);
-               Point3D pointOnFace = EuclidPolytopeRandomTools.nextPoint3DOnFace3D(random, face);
-               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
+               Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DOnFace3D(random, face);
+               tetrahedron = EuclidShapeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
             }
             else
             {
@@ -433,11 +432,11 @@ class ExpandingPolytopeAlgorithmTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Create the tetrahedron from its top vertex: 1- make it to be at a vertex, 2- go inside slightly
-         ConvexPolytope3D convexPolytope3D = EuclidPolytopeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
          if (convexPolytope3D.isEmpty())
          {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidPolytopeRandomTools.nextConvexPolytope3D(random), null, null);
+            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConvexPolytope3D(random), null, null);
          }
          else
          {
@@ -445,7 +444,7 @@ class ExpandingPolytopeAlgorithmTest
 
             if (convexPolytope3D.getNumberOfVertices() == 1)
             {
-               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
+               tetrahedron = EuclidShapeRandomTools.nextTetrahedronContainingPoint3D(random, convexPolytope3D.getVertex(0));
                assertTrue(tetrahedron.isPointInside(convexPolytope3D.getVertex(0)));
             }
             else if (convexPolytope3D.getNumberOfVertices() == 2)
@@ -473,8 +472,8 @@ class ExpandingPolytopeAlgorithmTest
             else if (convexPolytope3D.getNumberOfFaces() == 1)
             {
                Face3D face = convexPolytope3D.getFace(0);
-               Point3D pointOnFace = EuclidPolytopeRandomTools.nextPoint3DOnFace3D(random, face);
-               tetrahedron = EuclidPolytopeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
+               Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DOnFace3D(random, face);
+               tetrahedron = EuclidShapeRandomTools.nextTetrahedronContainingPoint3D(random, pointOnFace);
             }
             else
             {
