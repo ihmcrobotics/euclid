@@ -2,7 +2,7 @@ package us.ihmc.euclid.shape.tools;
 
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 
-import us.ihmc.euclid.shape.CollisionTestResult;
+import us.ihmc.euclid.shape.collision.CollisionTestResult;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;

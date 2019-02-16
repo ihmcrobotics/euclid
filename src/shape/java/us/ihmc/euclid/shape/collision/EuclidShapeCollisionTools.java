@@ -1,11 +1,10 @@
-package us.ihmc.euclid.shape.tools;
+package us.ihmc.euclid.shape.collision;
 
 import static us.ihmc.euclid.shape.tools.EuclidShapeTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 import static us.ihmc.euclid.tools.TupleTools.*;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.CollisionTestResult;
 import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;

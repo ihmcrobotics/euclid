@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape;
+package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;

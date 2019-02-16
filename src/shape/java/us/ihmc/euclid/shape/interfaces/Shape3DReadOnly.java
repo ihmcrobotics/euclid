@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.interfaces;
 
-import us.ihmc.euclid.shape.CollisionTestResult;
+import us.ihmc.euclid.shape.collision.CollisionTestResult;
+import us.ihmc.euclid.shape.collision.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;

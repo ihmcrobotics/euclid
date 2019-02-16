@@ -1,7 +1,7 @@
-package us.ihmc.euclid.shape.convexPolytope;
+package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.Axis;
-import us.ihmc.euclid.shape.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.shape.convexPolytope.SimplexPolytope3D;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
