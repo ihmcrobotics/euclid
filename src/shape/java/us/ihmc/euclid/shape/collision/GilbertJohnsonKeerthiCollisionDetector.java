@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.convexPolytope.SimplexPolytope3D;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -97,6 +98,32 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return false;
    }
 
+   public CollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   {
+      CollisionTestResult result = new CollisionTestResult();
+      doShapeCollisionTest(shapeA, shapeB, result);
+      return result;
+   }
+
+   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, CollisionTestResult result)
+   {
+      boolean areShapesColliding = doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
+      result.setToNaN();
+      result.setShapesAreColliding(areShapesColliding);
+      result.setShapeA(shapeA);
+      result.setShapeB(shapeB);
+
+      if (areShapesColliding)
+         return;
+
+      Vector3DReadOnly separationVector = getSeparationVector();
+      result.setDistance(separationVector.length());
+
+      updateClosestPoints();
+      result.getPointOnA().set(closestPointOnA);
+      result.getPointOnB().set(closestPointOnB);
+   }
+
    public int getIterations()
    {
       return iterations;
@@ -116,11 +143,16 @@ public class GilbertJohnsonKeerthiCollisionDetector
       {
          separationVector.set(supportDirection);
          separationVector.normalize();
-         separationVector.scale(simplex.getSmallestSimplexMemberReference(origin).distance(origin));
+         separationVector.scale(getDistance());
          isSeparationVectorUpToDate = true;
       }
 
       return separationVector;
+   }
+
+   public double getDistance()
+   {
+      return simplex.getSmallestSimplexMemberReference(origin).distance(origin);
    }
 
    public Point3DReadOnly getClosestPointOnA()

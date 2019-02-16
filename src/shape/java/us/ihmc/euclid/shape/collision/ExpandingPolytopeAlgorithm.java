@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.shape.convexPolytope.SimplexPolytope3D;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -16,6 +17,7 @@ public class ExpandingPolytopeAlgorithm
    private int iterations;
    private final int maxIterations = 1000;
    private double epsilon;
+   private boolean latestCollisionTestResult;
 
    private SimplexPolytope3D simplex;
    private final Vector3D supportDirection = new Vector3D();
@@ -56,11 +58,11 @@ public class ExpandingPolytopeAlgorithm
       areCollisionPointsUpToDate = false;
 
       gjkCollisionDetector.setEpsilon(epsilon);
-      boolean areShapesColliding = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
+      latestCollisionTestResult = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
       simplex = gjkCollisionDetector.getSimplex();
       supportDirection.set(gjkCollisionDetector.getSupportDirection());
 
-      if (!areShapesColliding)
+      if (!latestCollisionTestResult)
          return;
 
       previousSupportDirection.setToNaN();
@@ -82,6 +84,31 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
+   public CollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   {
+      CollisionTestResult result = new CollisionTestResult();
+      doShapeCollisionTest(shapeA, shapeB, result);
+      return result;
+   }
+
+   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, CollisionTestResult result)
+   {
+      doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
+      result.setToNaN();
+      result.setShapesAreColliding(latestCollisionTestResult);
+      result.setShapeA(shapeA);
+      result.setShapeB(shapeB);
+
+      if (latestCollisionTestResult)
+         result.setDepth(getDistance());
+      else
+         result.setDistance(getDistance());
+
+      updatePoints();
+      result.getPointOnA().set(pointOnA);
+      result.getPointOnB().set(pointOnB);
+   }
+
    public Vector3DReadOnly getCollisionVector()
    {
       if (simplex == null)
@@ -91,11 +118,16 @@ public class ExpandingPolytopeAlgorithm
       {
          collisionVector.set(supportDirection);
          collisionVector.normalize();
-         collisionVector.scale(simplex.getSmallestSimplexMemberReference(origin).distance(origin));
+         collisionVector.scale(getDistance());
          isCollisionVectorUpToDate = true;
       }
 
       return collisionVector;
+   }
+
+   public double getDistance()
+   {
+      return simplex.getSmallestSimplexMemberReference(origin).distance(origin);
    }
 
    public Point3DReadOnly getCollisionPointOnA()
