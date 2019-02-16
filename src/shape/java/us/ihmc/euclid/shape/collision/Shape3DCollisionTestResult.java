@@ -9,7 +9,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
-public class CollisionTestResult implements Clearable, EpsilonComparable<CollisionTestResult>, GeometricallyComparable<CollisionTestResult>
+public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<Shape3DCollisionTestResult>, GeometricallyComparable<Shape3DCollisionTestResult>
 {
    private boolean shapesAreColliding;
    private double depth;
@@ -24,7 +24,7 @@ public class CollisionTestResult implements Clearable, EpsilonComparable<Collisi
    private final Point3D pointOnB = new Point3D();
    private final Vector3D normalOnB = new Vector3D();
 
-   public CollisionTestResult()
+   public Shape3DCollisionTestResult()
    {
    }
 
@@ -154,7 +154,7 @@ public class CollisionTestResult implements Clearable, EpsilonComparable<Collisi
    }
 
    @Override
-   public boolean epsilonEquals(CollisionTestResult other, double epsilon)
+   public boolean epsilonEquals(Shape3DCollisionTestResult other, double epsilon)
    {
       if (areShapesColliding() != other.areShapesColliding())
          return false;
@@ -170,35 +170,10 @@ public class CollisionTestResult implements Clearable, EpsilonComparable<Collisi
             return false;
       }
 
-      if (!getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
+      if (getShapeA() != other.getShapeA())
          return false;
-      if (!getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
+      if (getShapeB() != other.getShapeB())
          return false;
-      if (!getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
-         return false;
-      if (!getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
-         return false;
-
-      return true;
-   }
-
-   @Override
-   public boolean geometricallyEquals(CollisionTestResult other, double epsilon)
-   {
-      if (areShapesColliding() != other.areShapesColliding())
-         return false;
-
-      if (areShapesColliding())
-      {
-         if (!EuclidCoreTools.epsilonEquals(getDepth(), other.getDepth(), epsilon))
-            return false;
-      }
-      else
-      {
-         if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
-            return false;
-      }
-
       if (!getPointOnA().geometricallyEquals(other.getPointOnA(), epsilon))
          return false;
       if (!getNormalOnA().geometricallyEquals(other.getNormalOnA(), epsilon))
@@ -207,6 +182,55 @@ public class CollisionTestResult implements Clearable, EpsilonComparable<Collisi
          return false;
       if (!getNormalOnB().geometricallyEquals(other.getNormalOnB(), epsilon))
          return false;
+
+      return true;
+   }
+
+   @Override
+   public boolean geometricallyEquals(Shape3DCollisionTestResult other, double epsilon)
+   {
+      if (areShapesColliding() != other.areShapesColliding())
+         return false;
+
+      if (areShapesColliding())
+      {
+         if (!EuclidCoreTools.epsilonEquals(getDepth(), other.getDepth(), epsilon))
+            return false;
+      }
+      else
+      {
+         if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
+            return false;
+      }
+
+      if (getShapeA() == other.getShapeA())
+      {
+         if (getShapeB() != other.getShapeB())
+            return false;
+         if (!getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
+            return false;
+         if (!getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
+            return false;
+         if (!getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
+            return false;
+         if (!getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
+            return false;
+      }
+      else
+      {
+         if (getShapeA() != other.getShapeB())
+            return false;
+         if (getShapeB() != other.getShapeA())
+            return false;
+         if (!getPointOnA().epsilonEquals(other.getPointOnB(), epsilon))
+            return false;
+         if (!getNormalOnA().epsilonEquals(other.getNormalOnB(), epsilon))
+            return false;
+         if (!getPointOnB().epsilonEquals(other.getPointOnA(), epsilon))
+            return false;
+         if (!getNormalOnB().epsilonEquals(other.getNormalOnA(), epsilon))
+            return false;
+      }
 
       return true;
    }

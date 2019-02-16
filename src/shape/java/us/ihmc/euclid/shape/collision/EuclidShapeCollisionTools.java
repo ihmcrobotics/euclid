@@ -26,14 +26,14 @@ public class EuclidShapeCollisionTools
    private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
    private static final double TORUS_SMALLEST_DISTANCE_TO_AXIS = 1.0e-12;
 
-   public static void doPointShape3DBox3DCollisionTest(PointShape3DReadOnly pointShape3D, Box3DReadOnly box3D, CollisionTestResult resultToPack)
+   public static void doPointShape3DBox3DCollisionTest(PointShape3DReadOnly pointShape3D, Box3DReadOnly box3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DBox3DCollisionTest(pointShape3D, box3D, resultToPack);
       resultToPack.setShapeA(pointShape3D);
       resultToPack.setShapeB(box3D);
    }
 
-   public static void doSphere3DBox3DCollisionTest(Sphere3DReadOnly sphere3D, Box3DReadOnly box3D, CollisionTestResult resultToPack)
+   public static void doSphere3DBox3DCollisionTest(Sphere3DReadOnly sphere3D, Box3DReadOnly box3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DBox3DCollisionTest(sphere3D.getPosition(), box3D, resultToPack);
       resultToPack.setShapeA(sphere3D);
@@ -54,7 +54,7 @@ public class EuclidShapeCollisionTools
       resultToPack.setDistance(Double.NaN);
    }
 
-   private static void doPoint3DBox3DCollisionTest(Point3DReadOnly point3D, Box3DReadOnly box3D, CollisionTestResult resultToPack)
+   private static void doPoint3DBox3DCollisionTest(Point3DReadOnly point3D, Box3DReadOnly box3D, Shape3DCollisionTestResult resultToPack)
    {
       resultToPack.setToNaN();
 
@@ -145,14 +145,14 @@ public class EuclidShapeCollisionTools
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
    }
 
-   public static void doPointShape3DCapsule3DCollisionTest(PointShape3DReadOnly pointShape3D, Capsule3DReadOnly capsule3D, CollisionTestResult resultToPack)
+   public static void doPointShape3DCapsule3DCollisionTest(PointShape3DReadOnly pointShape3D, Capsule3DReadOnly capsule3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DCapsule3DCollisionTest(pointShape3D, capsule3D, resultToPack);
       resultToPack.setShapeA(pointShape3D);
       resultToPack.setShapeB(capsule3D);
    }
 
-   public static void doCapsule3DCapsule3DCollisionTest(Capsule3DReadOnly capsule3DA, Capsule3DReadOnly capsule3DB, CollisionTestResult resultToPack)
+   public static void doCapsule3DCapsule3DCollisionTest(Capsule3DReadOnly capsule3DA, Capsule3DReadOnly capsule3DB, Shape3DCollisionTestResult resultToPack)
    {
       Point3D pointOnA = resultToPack.getPointOnA();
       Point3D pointOnB = resultToPack.getPointOnB();
@@ -186,7 +186,7 @@ public class EuclidShapeCollisionTools
       resultToPack.setShapeB(capsule3DB);
    }
 
-   public static void doSphere3DBox3DCollisionTest(Sphere3DReadOnly sphere3D, Capsule3DReadOnly capsule3D, CollisionTestResult resultToPack)
+   public static void doSphere3DBox3DCollisionTest(Sphere3DReadOnly sphere3D, Capsule3DReadOnly capsule3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DCapsule3DCollisionTest(sphere3D.getPosition(), capsule3D, resultToPack);
       resultToPack.setShapeA(sphere3D);
@@ -207,7 +207,7 @@ public class EuclidShapeCollisionTools
       resultToPack.setDistance(Double.NaN);
    }
 
-   private static void doPoint3DCapsule3DCollisionTest(Point3DReadOnly point3D, Capsule3DReadOnly capsule3D, CollisionTestResult resultToPack)
+   private static void doPoint3DCapsule3DCollisionTest(Point3DReadOnly point3D, Capsule3DReadOnly capsule3D, Shape3DCollisionTestResult resultToPack)
    {
       Point3DReadOnly capsule3DPosition = capsule3D.getPosition();
       Vector3DReadOnly capsule3DAxis = capsule3D.getAxis();
@@ -277,14 +277,14 @@ public class EuclidShapeCollisionTools
       }
    }
 
-   public static void doPointShape3DCylinder3DCollisionTest(PointShape3DReadOnly pointShape3D, Cylinder3DReadOnly cylinder3D, CollisionTestResult resultToPack)
+   public static void doPointShape3DCylinder3DCollisionTest(PointShape3DReadOnly pointShape3D, Cylinder3DReadOnly cylinder3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DCylinder3DCollisionTest(pointShape3D, cylinder3D, resultToPack);
       resultToPack.setShapeA(pointShape3D);
       resultToPack.setShapeB(cylinder3D);
    }
 
-   public static void doSphere3DCylinder3DCollisionTest(Sphere3DReadOnly sphere3D, Cylinder3DReadOnly cylinder3D, CollisionTestResult resultToPack)
+   public static void doSphere3DCylinder3DCollisionTest(Sphere3DReadOnly sphere3D, Cylinder3DReadOnly cylinder3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DCylinder3DCollisionTest(sphere3D.getPosition(), cylinder3D, resultToPack);
       resultToPack.setShapeA(sphere3D);
@@ -305,7 +305,7 @@ public class EuclidShapeCollisionTools
       resultToPack.setDistance(Double.NaN);
    }
 
-   private static void doPoint3DCylinder3DCollisionTest(Point3DReadOnly point3D, Cylinder3DReadOnly cylinder3D, CollisionTestResult resultToPack)
+   private static void doPoint3DCylinder3DCollisionTest(Point3DReadOnly point3D, Cylinder3DReadOnly cylinder3D, Shape3DCollisionTestResult resultToPack)
    {
       Point3DReadOnly cylinder3DPosition = cylinder3D.getPosition();
       Vector3DReadOnly cylinder3DAxis = cylinder3D.getAxis();
@@ -450,14 +450,14 @@ public class EuclidShapeCollisionTools
    }
 
    public static void doPointShape3DEllipsoid3DCollisionTest(PointShape3DReadOnly pointShape3D, Ellipsoid3DReadOnly ellipsoid3D,
-                                                             CollisionTestResult resultToPack)
+                                                             Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, resultToPack);
       resultToPack.setShapeA(pointShape3D);
       resultToPack.setShapeB(ellipsoid3D);
    }
 
-   public static void doSphere3DEllipsoid3DCollisionTest(Sphere3DReadOnly sphere3D, Ellipsoid3DReadOnly ellipsoid3D, CollisionTestResult resultToPack)
+   public static void doSphere3DEllipsoid3DCollisionTest(Sphere3DReadOnly sphere3D, Ellipsoid3DReadOnly ellipsoid3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DEllipsoid3DCollisionTest(sphere3D.getPosition(), ellipsoid3D, resultToPack);
       resultToPack.setShapeA(sphere3D);
@@ -478,7 +478,7 @@ public class EuclidShapeCollisionTools
       resultToPack.setDistance(Double.NaN);
    }
 
-   private static void doPoint3DEllipsoid3DCollisionTest(Point3DReadOnly point3D, Ellipsoid3DReadOnly ellipsoid3D, CollisionTestResult resultToPack)
+   private static void doPoint3DEllipsoid3DCollisionTest(Point3DReadOnly point3D, Ellipsoid3DReadOnly ellipsoid3D, Shape3DCollisionTestResult resultToPack)
    {
       Shape3DPoseReadOnly ellipsoid3DPose = ellipsoid3D.getPose();
       Vector3DReadOnly ellipsoid3DRadii = ellipsoid3D.getRadii();
@@ -540,14 +540,14 @@ public class EuclidShapeCollisionTools
       resultToPack.getNormalOnA().setAndNegate(normalOnB);
    }
 
-   public static void doPointShape3DRamp3DCollisionTest(PointShape3DReadOnly pointShape3D, Ramp3DReadOnly ramp3D, CollisionTestResult resultToPack)
+   public static void doPointShape3DRamp3DCollisionTest(PointShape3DReadOnly pointShape3D, Ramp3DReadOnly ramp3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DRamp3DCollisionTest(pointShape3D, ramp3D, resultToPack);
       resultToPack.setShapeA(pointShape3D);
       resultToPack.setShapeB(ramp3D);
    }
 
-   public static void doSphere3DRamp3DCollisionTest(Sphere3DReadOnly sphere3D, Ramp3DReadOnly ramp3D, CollisionTestResult resultToPack)
+   public static void doSphere3DRamp3DCollisionTest(Sphere3DReadOnly sphere3D, Ramp3DReadOnly ramp3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DRamp3DCollisionTest(sphere3D.getPosition(), ramp3D, resultToPack);
       resultToPack.setShapeA(sphere3D);
@@ -568,7 +568,7 @@ public class EuclidShapeCollisionTools
       resultToPack.setDistance(Double.NaN);
    }
 
-   private static void doPoint3DRamp3DCollisionTest(Point3DReadOnly query, Ramp3DReadOnly ramp3D, CollisionTestResult resultToPack)
+   private static void doPoint3DRamp3DCollisionTest(Point3DReadOnly query, Ramp3DReadOnly ramp3D, Shape3DCollisionTestResult resultToPack)
    {
       resultToPack.setToNaN();
 
@@ -762,14 +762,14 @@ public class EuclidShapeCollisionTools
       resultToPack.getNormalOnA().setAndNegate(normalOnB);
    }
 
-   public static void doPointShape3DSphere3DCollisionTest(PointShape3DReadOnly pointShape3D, Sphere3DReadOnly sphere3D, CollisionTestResult resultToPack)
+   public static void doPointShape3DSphere3DCollisionTest(PointShape3DReadOnly pointShape3D, Sphere3DReadOnly sphere3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DSphere3DCollisionTest(pointShape3D, sphere3D.getPosition(), sphere3D.getRadius(), resultToPack);
       resultToPack.setShapeA(pointShape3D);
       resultToPack.setShapeB(sphere3D);
    }
 
-   public static void doSphere3DSphere3DCollisionTest(Sphere3DReadOnly sphere3DA, Sphere3DReadOnly sphere3DB, CollisionTestResult resultToPack)
+   public static void doSphere3DSphere3DCollisionTest(Sphere3DReadOnly sphere3DA, Sphere3DReadOnly sphere3DB, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DSphere3DCollisionTest(sphere3DA.getPosition(), sphere3DB.getPosition(), sphere3DB.getRadius(), resultToPack);
       resultToPack.setShapeA(sphere3DA);
@@ -791,13 +791,13 @@ public class EuclidShapeCollisionTools
    }
 
    private static void doPoint3DSphere3DCollisionTest(Point3DReadOnly point3D, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
-                                                      CollisionTestResult resultToPack)
+                                                      Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DSphere3DCollisionTest(point3D, sphere3DRadius, sphere3DPosition.getX(), sphere3DPosition.getY(), sphere3DPosition.getZ(), resultToPack);
    }
 
    private static void doPoint3DSphere3DCollisionTest(Point3DReadOnly point3D, double sphere3DRadius, double sphere3DPositionX, double sphere3DPositionY,
-                                                      double sphere3DPositionZ, CollisionTestResult resultToPack)
+                                                      double sphere3DPositionZ, Shape3DCollisionTestResult resultToPack)
    {
       resultToPack.setToNaN();
 
@@ -838,14 +838,14 @@ public class EuclidShapeCollisionTools
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
    }
 
-   public static void doPointShape3DTorus3DCollisionTest(PointShape3DReadOnly pointShape3D, Torus3DReadOnly torus3D, CollisionTestResult resultToPack)
+   public static void doPointShape3DTorus3DCollisionTest(PointShape3DReadOnly pointShape3D, Torus3DReadOnly torus3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DTorus3DCollisionTest(pointShape3D, torus3D, resultToPack);
       resultToPack.setShapeA(pointShape3D);
       resultToPack.setShapeB(torus3D);
    }
 
-   public static void doSphere3DTorus3DCollisionTest(Sphere3DReadOnly sphere3D, Torus3DReadOnly torus3D, CollisionTestResult resultToPack)
+   public static void doSphere3DTorus3DCollisionTest(Sphere3DReadOnly sphere3D, Torus3DReadOnly torus3D, Shape3DCollisionTestResult resultToPack)
    {
       doPoint3DTorus3DCollisionTest(sphere3D.getPosition(), torus3D, resultToPack);
       resultToPack.setShapeA(sphere3D);
@@ -866,7 +866,7 @@ public class EuclidShapeCollisionTools
       resultToPack.setDistance(Double.NaN);
    }
 
-   private static void doPoint3DTorus3DCollisionTest(Point3DReadOnly point3D, Torus3DReadOnly torus3D, CollisionTestResult resultToPack)
+   private static void doPoint3DTorus3DCollisionTest(Point3DReadOnly point3D, Torus3DReadOnly torus3D, Shape3DCollisionTestResult resultToPack)
    {
       double torus3DRadius = torus3D.getRadius();
       double torus3DTubeRadius = torus3D.getTubeRadius();

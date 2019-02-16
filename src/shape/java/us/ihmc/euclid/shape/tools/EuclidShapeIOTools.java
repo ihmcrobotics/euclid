@@ -4,7 +4,7 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.shape.collision.CollisionTestResult;
+import us.ihmc.euclid.shape.collision.Shape3DCollisionTestResult;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
@@ -243,12 +243,12 @@ public class EuclidShapeIOTools
       return "Shape 3D pose: [position: " + getTuple3DString(format, position) + ", " + getStringAsYawPitchRoll(format, orientation) + "]";
    }
 
-   public static String getCollisionTestResultString(CollisionTestResult collisionTestResult)
+   public static String getCollisionTestResultString(Shape3DCollisionTestResult collisionTestResult)
    {
       return getCollisionTestResultString(DEFAULT_FORMAT, collisionTestResult);
    }
 
-   public static String getCollisionTestResultString(String format, CollisionTestResult collisionTestResult)
+   public static String getCollisionTestResultString(String format, Shape3DCollisionTestResult collisionTestResult)
    {
       if (collisionTestResult == null)
          return "null";

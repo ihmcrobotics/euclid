@@ -84,14 +84,14 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
-   public CollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   public Shape3DCollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
-      CollisionTestResult result = new CollisionTestResult();
+      Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
       doShapeCollisionTest(shapeA, shapeB, result);
       return result;
    }
 
-   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, CollisionTestResult result)
+   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, Shape3DCollisionTestResult result)
    {
       doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
       result.setToNaN();

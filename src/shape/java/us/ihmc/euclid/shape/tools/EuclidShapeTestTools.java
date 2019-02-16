@@ -2,7 +2,7 @@ package us.ihmc.euclid.shape.tools;
 
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 
-import us.ihmc.euclid.shape.collision.CollisionTestResult;
+import us.ihmc.euclid.shape.collision.Shape3DCollisionTestResult;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
@@ -374,17 +374,17 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
-   public static void assertCollisionTestResultEquals(CollisionTestResult expected, CollisionTestResult actual, double epsilon)
+   public static void assertCollisionTestResultEquals(Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, double epsilon)
    {
       assertCollisionTestResultEquals(null, expected, actual, epsilon);
    }
 
-   public static void assertCollisionTestResultEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, double epsilon)
+   public static void assertCollisionTestResultEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, double epsilon)
    {
       assertCollisionTestResultEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
-   public static void assertCollisionTestResultEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, double epsilon,
+   public static void assertCollisionTestResultEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, double epsilon,
                                                       String format)
    {
       if (expected == null && actual == null)
@@ -416,18 +416,18 @@ public class EuclidShapeTestTools
       }
    }
 
-   public static void assertCollisionTestResultGeometricallyEquals(CollisionTestResult expected, CollisionTestResult actual, double epsilon)
+   public static void assertCollisionTestResultGeometricallyEquals(Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, double epsilon)
    {
       assertCollisionTestResultGeometricallyEquals(null, expected, actual, epsilon);
    }
 
-   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual,
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual,
                                                                    double epsilon)
    {
       assertCollisionTestResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
-   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual,
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual,
                                                                    double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -496,12 +496,12 @@ public class EuclidShapeTestTools
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, String format)
    {
       throwNotEqualAssertionError(messagePrefix, expected, actual, format, null);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, CollisionTestResult expected, CollisionTestResult actual, String format,
+   private static void throwNotEqualAssertionError(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, String format,
                                                    String differenceAsString)
    {
       String expectedAsString = getCollisionTestResultString(format, expected);
