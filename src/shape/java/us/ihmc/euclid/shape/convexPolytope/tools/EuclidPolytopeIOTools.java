@@ -3,14 +3,13 @@ package us.ihmc.euclid.shape.convexPolytope.tools;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.function.Function;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -103,54 +102,17 @@ public class EuclidPolytopeIOTools
 
    private static String getVertex3DCollectionString(String format, String linePrefix, Collection<? extends Vertex3DReadOnly> vertices)
    {
-      return getCollectionString(linePrefix, null, linePrefix, format, vertices, vertex -> getTuple3DString(format, vertex));
+      return EuclidCoreIOTools.getCollectionString(linePrefix, null, linePrefix, vertices, vertex -> getTuple3DString(format, vertex));
    }
 
    private static String getHalfEdge3DCollectionString(String format, String linePrefix, Collection<? extends HalfEdge3DReadOnly> halfEdges)
    {
-      return getCollectionString(linePrefix, null, linePrefix, format, halfEdges, halfEdge -> getLineSegment3DShortString(format, halfEdge));
+      return EuclidCoreIOTools.getCollectionString(linePrefix, null, linePrefix, halfEdges, halfEdge -> getLineSegment3DShortString(format, halfEdge));
    }
 
    private static String getFace3DCollectionString(String format, String linePrefix, Collection<? extends Face3DReadOnly> faces)
    {
-      return getCollectionString(linePrefix, null, linePrefix, format, faces, face -> getFace3DShortString(format, face));
-   }
-
-   public static <T> String getCollectionString(String prefix, String suffix, String separator, Collection<T> collection,
-                                                Function<T, String> elementToStringFunction)
-   {
-      return getCollectionString(prefix, suffix, separator, DEFAULT_FORMAT, collection, elementToStringFunction);
-   }
-
-   public static <T> String getCollectionString(String prefix, String suffix, String separator, String format, Collection<T> collection,
-                                                Function<T, String> elementToStringFunction)
-   {
-      if (collection == null)
-         return "null";
-
-      String ret = getCollectionString(separator, format, collection, elementToStringFunction);
-
-      if (prefix != null)
-         ret = prefix + ret;
-
-      if (suffix != null)
-         ret += suffix;
-
-      return ret;
-   }
-
-   public static <T> String getCollectionString(String separator, String format, Collection<T> collection, Function<T, String> elementToStringFunction)
-   {
-      if (collection == null)
-         return "null";
-      if (collection.isEmpty())
-         return "";
-
-      Iterator<T> iterator = collection.iterator();
-      String ret = elementToStringFunction.apply(iterator.next());
-      while (iterator.hasNext())
-         ret += separator + elementToStringFunction.apply(iterator.next());
-      return ret;
+      return EuclidCoreIOTools.getCollectionString(linePrefix, null, linePrefix, faces, face -> getFace3DShortString(format, face));
    }
 
    private static String getLineSegment3DShortString(String format, LineSegment3DReadOnly edgeSupportingSegment)
