@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
-import us.ihmc.euclid.shape.collision.Shape3DCollisionTestResult;
 import us.ihmc.euclid.shape.collision.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -32,18 +31,6 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     *         otherwise.
     */
    boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
-
-   default Shape3DCollisionTestResult doCollisionTest(Shape3DReadOnly otherShape)
-   {
-      Shape3DCollisionTestResult collisionTestResult = new Shape3DCollisionTestResult();
-      doCollisionTest(otherShape, collisionTestResult);
-      return collisionTestResult;
-   }
-
-   default void doCollisionTest(Shape3DReadOnly otherShape, Shape3DCollisionTestResult result)
-   {
-      throw new UnsupportedOperationException("This shape does not support shape-to-shape collision: " + getClass().getSimpleName());
-   }
 
    /**
     * Calculates the minimum distance between the point and this shape.
