@@ -1,12 +1,12 @@
-package us.ihmc.euclid.shape;
+package us.ihmc.euclid.shape.primitives;
 
 import static us.ihmc.euclid.tools.EuclidCoreFactories.*;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.shape.interfaces.Shape3DPoseBasics;
-import us.ihmc.euclid.shape.interfaces.Shape3DPoseReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;

@@ -3,14 +3,14 @@ package us.ihmc.euclid.shape.tools;
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 
 import us.ihmc.euclid.shape.collision.CollisionTestResult;
-import us.ihmc.euclid.shape.interfaces.Box3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.Ellipsoid3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.PointShape3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.Ramp3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.Sphere3DReadOnly;
-import us.ihmc.euclid.shape.interfaces.Torus3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 

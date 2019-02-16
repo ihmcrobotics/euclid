@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.interfaces;
+package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;

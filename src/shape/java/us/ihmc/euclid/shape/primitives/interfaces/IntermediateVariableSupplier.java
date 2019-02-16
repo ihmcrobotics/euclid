@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.interfaces;
+package us.ihmc.euclid.shape.primitives.interfaces;
 
 import java.util.ArrayDeque;
 

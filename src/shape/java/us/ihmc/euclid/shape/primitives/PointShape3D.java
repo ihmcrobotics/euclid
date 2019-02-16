@@ -1,8 +1,8 @@
-package us.ihmc.euclid.shape;
+package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.shape.interfaces.PointShape3DBasics;
-import us.ihmc.euclid.shape.interfaces.PointShape3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;

@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 
-import us.ihmc.euclid.shape.interfaces.Shape3DBasics;
-import us.ihmc.euclid.shape.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;

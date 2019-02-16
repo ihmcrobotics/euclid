@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;

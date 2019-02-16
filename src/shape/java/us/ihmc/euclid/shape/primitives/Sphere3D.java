@@ -1,7 +1,7 @@
-package us.ihmc.euclid.shape;
+package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.shape.interfaces.Sphere3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;

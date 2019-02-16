@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.interfaces;
+package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;

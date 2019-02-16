@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.interfaces;
+package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -6,22 +6,10 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
+public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
 {
-   /**
-    * Sets the length of this cylinder.
-    *
-    * @param length the cylinder length along the z-axis.
-    * @throws IllegalArgumentException if {@code length} is negative.
-    */
    void setLength(double length);
 
-   /**
-    * Sets the radius of this cylinder.
-    *
-    * @param radius the new radius for this cylinder.
-    * @throws IllegalArgumentException if {@code radius} is negative.
-    */
    void setRadius(double radius);
 
    /**
@@ -44,7 +32,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    @Override
    default boolean containsNaN()
    {
-      return Cylinder3DReadOnly.super.containsNaN();
+      return Capsule3DReadOnly.super.containsNaN();
    }
 
    /** {@inheritDoc} */
@@ -65,17 +53,11 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
       setSize(0.0, 0.0);
    }
 
-   /**
-    * Copies the {@code other} cylinder data into {@code this}.
-    *
-    * @param other the other cylinder to copy. Not modified.
-    */
-   default void set(Cylinder3DReadOnly other)
+   default void set(Capsule3DReadOnly other)
    {
       getPosition().set(other.getPosition());
       getAxis().set(other.getAxis());
-      setLength(other.getLength());
-      setRadius(other.getRadius());
+      setSize(other.getLength(), other.getRadius());
    }
 
    default void set(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)

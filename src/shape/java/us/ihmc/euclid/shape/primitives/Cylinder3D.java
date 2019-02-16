@@ -1,9 +1,9 @@
-package us.ihmc.euclid.shape;
+package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.shape.interfaces.Cylinder3DBasics;
-import us.ihmc.euclid.shape.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
