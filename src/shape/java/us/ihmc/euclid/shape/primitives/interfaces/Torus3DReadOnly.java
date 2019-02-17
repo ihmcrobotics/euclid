@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -70,6 +71,12 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
       return EuclidShapeTools.orthogonalProjectionOntoTorus3D(pointToProject, getPosition(), getAxis(), getRadius(), getTubeRadius(), projectionToPack);
+   }
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      EuclidShapeTools.boundingBoxCylinder3D(getPosition(), getAxis(), getTubeRadius(), getRadius() + getTubeRadius(), boundingBoxToPack);
    }
 
    /**

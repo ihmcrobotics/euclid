@@ -1,8 +1,10 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -183,6 +185,56 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    {
       surfaceNormalToPack.set(-getSizeZ() / getRampLength(), 0.0, getSizeX() / getRampLength());
       transformToWorld(surfaceNormalToPack);
+   }
+
+   default Point3DBasics[] getVertices()
+   {
+      Point3D[] vertices = new Point3D[6];
+      for (int vertexIndex = 0; vertexIndex < 6; vertexIndex++)
+         getVertex(vertexIndex, vertices[vertexIndex] = new Point3D());
+      return vertices;
+   }
+
+   default void getVertices(Point3DBasics[] verticesToPack)
+   {
+      if (verticesToPack.length < 6)
+         throw new IllegalArgumentException("Array is too small, has to be at least 6 element long, was: " + verticesToPack.length);
+
+      for (int vertexIndex = 0; vertexIndex < 6; vertexIndex++)
+         getVertex(vertexIndex, verticesToPack[vertexIndex]);
+   }
+
+   default Point3DBasics getVertex(int vertexIndex)
+   {
+      Point3D vertex = new Point3D();
+      getVertex(vertexIndex, vertex);
+      return vertex;
+   }
+
+   default void getVertex(int vertexIndex, Point3DBasics vertexToPack)
+   {
+      if (vertexIndex < 0 || vertexIndex >= 6)
+         throw new IndexOutOfBoundsException("The vertex index has to be in [0, 5], was: " + vertexIndex);
+
+      vertexToPack.setX((vertexIndex & 2) == 0 ? getSizeX() : 0.0);
+      vertexToPack.setY((vertexIndex & 1) == 0 ? 0.5 * getSizeY() : -0.5 * getSizeY());
+      vertexToPack.setZ((vertexIndex & 4) == 0 ? 0.0 : getSizeZ());
+      transformToWorld(vertexToPack);
+   }
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxToPack.setToNaN();
+      Point3DBasics vertex = getIntermediateVariableSupplier().requestPoint3D();
+
+      for (int vertexIndex = 0; vertexIndex < 6; vertexIndex++)
+      {
+         getVertex(vertexIndex, vertex);
+         boundingBoxToPack.updateToIncludePoint(vertex);
+      }
+
+      getIntermediateVariableSupplier().releasePoint3D(vertex);
    }
 
    /**

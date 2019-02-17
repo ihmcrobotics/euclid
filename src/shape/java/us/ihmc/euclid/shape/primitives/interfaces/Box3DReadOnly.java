@@ -239,16 +239,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     */
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
-      boundingBoxToPack.setToNaN();
-      Point3DBasics vertex = getIntermediateVariableSupplier().requestPoint3D();
-
-      for (int vertexIndex = 0; vertexIndex < 8; vertexIndex++)
-      {
-         getVertex(vertexIndex, vertex);
-         boundingBoxToPack.updateToIncludePoint(vertex);
-      }
-
-      getIntermediateVariableSupplier().releasePoint3D(vertex);
+      EuclidShapeTools.boundingBoxBox3D(getPosition(), getOrientation(), getSize(), boundingBoxToPack);
    }
 
    /**

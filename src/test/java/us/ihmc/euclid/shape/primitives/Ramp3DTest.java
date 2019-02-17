@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.primitives;
 import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.*;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
@@ -573,6 +575,49 @@ public class Ramp3DTest
    {
       if (DEBUG)
          System.out.println(string);
+   }
+
+   @Test
+   void testGetVertices() throws Exception
+   {
+      Random random = new Random(335436);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with pose set to zero
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+         ramp3D.getPose().setToZero();
+         double sizeX = ramp3D.getSizeX();
+         double sizeY = 0.5 * ramp3D.getSizeY();
+         double sizeZ = ramp3D.getSizeZ();
+
+         Point3DBasics[] vertices = ramp3D.getVertices();
+         assertEquals(6, vertices.length);
+         int vertexIndex = 0;
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, -sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, -sizeY, 0.0), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, sizeY, sizeZ), vertices[vertexIndex++], EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(sizeX, -sizeY, sizeZ), vertices[vertexIndex++], EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Just testing that the vertices transformation
+         Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
+
+         Point3DBasics[] expectedVertices = ramp3D.getVertices();
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         ramp3D.applyTransform(transform);
+         Arrays.asList(expectedVertices).forEach(transform::transform);
+
+         Point3DBasics[] actualVertices = ramp3D.getVertices();
+
+         for (int j = 0; j < 6; j++)
+         {
+            EuclidCoreTestTools.assertTuple3DEquals(expectedVertices[j], actualVertices[j], EPSILON);
+         }
+      }
    }
 
    @Test

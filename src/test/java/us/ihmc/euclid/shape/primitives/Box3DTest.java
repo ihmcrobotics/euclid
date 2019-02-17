@@ -11,11 +11,14 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
@@ -1511,6 +1514,29 @@ public class Box3DTest
          for (int j = 0; j < 100; j++)
             assertTrue(boundingBox.isInsideExclusive(EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices())));
          box3D.scale(1.1);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Using getSupportingVertex
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         
+         BoundingBox3D expectedBoundingBox = new BoundingBox3D();
+         expectedBoundingBox.setToNaN();
+         Vector3D supportDirection = new Vector3D(Axis.X);
+         expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
+         supportDirection.negate();
+         expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
+         supportDirection.set(Axis.Y);
+         expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
+         supportDirection.negate();
+         expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
+         supportDirection.set(Axis.Z);
+         expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
+         supportDirection.negate();
+         expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
+
+         BoundingBox3DReadOnly actualBoundingBox = box3D.getBoundingBox();
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 }

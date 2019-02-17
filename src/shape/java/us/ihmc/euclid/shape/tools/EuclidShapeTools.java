@@ -95,6 +95,40 @@ public class EuclidShapeTools
       supportingVertexToPack.scale(0.5);
    }
 
+   public static void boundingBoxBox3D(Point3DReadOnly box3DPosition, RotationMatrixReadOnly box3DOrientation, Vector3DReadOnly box3DSize,
+                                           BoundingBox3DBasics boundingBoxToPack)
+   {
+      double halfSizeX = 0.5 * box3DSize.getX();
+      double halfSizeY = 0.5 * box3DSize.getY();
+      double halfSizeZ = 0.5 * box3DSize.getZ();
+
+      double xRange, yRange, zRange;
+      if (box3DOrientation.isIdentity())
+      {
+         xRange = halfSizeX;
+         yRange = halfSizeY;
+         zRange = halfSizeZ;
+      }
+      else
+      {
+         xRange = Math.abs(box3DOrientation.getM00()) * halfSizeX + Math.abs(box3DOrientation.getM01()) * halfSizeY
+               + Math.abs(box3DOrientation.getM02()) * halfSizeZ;
+         yRange = Math.abs(box3DOrientation.getM10()) * halfSizeX + Math.abs(box3DOrientation.getM11()) * halfSizeY
+               + Math.abs(box3DOrientation.getM12()) * halfSizeZ;
+         zRange = Math.abs(box3DOrientation.getM20()) * halfSizeX + Math.abs(box3DOrientation.getM21()) * halfSizeY
+               + Math.abs(box3DOrientation.getM22()) * halfSizeZ;
+      }
+
+      double maxX = box3DPosition.getX() + xRange;
+      double maxY = box3DPosition.getY() + yRange;
+      double maxZ = box3DPosition.getZ() + zRange;
+      double minX = box3DPosition.getX() - xRange;
+      double minY = box3DPosition.getY() - yRange;
+      double minZ = box3DPosition.getZ() - zRange;
+
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
+   }
+
    public static double doPoint3DBox3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly box3DSize, Point3DBasics closestPointToPack,
                                                     Vector3DBasics normalToPack)
    {
