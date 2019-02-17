@@ -5,6 +5,7 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -174,6 +175,13 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    default double getSizeZ()
    {
       return getSize().getZ();
+   }
+
+   default Vector3D getRampSurfaceNormal()
+   {
+      Vector3D surfaceNormal = new Vector3D();
+      getRampSurfaceNormal(surfaceNormal);
+      return surfaceNormal;
    }
 
    /**

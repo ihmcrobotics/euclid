@@ -1513,7 +1513,6 @@ public class Box3DTest
             assertTrue(boundingBox.isInsideInclusive(vertex));
          for (int j = 0; j < 100; j++)
             assertTrue(boundingBox.isInsideExclusive(EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices())));
-         box3D.scale(1.1);
       }
 
       for (int i = 0; i < ITERATIONS; i++)

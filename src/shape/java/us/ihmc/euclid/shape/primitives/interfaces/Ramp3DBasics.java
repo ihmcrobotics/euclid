@@ -2,9 +2,11 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -117,16 +119,28 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
       getSize().set(size);
    }
 
-   default void set(Pose3DReadOnly pose, double length, double width, double height)
+   default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
-      getPose().set(pose);
-      setSize(length, width, height);
+      getPose().set(orientation, position);
+      setSize(sizeX, sizeY, sizeZ);
    }
 
-   default void set(RigidBodyTransformReadOnly pose, double length, double width, double height)
+   default void set(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(pose);
-      setSize(length, width, height);
+      setSize(sizeX, sizeY, sizeZ);
+   }
+
+   default void set(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
+   {
+      getPose().set(pose);
+      setSize(sizeX, sizeY, sizeZ);
+   }
+
+   default void set(RigidBodyTransformReadOnly pose, double[] size)
+   {
+      getPose().set(pose);
+      setSize(size[0], size[1], size[2]);
    }
 
    /**

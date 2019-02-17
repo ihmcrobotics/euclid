@@ -2,12 +2,15 @@ package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
@@ -78,16 +81,6 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    }
 
    /**
-    * Creates a new ramp 3D identical to {@code other}.
-    *
-    * @param other the other ramp to copy. Not modified.
-    */
-   public Ramp3D(Ramp3D other)
-   {
-      set(other);
-   }
-
-   /**
     * Creates a new ramp 3D and initializes its size.
     *
     * @param length the size of this ramp along the x-axis.
@@ -96,9 +89,14 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Ramp3D(double length, double width, double height)
+   public Ramp3D(double sizeX, double sizeY, double sizeZ)
    {
-      setSize(length, width, height);
+      setSize(sizeX, sizeY, sizeZ);
+   }
+
+   public Ramp3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
+   {
+      set(position, orientation, sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -111,9 +109,9 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Ramp3D(RigidBodyTransformReadOnly pose, double length, double width, double height)
+   public Ramp3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      set(pose, length, width, height);
+      set(pose, sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -126,9 +124,19 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Ramp3D(Pose3DReadOnly pose, double length, double width, double height)
+   public Ramp3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      set(pose, length, width, height);
+      set(pose, sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Creates a new ramp 3D identical to {@code other}.
+    *
+    * @param other the other ramp to copy. Not modified.
+    */
+   public Ramp3D(Ramp3DReadOnly other)
+   {
+      set(other);
    }
 
    /**
