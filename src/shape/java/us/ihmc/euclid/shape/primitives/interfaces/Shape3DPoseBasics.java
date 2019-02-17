@@ -33,14 +33,12 @@ public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransfo
    @Override
    default void applyTransform(Transform transform)
    {
-      transform.transform(getTranslation());
-      transform.transform(getRotation());
+      transform.transform(this);
    }
 
    @Override
    default void applyInverseTransform(Transform transform)
    {
-      transform.inverseTransform(getTranslation());
-      transform.inverseTransform(getRotation());
+      transform.inverseTransform(this);
    }
 }

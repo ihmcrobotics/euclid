@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -58,16 +59,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    public Box3D()
    {
       this(1.0, 1.0, 1.0);
-   }
-
-   /**
-    * Creates a new box 3D identical to {@code other}.
-    *
-    * @param other the other box to copy. Not modified.
-    */
-   public Box3D(Box3D other)
-   {
-      set(other);
    }
 
    /**
@@ -132,15 +123,13 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    }
 
    /**
-    * Creates a new box 3D and initializes its pose and size.
+    * Creates a new box 3D identical to {@code other}.
     *
-    * @param pose the position and orientation of this box. Not modified.
-    * @param size the size of this box along in order the x, y, and z axes.
-    * @throws IllegalArgumentException if any of {@code size}'s elements is negative.
+    * @param other the other box to copy. Not modified.
     */
-   public Box3D(RigidBodyTransformReadOnly pose, double[] size)
+   public Box3D(Box3DReadOnly other)
    {
-      set(pose, size);
+      set(other);
    }
 
    @Override

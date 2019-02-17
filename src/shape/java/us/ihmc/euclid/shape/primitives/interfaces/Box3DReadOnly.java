@@ -198,20 +198,6 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Convenience method that packs the center of the box.
-    * <p>
-    * This method is equivalent to {@link #getPosition(Tuple3DBasics)}.
-    * </p>
-    *
-    * @param centerToPack the point in which the coordinates of the center of this box are stored.
-    *           Modified.
-    */
-   default void getCenter(Point3DBasics centerToPack)
-   {
-      centerToPack.set(getPose().getShapePosition());
-   }
-
-   /**
     * Gets this box size along the x-axis, i.e. its length.
     *
     * @return this box size along the x-axis.
@@ -273,7 +259,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     *
     * @return an array of 8 {@code Point3D} with this box vertices.
     */
-   default Point3D[] getVertices()
+   default Point3DBasics[] getVertices()
    {
       Point3D[] vertices = new Point3D[8];
       for (int vertexIndex = 0; vertexIndex < 8; vertexIndex++)
@@ -295,6 +281,13 @@ public interface Box3DReadOnly extends Shape3DReadOnly
 
       for (int vertexIndex = 0; vertexIndex < 8; vertexIndex++)
          getVertex(vertexIndex, verticesToPack[vertexIndex]);
+   }
+
+   default Point3DBasics getVertex(int vertexIndex)
+   {
+      Point3D vertex = new Point3D();
+      getVertex(vertexIndex, vertex);
+      return vertex;
    }
 
    /**

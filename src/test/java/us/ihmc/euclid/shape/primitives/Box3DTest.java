@@ -4,25 +4,32 @@ import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
+import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Box3DTest
@@ -30,399 +37,758 @@ public class Box3DTest
    private static final double EPSILON = 1.0e-12;
 
    @Test
-   public void testCommonShape3dFunctionality()
+   void testConstructors() throws Exception
    {
-      Shape3DTestHelper testHelper = new Shape3DTestHelper();
-      Random random = new Random(1776L);
+      Random random = new Random(34590376);
 
-      int numberOfShapes = 1000;
-      int numberOfPoints = 1000;
+      { // Empty constructor
+         Box3D box3D = new Box3D();
 
-      for (int i = 0; i < numberOfShapes; i++)
-      {
-         testHelper.runSimpleTests(EuclidShapeRandomTools.nextBox3D(random), random, numberOfPoints);
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getPosition());
+         EuclidCoreTestTools.assertIdentity(box3D.getOrientation(), EPSILON);
+      }
+
+      { // Empty constructor
+         Box3D box3D = new Box3D();
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getPosition());
+         EuclidCoreTestTools.assertIdentity(box3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Box3D(double sizeX, double sizeY, double sizeZ)
+         double sizeX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Box3D box3D = new Box3D(sizeX, sizeY, sizeZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getPosition());
+         EuclidCoreTestTools.assertIdentity(box3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
+         double sizeX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random);
+         RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Box3D box3D = new Box3D(position, orientation, sizeX, sizeY, sizeZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(position, box3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(orientation, box3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Box3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
+         double sizeX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random);
+         RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Pose3D pose = new Pose3D(position, orientation);
+         Box3D box3D = new Box3D(pose, sizeX, sizeY, sizeZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(position, box3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(orientation, box3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
+         double sizeX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random);
+         RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RigidBodyTransform pose = new RigidBodyTransform(orientation, position);
+         Box3D box3D = new Box3D(pose, sizeX, sizeY, sizeZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), box3D.getSize(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(position, box3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(orientation, box3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Box3D(Box3DReadOnly other)
+         Box3D original = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D copy = new Box3D(original);
+
+         EuclidShapeTestTools.assertBox3DEquals(original, copy, EPSILON);
       }
    }
 
    @Test
-   public void testCopyConstructor()
+   void testSetToNaN() throws Exception
    {
-      Random random = new Random(12434L);
-      Box3D box1 = EuclidShapeRandomTools.nextBox3D(random);
-      Box3D box2 = new Box3D(box1);
+      Random random = new Random(34575754);
 
-      EuclidShapeTestTools.assertBox3DEquals(box1, box2, 1e-14);
-
-      // make sure we're not copying references:
-      box1.getPose().set(EuclidCoreRandomTools.nextRigidBodyTransform(random));
-      box1.setSize(random.nextDouble(), random.nextDouble(), random.nextDouble());
-      assertEverythingDifferent(box1, box2, 1e-14);
-   }
-
-   @Test
-   public void testConstructors()
-   {
-      Random random = new Random(2345L);
-      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-      double length = random.nextDouble();
-      double width = random.nextDouble();
-      double height = random.nextDouble();
-
-      Box3D box1 = new Box3D(transform, length, width, height);
-      Box3D box2 = new Box3D(transform, new double[] {length, width, height});
-      Box3D box3 = new Box3D(length, width, height);
-      box3.getPose().set(transform);
-
-      EuclidShapeTestTools.assertBox3DEquals(box1, box2, 0.0);
-      EuclidShapeTestTools.assertBox3DEquals(box1, box3, 0.0);
-   }
-
-   @Test
-   public void testSetTransform3DAndGetters()
-   {
-      Random random = new Random(351235L);
-      Box3D box = new Box3D();
-      RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      box.getPose().set(transform);
-
-      RigidBodyTransform transformBack = new RigidBodyTransform();
-      transformBack.set(box.getPose());
-      EuclidCoreTestTools.assertRigidBodyTransformEquals(transform, transformBack, EPSILON);
-
-      RotationMatrix matrix = new RotationMatrix();
-      Vector3D vector = new Vector3D();
-      transform.get(matrix, vector);
-
-      RotationMatrix matrixBack = new RotationMatrix();
-      Point3D pointBack = new Point3D();
-
-      matrixBack.set(box.getPose().getShapeOrientation());
-      assertTrue(matrix.epsilonEquals(matrixBack, EPSILON));
-
-      box.getCenter(pointBack);
-      assertTrue(vector.epsilonEquals(pointBack, EPSILON));
-      assertTrue(vector.epsilonEquals(box.getPosition(), EPSILON));
-   }
-
-   @Test
-   public void testIsInsideOrOnSurfaceConvexCombinationOfVertices()
-   {
-      Random random = new Random(123234L);
-      Box3D box = EuclidShapeRandomTools.nextBox3D(random);
-
-      Point3D[] vertices = new Point3D[8];
-      for (int i = 0; i < vertices.length; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         vertices[i] = new Point3D();
-      }
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
 
-      box.getVertices(vertices);
+         assertFalse(box3D.containsNaN());
+         assertFalse(box3D.getPose().containsNaN());
+         assertFalse(box3D.getPosition().containsNaN());
+         assertFalse(box3D.getOrientation().containsNaN());
+         assertFalse(box3D.getSize().containsNaN());
 
-      int nTests = 300;
-      for (int i = 0; i < nTests; i++)
-      {
-         Point3D pointToTest = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
+         box3D.setToNaN();
 
-         assertTrue(box.isPointInside(pointToTest));
+         assertTrue(box3D.containsNaN());
+         assertTrue(box3D.getPose().containsNaN());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(box3D.getPosition());
+         EuclidCoreTestTools.assertMatrix3DContainsOnlyNaN(box3D.getOrientation());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(box3D.getSize());
       }
    }
 
    @Test
-   public void testVerticesProjection()
+   void testSetToZero() throws Exception
    {
-      Random random = new Random(123234L);
-      Box3D box = EuclidShapeRandomTools.nextBox3D(random);
+      Random random = new Random(34575754);
 
-      Point3D[] vertices = new Point3D[8];
-      for (int i = 0; i < vertices.length; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         vertices[i] = new Point3D();
-      }
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
 
-      box.getVertices(vertices);
+         assertFalse(new Point3D().epsilonEquals(box3D.getPosition(), EPSILON));
+         assertFalse(new Point3D().epsilonEquals(box3D.getSize(), EPSILON));
+         assertFalse(new RotationMatrix().epsilonEquals(box3D.getOrientation(), EPSILON));
 
-      for (int vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++)
-      {
-         Point3D vertex = vertices[vertexIndex];
-         Point3D projectedVertex = new Point3D(vertex);
-         box.orthogonalProjection(projectedVertex);
-         EuclidCoreTestTools.assertTuple3DEquals("Vertex index: " + vertexIndex, vertex, projectedVertex, 1e-14);
+         box3D.setToZero();
+
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getPosition());
+         EuclidCoreTestTools.assertIdentity(box3D.getOrientation(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(box3D.getSize());
       }
    }
 
    @Test
-   public void testIsInsideOrOnSurfaceVertices()
+   void testSetters() throws Exception
    {
-      Random random = new Random(123234L);
-      Box3D box = EuclidShapeRandomTools.nextBox3D(random);
+      Random random = new Random(45837543);
 
-      Point3D[] vertices = new Point3D[8];
-      for (int i = 0; i < vertices.length; i++)
-      {
-         vertices[i] = new Point3D();
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Box3D other)
+         Box3D expected = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+         actual.set(expected);
+         EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
       }
 
-      box.getVertices(vertices);
-
-      for (Point3D vertex : vertices)
-      {
-         assertTrue(box.isPointInside(vertex, 1e-14));
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Box3DReadOnly other)
+         Box3D expected = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+         actual.set((Box3DReadOnly) expected);
+         EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
       }
-   }
 
-   @Test
-   public void testProjectionToVertices()
-   {
-      Random random = new Random(123234L);
-
-      int nTests = 300;
-      for (int testIndex = 0; testIndex < nTests; testIndex++)
-      {
-         Box3D box = EuclidShapeRandomTools.nextBox3D(random);
-
-         Point3D[] vertices = new Point3D[8];
-         for (int i = 0; i < vertices.length; i++)
+      { // set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
+         for (int i = 0; i < ITERATIONS; i++)
          {
-            vertices[i] = new Point3D();
+            Box3D expected = EuclidShapeRandomTools.nextBox3D(random);
+            Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(expected.getPosition(), expected.getOrientation(), expected.getSizeX(), expected.getSizeY(), expected.getSizeZ());
+            EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
          }
 
-         double epsilon = EPSILON;
-         double maxScale = 2.0;
-         box.getVertices(vertices);
-         Tuple3DReadOnly center = box.getPosition();
-         for (Point3D vertex : vertices)
-         {
-            Vector3D offset = new Vector3D(vertex);
-            offset.sub(center);
-            offset.normalize();
-            offset.scale(EuclidCoreRandomTools.nextDouble(random, epsilon, maxScale));
-            Point3D testPoint = new Point3D(vertex);
-            testPoint.add(offset);
-            assertFalse(box.isPointInside(testPoint, epsilon));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new Point3D(), new Quaternion(), -0.1, 1.0, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new Point3D(), new Quaternion(), 1.0, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new Point3D(), new Quaternion(), 1.0, 1.0, -0.1));
+      }
 
-            Point3D projection = new Point3D(testPoint);
-            box.orthogonalProjection(projection);
-            EuclidCoreTestTools.assertTuple3DEquals(vertex, projection, epsilon);
-            assertTrue(box.isPointInside(projection, epsilon));
+      { // set(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Box3D expected = EuclidShapeRandomTools.nextBox3D(random);
+            Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(new Pose3D(expected.getPosition(), expected.getOrientation()), expected.getSizeX(), expected.getSizeY(), expected.getSizeZ());
+            EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new Pose3D(), -0.1, 1.0, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new Pose3D(), 1.0, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new Pose3D(), 1.0, 1.0, -0.1));
+      }
+
+      { // set(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Box3D expected = EuclidShapeRandomTools.nextBox3D(random);
+            Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()), expected.getSizeX(), expected.getSizeY(),
+                       expected.getSizeZ());
+            EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new RigidBodyTransform(), -0.1, 1.0, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new RigidBodyTransform(), 1.0, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new RigidBodyTransform(), 1.0, 1.0, -0.1));
+      }
+
+      { // set(RigidBodyTransformReadOnly pose, double[] size)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Box3D expected = EuclidShapeRandomTools.nextBox3D(random);
+            Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()),
+                       new double[] {expected.getSizeX(), expected.getSizeY(), expected.getSizeZ()});
+            EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new RigidBodyTransform(), new double[] {-0.1, 1.0, 1.0}));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new RigidBodyTransform(), new double[] {1.0, -0.1, 1.0}));
+         assertThrows(IllegalArgumentException.class, () -> new Box3D().set(new RigidBodyTransform(), new double[] {1.0, 1.0, -0.1}));
+      }
+   }
+
+   @Test
+   void testSetSize() throws Exception
+   {
+      Random random = new Random(5465446);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double sizeX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         assertFalse(EuclidCoreTools.epsilonEquals(sizeX, box3D.getSizeX(), EPSILON));
+         assertFalse(EuclidCoreTools.epsilonEquals(sizeY, box3D.getSizeY(), EPSILON));
+         assertFalse(EuclidCoreTools.epsilonEquals(sizeZ, box3D.getSizeZ(), EPSILON));
+         box3D.setSize(sizeX, sizeY, sizeZ);
+         assertEquals(sizeX, box3D.getSizeX(), EPSILON);
+         assertEquals(sizeY, box3D.getSizeY(), EPSILON);
+         assertEquals(sizeZ, box3D.getSizeZ(), EPSILON);
+      }
+
+      assertThrows(IllegalArgumentException.class, () -> new Box3D().setSize(-0.1, 1.0, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Box3D().setSize(1.0, -0.1, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Box3D().setSize(1.0, 1.0, -0.1));
+   }
+
+   @Test
+   void testScale() throws Exception
+   {
+      Random random = new Random(405743);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D expected = new Box3D(actual);
+         Vector3D size = new Vector3D(actual.getSize());
+         double scale = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         actual.scale(scale);
+         size.scale(scale);
+         expected.getSize().set(size);
+
+         EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+      }
+
+      assertThrows(IllegalArgumentException.class, () -> new Box3D().scale(-0.1));
+   }
+
+   @Test
+   void testIsPointInside() throws Exception
+   {
+      Random random = new Random(435635675);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with point inside using the weighted random generator 
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+
+         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices());
+         assertTrue(box3D.isPointInside(pointInside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Another pass with the point inside
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+
+         Point3D pointInside = EuclidCoreRandomTools.nextPoint3D(random, 0.5 * box3D.getSizeX(), 0.5 * box3D.getSizeY(), 0.5 * box3D.getSizeZ());
+         box3D.transformToWorld(pointInside);
+         assertTrue(box3D.isPointInside(pointInside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point hovering over each face
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double sizeX = box3D.getSizeX();
+         double sizeY = box3D.getSizeY();
+         double sizeZ = box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+
+         // Beyond the X+ face
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+
+         // Beyond the X- face
+         pointOutside.set(-EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+
+         // Beyond the Y+ face
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+
+         // Beyond the Y- face
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), -EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+                          -EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+
+         // Beyond the Z+ face
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+                          EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+
+         // Beyond the Z- face
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+                          -EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to an edge
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double sizeX = box3D.getSizeX();
+         double sizeY = box3D.getSizeY();
+         double sizeZ = box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+         double xSign, ySign, zSign;
+
+         // Beyond edge collinear to X-axis
+         ySign = random.nextBoolean() ? -1.0 : 1.0;
+         zSign = random.nextBoolean() ? -1.0 : 1.0;
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+                          zSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+
+         // Beyond edge collinear to Y-axis
+         xSign = random.nextBoolean() ? -1.0 : 1.0;
+         zSign = random.nextBoolean() ? -1.0 : 1.0;
+         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+                          zSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+
+         // Beyond edge collinear to Z-axis
+         xSign = random.nextBoolean() ? -1.0 : 1.0;
+         ySign = random.nextBoolean() ? -1.0 : 1.0;
+         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX,
+                          ySign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside closest to a vertex
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double sizeX = box3D.getSizeX();
+         double sizeY = box3D.getSizeY();
+         double sizeZ = box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+
+         double xSign = random.nextBoolean() ? -1.0 : 1.0;
+         double ySign = random.nextBoolean() ? -1.0 : 1.0;
+         double zSign = random.nextBoolean() ? -1.0 : 1.0;
+         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX,
+                          ySign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+                          zSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
+         box3D.transformToWorld(pointOutside);
+         assertFalse(box3D.isPointInside(pointOutside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test that the vertices are inside within an epsilon
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         for (Point3DBasics vertex : box3D.getVertices())
+         {
+            assertTrue(box3D.isPointInside(vertex, EPSILON));
          }
       }
    }
 
    @Test
-   public void testComputeVertices()
+   void testDoPoint3DCollisionTest() throws Exception
    {
-      Random random = new Random(6234L);
-      double length = random.nextDouble();
-      double width = random.nextDouble();
-      double height = random.nextDouble();
-      RigidBodyTransform configuration = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      Box3D box3d = new Box3D(configuration, length, width, height);
+      Random random = new Random(354534665);
 
-      ArrayList<Point3D> expectedVertices = new ArrayList<>(8);
-      expectedVertices.add(new Point3D(length / 2.0, width / 2.0, height / 2.0));
-      expectedVertices.add(new Point3D(length / 2.0, width / 2.0, -height / 2.0));
-      expectedVertices.add(new Point3D(length / 2.0, -width / 2.0, height / 2.0));
-      expectedVertices.add(new Point3D(length / 2.0, -width / 2.0, -height / 2.0));
-      expectedVertices.add(new Point3D(-length / 2.0, width / 2.0, height / 2.0));
-      expectedVertices.add(new Point3D(-length / 2.0, width / 2.0, -height / 2.0));
-      expectedVertices.add(new Point3D(-length / 2.0, -width / 2.0, height / 2.0));
-      expectedVertices.add(new Point3D(-length / 2.0, -width / 2.0, -height / 2.0));
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point not colliding, closest to a face
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
 
-      for (Point3D point3d : expectedVertices)
-      {
-         configuration.transform(point3d);
-      }
+         Point3D pointOutside = new Point3D();
+         Point3D actualClosestPoint = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         Point3D expectedClosestPoint = new Point3D();
+         Vector3D expectedNormal = new Vector3D();
 
-      Point3D[] vertices = new Point3D[8];
-      for (int i = 0; i < vertices.length; i++)
-      {
-         vertices[i] = new Point3D();
-      }
+         { // X faces
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+            expectedClosestPoint.set(xSign * halfSizeX, pointOutside.getY(), pointOutside.getZ());
+            expectedNormal.set(xSign, 0.0, 0.0);
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         }
 
-      box3d.getVertices(vertices);
+         { // Y faces
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+            expectedClosestPoint.set(pointOutside.getX(), ySign * halfSizeY, pointOutside.getZ());
+            expectedNormal.set(0.0, ySign, 0.0);
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         }
 
-      double epsilon = EPSILON;
-      for (Point3D vertex : vertices)
-      {
-         Iterator<Point3D> iterator = expectedVertices.iterator();
-         while (iterator.hasNext())
-         {
-            Point3D expectedVertex = iterator.next();
-            if (expectedVertex.epsilonEquals(vertex, epsilon))
-               iterator.remove();
+         { // Z faces
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            expectedClosestPoint.set(pointOutside.getX(), pointOutside.getY(), zSign * halfSizeZ);
+            expectedNormal.set(0.0, 0.0, zSign);
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
       }
 
-      assertEquals(0, expectedVertices.size());
-   }
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point not colliding, closest to an edge
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
 
-   @Test
-   public void testDistanceProjectionAndClosestPointAndNormal()
-   {
-      Random random = new Random(123415L);
-      int nBoxes = 10;
-      int nTestsPerBox = 1000;
-      for (int boxNumber = 0; boxNumber < nBoxes; boxNumber++)
-      {
-         Box3D box = EuclidShapeRandomTools.nextBox3D(random);
-         Box3D biggerBox = new Box3D(box);
-         biggerBox.scale(2.0);
+         Point3D pointOutside = new Point3D();
+         Point3D actualClosestPoint = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         Point3D expectedClosestPoint = new Point3D();
+         Vector3D expectedNormal = new Vector3D();
 
-         Point3D[] vertices = new Point3D[8];
-         for (int i = 0; i < vertices.length; i++)
-         {
-            vertices[i] = new Point3D();
+         { // Collinear to X-axis
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            expectedClosestPoint.set(pointOutside.getX(), ySign * halfSizeY, zSign * halfSizeZ);
+            expectedNormal.sub(pointOutside, expectedClosestPoint);
+            expectedNormal.normalize();
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
-         biggerBox.getVertices(vertices);
 
-         for (int testNumber = 0; testNumber < nTestsPerBox; testNumber++)
-         {
-            Point3D point = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
-            Point3D projectedPoint = new Point3D(point);
-            box.orthogonalProjection(projectedPoint);
+         { // Collinear to Y-axis
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            expectedClosestPoint.set(xSign * halfSizeX, pointOutside.getY(), zSign * halfSizeZ);
+            expectedNormal.sub(pointOutside, expectedClosestPoint);
+            expectedNormal.normalize();
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         }
 
-            Point3D closestPoint = new Point3D();
-            Vector3D normal = new Vector3D();
-            box.doPoint3DCollisionTest(point, closestPoint, normal);
+         { // Collinear to Z-axis
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY, EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+            expectedClosestPoint.set(xSign * halfSizeX, ySign * halfSizeY, pointOutside.getZ());
+            expectedNormal.sub(pointOutside, expectedClosestPoint);
+            expectedNormal.normalize();
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         }
+      }
 
-            // check distance stuff:
-            double epsilon = 1e-14;
-            assertEquals(box.distance(closestPoint), 0.0, epsilon);
-            assertTrue(box.isPointInside(closestPoint, epsilon));
-            assertTrue(box.isPointInside(projectedPoint, epsilon));
-            if (box.isPointInside(point))
-            {
-               EuclidCoreTestTools.assertTuple3DEquals(point, projectedPoint, 1e-10);
-            }
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point not colliding, closest to a vertex
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+         Point3D actualClosestPoint = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         Point3D expectedClosestPoint = new Point3D();
+         Vector3D expectedNormal = new Vector3D();
+
+         double xSign = random.nextBoolean() ? -1.0 : 1.0;
+         double ySign = random.nextBoolean() ? -1.0 : 1.0;
+         double zSign = random.nextBoolean() ? -1.0 : 1.0;
+         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                          ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                          zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+         expectedClosestPoint.set(xSign * halfSizeX, ySign * halfSizeY, zSign * halfSizeZ);
+         expectedNormal.sub(pointOutside, expectedClosestPoint);
+         expectedNormal.normalize();
+         box3D.transformToWorld(pointOutside);
+         box3D.transformToWorld(expectedClosestPoint);
+         box3D.transformToWorld(expectedNormal);
+         assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside generated by choosing the closest face
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         // Going for a cube setup so it is easier to predict which face is closest.
+         double size = EuclidCoreRandomTools.nextDouble(random, 0.2, 10.0);
+         box3D.setSize(size, size, size);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointInside = new Point3D();
+         Point3D actualClosestPoint = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         Point3D expectedClosestPoint = new Point3D();
+         Vector3D expectedNormal = new Vector3D();
+
+         { // X faces
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            Point3D[] faceVertices = {new Point3D(xSign * halfSizeX, halfSizeY, halfSizeZ), new Point3D(xSign * halfSizeX, -halfSizeY, halfSizeZ),
+                  new Point3D(xSign * halfSizeX, -halfSizeY, -halfSizeZ), new Point3D(xSign * halfSizeX, halfSizeY, -halfSizeZ)};
+
+            if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
             else
-            {
-               assertEquals(point.distance(projectedPoint), Math.abs(box.distance(point)), epsilon);
-               EuclidCoreTestTools.assertTuple3DEquals(projectedPoint, closestPoint, epsilon);
-            }
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
-            // create 3 points that are close to point and check whether a numerical normal to a plane through those points equals the returned normal:
-            double delta = 1e-5;
+            expectedClosestPoint.set(xSign * halfSizeX, pointInside.getY(), pointInside.getZ());
+            expectedNormal.set(xSign, 0.0, 0.0);
+            box3D.transformToWorld(pointInside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertTrue(box3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         }
 
-            Point3D point2 = new Point3D(point);
-            point2.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, delta));
-            Point3D closestPoint2 = new Point3D();
-            Vector3D normal2 = new Vector3D();
-            box.doPoint3DCollisionTest(point2, closestPoint2, normal2);
+         { // Y faces
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            Point3D[] faceVertices = {new Point3D(halfSizeX, ySign * halfSizeY, halfSizeZ), new Point3D(-halfSizeX, ySign * halfSizeY, halfSizeZ),
+                  new Point3D(-halfSizeX, ySign * halfSizeY, -halfSizeZ), new Point3D(halfSizeX, ySign * halfSizeY, -halfSizeZ)};
 
-            Point3D point3 = new Point3D(point);
-            point3.add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, delta));
-            Point3D closestPoint3 = new Point3D();
-            Vector3D normal3 = new Vector3D();
-            box.doPoint3DCollisionTest(point3, closestPoint3, normal3);
+            if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+            else
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
-            boolean pointsDistinct = closestPoint2.distance(closestPoint) > epsilon && closestPoint3.distance(closestPoint) > epsilon
-                  && closestPoint3.distance(closestPoint2) > epsilon;
-            if (pointsDistinct)
-            {
-               boolean normalsEqual = normal.epsilonEquals(normal2, epsilon) && normal.epsilonEquals(normal3, epsilon);
-               if (normalsEqual)
-               {
-                  Vector3D vector1 = new Vector3D();
-                  vector1.sub(closestPoint2, closestPoint);
+            expectedClosestPoint.set(pointInside.getX(), ySign * halfSizeY, pointInside.getZ());
+            expectedNormal.set(0.0, ySign, 0.0);
+            box3D.transformToWorld(pointInside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertTrue(box3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         }
 
-                  Vector3D vector2 = new Vector3D();
-                  vector2.sub(closestPoint3, closestPoint);
+         { // Z faces
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            Point3D[] faceVertices = {new Point3D(halfSizeX, halfSizeY, zSign * halfSizeZ), new Point3D(-halfSizeX, halfSizeY, zSign * halfSizeZ),
+                  new Point3D(-halfSizeX, -halfSizeY, zSign * halfSizeZ), new Point3D(halfSizeX, -halfSizeY, zSign * halfSizeZ)};
 
-                  Vector3D normalFromCrossProduct = new Vector3D();
-                  normalFromCrossProduct.cross(vector1, vector2);
-                  normalFromCrossProduct.normalize();
+            if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+            else
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
-                  assertEquals(1.0, Math.abs(normalFromCrossProduct.dot(normal)), 1e-8);
-               }
-            }
+            expectedClosestPoint.set(pointInside.getX(), pointInside.getY(), zSign * halfSizeZ);
+            expectedNormal.set(0.0, 0.0, zSign);
+            box3D.transformToWorld(pointInside);
+            box3D.transformToWorld(expectedClosestPoint);
+            box3D.transformToWorld(expectedNormal);
+            assertTrue(box3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
       }
    }
 
    @Test
-   public void testApplyTransform()
+   void testGetVertices() throws Exception
    {
-      Random random = new Random(562346L);
-      int nBoxes = 100;
-      int nTestsPerBox = 1000;
-      for (int boxNumber = 0; boxNumber < nBoxes; boxNumber++)
-      {
-         Box3D box = EuclidShapeRandomTools.nextBox3D(random);
+      Random random = new Random(3465);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Trivial test with the pose set to zero
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         box3D.getPose().setToZero();
+
+         Point3D expectedAbsoluteVertex = new Point3D(box3D.getSize());
+         expectedAbsoluteVertex.scale(0.5);
+
+         assertEquals(8, box3D.getVertices().length);
+
+         Point3DBasics[] vertices = box3D.getVertices();
+
+         for (int j = 0; j < vertices.length; j++)
+         {
+            Point3DBasics vertex = vertices[j];
+            EuclidCoreTestTools.assertTuple3DEquals(vertex, box3D.getVertex(j), EPSILON);
+            vertex.absolute();
+            EuclidCoreTestTools.assertTuple3DEquals(expectedAbsoluteVertex, vertex, EPSILON);
+         }
+
+         double x = 0.5 * box3D.getSizeX();
+         double y = 0.5 * box3D.getSizeY();
+         double z = 0.5 * box3D.getSizeZ();
+         int vertexIndex = 0;
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, -y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, -y, z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(x, -y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(-x, -y, -z), box3D.getVertex(vertexIndex++), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Just testing that the vertices transformation
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+
+         Point3DBasics[] expectedVertices = box3D.getVertices();
+
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Box3D boxTransformed = new Box3D(box);
-         boxTransformed.applyTransform(transform);
-         Box3D biggerBox = new Box3D(box);
-         biggerBox.scale(2.0);
+         box3D.applyTransform(transform);
+         Arrays.asList(expectedVertices).forEach(transform::transform);
 
-         Point3D[] vertices = new Point3D[8];
-         for (int i = 0; i < vertices.length; i++)
+         Point3DBasics[] actualVertices = box3D.getVertices();
+
+         for (int j = 0; j < 8; j++)
          {
-            vertices[i] = new Point3D();
-         }
-         biggerBox.getVertices(vertices);
-
-         for (int testNumber = 0; testNumber < nTestsPerBox; testNumber++)
-         {
-            Point3D point = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
-            Point3D pointTransformed = new Point3D(point);
-            box.transformToLocal(pointTransformed);
-            boxTransformed.transformToWorld(pointTransformed);
-
-            assertEquals(box.isPointInside(point), boxTransformed.isPointInside(pointTransformed));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedVertices[j], actualVertices[j], EPSILON);
          }
       }
    }
 
    @Test
-   public void testApplyTransform2()
+   void testApplyTransform()
    {
-      Box3D box3d = new Box3D();
-      RigidBodyTransform transform = new RigidBodyTransform();
-      Point3D point = new Point3D();
-      point.set(1.0, 1.0, 1.0);
-      transform.setTranslation(point);
-      box3d.applyTransform(transform);
+      Random random = new Random(346);
 
-      box3d.getCenter(point);
-      Point3D expectedPosition = new Point3D(1.0, 1.0, 1.0);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPosition, point, EPSILON);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D expected = new Box3D(actual);
 
-      Quaternion quat = new Quaternion();
-      quat.setYawPitchRoll(1.0, 1.0, 1.0);
-      Quaternion quat2 = new Quaternion(quat);
-      transform.setRotationAndZeroTranslation(quat);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
-      box3d.applyTransform(transform);
+         expected.getPose().applyTransform(transform);
+         actual.applyTransform(transform);
 
-      point.set(box3d.getPose().getShapePosition());
-      quat.set(box3d.getPose().getShapeOrientation());
-      expectedPosition.applyTransform(transform);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedPosition, point, EPSILON);
-      EuclidCoreTestTools.assertQuaternionEquals(quat2, quat, EPSILON);
+         EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D expected = new Box3D(actual);
+
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+
+         expected.getPose().applyTransform(transform);
+         actual.applyTransform(transform);
+
+         EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+      }
    }
 
    @Test
-   public void testSetYawPitchRoll()
+   void testApplyInverseTransform()
    {
-      int nTests = 100;
-      for (int i = 0; i < nTests; i++)
+      Random random = new Random(346);
+
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         Random random = new Random(562346L);
-         Box3D box = new Box3D();
+         Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D original = new Box3D(actual);
+         Box3D expected = new Box3D(actual);
 
-         double yaw = random.nextDouble();
-         double pitch = random.nextDouble();
-         double roll = random.nextDouble();
-         box.getPose().setRotationYawPitchRoll(yaw, pitch, roll);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
-         RotationMatrix rotation = new RotationMatrix();
-         rotation.set(box.getPose().getShapeOrientation());
+         expected.getPose().applyInverseTransform(transform);
+         actual.applyInverseTransform(transform);
 
-         double epsilon = 1e-14;
-         assertEquals(yaw, rotation.getYaw(), epsilon);
-         assertEquals(pitch, rotation.getPitch(), epsilon);
-         assertEquals(roll, rotation.getRoll(), epsilon);
+         EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+         actual.applyTransform(transform);
+         EuclidShapeTestTools.assertBox3DEquals(original, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
+         Box3D original = new Box3D(actual);
+         Box3D expected = new Box3D(actual);
+
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+
+         expected.getPose().applyInverseTransform(transform);
+         actual.applyInverseTransform(transform);
+
+         EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
+         actual.applyTransform(transform);
+         EuclidShapeTestTools.assertBox3DEquals(original, actual, EPSILON);
       }
    }
 
@@ -664,10 +1030,10 @@ public class Box3DTest
       {
          Box3D box = EuclidShapeRandomTools.nextBox3D(random);
          Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
-         Point3D expectedSupportingVertex = Stream.of(box.getVertices())
-                                                  .sorted((v1,
-                                                           v2) -> -Double.compare(TupleTools.dot(supportDirection, v1), TupleTools.dot(supportDirection, v2)))
-                                                  .findFirst().get();
+         Point3DBasics expectedSupportingVertex = Stream.of(box.getVertices()).sorted((v1,
+                                                                                       v2) -> -Double.compare(TupleTools.dot(supportDirection, v1),
+                                                                                                              TupleTools.dot(supportDirection, v2)))
+                                                        .findFirst().get();
          Point3DReadOnly actualSupportingVertex = box.getSupportingVertex(supportDirection);
          EuclidCoreTestTools.assertTuple3DEquals(expectedSupportingVertex, actualSupportingVertex, EPSILON);
       }
@@ -679,7 +1045,7 @@ public class Box3DTest
          Point3DReadOnly supportingVertex = box.getSupportingVertex(supportDirection);
          Point3D supportingVertexTranslated = new Point3D();
          supportDirection.normalize();
-         assertTrue(box.isPointInside(supportingVertex));
+         assertTrue(box.isPointInside(supportingVertex, EPSILON));
          supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
          assertFalse(box.isPointInside(supportingVertexTranslated));
          supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
@@ -693,13 +1059,458 @@ public class Box3DTest
       }
    }
 
-   private static void assertEverythingDifferent(Box3D box1, Box3D box2, double epsilon)
+   @Test
+   void testDistance() throws Exception
    {
-      assertFalse(box1.getOrientation().epsilonEquals(box2.getOrientation(), epsilon));
-      assertFalse(box1.getPosition().epsilonEquals(box2.getPosition(), epsilon));
+      Random random = new Random(986);
 
-      assertFalse(EuclidCoreTools.epsilonEquals(box1.getSizeX(), box2.getSizeX(), epsilon));
-      assertFalse(EuclidCoreTools.epsilonEquals(box1.getSizeY(), box2.getSizeY(), epsilon));
-      assertFalse(EuclidCoreTools.epsilonEquals(box1.getSizeZ(), box2.getSizeZ(), epsilon));
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, closest to a face
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+
+         { // X faces
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+
+            double expectedDistance = Math.abs(pointOutside.getX() - xSign * halfSizeX);
+            box3D.transformToWorld(pointOutside);
+            assertEquals(expectedDistance, box3D.distance(pointOutside), EPSILON);
+         }
+
+         { // Y faces
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+
+            double expectedDistance = Math.abs(pointOutside.getY() - ySign * halfSizeY);
+            box3D.transformToWorld(pointOutside);
+            assertEquals(expectedDistance, box3D.distance(pointOutside), EPSILON);
+         }
+
+         { // Z faces
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+
+            double expectedDistance = Math.abs(pointOutside.getZ() - zSign * halfSizeZ);
+            box3D.transformToWorld(pointOutside);
+            assertEquals(expectedDistance, box3D.distance(pointOutside), EPSILON);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point not colliding, closest to an edge
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+         Point3D closestPoint = new Point3D();
+
+         { // Collinear to X-axis
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            closestPoint.set(pointOutside.getX(), ySign * halfSizeY, zSign * halfSizeZ);
+            double expectedDistance = closestPoint.distance(pointOutside);
+            box3D.transformToWorld(pointOutside);
+            assertEquals(expectedDistance, box3D.distance(pointOutside), EPSILON);
+         }
+
+         { // Collinear to Y-axis
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            closestPoint.set(xSign * halfSizeX, pointOutside.getY(), zSign * halfSizeZ);
+            double expectedDistance = closestPoint.distance(pointOutside);
+            box3D.transformToWorld(pointOutside);
+            assertEquals(expectedDistance, box3D.distance(pointOutside), EPSILON);
+         }
+
+         { // Collinear to Z-axis
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY, EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+            closestPoint.set(xSign * halfSizeX, ySign * halfSizeY, pointOutside.getZ());
+            double expectedDistance = closestPoint.distance(pointOutside);
+            box3D.transformToWorld(pointOutside);
+            assertEquals(expectedDistance, box3D.distance(pointOutside), EPSILON);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point not colliding, closest to a vertex
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+         Point3D closestVertex = new Point3D();
+
+         double xSign = random.nextBoolean() ? -1.0 : 1.0;
+         double ySign = random.nextBoolean() ? -1.0 : 1.0;
+         double zSign = random.nextBoolean() ? -1.0 : 1.0;
+         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                          ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                          zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+         closestVertex.set(xSign * halfSizeX, ySign * halfSizeY, zSign * halfSizeZ);
+         double expectedDistance = closestVertex.distance(pointOutside);
+         box3D.transformToWorld(pointOutside);
+         assertEquals(expectedDistance, box3D.distance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside, the returned distance should be zero
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+
+         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices());
+         assertEquals(0.0, box3D.distance(pointInside));
+      }
+   }
+
+   @Test
+   void testSignedDistance() throws Exception
+   {
+      Random random = new Random(345346);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Simple tests against Box3DReadOnly.distance(Point3DReadOnly)
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         Point3DReadOnly point = EuclidCoreRandomTools.nextPoint3D(random, box3D.getSizeX(), box3D.getSizeY(), box3D.getSizeZ());
+         double distance = box3D.distance(point);
+         double signedDistance = box3D.signedDistance(point);
+
+         if (!box3D.isPointInside(point))
+            assertEquals(distance, signedDistance, EPSILON);
+         else
+            assertTrue(signedDistance < 0.0);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Using a cube making it easier to tests with queries inside
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double size = EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0);
+         box3D.setSize(size, size, size);
+         double halfSize = 0.5 * size;
+
+         Point3D pointInside = new Point3D();
+
+         { // X faces
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            Point3D[] faceVertices = {new Point3D(xSign * halfSize, halfSize, halfSize), new Point3D(xSign * halfSize, -halfSize, halfSize),
+                  new Point3D(xSign * halfSize, -halfSize, -halfSize), new Point3D(xSign * halfSize, halfSize, -halfSize)};
+
+            if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+            else
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+
+            double expectedDistance = -Math.abs(pointInside.getX() - xSign * halfSize);
+
+            box3D.transformToWorld(pointInside);
+            assertEquals(expectedDistance, box3D.signedDistance(pointInside), EPSILON);
+         }
+
+         { // Y faces
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            Point3D[] faceVertices = {new Point3D(halfSize, ySign * halfSize, halfSize), new Point3D(-halfSize, ySign * halfSize, halfSize),
+                  new Point3D(-halfSize, ySign * halfSize, -halfSize), new Point3D(halfSize, ySign * halfSize, -halfSize)};
+
+            if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+            else
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+
+            double expectedDistance = -Math.abs(pointInside.getY() - ySign * halfSize);
+            box3D.transformToWorld(pointInside);
+            assertEquals(expectedDistance, box3D.signedDistance(pointInside), EPSILON);
+         }
+
+         { // Z faces
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            Point3D[] faceVertices = {new Point3D(halfSize, halfSize, zSign * halfSize), new Point3D(-halfSize, halfSize, zSign * halfSize),
+                  new Point3D(-halfSize, -halfSize, zSign * halfSize), new Point3D(halfSize, -halfSize, zSign * halfSize)};
+
+            if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+            else
+               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+
+            double expectedDistance = -Math.abs(pointInside.getZ() - zSign * halfSize);
+            box3D.transformToWorld(pointInside);
+            assertEquals(expectedDistance, box3D.signedDistance(pointInside), EPSILON);
+         }
+      }
+   }
+
+   @Test
+   void testOrthogonalProjection() throws Exception
+   {
+      Random random = new Random(984);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, closest to a face
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+         Point3D expectedProjection = new Point3D();
+
+         { // X faces
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+            expectedProjection.set(xSign * halfSizeX, pointOutside.getY(), pointOutside.getZ());
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedProjection);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         }
+
+         { // Y faces
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+            expectedProjection.set(pointOutside.getX(), ySign * halfSizeY, pointOutside.getZ());
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedProjection);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         }
+
+         { // Z faces
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            expectedProjection.set(pointOutside.getX(), pointOutside.getY(), zSign * halfSizeZ);
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedProjection);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, closest to an edge
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+         Point3D expectedProjection = new Point3D();
+
+         { // Collinear to X-axis
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            expectedProjection.set(pointOutside.getX(), ySign * halfSizeY, zSign * halfSizeZ);
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedProjection);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         }
+
+         { // Collinear to Y-axis
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+                             zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+            expectedProjection.set(xSign * halfSizeX, pointOutside.getY(), zSign * halfSizeZ);
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedProjection);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         }
+
+         { // Collinear to Z-axis
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY, EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+            expectedProjection.set(xSign * halfSizeX, ySign * halfSizeY, pointOutside.getZ());
+            box3D.transformToWorld(pointOutside);
+            box3D.transformToWorld(expectedProjection);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, closest to a vertex
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D pointOutside = new Point3D();
+         Point3D expectedProjection = new Point3D();
+
+         double xSign = random.nextBoolean() ? -1.0 : 1.0;
+         double ySign = random.nextBoolean() ? -1.0 : 1.0;
+         double zSign = random.nextBoolean() ? -1.0 : 1.0;
+         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                          ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                          zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
+         expectedProjection.set(xSign * halfSizeX, ySign * halfSizeY, zSign * halfSizeZ);
+         box3D.transformToWorld(pointOutside);
+         box3D.transformToWorld(expectedProjection);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, box3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside, orthogonalProjection should return null
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices());
+         assertNull(box3D.orthogonalProjectionCopy(pointInside));
+      }
+   }
+
+   @Test
+   void testIntersectionWith() throws Exception
+   {
+      Random random = new Random(865);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Line not intersecting, hovering over a face
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         { // X faces
+            double xSign = random.nextBoolean() ? -1.0 : 1.0;
+            List<LineSegment3D> edges = new ArrayList<>();
+            edges.add(new LineSegment3D(xSign * halfSizeX, halfSizeY, halfSizeZ, xSign * halfSizeX, halfSizeY, -halfSizeZ));
+            edges.add(new LineSegment3D(xSign * halfSizeX, halfSizeY, -halfSizeZ, xSign * halfSizeX, -halfSizeY, -halfSizeZ));
+            edges.add(new LineSegment3D(xSign * halfSizeX, -halfSizeY, -halfSizeZ, xSign * halfSizeX, -halfSizeY, halfSizeZ));
+            edges.add(new LineSegment3D(xSign * halfSizeX, -halfSizeY, halfSizeZ, xSign * halfSizeX, halfSizeY, halfSizeZ));
+
+            LineSegment3D edge1 = edges.remove(random.nextInt(4));
+            LineSegment3D edge2 = edges.remove(random.nextInt(3));
+
+            Point3D pointOnEdge1 = new Point3D();
+            Point3D pointOnEdge2 = new Point3D();
+            pointOnEdge1.interpolate(edge1.getFirstEndpoint(), edge1.getSecondEndpoint(), random.nextDouble());
+            pointOnEdge2.interpolate(edge2.getFirstEndpoint(), edge2.getSecondEndpoint(), random.nextDouble());
+
+            pointOnEdge1.addX(xSign * EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+            pointOnEdge2.addX(xSign * EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+            Line3D line = new Line3D(pointOnEdge1, pointOnEdge2);
+
+            box3D.transformToWorld(line);
+            assertEquals(0, box3D.intersectionWith(line, null, null));
+         }
+
+         { // Y faces
+            double ySign = random.nextBoolean() ? -1.0 : 1.0;
+            List<LineSegment3D> edges = new ArrayList<>();
+            edges.add(new LineSegment3D(halfSizeX, ySign * halfSizeY, halfSizeZ, halfSizeX, ySign * halfSizeY, -halfSizeZ));
+            edges.add(new LineSegment3D(halfSizeX, ySign * halfSizeY, -halfSizeZ, -halfSizeX, ySign * halfSizeY, -halfSizeZ));
+            edges.add(new LineSegment3D(-halfSizeX, ySign * halfSizeY, -halfSizeZ, -halfSizeX, ySign * halfSizeY, halfSizeZ));
+            edges.add(new LineSegment3D(-halfSizeX, ySign * halfSizeY, halfSizeZ, halfSizeX, ySign * halfSizeY, halfSizeZ));
+
+            LineSegment3D edge1 = edges.remove(random.nextInt(4));
+            LineSegment3D edge2 = edges.remove(random.nextInt(3));
+
+            Point3D pointOnEdge1 = new Point3D();
+            Point3D pointOnEdge2 = new Point3D();
+            pointOnEdge1.interpolate(edge1.getFirstEndpoint(), edge1.getSecondEndpoint(), random.nextDouble());
+            pointOnEdge2.interpolate(edge2.getFirstEndpoint(), edge2.getSecondEndpoint(), random.nextDouble());
+
+            pointOnEdge1.addY(ySign * EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+            pointOnEdge2.addY(ySign * EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+            Line3D line = new Line3D(pointOnEdge1, pointOnEdge2);
+
+            box3D.transformToWorld(line);
+            assertEquals(0, box3D.intersectionWith(line, null, null));
+         }
+
+         { // Z faces
+            double zSign = random.nextBoolean() ? -1.0 : 1.0;
+            List<LineSegment3D> edges = new ArrayList<>();
+            edges.add(new LineSegment3D(halfSizeX, halfSizeY, zSign * halfSizeZ, halfSizeX, -halfSizeY, zSign * halfSizeZ));
+            edges.add(new LineSegment3D(halfSizeX, -halfSizeY, zSign * halfSizeZ, -halfSizeX, -halfSizeY, zSign * halfSizeZ));
+            edges.add(new LineSegment3D(-halfSizeX, -halfSizeY, zSign * halfSizeZ, -halfSizeX, halfSizeY, zSign * halfSizeZ));
+            edges.add(new LineSegment3D(-halfSizeX, halfSizeY, zSign * halfSizeZ, halfSizeX, halfSizeY, zSign * halfSizeZ));
+
+            LineSegment3D edge1 = edges.remove(random.nextInt(4));
+            LineSegment3D edge2 = edges.remove(random.nextInt(3));
+
+            Point3D pointOnEdge1 = new Point3D();
+            Point3D pointOnEdge2 = new Point3D();
+            pointOnEdge1.interpolate(edge1.getFirstEndpoint(), edge1.getSecondEndpoint(), random.nextDouble());
+            pointOnEdge2.interpolate(edge2.getFirstEndpoint(), edge2.getSecondEndpoint(), random.nextDouble());
+
+            pointOnEdge1.addZ(zSign * EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+            pointOnEdge2.addZ(zSign * EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+            Line3D line = new Line3D(pointOnEdge1, pointOnEdge2);
+
+            box3D.transformToWorld(line);
+            assertEquals(0, box3D.intersectionWith(line, null, null));
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Line intersecting, we generate the line from the intersections
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         double halfSizeX = 0.5 * box3D.getSizeX();
+         double halfSizeY = 0.5 * box3D.getSizeY();
+         double halfSizeZ = 0.5 * box3D.getSizeZ();
+
+         Point3D expectedIntersection1 = EuclidCoreRandomTools.nextPoint3D(random, halfSizeX, halfSizeY, halfSizeZ);
+         Point3D expectedIntersection2 = EuclidCoreRandomTools.nextPoint3D(random, halfSizeX, halfSizeY, halfSizeZ);
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+
+         double sign1 = random.nextBoolean() ? -1.0 : 1.0;
+         double sign2 = random.nextBoolean() ? -1.0 : 1.0;
+         int index1 = random.nextInt(3);
+         int index2 = random.nextInt(3);
+         if (sign1 == sign2 && index2 == index1)
+            index2 = (index2 + 1) % 3; // Prevent to generate the two points on the same face.
+
+         expectedIntersection1.setElement(index1, sign1 * 0.5 * box3D.getSize().getElement(index1));
+         expectedIntersection2.setElement(index2, sign2 * 0.5 * box3D.getSize().getElement(index2));
+
+         Line3D line = new Line3D(expectedIntersection1, expectedIntersection2);
+         box3D.transformToWorld(line);
+         box3D.transformToWorld(expectedIntersection1);
+         box3D.transformToWorld(expectedIntersection2);
+         assertEquals(2, box3D.intersectionWith(line, actualIntersection1, actualIntersection2));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+      }
+   }
+
+   @Test
+   void testGetBoundingBox3D() throws Exception
+   {
+      Random random = new Random(34563);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
+         BoundingBox3D boundingBox = EuclidGeometryRandomTools.nextBoundingBox3D(random);
+         box3D.getBoundingBox3D(boundingBox);
+
+         for (Point3DBasics vertex : box3D.getVertices())
+            assertTrue(boundingBox.isInsideInclusive(vertex));
+         for (int j = 0; j < 100; j++)
+            assertTrue(boundingBox.isInsideExclusive(EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices())));
+         box3D.scale(1.1);
+      }
    }
 }
