@@ -7,6 +7,10 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.shape.primitives.Capsule3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -54,6 +58,35 @@ class Capsule3DTest
          Vector3D actualNormal = new Vector3D();
          capsule.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
+      }
+   }
+
+   @Test
+   void testGetBoundingBox() throws Exception
+   {
+      Random random = new Random(36342);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Using getSupportingVertex
+         Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
+
+         BoundingBox3D expectedBoundingBox = new BoundingBox3D();
+         expectedBoundingBox.setToNaN();
+         Vector3D supportDirection = new Vector3D(Axis.X);
+         expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
+         supportDirection.negate();
+         expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
+         supportDirection.set(Axis.Y);
+         expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
+         supportDirection.negate();
+         expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
+         supportDirection.set(Axis.Z);
+         expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
+         supportDirection.negate();
+         expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
+
+         BoundingBox3DReadOnly actualBoundingBox = capsule3D.getBoundingBox();
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedBoundingBox, actualBoundingBox, EPSILON);
       }
    }
 }

@@ -1,5 +1,8 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.shape.collision.SupportingVertexHolder;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -128,4 +131,13 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @return whether the method succeeded or not.
     */
    boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack);
+
+   default BoundingBox3DReadOnly getBoundingBox()
+   {
+      BoundingBox3D boundingBox3D = new BoundingBox3D();
+      getBoundingBox(boundingBox3D);
+      return boundingBox3D;
+   }
+
+   void getBoundingBox(BoundingBox3DBasics boundingBoxToPack);
 }

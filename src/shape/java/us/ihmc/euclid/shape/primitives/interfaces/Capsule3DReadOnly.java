@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -101,5 +102,11 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
+   }
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      EuclidShapeTools.boundingBoxCapsule3D(getPosition(), getAxis(), getLength(), getRadius(), boundingBoxToPack);
    }
 }

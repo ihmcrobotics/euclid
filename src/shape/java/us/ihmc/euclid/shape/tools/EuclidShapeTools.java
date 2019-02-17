@@ -3,7 +3,9 @@ package us.ihmc.euclid.shape.tools;
 import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -267,9 +269,9 @@ public class EuclidShapeTools
       }
       else // if (percentageOnAxis < 0.0)
       {
-         double bottomCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-         double bottomCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-         double bottomCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
+         double bottomCenterX = capsule3DPosition.getX() - capsule3DHalfLength * capsule3DAxis.getX();
+         double bottomCenterY = capsule3DPosition.getY() - capsule3DHalfLength * capsule3DAxis.getY();
+         double bottomCenterZ = capsule3DPosition.getZ() - capsule3DHalfLength * capsule3DAxis.getZ();
          double distanceSquaredFromBottomCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(bottomCenterX, bottomCenterY, bottomCenterZ,
                                                                                                      pointToProject);
 
@@ -294,6 +296,25 @@ public class EuclidShapeTools
          supportingVertexToPack.scaleAdd(0.5 * capsule3DLength, capsule3DAxis, supportingVertexToPack);
       else
          supportingVertexToPack.scaleAdd(-0.5 * capsule3DLength, capsule3DAxis, supportingVertexToPack);
+   }
+
+   public static void boundingBoxCapsule3D(Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis, double capsule3DLength, double capsule3DRadius,
+                                           BoundingBox3DBasics boundingBoxToPack)
+   {
+      double capsule3DHalfLength = 0.5 * capsule3DLength;
+
+      double maxX = Math.abs(capsule3DHalfLength * capsule3DAxis.getX()) + capsule3DRadius;
+      double maxY = Math.abs(capsule3DHalfLength * capsule3DAxis.getY()) + capsule3DRadius;
+      double maxZ = Math.abs(capsule3DHalfLength * capsule3DAxis.getZ()) + capsule3DRadius;
+
+      double minX = -maxX + capsule3DPosition.getX();
+      double minY = -maxY + capsule3DPosition.getY();
+      double minZ = -maxZ + capsule3DPosition.getZ();
+      maxX += capsule3DPosition.getX();
+      maxY += capsule3DPosition.getY();
+      maxZ += capsule3DPosition.getZ();
+
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
    public static double doPoint3DCapsule3DCollisionTest(Point3DReadOnly query, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
@@ -557,6 +578,33 @@ public class EuclidShapeTools
          supportingVertexToPack.scaleAdd(-0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
    }
 
+   public static void boundingBoxCylinder3D(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
+                                            double cylinder3DRadius, BoundingBox3DBasics boundingBoxToPack)
+   {
+      // From https://iquilezles.org/www/articles/diskbbox/diskbbox.htm
+      double cylinder3DHalfLength = 0.5 * cylinder3DLength;
+
+      double normSquared = cylinder3DAxis.lengthSquared();
+      double capMinMaxX = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getX() * cylinder3DAxis.getX() / normSquared));
+      double capMinMaxY = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getY() * cylinder3DAxis.getY() / normSquared));
+      double capMinMaxZ = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getZ() * cylinder3DAxis.getZ() / normSquared));
+
+      double maxX = Math.abs(cylinder3DHalfLength * cylinder3DAxis.getX()) + capMinMaxX;
+      double maxY = Math.abs(cylinder3DHalfLength * cylinder3DAxis.getY()) + capMinMaxY;
+      double maxZ = Math.abs(cylinder3DHalfLength * cylinder3DAxis.getZ()) + capMinMaxZ;
+
+      double minX = -maxX + cylinder3DPosition.getX();
+      double minY = -maxY + cylinder3DPosition.getY();
+      double minZ = -maxZ + cylinder3DPosition.getZ();
+      maxX += cylinder3DPosition.getX();
+      maxY += cylinder3DPosition.getY();
+      maxZ += cylinder3DPosition.getZ();
+
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
+
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
+   }
+
    public static double doPoint3DCylinder3DCollisionTest(Point3DReadOnly query, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
                                                          double cylinder3DLength, double cylinder3DRadius, Point3DBasics closestPointOnSurfaceToPack,
                                                          Vector3DBasics normalToPack)
@@ -736,6 +784,36 @@ public class EuclidShapeTools
       supportingVertexToPack.set(nx, ny, nz);
       supportingVertexToPack.scale(ellipsoid3DRadii.getX(), ellipsoid3DRadii.getY(), ellipsoid3DRadii.getZ());
       supportingVertexToPack.scale(1.0 / Math.sqrt(EuclidCoreTools.normSquared(nx, ny, nz)));
+   }
+
+   public static void boundingBoxEllipsoid3D(Point3DReadOnly ellipsoid3DPosition, RotationMatrixReadOnly ellipsoid3DOrientation,
+                                             Vector3DReadOnly ellipsoid3DRadii, BoundingBox3DBasics boundingBoxToPack)
+   {
+      double m00 = ellipsoid3DOrientation.getM00() * ellipsoid3DOrientation.getM00();
+      double m01 = ellipsoid3DOrientation.getM01() * ellipsoid3DOrientation.getM01();
+      double m02 = ellipsoid3DOrientation.getM02() * ellipsoid3DOrientation.getM02();
+      double m10 = ellipsoid3DOrientation.getM10() * ellipsoid3DOrientation.getM10();
+      double m11 = ellipsoid3DOrientation.getM11() * ellipsoid3DOrientation.getM11();
+      double m12 = ellipsoid3DOrientation.getM12() * ellipsoid3DOrientation.getM12();
+      double m20 = ellipsoid3DOrientation.getM20() * ellipsoid3DOrientation.getM20();
+      double m21 = ellipsoid3DOrientation.getM21() * ellipsoid3DOrientation.getM21();
+      double m22 = ellipsoid3DOrientation.getM22() * ellipsoid3DOrientation.getM22();
+
+      double rx = ellipsoid3DRadii.getX() * ellipsoid3DRadii.getX();
+      double ry = ellipsoid3DRadii.getY() * ellipsoid3DRadii.getY();
+      double rz = ellipsoid3DRadii.getZ() * ellipsoid3DRadii.getZ();
+
+      double xRange = Math.sqrt(m00 * rx + m01 * ry + m02 * rz);
+      double yRange = Math.sqrt(m10 * rx + m11 * ry + m12 * rz);
+      double zRange = Math.sqrt(m20 * rx + m21 * ry + m22 * rz);
+
+      double maxX = ellipsoid3DPosition.getX() + xRange;
+      double maxY = ellipsoid3DPosition.getY() + yRange;
+      double maxZ = ellipsoid3DPosition.getZ() + zRange;
+      double minX = ellipsoid3DPosition.getX() - xRange;
+      double minY = ellipsoid3DPosition.getY() - yRange;
+      double minZ = ellipsoid3DPosition.getZ() - zRange;
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
    public static double doPoint3DEllipsoid3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics closestPointToPack,

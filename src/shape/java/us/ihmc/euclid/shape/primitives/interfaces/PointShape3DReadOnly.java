@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -52,6 +53,12 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
       return distanceSquared(query) <= epsilon * epsilon;
+   }
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxToPack.set(this, this);
    }
 
    default boolean epsilonEquals(PointShape3DReadOnly other, double epsilon)

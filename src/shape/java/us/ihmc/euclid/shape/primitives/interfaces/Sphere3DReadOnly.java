@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -121,6 +122,18 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       if (secondIntersectionToPack != null && numberOfIntersections == 2)
          secondIntersectionToPack.add(getPosition());
       return numberOfIntersections;
+   }
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      double minX = getPosition().getX() - getRadius();
+      double minY = getPosition().getY() - getRadius();
+      double minZ = getPosition().getZ() - getRadius();
+      double maxX = getPosition().getX() + getRadius();
+      double maxY = getPosition().getY() + getRadius();
+      double maxZ = getPosition().getZ() + getRadius();
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
    /**

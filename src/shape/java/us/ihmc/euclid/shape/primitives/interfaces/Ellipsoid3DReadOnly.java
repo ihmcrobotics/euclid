@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -180,6 +181,12 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
          transformToWorld(secondIntersectionToPack);
 
       return numberOfIntersections;
+   }
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      EuclidShapeTools.boundingBoxEllipsoid3D(getPosition(), getOrientation(), getRadii(), boundingBoxToPack);
    }
 
    /**

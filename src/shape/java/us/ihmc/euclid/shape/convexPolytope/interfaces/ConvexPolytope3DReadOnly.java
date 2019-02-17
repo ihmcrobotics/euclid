@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.List;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
@@ -97,7 +98,14 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
     */
    List<? extends Vertex3DReadOnly> getVertices();
 
+   @Override
    BoundingBox3DReadOnly getBoundingBox();
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxToPack.set(getBoundingBox());
+   }
 
    Point3DReadOnly getCentroid();
 

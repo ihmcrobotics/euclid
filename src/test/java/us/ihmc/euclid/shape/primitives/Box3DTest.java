@@ -1504,7 +1504,7 @@ public class Box3DTest
       {
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
          BoundingBox3D boundingBox = EuclidGeometryRandomTools.nextBoundingBox3D(random);
-         box3D.getBoundingBox3D(boundingBox);
+         box3D.getBoundingBox(boundingBox);
 
          for (Point3DBasics vertex : box3D.getVertices())
             assertTrue(boundingBox.isInsideInclusive(vertex));
