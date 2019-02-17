@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -49,7 +50,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
    default void setToZero()
    {
       getPosition().setToZero();
-      getAxis().setToZero();
+      getAxis().set(Axis.Z);
       setSize(0.0, 0.0);
    }
 

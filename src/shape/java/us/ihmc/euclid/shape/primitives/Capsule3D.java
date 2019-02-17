@@ -32,11 +32,6 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
       this(1.0, 0.5);
    }
 
-   public Capsule3D(Capsule3DReadOnly other)
-   {
-      set(other);
-   }
-
    public Capsule3D(double length, double radius)
    {
       setSize(length, radius);
@@ -45,6 +40,11 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    public Capsule3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
       set(position, axis, length, radius);
+   }
+
+   public Capsule3D(Capsule3DReadOnly other)
+   {
+      set(other);
    }
 
    @Override
@@ -56,12 +56,16 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    @Override
    public void setRadius(double radius)
    {
+      if (radius < 0.0)
+         throw new IllegalArgumentException("The radius of a Capsule3D cannot be negative: " + radius);
       this.radius = radius;
    }
 
    @Override
    public void setLength(double length)
    {
+      if (length < 0.0)
+         throw new IllegalArgumentException("The length of a Capsule3D cannot be negative: " + length);
       this.length = length;
       halfLength = 0.5 * length;
    }

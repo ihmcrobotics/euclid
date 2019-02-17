@@ -95,7 +95,9 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    default boolean geometricallyEquals(Capsule3DReadOnly other, double epsilon)
    {
-      if (Math.abs(getRadius() - other.getRadius()) > epsilon || Math.abs(getLength() - other.getLength()) > epsilon)
+      if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon))
          return false;
 
       if (!getPosition().geometricallyEquals(other.getPosition(), epsilon))
