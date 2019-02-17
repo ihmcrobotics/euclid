@@ -12,10 +12,14 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
-import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -27,295 +31,803 @@ public class Cylinder3DTest
    private static final double EPSILON = 1e-12;
 
    @Test
-   public void testCommonShape3dFunctionality()
+   void testConstructors() throws Exception
    {
-      Shape3DTestHelper testHelper = new Shape3DTestHelper();
-      Random random = new Random(1776L);
+      Random random = new Random(67542);
 
-      int numberOfShapes = 1000;
-      int numberOfPoints = 1000;
+      { // Empty constructor
+         Cylinder3D cylinder3D = new Cylinder3D();
 
-      for (int i = 0; i < numberOfShapes; i++)
-      {
-         testHelper.runSimpleTests(EuclidShapeRandomTools.nextCylinder3D(random), random, numberOfPoints);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getPosition());
+         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, cylinder3D.getAxis(), EPSILON);
+         assertEquals(1.0, cylinder3D.getLength());
+         assertEquals(0.5, cylinder3D.getHalfLength());
+         assertEquals(0.5, cylinder3D.getRadius());
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.5), cylinder3D.getTopCenter(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, -0.5), cylinder3D.getBottomCenter(), EPSILON);
+      }
+
+      { // Cylinder3D(double length, double radius)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            double length = EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0);
+            double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0);
+            Cylinder3D cylinder3D = new Cylinder3D(length, radius);
+
+            EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getPosition());
+            EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, cylinder3D.getAxis(), EPSILON);
+            assertEquals(length, cylinder3D.getLength());
+            assertEquals(0.5 * length, cylinder3D.getHalfLength());
+            assertEquals(radius, cylinder3D.getRadius());
+            EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.5 * length), cylinder3D.getTopCenter(), EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, -0.5 * length), cylinder3D.getBottomCenter(), EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(-0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(1.0, -0.1));
+      }
+
+      { // Cylinder3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Point3D expectedTopCenter = EuclidCoreRandomTools.nextPoint3D(random);
+            Point3D expectedBottomCenter = EuclidCoreRandomTools.nextPoint3D(random);
+            double length = expectedTopCenter.distance(expectedBottomCenter);
+            double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0);
+            Point3D position = EuclidGeometryTools.averagePoint3Ds(expectedTopCenter, expectedBottomCenter);
+            Vector3D axis = new Vector3D();
+            axis.sub(expectedTopCenter, expectedBottomCenter);
+            Cylinder3D cylinder3D = new Cylinder3D(position, axis, length, radius);
+            axis.normalize();
+
+            EuclidCoreTestTools.assertTuple3DEquals(position, cylinder3D.getPosition(), EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(axis, cylinder3D.getAxis(), EPSILON);
+            assertEquals(length, cylinder3D.getLength());
+            assertEquals(0.5 * length, cylinder3D.getHalfLength());
+            assertEquals(radius, cylinder3D.getRadius());
+            EuclidCoreTestTools.assertTuple3DEquals(expectedTopCenter, cylinder3D.getTopCenter(), EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedBottomCenter, cylinder3D.getBottomCenter(), EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis.Z, 1.0, -0.1));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Cylinder3D(Cylinder3DReadOnly other)
+         Cylinder3D original = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D copy = new Cylinder3D(original);
+
+         EuclidShapeTestTools.assertCylinder3DEquals(original, copy, EPSILON);
       }
    }
 
    @Test
-   public void testGettersAndSetters()
+   void testSetToNaN() throws Exception
    {
-      Random random = new Random(1776L);
+      Random random = new Random(34575754);
 
-      int numberOfShapes = 1000;
-
-      for (int i = 0; i < numberOfShapes; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D position = EuclidCoreRandomTools.nextPoint3D(random);
-         Vector3D axis = EuclidCoreRandomTools.nextVector3D(random);
-         double height = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         double radius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
-         Cylinder3D cylinder3d = new Cylinder3D(position, axis, height, radius);
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
 
-         assertEquals(cylinder3d.getRadius(), radius, 1e-7);
-         assertEquals(cylinder3d.getLength(), height, 1e-7);
-         EuclidCoreTestTools.assertTuple3DEquals(position, cylinder3d.getPosition(), EPSILON);
-         axis.normalize();
-         EuclidCoreTestTools.assertTuple3DEquals(axis, cylinder3d.getAxis(), EPSILON);
+         assertFalse(cylinder3D.containsNaN());
+         assertFalse(cylinder3D.getPosition().containsNaN());
+         assertFalse(cylinder3D.getAxis().containsNaN());
+         assertFalse(cylinder3D.getTopCenter().containsNaN());
+         assertFalse(cylinder3D.getBottomCenter().containsNaN());
+         assertFalse(Double.isNaN(cylinder3D.getLength()));
+         assertFalse(Double.isNaN(cylinder3D.getHalfLength()));
+         assertFalse(Double.isNaN(cylinder3D.getRadius()));
 
-         cylinder3d.setRadius(5.0);
-         cylinder3d.setLength(10.0);
+         cylinder3D.setToNaN();
 
-         assertEquals(cylinder3d.getRadius(), 5.0, 1e-7);
-         assertEquals(cylinder3d.getLength(), 10.0, 1e-7);
+         assertTrue(cylinder3D.containsNaN());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(cylinder3D.getPosition());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(cylinder3D.getAxis());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(cylinder3D.getTopCenter());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(cylinder3D.getBottomCenter());
+         assertTrue(Double.isNaN(cylinder3D.getLength()));
+         assertTrue(Double.isNaN(cylinder3D.getHalfLength()));
+         assertTrue(Double.isNaN(cylinder3D.getRadius()));
       }
    }
 
    @Test
-   public void testWithNoTransform()
+   void testSetToZero() throws Exception
    {
-      double height = 2.0;
-      double radius = 0.2;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
+      Random random = new Random(34575754);
 
-      Point3D pointToCheck = new Point3D(0.0, 0.0, 0.0001);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
 
-      pointToCheck = new Point3D(0.0, 0.0, -0.0001);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
+         assertFalse(new Point3D().epsilonEquals(cylinder3D.getPosition(), EPSILON));
+         assertFalse(new Point3D().epsilonEquals(cylinder3D.getAxis(), EPSILON));
+         assertFalse(new Point3D().epsilonEquals(cylinder3D.getTopCenter(), EPSILON));
+         assertFalse(new Point3D().epsilonEquals(cylinder3D.getBottomCenter(), EPSILON));
+         assertNotEquals(0.0, cylinder3D.getLength());
+         assertNotEquals(0.0, cylinder3D.getHalfLength());
+         assertNotEquals(0.0, cylinder3D.getRadius());
 
-      pointToCheck = new Point3D(0.0, 0.0, height / 2.0 + 0.0001);
-      assertFalse(cylinder3d.isPointInside(pointToCheck));
+         cylinder3D.setToZero();
 
-      pointToCheck = new Point3D(0.0, 0.0, -(height / 2.0) + 0.0001);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(radius + 0.001, 0.0, height / 4.0);
-      assertFalse(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(radius - 0.001, 0.0, height / 4.0);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(0.0, radius + 0.001, height / 4.0);
-      assertFalse(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(0.0, radius - 0.001, height / 4.0);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(radius / 2.0, radius / 2.0, height / 4.0);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getPosition());
+         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, cylinder3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getTopCenter());
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getBottomCenter());
+         assertEquals(0.0, cylinder3D.getLength());
+         assertEquals(0.0, cylinder3D.getHalfLength());
+         assertEquals(0.0, cylinder3D.getRadius());
+      }
    }
 
    @Test
-   public void testWithTransform()
+   void testSetters() throws Exception
    {
-      // TODO: More tests, rotations.
+      Random random = new Random(5467457);
 
-      double height = 2.0;
-      double radius = 0.2;
-      double positionX = 1.1;
-      double positionY = 1.3;
-      double positionZ = 1.4;
-      Point3D position = new Point3D(positionX, positionY, positionZ);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Cylinder3D other)
+         Cylinder3D expected = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D actual = EuclidShapeRandomTools.nextCylinder3D(random);
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+         actual.set(expected);
+         EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
+      }
 
-      Cylinder3D cylinder3d = new Cylinder3D(position, Axis.Z, height, radius);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Cylinder3DReadOnly other)
+         Cylinder3D expected = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D actual = EuclidShapeRandomTools.nextCylinder3D(random);
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+         actual.set((Cylinder3DReadOnly) expected);
+         EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
+      }
 
-      Point3D pointToCheck = new Point3D(positionX, positionY, positionZ - height / 2.0 + 0.0001);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
+      { // set(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Cylinder3D expected = EuclidShapeRandomTools.nextCylinder3D(random);
+            Cylinder3D actual = EuclidShapeRandomTools.nextCylinder3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(expected.getPosition(), expected.getAxis(), expected.getLength(), expected.getRadius());
+            EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
+         }
 
-      pointToCheck = new Point3D(positionX, positionY, positionZ - height / 2.0 - 0.0001);
-      assertFalse(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(positionX, positionY, positionZ + height / 2.0 + 0.0001);
-      assertFalse(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(positionX, positionY, positionZ + height / 2.0 - 0.0001);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(positionX + radius + 0.001, positionY, positionZ + height / 4.0);
-      assertFalse(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(positionX + radius - 0.001, positionY, positionZ + height / 4.0);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(positionX, positionY + radius + 0.001, positionZ + height / 4.0);
-      assertFalse(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(positionX, positionY + radius - 0.001, positionZ + height / 4.0);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
-
-      pointToCheck = new Point3D(positionX + radius / 2.0, positionY + radius / 2.0, positionZ + height / 4.0);
-      assertTrue(cylinder3d.isPointInside(pointToCheck));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().set(new Point3D(), Axis.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().set(new Point3D(), Axis.Z, 1.0, -0.1));
+      }
    }
 
    @Test
-   public void testOrthogonalProjectionSide()
+   void testSize() throws Exception
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Point3D pointToCheckAndPack = new Point3D(5, 5, 1);
+      Random random = new Random(43905783);
 
-      cylinder3d.orthogonalProjection(pointToCheckAndPack);
-      double xy = Math.sqrt(radius * radius / 2);
-      Point3D expectedProjection = new Point3D(xy, xy, 1);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, pointToCheckAndPack, EPSILON);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double length = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         assertNotEquals(length, cylinder3D.getLength());
+         assertNotEquals(radius, cylinder3D.getRadius());
+         cylinder3D.setSize(length, radius);
+         assertEquals(length, cylinder3D.getLength());
+         assertEquals(radius, cylinder3D.getRadius());
+      }
+
+      assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().setSize(-0.1, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().setSize(1.0, -0.1));
    }
 
    @Test
-   public void testOrthogonalProjectionTop()
+   void testIsPointInside() throws Exception
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Point3D pointToCheckAndPack = new Point3D(0.5, 0.25, 1.5);
+      Random random = new Random(3465463);
 
-      Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), height / 2.0);
-      cylinder3d.orthogonalProjection(pointToCheckAndPack);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, pointToCheckAndPack, EPSILON);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         double alpha = random.nextDouble();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), alpha);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 0.0, cylinder3D.getRadius());
+         Point3D pointInside = new Point3D();
+         pointInside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+
+         assertTrue(cylinder3D.isPointInside(pointInside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 1.0, 3.0) * cylinder3D.getRadius();
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+
+         assertFalse(cylinder3D.isPointInside(pointOutside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the top cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopCap = new Point3D();
+         pointOnTopCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopCap, cylinder3D.getAxis(), pointOnTopCap);
+
+         assertFalse(cylinder3D.isPointInside(pointOutside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the bottom cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomCap = new Point3D();
+         pointOnBottomCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomCap, cylinder3D.getAxis(), pointOnBottomCap);
+
+         assertFalse(cylinder3D.isPointInside(pointOutside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the top cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopPlane = new Point3D();
+         pointOnTopPlane.scaleAdd((1.0 + random.nextDouble()) * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopPlane, cylinder3D.getAxis(), pointOnTopPlane);
+
+         assertFalse(cylinder3D.isPointInside(pointOutside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the bottom cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomPlane = new Point3D();
+         pointOnBottomPlane.scaleAdd((1.0 + random.nextDouble()) * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomPlane, cylinder3D.getAxis(), pointOnBottomPlane);
+
+         assertFalse(cylinder3D.isPointInside(pointOutside));
+      }
    }
 
    @Test
-   public void testOrthogonalProjectionBottom()
+   void testDoPoint3DCollisionTest() throws Exception
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Point3D pointToCheckAndPack = new Point3D(0.5, 0.25, -height);
+      Random random = new Random(4444);
 
-      Point3D expectedProjection = new Point3D(pointToCheckAndPack.getX(), pointToCheckAndPack.getY(), -1.0);
-      cylinder3d.orthogonalProjection(pointToCheckAndPack);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, pointToCheckAndPack, EPSILON);
+      Point3D actualClosestPoint = new Point3D();
+      Vector3D actualNormal = new Vector3D();
+      Point3D expectedClosestPoint = new Point3D();
+      Vector3D expectedNormal = new Vector3D();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         double alpha = random.nextDouble();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), alpha);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 0.0, cylinder3D.getRadius());
+         Point3D pointInside = new Point3D();
+         pointInside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+
+         // Need to figure out which cylinder's feature the point is the closest to
+         double distanceFromInfiniteCylinder = cylinder3D.getRadius() - distanceOffAxis;
+         double distanceFromTopCap = alpha * cylinder3D.getLength();
+         double distanceFromBottomCap = (1.0 - alpha) * cylinder3D.getLength();
+
+         if (distanceFromInfiniteCylinder <= distanceFromTopCap && distanceFromInfiniteCylinder <= distanceFromBottomCap)
+         { // Closest to the infinite cylinder
+            expectedClosestPoint.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, pointOnAxis);
+            expectedNormal.setAndNormalize(orthogonalToAxis);
+            assertTrue(cylinder3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, distanceOffAxis < 1.0e-3 ? 2.0 * EPSILON : EPSILON);
+         }
+         else
+         {
+            if (distanceFromTopCap <= distanceFromBottomCap)
+            { // Closest to the top cap
+               expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointInside, cylinder3D.getTopCenter(), cylinder3D.getAxis()));
+               expectedNormal.set(cylinder3D.getAxis());
+            }
+            else
+            { // Closest to the bottom cap
+               expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointInside, cylinder3D.getBottomCenter(), cylinder3D.getAxis()));
+               expectedNormal.setAndNegate(cylinder3D.getAxis());
+            }
+            assertTrue(cylinder3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+         }
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 1.0, 3.0) * cylinder3D.getRadius();
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+         expectedClosestPoint.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, pointOnAxis);
+         expectedNormal.setAndNormalize(orthogonalToAxis);
+
+         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the top cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopCap = new Point3D();
+         pointOnTopCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopCap, cylinder3D.getAxis(), pointOnTopCap);
+         expectedClosestPoint.set(pointOnTopCap);
+         expectedNormal.set(cylinder3D.getAxis());
+
+         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the bottom cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomCap = new Point3D();
+         pointOnBottomCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomCap, cylinder3D.getAxis(), pointOnBottomCap);
+         expectedClosestPoint.set(pointOnBottomCap);
+         expectedNormal.setAndNegate(cylinder3D.getAxis());
+
+         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the top cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopPlane = new Point3D();
+         pointOnTopPlane.scaleAdd((1.0 + random.nextDouble()) * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopPlane, cylinder3D.getAxis(), pointOnTopPlane);
+         expectedClosestPoint.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+         expectedNormal.sub(pointOutside, expectedClosestPoint);
+         expectedNormal.normalize();
+
+         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the bottom cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomPlane = new Point3D();
+         pointOnBottomPlane.scaleAdd((1.0 + random.nextDouble()) * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomPlane, cylinder3D.getAxis(), pointOnBottomPlane);
+         expectedClosestPoint.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+         expectedNormal.sub(pointOutside, expectedClosestPoint);
+         expectedNormal.normalize();
+
+         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
    }
 
    @Test
-   public void testSurfaceNormalAt_OnSide()
+   void testApplyTransform()
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+      Random random = new Random(346);
 
-      Point3D pointToCheck = new Point3D(1, 0, 1);
-      Vector3D expectedNormal = new Vector3D(1, 0, 0);
-      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      assertEquals(expectedNormal, normalToPack);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Cylinder3D actual = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D expected = new Cylinder3D(actual);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         expected.getPosition().applyTransform(transform);
+         expected.getAxis().applyTransform(transform);
+         actual.applyTransform(transform);
+
+         EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Cylinder3D actual = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D expected = new Cylinder3D(actual);
+
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+
+         expected.getPosition().applyTransform(transform);
+         expected.getAxis().applyTransform(transform);
+         expected.getAxis().normalize();
+         actual.applyTransform(transform);
+
+         EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
+      }
    }
 
    @Test
-   public void testSurfaceNormalAt_inSide()
+   void testApplyInverseTransform()
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+      Random random = new Random(346);
 
-      Point3D pointToCheck = new Point3D(0.5, 0, 0.5);
-      Vector3D expectedNormal = new Vector3D(1, 0, 0);
-      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      assertEquals(expectedNormal, normalToPack);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Cylinder3D actual = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D original = new Cylinder3D(actual);
+         Cylinder3D expected = new Cylinder3D(actual);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         expected.getPosition().applyInverseTransform(transform);
+         expected.getAxis().applyInverseTransform(transform);
+         expected.getAxis().normalize();
+         actual.applyInverseTransform(transform);
+
+         EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
+         actual.applyTransform(transform);
+         EuclidShapeTestTools.assertCylinder3DEquals(original, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Cylinder3D actual = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D original = new Cylinder3D(actual);
+         Cylinder3D expected = new Cylinder3D(actual);
+
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+
+         expected.getPosition().applyInverseTransform(transform);
+         expected.getAxis().applyInverseTransform(transform);
+         expected.getAxis().normalize();
+         actual.applyInverseTransform(transform);
+
+         EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
+         actual.applyTransform(transform);
+         EuclidShapeTestTools.assertCylinder3DEquals(original, actual, EPSILON);
+      }
    }
 
    @Test
-   public void testSurfaceNormalAt_outSide()
+   void testDistance() throws Exception
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+      Random random = new Random(987346);
 
-      Point3D pointToCheck = new Point3D(1.5, 0, 1);
-      Vector3D expectedNormal = new Vector3D(1, 0, 0);
-      assertFalse(cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack));
-      assertEquals(expectedNormal, normalToPack);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         double alpha = random.nextDouble();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), alpha);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 0.0, cylinder3D.getRadius());
+         Point3D pointInside = new Point3D();
+         pointInside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+         assertEquals(0.0, cylinder3D.distance(pointInside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 1.0, 3.0) * cylinder3D.getRadius();
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+         assertEquals(distanceOffAxis - cylinder3D.getRadius(), cylinder3D.distance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the top cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopCap = new Point3D();
+         pointOnTopCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopCap, cylinder3D.getAxis(), pointOnTopCap);
+         assertEquals(distanceOffTopCap, cylinder3D.distance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the bottom cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomCap = new Point3D();
+         pointOnBottomCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomCap, cylinder3D.getAxis(), pointOnBottomCap);
+         assertEquals(distanceOffBottomCap, cylinder3D.distance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the top cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopPlane = new Point3D();
+         double distanceOrthogonalToAxis = (1.0 + random.nextDouble()) * cylinder3D.getRadius();
+         pointOnTopPlane.scaleAdd(distanceOrthogonalToAxis, orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopPlane, cylinder3D.getAxis(), pointOnTopPlane);
+         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffTopPlane));
+         assertEquals(expectedDistance, cylinder3D.distance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the bottom cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomPlane = new Point3D();
+         double distanceOrthogonalToAxis = (1.0 + random.nextDouble()) * cylinder3D.getRadius();
+         pointOnBottomPlane.scaleAdd(distanceOrthogonalToAxis, orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomPlane, cylinder3D.getAxis(), pointOnBottomPlane);
+         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffBottomPlane));
+         assertEquals(expectedDistance, cylinder3D.distance(pointOutside), EPSILON);
+      }
    }
 
    @Test
-   public void testSurfaceNormalAt_above()
+   void testSignedDistance() throws Exception
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+      Random random = new Random(987);
 
-      Point3D pointToCheck = new Point3D(0, 0, 3.5);
-      Vector3D expectedNormal = new Vector3D(0, 0, 1.0);
-      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      assertEquals(expectedNormal, normalToPack);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         double alpha = random.nextDouble();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), alpha);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 0.0, cylinder3D.getRadius());
+         Point3D pointInside = new Point3D();
+         pointInside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+         double distanceFromInfiniteCylinder = cylinder3D.getRadius() - distanceOffAxis;
+         double distanceFromTopCap = alpha * cylinder3D.getLength();
+         double distanceFromBottomCap = (1.0 - alpha) * cylinder3D.getLength();
+         assertEquals(-EuclidCoreTools.min(distanceFromInfiniteCylinder, distanceFromTopCap, distanceFromBottomCap), cylinder3D.signedDistance(pointInside),
+                      EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 1.0, 3.0) * cylinder3D.getRadius();
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+         assertEquals(distanceOffAxis - cylinder3D.getRadius(), cylinder3D.signedDistance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the top cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopCap = new Point3D();
+         pointOnTopCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopCap, cylinder3D.getAxis(), pointOnTopCap);
+         assertEquals(distanceOffTopCap, cylinder3D.signedDistance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the bottom cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomCap = new Point3D();
+         pointOnBottomCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomCap, cylinder3D.getAxis(), pointOnBottomCap);
+         assertEquals(distanceOffBottomCap, cylinder3D.signedDistance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the top cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopPlane = new Point3D();
+         double distanceOrthogonalToAxis = (1.0 + random.nextDouble()) * cylinder3D.getRadius();
+         pointOnTopPlane.scaleAdd(distanceOrthogonalToAxis, orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopPlane, cylinder3D.getAxis(), pointOnTopPlane);
+         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffTopPlane));
+         assertEquals(expectedDistance, cylinder3D.signedDistance(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the bottom cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomPlane = new Point3D();
+         double distanceOrthogonalToAxis = (1.0 + random.nextDouble()) * cylinder3D.getRadius();
+         pointOnBottomPlane.scaleAdd(distanceOrthogonalToAxis, orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomPlane, cylinder3D.getAxis(), pointOnBottomPlane);
+         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffBottomPlane));
+         assertEquals(expectedDistance, cylinder3D.signedDistance(pointOutside), EPSILON);
+      }
    }
 
    @Test
-   public void testSurfaceNormalAt_below()
+   void testOrthogonalProjection() throws Exception
    {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+      Random random = new Random(768);
 
-      Point3D pointToCheck = new Point3D(0, 0, -1);
-      Vector3D expectedNormal = new Vector3D(0, 0, -1.0);
-      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      assertEquals(expectedNormal, normalToPack);
-   }
+      Point3D expectedProjection = new Point3D();
 
-   @Test
-   public void testSurfaceNormalAt_upAndToSide()
-   {
-      double height = 2.0;
-      double radius = 1.0;
-      Cylinder3D cylinder3d = new Cylinder3D(height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         double alpha = random.nextDouble();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), alpha);
 
-      Point3D pointToCheck = new Point3D(0.0, 2.0, 2.0);
-      Vector3D expectedNormal = new Vector3D(0.0, 1.0, 1.0);
-      expectedNormal.normalize();
-      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      assertEquals(expectedNormal, normalToPack);
-   }
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 0.0, cylinder3D.getRadius());
+         Point3D pointInside = new Point3D();
+         pointInside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
 
-   @Test
-   public void testSurfaceNormalAt_above_translated()
-   {
-      double height = 2.0;
-      double radius = 1.0;
-      double tx = 1.5, ty = 1, tz = 2;
-      Point3D position = new Point3D(tx, ty, tz);
-      Cylinder3D cylinder3d = new Cylinder3D(position, Axis.Z, height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+         assertNull(cylinder3D.orthogonalProjectionCopy(pointInside));
+      }
 
-      Point3D pointToCheck = new Point3D(tx, ty, tz + 3.0);
-      Vector3D expectedNormal = new Vector3D(0, 0, 1.0);
-      cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      assertEquals(expectedNormal, normalToPack);
-   }
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside generated to be within a certain radius of the axis
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
 
-   @Test
-   public void testCheckInside()
-   {
-      double height = 2.0;
-      double radius = 1.0;
-      double tx = 1.5, ty = 1, tz = 2;
-      Point3D position = new Point3D(tx, ty, tz);
-      Cylinder3D cylinder3d = new Cylinder3D(position, Axis.Z, height, radius);
-      Vector3D normalToPack = new Vector3D();
-      Point3D closestPointToPack = new Point3D();
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 1.0, 3.0) * cylinder3D.getRadius();
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffAxis, orthogonalToAxis, pointOnAxis);
+         expectedProjection.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, pointOnAxis);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, cylinder3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+      }
 
-      Point3D pointToCheck = new Point3D(tx, ty, tz + 3.0);
-      Vector3D expectedNormal = new Vector3D(0, 0, 1.0);
-      boolean isInside = cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, normalToPack, 1e-7);
-      assertFalse(isInside);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the top cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
 
-      pointToCheck.set(tx, ty, tz + height / 2.0 - 0.011);
-      isInside = cylinder3d.doPoint3DCollisionTest(pointToCheck, closestPointToPack, normalToPack);
-      assertTrue(isInside);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, normalToPack, 1e-7);
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopCap = new Point3D();
+         pointOnTopCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopCap, cylinder3D.getAxis(), pointOnTopCap);
+         expectedProjection.set(pointOnTopCap);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, cylinder3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside hovering above the bottom cap
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomCap = new Point3D();
+         pointOnBottomCap.scaleAdd(random.nextDouble() * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomCap = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomCap, cylinder3D.getAxis(), pointOnBottomCap);
+         expectedProjection.set(pointOnBottomCap);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, cylinder3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the top cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnTopPlane = new Point3D();
+         pointOnTopPlane.scaleAdd((1.0 + random.nextDouble()) * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+
+         double distanceOffTopPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(distanceOffTopPlane, cylinder3D.getAxis(), pointOnTopPlane);
+         expectedProjection.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getTopCenter());
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, cylinder3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside the infinite cylinder AND beyond the bottom cap plane
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+
+         Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, cylinder3D.getAxis(), true);
+         Point3D pointOnBottomPlane = new Point3D();
+         pointOnBottomPlane.scaleAdd((1.0 + random.nextDouble()) * cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+
+         double distanceOffBottomPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
+         Point3D pointOutside = new Point3D();
+         pointOutside.scaleAdd(-distanceOffBottomPlane, cylinder3D.getAxis(), pointOnBottomPlane);
+         expectedProjection.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, cylinder3D.getBottomCenter());
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, cylinder3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+      }
    }
 
    @Test
@@ -433,12 +945,12 @@ public class Cylinder3DTest
          Cylinder3D cylinder = EuclidShapeRandomTools.nextCylinder3D(random);
          Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
          Point3DReadOnly supportingVertex = cylinder.getSupportingVertex(supportDirection);
-         assertTrue(cylinder.isPointInside(supportingVertex));
+         assertTrue(cylinder.isPointInside(supportingVertex, EPSILON));
 
          Point3D supportingVertexTranslated = new Point3D();
          supportDirection.normalize();
          supportingVertexTranslated.scaleAdd(1.0e-2, supportDirection, supportingVertex);
-         assertFalse(cylinder.isPointInside(supportingVertexTranslated));
+         assertFalse(cylinder.isPointInside(supportingVertexTranslated, EPSILON));
 
          Vector3D actualNormal = new Vector3D();
          cylinder.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);

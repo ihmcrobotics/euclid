@@ -51,16 +51,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    }
 
    /**
-    * Creates a new cylinder 3D identical to {@code other}.
-    *
-    * @param other the other cylinder to copy. Not modified.
-    */
-   public Cylinder3D(Cylinder3DReadOnly other)
-   {
-      set(other);
-   }
-
-   /**
     * Creates a new cylinder 3D and initializes its length and radius.
     *
     * @param length the cylinder length along the z-axis.
@@ -75,6 +65,16 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public Cylinder3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
       set(position, axis, length, radius);
+   }
+
+   /**
+    * Creates a new cylinder 3D identical to {@code other}.
+    *
+    * @param other the other cylinder to copy. Not modified.
+    */
+   public Cylinder3D(Cylinder3DReadOnly other)
+   {
+      set(other);
    }
 
    /**

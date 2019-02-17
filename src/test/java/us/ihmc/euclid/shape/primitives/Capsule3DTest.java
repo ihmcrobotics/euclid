@@ -227,7 +227,7 @@ class Capsule3DTest
       { // Point inside generated to be within a certain radius of the axis
          Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
          Point3D pointOnAxis = new Point3D();
-         pointOnAxis.interpolate(capsule3D.getTopCenter(), capsule3D.getTopCenter(), random.nextDouble());
+         pointOnAxis.interpolate(capsule3D.getTopCenter(), capsule3D.getBottomCenter(), random.nextDouble());
 
          Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, capsule3D.getAxis(), true);
          double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 0.0, capsule3D.getRadius());
@@ -241,7 +241,7 @@ class Capsule3DTest
       { // Point outside generated to be within a certain radius of the axis
          Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
          Point3D pointOnAxis = new Point3D();
-         pointOnAxis.interpolate(capsule3D.getTopCenter(), capsule3D.getTopCenter(), random.nextDouble());
+         pointOnAxis.interpolate(capsule3D.getTopCenter(), capsule3D.getBottomCenter(), random.nextDouble());
 
          Vector3D orthogonalToAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, capsule3D.getAxis(), true);
          double distanceOffAxis = EuclidCoreRandomTools.nextDouble(random, 1.0, 3.0) * capsule3D.getRadius();
