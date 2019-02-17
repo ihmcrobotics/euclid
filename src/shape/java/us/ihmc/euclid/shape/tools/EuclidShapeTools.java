@@ -796,7 +796,7 @@ public class EuclidShapeTools
 
       if (sumOfSquares > 1.0)
       {
-         projectionToPack.scale(1.0 / Math.sqrt(sumOfSquares));
+         projectionToPack.setAndScale(1.0 / Math.sqrt(sumOfSquares), pointToProject);
          return true;
       }
       else

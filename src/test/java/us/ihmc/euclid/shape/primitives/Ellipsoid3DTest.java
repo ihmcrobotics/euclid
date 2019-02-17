@@ -10,330 +10,582 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Ellipsoid3DTest
 {
    private static final double EPSILON = 1.0e-10; // This epsilon is meant small changes in coordinates. Use Ellipsoid3d's DEFAULT_EPSILON for error handling.
 
    @Test
-   public void testCommonShape3dFunctionality()
+   void testConstructors() throws Exception
    {
-      Shape3DTestHelper testHelper = new Shape3DTestHelper();
-      Random random = new Random(1776L);
+      Random random = new Random(45675654);
 
-      int numberOfShapes = 1000;
-      int numberOfPoints = 1000;
+      { // Empty constructor
+         Ellipsoid3D ellipsoid3D = new Ellipsoid3D();
 
-      for (int i = 0; i < numberOfShapes; i++)
-      {
-         testHelper.runSimpleTests(EuclidShapeRandomTools.nextEllipsoid3D(random), random, numberOfPoints);
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(ellipsoid3D.getPosition());
+         EuclidCoreTestTools.assertIdentity(ellipsoid3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D(double radiusX, double radiusY, double radiusZ)
+         double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Ellipsoid3D ellipsoid3D = new Ellipsoid3D(radiusX, radiusY, radiusZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(ellipsoid3D.getPosition());
+         EuclidCoreTestTools.assertIdentity(ellipsoid3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
+         double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random);
+         RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Ellipsoid3D ellipsoid3D = new Ellipsoid3D(position, orientation, radiusX, radiusY, radiusZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(position, ellipsoid3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(orientation, ellipsoid3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D(Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
+         double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random);
+         RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Pose3D pose = new Pose3D(position, orientation);
+         Ellipsoid3D ellipsoid3D = new Ellipsoid3D(pose, radiusX, radiusY, radiusZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(radiusX, radiusY, radiusZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(position, ellipsoid3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(orientation, ellipsoid3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
+         double sizeX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double sizeZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Point3D position = EuclidCoreRandomTools.nextPoint3D(random);
+         RotationMatrix orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RigidBodyTransform pose = new RigidBodyTransform(orientation, position);
+         Ellipsoid3D ellipsoid3D = new Ellipsoid3D(pose, sizeX, sizeY, sizeZ);
+
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(sizeX, sizeY, sizeZ), ellipsoid3D.getRadii(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(position, ellipsoid3D.getPosition(), EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(orientation, ellipsoid3D.getOrientation(), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D(Ellipsoid3DReadOnly other)
+         Ellipsoid3D original = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D copy = new Ellipsoid3D(original);
+
+         EuclidShapeTestTools.assertEllipsoid3DEquals(original, copy, EPSILON);
       }
    }
 
    @Test
-   public void testSimpleWithNoTransform()
+   void testSetToNaN() throws Exception
    {
-      double xRadius = 1.0;
-      double yRadius = 2.0;
-      double zRadius = 3.0;
+      Random random = new Random(34575754);
 
-      Ellipsoid3D ellipsoid = new Ellipsoid3D(xRadius, yRadius, zRadius);
-      assertTrue(ellipsoid.isPointInside(new Point3D(xRadius - EPSILON, 0.0, 0.0)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(0.0, yRadius - EPSILON, 0.0)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(0.0, 0.0, zRadius - EPSILON)));
-
-      assertTrue(ellipsoid.isPointInside(new Point3D(-xRadius + EPSILON, 0.0, 0.0)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(0.0, -yRadius + EPSILON, 0.0)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(0.0, 0.0, -zRadius + EPSILON)));
-
-      assertFalse(ellipsoid.isPointInside(new Point3D(xRadius + EPSILON, 0.0, 0.0)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(0.0, yRadius + EPSILON, 0.0)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(0.0, 0.0, zRadius + EPSILON)));
-
-      assertFalse(ellipsoid.isPointInside(new Point3D(-xRadius - EPSILON, 0.0, 0.0)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(0.0, -yRadius - EPSILON, 0.0)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(0.0, 0.0, -zRadius - EPSILON)));
-
-      Point3D closestPointToPack = new Point3D();
-      Vector3D normalToPack = new Vector3D();
-      boolean isInside = ellipsoid.doPoint3DCollisionTest(new Point3D(xRadius - EPSILON, 0.0, 0.0), closestPointToPack, normalToPack);
-      assertTrue(isInside);
-      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 0.0, 0.0), normalToPack, 1e-7);
-      EuclidCoreTestTools.assertTuple3DEquals(new Point3D(xRadius, 0.0, 0.0), closestPointToPack, 1e-7);
-
-      isInside = ellipsoid.doPoint3DCollisionTest(new Point3D(3.0, 7.0, -12.0), closestPointToPack, normalToPack);
-      assertFalse(isInside);
-      double xScaled = closestPointToPack.getX() / xRadius;
-      double yScaled = closestPointToPack.getY() / yRadius;
-      double zScaled = closestPointToPack.getZ() / zRadius;
-      double sumSquared = xScaled * xScaled + yScaled * yScaled + zScaled * zScaled;
-      assertEquals(1.0, sumSquared, 1e-7);
-   }
-
-   @Test
-   public void testSimpleWithTranslationalTransform()
-   {
-      double xRadius = 1.0;
-      double yRadius = 2.0;
-      double zRadius = 3.0;
-
-      double xTranslation = 0.5;
-      double yTranslation = -0.3;
-      double zTranslation = 1.1;
-
-      RigidBodyTransform transform = new RigidBodyTransform();
-      transform.setTranslation(new Vector3D(xTranslation, yTranslation, zTranslation));
-
-      Ellipsoid3D ellipsoid = new Ellipsoid3D(transform, xRadius, yRadius, zRadius);
-      assertTrue(ellipsoid.isPointInside(new Point3D(xTranslation + xRadius - EPSILON, yTranslation, zTranslation)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation + yRadius - EPSILON, zTranslation)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation, zTranslation + zRadius - EPSILON)));
-
-      assertTrue(ellipsoid.isPointInside(new Point3D(xTranslation - xRadius + EPSILON, yTranslation, zTranslation)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation - yRadius + EPSILON, zTranslation)));
-      assertTrue(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation, zTranslation - zRadius + EPSILON)));
-
-      assertFalse(ellipsoid.isPointInside(new Point3D(xTranslation + xRadius + EPSILON, yTranslation, zTranslation)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation + yRadius + EPSILON, zTranslation)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation, zTranslation + zRadius + EPSILON)));
-
-      assertFalse(ellipsoid.isPointInside(new Point3D(xTranslation - xRadius - EPSILON, yTranslation, zTranslation)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation - yRadius - EPSILON, zTranslation)));
-      assertFalse(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation, zTranslation - zRadius - EPSILON)));
-   }
-
-   @Test
-   public void testExampleUsage()
-   {
-      double xRadius = 1.0;
-      double yRadius = 2.0;
-      double zRadius = 3.0;
-
-      RigidBodyTransform transform = new RigidBodyTransform();
-      transform.setRotationRollAndZeroTranslation(Math.PI / 2.0);
-      transform.setTranslation(new Vector3D(0.0, 5.0, 0.0));
-
-      Ellipsoid3D ellipsoid = new Ellipsoid3D(transform, xRadius, yRadius, zRadius);
-
-      assertTrue(ellipsoid.isPointInside(new Point3D(0.0, 8.0, 0.0), 0.001));
-      assertTrue(ellipsoid.isPointInside(new Point3D(0.0, 7.9, 0.0), 0.001));
-      assertFalse(ellipsoid.isPointInside(new Point3D(0.0, 8.2, 0.0), 0.001));
-      assertFalse(ellipsoid.isPointInside(new Point3D(0.2, 8.2, 0.2), 0.001));
-   }
-
-   @Test
-   public void testSet()
-   {
-      double xRadius = 1.0;
-      double yRadius = 2.0;
-      double zRadius = 3.0;
-
-      Ellipsoid3D ellipsoid = new Ellipsoid3D(xRadius, yRadius, zRadius);
-
-      assertTrue(ellipsoid.isPointInside(new Point3D(0.0, 0.0, 0.0)));
-
-      double[] zeroes = new double[] {0.0, 0.0, 0.0};
-
-      double[] radii = new double[] {xRadius, yRadius, zRadius};
-
-      assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, zeroes, zeroes, ellipsoid);
-      assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, zeroes, new double[] {-EPSILON, -EPSILON, -EPSILON}, ellipsoid);
-      assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(true, radii, zeroes, new double[] {EPSILON, EPSILON, EPSILON}, ellipsoid);
-   }
-
-   private void assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(boolean invertResult, double[] radii, double[] translations, double[] offsets,
-                                                                   Ellipsoid3D ellipsoid)
-   {
-      assertEquals(!invertResult, ellipsoid.isPointInside(new Point3D(translations[0] + radii[0] + offsets[0], translations[1], translations[2])));
-      assertEquals(!invertResult, ellipsoid.isPointInside(new Point3D(translations[0] - (radii[0] + offsets[0]), translations[1], translations[2])));
-
-      assertEquals(!invertResult, ellipsoid.isPointInside(new Point3D(translations[0], translations[1] + radii[1] + offsets[1], translations[2])));
-      assertEquals(!invertResult, ellipsoid.isPointInside(new Point3D(translations[0], translations[1] - (radii[1] + offsets[1]), translations[2])));
-
-      assertEquals(!invertResult, ellipsoid.isPointInside(new Point3D(translations[0], translations[1], translations[2] + radii[2] + offsets[2])));
-      assertEquals(!invertResult, ellipsoid.isPointInside(new Point3D(translations[0], translations[1], translations[2] - (radii[2] + offsets[2]))));
-   }
-
-   @Test
-   public void testTranslation()
-   {
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Random random = new Random(1776L);
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
 
-         double xRadius = random.nextDouble();
-         double yRadius = random.nextDouble();
-         double zRadius = random.nextDouble();
+         assertFalse(ellipsoid3D.containsNaN());
+         assertFalse(ellipsoid3D.getPose().containsNaN());
+         assertFalse(ellipsoid3D.getPosition().containsNaN());
+         assertFalse(ellipsoid3D.getOrientation().containsNaN());
+         assertFalse(ellipsoid3D.getRadii().containsNaN());
 
-         double[] radii = new double[] {xRadius, yRadius, zRadius};
+         ellipsoid3D.setToNaN();
 
-         double xTranslation = random.nextDouble();
-         double yTranslation = random.nextDouble();
-         double zTranslation = random.nextDouble();
-
-         double[] translations = new double[] {xTranslation, yTranslation, zTranslation};
-
-         double[] zeroes = new double[] {0.0, 0.0, 0.0};
-
-         RigidBodyTransform transform = new RigidBodyTransform();
-         transform.setTranslation(new Vector3D(xTranslation, yTranslation, zTranslation));
-
-         Ellipsoid3D ellipsoid = new Ellipsoid3D(xRadius, yRadius, zRadius);
-         ellipsoid.getPose().set(transform);
-
-         assertTrue(ellipsoid.isPointInside(new Point3D(xTranslation, yTranslation, zTranslation)));
-
-         assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, translations, zeroes, ellipsoid);
-         assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(false, radii, translations, new double[] {-EPSILON, -EPSILON, -EPSILON}, ellipsoid);
-         assertPointIsInsideOrOnSurfaceForPlusOrMinusXYAndZ(true, radii, translations, new double[] {EPSILON, EPSILON, EPSILON}, ellipsoid);
+         assertTrue(ellipsoid3D.containsNaN());
+         assertTrue(ellipsoid3D.getPose().containsNaN());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(ellipsoid3D.getPosition());
+         EuclidCoreTestTools.assertMatrix3DContainsOnlyNaN(ellipsoid3D.getOrientation());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(ellipsoid3D.getRadii());
       }
    }
 
    @Test
-   public void testSimpleRotations()
+   void testSetToZero() throws Exception
    {
-      for (int n = 0; n < ITERATIONS; n++)
+      Random random = new Random(34575754);
+
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         Random random = new Random(1776L);
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
 
-         double xRadius = random.nextDouble();
-         double yRadius = random.nextDouble();
-         double zRadius = random.nextDouble();
+         assertFalse(new Point3D().epsilonEquals(ellipsoid3D.getPosition(), EPSILON));
+         assertFalse(new Point3D().epsilonEquals(ellipsoid3D.getRadii(), EPSILON));
+         assertFalse(new RotationMatrix().epsilonEquals(ellipsoid3D.getOrientation(), EPSILON));
 
-         double[] angles = new double[] {Math.PI / 3.0, Math.PI / 4.0, Math.PI / 6.0};
+         ellipsoid3D.setToZero();
 
-         for (double angle : angles)
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(ellipsoid3D.getPosition());
+         EuclidCoreTestTools.assertIdentity(ellipsoid3D.getOrientation(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(ellipsoid3D.getRadii());
+      }
+   }
+
+   @Test
+   void testSetters() throws Exception
+   {
+      Random random = new Random(45837543);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Ellipsoid3D other)
+         Ellipsoid3D expected = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+         actual.set(expected);
+         EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Ellipsoid3DReadOnly other)
+         Ellipsoid3D expected = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         assertFalse(expected.epsilonEquals(actual, EPSILON));
+         actual.set((Ellipsoid3DReadOnly) expected);
+         EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+      }
+
+      { // set(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
+         for (int i = 0; i < ITERATIONS; i++)
          {
-            for (int i = 0; i < 3; i++)
-            {
-               RigidBodyTransform transform = new RigidBodyTransform();
-
-               if (i == 0)
-                  transform.setRotationRollAndZeroTranslation(angle);
-               if (i == 1)
-                  transform.setRotationPitchAndZeroTranslation(angle);
-               if (i == 2)
-                  transform.setRotationYawAndZeroTranslation(angle);
-
-               Ellipsoid3D ellipsoid = new Ellipsoid3D(xRadius, yRadius, zRadius);
-               ellipsoid.getPose().set(transform);
-
-               assertTrue(ellipsoid.isPointInside(new Point3D(0.0, 0.0, 0.0)));
-
-               if (i == 0)
-               {
-                  assertTrue(ellipsoid.isPointInside(new Point3D(xRadius, 0.0, 0.0)));
-
-                  double yCoord = yRadius * Math.cos(angle);
-                  double zCoord = yRadius * Math.sin(angle);
-
-                  assertTrue(ellipsoid.isPointInside(new Point3D(0.0, yCoord, zCoord)));
-                  assertTrue(ellipsoid.isPointInside(new Point3D(0.0, -yCoord, -zCoord)));
-
-                  assertFalse(ellipsoid.isPointInside(new Point3D(0.0, yCoord + EPSILON, zCoord + EPSILON)));
-                  assertFalse(ellipsoid.isPointInside(new Point3D(0.0, -(yCoord + EPSILON), -(zCoord + EPSILON))));
-
-                  yCoord = zRadius * Math.cos(angle + Math.PI / 2.0);
-                  zCoord = zRadius * Math.sin(angle + Math.PI / 2.0);
-
-                  assertTrue(ellipsoid.isPointInside(new Point3D(0.0, yCoord, zCoord)));
-                  assertTrue(ellipsoid.isPointInside(new Point3D(0.0, -yCoord, -zCoord)));
-
-                  assertFalse(ellipsoid.isPointInside(new Point3D(0.0, yCoord - EPSILON, zCoord + EPSILON)));
-                  assertFalse(ellipsoid.isPointInside(new Point3D(0.0, -(yCoord - EPSILON), -(zCoord + EPSILON))));
-               }
-
-               if (i == 1)
-               {
-                  assertTrue(ellipsoid.isPointInside(new Point3D(0.0, yRadius, 0.0)));
-
-                  double xCoord = xRadius * Math.cos(angle);
-                  double zCoord = -xRadius * Math.sin(angle);
-
-                  assertTrue(ellipsoid.isPointInside(new Point3D(xCoord, 0.0, zCoord)));
-                  assertTrue(ellipsoid.isPointInside(new Point3D(-xCoord, 0.0, -zCoord)));
-
-                  assertFalse(ellipsoid.isPointInside(new Point3D(xCoord + EPSILON, 0.0, zCoord - EPSILON)));
-                  assertFalse(ellipsoid.isPointInside(new Point3D(-(xCoord + EPSILON), 0.0, -(zCoord - EPSILON))));
-
-                  xCoord = zRadius * Math.cos(angle + Math.PI / 2.0);
-                  zCoord = -zRadius * Math.sin(angle + Math.PI / 2.0);
-
-                  assertTrue(ellipsoid.isPointInside(new Point3D(xCoord, 0.0, zCoord)));
-                  assertTrue(ellipsoid.isPointInside(new Point3D(-xCoord, 0.0, -zCoord)));
-
-                  assertFalse(ellipsoid.isPointInside(new Point3D(xCoord - EPSILON, 0.0, zCoord - EPSILON)));
-                  assertFalse(ellipsoid.isPointInside(new Point3D(-(xCoord - EPSILON), 0.0, -(zCoord - EPSILON))));
-               }
-
-               if (i == 2)
-               {
-                  assertTrue(ellipsoid.isPointInside(new Point3D(0.0, 0.0, zRadius)));
-
-                  double xCoord = xRadius * Math.cos(angle);
-                  double yCoord = xRadius * Math.sin(angle);
-
-                  assertTrue(ellipsoid.isPointInside(new Point3D(xCoord, yCoord, 0.0)));
-                  assertTrue(ellipsoid.isPointInside(new Point3D(-xCoord, -yCoord, 0.0)));
-
-                  assertFalse(ellipsoid.isPointInside(new Point3D(xCoord + EPSILON, yCoord + EPSILON, 0.0)));
-                  assertFalse(ellipsoid.isPointInside(new Point3D(-(xCoord + EPSILON), -(yCoord + EPSILON), 0.0)));
-
-                  xCoord = yRadius * Math.cos(angle + Math.PI / 2.0);
-                  yCoord = yRadius * Math.sin(angle + Math.PI / 2.0);
-
-                  assertTrue(ellipsoid.isPointInside(new Point3D(xCoord, yCoord, 0.0)));
-                  assertTrue(ellipsoid.isPointInside(new Point3D(-xCoord, -yCoord, 0.0)));
-
-                  assertFalse(ellipsoid.isPointInside(new Point3D(xCoord - EPSILON, yCoord + EPSILON, 0.0)));
-                  assertFalse(ellipsoid.isPointInside(new Point3D(-(xCoord - EPSILON), -(yCoord + EPSILON), 0.0)));
-               }
-            }
+            Ellipsoid3D expected = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(expected.getPosition(), expected.getOrientation(), expected.getRadiusX(), expected.getRadiusY(), expected.getRadiusZ());
+            EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
          }
+
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Point3D(), new Quaternion(), -0.1, 1.0, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Point3D(), new Quaternion(), 1.0, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Point3D(), new Quaternion(), 1.0, 1.0, -0.1));
+      }
+
+      { // set(Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Ellipsoid3D expected = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(new Pose3D(expected.getPosition(), expected.getOrientation()), expected.getRadiusX(), expected.getRadiusY(), expected.getRadiusZ());
+            EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Pose3D(), -0.1, 1.0, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Pose3D(), 1.0, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new Pose3D(), 1.0, 1.0, -0.1));
+      }
+
+      { // set(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Ellipsoid3D expected = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()), expected.getRadiusX(), expected.getRadiusY(),
+                       expected.getRadiusZ());
+            EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), -0.1, 1.0, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), 1.0, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), 1.0, 1.0, -0.1));
+      }
+
+      { // set(RigidBodyTransformReadOnly pose, double[] size)
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Ellipsoid3D expected = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+            assertFalse(expected.epsilonEquals(actual, EPSILON));
+            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()),
+                       new double[] {expected.getRadiusX(), expected.getRadiusY(), expected.getRadiusZ()});
+            EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+         }
+
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), new double[] {-0.1, 1.0, 1.0}));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), new double[] {1.0, -0.1, 1.0}));
+         assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().set(new RigidBodyTransform(), new double[] {1.0, 1.0, -0.1}));
       }
    }
 
    @Test
-   public void testMethodsForRandomEllipsoids()
+   void testSetRadii() throws Exception
    {
-      Random random = new Random(1865L);
-      Ellipsoid3D ellipsoid = new Ellipsoid3D(1.0, 2.0, 3.0);
-      double xRad, yRad, zRad;
-      RigidBodyTransform transform = randomTransform(random);
+      Random random = new Random(5465446);
 
-      for (int n = 0; n < ITERATIONS; n++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         xRad = random.nextDouble();
-         yRad = random.nextDouble();
-         zRad = random.nextDouble();
+         double radiusX = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusY = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.0, 5.0);
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         assertFalse(EuclidCoreTools.epsilonEquals(radiusX, ellipsoid3D.getRadiusX(), EPSILON));
+         assertFalse(EuclidCoreTools.epsilonEquals(radiusY, ellipsoid3D.getRadiusY(), EPSILON));
+         assertFalse(EuclidCoreTools.epsilonEquals(radiusZ, ellipsoid3D.getRadiusZ(), EPSILON));
+         ellipsoid3D.setRadii(radiusX, radiusY, radiusZ);
+         assertEquals(radiusX, ellipsoid3D.getRadiusX(), EPSILON);
+         assertEquals(radiusY, ellipsoid3D.getRadiusY(), EPSILON);
+         assertEquals(radiusZ, ellipsoid3D.getRadiusZ(), EPSILON);
+      }
 
-         ellipsoid.setRadiusX(xRad);
-         ellipsoid.setRadiusY(yRad);
-         ellipsoid.setRadiusZ(zRad);
-         ellipsoid.getPose().set(transform);
+      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().setRadii(-0.1, 1.0, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().setRadii(1.0, -0.1, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().setRadii(1.0, 1.0, -0.1));
+   }
 
-         Ellipsoid3D ellipsoidCopy = new Ellipsoid3D(ellipsoid);
+   @Test
+   void testIsPointInside() throws Exception
+   {
+      Random random = new Random(3656);
 
-         assertEquals(ellipsoid.getRadiusX(), ellipsoidCopy.getRadiusX(), 1e-10);
-         assertEquals(ellipsoid.getRadiusY(), ellipsoidCopy.getRadiusY(), 1e-10);
-         assertEquals(ellipsoid.getRadiusZ(), ellipsoidCopy.getRadiusZ(), 1e-10);
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside, generated to be inside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
 
-         Point3D center = new Point3D();
-         center.set(ellipsoid.getPose().getShapePosition());
+         double radiusInUnitSphere = random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         translation.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         Point3D pointInside = new Point3D(translation);
+         ellipsoid3D.transformToWorld(pointInside);
+         assertTrue(ellipsoid3D.isPointInside(pointInside));
+      }
 
-         Point3D centerCopy = new Point3D();
-         centerCopy.set(ellipsoidCopy.getPose().getShapePosition());
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, generated to be outside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
 
-         EuclidCoreTestTools.assertTuple3DEquals(center, centerCopy, 1e-10);
+         double radiusInUnitSphere = 1.0 + random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         translation.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         Point3D pointOutside = new Point3D(translation);
+         ellipsoid3D.transformToWorld(pointOutside);
+         assertFalse(ellipsoid3D.isPointInside(pointOutside));
+      }
+   }
+
+   @Test
+   void testDoPoint3DCollisionTest() throws Exception
+   {
+      Random random = new Random(345345);
+
+      Point3D actualClosestPoint = new Point3D();
+      Vector3D actualNormal = new Vector3D();
+      Point3D expectedClosestPoint = new Point3D();
+      Vector3D expectedNormal = new Vector3D();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside, generated to be inside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointInside = new Point3D(translation);
+         pointInside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         expectedClosestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
+         expectedClosestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         expectedNormal.setAndScale(1.0 / radiusInUnitSphere, translation);
+         expectedNormal.scale(1.0 / ellipsoid3D.getRadiusX(), 1.0 / ellipsoid3D.getRadiusY(), 1.0 / ellipsoid3D.getRadiusZ());
+         expectedNormal.normalize();
+
+         ellipsoid3D.transformToWorld(pointInside);
+         ellipsoid3D.transformToWorld(expectedClosestPoint);
+         ellipsoid3D.transformToWorld(expectedNormal);
+         assertTrue(ellipsoid3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, generated to be outside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = 1.0 + random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointOutside = new Point3D(translation);
+         pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         expectedClosestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
+         expectedClosestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         expectedNormal.setAndScale(1.0 / radiusInUnitSphere, translation);
+         expectedNormal.scale(1.0 / ellipsoid3D.getRadiusX(), 1.0 / ellipsoid3D.getRadiusY(), 1.0 / ellipsoid3D.getRadiusZ());
+         expectedNormal.normalize();
+
+         ellipsoid3D.transformToWorld(pointOutside);
+         ellipsoid3D.transformToWorld(expectedClosestPoint);
+         ellipsoid3D.transformToWorld(expectedNormal);
+         assertFalse(ellipsoid3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+   }
+
+   @Test
+   void testApplyTransform()
+   {
+      Random random = new Random(346);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D expected = new Ellipsoid3D(actual);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         expected.getPose().applyTransform(transform);
+         actual.applyTransform(transform);
+
+         EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D expected = new Ellipsoid3D(actual);
+
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+
+         expected.getPose().applyTransform(transform);
+         actual.applyTransform(transform);
+
+         EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   void testApplyInverseTransform()
+   {
+      Random random = new Random(346);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D original = new Ellipsoid3D(actual);
+         Ellipsoid3D expected = new Ellipsoid3D(actual);
+
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+
+         expected.getPose().applyInverseTransform(transform);
+         actual.applyInverseTransform(transform);
+
+         EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+         actual.applyTransform(transform);
+         EuclidShapeTestTools.assertEllipsoid3DEquals(original, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D original = new Ellipsoid3D(actual);
+         Ellipsoid3D expected = new Ellipsoid3D(actual);
+
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+
+         expected.getPose().applyInverseTransform(transform);
+         actual.applyInverseTransform(transform);
+
+         EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
+         actual.applyTransform(transform);
+         EuclidShapeTestTools.assertEllipsoid3DEquals(original, actual, EPSILON);
+      }
+   }
+
+   @Test
+   void testDistance() throws Exception
+   {
+      Random random = new Random(2147385);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside, generated to be inside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointInside = new Point3D(translation);
+         pointInside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         ellipsoid3D.transformToWorld(pointInside);
+         assertEquals(0.0, ellipsoid3D.distance(pointInside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, generated to be outside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = 1.0 + random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointOutside = new Point3D(translation);
+         pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         Point3D closestPoint = new Point3D();
+         closestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
+         closestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         double expectedDistance = closestPoint.distance(pointOutside);
+
+         ellipsoid3D.transformToWorld(pointOutside);
+         assertEquals(expectedDistance, ellipsoid3D.distance(pointOutside), EPSILON);
+      }
+   }
+
+   @Test
+   void testSignedDistance() throws Exception
+   {
+      Random random = new Random(2147385);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside, generated to be inside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointInside = new Point3D(translation);
+         pointInside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         Point3D closestPoint = new Point3D();
+         closestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
+         closestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         double expectedDistance = -closestPoint.distance(pointInside);
+
+         ellipsoid3D.transformToWorld(pointInside);
+         assertEquals(expectedDistance, ellipsoid3D.signedDistance(pointInside), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, generated to be outside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = 1.0 + random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointOutside = new Point3D(translation);
+         pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         Point3D closestPoint = new Point3D();
+         closestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
+         closestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         double expectedDistance = closestPoint.distance(pointOutside);
+
+         ellipsoid3D.transformToWorld(pointOutside);
+         assertEquals(expectedDistance, ellipsoid3D.signedDistance(pointOutside), EPSILON);
+      }
+   }
+
+   @Test
+   void testOrthogonalProjection() throws Exception
+   {
+      Random random = new Random(4157885);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point inside, generated to be inside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointInside = new Point3D(translation);
+         pointInside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         ellipsoid3D.transformToWorld(pointInside);
+         assertNull(ellipsoid3D.orthogonalProjectionCopy(pointInside));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point outside, generated to be outside unit-sphere and then scaled up by the radii
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         double radiusInUnitSphere = 1.0 + random.nextDouble();
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
+         Point3D pointOutside = new Point3D(translation);
+         pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         Point3D expectedProjection = new Point3D();
+         expectedProjection.setAndScale(1.0 / radiusInUnitSphere, translation);
+         expectedProjection.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         ellipsoid3D.transformToWorld(pointOutside);
+         ellipsoid3D.transformToWorld(expectedProjection);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, ellipsoid3D.orthogonalProjectionCopy(pointOutside), EPSILON);
+      }
+   }
+
+   @Test
+   void testIntersectionWith() throws Exception
+   {
+      Random random = new Random(10688467);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Intersecting, generate the line from the two intersections
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         Point3D expectedIntersection1 = new Point3D(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0));
+         expectedIntersection1.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         Point3D expectedIntersection2 = new Point3D(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0));
+         expectedIntersection2.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         ellipsoid3D.transformToWorld(expectedIntersection1);
+         ellipsoid3D.transformToWorld(expectedIntersection2);
+
+         Line3D line = new Line3D(expectedIntersection1, expectedIntersection2);
+         line.getPoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random), line.getDirection(), line.getPoint());
+         Point3D actualIntersection1 = new Point3D();
+         Point3D actualIntersection2 = new Point3D();
+         assertEquals(2, ellipsoid3D.intersectionWith(line, actualIntersection1, actualIntersection2));
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection1, actualIntersection1, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedIntersection2, actualIntersection2, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Not intersecting, generate the line using a point and normal on the ellipsoid
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+
+         Vector3D direction = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         Point3D pointOnEllipsoid = new Point3D(direction);
+         Vector3D normal = new Vector3D(direction);
+         pointOnEllipsoid.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         normal.scale(1.0 / ellipsoid3D.getRadiusX(), 1.0 / ellipsoid3D.getRadiusY(), 1.0 / ellipsoid3D.getRadiusZ());
+         normal.normalize();
+
+         Vector3D lineDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true);
+         Point3D pointOnLine = new Point3D();
+         pointOnLine.scaleAdd(random.nextDouble(), normal, pointOnEllipsoid);
+         pointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), lineDirection, pointOnLine);
+         Line3D line = new Line3D(pointOnLine, lineDirection);
+
+         ellipsoid3D.transformToWorld(line);
+         assertEquals(0, ellipsoid3D.intersectionWith(line, null, null));
       }
    }
 
@@ -890,25 +1142,6 @@ public class Ellipsoid3DTest
       }
    }
 
-   private RigidBodyTransform randomTransform(Random random)
-   {
-      RigidBodyTransform transform = new RigidBodyTransform();
-      RigidBodyTransform tempTransform = new RigidBodyTransform();
-      transform.setRotationRollAndZeroTranslation(2 * Math.PI * random.nextDouble());
-      tempTransform.setRotationPitchAndZeroTranslation(2 * Math.PI * random.nextDouble());
-      transform.multiply(tempTransform);
-      tempTransform.setRotationYawAndZeroTranslation(2 * Math.PI * random.nextDouble());
-      transform.multiply(tempTransform);
-
-      double[] matrix = new double[16];
-      transform.get(matrix);
-      matrix[3] = random.nextDouble();
-      matrix[7] = random.nextDouble();
-      matrix[11] = random.nextDouble();
-
-      return transform;
-   }
-
    @Test
    void testGetSupportingVertex() throws Exception
    {
@@ -919,12 +1152,12 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid = EuclidShapeRandomTools.nextEllipsoid3D(random);
          Vector3D supportDirection = EuclidCoreRandomTools.nextVector3D(random);
          Point3DReadOnly supportingVertex = ellipsoid.getSupportingVertex(supportDirection);
-         assertTrue(ellipsoid.isPointInside(supportingVertex));
+         assertTrue(ellipsoid.isPointInside(supportingVertex, EPSILON));
 
          Point3D supportingVertexTranslated = new Point3D();
          supportDirection.normalize();
          supportingVertexTranslated.scaleAdd(1.0e-6, supportDirection, supportingVertex);
-         assertFalse(ellipsoid.isPointInside(supportingVertexTranslated));
+         assertFalse(ellipsoid.isPointInside(supportingVertexTranslated, EPSILON));
 
          for (int j = 0; j < 100; j++)
          {
@@ -932,11 +1165,11 @@ public class Ellipsoid3DTest
             Vector3D orthogonalToSupportDirection = EuclidCoreRandomTools.nextOrthogonalVector3D(random, supportDirection, true);
             Point3D pointSupposedlyOutside = new Point3D();
             pointSupposedlyOutside.scaleAdd(1.0e-4 * ellipsoid.getRadii().length(), orthogonalToSupportDirection, supportingVertex);
-            assertFalse(ellipsoid.isPointInside(pointSupposedlyOutside));
+            assertFalse(ellipsoid.isPointInside(pointSupposedlyOutside, EPSILON));
          }
 
          supportingVertexTranslated.scaleAdd(1.0e-8, supportDirection, supportingVertex);
-         assertFalse(ellipsoid.isPointInside(supportingVertexTranslated));
+         assertFalse(ellipsoid.isPointInside(supportingVertexTranslated, EPSILON));
 
          Vector3D actualNormal = new Vector3D();
          ellipsoid.doPoint3DCollisionTest(supportingVertex, new Point3D(), actualNormal);
@@ -952,7 +1185,7 @@ public class Ellipsoid3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Using getSupportingVertex
          Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
-         
+
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
          Vector3D supportDirection = new Vector3D(Axis.X);

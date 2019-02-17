@@ -2,11 +2,14 @@ package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
@@ -55,16 +58,6 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    }
 
    /**
-    * Creates a new ellipsoid 3D identical to {@code other}.
-    *
-    * @param other the other ellipsoid to copy. Not modified.
-    */
-   public Ellipsoid3D(Ellipsoid3D other)
-   {
-      set(other);
-   }
-
-   /**
     * Creates a new 3D ellipsoid and initializes its radii.
     *
     * @param radiusX radius of the ellipsoid along the x-axis.
@@ -75,6 +68,11 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    public Ellipsoid3D(double radiusX, double radiusY, double radiusZ)
    {
       setRadii(radiusX, radiusY, radiusZ);
+   }
+
+   public Ellipsoid3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
+   {
+      set(position, orientation, radiusX, radiusY, radiusZ);  
    }
 
    /**
@@ -103,6 +101,16 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    public Ellipsoid3D(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       set(pose, radiusX, radiusY, radiusZ);
+   }
+
+   /**
+    * Creates a new ellipsoid 3D identical to {@code other}.
+    *
+    * @param other the other ellipsoid to copy. Not modified.
+    */
+   public Ellipsoid3D(Ellipsoid3DReadOnly other)
+   {
+      set(other);
    }
 
    @Override

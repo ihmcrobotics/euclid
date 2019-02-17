@@ -2,9 +2,11 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -73,6 +75,12 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
       getRadii().set(other.getRadii());
    }
 
+   default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
+   {
+      getPose().set(orientation, position);
+      setRadii(radiusX, radiusY, radiusZ);
+   }
+
    /**
     * Sets the pose and radii of this ellipsoid.
     *
@@ -101,6 +109,12 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    {
       getPose().set(pose);
       setRadii(radiusX, radiusY, radiusZ);
+   }
+
+   default void set(RigidBodyTransformReadOnly pose, double[] radii)
+   {
+      getPose().set(pose);
+      setRadii(radii[0], radii[1], radii[2]);
    }
 
    /**
