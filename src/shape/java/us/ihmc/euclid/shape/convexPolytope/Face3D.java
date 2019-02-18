@@ -327,6 +327,12 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
+   public HalfEdge3D getCommonEdgeWith(Face3DReadOnly neighbor)
+   {
+      return (HalfEdge3D) Face3DReadOnly.super.getCommonEdgeWith(neighbor);
+   }
+
+   @Override
    public HalfEdge3D getClosestEdge(Point3DReadOnly point)
    {
       return (HalfEdge3D) Face3DReadOnly.super.getClosestEdge(point);

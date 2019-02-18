@@ -384,6 +384,16 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
          return twinEdge.getFace();
    }
 
+   default HalfEdge3DReadOnly getCommonEdgeWith(Face3DReadOnly neighbor)
+   {
+      for (int i = 0; i < getNumberOfEdges(); i++)
+      {
+         if (getNeighbor(i) == neighbor)
+            return getEdge(i);
+      }
+      return null;
+   }
+
    /**
     * Returns the edge closed to the point specified
     * 
