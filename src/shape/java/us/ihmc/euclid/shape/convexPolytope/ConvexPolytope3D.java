@@ -281,7 +281,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       List<Face3D> inPlaneFaces = new ArrayList<>();
       Collection<HalfEdge3D> silhouette = EuclidPolytopeTools.computeSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
 
-      if (silhouette != null)
+      if (silhouette != null && EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertexToAdd, silhouette) > constructionEpsilon)
       {
          removeFaces(visibleFaces);
          faces.addAll(EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, silhouette, inPlaneFaces, constructionEpsilon));

@@ -193,6 +193,16 @@ public class EuclidPolytopeTools
       return face.distanceToPlane(observer) <= epsilon;
    }
 
+   public static double distanceToClosestHalfEdge3D(Point3DReadOnly query, Collection<? extends HalfEdge3DReadOnly> halfEdges)
+   {
+      double minDistance = Double.POSITIVE_INFINITY;
+      for (HalfEdge3DReadOnly halfEdge : halfEdges)
+      {
+         minDistance = Math.min(minDistance, halfEdge.distance(query));
+      }
+      return minDistance;
+   }
+
    /**
     * Filters the given {@code faces} to only return the ones that the given {@code observer} can see.
     * <p>
