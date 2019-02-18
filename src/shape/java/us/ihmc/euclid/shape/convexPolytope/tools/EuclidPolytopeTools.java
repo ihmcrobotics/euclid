@@ -424,6 +424,8 @@ public class EuclidPolytopeTools
 
       while (currentVertex != silhouetteStartEdge.getOrigin())
       {
+         boolean foundNextEdge = false;
+
          for (HalfEdge3DReadOnly candidate : currentVertex.getAssociatedEdges())
          {
             if (visibleFacesToPack.contains(candidate.getFace()))
@@ -433,7 +435,13 @@ public class EuclidPolytopeTools
 
             silhouette.add((E) candidate);
             currentVertex = candidate.getDestination();
+            foundNextEdge = true;
             break;
+         }
+
+         if (!foundNextEdge)
+         {
+            throw new RuntimeException("Failed collecting the silhouette's edges");
          }
       }
 
