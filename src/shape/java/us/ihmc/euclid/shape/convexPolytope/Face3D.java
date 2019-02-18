@@ -102,7 +102,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       else if (edges.size() == 1)
       {
          HalfEdge3D firstEdge = edges.get(0);
-         if (firstEdge.getOrigin().epsilonEquals(vertexToAdd, constructionEpsilon))
+         if (firstEdge.getOrigin().geometricallyEquals(vertexToAdd, constructionEpsilon))
             return false;
 
          // Set the edge for the two points and then create its twin
@@ -150,9 +150,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
          if (lineOfSight.size() == 1)
          {
-            if (firstVisibleEdge.getOrigin().epsilonEquals(vertexToAdd, constructionEpsilon))
+            if (firstVisibleEdge.getOrigin().geometricallyEquals(vertexToAdd, constructionEpsilon))
                return false;
-            if (firstVisibleEdge.getDestination().epsilonEquals(vertexToAdd, constructionEpsilon))
+            if (firstVisibleEdge.getDestination().geometricallyEquals(vertexToAdd, constructionEpsilon))
                return false;
 
             HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
