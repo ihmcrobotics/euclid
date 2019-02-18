@@ -63,7 +63,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
-      return !EuclidShapeTools.orthogonalProjectionOntoSphere3D(pointToProject, getPosition(), getRadius(), projectionToPack);
+      return EuclidShapeTools.orthogonalProjectionOntoSphere3D(pointToProject, getPosition(), getRadius(), projectionToPack);
    }
 
    /**

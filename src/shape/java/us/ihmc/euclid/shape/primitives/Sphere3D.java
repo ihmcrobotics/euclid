@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.primitives;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -22,16 +23,6 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    public Sphere3D()
    {
       this(1.0);
-   }
-
-   /**
-    * Creates a new sphere 3D identical to {@code other}
-    *
-    * @param other the other sphere to copy. Not modified.
-    */
-   public Sphere3D(Sphere3D other)
-   {
-      set(other);
    }
 
    /**
@@ -69,6 +60,16 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    public Sphere3D(double centerX, double centerY, double centerZ, double radius)
    {
       set(centerX, centerY, centerZ, radius);
+   }
+
+   /**
+    * Creates a new sphere 3D identical to {@code other}
+    *
+    * @param other the other sphere to copy. Not modified.
+    */
+   public Sphere3D(Sphere3DReadOnly other)
+   {
+      set(other);
    }
 
    @Override
