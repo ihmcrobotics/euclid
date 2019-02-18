@@ -56,7 +56,7 @@ public class ExpandingPolytopeAlgorithm
       isCollisionVectorUpToDate = false;
       areCollisionPointsUpToDate = false;
 
-      gjkCollisionDetector.setEpsilon(epsilon);
+      gjkCollisionDetector.setTerminalConditionEpsilon(epsilon);
       latestCollisionTestResult = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
       simplex = gjkCollisionDetector.getSimplex();
       supportDirection.set(gjkCollisionDetector.getSupportDirection());

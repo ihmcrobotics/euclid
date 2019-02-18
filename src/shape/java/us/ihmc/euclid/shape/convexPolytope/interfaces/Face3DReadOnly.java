@@ -111,6 +111,49 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       return lineOfSight;
    }
 
+   default List<? extends HalfEdge3DReadOnly> lineOfSight(Point3DReadOnly observer, double epsilon)
+   {
+      List<HalfEdge3DReadOnly> lineOfSight = new ArrayList<>();
+
+      HalfEdge3DReadOnly currentEdge = lineOfSightStart(observer, epsilon);
+
+      for (int i = 0; currentEdge != null && i < getNumberOfEdges(); i++)
+      {
+         lineOfSight.add(currentEdge);
+         currentEdge = currentEdge.getNext();
+         if (!canObserverSeeEdge(observer, currentEdge, epsilon))
+            break;
+      }
+
+      return lineOfSight;
+   }
+
+   default HalfEdge3DReadOnly lineOfSightStart(Point3DReadOnly observer, double epsilon)
+   {
+      if (isEmpty())
+         return null;
+      if (getNumberOfEdges() <= 2)
+         return getEdge(0);
+
+      HalfEdge3DReadOnly startEdge = getEdge(0);
+      HalfEdge3DReadOnly currentEdge = startEdge;
+      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPrevious(), epsilon);
+
+      do
+      {
+         boolean edgeVisible = canObserverSeeEdge(observer, currentEdge, epsilon);
+
+         if (!previousEdgeVisible && edgeVisible)
+            return currentEdge;
+
+         previousEdgeVisible = edgeVisible;
+         currentEdge = currentEdge.getNext();
+      }
+      while (currentEdge != startEdge);
+
+      return null;
+   }
+
    /**
     * Returns the first edge that is visible from the specified point.
     * <p>
@@ -175,6 +218,32 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
       return null;
    }
 
+   default HalfEdge3DReadOnly lineOfSightEnd(Point3DReadOnly observer, double epsilon)
+   {
+      if (isEmpty())
+         return null;
+      if (getNumberOfEdges() <= 2)
+         return getEdge(0);
+
+      HalfEdge3DReadOnly startEdge = getEdge(0);
+      HalfEdge3DReadOnly currentEdge = startEdge;
+      boolean previousEdgeVisible = canObserverSeeEdge(observer, currentEdge.getPrevious(), epsilon);
+
+      do
+      {
+         boolean edgeVisible = canObserverSeeEdge(observer, currentEdge, epsilon);
+
+         if (previousEdgeVisible && !edgeVisible)
+            return currentEdge.getPrevious();
+
+         previousEdgeVisible = edgeVisible;
+         currentEdge = currentEdge.getNext();
+      }
+      while (currentEdge != startEdge);
+
+      return null;
+   }
+
    /**
     * Checks if a point is strictly on the same side of the specified edge as the face centroid, i.e.
     * the left hand side w.r.t. to the edge
@@ -191,6 +260,13 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    default boolean canObserverSeeEdge(Point3DReadOnly query, HalfEdge3DReadOnly edge)
    {
       return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal());
+   }
+
+   default boolean canObserverSeeEdge(Point3DReadOnly query, HalfEdge3DReadOnly edge, double epsilon)
+   {
+      if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal()))
+         return true;
+      return edge.distanceFromSupportLine(query) <= epsilon;
    }
 
    /**

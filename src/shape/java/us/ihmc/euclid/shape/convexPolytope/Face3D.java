@@ -89,7 +89,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     * @param vertexToAdd the vertex that must be added to the face
     * @param epsilon
     */
-   public void addVertex(Vertex3D vertexToAdd)
+   public boolean addVertex(Vertex3D vertexToAdd)
    {
       if (edges.isEmpty())
       {
@@ -103,7 +103,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       {
          HalfEdge3D firstEdge = edges.get(0);
          if (firstEdge.getOrigin().epsilonEquals(vertexToAdd, constructionEpsilon))
-            return;
+            return false;
 
          // Set the edge for the two points and then create its twin
          firstEdge.setDestination(vertexToAdd);
@@ -119,7 +119,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       {
          HalfEdge3D firstEdge = edges.get(0);
          if (firstEdge.distance(vertexToAdd) < constructionEpsilon)
-            return;
+            return false;
 
          HalfEdge3D secondEdge = edges.get(1);
 
@@ -140,16 +140,10 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       }
       else
       {
-         List<HalfEdge3D> lineOfSight = lineOfSight(vertexToAdd);
+         List<HalfEdge3D> lineOfSight = lineOfSight(vertexToAdd, constructionEpsilon);
 
          if (lineOfSight.isEmpty())
-            return;
-
-         // TODO Maybe do line-of-sight with epsilon?
-         if (lineOfSight.get(0).getPrevious().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
-            lineOfSight.add(0, lineOfSight.get(0).getPrevious());
-         if (lineOfSight.get(lineOfSight.size() - 1).getNext().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
-            lineOfSight.add(lineOfSight.get(lineOfSight.size() - 1).getNext());
+            return false;
 
          HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
          HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
@@ -157,9 +151,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          if (lineOfSight.size() == 1)
          {
             if (firstVisibleEdge.getOrigin().epsilonEquals(vertexToAdd, constructionEpsilon))
-               return;
+               return false;
             if (firstVisibleEdge.getDestination().epsilonEquals(vertexToAdd, constructionEpsilon))
-               return;
+               return false;
 
             HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
             additionalEdge.setFace(this);
@@ -198,6 +192,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       updateCentroidAndArea();
 
       boundingBox.updateToIncludePoint(vertexToAdd);
+      return true;
    }
 
    public void updateVertices()
@@ -284,15 +279,45 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
+   public List<HalfEdge3D> lineOfSight(Point3DReadOnly observer, double epsilon)
+   {
+      List<HalfEdge3D> lineOfSight = new ArrayList<>();
+
+      HalfEdge3D edgeUnderConsideration = lineOfSightStart(observer, epsilon);
+
+      for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
+      {
+         lineOfSight.add(edgeUnderConsideration);
+         edgeUnderConsideration = edgeUnderConsideration.getNext();
+         if (!canObserverSeeEdge(observer, edgeUnderConsideration, epsilon))
+            break;
+      }
+
+      return lineOfSight;
+   }
+
+   @Override
    public HalfEdge3D lineOfSightStart(Point3DReadOnly observer)
    {
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightStart(observer);
    }
 
    @Override
+   public HalfEdge3D lineOfSightStart(Point3DReadOnly observer, double epsilon)
+   {
+      return (HalfEdge3D) Face3DReadOnly.super.lineOfSightStart(observer, epsilon);
+   }
+
+   @Override
    public HalfEdge3D lineOfSightEnd(Point3DReadOnly observer)
    {
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer);
+   }
+
+   @Override
+   public HalfEdge3D lineOfSightEnd(Point3DReadOnly observer, double epsilon)
+   {
+      return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer, epsilon);
    }
 
    @Override

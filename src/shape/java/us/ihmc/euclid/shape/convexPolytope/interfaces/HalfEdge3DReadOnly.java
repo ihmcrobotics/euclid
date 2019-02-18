@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -64,6 +65,11 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
    default double distance(Point3DReadOnly point)
    {
       return LineSegment3DReadOnly.super.distance(point);
+   }
+
+   default double distanceFromSupportLine(Point3DReadOnly point)
+   {
+      return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, getOrigin(), getDestination());
    }
 
    @Override

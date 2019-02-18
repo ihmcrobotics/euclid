@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -16,7 +17,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    private int iterations;
    private final int maxIterations = 1000;
-   private double epsilon;
+   private double terminalConditionEpsilon;
+   private double simplexConstructionEpsilon = EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON;
    private boolean latestCollisionTestResult;
 
    private SimplexPolytope3D simplex;
@@ -35,9 +37,9 @@ public class GilbertJohnsonKeerthiCollisionDetector
       this(defaultCollisionEpsilon);
    }
 
-   public GilbertJohnsonKeerthiCollisionDetector(double epsilon)
+   public GilbertJohnsonKeerthiCollisionDetector(double terminalConditionEpsilon)
    {
-      setEpsilon(epsilon);
+      setTerminalConditionEpsilon(terminalConditionEpsilon);
    }
 
    public SimplexPolytope3D getSimplex()
@@ -45,14 +47,24 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return simplex;
    }
 
-   public void setEpsilon(double epsilon)
+   public void setTerminalConditionEpsilon(double epsilon)
    {
-      this.epsilon = epsilon;
+      this.terminalConditionEpsilon = epsilon;
    }
 
-   public double getEpsilon()
+   public void setSimplexConstructionEpsilon(double simplexConstructionEpsilon)
    {
-      return epsilon;
+      this.simplexConstructionEpsilon = simplexConstructionEpsilon;
+   }
+
+   public double getTerminalConditionEpsilon()
+   {
+      return terminalConditionEpsilon;
+   }
+
+   public double getSimplexConstructionEpsilon()
+   {
+      return simplexConstructionEpsilon;
    }
 
    public boolean doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
@@ -71,22 +83,23 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return false;
       }
 
-      simplex = new SimplexPolytope3D();
+      simplex = new SimplexPolytope3D(simplexConstructionEpsilon);
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
          simplex.addVertex(supportingVertexA, supportingVertexB);
 
          // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
-         if (simplex.isPointInside(origin, epsilon))
+         if (simplex.isPointInside(origin, terminalConditionEpsilon))
          {
+            simplex.isPointInside(origin, terminalConditionEpsilon);
             latestCollisionTestResult = true;
             return true;
          }
 
          simplex.getSupportVectorDirectionTo(origin, supportDirection);
 
-         if (previousSupportDirection.epsilonEquals(supportDirection, epsilon))
+         if (previousSupportDirection.epsilonEquals(supportDirection, terminalConditionEpsilon))
             return false;
 
          previousSupportDirection.set(supportDirection);

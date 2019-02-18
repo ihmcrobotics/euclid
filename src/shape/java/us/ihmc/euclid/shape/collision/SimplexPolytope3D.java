@@ -16,13 +16,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class SimplexPolytope3D implements Simplex3D
 {
-   private ConvexPolytope3D polytope = new ConvexPolytope3D();
+   private ConvexPolytope3D polytope;
    private List<SimplexVertex3D> vertices = new ArrayList<>();
    private final Point3D projection = new Point3D();
 
-   public SimplexPolytope3D()
+   public SimplexPolytope3D(double constructionEpsilon)
    {
-      super();
+      polytope = new ConvexPolytope3D(constructionEpsilon);
    }
 
    public SimplexVertex3D addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)

@@ -1,12 +1,10 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
  * A template that defines the basic structure of a DCEL half edge. A half edge is composed of
@@ -250,11 +248,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    public Point3DBasics getSecondEndpoint()
    {
       return getDestination();
-   }
-
-   public double distanceFromSupportLine(Point3DReadOnly point)
-   {
-      return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, origin, destination);
    }
 
    /**

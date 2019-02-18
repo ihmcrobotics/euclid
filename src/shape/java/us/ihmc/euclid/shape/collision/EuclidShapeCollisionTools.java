@@ -320,17 +320,21 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3DA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      if (resultToPack.areShapesColliding())
-         return;
+      double distance = resultToPack.areShapesColliding() ? resultToPack.getDepth() : resultToPack.getDistance();
+      distance -= sphere3DA.getRadius();
 
-      double distance = resultToPack.getDistance() - sphere3DA.getRadius();
-
-      if (distance > 0.0)
-         return;
-
-      resultToPack.setShapesAreColliding(true);
-      resultToPack.setDepth(distance);
-      resultToPack.setDistance(Double.NaN);
+      if (distance < 0.0)
+      {
+         resultToPack.setShapesAreColliding(true);
+         resultToPack.setDepth(distance);
+         resultToPack.setDistance(Double.NaN);
+      }
+      else
+      {
+         resultToPack.setShapesAreColliding(false);
+         resultToPack.setDistance(distance);
+         resultToPack.setDepth(Double.NaN);
+      }
    }
 
    private static void doPoint3DSphere3DCollisionTest(Point3DReadOnly point3D, Point3DReadOnly sphere3DPosition, double sphere3DRadius,

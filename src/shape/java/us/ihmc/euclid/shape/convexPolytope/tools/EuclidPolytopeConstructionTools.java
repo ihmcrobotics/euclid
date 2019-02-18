@@ -54,7 +54,7 @@ public class EuclidPolytopeConstructionTools
                                                          double epsilon)
    {
       List<Face3D> newFaces = new ArrayList<>();
-   
+
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
          if (inPlaneFaces.contains(silhouetteEdge.getFace()))
@@ -66,15 +66,15 @@ public class EuclidPolytopeConstructionTools
             newFaces.add(newFace3DFromVertexAndTwinEdge(vertex, silhouetteEdge, epsilon));
          }
       }
-   
+
       for (HalfEdge3D startingFrom : vertex.getAssociatedEdges())
       { // Going through the new edges and associating the twins.
          HalfEdge3D endingTo = startingFrom.getDestination().getEdgeTo(vertex);
-   
+
          startingFrom.setTwin(endingTo);
          endingTo.setTwin(startingFrom);
       }
-   
+
       return newFaces;
    }
 
@@ -96,23 +96,23 @@ public class EuclidPolytopeConstructionTools
       Vertex3D v1 = twinEdge.getDestination();
       Vertex3D v2 = twinEdge.getOrigin();
       Vertex3D v3 = vertex;
-   
+
       // Estimate the face's normal based on its vertices and knowing the expecting ordering based on the twin-edge: v1, v2, then v3.
       Vector3D initialNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(v1, v2, v2, v3);
       // As the vertices are clock-wise ordered the cross-product of 2 successive edges should be negated to obtain the face's normal.
       initialNormal.negate();
-   
+
       Face3D face = new Face3D(initialNormal, epsilon);
-   
+
       face.addVertex(v1);
       face.addVertex(v2);
       face.addVertex(v3);
-   
+
       HalfEdge3D faceFirstEdge = face.getEdge(0);
-   
+
       twinEdge.setTwin(faceFirstEdge);
       faceFirstEdge.setTwin(twinEdge);
-   
+
       return face;
    }
 
@@ -128,17 +128,17 @@ public class EuclidPolytopeConstructionTools
       EuclidPolytopeConstructionTools.computeCovariance3D(vertices, averageToPack, covariance);
       if (eigenValuesToPack == null)
          eigenValuesToPack = new Vector3D();
-   
+
       Vector3D newNormal = new Vector3D();
       boolean success = EuclidPolytopeConstructionTools.computeEigenVectors(covariance, eigenValuesToPack, null, null, newNormal);
       if (!success)
          return false;
-   
+
       if (newNormal.dot(normalToUpdate) < 0.0)
          newNormal.negate();
-   
+
       normalToUpdate.set(newNormal);
-   
+
       return true;
    }
 
@@ -147,16 +147,16 @@ public class EuclidPolytopeConstructionTools
    {
       DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
       matrix.get(denseMatrix);
-   
+
       EigenDecomposition<DenseMatrix64F> eig = DecompositionFactory.eig(3, true, true);
       if (!eig.decompose(denseMatrix))
          return false;
       double eigenValue0 = eig.getEigenvalue(0).getReal();
       double eigenValue1 = eig.getEigenvalue(1).getReal();
       double eigenValue2 = eig.getEigenvalue(2).getReal();
-   
+
       int largeEigenValueIndex, midEigenValueIndex, smallEigenValueIndex;
-   
+
       if (eigenValue0 > eigenValue1)
       {
          if (eigenValue1 > eigenValue2)
@@ -199,21 +199,21 @@ public class EuclidPolytopeConstructionTools
             smallEigenValueIndex = 0;
          }
       }
-   
+
       if (eigenValues != null)
       {
          eigenValues.setX(eig.getEigenvalue(largeEigenValueIndex).getReal());
          eigenValues.setY(eig.getEigenvalue(midEigenValueIndex).getReal());
          eigenValues.setZ(eig.getEigenvalue(smallEigenValueIndex).getReal());
       }
-   
+
       if (firstEigenVector != null)
          firstEigenVector.set(eig.getEigenVector(largeEigenValueIndex));
       if (secondEigenVector != null)
          secondEigenVector.set(eig.getEigenVector(midEigenValueIndex));
       if (thirdEigenVector != null)
          thirdEigenVector.set(eig.getEigenVector(smallEigenValueIndex));
-   
+
       return true;
    }
 
@@ -222,7 +222,7 @@ public class EuclidPolytopeConstructionTools
       double meanX = 0.0;
       double meanY = 0.0;
       double meanZ = 0.0;
-   
+
       for (int i = 0; i < input.size(); i++)
       {
          Tuple3DReadOnly element = input.get(i);
@@ -230,34 +230,34 @@ public class EuclidPolytopeConstructionTools
          meanY += element.getY();
          meanZ += element.getZ();
       }
-   
+
       double inverseOfInputSize = 1.0 / input.size();
-   
+
       meanX *= inverseOfInputSize;
       meanY *= inverseOfInputSize;
       meanZ *= inverseOfInputSize;
-   
+
       if (averageToPack != null)
       {
          averageToPack.set(meanX, meanY, meanZ);
       }
-   
+
       covarianceToPack.setToZero();
-   
+
       for (int i = 0; i < input.size(); i++)
       {
          Tuple3DReadOnly element = input.get(i);
          double devX = element.getX() - meanX;
          double devY = element.getY() - meanY;
          double devZ = element.getZ() - meanZ;
-   
+
          double covXX = devX * devX * inverseOfInputSize;
          double covYY = devY * devY * inverseOfInputSize;
          double covZZ = devZ * devZ * inverseOfInputSize;
          double covXY = devX * devY * inverseOfInputSize;
          double covXZ = devX * devZ * inverseOfInputSize;
          double covYZ = devY * devZ * inverseOfInputSize;
-   
+
          covarianceToPack.addM00(covXX);
          covarianceToPack.addM11(covYY);
          covarianceToPack.addM22(covZZ);
@@ -274,7 +274,7 @@ public class EuclidPolytopeConstructionTools
                                                    boolean clockwiseOrdered, Point3DBasics centroidToPack)
    {
       EuclidPolytopeConstructionTools.checkNumberOfVertices(convexPolygon3D, numberOfVertices);
-   
+
       if (numberOfVertices == 0)
       {
          if (centroidToPack != null)
@@ -298,23 +298,23 @@ public class EuclidPolytopeConstructionTools
          double Cx = 0.0;
          double Cy = 0.0;
          double Cz = 0.0;
-   
+
          if (clockwiseOrdered)
          {
             for (int i = 0; i < numberOfVertices; i++)
             {
                Point3DReadOnly ci = convexPolygon3D.get(i);
                Point3DReadOnly ciMinus1 = convexPolygon3D.get(previous(i, numberOfVertices));
-   
+
                double wx = ci.getY() * ciMinus1.getZ() - ci.getZ() * ciMinus1.getY();
                double wy = ci.getZ() * ciMinus1.getX() - ci.getX() * ciMinus1.getZ();
                double wz = ci.getX() * ciMinus1.getY() - ci.getY() * ciMinus1.getX();
                double weight = TupleTools.dot(wx, wy, wz, normal);
-   
+
                Cx += (ci.getX() + ciMinus1.getX()) * weight;
                Cy += (ci.getY() + ciMinus1.getY()) * weight;
                Cz += (ci.getZ() + ciMinus1.getZ()) * weight;
-   
+
                area += weight;
             }
          }
@@ -324,22 +324,22 @@ public class EuclidPolytopeConstructionTools
             {
                Point3DReadOnly ci = convexPolygon3D.get(i);
                Point3DReadOnly ciPlus1 = convexPolygon3D.get(next(i, numberOfVertices));
-   
+
                double wx = ci.getY() * ciPlus1.getZ() - ci.getZ() * ciPlus1.getY();
                double wy = ci.getZ() * ciPlus1.getX() - ci.getX() * ciPlus1.getZ();
                double wz = ci.getX() * ciPlus1.getY() - ci.getY() * ciPlus1.getX();
                double weight = TupleTools.dot(wx, wy, wz, normal);
-   
+
                Cx += (ci.getX() + ciPlus1.getX()) * weight;
                Cy += (ci.getY() + ciPlus1.getY()) * weight;
                Cz += (ci.getZ() + ciPlus1.getZ()) * weight;
-   
+
                area += weight;
             }
          }
-   
+
          area *= 0.5;
-   
+
          if (centroidToPack != null)
          {
             if (area < 1.0e-5)
@@ -352,24 +352,24 @@ public class EuclidPolytopeConstructionTools
                Cx *= scale;
                Cy *= scale;
                Cz *= scale;
-   
+
                centroidToPack.set(Cx, Cy, Cz);
-   
+
                double dot = TupleTools.dot(Cx, Cy, Cz, normal);
                centroidToPack.scaleAdd(-dot, normal, centroidToPack);
-   
+
                double average = 0.0;
-   
+
                for (int i = 0; i < numberOfVertices; i++)
                {
                   Point3DReadOnly vertex = convexPolygon3D.get(i);
                   average += TupleTools.dot(vertex, normal) / numberOfVertices;
                }
-   
+
                centroidToPack.scaleAdd(average, normal, centroidToPack);
             }
          }
-   
+
          return area;
       }
    }
@@ -378,23 +378,23 @@ public class EuclidPolytopeConstructionTools
    {
       centroidToPack.setToZero();
       double volume = 0.0;
-   
+
       if (convexPolytope3D.getNumberOfVertices() <= 4)
       {
          for (int vertexIndex = 0; vertexIndex < convexPolytope3D.getNumberOfVertices(); vertexIndex++)
             centroidToPack.add(convexPolytope3D.getVertex(vertexIndex));
          centroidToPack.scale(1.0 / convexPolytope3D.getNumberOfVertices());
-   
+
          if (convexPolytope3D.getNumberOfVertices() == 4)
             volume = EuclidShapeTools.tetrahedronVolume(convexPolytope3D.getVertex(0), convexPolytope3D.getVertex(1), convexPolytope3D.getVertex(2),
-                                                           convexPolytope3D.getVertex(3));
+                                                        convexPolytope3D.getVertex(3));
          else
             volume = 0.0;
          return volume;
       }
-   
+
       Point3DReadOnly a = convexPolytope3D.getFace(0).getVertex(0);
-   
+
       // We can skip the first face as the vertex 'a' comes from it, so it does not participate in the centroid/volume calculation.
       for (int faceIndex = 1; faceIndex < convexPolytope3D.getNumberOfFaces(); faceIndex++)
       {
@@ -406,7 +406,7 @@ public class EuclidPolytopeConstructionTools
          Face3DReadOnly face = convexPolytope3D.getFace(faceIndex);
          int numberOfTriangles = face.getNumberOfEdges() - 2;
          Vertex3DReadOnly b = face.getVertex(0);
-   
+
          for (int triangleIndex = 0; triangleIndex < numberOfTriangles; triangleIndex++)
          {
             Vertex3DReadOnly c = face.getVertex(triangleIndex + 1);
@@ -423,9 +423,9 @@ public class EuclidPolytopeConstructionTools
             volume += tetrahedronVolume;
          }
       }
-   
+
       centroidToPack.scale(1.0 / volume);
-   
+
       return volume;
    }
 

@@ -15,6 +15,7 @@ import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
+import us.ihmc.euclid.shape.primitives.Sphere3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -551,5 +552,45 @@ class ExpandingPolytopeAlgorithmTest
       polytopeBTranslated.applyTransform(new RigidBodyTransform(new Quaternion(), augmentedCollisionVector));
       // We translate the polytopeB just enough to resolve the collision
       assertFalse(new GilbertJohnsonKeerthiCollisionDetector().doCollisionTest(polytopeA, polytopeBTranslated));
+   }
+
+   @Test //TODO Finish me
+   void testSphere3DToSphere3D() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(10860004);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
+         Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
+
+         Shape3DCollisionTestResult expectedResult = new Shape3DCollisionTestResult();
+         Shape3DCollisionTestResult gjkResult = new Shape3DCollisionTestResult();
+         Shape3DCollisionTestResult epaResult = new Shape3DCollisionTestResult();
+         EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
+
+         GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
+         gjkDetector.doShapeCollisionTest(sphereA, sphereB, gjkResult);
+         ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
+         epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
+
+         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
+         assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding());
+
+         if (expectedResult.areShapesColliding())
+         {
+            assertTrue(gjkResult.containsNaN());
+            assertTrue(gjkResult.getPointOnA().containsNaN());
+            assertTrue(gjkResult.getPointOnB().containsNaN());
+            assertTrue(gjkResult.getNormalOnA().containsNaN());
+            assertTrue(gjkResult.getNormalOnB().containsNaN());
+            assertTrue(Double.isNaN(gjkResult.getDepth()));
+            assertTrue(Double.isNaN(gjkResult.getDistance()));
+         }
+         else
+         {
+            
+         }
+      }
    }
 }
