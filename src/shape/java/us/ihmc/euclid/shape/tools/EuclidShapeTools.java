@@ -96,7 +96,7 @@ public class EuclidShapeTools
    }
 
    public static void boundingBoxBox3D(Point3DReadOnly box3DPosition, RotationMatrixReadOnly box3DOrientation, Vector3DReadOnly box3DSize,
-                                           BoundingBox3DBasics boundingBoxToPack)
+                                       BoundingBox3DBasics boundingBoxToPack)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
       double halfSizeY = 0.5 * box3DSize.getY();
@@ -375,54 +375,43 @@ public class EuclidShapeTools
       double capsule3DHalfLength = 0.5 * capsule3DLength;
 
       double percentageOnAxis = EuclidGeometryTools.percentageAlongLine3D(query, capsule3DPosition, capsule3DAxis);
+      if (percentageOnAxis > capsule3DHalfLength)
+         percentageOnAxis = capsule3DHalfLength;
+      else if (percentageOnAxis < -capsule3DHalfLength)
+         percentageOnAxis = -capsule3DHalfLength;
 
-      if (Math.abs(percentageOnAxis) < capsule3DHalfLength)
+      double projectionOnAxisX = capsule3DPosition.getX() + percentageOnAxis * capsule3DAxis.getX();
+      double projectionOnAxisY = capsule3DPosition.getY() + percentageOnAxis * capsule3DAxis.getY();
+      double projectionOnAxisZ = capsule3DPosition.getZ() + percentageOnAxis * capsule3DAxis.getZ();
+      double distanceSquaredFromAxisClosest = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ,
+                                                                                                 query);
+
+      if (distanceSquaredFromAxisClosest < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      { // We need to setup a vector that is orthogonal to the capsule's axis, then we'll perform the projection along that vector.
+         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
+         if (Math.abs(capsule3DAxis.getY()) > 0.1 || Math.abs(capsule3DAxis.getZ()) > 0.1)
+            normalToPack.set(1.0, 0.0, 0.0);
+         else
+            normalToPack.set(0.0, 1.0, 0.0);
+
+         normalToPack.cross(capsule3DAxis);
+         normalToPack.normalize();
+         closestPointOnSurfaceToPack.setAndScale(capsule3DRadius, normalToPack);
+         closestPointOnSurfaceToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+         return -capsule3DRadius;
+      }
+      else
       {
-         double projectionOnAxisX = capsule3DPosition.getX() + percentageOnAxis * capsule3DAxis.getX();
-         double projectionOnAxisY = capsule3DPosition.getY() + percentageOnAxis * capsule3DAxis.getY();
-         double projectionOnAxisZ = capsule3DPosition.getZ() + percentageOnAxis * capsule3DAxis.getZ();
-         double distanceFromAxis = EuclidGeometryTools.distanceBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ, query);
+         double distanceFromAxisClosest = Math.sqrt(distanceSquaredFromAxisClosest);
 
          normalToPack.set(query);
          normalToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-         normalToPack.scale(1.0 / distanceFromAxis);
+         normalToPack.scale(1.0 / distanceFromAxisClosest);
 
          closestPointOnSurfaceToPack.setAndScale(capsule3DRadius, normalToPack);
          closestPointOnSurfaceToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
 
-         return distanceFromAxis - capsule3DRadius;
-      }
-      else if (percentageOnAxis > 0.0)
-      {
-         double topCenterX = capsule3DPosition.getX() + capsule3DHalfLength * capsule3DAxis.getX();
-         double topCenterY = capsule3DPosition.getY() + capsule3DHalfLength * capsule3DAxis.getY();
-         double topCenterZ = capsule3DPosition.getZ() + capsule3DHalfLength * capsule3DAxis.getZ();
-         double distanceFromTopCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(topCenterX, topCenterY, topCenterZ, query);
-
-         normalToPack.set(query);
-         normalToPack.sub(topCenterX, topCenterY, topCenterZ);
-         normalToPack.scale(1.0 / distanceFromTopCenter);
-
-         closestPointOnSurfaceToPack.setAndScale(capsule3DRadius, normalToPack);
-         closestPointOnSurfaceToPack.add(topCenterX, topCenterY, topCenterZ);
-
-         return distanceFromTopCenter - capsule3DRadius;
-      }
-      else // if (percentageOnAxis < 0.0)
-      {
-         double bottomCenterX = capsule3DPosition.getX() - capsule3DHalfLength * capsule3DAxis.getX();
-         double bottomCenterY = capsule3DPosition.getY() - capsule3DHalfLength * capsule3DAxis.getY();
-         double bottomCenterZ = capsule3DPosition.getZ() - capsule3DHalfLength * capsule3DAxis.getZ();
-         double distanceFromBottomCenter = EuclidGeometryTools.distanceBetweenPoint3Ds(bottomCenterX, bottomCenterY, bottomCenterZ, query);
-
-         normalToPack.set(query);
-         normalToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
-         normalToPack.scale(1.0 / distanceFromBottomCenter);
-
-         closestPointOnSurfaceToPack.setAndScale(capsule3DRadius, normalToPack);
-         closestPointOnSurfaceToPack.add(bottomCenterX, bottomCenterY, bottomCenterZ);
-
-         return distanceFromBottomCenter - capsule3DRadius;
+         return distanceFromAxisClosest - capsule3DRadius;
       }
    }
 
@@ -698,6 +687,21 @@ public class EuclidShapeTools
                normalToPack.set(cylinder3DAxis);
                return positionOnAxis - halfLength;
             }
+         }
+         else if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+         { // Edge-case: the query is too close to the axis to compute sane results
+            // We need to setup a vector that is orthogonal to the cylinder's axis, then we'll perform the projection along that vector.
+            // Purposefully picking a large tolerance to ensure sanity of the cross-product.
+            if (Math.abs(cylinder3DAxis.getY()) > 0.1 || Math.abs(cylinder3DAxis.getZ()) > 0.1)
+               normalToPack.set(1.0, 0.0, 0.0);
+            else
+               normalToPack.set(0.0, 1.0, 0.0);
+
+            normalToPack.cross(cylinder3DAxis);
+            normalToPack.normalize();
+            closestPointOnSurfaceToPack.setAndScale(cylinder3DRadius, normalToPack);
+            closestPointOnSurfaceToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
+            return -cylinder3DRadius;
          }
          else
          { // Closer to the cylinder part

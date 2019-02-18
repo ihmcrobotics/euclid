@@ -327,6 +327,21 @@ public class Cylinder3DTest
       Vector3D expectedNormal = new Vector3D();
 
       for (int i = 0; i < ITERATIONS; i++)
+      { // Edge-case: Query is on the axis 
+         Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D pointOnAxis = new Point3D();
+         pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
+
+         assertTrue(cylinder3D.doPoint3DCollisionTest(pointOnAxis, actualClosestPoint, actualNormal));
+         assertFalse(actualClosestPoint.containsNaN());
+         assertFalse(actualNormal.containsNaN());
+
+         cylinder3D.doPoint3DCollisionTest(actualClosestPoint, expectedClosestPoint, expectedNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
       { // Point inside generated to be within a certain radius of the axis
          Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
          Point3D pointOnAxis = new Point3D();
