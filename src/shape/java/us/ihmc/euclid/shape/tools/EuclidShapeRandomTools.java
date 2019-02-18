@@ -114,7 +114,7 @@ public class EuclidShapeRandomTools
 
    public static Torus3D nextTorus3D(Random random)
    {
-      return nextTorus3D(random, 0.1, 1.0, 0.0, 0.1);
+      return nextTorus3D(random, 0.5, 2.0, 0.0, 0.5);
    }
 
    public static Torus3D nextTorus3D(Random random, double minRadius, double maxRadius, double minTubeRadius, double maxTubeRadius)

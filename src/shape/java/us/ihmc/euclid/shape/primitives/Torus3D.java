@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.primitives;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -40,16 +41,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    }
 
    /**
-    * Creates a new torus 3D identical to {@code other}.
-    *
-    * @param other the other torus to copy. Not modified.
-    */
-   public Torus3D(Torus3D other)
-   {
-      set(other);
-   }
-
-   /**
     * Creates a new torus 3D and initializes its radii.
     *
     * @param radius radius from the torus center to the tube center.
@@ -74,6 +65,16 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    public Torus3D(Point3DReadOnly position, Vector3DReadOnly axis, double radius, double tubeRadius)
    {
       set(position, axis, radius, tubeRadius);
+   }
+
+   /**
+    * Creates a new torus 3D identical to {@code other}.
+    *
+    * @param other the other torus to copy. Not modified.
+    */
+   public Torus3D(Torus3DReadOnly other)
+   {
+      set(other);
    }
 
    /**

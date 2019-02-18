@@ -198,7 +198,7 @@ class Capsule3DTest
    }
 
    @Test
-   void testSize() throws Exception
+   void testSetSize() throws Exception
    {
       Random random = new Random(43905783);
 
