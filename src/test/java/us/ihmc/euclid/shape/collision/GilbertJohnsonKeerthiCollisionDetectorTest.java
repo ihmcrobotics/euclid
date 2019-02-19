@@ -593,9 +593,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       Random random = new Random(108604);
       boolean verbose = false;
       double meanError = 0.0;
-      int numberOfIterations = 10 * ITERATIONS;
 
-      for (int i = 0; i < numberOfIterations; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
@@ -617,7 +616,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                   + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
          }
 
-         meanError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance()) / numberOfIterations;
+         meanError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance()) / ITERATIONS;
 
          // Asserts the internal sanity of the collision result
          assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding());
