@@ -400,6 +400,26 @@ public class EuclidPolytopeTools
       if (visibleFacesToPack.isEmpty())
          return null; // The observer cannot see any face => no silhouette.
 
+      if (visibleFacesToPack.size() > 1)
+      {
+         for (F visibleFace : visibleFacesToPack)
+         {
+            boolean hasAtLeastOneVisibleNeighbor = false;
+
+            for (int edgeIndex = 0; edgeIndex < visibleFace.getNumberOfEdges(); edgeIndex++)
+            {
+               if (visibleFacesToPack.contains(visibleFace.getNeighbor(edgeIndex)))
+               {
+                  hasAtLeastOneVisibleNeighbor = true;
+                  break;
+               }
+            }
+
+            if (!hasAtLeastOneVisibleNeighbor)
+               return null;
+         }
+      }
+
       // Now we search for the silhouette and we start by looking for the first edge.
       E silhouetteStartEdge = null;
 
