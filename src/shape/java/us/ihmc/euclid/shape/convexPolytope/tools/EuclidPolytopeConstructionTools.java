@@ -53,8 +53,25 @@ public class EuclidPolytopeConstructionTools
    public static List<Face3D> computeVertexNeighborFaces(Vertex3D vertex, Collection<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces,
                                                          double epsilon)
    {
-      List<Face3D> newFaces = new ArrayList<>();
+      if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertex, silhouetteEdges) <= epsilon)
+         return null;
 
+      // Last filter before actually modifying the polytope
+      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+      { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
+         Face3D face = silhouetteEdge.getFace();
+         if (inPlaneFaces.contains(face))
+         { // The face has to be extended to include the new vertex
+            if (!face.canObserverSeeEdge(vertex, silhouetteEdge, epsilon))
+               return null;
+            if (face.lineOfSight(vertex, epsilon).size() != 1)
+               return null;
+         }
+         // TODO Consider adding a filter for the faces to be created.
+      }
+
+      List<Face3D> newFaces = new ArrayList<>();
+      
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
          if (inPlaneFaces.contains(silhouetteEdge.getFace()))

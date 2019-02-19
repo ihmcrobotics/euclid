@@ -257,6 +257,8 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       }
       else if (!firstFace.isPointInFacePlane(vertexToAdd, constructionEpsilon))
       { // Off the face plane => need to create new faces.
+         if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertexToAdd, firstFace.getEdges()) <= constructionEpsilon)
+            return false;
          if (firstFace.canObserverSeeFace(vertexToAdd))
             firstFace.flip();
 
@@ -281,16 +283,23 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       List<Face3D> inPlaneFaces = new ArrayList<>();
       Collection<HalfEdge3D> silhouette = EuclidPolytopeTools.computeSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
 
-      if (silhouette != null && EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertexToAdd, silhouette) > constructionEpsilon)
+      if (silhouette != null)
       {
-         removeFaces(visibleFaces);
-         faces.addAll(EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, silhouette, inPlaneFaces, constructionEpsilon));
-         return true;
+         List<Face3D> newFaces = EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, silhouette, inPlaneFaces, constructionEpsilon);
+         if (newFaces != null)
+         {
+            removeFaces(visibleFaces);
+            faces.addAll(newFaces);
+            return true;
+         }
       }
-      else
-      { // The vertex is either inside the polytope or inside a face.
-         return false;
-      }
+
+      /*
+       * The vertex is either: inside the polytope, inside a face, or got rejected in case adding it would
+       * result in an inconsistent polytope (this is expected to occur only when dealing with numerical
+       * inaccuracies).
+       */
+      return false;
    }
 
    public void updateVertices()
