@@ -15,7 +15,6 @@ public class ExpandingPolytopeAlgorithm
 
    private int iterations;
    private final int maxIterations = 1000;
-   private double epsilon;
    private boolean latestCollisionTestResult;
 
    private SimplexPolytope3D simplex;
@@ -35,20 +34,34 @@ public class ExpandingPolytopeAlgorithm
       this(defaultCollisionEpsilon);
    }
 
-   public ExpandingPolytopeAlgorithm(double epsilon)
+   public ExpandingPolytopeAlgorithm(double terminalConditionEpsilon)
    {
-      gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector(epsilon);
-      setEpsilon(epsilon);
+      gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector(terminalConditionEpsilon);
    }
 
-   public void setEpsilon(double epsilon)
+   public SimplexPolytope3D getSimplex()
    {
-      this.epsilon = epsilon;
+      return simplex;
    }
 
-   public double getEpsilon()
+   public void setTerminalConditionEpsilon(double epsilon)
    {
-      return epsilon;
+      gjkCollisionDetector.setTerminalConditionEpsilon(epsilon);
+   }
+
+   public void setSimplexConstructionEpsilon(double simplexConstructionEpsilon)
+   {
+      gjkCollisionDetector.setSimplexConstructionEpsilon(simplexConstructionEpsilon);
+   }
+
+   public double getTerminalConditionEpsilon()
+   {
+      return gjkCollisionDetector.getTerminalConditionEpsilon();
+   }
+
+   public double getSimplexConstructionEpsilon()
+   {
+      return gjkCollisionDetector.getSimplexConstructionEpsilon();
    }
 
    public void doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
@@ -56,7 +69,6 @@ public class ExpandingPolytopeAlgorithm
       isCollisionVectorUpToDate = false;
       areCollisionPointsUpToDate = false;
 
-      gjkCollisionDetector.setTerminalConditionEpsilon(epsilon);
       latestCollisionTestResult = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
       simplex = gjkCollisionDetector.getSimplex();
       supportDirection.set(gjkCollisionDetector.getSupportDirection());
@@ -72,7 +84,7 @@ public class ExpandingPolytopeAlgorithm
          // We need to negate the support direction to point toward the outside of the simplex and thus force the expansion.
          supportDirection.negate();
 
-         if (supportDirection.epsilonEquals(previousSupportDirection, epsilon))
+         if (supportDirection.epsilonEquals(previousSupportDirection, gjkCollisionDetector.getTerminalConditionEpsilon()))
             break;
 
          Point3DReadOnly supportingVertexA = shapeA.getSupportingVertex(supportDirection);

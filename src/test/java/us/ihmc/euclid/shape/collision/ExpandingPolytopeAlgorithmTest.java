@@ -30,6 +30,7 @@ class ExpandingPolytopeAlgorithmTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
+   private static final double LARGE_EPSILON = 1.0e-2;
 
    @Test
    void testNonCollidingCubeAndTetrahedron()
@@ -554,43 +555,51 @@ class ExpandingPolytopeAlgorithmTest
       assertFalse(new GilbertJohnsonKeerthiCollisionDetector().doCollisionTest(polytopeA, polytopeBTranslated));
    }
 
-   @Test //TODO Finish me
+   @Test
    void testSphere3DToSphere3D() throws Exception
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
-      Random random = new Random(10860004);
+      Random random = new Random(108604);
+      boolean verbose = false;
+      double meanError = 0.0;
 
       for (int i = 0; i < ITERATIONS; i++)
       {
          Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
+         sphereB.getPosition().set(sphereA.getPosition());
+         sphereB.getPosition().add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 0.8, 2.0)
+               * (sphereA.getRadius() + sphereB.getRadius())));
 
          Shape3DCollisionTestResult expectedResult = new Shape3DCollisionTestResult();
-         Shape3DCollisionTestResult gjkResult = new Shape3DCollisionTestResult();
          Shape3DCollisionTestResult epaResult = new Shape3DCollisionTestResult();
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
-         GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         gjkDetector.doShapeCollisionTest(sphereA, sphereB, gjkResult);
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
+         epaDetector.setSimplexConstructionEpsilon(1.0e-3);
          epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
 
-         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
-         assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding());
+         System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", GJK: " + epaResult.getDistance() + ", diff: "
+               + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
 
-         if (expectedResult.areShapesColliding())
-         {
-            assertTrue(gjkResult.containsNaN());
-            assertTrue(gjkResult.getPointOnA().containsNaN());
-            assertTrue(gjkResult.getPointOnB().containsNaN());
-            assertTrue(gjkResult.getNormalOnA().containsNaN());
-            assertTrue(gjkResult.getNormalOnB().containsNaN());
-            assertTrue(Double.isNaN(gjkResult.getDepth()));
-            assertTrue(Double.isNaN(gjkResult.getDistance()));
-         }
-         else
-         {
-            
-         }
+         meanError += Math.abs(expectedResult.getDistance() - epaResult.getDistance()) / ITERATIONS;
+
+         // Asserts the internal sanity of the collision result
+//         assertEquals(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, epaResult.areShapesColliding());
+
+         if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.
+            assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding());
+
+         assertEquals(expectedResult.getDistance(), epaResult.getDistance(), LARGE_EPSILON,
+                      "difference: " + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
+
+         EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), epaResult.getPointOnA(), LARGE_EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), epaResult.getPointOnB(), LARGE_EPSILON);
+         // GJK-EPA does not estimate either the depth (collision case not covered) nor the normal on each shape.
+         assertTrue(epaResult.getNormalOnA().containsNaN());
+         assertTrue(epaResult.getNormalOnB().containsNaN());
       }
+
+      if (verbose)
+         System.out.println("Average error for the distance: " + meanError);
    }
 }
