@@ -256,11 +256,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    public void detroy()
    {
-      if (twin != null)
+      if (twin != null && twin.getTwin() == this)
          twin.setTwin(null);
-      if (next != null)
+      if (next != null && next.getPrevious() == this)
          next.setPrevious(null);
-      if (previous != null)
+      if (previous != null && previous.getNext() == this)
          previous.setNext(null);
 
       setTwin(null);
