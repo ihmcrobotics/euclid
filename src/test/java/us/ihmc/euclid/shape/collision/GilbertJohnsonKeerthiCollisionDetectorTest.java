@@ -644,6 +644,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          assertTrue(gjkResult.getNormalOnB().containsNaN());
       }
 
-      System.out.println("Average error for the distance: " + meanError);
+      if (verbose)
+         System.out.println("Average error for the distance: " + meanError);
    }
 }
