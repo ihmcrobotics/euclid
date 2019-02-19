@@ -34,7 +34,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
-   private static final double LARGE_EPSILON = 1.0e-5;
+   private static final double LARGE_EPSILON = 5.0-4;
 
    @Test
    void testSimpleCollisionWithNonCollidingCubeAndTetrahedron()
@@ -584,30 +584,48 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
    @Test
    void testSphere3DToSphere3D() throws Exception
-   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
-      Random random = new Random(10860004);
+   { // This test confirms that GJK can be used with primitives too, and also serves as benchmark for accuracy.
+      /*
+       * Interestingly, this test also exercises a LOT the use of the ConvexPolytope3D.constructionEpsilon
+       * as GJK will reduce the size of its internal polytope's faces and edges until new vertices are not
+       * supposed to be added.
+       */
+      Random random = new Random(108604);
+      boolean verbose = false;
+      double meanError = 0.0;
+      int numberOfIterations = 10 * ITERATIONS;
 
-      for (int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < numberOfIterations; i++)
       {
          Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
+         sphereB.getPosition().set(sphereA.getPosition());
+         sphereB.getPosition().add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 1.0, 5.0)
+               * (sphereA.getRadius() + sphereB.getRadius())));
 
          Shape3DCollisionTestResult expectedResult = new Shape3DCollisionTestResult();
          Shape3DCollisionTestResult gjkResult = new Shape3DCollisionTestResult();
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         /*
-          * FIXME The default epsilon results in a NPE somehow, need to be tracked down. And when the epsilon
-          * is very small, ConvexPolytope3DReadOnly.isPointInside(Point3DReadOnly, double) becomes flaky.
-          */
-         gjkDetector.setSimplexConstructionEpsilon(0.0);
+         gjkDetector.setSimplexConstructionEpsilon(1.0e-3);
          gjkDetector.doShapeCollisionTest(sphereA, sphereB, gjkResult);
 
-         System.out.println(expectedResult.getDistance());
-         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
+         if (verbose && (i % 5000) == 0)
+         {
+            System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", GJK: " + gjkResult.getDistance() + ", diff: "
+                  + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
+         }
 
-         if (expectedResult.areShapesColliding())
+         meanError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance()) / numberOfIterations;
+
+         // Asserts the internal sanity of the collision result
+         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding());
+
+         if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.
+            assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
+
+         if (gjkResult.areShapesColliding())
          {
             assertTrue(gjkResult.containsNaN());
             assertTrue(gjkResult.getPointOnA().containsNaN());
@@ -616,14 +634,17 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          }
          else
          {
-            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), LARGE_EPSILON);
+            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), LARGE_EPSILON, "difference: " + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
             EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), LARGE_EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), LARGE_EPSILON);
          }
 
+         // GJK does not estimate either the depth (collision case not covered) nor the normal on each shape.
          assertTrue(Double.isNaN(gjkResult.getDepth()));
          assertTrue(gjkResult.getNormalOnA().containsNaN());
          assertTrue(gjkResult.getNormalOnB().containsNaN());
       }
+
+      System.out.println("Average error for the distance: " + meanError);
    }
 }
