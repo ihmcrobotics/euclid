@@ -422,8 +422,16 @@ public class EuclidPolytopeTools
 
       Vertex3DReadOnly currentVertex = silhouetteStartEdge.getDestination();
 
+      int iteration = 0;
+
       while (currentVertex != silhouetteStartEdge.getOrigin())
       {
+         if (iteration++ >= 10000000)
+         {
+            System.err.println(EuclidPolytopeTools.class.getSimpleName() + ": computeSilhouette got stuck in infinite loop.");
+            return null;
+         }
+
          boolean foundNextEdge = false;
 
          for (HalfEdge3DReadOnly candidate : currentVertex.getAssociatedEdges())
