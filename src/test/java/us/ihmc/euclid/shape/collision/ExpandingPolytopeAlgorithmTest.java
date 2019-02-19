@@ -589,7 +589,7 @@ class ExpandingPolytopeAlgorithmTest
          {
             Vector3D expectedNormalDirection = new Vector3D();
             expectedNormalDirection.sub(face.getCentroid(), epaDetector.getSimplex().getPolytope().getCentroid());
-            assertTrue(expectedNormalDirection.dot(face.getNormal()) > 0.0);
+            assertTrue(expectedNormalDirection.dot(face.getNormal()) > 0.0, "Expected direction: " + expectedNormalDirection + ", actual face normal: " + face.getNormal());
          }
 //         assertEquals(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, epaResult.areShapesColliding());
 
