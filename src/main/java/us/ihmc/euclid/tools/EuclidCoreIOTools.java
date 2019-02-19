@@ -655,7 +655,7 @@ public abstract class EuclidCoreIOTools
     *           {@code String} for each element.
     * @return the representative {@code String}.
     */
-   public static <T> String getCollectionString(String prefix, String suffix, String separator, Collection<T> collection,
+   public static <T> String getCollectionString(String prefix, String suffix, String separator, Collection<? extends T> collection,
                                                 Function<T, String> elementToStringFunction)
    {
       if (collection == null)
@@ -687,14 +687,14 @@ public abstract class EuclidCoreIOTools
     *           {@code String} for each element.
     * @return the representative {@code String}.
     */
-   public static <T> String getCollectionString(String separator, Collection<T> collection, Function<T, String> elementToStringFunction)
+   public static <T> String getCollectionString(String separator, Collection<? extends T> collection, Function<T, String> elementToStringFunction)
    {
       if (collection == null)
          return "null";
       if (collection.isEmpty())
          return "";
 
-      Iterator<T> iterator = collection.iterator();
+      Iterator<? extends T> iterator = collection.iterator();
       String ret = elementToStringFunction.apply(iterator.next());
       while (iterator.hasNext())
          ret += separator + elementToStringFunction.apply(iterator.next());

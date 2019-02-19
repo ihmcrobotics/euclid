@@ -3,6 +3,8 @@ package us.ihmc.euclid.shape.tools;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -360,6 +362,31 @@ public class EuclidShapeIOTools
       string += "\nEdge list: " + getHalfEdge3DCollectionString(format, linePrefix, polytopeEdges);
       string += "\nVertex list: " + getVertex3DCollectionString(format, linePrefix, polytopeVertices);
       return string;
+   }
+
+   public static String getConvexPolytope3DStringForUnitTesting(ConvexPolytope3DReadOnly badPolytope, Point3DReadOnly troublingVertex)
+   {
+      return getConvexPolytope3DStringForUnitTesting(badPolytope.getVertices(), troublingVertex, badPolytope.getConstructionEpsilon());
+   }
+
+   public static String getConvexPolytope3DStringForUnitTesting(List<? extends Point3DReadOnly> verticesBeforeProblem, Point3DReadOnly troublingVertex,
+                                                                double constructionEpsilon)
+   {
+      String stringFormat = EuclidCoreIOTools.getStringFormat(23, 20);
+
+      String prefix = "vertices.add(new Point3D";
+      String suffix = ");";
+      String separator = suffix + "\n" + prefix;
+      Function<Point3DReadOnly, String> elementToStringFunction = v -> EuclidCoreIOTools.getTuple3DString(stringFormat, v);
+
+      String result = "";
+      result += "List<Point3D> vertices = new ArrayList<>();\n";
+      result += EuclidCoreIOTools.getCollectionString(prefix, suffix, separator, verticesBeforeProblem, elementToStringFunction) + "\n";
+      result += "Point3D troublingVertex = new Point3D" + elementToStringFunction.apply(troublingVertex) + ";\n";
+      result += "double constructionEpsilon = " + constructionEpsilon + ";\n";
+      result += "ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);\n";
+      result += "convexPolytope3D.addVertex(troublingVertex);";
+      return result;
    }
 
    private static String getVertex3DCollectionString(String format, String linePrefix, Collection<? extends Vertex3DReadOnly> vertices)
