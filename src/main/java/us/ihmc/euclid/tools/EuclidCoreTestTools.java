@@ -2728,6 +2728,11 @@ public abstract class EuclidCoreTestTools
       throw new AssertionError(errorMessage);
    }
 
+   public static void throwAssertionError(String messagePrefix, String errorMessage)
+   {
+      throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
+   }
+
    public static String addPrefixToMessage(String prefix, String message)
    {
       if (prefix != null && !prefix.isEmpty())

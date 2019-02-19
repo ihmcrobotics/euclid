@@ -1,6 +1,23 @@
 package us.ihmc.euclid.shape.tools;
 
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getBox3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCollisionTestResultString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getConvexPolytope3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCylinder3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getEllipsoid3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getFace3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getHalfEdge3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getRamp3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getSphere3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getTorus3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getVertex3DString;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import us.ihmc.euclid.shape.collision.Shape3DCollisionTestResult;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
@@ -17,6 +34,8 @@ import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidShapeTestTools
 {
@@ -599,6 +618,150 @@ public class EuclidShapeTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+   }
+
+   public static void assertConvexPolytope3DGeneralIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
+   {
+      assertConvexPolytope3DFacesIntegrity(messagePrefix, convexPolytope3D);
+      assertConvexPolytope3DHalfEdgesIntegrity(messagePrefix, convexPolytope3D);
+      assertConvexPolytope3DVerticesIntegrity(messagePrefix, convexPolytope3D);
+   }
+
+   public static void assertConvexPolytope3DFacesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
+   {
+      Vector3D toOrigin = new Vector3D();
+      Vector3D toDestination = new Vector3D();
+      Vector3D toCentroid = new Vector3D();
+      Vector3D cross = new Vector3D();
+
+      for (int faceIndex = 0; faceIndex < convexPolytope3D.getNumberOfFaces(); faceIndex++)
+      {
+         Face3DReadOnly face = convexPolytope3D.getFace(faceIndex);
+         Point3DReadOnly centroid = face.getCentroid();
+         Vector3DReadOnly normal = face.getNormal();
+         List<? extends HalfEdge3DReadOnly> edges = face.getEdges();
+
+         for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
+         {
+            HalfEdge3DReadOnly edge = edges.get(edgeIndex);
+
+            if (edge.getFace() != face)
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge does not this face as its face.");
+            if (!edges.contains(edge.getNext()))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge's next does not belong to this face.");
+            if (!edges.contains(edge.getPrevious()))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                       faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
+            if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                       faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
+
+            // Verifying the edges are all clockwise ordered.
+            toOrigin.sub(edge.getOrigin(), centroid);
+            toDestination.sub(edge.getDestination(), centroid);
+            cross.cross(toDestination, toOrigin);
+
+            if (cross.dot(normal) < 0.0)
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge is orientated counter-clockwise.");
+         }
+
+         // Verifying the normal is pointing towards the outside of the polytope.
+         toCentroid.sub(centroid, convexPolytope3D.getCentroid());
+
+         if (toCentroid.dot(normal) < 0.0)
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face's normal is pointing towards the inside of the polytope.");
+      }
+   }
+
+   public static void assertConvexPolytope3DHalfEdgesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
+   {
+      for (int halfEdgeIndex = 0; halfEdgeIndex < convexPolytope3D.getNumberOfHalfEdges(); halfEdgeIndex++)
+      {
+         HalfEdge3DReadOnly halfEdge = convexPolytope3D.getHalfEdge(halfEdgeIndex);
+
+         Vertex3DReadOnly origin = halfEdge.getOrigin();
+         Vertex3DReadOnly destination = halfEdge.getDestination();
+         HalfEdge3DReadOnly twin = halfEdge.getTwin();
+         HalfEdge3DReadOnly next = halfEdge.getNext();
+         HalfEdge3DReadOnly previous = halfEdge.getPrevious();
+         Face3DReadOnly face = halfEdge.getFace();
+
+         if (twin == null)
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's twin is null.");
+         if (next == null)
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's next is null.");
+         if (previous == null)
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's previous is null.");
+         if (face == null)
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's face is null.");
+
+         if (origin != twin.getDestination() || destination != twin.getOrigin())
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge is inconsistent with its twin.");
+         if (origin != previous.getDestination())
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge is not attached to its previous.");
+         if (destination != previous.getOrigin())
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge is not attached to its next.");
+         if (halfEdge.getFace() != previous.getFace())
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge does not share the same face as its previous.");
+         if (halfEdge.getFace() != next.getFace())
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge does not share the same face as its next.");
+         if (!origin.getAssociatedEdges().contains(halfEdge))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge is not associated to its origin.");
+         if (origin != destination && destination.getAssociatedEdges().contains(halfEdge))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge should not be associated to its origin.");
+         if (!halfEdge.getFace().getEdges().contains(halfEdge))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's face does not declare it as one of its edges.");
+
+         if (!convexPolytope3D.getFaces().contains(face))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's face is not registered as a polytope face.");
+         if (!convexPolytope3D.getHalfEdges().contains(twin))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's twin is not registered as a polytope half-edge.");
+         if (!convexPolytope3D.getHalfEdges().contains(next))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's next is not registered as a polytope half-edge.");
+         if (!convexPolytope3D.getHalfEdges().contains(previous))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's previous is not registered as a polytope half-edge.");
+         if (!convexPolytope3D.getVertices().contains(origin))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's origin is not registered as a polytope vertex.");
+         if (!convexPolytope3D.getVertices().contains(destination))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge's destination is not registered as a polytope vertex.");
+      }
+   }
+
+   public static void assertConvexPolytope3DVerticesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
+   {
+      for (int vertexIndex = 0; vertexIndex < convexPolytope3D.getNumberOfVertices(); vertexIndex++)
+      {
+         Vertex3DReadOnly vertex = convexPolytope3D.getVertex(vertexIndex);
+         Collection<? extends HalfEdge3DReadOnly> associatedEdges = vertex.getAssociatedEdges();
+
+         // Used to assert uniqueness of the faces obtained from the associated-edges.
+         Set<Face3DReadOnly> connectedFaces = new HashSet<>();
+
+         for (HalfEdge3DReadOnly associatedEdge : associatedEdges)
+         {
+            if (vertex != associatedEdge.getOrigin())
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex is not the origin of an associated edge.");
+
+            if (!connectedFaces.add(associatedEdge.getFace()))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, "The connected faces to " + vertexIndex + "th vertex are not unique.");
+
+            if (associatedEdge.getDestination().getEdgeTo(vertex) == null)
+               EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                       vertexIndex + "th vertex has an edge which destination does not have an edge going back to it.");
+            if (associatedEdge.getDestination().getEdgeTo(vertex) != associatedEdge.getTwin())
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which destination's return edge is not the twin.");
+            if (!associatedEdge.getFace().getVertices().contains(vertex))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which face does not delare it.");
+
+            if (!convexPolytope3D.getFaces().contains(associatedEdge.getFace()))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge's face which is not registered as a polytope face.");
+            if (!convexPolytope3D.getHalfEdges().contains(associatedEdge))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which is not registered as a polytope edge.");
+            if (!convexPolytope3D.getVertices().contains(associatedEdge.getDestination()))
+               EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                       vertexIndex + "th vertex has an edge's destination which is not registered as a polytope vertex.");
+         }
+      }
    }
 
    public static void assertCollisionTestResultGeometricallyEquals(Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, double epsilon)
