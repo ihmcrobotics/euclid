@@ -17,7 +17,6 @@ import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -30,7 +29,6 @@ import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -1600,7 +1598,6 @@ public class ConvexPolytope3DTest
    @Test
    void testGJKNullPointerExceptionBug1() throws Exception
    {
-      String detailedFormat = EuclidCoreIOTools.getStringFormat(9, 6);
       List<Point3D> vertices = new ArrayList<>();
       // Commented out the vertices from the original dataset that do not seem to cause the issue.
       // vertices.add(new Point3D(0.1727226445760459, 0.3408246844828842, 0.0707692371805856));
@@ -1616,25 +1613,6 @@ public class ConvexPolytope3DTest
       double constructionEpsilon = 1.0e-3;
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
       assertEquals(vertices.size(), convexPolytope3D.getNumberOfVertices());
-
-      System.out.println("Polytope edge lengths:");
-      for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
-         System.out.println(edge.getDirection(false).length());
-      System.out.println("Distance of troublingVertex from polytope vertices:");
-      for (Point3D vertex : vertices)
-         System.out.println(vertex.distance(troublingVertex));
-      System.out.println("Distance of troublingVertex from polytope faces:");
-      for (Face3D face : convexPolytope3D.getFaces())
-         System.out.println(face.distance(troublingVertex));
-      System.out.println("Signed-distance of troublingVertex from polytope faces' support plane:");
-      for (Face3D face : convexPolytope3D.getFaces())
-         System.out.println(face.signedDistanceToPlane(troublingVertex));
-      System.out.println("Distance of troublingVertex from polytope edges' support line:");
-      for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
-         System.out.println(edge.distanceFromSupportLine(troublingVertex));
-      System.out.println("Faces centroid and normal:");
-      for (Face3D face : convexPolytope3D.getFaces())
-         System.out.println(face.getCentroid().toString() + ", " + face.getNormal().toString());
 
       // Checking each face normal sanity
       for (Face3D face : convexPolytope3D.getFaces())
@@ -1655,23 +1633,7 @@ public class ConvexPolytope3DTest
       assertTrue(silhouette.get(1).getDestination() == silhouette.get(2).getOrigin());
       assertTrue(silhouette.get(2).getDestination() == silhouette.get(0).getOrigin());
 
-      //      assertEquals(2, inPlaneFaces.size());
-      //
-      //      System.out.println("Distance centroid <-> plane for comparing the 2 inPlaneFaces:");
-      //      System.out.println(inPlaneFaces.get(0).distanceToPlane(inPlaneFaces.get(1).getCentroid()));
-      //      System.out.println(inPlaneFaces.get(1).distanceToPlane(inPlaneFaces.get(0).getCentroid()));
-      //      System.out.println("Angle between the 2 inPlaneFaces:");
-      //      System.out.println(inPlaneFaces.get(0).getNormal().angle(inPlaneFaces.get(1).getNormal()));
-      //      HalfEdge3D commonEdgeWith = inPlaneFaces.get(0).getCommonEdgeWith(inPlaneFaces.get(1));
-      //      System.out.println("inPlaneFaces common edge:\n"+ EuclidGeometryIOTools.getLineSegment3DString(detailedFormat, commonEdgeWith));
-      //      System.out.println("troublingVertex distance to common-edge: " + commonEdgeWith.distanceFromSupportLine(troublingVertex));
-
-      System.out.println("Polytope edges:");
-      for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
-      {
-         if (edge.hashCode() < edge.getTwin().hashCode())
-            System.out.println(EuclidGeometryIOTools.getLineSegment3DString(detailedFormat, edge));
-      }
+      assertEquals(0, inPlaneFaces.size());
 
       for (Face3D inPlaneFace : inPlaneFaces)
          assertFalse(visibleFaces.contains(inPlaneFace));
@@ -1725,5 +1687,79 @@ public class ConvexPolytope3DTest
       assertEquals(vertices.size(), convexPolytope3D.getNumberOfVertices());
 
       convexPolytope3D.addVertex(troublingVertex);
+   }
+
+   @Test
+   void testGJKNullPointerExceptionBug4() throws Exception
+   {
+      List<Point3D> vertices = new ArrayList<>();
+      vertices.add(new Point3D(0.0051506551364596, -0.0348819759911019, 0.0691778540151096));
+      // vertices.add(new Point3D(0.0422493845451721, 0.0727920949601139, 0.5674466022012327));
+      vertices.add(new Point3D(0.0004104647457426, -0.0451992694194132, 0.0472529766744278));
+      vertices.add(new Point3D(0.0020291613573142, -0.0559465436341543, 0.0250833552689338));
+      vertices.add(new Point3D(-0.0033350301665630, -0.0940280104643934, -0.0447924048275297));
+      // vertices.add(new Point3D(-0.0113077830899894, -0.1649473194674913, -0.1518735281452312));
+      // vertices.add(new Point3D(-0.0253624237359933, -0.3387902241779525, -0.3406397827449963));
+      // vertices.add(new Point3D(-0.0470958837642707, -1.2942558333752370, -0.6325393732333888));
+      vertices.add(new Point3D(0.0046484599886485, -0.0503176108042466, 0.0362947448605222));
+      Point3D troublingVertex = new Point3D(-0.0068611168376205, -0.0525067429256160, 0.0327580791751562);
+      double constructionEpsilon = 0.001;
+      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
+
+      convexPolytope3D.addVertex(troublingVertex);
+   }
+
+   @Test
+   void testGJKNullPointerExceptionBug5() throws Exception
+   {
+      List<Point3D> vertices = new ArrayList<>();
+      vertices.add(new Point3D(0.19811056289014100000, 1.53064568455729290000, 0.68554775478046680000));
+      vertices.add(new Point3D(0.09942174868943067000, -0.07312979643742923000, 0.34404201167296220000));
+      vertices.add(new Point3D(0.03548092653292492000, 0.08553875648964482000, 0.12277926611952411000));
+      vertices.add(new Point3D(0.02835400199038940000, 0.11051604727461928000, 0.09913549801006882000));
+      vertices.add(new Point3D(0.02555035291707655200, 0.11906397969616522000, 0.09162654986018806000));
+      vertices.add(new Point3D(0.02206651442783452700, 0.13649893774802690000, 0.07635963070894680000));
+      vertices.add(new Point3D(0.00987877860785552000, 0.19131147056882847000, 0.03418482283725754500));
+      vertices.add(new Point3D(-0.01048610647118039500, 0.31094167239958503000, -0.03628643845554569000));
+      vertices.add(new Point3D(-0.03072567104185691700, 0.85768242870865940000, -0.10632403688918313000));
+      vertices.add(new Point3D(0.03326520528372667000, 0.09790747514458276000, 0.11042444275049243000));
+
+      // Could not reproduce the original exception, but manage to highlight a new one by shuffling the vertices in a given way
+      Random random = new Random(-103505459636305186L);
+      Collections.shuffle(vertices, random);
+
+      //      Point3D troublingVertex = new Point3D( 0.02818508137321876200,  0.10400186862552696000,  0.10568732858207800000 );
+      double constructionEpsilon = 0.001;
+      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices.subList(0, 8)), constructionEpsilon);
+      convexPolytope3D.addVertex(vertices.get(8));
+   }
+
+   @Test
+   void testGJKNullPointerExceptionBug6() throws Exception
+   {
+      List<Point3D> vertices = new ArrayList<>();
+      vertices.add(new Point3D(-0.16594466242134853000, -0.15167737932767710000, 0.06375940884903786000));
+      vertices.add(new Point3D(-0.15493261840750883000, -0.16646658348557453000, 0.06032647391633983000));
+      vertices.add(new Point3D(-0.18402867588922667000, -0.12629220803748709000, 0.07363271127979126000));
+      vertices.add(new Point3D(-0.20441775948060736000, -0.10131005633356671000, 0.07902696117881491000));
+      vertices.add(new Point3D(-0.28134730614168046000, -0.01222890247491981200, 0.10876756841830115000));
+      vertices.add(new Point3D(0.08114060867902650000, -1.60769973787097800000, -0.03136858435585743000));
+      vertices.add(new Point3D(-0.13409442245051250000, -0.19646058810895028000, 0.05184028405466168000));
+      vertices.add(new Point3D(-0.17583758138846740000, -0.13878848467476557000, 0.06663279438238556000));
+      vertices.add(new Point3D(-1.32350866683800360000, 0.45061221257020545000, 0.51166233452409130000));
+      vertices.add(new Point3D(-0.45317219159206390000, 0.14566075149172053000, 0.17519427511219820000));
+      vertices.add(new Point3D(-0.16885169989877480000, -0.14496535839630130000, 0.07101749538537033000));
+
+      // Could not reproduce the original exception, but manage to highlight a new one by shuffling the vertices in a given way
+      Random random = new Random(478396840718102216L);
+      Collections.shuffle(vertices, random);
+
+      //      Point3D troublingVertex = new Point3D(-0.17167505184802145000, -0.14532344838490086000, 0.06290309248341330000);
+      double constructionEpsilon = 0.001;
+      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices.subList(0, 7)), constructionEpsilon);
+      assertTrue(convexPolytope3D.getHalfEdges().stream().noneMatch(edge -> edge.getTwin() == null));
+      convexPolytope3D.addVertex(vertices.get(7));
+      assertTrue(convexPolytope3D.getHalfEdges().stream().noneMatch(edge -> edge.getTwin() == null));
+      convexPolytope3D.addVertex(vertices.get(8));
    }
 }
