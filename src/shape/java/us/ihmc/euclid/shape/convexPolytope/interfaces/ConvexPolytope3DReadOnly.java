@@ -135,6 +135,9 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
       if (isEmpty())
          return false;
 
+      if (!getBoundingBox().isInsideInclusive(pointToCheck))
+         return false;
+
       if (getNumberOfFaces() <= 2)
          return getFace(0).isPointInside(pointToCheck, 0.0);
 
@@ -152,6 +155,9 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
    default boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
    {
       if (isEmpty())
+         return false;
+
+      if (!getBoundingBox().isInsideEpsilon(pointToCheck, epsilon))
          return false;
 
       if (getNumberOfFaces() <= 2)

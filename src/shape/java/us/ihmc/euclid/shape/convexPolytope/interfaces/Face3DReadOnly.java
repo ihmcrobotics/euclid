@@ -345,6 +345,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    {
       if (getNumberOfEdges() < 3)
          return getEdge(0).distanceSquared(query) <= epsilon * epsilon;
+      else if (!getBoundingBox().isInsideEpsilon(query, epsilon))
+         return false;
       else
          return isPointInFacePlane(query, epsilon) && isPointDirectlyAboveOrBelow(query);
    }
