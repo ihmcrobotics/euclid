@@ -441,7 +441,18 @@ public class EuclidPolytopeConstructionTools
          }
       }
 
-      centroidToPack.scale(1.0 / volume);
+      if (volume <= 1.0e-12)
+      {
+         for (Point3DReadOnly vertex : convexPolytope3D.getVertices())
+         {
+            centroidToPack.add(vertex);
+         }
+         centroidToPack.scale(1.0 / convexPolytope3D.getNumberOfVertices());
+      }
+      else
+      {
+         centroidToPack.scale(1.0 / volume);
+      }
 
       return volume;
    }
