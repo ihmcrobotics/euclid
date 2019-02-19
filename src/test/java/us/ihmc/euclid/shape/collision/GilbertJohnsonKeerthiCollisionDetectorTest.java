@@ -34,7 +34,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
-   private static final double LARGE_EPSILON = 5.0-4;
+   private static final double LARGE_EPSILON = 5.0e-3;
 
    @Test
    void testSimpleCollisionWithNonCollidingCubeAndTetrahedron()
@@ -607,7 +607,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         gjkDetector.setSimplexConstructionEpsilon(1.0e-3);
+         gjkDetector.setSimplexConstructionEpsilon(1.0e-4);
          gjkDetector.doShapeCollisionTest(sphereA, sphereB, gjkResult);
 
          if (verbose && (i % 5000) == 0)
@@ -639,7 +639,6 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          }
 
          // GJK does not estimate either the depth (collision case not covered) nor the normal on each shape.
-         assertTrue(Double.isNaN(gjkResult.getDepth()));
          assertTrue(gjkResult.getNormalOnA().containsNaN());
          assertTrue(gjkResult.getNormalOnB().containsNaN());
       }
