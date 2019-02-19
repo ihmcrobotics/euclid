@@ -558,7 +558,7 @@ class ExpandingPolytopeAlgorithmTest
    @Test
    void testSphere3DToSphere3D() throws Exception
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
-      Random random = new Random(108604);
+      Random random = new Random(18604);
       boolean verbose = false;
       double meanError = 0.0;
 
@@ -575,15 +575,22 @@ class ExpandingPolytopeAlgorithmTest
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
-         epaDetector.setSimplexConstructionEpsilon(1.0e-3);
+         epaDetector.setSimplexConstructionEpsilon(5.0e-4);
          epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
 
-         System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", GJK: " + epaResult.getDistance() + ", diff: "
+         System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", EPA: " + epaResult.getDistance() + ", diff: "
                + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
 
          meanError += Math.abs(expectedResult.getDistance() - epaResult.getDistance()) / ITERATIONS;
 
          // Asserts the internal sanity of the collision result
+         System.out.println(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()));
+         for (Face3D face : epaDetector.getSimplex().getPolytope().getFaces())
+         {
+            Vector3D expectedNormalDirection = new Vector3D();
+            expectedNormalDirection.sub(face.getCentroid(), epaDetector.getSimplex().getPolytope().getCentroid());
+            assertTrue(expectedNormalDirection.dot(face.getNormal()) > 0.0);
+         }
 //         assertEquals(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, epaResult.areShapesColliding());
 
          if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.
